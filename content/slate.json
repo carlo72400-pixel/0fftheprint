@@ -1,0 +1,16 @@
+{
+  "next": {
+    "num": "0TP-002",
+    "title": "The Ink",
+    "line": "Smiley Onerr at Legion Ink. Day one is shot. The sit down is its own day.",
+    "status": "IN PRODUCTION",
+    "art": "assets/card-ink-fullart.jpg",
+    "link": "#roster"
+  },
+  "latest_drop": {
+    "label": "LATEST DROP",
+    "title": "Zen Haus · Third Friday Night Market",
+    "count": "40 frames, full quality",
+    "link": "events/2026-08-21-zen-haus/"
+  }
+}

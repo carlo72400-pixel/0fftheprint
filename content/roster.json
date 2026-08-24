@@ -1,0 +1,373 @@
+{
+  "items": [
+    {
+      "name": "KAV-MAN",
+      "type": "voice",
+      "type_label": "WAR CHANT",
+      "hp": 200,
+      "rarity": "warlord",
+      "photo": "assets/card-kavman-warlord.jpg",
+      "pending_glyph": "KAV",
+      "pending_stamp": "TRANSMISSION LOADING",
+      "flavor": "The city knew the name before the algorithm did.",
+      "moves": [
+        {
+          "cost": "y",
+          "name": "Soundcheck",
+          "damage": 60,
+          "desc": "The room goes quiet first. Reveal the crowd."
+        },
+        {
+          "cost": "yyyy",
+          "name": "Hometown Anthem",
+          "damage": 190,
+          "desc": "Discard 2 Energies. Every seat in the building takes it."
+        }
+      ],
+      "platform": "SATX",
+      "link": "#roster",
+      "theme_song": "https://open.spotify.com/track/0KJIm3Ukd82n0d7VOCQWWI",
+      "lore": "Artist. San Antonio. Calling him a rapper undersells it, he does all of it and the credit list keeps getting longer.\n\nFirst on the roster. Not a subject, a member: the desk shoots every frame of what comes next.\n\nWhat he's loading stays off the page until it drops. When it drops, it drops with our footage on it.\n\nTexas first. Then everywhere else.",
+      "theme_start": 123,
+      "cost_orb": 7,
+      "power": 9000
+    },
+    {
+      "name": "VIRGOSGATEWAY",
+      "type": "signal",
+      "type_label": "THE SIGNAL",
+      "hp": "???",
+      "rarity": "diamond-rare",
+      "photo": "assets/card-virgo-crystal.jpg",
+      "pending_glyph": "V",
+      "pending_stamp": "CLASSIFIED",
+      "flavor": "You've already heard him. You just didn't know it.",
+      "moves": [
+        {
+          "cost": "g",
+          "name": "Alignment",
+          "damage": 50,
+          "desc": "Universal divinity receives it. Next move does +60."
+        },
+        {
+          "cost": "ggg",
+          "name": "Transmission",
+          "damage": 160,
+          "desc": "Every speaker in range obeys."
+        }
+      ],
+      "platform": "IG",
+      "link": "https://instagram.com/virgosgateway",
+      "theme_song": "https://open.spotify.com/track/0sKUd3PxqITdWs8NqzpCBV",
+      "lore": "Rapper. San Antonio. Punk on the surface, trap in the bones, anarchy on the hook.\n\nSecond artist on the roster. Sessions are closed, and what's coming out of them is classified until it isn't.\n\nWhen the file opens, the desk has the frames."
+    },
+    {
+      "name": "WRATHFOL",
+      "type": "board",
+      "type_label": "HEAVY HITTER",
+      "hp": 220,
+      "rarity": "amazing",
+      "photo": "assets/card-wrathfol-amazing.jpg",
+      "pending_glyph": "W",
+      "pending_stamp": "NOT SUBTLE",
+      "flavor": "Tells the story. Loudly.",
+      "moves": [
+        {
+          "cost": "b",
+          "name": "Any Genre",
+          "damage": 50,
+          "desc": "Produces anything. Copy any move in play."
+        },
+        {
+          "cost": "bbb",
+          "name": "Full Send",
+          "damage": 200,
+          "desc": "Not subtle. Everything in the room takes it."
+        }
+      ],
+      "platform": "IG",
+      "link": "https://www.instagram.com/wrathfol/",
+      "theme_song": "",
+      "lore": "Producer. San Antonio by way of Houston. Jack of all trades, produces anything, and every beat carries a story.\n\nEnergetic, fun, built for everybody in the room. Subtle was never the assignment. Heavy hitter.\n\nOff the boards he's an adventurer. Ask where he's been, then listen to what he made when he got back.",
+      "cost_orb": 6,
+      "power": 8000
+    },
+    {
+      "name": "The Ink",
+      "type": "ink",
+      "type_label": "THE INK · 002",
+      "hp": 110,
+      "rarity": "full-art",
+      "photo": "assets/card-ink-fullart.jpg",
+      "pending_glyph": "002",
+      "pending_stamp": "IN PRODUCTION",
+      "flavor": "Oil on canvas after hours. Skin by appointment.",
+      "moves": [
+        {
+          "cost": "pp",
+          "name": "Line Work",
+          "damage": 40,
+          "desc": "Slow is smooth. Next move can't miss."
+        },
+        {
+          "cost": "ppp",
+          "name": "Black & Grey",
+          "damage": 90,
+          "desc": "No color needed. The shading does the talking."
+        }
+      ],
+      "platform": "Portfolio",
+      "link": "https://smiley-one98.merlin.site/",
+      "theme_song": "",
+      "lore": "Black and grey by appointment, oil on canvas after hours. The crossover is the story.\n\nInterview 002 is in production: the format moves from the chair to the bench. The machine runs while the conversation does, and the room light stays the room light.\n\nThe subject sees the cut before anyone else. House rule. The reveal is the drop."
+    }
+  ],
+  "_archived_unfilled_seats": [
+    {
+      "name": "The Page",
+      "type": "panel",
+      "type_label": "THE PAGE · 003",
+      "hp": 70,
+      "rarity": "rare-holo",
+      "photo": null,
+      "pending_glyph": "003",
+      "pending_stamp": "IN TALKS",
+      "flavor": "Draws the rooms the cameras can't enter.",
+      "moves": [
+        {
+          "cost": "g",
+          "name": "Cold Open",
+          "damage": 30,
+          "desc": "Sets the scene in one panel."
+        },
+        {
+          "cost": "gg",
+          "name": "Splash Page",
+          "damage": 80,
+          "desc": "Full bleed. No dialogue needed."
+        }
+      ],
+      "platform": "TBA",
+      "link": "#roster",
+      "theme_song": "",
+      "lore": "Comics, zines, ink on paper. The lane where the scene draws itself.\n\nSeat 003 is in talks. The reveal is the drop.\n\nSame house rules apply: the subject sees the cut first, and off the record stays off the record."
+    },
+    {
+      "name": "The Hairstylist",
+      "type": "color",
+      "type_label": "THE COLOR · 001",
+      "hp": 80,
+      "rarity": "rare-holo",
+      "photo": "assets/voice-01-hairstylist.jpg",
+      "flavor": "Does the color on camera. Conversation cuts deeper.",
+      "moves": [
+        {
+          "cost": "pp",
+          "name": "Dye Job",
+          "damage": 40,
+          "desc": "Marks the next subject in the scene."
+        },
+        {
+          "cost": "ppp",
+          "name": "First Cut",
+          "damage": 80,
+          "desc": "Sets the format. Coin flip: heads, copy the format."
+        }
+      ],
+      "platform": "IG",
+      "link": "https://instagram.com/vamppsych",
+      "theme_song": "https://open.spotify.com/track/7JmJp9PARHAgJIo4Fd0kUl",
+      "lore": "The chair is the studio. Pastel pink, electric blue, leopard streaks — whatever the subject brings in. The cut starts the conversation; the dye finishes it.\n\nShe's the format we keep returning to: each interview shot at the subject's own station, the work happening on-camera while they talk. The chair is a confession booth with better lighting.\n\nSeat 001. The one that set the rule."
+    },
+    {
+      "name": "The Promoter",
+      "type": "booking",
+      "type_label": "THE BOOKING",
+      "hp": 70,
+      "rarity": "rare-holo",
+      "photo": "assets/voice-02-promoter.jpg",
+      "flavor": "Holds the door. Knows who pays the rider.",
+      "moves": [
+        {
+          "cost": "y",
+          "name": "Flyer Drop",
+          "damage": 30,
+          "desc": "Posts a venue. Reveals one secret show."
+        },
+        {
+          "cost": "yyp",
+          "name": "Doors at 9",
+          "damage": 70,
+          "desc": "Loads the queue. Crowd silences any Take this turn."
+        }
+      ],
+      "platform": "TBA",
+      "link": "#roster",
+      "theme_song": "https://open.spotify.com/track/7vPOYVRdHZzTrAyamuRkuF",
+      "lore": "Holds the door. Knows who pays the rider. Books the room before the artist knows they're playing it.\n\nThe load-bearing wall of the underground — the one keeping shows on the books while everyone else argues about the bill. Local SA venues run on her flyer drops. The crowd never sees her, but the show wouldn't exist without her.\n\nFinal word on who gets in, who gets the green room, who comes back next month."
+    },
+    {
+      "name": "The DJ",
+      "type": "turntable",
+      "type_label": "THE TURNTABLE",
+      "hp": 90,
+      "rarity": "rare-holo",
+      "photo": "assets/voice-03-dj.jpg",
+      "flavor": "Knows what the room needs before it does.",
+      "moves": [
+        {
+          "cost": "b",
+          "name": "Crossfade",
+          "damage": 40,
+          "desc": "Switch any lane mid-set."
+        },
+        {
+          "cost": "bbp",
+          "name": "Drop the Beat",
+          "damage": 90,
+          "desc": "Discard one Take to do +30 to a Voice."
+        }
+      ],
+      "platform": "TBA",
+      "link": "#roster",
+      "theme_song": "https://open.spotify.com/track/1Ul9DAz89T4ICLC44SfI11",
+      "lore": "Reads the floor in two bars and adjusts. Underground hours: 1AM start, 4AM peak, 6AM closer.\n\nThe format authority. Every set is an essay on the scene's temperature — Carti deep cuts into Sematary edits into a Snow Strippers slow-burn. No requests. No talking on the mic.\n\nThe crossfade is the only commentary that matters."
+    },
+    {
+      "name": "The Label Head",
+      "type": "label",
+      "type_label": "THE LABEL EX",
+      "hp": 220,
+      "rarity": "gold-rare",
+      "photo": "assets/voice-04-label-head.jpg",
+      "flavor": "Final cut. Final cheque.",
+      "moves": [
+        {
+          "cost": "y",
+          "name": "A&R Stare",
+          "damage": 60,
+          "desc": "Marks a Pitch. Returns it next turn."
+        },
+        {
+          "cost": "yyyy",
+          "name": "Test Pressing",
+          "damage": 180,
+          "desc": "Discard two Energies. Hits anything in the public feed."
+        }
+      ],
+      "platform": "TBA",
+      "link": "#roster",
+      "theme_song": "https://open.spotify.com/track/1WF6qggVDALZmvHRTL752x",
+      "lore": "Final cut. Final cheque. The one who says yes or no on a test pressing.\n\nRuns a small underground roster out of a bedroom studio. Picks the artists, signs the bills, kills projects that aren't ready. Reputation built on saying no more than yes.\n\nThe A&R stare is the toll. If you survive it, the cheque clears."
+    },
+    {
+      "name": "The Provocateur",
+      "kind": "trainer",
+      "type": "take",
+      "type_label": "Speaks for nobody · Everybody",
+      "hp": 0,
+      "rarity": "rainbow-rare",
+      "photo": "assets/voice-05-provocateur.jpg",
+      "flavor": "Off the record stays off the record. The rest is fair game.",
+      "moves": [
+        {
+          "cost": "",
+          "name": "Subtweet",
+          "damage": "",
+          "desc": "Reveal one Pitch from your deck. Your opponent cannot respond this turn."
+        },
+        {
+          "cost": "",
+          "name": "Drag",
+          "damage": "",
+          "desc": "Choose 1 Voice in play. They cannot use their attack until two turns pass."
+        }
+      ],
+      "platform": "TBA",
+      "link": "#roster",
+      "theme_song": "https://open.spotify.com/track/7LqHM8vXewc8jxsM7VBVUj",
+      "lore": "Speaks for nobody. Speaks for everybody. Starting fights in the group chat at 3AM.\n\nThe scene's loose cannon — anonymous account, sharp takes, ten followers in the know. Drags artists who should be dragged. Defends artists who shouldn't be. Everyone reads the subtweets even if they pretend not to.\n\nOff the record stays off the record. Everything else is fair game."
+    },
+    {
+      "name": "The Painter",
+      "type": "canvas",
+      "type_label": "THE CANVAS",
+      "hp": 180,
+      "rarity": "tera-ex",
+      "photo": "assets/voice-06-painter.jpg",
+      "flavor": "Says it all without saying it.",
+      "moves": [
+        {
+          "cost": "g",
+          "name": "Underpainting",
+          "damage": 30,
+          "desc": "Sets up the next attack. Next move does +50."
+        },
+        {
+          "cost": "ggg",
+          "name": "One Stroke",
+          "damage": 150,
+          "desc": "One canvas, one shot. Discard if you flip tails."
+        }
+      ],
+      "platform": "TBA",
+      "link": "#roster",
+      "theme_song": "https://open.spotify.com/track/2zZYe0VgBUAamZ9zTxzE4l",
+      "lore": "Says it all without saying it. The one whose Instagram is just photos of their wall.\n\nWorks in oil and gesso. Paints scene portraits that hang in apartments and venue green rooms. Documents the people the cameras don't catch. One canvas a month, sometimes less.\n\nPretty-first, with teeth — but the teeth are subtle. You see them after the second look."
+    },
+    {
+      "name": "The Archivist",
+      "type": "memory",
+      "type_label": "THE MEMORY",
+      "hp": 50,
+      "rarity": "uncommon",
+      "photo": "assets/voice-07-archivist.jpg",
+      "flavor": "Remembers. Even the things you deleted.",
+      "moves": [
+        {
+          "cost": "g",
+          "name": "Footnote",
+          "damage": 20,
+          "desc": "Reveals what's in the file."
+        },
+        {
+          "cost": "gg",
+          "name": "Receipt",
+          "damage": 50,
+          "desc": "Brings back any old Take from your discard pile."
+        }
+      ],
+      "platform": "TBA",
+      "link": "#roster",
+      "theme_song": "https://open.spotify.com/track/49RkcmelPjEoUIf02ONcRN",
+      "lore": "Remembers. Even the things you deleted. Even the things you wish you hadn't said.\n\nRuns a Dropbox of flyers, screenshots, deleted IG stories, secret-show photos. Hard drive of receipts going back six years. The scene's institutional memory before the scene is old enough to have one.\n\nWhen the Provocateur drags someone, the Archivist provides the source material."
+    },
+    {
+      "name": "The Outsider",
+      "type": "street",
+      "type_label": "THE STREET",
+      "hp": 60,
+      "rarity": "common",
+      "photo": "assets/voice-08-outsider.jpg",
+      "flavor": "Watches from the door. Knows the room better than the regulars.",
+      "moves": [
+        {
+          "cost": "p",
+          "name": "Lurk",
+          "damage": 10,
+          "desc": "Sees the room first. Look at the top 3 cards."
+        },
+        {
+          "cost": "pp",
+          "name": "Through The Door",
+          "damage": 60,
+          "desc": "Always returns to the scene."
+        }
+      ],
+      "platform": "TBA",
+      "link": "#roster",
+      "theme_song": "https://open.spotify.com/track/6l29X3RtcndQexIlsHOvuI",
+      "lore": "Watches from the door. Knows the room better than the regulars.\n\nNot in any clique. Shows up to every show, doesn't drink, doesn't post, doesn't network. Just clocks the room and leaves.\n\nEventually becomes the most reliable narrator the scene has — because they're the only one with no skin in the game."
+    }
+  ]
+}

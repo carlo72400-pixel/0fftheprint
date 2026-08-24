@@ -1,0 +1,31 @@
+{
+  "items": [
+    {
+      "slug": "2026-08-21-zen-haus",
+      "title": "Third Friday Night Market",
+      "venue": "Zen Haus",
+      "date": "2026-08-21",
+      "date_short": "08.21.26",
+      "count": 40,
+      "cover": "2026-08-21-zen-haus/media/001_t.jpg"
+    },
+    {
+      "slug": "2026-08-16-the-mix",
+      "title": "The Mix",
+      "venue": "The Mix",
+      "date": "2026-08-16",
+      "date_short": "08.16.26",
+      "count": 47,
+      "cover": "2026-08-16-the-mix/media/001_t.jpg"
+    },
+    {
+      "slug": "2026-08-14-blade-rave",
+      "title": "Blade Rave",
+      "venue": "Paper Tiger",
+      "date": "2026-08-14",
+      "date_short": "08.14.26",
+      "count": 48,
+      "cover": "2026-08-14-blade-rave/media/001_t.jpg"
+    }
+  ]
+}

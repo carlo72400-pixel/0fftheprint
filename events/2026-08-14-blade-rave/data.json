@@ -1,0 +1,390 @@
+{
+  "slug": "2026-08-14-blade-rave",
+  "title": "Blade Rave",
+  "venue": "Paper Tiger",
+  "date": "2026-08-14",
+  "date_short": "08.14.26",
+  "count": 48,
+  "media": [
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/001.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/001_full.jpg",
+      "thumb": "media/001_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/002.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/002_full.jpg",
+      "thumb": "media/002_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/003.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/003_full.jpg",
+      "thumb": "media/003_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/004.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/004_full.jpg",
+      "thumb": "media/004_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/005.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/005_full.jpg",
+      "thumb": "media/005_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/006.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/006_full.jpg",
+      "thumb": "media/006_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/007.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/007_full.jpg",
+      "thumb": "media/007_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/008.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/008_full.jpg",
+      "thumb": "media/008_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/009.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/009_full.jpg",
+      "thumb": "media/009_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/010.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/010_full.jpg",
+      "thumb": "media/010_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/011.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/011_full.jpg",
+      "thumb": "media/011_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/012.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/012_full.jpg",
+      "thumb": "media/012_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/013.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/013_full.jpg",
+      "thumb": "media/013_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/014.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/014_full.jpg",
+      "thumb": "media/014_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/015.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/015_full.jpg",
+      "thumb": "media/015_t.jpg",
+      "w": 2560,
+      "h": 1920
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/016.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/016_full.jpg",
+      "thumb": "media/016_t.jpg",
+      "w": 2560,
+      "h": 1920
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/017.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/017_full.jpg",
+      "thumb": "media/017_t.jpg",
+      "w": 2560,
+      "h": 1920
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/018.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/018_full.jpg",
+      "thumb": "media/018_t.jpg",
+      "w": 2560,
+      "h": 1920
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/019.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/019_full.jpg",
+      "thumb": "media/019_t.jpg",
+      "w": 2560,
+      "h": 1920
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/020.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/020_full.jpg",
+      "thumb": "media/020_t.jpg",
+      "w": 2560,
+      "h": 1920
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/021.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/021_full.jpg",
+      "thumb": "media/021_t.jpg",
+      "w": 2560,
+      "h": 1920
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/022.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/022_full.jpg",
+      "thumb": "media/022_t.jpg",
+      "w": 2560,
+      "h": 1920
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/023.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/023_full.jpg",
+      "thumb": "media/023_t.jpg",
+      "w": 2560,
+      "h": 1920
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/024.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/024_full.jpg",
+      "thumb": "media/024_t.jpg",
+      "w": 2560,
+      "h": 1920
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/025.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/025_full.jpg",
+      "thumb": "media/025_t.jpg",
+      "w": 2560,
+      "h": 1920
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/026.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/026_full.jpg",
+      "thumb": "media/026_t.jpg",
+      "w": 2560,
+      "h": 1920
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/027.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/027_full.jpg",
+      "thumb": "media/027_t.jpg",
+      "w": 2560,
+      "h": 1920
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/028.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/028_full.jpg",
+      "thumb": "media/028_t.jpg",
+      "w": 2560,
+      "h": 1920
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/029.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/029_full.jpg",
+      "thumb": "media/029_t.jpg",
+      "w": 2560,
+      "h": 1920
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/030.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/030_full.jpg",
+      "thumb": "media/030_t.jpg",
+      "w": 2560,
+      "h": 1920
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/031.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/031_full.jpg",
+      "thumb": "media/031_t.jpg",
+      "w": 2560,
+      "h": 1920
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/032.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/032_full.jpg",
+      "thumb": "media/032_t.jpg",
+      "w": 2560,
+      "h": 1920
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/033.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/033_full.jpg",
+      "thumb": "media/033_t.jpg",
+      "w": 2560,
+      "h": 1920
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/034.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/034_full.jpg",
+      "thumb": "media/034_t.jpg",
+      "w": 2560,
+      "h": 1920
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/035.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/035_full.jpg",
+      "thumb": "media/035_t.jpg",
+      "w": 2560,
+      "h": 1920
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/036.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/036_full.jpg",
+      "thumb": "media/036_t.jpg",
+      "w": 2560,
+      "h": 1920
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/037.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/037_full.jpg",
+      "thumb": "media/037_t.jpg",
+      "w": 2560,
+      "h": 1920
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/038.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/038_full.jpg",
+      "thumb": "media/038_t.jpg",
+      "w": 2560,
+      "h": 1920
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/039.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/039_full.jpg",
+      "thumb": "media/039_t.jpg",
+      "w": 2560,
+      "h": 1920
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/040.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/040_full.jpg",
+      "thumb": "media/040_t.jpg",
+      "w": 2560,
+      "h": 1920
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/041.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/041_full.jpg",
+      "thumb": "media/041_t.jpg",
+      "w": 2560,
+      "h": 1920
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/042.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/042_full.jpg",
+      "thumb": "media/042_t.jpg",
+      "w": 2560,
+      "h": 1920
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/043.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/043_full.jpg",
+      "thumb": "media/043_t.jpg",
+      "w": 2560,
+      "h": 1920
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/044.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/044_full.jpg",
+      "thumb": "media/044_t.jpg",
+      "w": 2560,
+      "h": 1920
+    },
+    {
+      "type": "video",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/v01.mp4",
+      "thumb": "media/v01_t.jpg",
+      "w": 520,
+      "h": 292
+    },
+    {
+      "type": "video",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/v02.mp4",
+      "thumb": "media/v02_t.jpg",
+      "w": 520,
+      "h": 292
+    },
+    {
+      "type": "video",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/v03.mp4",
+      "thumb": "media/v03_t.jpg",
+      "w": 520,
+      "h": 292
+    },
+    {
+      "type": "video",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/v04.mp4",
+      "thumb": "media/v04_t.jpg",
+      "w": 520,
+      "h": 292
+    }
+  ]
+}

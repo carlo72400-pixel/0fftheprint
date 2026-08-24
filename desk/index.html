@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>The Desk · 0FF THE PRINT</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0a0a0d">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/auth.css">
+<style>
+  .post-row{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;
+    padding:15px 4px;border-bottom:1px solid var(--line)}
+  .post-row.no-img{grid-template-columns:1fr}
+  .post-row:last-child{border-bottom:0}
+  .pthumb{width:56px;height:56px;border-radius:9px;background:#0d0c11 center/cover no-repeat;
+    border:1px solid var(--line);flex:0 0 auto;object-fit:cover}
+  .post-row .txt{font-size:14px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}
+  .post-row .meta{font-family:var(--f-mono);font-size:10.5px;color:var(--muted);letter-spacing:.1em;
+    margin-top:7px;display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+  .gone{opacity:.45}
+  .pill.hidden{border-color:rgba(255,255,255,.18);color:var(--muted)}
+  .pill.edited{border-color:rgba(255,255,255,.14);color:var(--muted);font-size:9px}
+  .pill.pin{border-color:rgba(47,107,255,.5);color:#9db9ff}
+  .acts{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap}
+  .acts .btn{width:auto;margin:0;min-height:40px;font-size:13px;padding:8px 15px}
+  .more{background:none;border:0;color:var(--pink-glow);cursor:pointer;font-family:var(--f-mono);
+    font-size:11px;padding:0;margin-top:4px}
+  .undo{background:rgba(47,107,255,.1);border:1px solid rgba(47,107,255,.4);border-radius:9px;
+    padding:11px 13px;margin-top:12px;font-size:13px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .undo .btn{width:auto;margin:0;font-size:13px;padding:7px 14px;min-height:0}
+  .slug{font-family:var(--f-mono);font-size:10.5px;color:var(--muted)}
+  .broke{background:rgba(255,93,126,.08);border:1px solid rgba(255,93,126,.35);border-radius:10px;
+    padding:14px;font-size:13px;color:#ffb3c4}
+</style>
+</head>
+<body>
+<div class="leopard-bar"></div>
+<div class="wrap wide">
+  <a class="back" href="../">&larr; 0FF THE PRINT</a>
+  <h1>The Desk</h1>
+  <div class="sub">who gets in &nbsp;·&nbsp; what stays up</div>
+  <div id="panel"><div class="empty">checking…</div></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="../supabase-config.js?v=f1348482"></script>
+<script src="../assets/js/desk.js?v=128f5421"></script>
+<script>
+(async () => {
+  const $ = id => document.getElementById(id);
+  const panel = $('panel');
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const when = iso => { const d = new Date(iso); return isNaN(d) ? '' : d.toLocaleDateString(undefined,{month:'short',day:'numeric'}); };
+
+  // Survives a re-render so the undo strip does not vanish under him.
+  let lastBatch = null, lastBatchN = 0, lastBatchWho = '', lastRetired = null;
+
+  if (!OTP.configured) {
+    panel.innerHTML = `<div class="setup"><b>Backend not switched on yet</b>
+      Run <code>schema.sql</code> in Supabase and fill in <code>supabase-config.js</code>.
+      Full walkthrough is in <code>SUPABASE_SETUP.md</code>.</div>`;
+    return;
+  }
+  const me = await OTP.me();
+  if (!me) { location.href = '../join/'; return; }
+  if (!me.profile?.is_admin) {
+    panel.innerHTML = `<div class="card"><b style="font-family:var(--f-display);font-style:italic;font-size:24px;text-transform:uppercase">Desk only.</b>
+      <div class="note">Signed in as ${esc(me.user.email)}, but this page is the owner's.</div>
+      <button class="btn ghost" id="out" type="button">Sign out</button></div>`;
+    $('out').onclick = async () => { await OTP.signOut(); location.href = '../join/'; };
+    return;
+  }
+
+  // Photos whose post went away. Draining on open means they clean themselves
+  // up whenever he looks at the desk, instead of piling up on a storage bill.
+  try { await OTP.drainOrphans(); } catch (e) { console.warn('orphan drain skipped:', e.message); }
+
+  async function render() {
+    const [pending, members, posts, orphans] = await Promise.all([
+      OTP.pending(), OTP.members(), OTP.allPosts(40), OTP.orphanImages()
+    ]);
+
+    const undoStrip = lastBatch
+      ? `<div class="undo">Pulled ${lastBatchN} post${lastBatchN === 1 ? '' : 's'} by ${esc(lastBatchWho)}.
+           <button class="btn ghost" id="undo" type="button">Put them back</button></div>`
+      : '';
+
+    panel.innerHTML = `
+      <div class="card">
+        <div class="who">signed in as <b>${esc(me.profile.display_name)}</b>
+          <button class="btn ghost sm" id="out" type="button">Sign out</button></div>
+      </div>
+
+      <div class="card">
+        <b style="font-family:var(--f-display);font-style:italic;font-size:24px;text-transform:uppercase">
+          Waiting on you ${pending.length ? `<span class="pill wait">${pending.length}</span>` : ''}</b>
+        ${pending.length ? pending.map(p => `
+          <div class="person">
+            <div><b>${esc(p.display_name)}</b>
+              <div class="meta">${p.requested_slug ? 'asked for: ' + esc(p.requested_slug) : 'no card asked for'}
+                &nbsp;·&nbsp; asked ${when(p.created_at)}</div></div>
+            <div class="row">
+              <button class="btn ok sm" data-ok="${p.id}" type="button">Approve</button>
+              ${p.requested_slug ? `<button class="btn ok sm" data-okcard="${p.id}" data-slug="${esc(p.requested_slug)}" type="button">Approve + give card</button>` : ''}
+            </div>
+          </div>`).join('') : '<div class="empty">nobody waiting</div>'}
+      </div>
+
+      <div class="card">
+        <b style="font-family:var(--f-display);font-style:italic;font-size:24px;text-transform:uppercase">
+          Card holders</b>
+        ${undoStrip}
+        ${members.length ? members.map(p => `
+          <div class="person">
+            <div><b>${esc(p.display_name)}</b>
+              <div class="meta"><span class="slug">${esc(p.card_slug || 'no card')}</span>
+                ${p.is_admin ? '<span class="pill ok">DESK</span>' : ''}</div></div>
+            <div class="row">
+              <button class="btn ghost sm" data-card="${p.id}" data-cur="${esc(p.card_slug || '')}" type="button">Change card</button>
+              ${p.is_admin ? '' : `<button class="btn bad sm" data-retire="${p.id}" data-name="${esc(p.display_name)}" type="button">Revoke + pull posts</button>`}
+            </div>
+          </div>`).join('') : '<div class="empty">nobody approved yet</div>'}
+      </div>
+
+      ${orphans.length ? `
+      <div class="card">
+        <b style="font-family:var(--f-display);font-style:italic;font-size:24px;text-transform:uppercase">
+          Photos that would not go away</b>
+        <div class="broke" style="margin-top:12px">These files should have gone when their post did. They are still up. Tap to try again.</div>
+        ${orphans.map(o => `
+          <div class="person">
+            <div><b style="font-size:14px;font-style:normal;text-transform:none">${esc(o.object_name)}</b>
+              <div class="meta">${esc(o.reason || 'no reason recorded')}</div></div>
+            <div class="row"><button class="btn ghost sm" data-orphan="${esc(o.object_name)}" type="button">Try again</button></div>
+          </div>`).join('')}
+      </div>` : ''}
+
+      <div class="card">
+        <b style="font-family:var(--f-display);font-style:italic;font-size:24px;text-transform:uppercase">
+          Every post</b>
+        ${posts.length ? posts.map(p => {
+          const pulled = !p.published;
+          // published=true but the author got revoked means visitors cannot see it
+          // even though the row says live. Without this he moderates blind.
+          const hidden = p.published && p.author_approved === false;
+          const full = p.text || '';
+          const clipped = full.length > 400;
+          return `<div class="post-row ${p.image_url ? '' : 'no-img'} ${pulled || hidden ? 'gone' : ''}" data-id="${p.id}">
+            ${p.image_url
+                ? (OTP.isVideo(p.image_url)
+                    ? `<video class="pthumb" src="${esc(p.image_url)}" preload="metadata" muted playsinline></video>`
+                    : `<div class="pthumb" data-bg="${esc(p.image_url)}"></div>`)
+                : ''}
+            <div>
+              <div class="txt" data-full="${esc(full)}">${esc(clipped ? full.slice(0,400) + '…' : full)}</div>
+              ${clipped ? `<button class="more" data-more="1" type="button">more</button>` : ''}
+              <div class="meta">
+                <b style="color:var(--ink);font-family:var(--f-body);font-size:12px">${esc(p.display_name || p.profiles?.display_name || '?')}</b>
+                <span>${when(p.created_at)}</span>
+                ${p.pinned ? '<span class="pill pin">PINNED</span>' : ''}
+                ${p.edited_at ? '<span class="pill edited">EDITED</span>' : ''}
+                ${pulled ? '<span class="pill" style="color:var(--bad);border-color:rgba(255,93,126,.45)">PULLED</span>' : ''}
+                ${hidden ? '<span class="pill hidden">HIDDEN, author revoked</span>' : ''}
+              </div>
+              <div class="acts">
+                <button class="btn ghost" data-edit="${p.id}" type="button">Edit</button>
+                <button class="btn ghost" data-pin="${p.id}" data-on="${p.pinned ? '0' : '1'}" type="button">${p.pinned ? 'Unpin' : 'Pin'}</button>
+                ${pulled
+                  ? `<button class="btn ok" data-pub="${p.id}" data-on="1" type="button">Restore</button>`
+                  : `<button class="btn bad" data-pub="${p.id}" data-on="0" type="button">Pull</button>`}
+                <button class="btn bad" data-del="${p.id}" type="button">Delete</button>
+              </div>
+              <div class="msg" id="pm${p.id}"></div>
+            </div>
+          </div>`;
+        }).join('') : '<div class="empty">no posts yet</div>'}
+      </div>`;
+
+    panel.querySelectorAll('.pthumb[data-bg]').forEach(el => {
+      el.style.backgroundImage = 'url("' + el.dataset.bg + '")';
+    });
+
+    // render() sits in a finally, not the success path. "Approve + give card" is
+    // two requests: if the approve commits and the card assignment throws
+    // (somebody already holds it), skipping the re-render left the person
+    // approved in the database while the screen still listed them as waiting,
+    // with the pending count unchanged and both buttons live.
+    const rerun = fn => async (ev) => {
+      const b = ev.currentTarget; b.disabled = true;
+      try { await fn(b); }
+      catch (e) { alert(e.message || 'That did not go through.'); }
+      finally { render(); }
+    };
+
+    $('out').onclick = async () => { await OTP.signOut(); location.href = '../join/'; };
+    if ($('undo')) $('undo').onclick = rerun(async () => {
+      // Retiring does TWO writes: it revokes the person AND pulls their posts.
+      // Undo used to reverse only the second, so the posts came back "published"
+      // while their author was still unapproved, and the public feed hides an
+      // unapproved author's posts. Nothing actually returned to the site, and the
+      // confirm dialog had promised it would. Re-approve FIRST, then republish.
+      if (lastRetired) await OTP.setApproved(lastRetired, true);
+      await OTP.restoreBatch(lastBatch);
+      lastBatch = null; lastRetired = null;
+    });
+
+    panel.querySelectorAll('[data-ok]').forEach(b => b.onclick = rerun(b => OTP.setApproved(b.dataset.ok, true)));
+    panel.querySelectorAll('[data-okcard]').forEach(b => b.onclick = rerun(async b => {
+      await OTP.setApproved(b.dataset.okcard, true);
+      await OTP.setCard(b.dataset.okcard, b.dataset.slug);
+    }));
+    panel.querySelectorAll('[data-card]').forEach(b => b.onclick = async () => {
+      const v = prompt('Which card? Leave it empty to take the card off them.', b.dataset.cur || '');
+      if (v === null) return;
+      try { await OTP.setCard(b.dataset.card, v.trim()); render(); }
+      catch (e) { alert(e.message); }
+    });
+    panel.querySelectorAll('[data-retire]').forEach(b => b.onclick = async () => {
+      const name = b.dataset.name;
+      if (!confirm('Revoke ' + name + ' and pull everything they posted? You can put it back.')) return;
+      b.disabled = true;
+      try {
+        const batch = await OTP.retireMember(b.dataset.retire);
+        const n = (await OTP.allPosts(200)).filter(p => p.pull_batch === batch).length;
+        lastBatch = batch; lastBatchN = n; lastBatchWho = name;
+        lastRetired = b.dataset.retire;
+        render();
+      } catch (e) { alert(e.message); b.disabled = false; }
+    });
+
+    panel.querySelectorAll('[data-orphan]').forEach(b => b.onclick = rerun(async b => {
+      await OTP.deleteImage('/storage/v1/object/public/posts/' + b.dataset.orphan);
+    }));
+
+    panel.querySelectorAll('[data-more]').forEach(b => b.onclick = () => {
+      const t = b.previousElementSibling;
+      t.textContent = t.dataset.full; b.remove();
+    });
+
+    panel.querySelectorAll('[data-pin]').forEach(b => b.onclick = rerun(b => OTP.setPinned(b.dataset.pin, b.dataset.on === '1')));
+
+    panel.querySelectorAll('[data-pub]').forEach(b => b.onclick = async (ev) => {
+      const btn = ev.currentTarget;
+      const on = btn.dataset.on === '1';
+      if (!on && !confirm('Pull this post off the site? You can put it back.')) return;
+      btn.disabled = true;
+      try { await OTP.setPublished(btn.dataset.pub, on); render(); }
+      catch (e) { alert(e.message); btn.disabled = false; }
+    });
+
+    panel.querySelectorAll('[data-del]').forEach(b => b.onclick = async (ev) => {
+      const btn = ev.currentTarget;
+      if (!confirm('Delete this for good? The photo goes with it and there is no undo button.')) return;
+      if (!confirm('Last check. This one does not come back.')) return;
+      btn.disabled = true;
+      try { await OTP.deletePost(btn.dataset.del); render(); }
+      catch (e) { alert(e.message); btn.disabled = false; }
+    });
+
+    panel.querySelectorAll('[data-edit]').forEach(b => b.onclick = () => {
+      const row = b.closest('.post-row');
+      const id = b.dataset.edit;
+      const holder = row.querySelector('.txt').parentElement;
+      const current = row.querySelector('.txt').dataset.full;
+      holder.innerHTML = `
+        <textarea id="de${id}" maxlength="800">${esc(current)}</textarea>
+        <div class="acts">
+          <button class="btn" data-save="${id}" type="button">Save</button>
+          <button class="btn ghost" data-cancel="1" type="button">Never mind</button>
+        </div>
+        <div class="msg" id="pm${id}"></div>`;
+      holder.querySelector('[data-cancel]').onclick = () => render();
+      holder.querySelector('[data-save]').onclick = async (ev) => {
+        const btn = ev.currentTarget;
+        const t = document.getElementById('de' + id).value.trim();
+        if (!t) return;
+        btn.disabled = true; btn.textContent = 'Saving…';
+        try { await OTP.updatePost(id, { text: t }); render(); }
+        catch (e) {
+          const m = document.getElementById('pm' + id);
+          m.textContent = e.message; m.className = 'msg show err';
+          btn.disabled = false; btn.textContent = 'Save';
+        }
+      };
+    });
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>

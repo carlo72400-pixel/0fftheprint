@@ -1,0 +1,43 @@
+{
+  "site_name": "0FF THE PRINT",
+  "handle": "@vamppsych",
+  "city": "San Antonio",
+  "kicker": "MEDIA HOUSE · SAN ANTONIO TX · SINCE WE FELT LIKE IT",
+  "one_liner": "Underground media house in San Antonio. Interviews, night photos, shows, music visuals, all of it shot while the work is happening.",
+  "social": {
+    "instagram": "https://instagram.com/vamppsych",
+    "tiktok": "https://www.tiktok.com/@vamp.psych",
+    "youtube": "https://www.youtube.com/@Vamppsych"
+  },
+  "ticker_headlines": [
+    "NO COMMENTS. NO ALGORITHM. IF YOU HOLD A CARD, YOU HOLD A LOGIN.",
+    "OFF THE RECORD STAYS OFF THE RECORD",
+    "THE SUBJECT SEES THE CUT BEFORE ANYBODY ELSE",
+    "NOBODY SITS AGAINST A WALL",
+    "EVERY DROP GETS A NUMBER",
+    "KAV-MAN · THE VOICE",
+    "VIRGOSGATEWAY · THE SIGNAL",
+    "WRATHFOL · THE BOARD",
+    "ON ROTATION: VIRGOSGATEWAY · 2 HI / YOU TRIED IT",
+    "ZENHOUSE FRIDAYS. WE PEAK AROUND 2 AM.",
+    "STILL IN SAN ANTONIO. STILL NOT LEAVING."
+  ],
+  "house_quote": "The soul becomes dyed with the color of its thoughts.",
+  "house_quote_attribution": "Marcus Aurelius",
+  "house_quote_highlight": "dyed",
+  "mic_check": {
+    "studio": "San Antonio, TX",
+    "founded": "2026 · vol. 1",
+    "what_it_is": "Underground media house",
+    "pillars": "Music · Scene · Interviews · The Take",
+    "the_roster": "KAV-MAN · VIRGOSGATEWAY · WRATHFOL · seats filling",
+    "territory": "San Antonio, and wherever the work takes us",
+    "the_rooms": "Zenhouse · The Mix · Rah Rah Room · Paper Tiger",
+    "vibe": "Pretty-first, with teeth.",
+    "the_lens": "VampPsych · FX6 / Insta360",
+    "palette": "Pastel pink + chrome + feral black, dye-blue accent",
+    "signature": "The pink leopard. One bold hit per asset.",
+    "voice": "Insider · opinionated · provocative",
+    "not_interested_in": "Corporate. Algorithms. Permission."
+  }
+}

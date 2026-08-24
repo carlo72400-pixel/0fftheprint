@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Post · 0FF THE PRINT</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0a0a0d">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/auth.css">
+<style>
+  .drop{margin-top:14px;border:1px dashed var(--line);border-radius:12px;padding:18px;text-align:center;
+    font-family:var(--f-mono);font-size:11.5px;letter-spacing:.14em;color:var(--muted);cursor:pointer;text-transform:uppercase}
+  .drop:hover,.drop.over{border-color:var(--pink-deep);color:var(--pink-glow)}
+  .prev{margin-top:12px;position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--line);display:none}
+  .prev img,.prev video{width:100%;display:block;max-height:340px;object-fit:cover;background:#000}
+  .prev button{position:absolute;top:8px;right:8px;background:rgba(10,10,13,.85);border:1px solid var(--line);
+    color:var(--ink);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px}
+  .cnt{text-align:right;font-family:var(--f-mono);font-size:10.5px;color:var(--muted);margin-top:6px}
+  .cnt.over{color:var(--bad)}
+
+  /* ---- your posts ---- */
+  .mine{margin-top:22px}
+  .mine h2{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:24px;
+    text-transform:uppercase;margin-bottom:4px}
+  .mrow{display:grid;grid-template-columns:auto 1fr;gap:12px;padding:15px 0;border-bottom:1px solid var(--line)}
+  .mrow:last-child{border-bottom:0}
+  .mthumb{width:54px;height:54px;border-radius:9px;background:#0d0c11 center/cover no-repeat;
+    border:1px solid var(--line);flex:0 0 auto;object-fit:cover}
+  .mrow.no-img{grid-template-columns:1fr}
+  .mtext{font-size:14px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}
+  .mmeta{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;color:var(--muted);margin-top:6px;
+    display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .tag{font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;
+    border:1px solid var(--line);border-radius:3px;padding:2px 6px}
+  .tag.edited{color:var(--muted)}
+  .tag.pulled{color:var(--bad);border-color:rgba(255,93,126,.45)}
+  /* 44px minimum tap target. These are people on phones, not on a mouse. */
+  .macts{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+  .macts .btn{width:auto;margin:0;min-height:44px;font-size:14px;padding:9px 18px}
+  .macts .btn:disabled{opacity:.35}
+  .locked{font-family:var(--f-mono);font-size:11px;color:var(--muted);margin-top:8px}
+  .mrow textarea{min-height:110px;margin-top:2px}
+</style>
+</head>
+<body>
+<div class="leopard-bar"></div>
+<div class="wrap">
+  <a class="back" href="../">&larr; 0FF THE PRINT</a>
+  <h1>New Post</h1>
+  <div class="sub" id="sub">the timeline &nbsp;·&nbsp; goes live instantly</div>
+
+  <div class="card" id="panel"><div class="empty">checking your card…</div></div>
+  <div class="mine" id="mine"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="../supabase-config.js?v=f1348482"></script>
+<script src="../assets/js/desk.js?v=128f5421"></script>
+<script>
+(async () => {
+  const $ = id => document.getElementById(id);
+  const panel = $('panel');
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const when = iso => { const d = new Date(iso); return isNaN(d) ? '' : d.toLocaleDateString(undefined,{month:'short',day:'numeric'}) + ', ' + d.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'}); };
+
+  if (!OTP.configured) {
+    panel.innerHTML = `<div class="setup"><b>Backend not switched on yet</b>
+      Wire up Supabase first, see <code>SUPABASE_SETUP.md</code>.</div>`;
+    return;
+  }
+  const me = await OTP.me();
+  if (!me) { location.href = '../join/'; return; }
+  if (!me.profile?.approved) {
+    panel.innerHTML = `<b style="font-family:var(--f-display);font-style:italic;font-size:26px;text-transform:uppercase">Not approved yet.</b>
+      <div class="note">Signed in as ${esc(me.user.email)}. The desk approves by hand. Once you're in, this becomes your post box.</div>
+      <button class="btn ghost" id="out" type="button">Sign out</button>`;
+    $('out').onclick = async () => { await OTP.signOut(); location.href = '../join/'; };
+    return;
+  }
+
+  // card_slug is desk-granted now, so a freshly approved member legitimately has none.
+  const noCard = !me.profile.card_slug;
+
+  panel.innerHTML = `
+    <div class="who">posting as <b>${esc(me.profile.display_name)}</b>
+      <button class="btn ghost sm" id="out" type="button">Sign out</button></div>
+    ${noCard ? `<div class="note">No card on you yet, so your posts run under your name until the desk hands one over.</div>` : ''}
+    <label for="text">What's up</label>
+    <textarea id="text" maxlength="800" placeholder="art, a thought, a bad opinion about a mix"></textarea>
+    <div class="cnt" id="cnt">0 / 800</div>
+    <div class="drop" id="drop">Tap to attach a photo, GIF or clip</div>
+    <input type="file" id="file" accept="image/*,video/*" hidden>
+    <div class="prev" id="prev"><img id="previmg" alt=""><button id="rm" type="button">&times;</button></div>
+    <div id="altwrap" style="display:none">
+      <label for="alt">Describe the photo (optional)</label>
+      <input id="alt" type="text" maxlength="180" placeholder="for anybody who can't see it">
+    </div>
+    <button class="btn" id="go" type="button">Post it</button>
+    <div class="msg" id="msg"></div>
+    <div class="note">Edit it, delete it, whatever. If the desk pulls a post it locks, and that is on purpose.</div>
+
+    <label>Your color</label>
+    <div class="swatches" id="sw"></div>
+    <div class="note" id="swnote">This colors your posts on the timeline, and these pages while you're logged in.</div>`;
+
+  const msg = (t, k) => { const m = $('msg'); m.textContent = t; m.className = 'msg show ' + k; };
+  let file = null;
+
+  $('out').onclick = async () => { await OTP.signOut(); location.href = '../join/'; };
+  $('text').oninput = () => {
+    const n = $('text').value.length;
+    $('cnt').textContent = `${n} / 800`;
+    $('cnt').classList.toggle('over', n > 800);
+  };
+  $('drop').onclick = () => $('file').click();
+  $('drop').ondragover = e => { e.preventDefault(); $('drop').classList.add('over'); };
+  $('drop').ondragleave = () => $('drop').classList.remove('over');
+  $('drop').ondrop = e => {
+    e.preventDefault(); $('drop').classList.remove('over');
+    if (e.dataTransfer.files[0]) setFile(e.dataTransfer.files[0]);
+  };
+  $('file').onchange = e => { if (e.target.files[0]) setFile(e.target.files[0]); };
+  $('rm').onclick = () => {
+    file = null; $('prev').style.display = 'none'; $('file').value = '';
+    $('altwrap').style.display = 'none'; $('alt').value = '';
+  };
+
+  function setFile(f) {
+    // The bucket enforces both of these server side too. This is just a faster,
+    // friendlier no than a failed upload.
+    // Kept in step with the homepage box and with what the bucket actually
+    // accepts (50MB, images + mp4/mov/webm/m4v). This page said "photo" and
+    // 8MB for a while after the bucket had already moved.
+    const isVid = /^video\//.test(f.type || '') || /\.(mp4|mov|webm|m4v)$/i.test(f.name || '');
+    if (!isVid && !/^image\//.test(f.type || '')
+        && !/\.(jpe?g|png|gif|webp|heic|heif|avif)$/i.test(f.name || '')) {
+      msg('Photos, GIFs and video clips only.', 'err'); return;
+    }
+    if (f.size > 50 * 1024 * 1024) {
+      msg(isVid ? 'That clip is over 50MB. Trim it or drop the quality a notch.'
+                : 'That photo is over 50MB. Shrink it first.', 'err');
+      return;
+    }
+    file = f;
+    // Swap the preview element to match what they picked, or a video renders
+    // as a broken image icon.
+    const old = $('previmg');
+    const el = document.createElement(isVid ? 'video' : 'img');
+    el.id = 'previmg';
+    if (isVid) { el.controls = true; el.playsInline = true; }
+    el.src = URL.createObjectURL(f);
+    old.replaceWith(el);
+    $('prev').style.display = 'block';
+    $('altwrap').style.display = isVid ? 'none' : 'block';
+  }
+
+  $('go').onclick = async () => {
+    const text = $('text').value.trim();
+    if (!text) { msg('Say something first.', 'err'); return; }
+    $('go').disabled = true; $('go').textContent = 'Posting…';
+    try {
+      let url = null;
+      if (file) { $('go').textContent = 'Uploading photo…'; url = await OTP.uploadImage(file); }
+      await OTP.post({ text, imageUrl: url, imageAlt: $('alt').value.trim() || null });
+      msg('Up. It is on the homepage now.', 'good');
+      $('text').value = ''; $('cnt').textContent = '0 / 800';
+      $('rm').click();
+      renderMine();
+    } catch (e) {
+      // The database writes these for humans already, so pass them straight through.
+      const m = e.message || '';
+      msg(/^(Slow down|That is twenty|The desk pulled|Log in first)/.test(m) ? m : (m || 'That did not go through.'), 'err');
+    } finally {
+      $('go').disabled = false; $('go').textContent = 'Post it';
+    }
+  };
+
+  /* ================= YOUR COLOR ================= */
+  // The key is all that travels. The hexes live in auth.css and index.html and
+  // nowhere else, so nothing here can ever put a color into the page.
+  const NAMES = { acid:'Acid', gold:'Gold', ember:'Ember', pink:'Pink', violet:'Violet', ice:'Ice' };
+  const paintBody = k => {
+    document.body.className = document.body.className.replace(/\bacc-\S+/g, '').trim();
+    if (OTP.ACCENTS.indexOf(k) !== -1) document.body.classList.add('acc-' + k);
+  };
+
+  function renderSwatches(current) {
+    paintBody(current);
+    $('sw').innerHTML = OTP.ACCENTS.map(k =>
+      `<button class="sw sw-${k}${k === current ? ' on' : ''}" data-k="${k}"
+               type="button" title="${NAMES[k]}" aria-label="${NAMES[k]}"></button>`).join('');
+    $('sw').querySelectorAll('[data-k]').forEach(b => b.onclick = async () => {
+      const k = b.dataset.k;
+      $('sw').querySelectorAll('.sw').forEach(x => x.classList.toggle('on', x === b));
+      paintBody(k);                                  // instant, before the round trip
+      try {
+        await OTP.setAccent(k);
+        $('swnote').textContent = NAMES[k] + '. Saved. Your posts on the timeline use it too.';
+      } catch (e) {
+        $('swnote').textContent = 'That did not save. ' + (e.message || '');
+        renderSwatches(current);                     // put it back
+      }
+    });
+  }
+  renderSwatches(me.profile.accent || null);
+
+  /* ================= YOUR POSTS ================= */
+  const mine = $('mine');
+
+  async function renderMine() {
+    const rows = await OTP.myPosts();
+    if (!rows.length) {
+      mine.innerHTML = `<h2>Your posts</h2><div class="empty">nothing up yet</div>`;
+      return;
+    }
+    mine.innerHTML = `<h2>Your posts</h2><div class="card" id="minecard"></div>`;
+    const box = $('minecard');
+    box.innerHTML = rows.map(p => {
+      const pulled = !p.published;
+      return `<div class="mrow ${p.image_url ? '' : 'no-img'}" data-id="${p.id}">
+        ${p.image_url
+            ? (OTP.isVideo(p.image_url)
+                // a background-image of an mp4 renders nothing, so video gets a
+                // real element and shows its first frame
+                ? `<video class="mthumb" src="${esc(p.image_url)}" preload="metadata" muted playsinline></video>`
+                : `<div class="mthumb" data-bg="${esc(p.image_url)}"></div>`)
+            : ''}
+        <div>
+          <div class="mtext">${esc(p.text)}</div>
+          <div class="mmeta">
+            <span>${esc(when(p.created_at))}</span>
+            ${p.edited_at ? '<span class="tag edited">EDITED</span>' : ''}
+            ${pulled ? '<span class="tag pulled">PULLED</span>' : ''}
+            ${p.pinned ? '<span class="tag">PINNED</span>' : ''}
+          </div>
+          ${pulled
+            ? `<div class="locked">The desk has this one. Text Gianni.</div>
+               <div class="macts">
+                 <button class="btn ghost" disabled type="button">Edit</button>
+                 <button class="btn bad" disabled type="button">Delete</button>
+               </div>`
+            : `<div class="macts">
+                 <button class="btn ghost" data-edit="${p.id}" type="button">Edit</button>
+                 <button class="btn bad" data-del="${p.id}" type="button">Delete</button>
+               </div>`}
+        </div>
+      </div>`;
+    }).join('');
+
+    // Thumbnails through the CSSOM, never an inline style attribute.
+    box.querySelectorAll('.mthumb[data-bg]').forEach(el => {
+      el.style.backgroundImage = 'url("' + el.dataset.bg + '")';
+    });
+
+    box.querySelectorAll('[data-del]').forEach(b => b.onclick = async () => {
+      if (!confirm('Delete this post? The photo goes with it. No undo.')) return;
+      b.disabled = true;
+      try { await OTP.deletePost(b.dataset.del); renderMine(); }
+      catch (e) { alert(e.message); b.disabled = false; }
+    });
+
+    box.querySelectorAll('[data-edit]').forEach(b => b.onclick = () => {
+      const row = b.closest('.mrow');
+      const p = rows.find(r => String(r.id) === b.dataset.edit);
+      const holder = row.querySelector('.mtext').parentElement;
+      holder.innerHTML = `
+        <label for="e${p.id}">Fix it up</label>
+        <textarea id="e${p.id}" maxlength="800">${esc(p.text)}</textarea>
+        ${p.image_url ? `<label for="a${p.id}">Describe the photo</label>
+          <input id="a${p.id}" type="text" maxlength="180" value="${esc(p.image_alt || '')}">` : ''}
+        <div class="macts">
+          <button class="btn" data-save="${p.id}" type="button">Save changes</button>
+          <button class="btn ghost" data-cancel="1" type="button">Never mind</button>
+        </div>
+        <div class="msg" id="m${p.id}"></div>`;
+      holder.querySelector('[data-cancel]').onclick = () => renderMine();
+      holder.querySelector('[data-save]').onclick = async (ev) => {
+        const btn = ev.currentTarget;
+        const t = document.getElementById('e' + p.id).value.trim();
+        const a = p.image_url ? document.getElementById('a' + p.id).value.trim() : undefined;
+        if (!t) { const m = document.getElementById('m' + p.id); m.textContent = 'It needs to say something.'; m.className = 'msg show err'; return; }
+        btn.disabled = true; btn.textContent = 'Saving…';
+        try { await OTP.updatePost(p.id, { text: t, imageAlt: a }); renderMine(); }
+        catch (e) {
+          const m = document.getElementById('m' + p.id);
+          m.textContent = e.message; m.className = 'msg show err';
+          btn.disabled = false; btn.textContent = 'Save changes';
+        }
+      };
+    });
+  }
+
+  renderMine();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<style>
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1600px;height:1600px;background:#f2efe8;position:relative;overflow:hidden;font-family:'Saira Condensed',sans-serif;}
+.tilt{position:absolute;inset:0;transform:rotate(-1.3deg);}
+.stack{position:absolute;left:120px;top:150px;font-style:italic;font-weight:900;color:#101010;line-height:.82;letter-spacing:-.01em;text-transform:uppercase;}
+.stack .l1{font-size:430px;display:block;}
+.stack .l2{font-size:430px;display:block;}
+.stack .l3{font-size:430px;display:block;}
+.side{position:absolute;right:88px;top:150px;writing-mode:vertical-rl;font-family:'JetBrains Mono',monospace;font-size:46px;letter-spacing:.3em;color:#101010;font-weight:600;-webkit-text-stroke:2.5px #101010;}
+.cross{position:absolute;left:1224px;top:82px;width:96px;height:96px;border:12px solid #101010;border-radius:50%;}
+.cross::before,.cross::after{content:'';position:absolute;background:#101010;}
+.cross::before{left:50%;top:-26px;bottom:-26px;width:12px;transform:translateX(-50%);}
+.cross::after{top:50%;left:-26px;right:-26px;height:12px;transform:translateY(-50%);}
+.foot{position:absolute;left:124px;bottom:120px;font-family:'JetBrains Mono',monospace;font-weight:600;color:#101010;font-size:50px;letter-spacing:.2em;display:flex;gap:34px;align-items:center;-webkit-text-stroke:2.5px #101010;}
+.foot .box{border:12px solid #101010;padding:14px 26px;}
+.bar{position:absolute;left:124px;top:112px;width:1050px;height:24px;background:repeating-linear-gradient(90deg,#101010 0 42px,transparent 42px 62px);}
+.zeroslash{position:absolute;left:196px;top:330px;width:190px;height:26px;background:#f2efe8;transform:rotate(-30deg);}
+</style></head>
+<body>
+<div class="tilt">
+  <div class="bar"></div>
+  <div class="stack"><span class="l1">0FF</span><span class="l2">THE</span><span class="l3">PRINT</span></div>
+  <div class="zeroslash"></div>
+  <div class="side">UNDERGROUND MEDIA HOUSE · SATX</div>
+  <div class="foot"><span class="box">NO. 0TP</span><span>PRETTY-FIRST · WITH TEETH</span></div>
+  <div class="cross"></div>
+</div>
+</body></html>

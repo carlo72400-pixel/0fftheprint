@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Third Friday Night Market · Zen Haus · 0FF THE PRINT</title>
+<meta name="description" content="40 frames from Third Friday Night Market at Zen Haus, Aug 21, 2026. Shot by 0FF THE PRINT.">
+<meta name="theme-color" content="#0a0a0d">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Third Friday Night Market · Zen Haus">
+<meta property="og:description" content="40 frames, Aug 21, 2026. Shot by 0FF THE PRINT.">
+<meta property="og:image" content="https://0fftheprint.com/events/2026-08-21-zen-haus/preview.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://0fftheprint.com/events/2026-08-21-zen-haus/preview.jpg">
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0d;--panel:#121218;--line:#23222b;--ink:#f4eef2;--muted:#9a93a3;
+--pink:#f7b9dd;--pink-deep:#f48fc8;--pink-glow:#ff79c6;--dye-blue:#2f6bff;
+--f-display:'Saira Condensed',sans-serif;--f-body:'Inter',system-ui,sans-serif;--f-mono:'JetBrains Mono',monospace;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.leopard-bar{height:14px;background:linear-gradient(90deg,var(--pink-deep),var(--pink) 25%,var(--dye-blue) 50%,var(--pink-deep) 75%,var(--pink))}
+.wrap{max-width:1400px;margin:0 auto;padding:26px 18px 70px}
+.back{font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);text-decoration:none;display:inline-block;margin-bottom:22px}
+.back:hover{color:var(--pink-glow)}
+h1{font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;
+font-size:clamp(34px,7vw,76px);line-height:.94;letter-spacing:-.01em;
+background:linear-gradient(180deg,#fff 10%,var(--pink) 45%,#8f8a97 60%,var(--pink-deep) 96%);
+-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 4px 24px rgba(255,121,198,.22))}
+.meta{font-family:var(--f-mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-top:10px}
+.meta b{color:var(--pink-glow);font-weight:500}
+.grid{columns:4 260px;column-gap:12px;margin-top:26px}
+.tile{break-inside:avoid;margin:0 0 12px;position:relative;display:block;width:100%;
+border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--panel);cursor:zoom-in}
+/* width/height on the img give it an intrinsic ratio so the tile has a real
+   height BEFORE the picture arrives. Without that the column collapses to 2px,
+   nothing intersects the viewport, loading="lazy" never fires, and the grid
+   stays empty forever. That deadlock shipped and nobody caught it. */
+.tile img{width:100%;height:auto;display:block;aspect-ratio:16/9;
+transition:transform .35s ease,filter .35s ease}
+.tile img[width][height]{aspect-ratio:auto}
+.tile:hover img{transform:scale(1.03);filter:brightness(1.08)}
+.tile.vid::after{content:'▶';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+width:52px;height:52px;border-radius:50%;background:rgba(10,10,13,.72);border:1px solid var(--pink-deep);
+color:var(--pink-glow);display:flex;align-items:center;justify-content:center;font-size:17px;padding-left:3px}
+.foot{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);
+font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.foot a{color:var(--pink-glow);text-decoration:none}
+/* lightbox */
+.lb{position:fixed;inset:0;z-index:200;background:rgba(6,6,9,.96);display:none;
+align-items:center;justify-content:center;padding:26px}
+.lb.open{display:flex}
+.lb img,.lb video{max-width:100%;max-height:88vh;border-radius:8px;box-shadow:0 20px 70px rgba(0,0,0,.7)}
+.lb-x,.lb-n,.lb-p{position:absolute;background:rgba(18,18,24,.9);border:1px solid var(--line);
+color:var(--ink);width:46px;height:46px;border-radius:50%;cursor:pointer;font-size:18px}
+.lb-x{top:18px;right:18px}
+.lb-p{left:18px;top:50%;transform:translateY(-50%)}
+.lb-n{right:18px;top:50%;transform:translateY(-50%)}
+.lb-x:hover,.lb-n:hover,.lb-p:hover{border-color:var(--pink-deep);color:var(--pink-glow)}
+.lb-dl{position:fixed;left:18px;bottom:18px;z-index:12;font-family:var(--f-mono,monospace);
+font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#f7b9dd;text-decoration:none;
+border:1px solid rgba(255,121,198,.45);border-radius:999px;padding:8px 14px;background:rgba(10,10,13,.75)}
+.lb-dl:hover{color:#0a0a0d;background:#f7b9dd}
+.lb-count{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);
+font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;color:var(--muted)}
+@media (max-width:640px){.grid{columns:2 150px;column-gap:8px}.tile{margin-bottom:8px}
+.lb-p,.lb-n{width:40px;height:40px}}
+</style>
+</head>
+<body>
+<div class="leopard-bar"></div>
+<div class="wrap">
+  <a class="back" href="../">&larr; All events</a>
+  <h1>Third Friday Night Market</h1>
+  <div class="meta"><b>Zen Haus</b> &nbsp;·&nbsp; Aug 21, 2026 &nbsp;·&nbsp; 40 frames</div>
+  <div class="grid" id="grid"></div>
+  <div class="foot">Shot by 0FF THE PRINT &nbsp;·&nbsp;
+    <a href="https://instagram.com/vamppsych" target="_blank" rel="noopener">@vamppsych</a>
+    &nbsp;·&nbsp; Tagged in one of these? DM for the full-res file.</div>
+</div>
+<div class="lb" id="lb">
+  <button class="lb-x" id="lbx" aria-label="Close">&times;</button>
+  <button class="lb-p" id="lbp" aria-label="Previous">&#8249;</button>
+  <button class="lb-n" id="lbn" aria-label="Next">&#8250;</button>
+  <div id="lbstage"></div>
+  <div class="lb-count" id="lbc"></div>
+  <a class="lb-dl" id="lbdl" href="#" target="_blank" rel="noopener">full res &darr;</a>
+</div>
+<script>
+const MEDIA = [{"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/001.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/001_full.jpg", "thumb": "media/001_t.jpg", "w": 2560, "h": 1440}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/002.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/002_full.jpg", "thumb": "media/002_t.jpg", "w": 2560, "h": 1440}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/003.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/003_full.jpg", "thumb": "media/003_t.jpg", "w": 2560, "h": 1440}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/004.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/004_full.jpg", "thumb": "media/004_t.jpg", "w": 2560, "h": 1440}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/005.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/005_full.jpg", "thumb": "media/005_t.jpg", "w": 2560, "h": 1440}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/006.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/006_full.jpg", "thumb": "media/006_t.jpg", "w": 2560, "h": 1440}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/007.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/007_full.jpg", "thumb": "media/007_t.jpg", "w": 2560, "h": 1440}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/008.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/008_full.jpg", "thumb": "media/008_t.jpg", "w": 2560, "h": 1440}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/009.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/009_full.jpg", "thumb": "media/009_t.jpg", "w": 2560, "h": 1440}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/010.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/010_full.jpg", "thumb": "media/010_t.jpg", "w": 2560, "h": 1440}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/011.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/011_full.jpg", "thumb": "media/011_t.jpg", "w": 1440, "h": 2560}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/012.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/012_full.jpg", "thumb": "media/012_t.jpg", "w": 2560, "h": 1440}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/013.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/013_full.jpg", "thumb": "media/013_t.jpg", "w": 2560, "h": 1440}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/014.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/014_full.jpg", "thumb": "media/014_t.jpg", "w": 2560, "h": 1440}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/015.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/015_full.jpg", "thumb": "media/015_t.jpg", "w": 2560, "h": 1440}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/016.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/016_full.jpg", "thumb": "media/016_t.jpg", "w": 2560, "h": 1440}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/017.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/017_full.jpg", "thumb": "media/017_t.jpg", "w": 2560, "h": 1440}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/018.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/018_full.jpg", "thumb": "media/018_t.jpg", "w": 2560, "h": 1440}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/019.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/019_full.jpg", "thumb": "media/019_t.jpg", "w": 2560, "h": 1440}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/020.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/020_full.jpg", "thumb": "media/020_t.jpg", "w": 1440, "h": 2560}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/021.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/021_full.jpg", "thumb": "media/021_t.jpg", "w": 2560, "h": 1440}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/022.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/022_full.jpg", "thumb": "media/022_t.jpg", "w": 2560, "h": 1440}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/023.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/023_full.jpg", "thumb": "media/023_t.jpg", "w": 2560, "h": 1440}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/024.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/024_full.jpg", "thumb": "media/024_t.jpg", "w": 2560, "h": 1440}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/025.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/025_full.jpg", "thumb": "media/025_t.jpg", "w": 2560, "h": 1440}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/026.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/026_full.jpg", "thumb": "media/026_t.jpg", "w": 2560, "h": 1440}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/027.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/027_full.jpg", "thumb": "media/027_t.jpg", "w": 1440, "h": 2560}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/028.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/028_full.jpg", "thumb": "media/028_t.jpg", "w": 2560, "h": 1440}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/029.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/029_full.jpg", "thumb": "media/029_t.jpg", "w": 2560, "h": 1440}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/030.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/030_full.jpg", "thumb": "media/030_t.jpg", "w": 2560, "h": 1440}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/031.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/031_full.jpg", "thumb": "media/031_t.jpg", "w": 2560, "h": 1440}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/032.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/032_full.jpg", "thumb": "media/032_t.jpg", "w": 1440, "h": 2560}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/033.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/033_full.jpg", "thumb": "media/033_t.jpg", "w": 1440, "h": 2560}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/034.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/034_full.jpg", "thumb": "media/034_t.jpg", "w": 2560, "h": 1440}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/035.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/035_full.jpg", "thumb": "media/035_t.jpg", "w": 1440, "h": 2560}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/036.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/036_full.jpg", "thumb": "media/036_t.jpg", "w": 1440, "h": 2560}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/037.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/037_full.jpg", "thumb": "media/037_t.jpg", "w": 2560, "h": 1440}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/038.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/038_full.jpg", "thumb": "media/038_t.jpg", "w": 1440, "h": 2560}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/039.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/039_full.jpg", "thumb": "media/039_t.jpg", "w": 2560, "h": 1440}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/040.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/040_full.jpg", "thumb": "media/040_t.jpg", "w": 2560, "h": 1440}];
+const grid = document.getElementById('grid');
+grid.innerHTML = MEDIA.map((m,i) =>
+  `<a class="tile${m.type==='video'?' vid':''}" data-i="${i}" href="${m.src}">
+     <img src="${m.thumb}" alt="Frame ${i+1}" loading="lazy" decoding="async"
+          width="${m.w||16}" height="${m.h||9}">
+   </a>`).join('');
+const lb=document.getElementById('lb'), stage=document.getElementById('lbstage'), count=document.getElementById('lbc');
+let cur=0;
+function show(i){
+  cur=(i+MEDIA.length)%MEDIA.length;
+  const m=MEDIA[cur];
+  stage.innerHTML = m.type==='video'
+    ? `<video src="${m.src}" controls autoplay playsinline></video>`
+    : `<img src="${m.src}" alt="Frame ${cur+1}">`;
+  // The native export sits on the same release. download attr is ignored
+  // cross-origin, but GitHub already sends content-disposition: attachment,
+  // so it saves rather than navigating anyway.
+  const dl=document.getElementById('lbdl');
+  if(m.full){dl.href=m.full;dl.style.display='';}else{dl.style.display='none';}
+  count.textContent=`${cur+1} / ${MEDIA.length}`;
+  lb.classList.add('open'); document.body.style.overflow='hidden';
+}
+function close(){lb.classList.remove('open');stage.innerHTML='';document.body.style.overflow='';}
+grid.addEventListener('click',e=>{const t=e.target.closest('.tile');if(!t)return;e.preventDefault();show(+t.dataset.i);});
+document.getElementById('lbx').onclick=close;
+document.getElementById('lbn').onclick=()=>show(cur+1);
+document.getElementById('lbp').onclick=()=>show(cur-1);
+lb.addEventListener('click',e=>{if(e.target===lb)close();});
+document.addEventListener('keydown',e=>{
+  if(!lb.classList.contains('open'))return;
+  if(e.key==='Escape')close(); if(e.key==='ArrowRight')show(cur+1); if(e.key==='ArrowLeft')show(cur-1);
+});
+</script>
+</body>
+</html>

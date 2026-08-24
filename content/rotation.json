@@ -1,0 +1,53 @@
+{
+  "items": [
+    {
+      "platform": "spotify",
+      "title": "Stardust Breaker",
+      "artist": "KAV-MAN",
+      "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d0000b273824a32b56f258d90d1aeaa01",
+      "link": "https://open.spotify.com/track/0KJIm3Ukd82n0d7VOCQWWI?t=123",
+      "start": 123,
+      "preview": "https://p.scdn.co/mp3-preview/0672e369bb582b64c8fffe218daa286b2a099379"
+    },
+    {
+      "platform": "spotify",
+      "title": "2 HI",
+      "artist": "VIRGOSGATEWAY",
+      "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d0000b2737a49561a1eb3f079d7e4f4f7",
+      "link": "https://open.spotify.com/track/0sKUd3PxqITdWs8NqzpCBV",
+      "preview": "https://p.scdn.co/mp3-preview/4559e4f26c088f1ca47dfb05f646c0580b37c052"
+    },
+    {
+      "platform": "spotify",
+      "title": "YOU TRIED IT",
+      "artist": "VIRGOSGATEWAY",
+      "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d0000b2737278fa6c7ec6e3598a7338b6",
+      "link": "https://open.spotify.com/track/1PkGP1pjnPXpi081HVv7zr",
+      "preview": "https://p.scdn.co/mp3-preview/7b717897dbce2610548fc8bef9cbecb685b82585"
+    },
+    {
+      "platform": "spotify",
+      "title": "Under Your Spell",
+      "artist": "Snow Strippers",
+      "art": "https://i.scdn.co/image/ab67616d0000b27317dbd78819c31da3641cb8ca",
+      "preview": "https://p.scdn.co/mp3-preview/e062d4407e186166dd6adea9bda84848eacd30d8.mp3",
+      "link": "https://open.spotify.com/track/5q0N5SaFhROG9UQiPukv9p"
+    },
+    {
+      "platform": "spotify",
+      "title": "trust",
+      "artist": "2hollis",
+      "art": "https://i.scdn.co/image/ab67616d0000b273057d046c6dfb348e0215567c",
+      "preview": "https://p.scdn.co/mp3-preview/ad5213fdeba930ad0ea40605eb6c123f6b6b29ba.mp3",
+      "link": "https://open.spotify.com/track/7fYba5gDhSnMJoQPjqAarN"
+    },
+    {
+      "platform": "spotify",
+      "title": "BIG FEELING",
+      "artist": "BKTHERULA",
+      "art": "https://i.scdn.co/image/ab67616d0000b27355606510e6cd5ed161f78b3e",
+      "preview": "https://p.scdn.co/mp3-preview/1d179146430e79da6db2100323d1b4f3003aaf5b.mp3",
+      "link": "https://open.spotify.com/track/0sH7M5s2bEWFRe7v7VRemW"
+    }
+  ]
+}

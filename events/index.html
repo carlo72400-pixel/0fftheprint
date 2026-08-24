@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Event Photos · 0FF THE PRINT</title>
+<meta name="description" content="Every night we shot. San Antonio venues, shows, raves, after hours. Find yours.">
+<meta name="theme-color" content="#0a0a0d">
+<meta property="og:type" content="website">
+<meta property="og:title" content="EVENT PHOTOS · 0FF THE PRINT">
+<meta property="og:description" content="Every night we shot. Find yours.">
+<meta property="og:image" content="https://0fftheprint.com/assets/preview.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0d;--panel:#121218;--line:#23222b;--ink:#f4eef2;--muted:#9a93a3;
+--pink:#f7b9dd;--pink-deep:#f48fc8;--pink-glow:#ff79c6;--dye-blue:#2f6bff;
+--f-display:'Saira Condensed',sans-serif;--f-body:'Inter',system-ui,sans-serif;--f-mono:'JetBrains Mono',monospace;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.leopard-bar{height:14px;background:linear-gradient(90deg,var(--pink-deep),var(--pink) 25%,var(--dye-blue) 50%,var(--pink-deep) 75%,var(--pink))}
+.wrap{max-width:1100px;margin:0 auto;padding:26px 18px 70px}
+.back{font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);text-decoration:none;display:inline-block;margin-bottom:22px}
+.back:hover{color:var(--pink-glow)}
+h1{font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;
+font-size:clamp(38px,8vw,88px);line-height:.92;letter-spacing:-.01em;
+background:linear-gradient(180deg,#fff 10%,var(--pink) 45%,#8f8a97 60%,var(--pink-deep) 96%);
+-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 4px 24px rgba(255,121,198,.22))}
+.sub{font-family:var(--f-mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-top:12px}
+.list{margin-top:34px;border-top:1px solid var(--line)}
+.ev{display:grid;grid-template-columns:96px 1fr auto;gap:16px;align-items:center;
+padding:14px 8px;border-bottom:1px solid var(--line);text-decoration:none;color:inherit;transition:background .18s ease}
+.ev:hover{background:rgba(244,143,200,.07)}
+.ev-cover{width:96px;height:64px;object-fit:cover;border-radius:5px;border:1px solid var(--line);display:block;background:var(--panel)}
+.ev-name{font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;
+font-size:26px;line-height:1;letter-spacing:.01em;color:var(--ink)}
+.ev:hover .ev-name{color:var(--pink-glow)}
+.ev-venue{font-family:var(--f-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:5px}
+.ev-date{font-family:var(--f-mono);font-size:13px;letter-spacing:.14em;color:var(--pink-deep);white-space:nowrap}
+.ev-count{font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;color:var(--muted);text-align:right;margin-top:4px}
+.empty{padding:40px 0;color:var(--muted);font-family:var(--f-mono);font-size:12px;letter-spacing:.14em}
+.foot{margin-top:40px;padding-top:20px;border-top:1px solid var(--line);
+font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);line-height:2}
+.foot a{color:var(--pink-glow);text-decoration:none}
+@media (max-width:600px){
+  .ev{grid-template-columns:64px 1fr;gap:12px}
+  .ev-cover{width:64px;height:48px}
+  .ev-name{font-size:20px}
+  .ev-date{grid-column:2;font-size:11px}
+  .ev-count{display:none}
+}
+</style>
+</head>
+<body>
+<div class="leopard-bar"></div>
+<div class="wrap">
+  <a class="back" href="../">&larr; 0FF THE PRINT</a>
+  <h1>Event Photos</h1>
+  <div class="sub">every night we shot &nbsp;·&nbsp; san antonio &nbsp;·&nbsp; find yours</div>
+  <div class="list" id="list"><div class="empty">loading…</div></div>
+  <div class="foot">
+    Shot by 0FF THE PRINT &nbsp;·&nbsp; <a href="https://instagram.com/vamppsych" target="_blank" rel="noopener">@vamppsych</a><br>
+    Want your night shot? DM the desk.<br>
+    In one of these and want the full-res? DM, it's yours.
+  </div>
+</div>
+<script>
+(async () => {
+  const el = document.getElementById('list');
+  try {
+    const d = await (await fetch('events.json', {cache:'no-cache'})).json();
+    const items = d.items || [];
+    if (!items.length) { el.innerHTML = '<div class="empty">No events posted yet.</div>'; return; }
+    el.innerHTML = items.map(e => `
+      <a class="ev" href="${e.slug}/">
+        <img class="ev-cover" src="${e.cover}" alt="" loading="lazy" decoding="async">
+        <div>
+          <div class="ev-name">${e.title}</div>
+          <div class="ev-venue">${e.venue}</div>
+        </div>
+        <div>
+          <div class="ev-date">${e.date_short}</div>
+          <div class="ev-count">${e.count} frames</div>
+        </div>
+      </a>`).join('');
+  } catch (err) {
+    el.innerHTML = '<div class="empty">Could not load events.</div>';
+  }
+})();
+</script>
+</body>
+</html>

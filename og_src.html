@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<!-- OG card source for /0fftheprint/preview → assets/preview.jpg. Render:
+  Chrome --headless --window-size=1200,630 --screenshot=og.png file://.../og_src.html
+  then sips -s format jpeg -s formatOptions 88 og.png --out assets/preview.jpg -->
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1200px;height:630px;overflow:hidden;background:#0a0a0d;position:relative;
+display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px}
+body::before{content:"";position:absolute;inset:0;
+background:radial-gradient(110% 62% at 78% -8%, rgba(255,121,198,.20), transparent 62%),
+radial-gradient(90% 50% at -8% 110%, rgba(47,107,255,.16), transparent 60%);}
+.kick{font-family:"JetBrains Mono",monospace;color:#9a93a3;font-size:20px;letter-spacing:.42em;position:relative;text-transform:uppercase}
+h1{font-family:"Saira Condensed",sans-serif;font-style:italic;font-weight:900;font-size:142px;line-height:.88;padding:0 30px;
+text-transform:uppercase;text-align:center;position:relative;letter-spacing:-.005em;
+background:linear-gradient(180deg,#fff 8%,#f7b9dd 36%,#8f8a97 52%,#fff 62%,#f48fc8 95%);
+-webkit-background-clip:text;background-clip:text;color:transparent;
+filter:drop-shadow(0 6px 30px rgba(255,121,198,.28))}
+h1 .zero{background:linear-gradient(180deg,#cfe0ff 10%,#2f6bff 58%,#9db9ff 95%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.pulse{font-family:"Saira Condensed",sans-serif;font-style:italic;font-weight:900;font-size:44px;color:#f4eef2;
+text-transform:uppercase;position:relative;letter-spacing:.01em;text-align:center;max-width:1050px}
+.pulse b{color:#ff79c6}
+.strip{font-family:"JetBrains Mono",monospace;color:#f4eef2;font-size:20px;letter-spacing:.22em;
+border:2px solid #23222b;border-radius:999px;padding:13px 34px;position:relative;
+background:linear-gradient(180deg,rgba(244,143,200,.14),rgba(47,107,255,.07))}
+.strip b{color:#ff79c6;font-weight:600}
+.leo{position:absolute;left:0;right:0;bottom:0;height:16px;
+background:linear-gradient(90deg,#f48fc8,#f7b9dd 25%,#2f6bff 50%,#f48fc8 75%,#f7b9dd);}
+.leo::before{content:"";position:absolute;inset:0;
+background:radial-gradient(circle at 6% 50%, #1a1118 0 5px, transparent 6px),
+radial-gradient(circle at 16% 50%, #1a1118 0 4px, transparent 5px),
+radial-gradient(circle at 27% 50%, #1a1118 0 5px, transparent 6px),
+radial-gradient(circle at 39% 50%, #1a1118 0 4px, transparent 5px),
+radial-gradient(circle at 51% 50%, #1a1118 0 5px, transparent 6px),
+radial-gradient(circle at 63% 50%, #1a1118 0 4px, transparent 5px),
+radial-gradient(circle at 75% 50%, #1a1118 0 5px, transparent 6px),
+radial-gradient(circle at 87% 50%, #1a1118 0 4px, transparent 5px),
+radial-gradient(circle at 96% 50%, #1a1118 0 5px, transparent 6px);}
+</style></head>
+<body>
+<div class="kick">San Antonio, TX · Underground Media House</div>
+<h1><span class="zero">0</span>FF THE PRINT</h1>
+<div class="pulse">We are the underground. <b>The city pulses because we pump it.</b></div>
+<div class="strip"><b>SATX</b> FIRST · ATX · HTX · DTX · VOL. 1</div>
+<div class="leo"></div>
+</body></html>

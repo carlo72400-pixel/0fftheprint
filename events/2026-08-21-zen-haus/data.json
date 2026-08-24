@@ -1,0 +1,330 @@
+{
+  "slug": "2026-08-21-zen-haus",
+  "title": "Third Friday Night Market",
+  "venue": "Zen Haus",
+  "date": "2026-08-21",
+  "date_short": "08.21.26",
+  "count": 40,
+  "media": [
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/001.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/001_full.jpg",
+      "thumb": "media/001_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/002.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/002_full.jpg",
+      "thumb": "media/002_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/003.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/003_full.jpg",
+      "thumb": "media/003_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/004.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/004_full.jpg",
+      "thumb": "media/004_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/005.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/005_full.jpg",
+      "thumb": "media/005_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/006.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/006_full.jpg",
+      "thumb": "media/006_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/007.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/007_full.jpg",
+      "thumb": "media/007_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/008.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/008_full.jpg",
+      "thumb": "media/008_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/009.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/009_full.jpg",
+      "thumb": "media/009_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/010.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/010_full.jpg",
+      "thumb": "media/010_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/011.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/011_full.jpg",
+      "thumb": "media/011_t.jpg",
+      "w": 1440,
+      "h": 2560
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/012.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/012_full.jpg",
+      "thumb": "media/012_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/013.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/013_full.jpg",
+      "thumb": "media/013_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/014.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/014_full.jpg",
+      "thumb": "media/014_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/015.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/015_full.jpg",
+      "thumb": "media/015_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/016.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/016_full.jpg",
+      "thumb": "media/016_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/017.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/017_full.jpg",
+      "thumb": "media/017_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/018.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/018_full.jpg",
+      "thumb": "media/018_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/019.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/019_full.jpg",
+      "thumb": "media/019_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/020.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/020_full.jpg",
+      "thumb": "media/020_t.jpg",
+      "w": 1440,
+      "h": 2560
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/021.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/021_full.jpg",
+      "thumb": "media/021_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/022.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/022_full.jpg",
+      "thumb": "media/022_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/023.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/023_full.jpg",
+      "thumb": "media/023_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/024.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/024_full.jpg",
+      "thumb": "media/024_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/025.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/025_full.jpg",
+      "thumb": "media/025_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/026.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/026_full.jpg",
+      "thumb": "media/026_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/027.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/027_full.jpg",
+      "thumb": "media/027_t.jpg",
+      "w": 1440,
+      "h": 2560
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/028.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/028_full.jpg",
+      "thumb": "media/028_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/029.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/029_full.jpg",
+      "thumb": "media/029_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/030.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/030_full.jpg",
+      "thumb": "media/030_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/031.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/031_full.jpg",
+      "thumb": "media/031_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/032.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/032_full.jpg",
+      "thumb": "media/032_t.jpg",
+      "w": 1440,
+      "h": 2560
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/033.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/033_full.jpg",
+      "thumb": "media/033_t.jpg",
+      "w": 1440,
+      "h": 2560
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/034.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/034_full.jpg",
+      "thumb": "media/034_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/035.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/035_full.jpg",
+      "thumb": "media/035_t.jpg",
+      "w": 1440,
+      "h": 2560
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/036.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/036_full.jpg",
+      "thumb": "media/036_t.jpg",
+      "w": 1440,
+      "h": 2560
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/037.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/037_full.jpg",
+      "thumb": "media/037_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/038.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/038_full.jpg",
+      "thumb": "media/038_t.jpg",
+      "w": 1440,
+      "h": 2560
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/039.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/039_full.jpg",
+      "thumb": "media/039_t.jpg",
+      "w": 2560,
+      "h": 1440
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/040.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-21-zen-haus/040_full.jpg",
+      "thumb": "media/040_t.jpg",
+      "w": 2560,
+      "h": 1440
+    }
+  ]
+}
