@@ -1,108 +1,108 @@
 {
-  "items": [
+ "items": [
+  {
+   "name": "VampPsych",
+   "role": "The Lens",
+   "tag": "cinematographer · music · gothic essays",
+   "kind": "ex",
+   "type": "lens",
+   "type_label": "DARK LORD",
+   "hp": 300,
+   "rarity": "full-art",
+   "rarities": [
+    "full-art"
+   ],
+   "photo": "assets/card-vamp-prismatic.jpg",
+   "flavor": "Sees first. Cuts last.",
+   "moves": [
     {
-      "name": "VampPsych",
-      "role": "The Lens",
-      "tag": "cinematographer · music · gothic essays",
-      "kind": "ex",
-      "type": "lens",
-      "type_label": "DARK LORD",
-      "hp": 300,
-      "rarity": "darklord",
-      "rarities": [
-        "darklord"
-      ],
-      "photo": "assets/card-vamp-darklord.jpg",
-      "flavor": "Sees first. Cuts last.",
-      "moves": [
-        {
-          "cost": "y",
-          "name": "Roll Cameras",
-          "damage": 80,
-          "desc": "Reveal the top card of your opponent's deck. Discard if it's a Pitch."
-        },
-        {
-          "cost": "yyyy",
-          "name": "Final Cut",
-          "damage": 240,
-          "desc": "Discard 3 Energies. Hits anything in play."
-        }
-      ],
-      "platform": "IG",
-      "link": "https://instagram.com/vamppsych",
-      "theme_song": "https://open.spotify.com/track/27OqNFBwYkOOZKhXShri4n",
-      "lore": "Gianni grew up watching the scene through a viewfinder. Full Sail Digital Cinematography, Sony FX6, Insta360. The gear is the diary.\n\nWent all in on the camera in 2026: directed VOLUME, shoots the rooms the city actually moves in. Zenhouse on Fridays, The Mix on the Strip, Paper Tiger, the raves. Cuts gothic essays as Vamppsych. Started 0FF THE PRINT when he realized the underground didn't need coverage, it needed its own outlet.\n\nThe lens is the proof. Final cut is final word.",
-      "open_seat": false,
-      "cost_orb": 8,
-      "power": 6000
-    }
-  ],
-  "_benched_revisit_later": [
-    {
-      "name": "@cam_dyed",
-      "role": "The Color",
-      "tag": "alt-hair · fashion · on-camera face",
-      "kind": "trainer",
-      "type": "color",
-      "type_label": "Color in any lane",
-      "hp": 0,
-      "rarity": "rainbow-rare",
-      "rarities": [
-        "rainbow-rare",
-        "rare-holo"
-      ],
-      "photo": "assets/curator-cam.jpg",
-      "flavor": "If she dyes it, the scene wears it.",
-      "moves": [
-        {
-          "cost": "",
-          "name": "Dye Anyone",
-          "damage": "",
-          "desc": "Choose 1 Voice in play. Change their type to THE COLOR for the rest of the match."
-        },
-        {
-          "cost": "",
-          "name": "On-Camera",
-          "damage": "",
-          "desc": "Draw cards until you have 6. Your next attack does +40."
-        }
-      ],
-      "platform": "IG",
-      "link": "https://instagram.com/cam_dyed",
-      "theme_song": "https://open.spotify.com/track/5xHj2EOzaGa7O3ZrzkhXjC",
-      "lore": "Alt-hair colorist working out of a chair in San Antonio. Dyes the scene one head at a time — pastel pink, electric blue, leopard streaks, whatever the client brings in.\n\nThe on-camera face of the brand. If a Take post has a person in the frame, it usually started in her chair. She picks the colors, books the chair, and walks every subject through the cut while VampPsych rolls cameras.\n\nThe color authority. Final word on what the scene actually wears.",
-      "open_seat": false
+     "cost": "y",
+     "name": "Roll Cameras",
+     "damage": 80,
+     "desc": "Reveal the top card of your opponent's deck. Discard if it's a Pitch."
     },
     {
-      "name": "VampPsych & Cam",
-      "role": "Tag Team GX",
-      "tag": "two curators · one frame",
-      "kind": "tag-team",
-      "type": "lens",
-      "type_label": "TAG TEAM · GX",
-      "hp": 340,
-      "rarity": "tag-team",
-      "photo": "assets/curator-duo.jpg",
-      "flavor": "The whole picture, with a face on it.",
-      "moves": [
-        {
-          "cost": "yp",
-          "name": "Behind & In Front",
-          "damage": 100,
-          "desc": "Hits two Voices for 100 each, or one for 200."
-        },
-        {
-          "cost": "yyyy",
-          "name": "Pretty First With Teeth GX",
-          "damage": 280,
-          "desc": "You can't use more than 1 GX attack in a match."
-        }
-      ],
-      "platform": "IG",
-      "link": "#curators",
-      "theme_song": "https://open.spotify.com/track/4W2P5X1qz3RJEQWjo74vL2",
-      "lore": "Two curators, one outlet. VampPsych behind the lens, Cam in front of it. The brand reads exactly because both seats are filled.\n\nThe pretty-first comes from her. The teeth come from him. Every drop on 0FF THE PRINT carries both signatures.\n\nTAG TEAM rule: when this card is in play, both curators are on the record.",
-      "open_seat": false
+     "cost": "yyyy",
+     "name": "Final Cut",
+     "damage": 240,
+     "desc": "Discard 3 Energies. Hits anything in play."
     }
-  ]
+   ],
+   "platform": "IG",
+   "link": "https://instagram.com/vamppsych",
+   "theme_song": "https://open.spotify.com/track/27OqNFBwYkOOZKhXShri4n",
+   "lore": "Gianni grew up watching the scene through a viewfinder. Full Sail Digital Cinematography, Sony FX6, Insta360. The gear is the diary.\n\nWent all in on the camera in 2026: directed VOLUME, shoots the rooms the city actually moves in. Zenhouse on Fridays, The Mix on the Strip, Paper Tiger, the raves. Cuts gothic essays as Vamppsych. Started 0FF THE PRINT when he realized the underground didn't need coverage, it needed its own outlet.\n\nThe lens is the proof. Final cut is final word.",
+   "open_seat": false,
+   "cost_orb": 8,
+   "power": 6000
+  }
+ ],
+ "_benched_revisit_later": [
+  {
+   "name": "@cam_dyed",
+   "role": "The Color",
+   "tag": "alt-hair · fashion · on-camera face",
+   "kind": "trainer",
+   "type": "color",
+   "type_label": "Color in any lane",
+   "hp": 0,
+   "rarity": "rainbow-rare",
+   "rarities": [
+    "rainbow-rare",
+    "rare-holo"
+   ],
+   "photo": "assets/curator-cam.jpg",
+   "flavor": "If she dyes it, the scene wears it.",
+   "moves": [
+    {
+     "cost": "",
+     "name": "Dye Anyone",
+     "damage": "",
+     "desc": "Choose 1 Voice in play. Change their type to THE COLOR for the rest of the match."
+    },
+    {
+     "cost": "",
+     "name": "On-Camera",
+     "damage": "",
+     "desc": "Draw cards until you have 6. Your next attack does +40."
+    }
+   ],
+   "platform": "IG",
+   "link": "https://instagram.com/cam_dyed",
+   "theme_song": "https://open.spotify.com/track/5xHj2EOzaGa7O3ZrzkhXjC",
+   "lore": "Alt-hair colorist working out of a chair in San Antonio. Dyes the scene one head at a time — pastel pink, electric blue, leopard streaks, whatever the client brings in.\n\nThe on-camera face of the brand. If a Take post has a person in the frame, it usually started in her chair. She picks the colors, books the chair, and walks every subject through the cut while VampPsych rolls cameras.\n\nThe color authority. Final word on what the scene actually wears.",
+   "open_seat": false
+  },
+  {
+   "name": "VampPsych & Cam",
+   "role": "Tag Team GX",
+   "tag": "two curators · one frame",
+   "kind": "tag-team",
+   "type": "lens",
+   "type_label": "TAG TEAM · GX",
+   "hp": 340,
+   "rarity": "tag-team",
+   "photo": "assets/curator-duo.jpg",
+   "flavor": "The whole picture, with a face on it.",
+   "moves": [
+    {
+     "cost": "yp",
+     "name": "Behind & In Front",
+     "damage": 100,
+     "desc": "Hits two Voices for 100 each, or one for 200."
+    },
+    {
+     "cost": "yyyy",
+     "name": "Pretty First With Teeth GX",
+     "damage": 280,
+     "desc": "You can't use more than 1 GX attack in a match."
+    }
+   ],
+   "platform": "IG",
+   "link": "#curators",
+   "theme_song": "https://open.spotify.com/track/4W2P5X1qz3RJEQWjo74vL2",
+   "lore": "Two curators, one outlet. VampPsych behind the lens, Cam in front of it. The brand reads exactly because both seats are filled.\n\nThe pretty-first comes from her. The teeth come from him. Every drop on 0FF THE PRINT carries both signatures.\n\nTAG TEAM rule: when this card is in play, both curators are on the record.",
+   "open_seat": false
+  }
+ ]
 }
