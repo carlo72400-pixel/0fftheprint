@@ -148,8 +148,14 @@ def build_photos(src, out_dir, stage_dir, tag, limit, mode='best'):
         light.thumbnail((LIGHT_W, LIGHT_W), Image.LANCZOS)
         light.save(os.path.join(stage_dir, f"{stem}.jpg"), quality=LIGHT_Q, optimize=True)
 
-        # the native export, untouched size, also on the release
-        im.save(os.path.join(stage_dir, f"{stem}_full.jpg"), quality=NATIVE_Q, optimize=True)
+        # THE UNTOUCHED ORIGINAL FILE, byte for byte, EXIF and all. It used to
+        # be a quality-92 re-export at native size, which is a good print file
+        # but not the original. copy2 keeps bytes and timestamps. A HEIC
+        # original will not display in most browsers, but the full-res button
+        # is a download, not a viewer, so that is fine.
+        ext = os.path.splitext(fn)[1].lower() or ".jpg"
+        fullname = f"{stem}_full{ext}"
+        shutil.copy2(os.path.join(src, fn), os.path.join(stage_dir, fullname))
 
         # the only thing that gets committed
         th = im.copy()
@@ -158,7 +164,7 @@ def build_photos(src, out_dir, stage_dir, tag, limit, mode='best'):
 
         items.append({"type": "photo",
                       "src":   f"{REL_BASE}/{tag}/{stem}.jpg",
-                      "full":  f"{REL_BASE}/{tag}/{stem}_full.jpg",
+                      "full":  f"{REL_BASE}/{tag}/{fullname}",
                       "thumb": f"media/{stem}_t.jpg",
                       "w": light.width, "h": light.height})
         print(f"  [{i}/{len(chosen)}] {fn}", end="\r")
@@ -199,6 +205,18 @@ def build_videos(src, out_dir, stage_dir, tag, limit):
             print(f"  {fn} is {human(size)}, over the 2GiB release ceiling, left out")
             os.remove(outv)
             continue
+        # the untouched original rides along, same as photos. 1080p copy stays
+        # for instant playback; the original is the real file. 2GiB ceiling.
+        full_url = None
+        srcsize = os.path.getsize(os.path.join(src, fn))
+        if srcsize <= 2 * 1024 * 1024 * 1024:
+            oext = os.path.splitext(fn)[1].lower() or ".mp4"
+            ofullname = f"{stem}_full{oext}"
+            shutil.copy2(os.path.join(src, fn), os.path.join(stage_dir, ofullname))
+            full_url = f"{REL_BASE}/{tag}/{ofullname}"
+        else:
+            print(f"  {fn} original is {human(srcsize)}, over 2GiB; 1080p only")
+
         poster = os.path.join(out_dir, f"{stem}_t.jpg")
         subprocess.run(["ffmpeg", "-y", "-i", outv, "-vf",
                         f"thumbnail,scale={THUMB_W}:-2", "-frames:v", "1", poster],
@@ -211,6 +229,7 @@ def build_videos(src, out_dir, stage_dir, tag, limit):
             pass
         items.append({"type": "video",
                       "src":   f"{REL_BASE}/{tag}/{stem}.mp4",
+                      **({"full": full_url} if full_url else {}),
                       "thumb": f"media/{stem}_t.jpg",
                       "w": pw, "h": ph})
         print(f"  [{i}/{len(chosen)}] {fn} -> {human(size)}")
