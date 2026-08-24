@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>The Hit List · 0FF THE PRINT</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0a0a0d">
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/auth.css">
+<style>
+  .chips{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0 4px}
+  .chip{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    padding:7px 12px;border-radius:999px;border:1px solid var(--line);color:var(--muted);
+    background:none;cursor:pointer}
+  .chip.on{border-color:var(--pink-glow);color:var(--ink)}
+  .chip b{color:inherit}
+  .search{width:100%;margin-top:10px;background:#0d0c11;border:1px solid var(--line);
+    border-radius:10px;color:var(--ink);padding:11px 13px;font-size:14px}
+  .t-row{padding:16px 4px;border-bottom:1px solid var(--line)}
+  .t-row:last-child{border-bottom:0}
+  .t-name{font-family:var(--f-display);font-style:italic;text-transform:uppercase;font-size:19px;
+    line-height:1.15;display:flex;gap:9px;align-items:baseline}
+  .t-name .rk{font-family:var(--f-mono);font-style:normal;font-size:11px;color:var(--muted)}
+  .t-meta{font-family:var(--f-mono);font-size:10.5px;color:var(--muted);letter-spacing:.08em;
+    margin-top:5px;overflow-wrap:anywhere}
+  .t-body{font-size:13.5px;line-height:1.55;margin-top:9px}
+  .t-body b{font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;color:var(--muted);
+    text-transform:uppercase;display:block;margin-top:8px}
+  .t-body .warn{color:#ffb3c4}
+  .t-body a{color:var(--pink-glow);text-decoration:none;overflow-wrap:anywhere}
+  .ev{display:flex;gap:8px;flex-wrap:wrap;margin-top:5px}
+  .ev a{font-family:var(--f-mono);font-size:10.5px;border:1px solid var(--line);
+    border-radius:999px;padding:4px 10px;color:var(--muted)}
+  .st{display:flex;gap:7px;margin-top:12px;flex-wrap:wrap}
+  .st .btn{width:auto;margin:0;min-height:38px;font-size:12px;padding:7px 13px}
+  .st .btn.cur{border-color:var(--pink-glow);color:var(--ink)}
+  .st .btn.cur.booked{border-color:rgba(88,214,141,.6);color:#9fe8bd}
+  .st .btn.cur.dead{opacity:.55}
+  .t-row.is-dead{opacity:.45}
+  .t-row.is-booked .t-name{color:#9fe8bd}
+  .nb{margin-top:10px}
+  .nb textarea{width:100%;min-height:44px;background:#0d0c11;border:1px solid var(--line);
+    border-radius:9px;color:var(--ink);padding:9px 11px;font-size:13px}
+  .nb .btn{width:auto;margin:6px 0 0;min-height:36px;font-size:12px;padding:6px 13px;display:none}
+  .nb.dirty .btn{display:inline-block}
+  details.notes{margin-top:18px}
+  details.notes summary{font-family:var(--f-display);font-style:italic;text-transform:uppercase;
+    font-size:20px;cursor:pointer}
+  details.notes .t-body{white-space:pre-wrap}
+  .intro{font-size:13.5px;line-height:1.55;color:var(--muted);margin-top:8px}
+</style>
+</head>
+<body>
+<div class="leopard-bar"></div>
+<div class="wrap wide">
+  <a class="back" href="../">&larr; The Desk</a>
+  <h1>The Hit List</h1>
+  <div class="sub">45 doors &nbsp;·&nbsp; desk eyes only</div>
+  <div id="panel"><div class="empty">checking…</div></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="../../supabase-config.js?v=f1348482"></script>
+<script src="../../assets/js/desk.js?v=128f5421"></script>
+<script>
+(async () => {
+  const panel = document.getElementById('panel');
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const STATUSES = ['to hit','pitched','booked','dead'];
+
+  if (!OTP.configured) {
+    panel.innerHTML = '<div class="setup"><b>Backend not switched on yet</b> Fill in <code>supabase-config.js</code>.</div>';
+    return;
+  }
+  const me = await OTP.me();
+  if (!me) { location.href = '../../join/'; return; }
+  if (!me.profile?.is_admin) {
+    panel.innerHTML = `<div class="card"><b style="font-family:var(--f-display);font-style:italic;font-size:24px;text-transform:uppercase">Desk only.</b>
+      <div class="note">Signed in as ${esc(me.user.email)}, but this page is the owner's.</div>
+      <button class="btn ghost" id="out" type="button">Sign out</button></div>`;
+    document.getElementById('out').onclick = async () => { await OTP.signOut(); location.href = '../../join/'; };
+    return;
+  }
+
+  const c = OTP.sb();
+  let rows = [], meta = {};
+  let filt = 'all', query = '';
+
+  async function load() {
+    const [r, m] = await Promise.all([
+      c.from('hitlist').select('*').order('rank', { ascending: true }),
+      c.from('hitlist_meta').select('*'),
+    ]);
+    if (r.error) { panel.innerHTML = `<div class="card"><div class="note">${esc(r.error.message)}. Has migration 006 + the seed been run?</div></div>`; return false; }
+    rows = r.data || [];
+    (m.data || []).forEach(x => meta[x.k] = x.v);
+    return true;
+  }
+
+  // phone numbers become tap-to-call, urls become links
+  const rich = s => esc(s)
+    .replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>')
+    .replace(/(\d{3})[-. ](\d{3})[-. ](\d{4})/g, '<a href="tel:$1$2$3">$1-$2-$3</a>');
+
+  const host = u => { try { return new URL(u).hostname.replace(/^www\./,''); } catch { return u; } };
+
+  function visible() {
+    const q = query.toLowerCase();
+    return rows.filter(r =>
+      (filt === 'all' || r.status === filt) &&
+      (!q || [r.name, r.area, r.ig, r.content_read, r.hook, r.pitch].join(' ').toLowerCase().includes(q)));
+  }
+
+  function render() {
+    const counts = { all: rows.length };
+    STATUSES.forEach(s => counts[s] = rows.filter(r => r.status === s).length);
+    const list = visible();
+
+    panel.innerHTML = `
+      ${meta.intro ? `<div class="intro">${rich(meta.intro)}</div>` : ''}
+      <div class="chips">
+        ${['all', ...STATUSES].map(s => `<button class="chip ${filt === s ? 'on' : ''}" data-f="${s}" type="button">${s} <b>${counts[s] ?? 0}</b></button>`).join('')}
+      </div>
+      <input class="search" id="q" type="search" placeholder="search names, areas, handles" value="${esc(query)}">
+      <div class="card">
+        ${list.length ? list.map(r => `
+          <div class="t-row ${r.status === 'dead' ? 'is-dead' : ''} ${r.status === 'booked' ? 'is-booked' : ''}" data-id="${r.id}">
+            <div class="t-name"><span class="rk">${r.rank ?? ''}</span> ${esc(r.name)}</div>
+            <div class="t-meta">${esc([r.area, r.ig].filter(Boolean).join(' · '))}</div>
+            <div class="t-body">
+              ${r.content_read ? `<b>the read</b>${rich(r.content_read)}` : ''}
+              ${r.hook ? `<b>the hook</b>${r.hook.split(' | WATCH: ').map((p, i) => i ? `<span class="warn">⚠ ${rich(p)}</span>` : rich(p)).join('<br>')}` : ''}
+              ${r.pitch ? `<b>the pitch</b>${rich(r.pitch)}` : ''}
+              ${r.tier ? `<b>tier</b>${rich(r.tier)}` : ''}
+              ${r.evidence ? `<div class="ev">${r.evidence.split('\n').filter(Boolean).map(u => `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(host(u))}</a>`).join('')}</div>` : ''}
+            </div>
+            <div class="st">
+              ${STATUSES.map(s => `<button class="btn ghost sm ${r.status === s ? 'cur ' + s.replace(' ','') : ''}" data-st="${s}" type="button">${s}</button>`).join('')}
+            </div>
+            <div class="nb"><textarea placeholder="field notes">${esc(r.notes || '')}</textarea>
+              <button class="btn sm" type="button">Save note</button></div>
+          </div>`).join('') : '<div class="empty">nothing here</div>'}
+      </div>
+      ${meta.lane_notes ? `<details class="notes"><summary>Lane notes</summary><div class="t-body">${rich(meta.lane_notes).replace(/\*\*([^*]+)\*\*/g, '<b style="display:inline;font-family:inherit;font-size:inherit;letter-spacing:0;text-transform:none;color:var(--ink)">$1</b>')}</div></details>` : ''}`;
+
+    panel.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { filt = b.dataset.f; render(); });
+    const q = document.getElementById('q');
+    q.oninput = () => { query = q.value; render(); const nq = document.getElementById('q'); nq.focus(); nq.setSelectionRange(nq.value.length, nq.value.length); };
+
+    panel.querySelectorAll('.t-row').forEach(row => {
+      const id = row.dataset.id;
+      row.querySelectorAll('[data-st]').forEach(b => b.onclick = async () => {
+        b.disabled = true;
+        const { error } = await c.from('hitlist').update({ status: b.dataset.st }).eq('id', id);
+        if (error) alert(error.message);
+        const local = rows.find(r => String(r.id) === id);
+        if (local && !error) local.status = b.dataset.st;
+        render();
+      });
+      const nb = row.querySelector('.nb'), ta = nb.querySelector('textarea'), save = nb.querySelector('.btn');
+      ta.oninput = () => nb.classList.add('dirty');
+      save.onclick = async () => {
+        save.disabled = true; save.textContent = 'Saving…';
+        const { error } = await c.from('hitlist').update({ notes: ta.value }).eq('id', id);
+        if (error) { alert(error.message); save.disabled = false; save.textContent = 'Save note'; return; }
+        const local = rows.find(r => String(r.id) === id);
+        if (local) local.notes = ta.value;
+        nb.classList.remove('dirty'); save.disabled = false; save.textContent = 'Save note';
+      };
+    });
+  }
+
+  if (await load()) render();
+})();
+</script>
+</body>
+</html>

@@ -23,7 +23,8 @@ ROOT = pathlib.Path(__file__).resolve().parent
 TRACKED = ["assets/js/desk.js", "assets/js/door.js", "assets/js/composer.js", "supabase-config.js"]
 
 # every document that loads them
-DOCS = ["index.html", "join/index.html", "compose/index.html", "desk/index.html"]
+DOCS = ["index.html", "join/index.html", "compose/index.html", "desk/index.html",
+        "desk/targets/index.html"]
 
 
 def short_hash(path: pathlib.Path) -> str:
@@ -52,7 +53,7 @@ def main() -> int:
         for name, h in stamps.items():
             # src="../assets/js/desk.js"  or  src="assets/js/desk.js?v=old"
             text = re.sub(
-                r'(src="(?:\.\./)?(?:assets/js/)?%s)(?:\?v=[^"]*)?"' % re.escape(name),
+                r'(src="(?:\.\./)*(?:assets/js/)?%s)(?:\?v=[^"]*)?"' % re.escape(name),
                 r'\1?v=%s"' % h,
                 text,
             )
