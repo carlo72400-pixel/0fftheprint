@@ -2319,6 +2319,20 @@
   .pitch-btn.blue:hover{border-color:var(--dye-blue);}
   .pitch-fine{color:var(--muted);font-size:12.5px;line-height:1.6;}
 
+  .work-more{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+    aspect-ratio:4/3;text-decoration:none;cursor:pointer;
+    background:repeating-linear-gradient(-45deg,#101016 0 14px,#0c0c11 14px 28px);
+  }
+  .work-more::before{content:'';position:absolute;inset:6px;border:1px dashed rgba(244,143,200,.35);border-radius:6px;pointer-events:none;transition:border-color .15s ease;}
+  .work-more:hover::before{border-color:var(--pink-glow);}
+  .wm-num{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:52px;line-height:1;
+    background:linear-gradient(180deg,#fff,var(--pink-deep));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .wm-line{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);}
+  .wm-cta{font-family:var(--f-mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--pink-glow);
+    border:1px solid rgba(255,121,198,.5);padding:5px 12px;border-radius:3px;background:rgba(255,121,198,.06);}
+  .work-more:hover .wm-cta{background:rgba(255,121,198,.16);}
+
   /* masonry stability: real image dimensions so columns balance before lazy loads land */
   .work-grid{ column-fill:balance; }
   .work-item{ display:block; width:100%; }
@@ -3919,7 +3933,12 @@
     // 1000px derivative, and that is correct: only the RATIO is load-bearing
     // here, and a proportional resize preserves it. There is no lightbox on
     // this grid, so nothing ever needs the full file.
-    wMount.innerHTML = work.map(it => {
+    // The landing page FEATURES the work, it does not archive it. Six frames,
+    // then one tile that carries the count and opens the full grid at /work/.
+    // The slice is the top of work.json, so curating the feature = reordering
+    // the JSON, same as always.
+    const FEATURED = 6;
+    wMount.innerHTML = work.slice(0, FEATURED).map(it => {
       const w = Number(it.w) || 0, h = Number(it.h) || 0;
       const u = safeUrl(it.src);
       if (!u) return '';
@@ -3928,7 +3947,12 @@
         <img src="${esc(sized(u, 'grid'))}" alt="${esc(it.alt || it.label || '')}"${w && h ? ` width="${w}" height="${h}"` : ''} loading="lazy" decoding="async">
         <figcaption>${esc(it.label || '')}</figcaption>
       </figure>`;
-    }).join('');
+    }).join('') + (work.length > FEATURED ? `
+      <a class="work-item work-more" href="work/">
+        <span class="wm-num">${work.length}</span>
+        <span class="wm-line">frames in the archive</span>
+        <span class="wm-cta">See all &rarr;</span>
+      </a>` : '');
   }
 
   // ============ Roster ============

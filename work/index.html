@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>The Work · 0FF THE PRINT</title>
+<meta name="description" content="Every frame the house has put its name on. Nights, shops, stages, back rooms. San Antonio.">
+<meta name="theme-color" content="#0a0a0d">
+<meta property="og:type" content="website">
+<meta property="og:title" content="The Work · 0FF THE PRINT">
+<meta property="og:description" content="Every frame the house has put its name on. Nights, shops, stages, back rooms.">
+<meta property="og:url" content="https://0fftheprint.com/work/">
+<meta property="og:image" content="https://0fftheprint.com/assets/work/w3-zen-025.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://0fftheprint.com/assets/work/w3-zen-025.jpg">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0d;--panel:#121218;--line:#23222b;--ink:#f4eef2;--muted:#9a93a3;
+--pink:#f7b9dd;--pink-deep:#f48fc8;--pink-glow:#ff79c6;--dye-blue:#2f6bff;
+--f-display:'Saira Condensed',sans-serif;--f-body:'Inter',system-ui,sans-serif;--f-mono:'JetBrains Mono',monospace;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.leopard-bar{height:14px;background:linear-gradient(90deg,var(--pink-deep),var(--pink) 25%,var(--dye-blue) 50%,var(--pink-deep) 75%,var(--pink))}
+.wrap{max-width:1400px;margin:0 auto;padding:26px 18px 70px}
+.back{font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);text-decoration:none;display:inline-block;margin-bottom:22px}
+.back:hover{color:var(--pink-glow)}
+h1{font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;
+font-size:clamp(34px,7vw,76px);line-height:.94;letter-spacing:-.01em;
+background:linear-gradient(180deg,#fff 10%,var(--pink) 45%,#8f8a97 60%,var(--pink-deep) 96%);
+-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 4px 24px rgba(255,121,198,.22))}
+.meta{font-family:var(--f-mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-top:10px}
+.meta b{color:var(--pink-glow);font-weight:500}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.fpill{font-family:var(--f-mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);
+background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:7px 14px;cursor:pointer}
+.fpill:hover{border-color:var(--pink-deep);color:var(--ink)}
+.fpill.on{background:rgba(255,121,198,.14);border-color:var(--pink-glow);color:var(--pink)}
+.grid{columns:4 260px;column-gap:12px;margin-top:24px}
+.tile{break-inside:avoid;margin:0 0 12px;position:relative;display:block;width:100%;
+border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--panel);cursor:zoom-in}
+.tile img{width:100%;height:100%;object-fit:cover;display:block}
+.tile figcaption{position:absolute;left:0;right:0;bottom:0;padding:22px 10px 8px;font-family:var(--f-mono);
+font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--pink);
+background:linear-gradient(180deg,transparent,rgba(10,10,13,.88))}
+.tile.hid{display:none}
+.foot{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);
+font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.foot a{color:var(--pink-glow);text-decoration:none}
+.lb{position:fixed;inset:0;z-index:200;background:rgba(6,6,9,.96);display:none;
+align-items:center;justify-content:center;flex-direction:column;padding:16px}
+.lb.open{display:flex}
+.lb img{max-width:96vw;max-height:82vh;border-radius:6px}
+.lb-cap{margin-top:12px;font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--pink)}
+.lb-x,.lb-n,.lb-p{position:absolute;background:rgba(18,18,24,.9);border:1px solid var(--line);
+color:var(--ink);width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer;line-height:1}
+.lb-x{top:16px;right:16px}
+.lb-p{left:12px;top:50%;transform:translateY(-50%)}
+.lb-n{right:12px;top:50%;transform:translateY(-50%)}
+@media(max-width:640px){.lb-p,.lb-n{bottom:14px;top:auto;transform:none}.lb-p{left:14px}.lb-n{right:14px}}
+</style>
+</head>
+<body>
+<div class="leopard-bar"></div>
+<div class="wrap">
+  <a class="back" href="../">&larr; 0FF THE PRINT</a>
+  <h1>The Work</h1>
+  <div class="meta"><b id="count"></b> &nbsp;·&nbsp; nights, shops, stages, back rooms &nbsp;·&nbsp; san antonio</div>
+  <div class="filters" id="filters"></div>
+  <div class="grid" id="grid"></div>
+  <div class="foot">Shot by 0FF THE PRINT &nbsp;·&nbsp;
+    <a href="https://instagram.com/vamppsych" target="_blank" rel="noopener">@vamppsych</a>
+    &nbsp;·&nbsp; Want a night like these shot? The DMs are open.</div>
+</div>
+<div class="lb" id="lb">
+  <button class="lb-x" id="lbx" aria-label="Close">&times;</button>
+  <button class="lb-p" id="lbp" aria-label="Previous">&#8249;</button>
+  <button class="lb-n" id="lbn" aria-label="Next">&#8250;</button>
+  <img id="lbi" alt="">
+  <div class="lb-cap" id="lbc"></div>
+</div>
+<script>
+(async function(){
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  // Only same-site relative asset paths are allowed through. This page never
+  // renders a URL from the JSON verbatim into an attribute without this gate.
+  const ok = u => typeof u === 'string' && /^assets\/[A-Za-z0-9._/-]+\.(jpe?g|png|webp)$/i.test(u);
+  let items = [];
+  try {
+    const r = await fetch('../content/work.json', {cache:'no-cache'});
+    items = ((await r.json()).items || []).filter(it => ok(it.src));
+  } catch (e) {
+    document.getElementById('grid').innerHTML = '<div style="font-family:var(--f-mono);color:var(--muted)">The archive did not load. Refresh?</div>';
+    return;
+  }
+  document.getElementById('count').textContent = items.length + ' frames';
+
+  // venue filter pills, built from what is really in the labels
+  const venueOf = it => (it.label || '').split('·')[0].trim() || 'ELSEWHERE';
+  const venues = [...new Set(items.map(venueOf))];
+  const fMount = document.getElementById('filters');
+  let active = 'ALL';
+  const drawFilters = () => {
+    fMount.innerHTML = ['ALL', ...venues].map(v =>
+      `<button class="fpill${v === active ? ' on' : ''}" data-v="${esc(v)}">${esc(v)}</button>`).join('');
+  };
+  drawFilters();
+  fMount.addEventListener('click', e => {
+    const b = e.target.closest('.fpill'); if (!b) return;
+    active = b.dataset.v; drawFilters();
+    document.querySelectorAll('.tile').forEach((t, i) => {
+      t.classList.toggle('hid', active !== 'ALL' && venueOf(items[i]) !== active);
+    });
+  });
+
+  const grid = document.getElementById('grid');
+  grid.innerHTML = items.map((it, i) => {
+    const w = Number(it.w) || 0, h = Number(it.h) || 0;
+    const thumb = '../' + it.src.replace(/^assets\//, 'assets/grid/');
+    return `<figure class="tile" data-i="${i}"${w && h ? ` style="aspect-ratio:${w}/${h}"` : ''}>
+      <img src="${esc(thumb)}" alt="${esc(it.alt || it.label || '')}"${w && h ? ` width="${w}" height="${h}"` : ''} loading="lazy" decoding="async">
+      <figcaption>${esc(it.label || '')}</figcaption>
+    </figure>`;
+  }).join('');
+
+  // lightbox opens the full 1400px source, arrows respect the active filter
+  const lb = document.getElementById('lb'), lbi = document.getElementById('lbi'), lbc = document.getElementById('lbc');
+  let cur = 0;
+  const visible = () => items.map((it, i) => i).filter(i => active === 'ALL' || venueOf(items[i]) === active);
+  const show = i => { cur = i; lbi.src = '../' + items[i].src; lbi.alt = items[i].alt || ''; lbc.textContent = items[i].label || ''; lb.classList.add('open'); };
+  const step = d => { const v = visible(); const p = v.indexOf(cur); show(v[(p + d + v.length) % v.length]); };
+  grid.addEventListener('click', e => { const t = e.target.closest('.tile'); if (t) show(Number(t.dataset.i)); });
+  document.getElementById('lbx').onclick = () => lb.classList.remove('open');
+  document.getElementById('lbp').onclick = () => step(-1);
+  document.getElementById('lbn').onclick = () => step(1);
+  lb.addEventListener('click', e => { if (e.target === lb) lb.classList.remove('open'); });
+  document.addEventListener('keydown', e => {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape') lb.classList.remove('open');
+    if (e.key === 'ArrowLeft') step(-1);
+    if (e.key === 'ArrowRight') step(1);
+  });
+})();
+</script>
+</body>
+</html>
