@@ -213,6 +213,19 @@ def build_videos(src, out_dir, stage_dir, tag, limit):
             print(f"  {fn} is {human(size)}, over the 2GiB release ceiling, left out")
             os.remove(outv)
             continue
+        # THE UNTOUCHED ORIGINAL rides along as vNN_full.<ext>. The 1080p copy
+        # above exists so the page plays instantly; the original is what the
+        # client actually keeps. Same 2GiB release ceiling applies to it.
+        full_url = None
+        srcsize = os.path.getsize(os.path.join(src, fn))
+        if srcsize <= 2 * 1024 * 1024 * 1024:
+            ext = os.path.splitext(fn)[1].lower() or ".mp4"
+            fullname = f"{stem}_full{ext}"
+            shutil.copy2(os.path.join(src, fn), os.path.join(stage_dir, fullname))
+            full_url = f"{REL_BASE}/{tag}/{fullname}"
+        else:
+            print(f"  {fn} original is {human(srcsize)}, over 2GiB; delivering 1080p only")
+
         poster = os.path.join(out_dir, f"{stem}_t.jpg")
         subprocess.run(["ffmpeg", "-y", "-i", outv, "-vf",
                         f"thumbnail,scale={THUMB_W}:-2", "-frames:v", "1", poster],
@@ -225,6 +238,7 @@ def build_videos(src, out_dir, stage_dir, tag, limit):
             pass
         items.append({"type": "video",
                       "src":   f"{REL_BASE}/{tag}/{stem}.mp4",
+                      **({"full": full_url} if full_url else {}),
                       "thumb": f"media/{stem}_t.jpg",
                       "w": pw, "h": ph})
         print(f"  [{i}/{len(chosen)}] {fn} -> {human(size)}")
