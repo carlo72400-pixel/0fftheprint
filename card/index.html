@@ -192,8 +192,9 @@ input:focus,select:focus{outline:2px solid var(--pink-deep);outline-offset:1px}
   function paintFrames(){
     const grant = me.profile.frame_grant;
     const list = OTP.OPEN_FRAMES.concat(grant && OTP.OPEN_FRAMES.indexOf(grant) === -1 ? [grant] : []);
+    const current = state.card_frame || seed?.rarity;
     $('frames').innerHTML = list.map(f => `
-      <button class="fr ${f === (state.card_frame || seed?.rarity) ? 'on' : ''}${f === grant ? ' granted' : ''}"
+      <button class="fr ${f === current ? 'on' : ''}${f === grant ? ' granted' : ''}"
               data-f="${esc(f)}" type="button">${esc(f.replace('-', ' '))}
         <span class="tag">${f === grant ? 'yours' : 'open'}</span></button>`).join('');
     $('frames').querySelectorAll('.fr').forEach(b => b.onclick = () => {
@@ -230,7 +231,10 @@ input:focus,select:focus{outline:2px solid var(--pink-deep);outline-offset:1px}
         .find(x => slugify(x.name) === me.profile.card_slug) || null;
     } catch (e) { seed = null; }
 
-    state.card_frame = me.profile.card_frame || seed?.rarity || 'common';
+    // Only what the member actually SAVED. The roster seed still paints the
+    // preview via the fallbacks below, but it never rides along in a save, so
+    // changing your song can never bounce off a frame you were never granted.
+    state.card_frame = me.profile.card_frame || null;
     state.card_photo = me.profile.card_photo || seed?.photo || null;
     $('theme').value = me.profile.theme_track || '';
     $('start').value = me.profile.theme_start || '';
@@ -272,14 +276,15 @@ input:focus,select:focus{outline:2px solid var(--pink-deep);outline-offset:1px}
       $('save').disabled = true;
       $('msg').className = 'msg'; $('msg').textContent = 'Saving...';
       try {
-        await OTP.saveCard({
-          card_frame: state.card_frame,
+        const payload = {
           card_photo: state.card_photo,
           theme_song: $('theme').value,
           theme_start: $('start').value,
           link_platform: $('plat').value,
           link_handle: $('handle').value,
-        });
+        };
+        if (state.card_frame) payload.card_frame = state.card_frame;
+        await OTP.saveCard(payload);
         await OTP.setFeatured([$('f1').value, $('f2').value, $('f3').value]);
         $('msg').className = 'msg ok';
         $('msg').textContent = 'Saved. It shows on the roster next time the page loads.';
