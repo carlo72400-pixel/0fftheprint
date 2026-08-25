@@ -46,6 +46,18 @@
   .side b{font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;display:block;margin-top:9px}
   .upd{font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;color:var(--muted);margin-top:16px}
   h2.sec{font-family:var(--f-display);font-style:italic;text-transform:uppercase;font-size:20px;margin:0 0 4px}
+  .ckhead{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--f-mono);
+    font-size:11px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin:14px 0 4px}
+  .ckhead b{color:var(--pink-glow);font-size:13px}
+  .ckrow{display:grid;grid-template-columns:26px 1fr;gap:11px;align-items:start;width:100%;
+    text-align:left;background:none;border:0;border-bottom:1px solid var(--line);
+    padding:12px 2px;cursor:pointer;color:var(--ink);font:inherit}
+  .ckrow:last-child{border-bottom:0}
+  .ckbox{width:22px;height:22px;border-radius:7px;border:1px solid var(--line);display:flex;
+    align-items:center;justify-content:center;font-size:13px;margin-top:1px;flex:0 0 auto}
+  .ckrow .ckt{font-size:14px;line-height:1.45}
+  .ckrow.on .ckbox{border-color:rgba(88,214,141,.6);color:#9fe8bd;background:rgba(88,214,141,.07)}
+  .ckrow.on .ckt{color:var(--muted);text-decoration:line-through;text-decoration-color:rgba(88,214,141,.5)}
 </style>
 </head>
 <body>
@@ -78,12 +90,14 @@
   }
 
   const c = OTP.sb();
-  const [metaR, listR] = await Promise.all([
+  const [metaR, ckR, listR] = await Promise.all([
     c.from('hitlist_meta').select('v').eq('k', 'goals').maybeSingle(),
+    c.from('hitlist_meta').select('v').eq('k', 'checkpoints').maybeSingle(),
     c.from('hitlist').select('name,status,tier'),
   ]);
-  let g = null;
+  let g = null, ck = null;
   try { g = JSON.parse(metaR.data?.v || 'null'); } catch (e) {}
+  try { ck = JSON.parse(ckR.data?.v || 'null'); } catch (e) {}
   if (!g) { panel.innerHTML = '<div class="card"><div class="note">No goals data loaded yet. Tell Claude to update the scoreboard.</div></div>'; return; }
 
   const rows = listR.data || [];
@@ -127,16 +141,38 @@
         : `<div class="bookedlist" style="color:var(--muted)">Nothing booked off the list yet. Right track = the pitched number moving every week.</div>`}
     </div>
 
-    <div class="card">
-      <h2 class="sec">This week</h2>
-      <ul class="week">${(g.week || []).map(w => `<li>${esc(w)}</li>`).join('')}</ul>
-    </div>
+    ${ck ? `<div class="card">
+      <h2 class="sec">Checkpoints</h2>
+      ${ck.groups.map((grp, gi) => `
+        <div class="ckhead"><span>${esc(grp.name)}</span><b id="ckc${gi}">${grp.items.filter(i => i.done).length}/${grp.items.length}</b></div>
+        ${grp.items.map((it, ii) => `
+          <button class="ckrow ${it.done ? 'on' : ''}" data-g="${gi}" data-i="${ii}" type="button">
+            <span class="ckbox">${it.done ? '✓' : ''}</span><span class="ckt">${esc(it.t)}</span>
+          </button>`).join('')}`).join('')}
+      <div class="upd" id="cksaved">tap a line to check it off, it saves on its own</div>
+    </div>` : ''}
 
     <div class="card">
       <h2 class="sec">Side goals</h2>
       <div class="side">${(g.side || []).map(s => `<b>${esc(s.k)}</b>${esc(s.v)}`).join('')}</div>
       <div class="upd">scoreboard updated ${esc(g.updated)} · say "update the scoreboard" and it refreshes from the ledger</div>
     </div>`;
+
+  panel.querySelectorAll('.ckrow').forEach(b => b.onclick = async () => {
+    const gi = +b.dataset.g, ii = +b.dataset.i;
+    const it = ck.groups[gi].items[ii];
+    it.done = !it.done;
+    b.classList.toggle('on', it.done);
+    b.querySelector('.ckbox').textContent = it.done ? '✓' : '';
+    const grp = ck.groups[gi];
+    document.getElementById('ckc' + gi).textContent =
+      grp.items.filter(i => i.done).length + '/' + grp.items.length;
+    const saved = document.getElementById('cksaved');
+    saved.textContent = 'saving…';
+    const { error } = await c.from('hitlist_meta')
+      .update({ v: JSON.stringify(ck) }).eq('k', 'checkpoints');
+    saved.textContent = error ? 'DID NOT SAVE: ' + error.message : 'saved';
+  });
 })();
 </script>
 </body>

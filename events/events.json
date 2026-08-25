@@ -1,6 +1,15 @@
 {
   "items": [
     {
+      "slug": "2026-08-23-the-showcase",
+      "title": "The Showcase",
+      "venue": "The Mix",
+      "date": "2026-08-23",
+      "date_short": "08.23.26",
+      "count": 60,
+      "cover": "2026-08-23-the-showcase/media/001_t.jpg"
+    },
+    {
       "slug": "2026-08-21-zen-haus",
       "title": "Third Friday Night Market",
       "venue": "Zen Haus",

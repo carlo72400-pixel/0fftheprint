@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Seats · 0FF THE PRINT</title>
+<link rel="icon" href="../assets/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@700;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0a0d; --panel:#121218; --line:#23222b; --ink:#f4eef2; --muted:#9a93a3;
+  --pink-deep:#f48fc8; --pink-glow:#ff79c6;
+  --f-display:'Saira Condensed',sans-serif; --f-body:'Inter',system-ui,sans-serif;
+  --f-mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);
+  line-height:1.62;padding:0 20px 90px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:640px;margin:0 auto}
+header{padding:56px 0 30px;border-bottom:1px solid var(--line)}
+.mark{font-family:var(--f-display);font-weight:900;font-style:italic;font-size:31px;
+  text-transform:uppercase;letter-spacing:-.01em;line-height:1}
+.kick{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.2em;color:var(--muted);
+  margin-top:11px;text-transform:uppercase}
+.note{margin:32px 0 0;font-size:17.5px}
+.note p{margin-bottom:17px}
+.note .lead{color:var(--muted);font-family:var(--f-mono);font-size:13px;
+  letter-spacing:.06em;text-transform:uppercase;margin-bottom:26px}
+h2{font-family:var(--f-display);font-weight:900;font-style:italic;font-size:27px;
+  text-transform:uppercase;margin:52px 0 6px;letter-spacing:-.01em}
+.sub{color:var(--muted);font-size:14.5px;margin-bottom:24px}
+.seat{border:1px solid var(--line);background:var(--panel);border-radius:3px;
+  padding:19px 21px;margin-bottom:11px}
+.seat .top{display:flex;justify-content:space-between;align-items:baseline;gap:14px}
+.seat .nm{font-family:var(--f-display);font-weight:900;font-style:italic;font-size:25px;
+  text-transform:uppercase;letter-spacing:-.01em}
+.seat .no{font-family:var(--f-mono);font-size:11px;letter-spacing:.18em;color:var(--muted);
+  white-space:nowrap}
+.seat .fl{margin-top:7px;font-size:15.5px;color:var(--ink)}
+.seat .st{margin-top:11px;font-family:var(--f-mono);font-size:11px;letter-spacing:.18em;
+  color:var(--pink-deep);text-transform:uppercase}
+.rule{border:0;border-top:1px solid var(--line);margin:46px 0 0}
+.out{margin-top:30px;font-size:17px}
+.out a{color:var(--pink-glow);text-decoration:none;border-bottom:1px solid var(--pink-deep);
+  padding-bottom:1px}
+.out a:hover{color:#fff}
+.foot{margin-top:56px;font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;
+  color:var(--muted);text-transform:uppercase}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="mark">0FF THE PRINT</div>
+  <div class="kick">Media house &middot; San Antonio TX</div>
+</header>
+
+<div class="note">
+  <p class="lead">Somebody sent you this link. That is the only way to get to this page.</p>
+
+  <p>Short version. I run a site with a timeline on it, and I want people I actually rate
+  posting to it. Not me posting about them. Them, logged in, in their own words. Call it a
+  blog if that is easier to say out loud, I am not going to correct anybody.</p>
+
+  <p>You would post under your own name, in your own color, and you could delete it at 3am
+  like a normal person. No comments, no follower counts, and nothing deciding who sees it.</p>
+
+  <p>The card is the login. Hold one and you are in. There is no other door and I did not
+  build one. I approve accounts by hand at a desk, which is exactly as slow as it sounds.</p>
+
+  <p>What it costs is nothing. What it asks is that you post sometimes.</p>
+</div>
+
+<h2>The seats nobody is sitting in</h2>
+<div class="sub">Read them and see if one of them is just a description of you.</div>
+<div id="seats"></div>
+
+<hr class="rule">
+<div class="out">
+  <p>If none of them are, that is a fair answer and there is no follow up.</p>
+  <p style="margin-top:14px">This page is not in the menu. Ask whoever sent it to you, or
+  <a href="https://www.instagram.com/vamppsych/">come through the DMs</a>. We are slow.</p>
+</div>
+
+<div class="foot">The city goes dark. We clock in.</div>
+
+</div>
+<script>
+(async () => {
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g,
+    c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const el = document.getElementById('seats');
+  try {
+    const r = await fetch('../content/roster.json', { cache: 'no-cache' }).then(r => r.json());
+    const open = (r.items || []).filter(s => s.pending_stamp === 'SEAT OPEN');
+    if (!open.length) { el.innerHTML =
+      '<div class="seat"><div class="fl">Every seat is taken right now. That does happen.</div></div>';
+      return; }
+    el.innerHTML = open.map(s => `
+      <div class="seat">
+        <div class="top">
+          <span class="nm">${esc(s.name)}</span>
+          <span class="no">SEAT ${esc(s.pending_glyph || '')}</span>
+        </div>
+        <div class="fl">${esc(s.flavor || '')}</div>
+        <div class="st">Nobody has this one</div>
+      </div>`).join('');
+  } catch (e) {
+    el.innerHTML =
+      '<div class="seat"><div class="fl">The list did not load. The DMs still work.</div></div>';
+  }
+})();
+</script>
+</body>
+</html>
