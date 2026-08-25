@@ -1,57 +1,96 @@
 {
-  "items": [
-    {
-      "title": "Paper Tiger · after hours",
-      "lanes": [
-        "scene",
-        "music"
-      ],
-      "platform": "instagram",
-      "thumb": "assets/work/w2-blade-037.jpg",
-      "link": "https://instagram.com/vamppsych",
-      "num": "0TP-005"
-    },
-    {
-      "title": "The Mix on St Mary's · live",
-      "lanes": [
-        "scene",
-        "music"
-      ],
-      "platform": "instagram",
-      "thumb": "assets/work/w2-mix-010.jpg",
-      "link": "https://instagram.com/vamppsych",
-      "num": "0TP-004"
-    },
-    {
-      "title": "The Signal · VIRGOSGATEWAY",
-      "lanes": [
-        "music"
-      ],
-      "platform": "instagram",
-      "thumb": "assets/card-virgo.jpg",
-      "link": "https://instagram.com/virgosgateway",
-      "num": "0TP-003"
-    },
-    {
-      "title": "The Ink, day one",
-      "lanes": [
-        "scene"
-      ],
-      "platform": "SITE",
-      "thumb": "assets/work/w3-ink-inks.jpg",
-      "link": "https://smiley-one98.merlin.site/",
-      "num": "0TP-002"
-    },
-    {
-      "title": "The Voice · KAV-MAN",
-      "lanes": [
-        "music",
-        "interview"
-      ],
-      "platform": "SATX",
-      "thumb": "assets/card-kavman.jpg",
-      "link": "#roster",
-      "num": "0TP-001"
-    }
-  ]
+ "items": [
+  {
+   "title": "The Rage Kid Got Sober",
+   "kicker": "THE RECORD",
+   "dek": "Nettspend shaved his head, put his mom on camera, and killed the character that made him famous.",
+   "date": "08.25.26",
+   "lanes": [
+    "story"
+   ],
+   "platform": "SITE",
+   "thumb": "word/the-rage-kid-got-sober/thumb.jpg",
+   "link": "word/the-rage-kid-got-sober/",
+   "num": "0TP-008"
+  },
+  {
+   "title": "Goth With a Beauty Budget",
+   "kicker": "THE LOOK",
+   "dek": "Pinterest put a name on the look and a number on the name. Here is what happens to a subculture when the forecast finds it.",
+   "date": "08.25.26",
+   "lanes": [
+    "story"
+   ],
+   "platform": "SITE",
+   "thumb": "word/goth-with-a-beauty-budget/thumb.jpg",
+   "link": "word/goth-with-a-beauty-budget/",
+   "num": "0TP-007"
+  },
+  {
+   "title": "The Fall Run",
+   "kicker": "THE CALENDAR",
+   "dek": "Every Texas date that matters between now and Halloween, in one place.",
+   "date": "08.25.26",
+   "lanes": [
+    "story"
+   ],
+   "platform": "SITE",
+   "thumb": "word/the-fall-run/thumb.jpg",
+   "link": "word/the-fall-run/",
+   "num": "0TP-006"
+  },
+  {
+   "title": "Paper Tiger \u00b7 after hours",
+   "lanes": [
+    "scene",
+    "music"
+   ],
+   "platform": "instagram",
+   "thumb": "assets/work/w2-blade-037.jpg",
+   "link": "https://instagram.com/vamppsych",
+   "num": "0TP-005"
+  },
+  {
+   "title": "The Mix on St Mary's \u00b7 live",
+   "lanes": [
+    "scene",
+    "music"
+   ],
+   "platform": "instagram",
+   "thumb": "assets/work/w2-mix-010.jpg",
+   "link": "https://instagram.com/vamppsych",
+   "num": "0TP-004"
+  },
+  {
+   "title": "The Signal \u00b7 VIRGOSGATEWAY",
+   "lanes": [
+    "music"
+   ],
+   "platform": "instagram",
+   "thumb": "assets/card-virgo.jpg",
+   "link": "https://instagram.com/virgosgateway",
+   "num": "0TP-003"
+  },
+  {
+   "title": "The Ink, day one",
+   "lanes": [
+    "scene"
+   ],
+   "platform": "SITE",
+   "thumb": "assets/work/w3-ink-inks.jpg",
+   "link": "https://smiley-one98.merlin.site/",
+   "num": "0TP-002"
+  },
+  {
+   "title": "The Voice \u00b7 KAV-MAN",
+   "lanes": [
+    "music",
+    "interview"
+   ],
+   "platform": "SATX",
+   "thumb": "assets/card-kavman.jpg",
+   "link": "#roster",
+   "num": "0TP-001"
+  }
+ ]
 }
