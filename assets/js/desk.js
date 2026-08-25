@@ -243,6 +243,178 @@
       return patch;
     },
 
+    // ---- THE WORD (migration 008): story overrides + member entries ------
+    async storyOverride(slug) {
+      const c = sb(); if (!c) return null;
+      const { data, error } = await c.from("story_pages")
+        .select("slug,body_md,stamp,updated_at").eq("slug", slug).maybeSingle();
+      if (error) throw error;
+      return data || null;
+    },
+
+    async saveStoryOverride(slug, bodyMd, stamp) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { error } = await c.from("story_pages")
+        .upsert({ slug, body_md: NO_DASH(bodyMd), stamp: stamp || null });
+      if (error) throw error;
+    },
+
+    async clearStoryOverride(slug) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { error } = await c.from("story_pages").delete().eq("slug", slug);
+      if (error) throw error;
+    },
+
+    async wall(slug) {
+      const c = sb(); if (!c) return [];
+      const { data, error } = await c.from("word_wall")
+        .select("id,story_slug,text,created_at,display_name,card_slug")
+        .eq("story_slug", slug).order("created_at");
+      if (error) throw error;
+      return data || [];
+    },
+
+    async myEntries(slug) {
+      const c = sb(); if (!c) return [];
+      const { data: { user } } = await c.auth.getUser();
+      if (!user) return [];
+      const { data, error } = await c.from("word_entries")
+        .select("id,story_slug,text,published,created_at")
+        .eq("author_id", user.id).eq("story_slug", slug);
+      if (error) throw error;
+      return data || [];
+    },
+
+    async submitEntry(slug, text) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { data: { user } } = await c.auth.getUser();
+      if (!user) throw new Error("Log in first.");
+      const t = NO_DASH(text).trim();
+      if (!t) throw new Error("Say something first.");
+      if (t.length > 500) throw new Error("500 characters. Trim it.");
+      const { error } = await c.from("word_entries")
+        .insert({ story_slug: slug, author_id: user.id, text: t });
+      if (error) {
+        if (error.code === "23505") throw new Error("Yours is already on the desk for this one.");
+        throw error;
+      }
+    },
+
+    async withdrawEntry(id) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { data, error } = await c.from("word_entries").delete()
+        .eq("id", id).select("id");
+      if (error) throw error;
+      if (!data || !data.length) throw new Error("The desk already has that one.");
+    },
+
+    // desk: everything pending + everything on the walls
+    async deskWord() {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { data, error } = await c.from("word_entries")
+        .select("id,story_slug,text,published,created_at, profiles(display_name,card_slug)")
+        .order("created_at", { ascending: false }).limit(100);
+      if (error) throw error;
+      return data || [];
+    },
+
+    async setEntryPublished(id, on) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { error } = await c.from("word_entries")
+        .update({ published: !!on }).eq("id", id);
+      if (error) throw error;
+    },
+
+    async deleteEntry(id) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { error } = await c.from("word_entries").delete().eq("id", id);
+      if (error) throw error;
+    },
+
+    // ---- MUSIC ON ROTATION (migration 009) -------------------------------
+    // Submit resolves title + cover through Spotify's oEmbed (CORS-open,
+    // verified live). The DB stores the track id and a 40-hex cover key,
+    // never a URL a member typed.
+    async submitTrack({ url, artist }) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { data: { user } } = await c.auth.getUser();
+      if (!user) throw new Error("Log in first.");
+      const id = OTP.trackId(url);
+      if (!id) throw new Error("That is not a Spotify track link.");
+      let meta;
+      try {
+        meta = await fetch("https://open.spotify.com/oembed?url=https://open.spotify.com/track/" + id)
+          .then(r => r.ok ? r.json() : null);
+      } catch (e) { meta = null; }
+      if (!meta || !meta.title) throw new Error("Could not read that track. Try again in a minute.");
+      const km = /\/image\/([a-f0-9]{40})$/.exec(meta.thumbnail_url || "");
+      const { error } = await c.from("rotation_tracks").insert({
+        submitted_by: user.id,
+        track: id,
+        title: NO_DASH(meta.title).slice(0, 60),
+        artist: NO_DASH(artist || "").trim().slice(0, 40) || "unknown",
+        art_key: km ? km[1] : null,
+      });
+      if (error) {
+        if (error.code === "23505") throw new Error("That one is already on the shelf.");
+        throw error;
+      }
+      return { title: meta.title, art: meta.thumbnail_url || null };
+    },
+
+    async rotation(limit = 12) {
+      const c = sb(); if (!c) return [];
+      const { data, error } = await c.from("rotation")
+        .select("track,title,artist,link,art,by,created_at")
+        .order("created_at", { ascending: false }).limit(limit);
+      if (error) throw error;
+      return (data || []).map(t => ({
+        platform: "spotify", title: t.title, artist: t.artist,
+        art: t.art, link: t.link, by: t.by, track: t.track, live: true,
+      }));
+    },
+
+    async myRotation() {
+      const c = sb(); if (!c) return [];
+      const { data: { user } } = await c.auth.getUser();
+      if (!user) return [];
+      const { data, error } = await c.from("rotation_tracks")
+        .select("id,track,title,artist,published,created_at")
+        .eq("submitted_by", user.id).order("created_at", { ascending: false });
+      if (error) throw error;
+      return data || [];
+    },
+
+    async withdrawTrack(id) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { data, error } = await c.from("rotation_tracks").delete()
+        .eq("id", id).select("id");
+      if (error) throw error;
+      if (!data || !data.length) throw new Error("That one is on rotation. The desk pulls it.");
+    },
+
+    async rotationAll() {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { data, error } = await c.from("rotation_tracks")
+        .select("id,track,title,artist,art_key,published,created_at, profiles(display_name,card_slug)")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data || [];
+    },
+
+    async setTrackPublished(id, on) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { error } = await c.from("rotation_tracks")
+        .update({ published: !!on }).eq("id", id);
+      if (error) throw error;
+    },
+
+    async deleteTrack(id) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { error } = await c.from("rotation_tracks").delete().eq("id", id);
+      if (error) throw error;
+    },
+
     // Public card overlay for the homepage: every approved member's saved card
     // fields in one request (the `cards` view folds featured tracks in with
     // jsonb_agg, so this is ONE round trip, not one per member).

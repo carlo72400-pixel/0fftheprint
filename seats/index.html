@@ -94,7 +94,11 @@ h2{font-family:var(--f-display);font-weight:900;font-style:italic;font-size:27px
   const el = document.getElementById('seats');
   try {
     const r = await fetch('../content/roster.json', { cache: 'no-cache' }).then(r => r.json());
-    const open = (r.items || []).filter(s => s.pending_stamp === 'SEAT OPEN');
+    // Open seats were pulled OFF the public roster 8/25 (empty cards read as
+    // filler). They live under _archived_unfilled_seats now, and this page is
+    // the one place they still show, which is exactly its job.
+    const pool = (r.items || []).concat(r._archived_unfilled_seats || []);
+    const open = pool.filter(s => s.pending_stamp === 'SEAT OPEN');
     if (!open.length) { el.innerHTML =
       '<div class="seat"><div class="fl">Every seat is taken right now. That does happen.</div></div>';
       return; }

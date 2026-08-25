@@ -48,7 +48,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="../supabase-config.js?v=f1348482"></script>
-<script src="../assets/js/desk.js?v=aeebe9c1"></script>
+<script src="../assets/js/desk.js?v=8bab1cb5"></script>
 <script>
 (async () => {
   const $ = id => document.getElementById(id);
@@ -80,9 +80,16 @@
   try { await OTP.drainOrphans(); } catch (e) { console.warn('orphan drain skipped:', e.message); }
 
   async function render() {
-    const [pending, members, posts, orphans] = await Promise.all([
-      OTP.pending(), OTP.members(), OTP.allPosts(40), OTP.orphanImages()
+    const [pending, members, posts, orphans, wordEntries, rotTracks] = await Promise.all([
+      OTP.pending(), OTP.members(), OTP.allPosts(40), OTP.orphanImages(),
+      // .catch keeps the desk usable before migrations 008/009 have run
+      OTP.deskWord ? OTP.deskWord().catch(() => []) : [],
+      OTP.rotationAll ? OTP.rotationAll().catch(() => []) : [],
     ]);
+    const wordPending = wordEntries.filter(e => !e.published);
+    const wordLive = wordEntries.filter(e => e.published);
+    const rotPending = rotTracks.filter(t => !t.published);
+    const rotLive = rotTracks.filter(t => t.published);
 
     const undoStrip = lastBatch
       ? `<div class="undo">Pulled ${lastBatchN} post${lastBatchN === 1 ? '' : 's'} by ${esc(lastBatchWho)}.
@@ -138,6 +145,59 @@
             <div class="row"><button class="btn ghost sm" data-orphan="${esc(o.object_name)}" type="button">Try again</button></div>
           </div>`).join('')}
       </div>` : ''}
+
+      ${(wordEntries.length || 1) ? `
+      <div class="card">
+        <b style="font-family:var(--f-display);font-style:italic;font-size:24px;text-transform:uppercase">
+          The Word${wordPending.length ? ' · waiting ' + wordPending.length : ''}</b>
+        <div class="broke" style="margin-top:12px">Entries go on the wall only after you approve them.
+          <a href="word/" style="color:var(--pink-glow)">Edit a story body &rarr;</a></div>
+        ${wordPending.map(e => `
+          <div class="person">
+            <div><b style="font-size:14px;font-style:normal;text-transform:none">${esc((e.profiles && e.profiles.display_name) || '?')}</b>
+              <span class="meta"> on ${esc(e.story_slug)}</span>
+              <div class="meta" style="text-transform:none;letter-spacing:0">${esc(e.text)}</div></div>
+            <div class="row">
+              <button class="btn ok sm" data-we-ok="${e.id}" type="button">Approve</button>
+              <button class="btn bad sm" data-we-del="${e.id}" type="button">Toss</button>
+            </div>
+          </div>`).join('') || '<div class="meta" style="margin-top:8px">Nothing waiting.</div>'}
+        ${wordLive.length ? wordLive.map(e => `
+          <div class="person gone-ok">
+            <div><b style="font-size:14px;font-style:normal;text-transform:none">${esc((e.profiles && e.profiles.display_name) || '?')}</b>
+              <span class="meta"> on ${esc(e.story_slug)} · ON THE WALL</span>
+              <div class="meta" style="text-transform:none;letter-spacing:0">${esc(e.text.slice(0,120))}${e.text.length > 120 ? '…' : ''}</div></div>
+            <div class="row">
+              <button class="btn ghost sm" data-we-pull="${e.id}" type="button">Pull</button>
+              <button class="btn bad sm" data-we-del="${e.id}" type="button">Delete</button>
+            </div>
+          </div>`).join('') : ''}
+      </div>` : ''}
+
+      <div class="card">
+        <b style="font-family:var(--f-display);font-style:italic;font-size:24px;text-transform:uppercase">
+          The Rotation${rotPending.length ? ' · waiting ' + rotPending.length : ''}</b>
+        <div class="broke" style="margin-top:12px">Pull means no, it stays refused. Delete means try again later.</div>
+        ${rotPending.map(t => `
+          <div class="person">
+            <div><b style="font-size:14px;font-style:normal;text-transform:none">${esc(t.title)}</b>
+              <span class="meta"> · ${esc(t.artist)}</span>
+              <div class="meta">from ${esc((t.profiles && t.profiles.display_name) || '?')}</div></div>
+            <div class="row">
+              <button class="btn ok sm" data-rt-ok="${t.id}" type="button">Approve</button>
+              <button class="btn bad sm" data-rt-del="${t.id}" type="button">Toss</button>
+            </div>
+          </div>`).join('') || '<div class="meta" style="margin-top:8px">Nothing waiting.</div>'}
+        ${rotLive.length ? rotLive.map(t => `
+          <div class="person gone-ok">
+            <div><b style="font-size:14px;font-style:normal;text-transform:none">${esc(t.title)}</b>
+              <span class="meta"> · ${esc(t.artist)} · ON ROTATION</span></div>
+            <div class="row">
+              <button class="btn ghost sm" data-rt-pull="${t.id}" type="button">Pull</button>
+              <button class="btn bad sm" data-rt-del="${t.id}" type="button">Delete</button>
+            </div>
+          </div>`).join('') : ''}
+      </div>
 
       <div class="card">
         <b style="font-family:var(--f-display);font-style:italic;font-size:24px;text-transform:uppercase">
@@ -208,6 +268,12 @@
       lastBatch = null; lastRetired = null;
     });
 
+    panel.querySelectorAll('[data-we-ok]').forEach(b => b.onclick = rerun(b => OTP.setEntryPublished(b.dataset.weOk, true)));
+    panel.querySelectorAll('[data-we-pull]').forEach(b => b.onclick = rerun(b => OTP.setEntryPublished(b.dataset.wePull, false)));
+    panel.querySelectorAll('[data-we-del]').forEach(b => b.onclick = rerun(b => OTP.deleteEntry(b.dataset.weDel)));
+    panel.querySelectorAll('[data-rt-ok]').forEach(b => b.onclick = rerun(b => OTP.setTrackPublished(b.dataset.rtOk, true)));
+    panel.querySelectorAll('[data-rt-pull]').forEach(b => b.onclick = rerun(b => OTP.setTrackPublished(b.dataset.rtPull, false)));
+    panel.querySelectorAll('[data-rt-del]').forEach(b => b.onclick = rerun(b => OTP.deleteTrack(b.dataset.rtDel)));
     panel.querySelectorAll('[data-ok]').forEach(b => b.onclick = rerun(b => OTP.setApproved(b.dataset.ok, true)));
     panel.querySelectorAll('[data-okcard]').forEach(b => b.onclick = rerun(async b => {
       await OTP.setApproved(b.dataset.okcard, true);

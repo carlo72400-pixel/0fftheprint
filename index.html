@@ -38,7 +38,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Pirata+One&family=Luckiest+Guy&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" defer></script>
 <script src="supabase-config.js?v=f1348482" defer></script>
-<script src="assets/js/desk.js?v=aeebe9c1" defer></script>
+<script src="assets/js/desk.js?v=8bab1cb5" defer></script>
 <script src="assets/js/door.js?v=cb068ae4" defer></script>
 <script src="assets/js/composer.js?v=51127ffa" defer></script>
 <style>
@@ -672,8 +672,18 @@
      many columns fit. */
   .roster{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:18px;perspective:1000px;}
   @media (max-width:980px){.roster{grid-template-columns:repeat(3,minmax(0,1fr));}}
-  @media (max-width:720px){.roster{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}}
-  @media (max-width:460px){.roster{grid-template-columns:1fr;}}
+  /* Phone: the roster is a snap CAROUSEL, not a wall. Six full-art cards
+     stacked one per row was most of a mile of scroll; now one swipe-row of
+     smaller cards, next card peeking so nobody needs told it scrolls.
+     Tap still opens the same modal. */
+  @media (max-width:720px){
+    .roster{display:flex;overflow-x:auto;gap:12px;padding:4px 2px 14px;
+      scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+    .roster::-webkit-scrollbar{display:none;}
+    .roster > .poke{flex:0 0 236px;scroll-snap-align:center;}
+    /* This Is Us: one card, so no carousel, just stop it being a billboard */
+    .curators-grid .poke{max-width:280px;margin:0 auto;}
+  }
   .poke{
     --mx:50%;--my:50%;
     --ty:0px;--ry:0deg;--rx:0deg;--sc:1;
@@ -1542,8 +1552,9 @@
     .rotation-grid, .tile-grid, .tile-grid.two, .roster{
       gap:8px;
     }
-    /* Mobile: single column for roster + curators so cards don't clip */
-    .roster, .curators-grid{grid-template-columns:1fr;}
+    /* Mobile: curators stays single column; the roster is a snap carousel now
+       (rule lives with the .roster block) so it must NOT be re-gridded here. */
+    .curators-grid{grid-template-columns:1fr;}
     .wrap{padding:14px 12px 26px;}
     nav.site a{font-size:10px;letter-spacing:.16em;}
     .brand-card img{max-width:240px;}
@@ -2348,16 +2359,21 @@
   .pitch-btn.blue:hover{border-color:var(--dye-blue);}
   .pitch-fine{color:var(--muted);font-size:12.5px;line-height:1.6;}
 
+  /* Compact banner, not a phantom frame: the old 4:3 cell was a huge mostly
+     empty dashed box and the italic number overlapped its own label. */
   .work-more{
-    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
-    aspect-ratio:4/3;text-decoration:none;cursor:pointer;
+    display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:14px;
+    padding:16px 18px;text-decoration:none;cursor:pointer;
     background:repeating-linear-gradient(-45deg,#101016 0 14px,#0c0c11 14px 28px);
   }
-  .work-more::before{content:'';position:absolute;inset:6px;border:1px dashed rgba(244,143,200,.35);border-radius:6px;pointer-events:none;transition:border-color .15s ease;}
+  .work-more::before{content:'';position:absolute;inset:5px;border:1px dashed rgba(244,143,200,.35);border-radius:6px;pointer-events:none;transition:border-color .15s ease;}
   .work-more:hover::before{border-color:var(--pink-glow);}
-  .wm-num{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:52px;line-height:1;
+  .wm-num{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:34px;line-height:1;
+    flex:none;padding-right:2px;
     background:linear-gradient(180deg,#fff,var(--pink-deep));-webkit-background-clip:text;background-clip:text;color:transparent;}
-  .wm-line{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);}
+  .wm-line{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);
+    flex:1;min-width:0;line-height:1.6;}
+  .work-more .wm-cta{flex:none;margin-left:auto;}
   .wm-cta{font-family:var(--f-mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--pink-glow);
     border:1px solid rgba(255,121,198,.5);padding:5px 12px;border-radius:3px;background:rgba(255,121,198,.06);}
   .work-more:hover .wm-cta{background:rgba(255,121,198,.16);}
@@ -3715,6 +3731,15 @@
   // Supabase free tier PAUSES after a week of no traffic, so "backend is asleep"
   // is a normal state, not an edge case. Cap what that can cost the page.
   const LIVE_TIMEOUT_MS = 1800;
+  // Member-submitted rotation tracks (migration 009). STARTED here, next to the
+  // other overlays' clock, and awaited down in the rotation render block — a
+  // third SEQUENTIAL race would stack to ~5.4s worst case on a paused backend.
+  const rotationLiveP = (window.OTP && OTP.configured && OTP.rotation)
+    ? Promise.race([
+        OTP.rotation(),
+        new Promise(r => setTimeout(() => r([]), LIVE_TIMEOUT_MS)),
+      ]).catch(() => [])
+    : Promise.resolve([]);
   const tMount = document.getElementById('take-mount');
   if (tMount && take) {
     // Authors resolve out of the roster + curator cards, so a member's avatar
@@ -3883,6 +3908,15 @@
   let activeAudio = null;
   const rMount = document.getElementById('rotation-mount');
   if (rMount && rotation) {
+    // Live tracks sit ABOVE the seeds, capped at 6 so approvals can never evict
+    // the whole hand-picked floor (previews only exist on seeds, and a paused
+    // backend must always leave a full grid). Dedupe by track id so promoting
+    // a live track into rotation.json never doubles it while both exist.
+    const liveTracks = await rotationLiveP;
+    if (liveTracks && liveTracks.length) {
+      const seeded = new Set(rotation.map(e => parseSpotifyId(e.link)).filter(Boolean));
+      rotation = [...liveTracks.filter(t => !seeded.has(t.track)).slice(0, 6), ...rotation].slice(0, 12);
+    }
     const labels = { spotify:'Spotify', youtube:'YouTube', soundcloud:'SoundCloud' };
     rotation.forEach(entry => {
       const tile = document.createElement('a');

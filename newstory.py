@@ -27,7 +27,7 @@ House rules baked in: no em dashes survive (they become commas), the byline is
 the HOUSE, not a person, and stories are indexable because the whole point of
 an outlet is being read.
 """
-import argparse, html, json, os, re, shutil, sys
+import argparse, html, json, os, re, shutil, sys, zlib
 from datetime import date
 
 try:
@@ -134,6 +134,17 @@ PAGE = """<!DOCTYPE html>
     font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;
     text-transform:uppercase;color:var(--muted)}}
   .foot a{{color:var(--pink);text-decoration:none}}
+  .wall{{max-width:680px;margin:34px auto 0;padding-top:26px;border-top:1px solid var(--line)}}
+  .wall h2{{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;font-size:22px;text-transform:uppercase;margin-bottom:14px}}
+  .wall-entry{{border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-bottom:10px}}
+  .we-by{{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--pink);margin-bottom:6px}}
+  .we-text{{font-size:15px;line-height:1.65;color:var(--ink);overflow-wrap:anywhere}}
+  .we-none,.we-pending,.we-msg{{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);line-height:1.7}}
+  .we-msg{{color:#ff6a7e;min-height:16px;margin-top:6px}}
+  #wall-compose textarea{{width:100%;background:#111016;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:12px;font-size:16px;font-family:Inter,sans-serif;margin-top:8px}}
+  .we-row{{display:flex;align-items:center;justify-content:space-between;margin-top:8px}}
+  .we-count{{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}}
+  .we-row button,.we-pending button{{background:transparent;color:var(--pink);border:1px solid var(--pink);border-radius:7px;padding:9px 16px;font-size:13px;cursor:pointer;min-height:40px}}
 </style>
 </head>
 <body>
@@ -145,11 +156,20 @@ PAGE = """<!DOCTYPE html>
   <div class="dek">{dek}</div>
   <div class="byline">{num} &nbsp;·&nbsp; <b>0FF THE PRINT</b> &nbsp;·&nbsp; San Antonio &nbsp;·&nbsp; {datestr}</div>
   <div class="cover"><img src="cover.jpg" alt=""></div>
-  <article>
+  <article data-stamp="{stamp}">
 {body}
   </article>
+  <section class="wall" id="wall" data-story="{slug}" hidden>
+    <h2>From the floor</h2>
+    <div id="wall-entries"></div>
+    <div id="wall-compose"></div>
+  </section>
   <div class="foot">Every drop gets a number. This one is {num}. <a href="../../#desk">Back to The Word &rarr;</a></div>
 </div>
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="../../assets/js/desk.js" defer></script>
+<script src="../../assets/js/word.js" defer></script>
 </body>
 </html>
 """
@@ -188,11 +208,20 @@ def main():
             md = f.read()
         body = md_to_html(md, story_dir, os.path.dirname(os.path.abspath(a.draft)))
         datestr = date.fromisoformat(a.date).strftime("%b %d, %Y").upper()
+        # The stamp locks the phone-editor loop: word.js ignores any story_pages
+        # override whose stamp no longer matches the page, so a forgotten
+        # "Clear override" after a bake cannot shadow newer committed content.
+        md_clean = no_dash(md)
+        stamp = format(zlib.crc32(md_clean.encode()) & 0xFFFFFFFF, "08x")
         page = PAGE.format(title=html.escape(no_dash(a.title)), dek=html.escape(no_dash(a.dek)),
                            kicker=html.escape(no_dash(a.kicker).upper()), num=num,
-                           datestr=datestr, body=body, slug=slug)
+                           datestr=datestr, body=body, slug=slug, stamp=stamp)
         with open(os.path.join(story_dir, "index.html"), "w") as f:
             f.write(page)
+        # source.md is the editor's base text: the phone editor seeds from it,
+        # so nothing ever round-trips through HTML.
+        with open(os.path.join(story_dir, "source.md"), "w") as f:
+            f.write(md_clean if md_clean.endswith("\n") else md_clean + "\n")
         link = f"word/{slug}/"
 
     desk["items"].insert(0, {

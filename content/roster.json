@@ -178,6 +178,37 @@
       "link": "https://www.instagram.com/haze.dt/",
       "theme_song": "",
       "lore": "Haze Dt Nightingale. Singer, performer, artist in every way, which is her own phrase and the reason for the seat.\n\nRuns between New York, Houston, San Antonio and Austin. Played Saint Mary's on 8/23.\n\nSeat filled 8/24. Song and card art are hers to set."
+    }
+  ],
+  "_archived_unfilled_seats": [
+    {
+      "name": "The Page",
+      "type": "panel",
+      "type_label": "THE PAGE · 003",
+      "hp": 70,
+      "rarity": "rare-holo",
+      "photo": null,
+      "pending_glyph": "003",
+      "pending_stamp": "IN TALKS",
+      "flavor": "Draws the rooms the cameras can't enter.",
+      "moves": [
+        {
+          "cost": "g",
+          "name": "Cold Open",
+          "damage": 30,
+          "desc": "Sets the scene in one panel."
+        },
+        {
+          "cost": "gg",
+          "name": "Splash Page",
+          "damage": 80,
+          "desc": "Full bleed. No dialogue needed."
+        }
+      ],
+      "platform": "TBA",
+      "link": "#roster",
+      "theme_song": "",
+      "lore": "Comics, zines, ink on paper. The lane where the scene draws itself.\n\nSeat 003 is in talks. The reveal is the drop.\n\nSame house rules apply: the subject sees the cut first, and off the record stays off the record."
     },
     {
       "name": "The Hairstylist",
@@ -419,37 +450,6 @@
       "theme_start": 0,
       "pending_glyph": "009",
       "pending_stamp": "SEAT OPEN"
-    }
-  ],
-  "_archived_unfilled_seats": [
-    {
-      "name": "The Page",
-      "type": "panel",
-      "type_label": "THE PAGE · 003",
-      "hp": 70,
-      "rarity": "rare-holo",
-      "photo": null,
-      "pending_glyph": "003",
-      "pending_stamp": "IN TALKS",
-      "flavor": "Draws the rooms the cameras can't enter.",
-      "moves": [
-        {
-          "cost": "g",
-          "name": "Cold Open",
-          "damage": 30,
-          "desc": "Sets the scene in one panel."
-        },
-        {
-          "cost": "gg",
-          "name": "Splash Page",
-          "damage": 80,
-          "desc": "Full bleed. No dialogue needed."
-        }
-      ],
-      "platform": "TBA",
-      "link": "#roster",
-      "theme_song": "",
-      "lore": "Comics, zines, ink on paper. The lane where the scene draws itself.\n\nSeat 003 is in talks. The reveal is the drop.\n\nSame house rules apply: the subject sees the cut first, and off the record stays off the record."
     }
   ]
 }

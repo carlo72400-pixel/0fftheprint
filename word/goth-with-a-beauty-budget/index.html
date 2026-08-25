@@ -48,6 +48,22 @@
     font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;
     text-transform:uppercase;color:var(--muted)}
   .foot a{color:var(--pink);text-decoration:none}
+
+  .wall{max-width:680px;margin:34px auto 0;padding-top:26px;border-top:1px solid var(--line)}
+  .wall h2{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
+    font-size:22px;text-transform:uppercase;letter-spacing:.01em;margin-bottom:14px}
+  .wall-entry{border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-bottom:10px}
+  .we-by{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--pink);margin-bottom:6px}
+  .we-text{font-size:15px;line-height:1.65;color:var(--ink);overflow-wrap:anywhere}
+  .we-none,.we-pending,.we-msg{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);line-height:1.7}
+  .we-msg{color:#ff6a7e;min-height:16px;margin-top:6px}
+  #wall-compose textarea{width:100%;background:#111016;color:var(--ink);border:1px solid var(--line);
+    border-radius:8px;padding:12px;font-size:16px;font-family:Inter,sans-serif;margin-top:8px}
+  .we-row{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+  .we-count{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+  .we-row button,.we-pending button{background:transparent;color:var(--pink);border:1px solid var(--pink);
+    border-radius:7px;padding:9px 16px;font-size:13px;cursor:pointer;min-height:40px}
 </style>
 </head>
 <body>
@@ -60,7 +76,7 @@
   <div class="byline">0TP-007 &nbsp;·&nbsp; <b>0FF THE PRINT</b> &nbsp;·&nbsp; San Antonio &nbsp;·&nbsp; AUG 25, 2026</div>
   <div class="cover"><img src="cover.jpg" alt=""></div>
   <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:-20px 0 30px;text-align:right">D.&thinsp;H. Friston, &ldquo;Carmilla,&rdquo; The Dark Blue, 1872. Public domain.</div>
-  <article>
+  <article data-stamp="2e4aa115">
 <p>Pinterest Predicts just put a name on the look: Vamp Romantic. Their own numbers say gothic coffin nails are up 180 percent, dark romantic makeup up 160, vampire beauty up 90, and something they are calling the carmilla aesthetic up 60. They frame it as the polished cousin of goth, pulling from Victorian romance and old Hollywood instead of post punk.</p>
 <p>First, respect where it is due: whoever at Pinterest snuck the word carmilla into a corporate trend deck is one of us and should blink twice if they need extraction.</p>
 <h2>What actually happens now</h2>
@@ -70,7 +86,16 @@
 <p>And then the cycle moves on, the way it always does, and what is left is everyone who was already here. A subculture is not the nails. It is the part that does not photograph, which is exactly why a mood board platform can only ever sell the surface of it.</p>
 <p>This house has been shooting the look since before it had a growth chart. We will be shooting it after the chart goes back down. If the forecast brings a few people all the way through the surface and into the real thing, honestly, welcome. The water is cold and we like it that way.</p>
   </article>
-  <div class="foot">Every drop gets a number. This one is 0TP-007. <a href="../../#desk">Back to The Word &rarr;</a></div>
+  <section class="wall" id="wall" data-story="goth-with-a-beauty-budget" hidden>
+  <h2>From the floor</h2>
+  <div id="wall-entries"></div>
+  <div id="wall-compose"></div>
+</section>
+<div class="foot">Every drop gets a number. This one is 0TP-007. <a href="../../#desk">Back to The Word &rarr;</a></div>
 </div>
+<script src="../../supabase-config.js?v=f1348482"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="../../assets/js/desk.js?v=8bab1cb5" defer></script>
+<script src="../../assets/js/word.js?v=2d1e5d83" defer></script>
 </body>
 </html>

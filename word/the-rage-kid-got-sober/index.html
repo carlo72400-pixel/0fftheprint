@@ -48,6 +48,22 @@
     font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;
     text-transform:uppercase;color:var(--muted)}
   .foot a{color:var(--pink);text-decoration:none}
+
+  .wall{max-width:680px;margin:34px auto 0;padding-top:26px;border-top:1px solid var(--line)}
+  .wall h2{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
+    font-size:22px;text-transform:uppercase;letter-spacing:.01em;margin-bottom:14px}
+  .wall-entry{border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-bottom:10px}
+  .we-by{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--pink);margin-bottom:6px}
+  .we-text{font-size:15px;line-height:1.65;color:var(--ink);overflow-wrap:anywhere}
+  .we-none,.we-pending,.we-msg{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);line-height:1.7}
+  .we-msg{color:#ff6a7e;min-height:16px;margin-top:6px}
+  #wall-compose textarea{width:100%;background:#111016;color:var(--ink);border:1px solid var(--line);
+    border-radius:8px;padding:12px;font-size:16px;font-family:Inter,sans-serif;margin-top:8px}
+  .we-row{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+  .we-count{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+  .we-row button,.we-pending button{background:transparent;color:var(--pink);border:1px solid var(--pink);
+    border-radius:7px;padding:9px 16px;font-size:13px;cursor:pointer;min-height:40px}
 </style>
 </head>
 <body>
@@ -60,7 +76,7 @@
   <div class="byline">0TP-008 &nbsp;·&nbsp; <b>0FF THE PRINT</b> &nbsp;·&nbsp; San Antonio &nbsp;·&nbsp; AUG 25, 2026</div>
   <div class="cover"><img src="cover.jpg" alt=""></div>
   <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:-20px 0 30px;text-align:right">Still from the &ldquo;sober&rdquo; video (2026)</div>
-  <article>
+  <article data-stamp="4810f6e6">
 <p>On August 21, Nettspend put out a record called sober. Black and white video. The buzzed head reveal happens at a sold out Mayan Theater in LA. His mother is on camera. OsamaSon is on camera. In between, he skates through LA at night while reklus1ve chops a glowing organ line into trap. The kid who built a career on being a beautiful mess just filmed himself cleaning it up.</p>
 <h2>Why this one is different</h2>
 <p>Rage rap has a lineage, and the lineage is mostly a memorial wall. Peep. Juice. X. The genre's defining records about substances were either warnings nobody took or celebrations that aged into eulogies. The pattern has been so reliable that the culture treats the crash as part of the arc, like it comes with the distortion.</p>
@@ -69,7 +85,16 @@
 <p>That is the whole story. Not the haircut, not the rollout. A genre that memorializes its casualties just watched its youngest export choose the other ending, and he put his mom in the video to make sure you understood it was not a costume change.</p>
 <p>Whether the record itself holds up is a separate conversation, and the internet will have it loudly. The move already landed. Somewhere there is a fifteen year old who found this music the same way everyone found it, and the biggest kid in their lane just made survival look like the hardest thing you can do on camera. That is worth a write up from a house that shoots the culture this music soundtracks.</p>
   </article>
-  <div class="foot">Every drop gets a number. This one is 0TP-008. <a href="../../#desk">Back to The Word &rarr;</a></div>
+  <section class="wall" id="wall" data-story="the-rage-kid-got-sober" hidden>
+  <h2>From the floor</h2>
+  <div id="wall-entries"></div>
+  <div id="wall-compose"></div>
+</section>
+<div class="foot">Every drop gets a number. This one is 0TP-008. <a href="../../#desk">Back to The Word &rarr;</a></div>
 </div>
+<script src="../../supabase-config.js?v=f1348482"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="../../assets/js/desk.js?v=8bab1cb5" defer></script>
+<script src="../../assets/js/word.js?v=2d1e5d83" defer></script>
 </body>
 </html>

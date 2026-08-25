@@ -53,12 +53,13 @@
     <a href="../card/" style="color:var(--pink-glow);text-decoration:none;font-weight:600">YOUR CARD &rarr;</a></div>
 
   <div class="card" id="panel"><div class="empty">checking your card…</div></div>
+  <div id="rot"></div>
   <div class="mine" id="mine"></div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="../supabase-config.js?v=f1348482"></script>
-<script src="../assets/js/desk.js?v=aeebe9c1"></script>
+<script src="../assets/js/desk.js?v=8bab1cb5"></script>
 <script>
 (async () => {
   const $ = id => document.getElementById(id);
@@ -206,6 +207,51 @@
     });
   }
   renderSwatches(me.profile.accent || null);
+
+  /* ================= PUT A SONG ON ROTATION ================= */
+  // Degrades to nothing until migration 009 runs; .catch keeps the page whole.
+  const rot = $('rot');
+  async function renderRotation() {
+    if (!rot || !OTP.myRotation) return;
+    let minez = [];
+    try { minez = await OTP.myRotation(); } catch (e) { rot.innerHTML = ''; return; }
+    rot.innerHTML = `
+      <h2 style="margin-top:26px">Put a song on rotation</h2>
+      <div class="card">
+        <div class="empty" style="margin-bottom:10px">Paste a Spotify track link. The desk gets it first.</div>
+        <input type="text" id="rt-url" placeholder="https://open.spotify.com/track/..." autocomplete="off"
+          style="width:100%;background:#0d0d12;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:12px;font-size:16px;min-height:44px">
+        <input type="text" id="rt-artist" placeholder="artist name" autocomplete="off" maxlength="40"
+          style="width:100%;background:#0d0d12;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:12px;font-size:16px;min-height:44px;margin-top:8px">
+        <div style="display:flex;gap:10px;align-items:center;margin-top:10px">
+          <button class="btn" id="rt-send" type="button">Send it in</button>
+          <span class="empty" id="rt-msg" style="margin:0"></span>
+        </div>
+        ${minez.length ? `<div style="margin-top:14px">` + minez.map(t => `
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;border-top:1px solid var(--line);padding:9px 0">
+            <span style="font-size:13px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(t.title)} · ${esc(t.artist)}</span>
+            <span style="font-family:var(--f-mono);font-size:9.5px;letter-spacing:.14em;color:${t.published ? 'var(--pink-glow)' : 'var(--muted)'}">${t.published ? 'ON ROTATION' : 'WAITING'}</span>
+            ${!t.published ? `<button class="btn ghost sm" data-rtw="${t.id}" type="button">Withdraw</button>` : ''}
+          </div>`).join('') + `</div>` : ''}
+      </div>`;
+    $('rt-send').onclick = async () => {
+      const msg = $('rt-msg');
+      $('rt-send').disabled = true; msg.textContent = 'Reading the track…';
+      try {
+        const r = await OTP.submitTrack({ url: $('rt-url').value, artist: $('rt-artist').value });
+        msg.textContent = '"' + r.title + '" is in the queue.';
+        $('rt-url').value = ''; $('rt-artist').value = '';
+        renderRotation();
+      } catch (e) { msg.textContent = e.message; }
+      $('rt-send').disabled = false;
+    };
+    rot.querySelectorAll('[data-rtw]').forEach(b => b.onclick = async () => {
+      b.disabled = true;
+      try { await OTP.withdrawTrack(b.dataset.rtw); renderRotation(); }
+      catch (e) { alert(e.message); b.disabled = false; }
+    });
+  }
+  renderRotation();
 
   /* ================= YOUR POSTS ================= */
   const mine = $('mine');

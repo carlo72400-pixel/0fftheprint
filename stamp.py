@@ -20,7 +20,8 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parent
 
 # script path (relative to ROOT)  ->  how it appears in src="..."
-TRACKED = ["assets/js/desk.js", "assets/js/door.js", "assets/js/composer.js", "supabase-config.js"]
+TRACKED = ["assets/js/desk.js", "assets/js/door.js", "assets/js/composer.js",
+           "assets/js/word.js", "supabase-config.js"]
 
 # every document that loads them
 DOCS = ["index.html", "join/index.html", "compose/index.html", "desk/index.html",
@@ -28,7 +29,9 @@ DOCS = ["index.html", "join/index.html", "compose/index.html", "desk/index.html"
         # Any page that loads desk.js belongs here. A page left off this list
         # silently serves whatever desk.js the browser cached, which is exactly
         # the bug this script exists to prevent.
-        "card/index.html"]
+        "card/index.html", "desk/word/index.html"] + [
+        # every story page carries desk.js + word.js
+        str(p.relative_to(ROOT)) for p in sorted(ROOT.glob("word/*/index.html"))]
 
 
 def short_hash(path: pathlib.Path) -> str:

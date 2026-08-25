@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Edit a story · The Desk · 0FF THE PRINT</title>
+<link rel="icon" href="../../assets/favicon.svg">
+<link rel="stylesheet" href="../../assets/css/auth.css">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@700;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+.wrap{max-width:760px;margin:0 auto;padding:0 16px 90px}
+.story-row{display:flex;justify-content:space-between;align-items:center;gap:10px;
+  border:1px solid var(--line);border-radius:9px;padding:14px;margin-bottom:10px;cursor:pointer}
+.story-row:hover{border-color:var(--pink-deep)}
+.story-row b{font-family:var(--f-display);font-style:italic;font-size:18px;text-transform:uppercase}
+.story-row .st{font-family:var(--f-mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.story-row .st.live{color:var(--pink-glow)}
+.story-row .st.stale{color:#ff6a7e}
+#ed textarea{width:100%;min-height:52vh;background:#0d0d12;color:var(--ink);border:1px solid var(--line);
+  border-radius:9px;padding:14px;font-size:16px;line-height:1.6;font-family:'JetBrains Mono',monospace}
+.bar{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+.btn{background:var(--pink-deep);color:#12000a;border:0;border-radius:8px;padding:12px 18px;
+  font-weight:700;font-size:14px;cursor:pointer;min-height:44px;font-family:var(--f-body)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.5}
+.msg{font-family:var(--f-mono);font-size:12px;margin-top:10px;min-height:18px;color:var(--muted)}
+.msg.ok{color:var(--ok)} .msg.bad{color:var(--bad)}
+.hint{color:var(--muted);font-size:13px;line-height:1.6;margin:8px 0 18px}
+.gate{max-width:520px;margin:80px auto;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header style="padding:30px 0 14px">
+    <div style="font-family:var(--f-display);font-style:italic;font-weight:900;font-size:26px;text-transform:uppercase">Edit a story</div>
+    <div style="font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;color:var(--muted);margin-top:8px">
+      THE DESK &middot; <a href="../" style="color:var(--pink-glow)">back to the desk</a></div>
+  </header>
+
+  <div id="gate" class="gate" style="display:none"></div>
+  <div id="list" style="display:none"></div>
+  <div id="ed" style="display:none">
+    <div class="hint" id="ed-title"></div>
+    <textarea id="body" spellcheck="true"></textarea>
+    <div class="hint">Plain paragraphs. <b>## </b>for a heading, <b>&gt; </b>for a pull quote,
+      <b>**bold**</b>, <b>*italic*</b>, <b>[text](https://link)</b>. Blank line between blocks.
+      Saves show on the live page in seconds. Baking it into git happens at the laptop
+      (<b>bake.py</b>), and a baked page ignores its old override on its own.</div>
+    <div class="bar">
+      <button class="btn" id="save" type="button">Save to the live page</button>
+      <button class="btn ghost" id="clear" type="button">Clear override</button>
+      <button class="btn ghost" id="back" type="button">&larr; Stories</button>
+    </div>
+    <div class="msg" id="msg"></div>
+  </div>
+</div>
+
+<script src="../../supabase-config.js?v=f1348482"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="../../assets/js/desk.js?v=8bab1cb5" defer></script>
+<script defer>
+(() => {
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g,
+    c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  let stories = [], cur = null;
+
+  async function pageStamp(slug){
+    try {
+      const html = await fetch(`../../word/${slug}/index.html`, { cache: 'no-cache' }).then(r => r.text());
+      const m = html.match(/<article data-stamp="([a-f0-9]{8})">/);
+      return m ? m[1] : null;
+    } catch (e) { return null; }
+  }
+
+  async function showList(){
+    $('ed').style.display = 'none';
+    const rows = await Promise.all(stories.map(async st => {
+      const [ov, stamp] = await Promise.all([OTP.storyOverride(st.slug), pageStamp(st.slug)]);
+      let state = 'committed page';
+      let cls = '';
+      if (ov) {
+        const stale = ov.stamp && stamp && ov.stamp !== stamp;
+        state = stale ? 'STALE OVERRIDE · clear it' : 'LIVE OVERRIDE';
+        cls = stale ? 'stale' : 'live';
+      }
+      return `<div class="story-row" data-slug="${esc(st.slug)}">
+        <b>${esc(st.title)}</b><span class="st ${cls}">${state}</span></div>`;
+    }));
+    $('list').innerHTML = rows.join('') ||
+      '<div class="hint">No stories with pages yet. newstory.py makes them.</div>';
+    $('list').style.display = '';
+    $('list').querySelectorAll('.story-row').forEach(r =>
+      r.addEventListener('click', () => openStory(r.dataset.slug)));
+  }
+
+  async function openStory(slug){
+    cur = { slug };
+    const [ov, stamp] = await Promise.all([OTP.storyOverride(slug), pageStamp(slug)]);
+    cur.stamp = stamp;
+    let body = '';
+    const stale = ov && ov.stamp && stamp && ov.stamp !== stamp;
+    if (ov && !stale) {
+      body = ov.body_md;
+    } else {
+      // seed from the committed source, never from HTML
+      try { body = await fetch(`../../word/${slug}/source.md`, { cache: 'no-cache' }).then(r => r.ok ? r.text() : ''); }
+      catch (e) { body = ''; }
+    }
+    $('ed-title').innerHTML = `<b>${esc(slug)}</b>` +
+      (stale ? ' &middot; <span style="color:#ff6a7e">the old override was already baked; you are editing the committed page</span>' : '');
+    $('body').value = body;
+    $('list').style.display = 'none';
+    $('ed').style.display = '';
+    $('msg').className = 'msg'; $('msg').textContent = '';
+  }
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    const me = await OTP.me().catch(() => null);
+    if (!me || !me.profile || !me.profile.is_admin) {
+      $('gate').style.display = '';
+      $('gate').innerHTML = '<p class="door-note">Desk only. <a href="../../join/">The door is that way.</a></p>';
+      return;
+    }
+    const desk = await fetch('../../content/desk.json', { cache: 'no-cache' }).then(r => r.json());
+    stories = (desk.items || [])
+      .filter(it => (it.link || '').startsWith('word/'))
+      .map(it => ({ slug: it.link.replace(/^word\//, '').replace(/\/$/, ''), title: it.title }));
+    showList();
+
+    $('back').onclick = showList;
+    $('save').onclick = async () => {
+      $('save').disabled = true;
+      $('msg').className = 'msg'; $('msg').textContent = 'Saving...';
+      try {
+        await OTP.saveStoryOverride(cur.slug, $('body').value, cur.stamp);
+        $('msg').className = 'msg ok';
+        $('msg').textContent = 'Live. The committed page catches up next bake.';
+      } catch (e) { $('msg').className = 'msg bad'; $('msg').textContent = e.message; }
+      $('save').disabled = false;
+    };
+    $('clear').onclick = async () => {
+      if (!confirm('Drop the override and let the committed page show?')) return;
+      try { await OTP.clearStoryOverride(cur.slug); $('msg').className = 'msg ok'; $('msg').textContent = 'Cleared.'; }
+      catch (e) { $('msg').className = 'msg bad'; $('msg').textContent = e.message; }
+    };
+  });
+})();
+</script>
+</body>
+</html>
