@@ -993,6 +993,15 @@
   .poke[data-type="canvas"] .poke-type{background:rgba(220,80,80,.2);color:#ff8a8a;border-color:rgba(220,80,80,.5);}
   .poke[data-type="memory"] .poke-type{background:rgba(180,150,100,.2);color:#dac38a;border-color:rgba(180,150,100,.5);}
   .poke[data-type="street"] .poke-type{background:rgba(154,147,163,.2);color:#c8c0d4;border-color:rgba(154,147,163,.5);}
+  /* Six types were live in the JSON with no rule here, so they all fell through to
+     the default grey plate and read as a bug rather than a choice. Keep this list
+     in step with the `type` values in content/roster.json + creators.json. */
+  .poke[data-type="voice"] .poke-type{background:rgba(163,230,53,.18);color:#a3e635;border-color:rgba(163,230,53,.45);}
+  .poke[data-type="signal"] .poke-type{background:rgba(160,230,255,.18);color:#a0e6ff;border-color:rgba(160,230,255,.45);}
+  .poke[data-type="board"] .poke-type{background:rgba(255,138,92,.18);color:#ff8a5c;border-color:rgba(255,138,92,.45);}
+  .poke[data-type="ink"] .poke-type{background:rgba(210,210,220,.16);color:#d6d6e0;border-color:rgba(210,210,220,.42);}
+  .poke[data-type="sermon"] .poke-type{background:rgba(247,208,70,.18);color:#f0c65a;border-color:rgba(247,208,70,.45);}
+  .poke[data-type="diary"] .poke-type{background:rgba(192,132,252,.18);color:#c084fc;border-color:rgba(192,132,252,.45);}
   /* fallback for legacy .voice items in case the JSON hasn't been upgraded yet */
   .voice{
     background:var(--panel);
@@ -3339,15 +3348,6 @@
       <a class="slate-latest" id="slate-latest" href="events/"></a>
     </section>
 
-    <!-- ===== CURATORS HERO — one lens, the voices come to it ===== -->
-    <section id="curators" class="curators-hero">
-      <div class="section-head">
-        <h2>This Is Us <span class="accent">the outlet</span></h2>
-        <div class="sub">one lens · a roster of voices · open seats that mean it</div>
-      </div>
-      <div class="curators-grid" id="curators-mount"></div>
-    </section>
-
     <!-- ===== THE TAKE — the timeline. Card holders post here. ===== -->
     <section id="take">
       <div class="section-head">
@@ -3378,6 +3378,16 @@
         <div class="sub">cued up &nbsp;·&nbsp; loud &nbsp;·&nbsp; looping</div>
       </div>
       <div class="rotation-grid" id="rotation-mount"></div>
+    </section>
+
+    <!-- ===== CURATORS HERO — one lens, the voices come to it.
+         Moved below the work 8/25: the frames are the face, not us. ===== -->
+    <section id="curators" class="curators-hero">
+      <div class="section-head">
+        <h2>This Is Us <span class="accent">the outlet</span></h2>
+        <div class="sub">one lens · a roster of voices · open seats that mean it</div>
+      </div>
+      <div class="curators-grid" id="curators-mount"></div>
     </section>
 
     <!-- ===== THE DESK · filterable culture feed ===== -->
@@ -3478,7 +3488,13 @@
     // leaving it out silently killed every in-page link that came through here
     // (the #roster catalog tile, a card holder's avatar with no external link).
     if (/^#[\w-]*$/.test(v)) return v;
-    if (/^(https?:)?\/\//i.test(v) || /^\/(?!\/)/.test(v) || /^[\w./-]+$/.test(v)) {
+    // ⛔ Protocol-relative ('//evil.example/x') borrows the page's scheme and hides
+    // the host. It passed the old '(https?:)?//' branch AND the bare '[\w./-]+'
+    // branch, and then failed the isExt test at the render, so it painted as a
+    // SAME-TAB link with no rel=noopener labelled "Jump to roster". Harmless while
+    // nothing member-written reaches a URL field; the card builder changes that.
+    if (/^\/\//.test(v)) return '';
+    if (/^https?:\/\//i.test(v) || /^\/(?!\/)/.test(v) || /^[\w./-]+$/.test(v)) {
       return /^\s*(javascript|data|vbscript):/i.test(v) ? '' : v.replace(/["']/g, '');
     }
     return '';
@@ -3670,6 +3686,9 @@
   // How many posts the homepage shows, tops. OTP.FEED_CAP when the backend is
   // loaded, otherwise the same number, so the JSON-only path caps identically.
   const FEED_CAP = (window.OTP && OTP.FEED_CAP) || 8;
+  // Supabase free tier PAUSES after a week of no traffic, so "backend is asleep"
+  // is a normal state, not an edge case. Cap what that can cost the page.
+  const LIVE_TIMEOUT_MS = 1800;
   const tMount = document.getElementById('take-mount');
   if (tMount && take) {
     // Authors resolve out of the roster + curator cards, so a member's avatar
@@ -3706,7 +3725,16 @@
     // If the backend is not configured, this is a no-op and the seeds show alone.
     if (window.OTP && OTP.configured) {
       try {
-        const live = await OTP.feed(FEED_CAP);
+        // ⛔ This was a BARE await in the middle of the single render pass, and
+        // OTP.feed() carries no timeout of its own. Everything below it (Music,
+        // Catalog, THE WORK, the roster, the card wiring) renders after it, so a
+        // hung or paused Supabase did not cost a moment, it meant those sections
+        // NEVER rendered. The git-backed JSON is the render floor and it must not
+        // be gated on a network call. Losing the race just means seeds-only.
+        const live = await Promise.race([
+          OTP.feed(FEED_CAP),
+          new Promise(r => setTimeout(() => r([]), LIVE_TIMEOUT_MS)),
+        ]);
         if (live.length) {
           const seeds = take.filter(p => !p.pinned);
           const pinned = [...live, ...take].filter(p => p.pinned);
@@ -4352,26 +4380,35 @@
     'common': 30, 'uncommon': 22, 'rare': 16, 'rare-holo': 12,
     'rainbow-rare': 6, 'tera-ex': 5, 'gold-rare': 4, 'tag-team': 2,
   };
+  // A bespoke house frame (warlord, darklord, vampy, amazing, diamond-rare,
+  // full-art, stone) is not in the ladder above, so it needs its own weight or
+  // `?? 0` would make those cards unpullable. Below gold-rare on purpose.
+  const BESPOKE_WEIGHT = 3;
   function weightedPull(){
     // Pool: every roster card + every non-open-seat curator
     const pool = [];
     (roster || []).forEach(v => pool.push({type:'roster', card:v}));
     (creators || []).forEach(v => { if (!v.open_seat) pool.push({type:'curator', card:v}); });
     if (!pool.length) return null;
-    // Re-roll the rarity for the pull using the WEIGHTS
-    const totalW = Object.values(PULL_WEIGHTS).reduce((a,b)=>a+b,0);
-    const roll = Math.random() * totalW;
-    let acc = 0; let pulledRarity = 'common';
-    for (const [r, w] of Object.entries(PULL_WEIGHTS)){
-      acc += w;
-      if (roll < acc){ pulledRarity = r; break; }
+    // ⛔ This used to roll a rarity from PULL_WEIGHTS, look for a card whose
+    // `rarities` ARRAY contained it, and then FORCE that rarity onto whatever it
+    // found. No item in roster.json has a `rarities` array and the only one in
+    // creators.json is ['full-art'], which is not a PULL_WEIGHTS key, so the
+    // match was ALWAYS empty: every pull fell through to a uniform random card
+    // and then overwrote its frame. The pack printed KAV-MAN as a `common` and
+    // stripped WRATHFOL's `amazing`, i.e. the one place that publishes scarcity
+    // was contradicting the one place that enforces it.
+    //
+    // Now the CARD's own rarity is its pull weight, so a bespoke frame is simply
+    // rarer to pull, and nothing ever renders wearing a frame that is not its own.
+    const weightOf = c => PULL_WEIGHTS[c.rarity] ?? BESPOKE_WEIGHT;
+    const totalW = pool.reduce((a, p) => a + weightOf(p.card), 0);
+    let roll = Math.random() * totalW;
+    for (const p of pool){
+      roll -= weightOf(p.card);
+      if (roll < 0) return p;
     }
-    // Pick a pool card whose rarities array includes pulledRarity, else any card
-    const compatible = pool.filter(p => Array.isArray(p.card.rarities) && p.card.rarities.includes(pulledRarity));
-    const pick = compatible.length ? compatible[Math.floor(Math.random()*compatible.length)] : pool[Math.floor(Math.random()*pool.length)];
-    // Force the pulled rarity on the rendered card
-    pick.card = Object.assign({}, pick.card, { rarity: pulledRarity, rarities: null });
-    return pick;
+    return pool[pool.length - 1];
   }
   function openBooster(){
     if (!boosterOverlay) return;
