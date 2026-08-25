@@ -38,7 +38,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Pirata+One&family=Luckiest+Guy&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" defer></script>
 <script src="supabase-config.js?v=f1348482" defer></script>
-<script src="assets/js/desk.js?v=7043a7bc" defer></script>
+<script src="assets/js/desk.js?v=aeebe9c1" defer></script>
 <script src="assets/js/door.js?v=cb068ae4" defer></script>
 <script src="assets/js/composer.js?v=51127ffa" defer></script>
 <style>
@@ -1821,6 +1821,14 @@
   .stat-move-name{font-weight:700;font-size:12px;color:var(--ink);}
   .stat-move-dmg{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:14px;color:var(--pink-glow);}
   .stat-move-desc{font-size:10px;color:#b8b0c0;margin-top:3px;line-height:1.4;}
+  .stat-tracks{display:flex;flex-direction:column;gap:6px;}
+  .stat-track{display:flex;align-items:center;gap:10px;width:100%;min-height:40px;
+    background:rgba(255,255,255,.04);border:1px solid var(--line,#2a2733);border-radius:7px;
+    padding:8px 12px;color:var(--ink,#efeff2);font-family:var(--f-mono,monospace);
+    font-size:12.5px;letter-spacing:.06em;cursor:pointer;text-align:left;}
+  .stat-track:hover{border-color:var(--pink-deep,#e5378f);color:#fff;}
+  .stat-track .tn{color:var(--pink-glow,#ff79c6);font-weight:700;min-width:20px;}
+  .stat-track .tt{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .stat-theme{font-family:var(--f-mono);font-size:10px;color:#c8c0d4;letter-spacing:.04em;flex-shrink:0;}
   .stat-lore{font-size:11px;line-height:1.5;color:#d6d0da;flex-shrink:0;}
   .stat-lore p{margin-bottom:6px;}
@@ -3533,6 +3541,12 @@
     const v = String(u ?? '');
     if (!v) return v;
     if (/^(https?:)?\/\//i.test(v)) {
+      // Member card art ships as a -full/-card pair with the size in the NAME
+      // (the Spotify-cover-id move). Everything but the tapped-open modal gets
+      // the small one, or member uploads torch the 5GB/mo egress budget.
+      if (kind !== 'full' && /\/storage\/v1\/object\/public\/cards\/.+-full\.jpg$/i.test(v)) {
+        return v.replace(/-full\.jpg$/i, '-card.jpg');
+      }
       return v.indexOf(SPOTIFY_640) !== -1 && kind !== 'full'
         ? v.replace(SPOTIFY_640, SPOTIFY_300)
         : v;
@@ -3753,6 +3767,52 @@
           take = [...pinned.slice(0, 1), ...live.filter(p => !p.pinned), ...seeds];
         }
       } catch (e) { console.warn('live feed skipped:', e.message); }
+    }
+
+    // Member card edits (the /card/ builder) overlay the seeded roster exactly
+    // the way live posts overlay take.json: the committed JSON is the render
+    // floor, DB rows only override what a member actually saved. Same race, same
+    // reason, and losing it just means the desk-authored cards show.
+    if (window.OTP && OTP.configured && OTP.cards) {
+      try {
+        const rows = await Promise.race([
+          OTP.cards(),
+          new Promise(r => setTimeout(() => r([]), LIVE_TIMEOUT_MS)),
+        ]);
+        if (rows && rows.length) {
+          const by = {};
+          rows.forEach(rw => { if (rw && rw.card_slug) by[rw.card_slug] = rw; });
+          // The handle is regex-pinned at the database; the HOST is ours, never
+          // theirs. This is what makes a member link unable to point anywhere
+          // but their own profile on a known platform.
+          const LINK_BASE = {
+            instagram:  h => 'https://www.instagram.com/' + h + '/',
+            tiktok:     h => 'https://www.tiktok.com/@' + h,
+            youtube:    h => 'https://www.youtube.com/@' + h,
+            spotify:    h => 'https://open.spotify.com/artist/' + h,
+            soundcloud: h => 'https://soundcloud.com/' + h,
+            bandcamp:   h => 'https://' + h + '.bandcamp.com/',
+          };
+          [roster, creators].forEach(list => (list || []).forEach(v => {
+            const rw = by[slugify(v.name)];
+            if (!rw) return;
+            if (rw.card_frame) v.rarity = rw.card_frame;
+            if (rw.card_photo) v.photo = rw.card_photo;
+            if (rw.theme_song && parseSpotifyId(rw.theme_song)) {
+              v.theme_song = rw.theme_song;
+              v.theme_start = rw.theme_start || 0;
+            }
+            if (Array.isArray(rw.featured) && rw.featured.length) {
+              v.featured = rw.featured.slice(0, 3);
+            }
+            if (rw.link_platform && rw.link_handle && LINK_BASE[rw.link_platform]
+                && /^[A-Za-z0-9._-]{1,30}$/.test(rw.link_handle)) {
+              v.link = LINK_BASE[rw.link_platform](rw.link_handle);
+              v.platform = rw.link_platform.charAt(0).toUpperCase() + rw.link_platform.slice(1);
+            }
+          }));
+        }
+      } catch (e) { console.warn('card overlay skipped:', e.message); }
     }
 
     // The pin is hoisted to the front BEFORE the slice, so it can never fall off
@@ -4140,8 +4200,9 @@
     root.querySelectorAll('.sp-seek:not([data-mounted])').forEach(host => {
       host.setAttribute('data-mounted', '1');
       const id = host.dataset.track;
-      const start = parseInt(host.dataset.start, 10) || 0;
+      let start = parseInt(host.dataset.start, 10) || 0;
       const autoplay = host.dataset.autoplay === '1';
+      const stable = host.closest('.theme-song') || host.parentElement || host;
       loadSpotifyApi().then(API => {
         if (!API){
           // API blocked or offline: fall back to a normal embed, just without the offset.
@@ -4150,6 +4211,16 @@
         }
         API.createController(host, { uri: 'spotify:track:' + id, width: '100%', height: 80 }, ctrl => {
           let jumped = !start;
+          // Featured tracks retarget THIS controller instead of mounting three
+          // more iframes. Re-arming `jumped`/`start` per load is what stops the
+          // old one-shot seek from firing on the WRONG track: swap before the
+          // theme ever played and the pending seek would have dragged the new
+          // track to the theme's timestamp.
+          stable._loadTrack = (tid, tstart) => {
+            start = parseInt(tstart, 10) || 0;
+            jumped = !start;
+            try { ctrl.loadUri('spotify:track:' + tid); ctrl.play(); } catch (err) {}
+          };
           ctrl.addListener('playback_update', e => {
             const d = e && e.data;
             if (!d || jumped) return;
@@ -4277,7 +4348,10 @@
         ${m.desc ? `<div class="stat-move-desc">${esc(m.desc)}</div>` : ''}
       </div>`).join('');
     const themeId = parseSpotifyId(data.theme_song);
-    const themeLabel = themeId ? `Track ID · ${themeId.slice(0,8)}…` : 'No theme set';
+    const feats = (Array.isArray(data.featured) ? data.featured : [])
+      .map(f => parseSpotifyId(f && f.track))
+      .filter(Boolean)
+      .slice(0, 3);
     const hasLore = !!(data.lore && String(data.lore).trim());
     const loreHtml = hasLore ? `
       <div class="stat-divider">From the file</div>
@@ -4297,8 +4371,12 @@
           </div>
           <div class="stat-divider">Moves</div>
           <div class="stat-moves">${moves || '<em style="opacity:.5;">No moves set</em>'}</div>
-          <div class="stat-divider">Theme</div>
-          <div class="stat-theme">${esc(themeLabel)}</div>
+          <div class="stat-divider">On the card</div>
+          <div class="stat-tracks">
+            ${themeId ? `<button class="stat-track" type="button" data-play="${esc(themeId)}" data-start="${parseInt(data.theme_start,10)||0}" data-oembed="${esc(themeId)}"><span class="tn">&#9654;</span><span class="tt">Opening song</span></button>` : ''}
+            ${feats.map((tid, i) => `<button class="stat-track" type="button" data-play="${esc(tid)}" data-start="0" data-oembed="${esc(tid)}"><span class="tn">${String(i+1).padStart(2,'0')}</span><span class="tt">Featured ${String(i+1).padStart(2,'0')}</span></button>`).join('')}
+            ${(!themeId && !feats.length) ? '<em style="opacity:.5;">No songs set</em>' : ''}
+          </div>
           ${loreHtml}
           <div class="stat-foot">
             <span>0FF · VOL.1</span>
@@ -4325,6 +4403,39 @@
     `;
     paintBg(modalCardMount);
     wireSpotifyEmbeds(modalCardMount);
+    // Tracklist taps retarget the ONE mounted controller. A card with featured
+    // songs but no opening song has no embed yet, so the first tap mounts one.
+    modalCardMount.querySelectorAll('.stat-track').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tid = btn.dataset.play;
+        const tstart = parseInt(btn.dataset.start, 10) || 0;
+        // The IFrame API replaces .sp-seek with its iframe, so the retarget
+        // handle lives on the surviving .theme-song wrapper instead.
+        const wrap = modalCardMount.querySelector('.theme-song');
+        if (wrap && wrap._loadTrack) { wrap._loadTrack(tid, tstart); return; }
+        if (!wrap) {
+          const mount = document.createElement('div');
+          mount.innerHTML = spotifyEmbed(tid, true, tstart);
+          if (mount.firstElementChild) {
+            modalCardMount.appendChild(mount.firstElementChild);
+            wireSpotifyEmbeds(modalCardMount);
+          }
+        }
+      });
+    });
+    // Best-effort real titles via Spotify's oEmbed (title + cover, no auth). If
+    // CORS or the network says no, the numbered labels stand; nothing depends
+    // on this resolving.
+    modalCardMount.querySelectorAll('.stat-track[data-oembed]').forEach(btn => {
+      fetch('https://open.spotify.com/oembed?url=https://open.spotify.com/track/' + btn.dataset.oembed)
+        .then(r => r.ok ? r.json() : null)
+        .then(j => {
+          if (!j || !j.title) return;
+          const tt = btn.querySelector('.tt');
+          if (tt) tt.textContent = j.title;
+        })
+        .catch(() => {});
+    });
     // Actions — primary OPEN IG (full width) + secondary row (FLIP / SHARE / CLOSE)
     const link = safeUrl(data.link) || '#';
     const isExt = /^https?:\/\//.test(link);

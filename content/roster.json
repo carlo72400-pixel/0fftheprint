@@ -122,6 +122,64 @@
       "lore": "Black and grey by appointment, oil on canvas after hours. The crossover is the story.\n\nInterview 002 is in production: the format moves from the chair to the bench. The machine runs while the conversation does, and the room light stays the room light.\n\nThe subject sees the cut before anyone else. House rule. The reveal is the drop."
     },
     {
+      "name": "KURLYTOP",
+      "type": "sermon",
+      "type_label": "THE SERMON",
+      "hp": 170,
+      "rarity": "vampy",
+      "photo": "assets/card-kurlytop.jpg",
+      "pending_glyph": "KT",
+      "pending_stamp": "PHOTO PENDING",
+      "flavor": "God-fearing and unorthodox, in that order.",
+      "moves": [
+        {
+          "cost": "y",
+          "name": "Testimony",
+          "damage": 50,
+          "desc": "Say the part everybody leaves out. The room gets quiet."
+        },
+        {
+          "cost": "yyy",
+          "name": "Unorthodox",
+          "damage": 150,
+          "desc": "Does it the wrong way. It works. Nobody can explain it."
+        }
+      ],
+      "platform": "SATX",
+      "link": "https://www.instagram.com/kurlytop/",
+      "theme_song": "",
+      "lore": "Joseph Hector Espino. San Antonio. Music, videos, and the long way around.\n\nHis own bio does the introduction better than we could: God-fearing man, unorthodox. That collision is the whole seat.\n\nSeat filled 8/24. He picks his own song and his own card art, the same as everybody else here."
+    },
+    {
+      "name": "HAZE DT",
+      "type": "diary",
+      "type_label": "THE DIARY",
+      "hp": 150,
+      "rarity": "rainbow-rare",
+      "photo": "assets/card-haze.jpg",
+      "pending_glyph": "HZ",
+      "pending_stamp": "PHOTO PENDING",
+      "flavor": "Artist in every way.",
+      "moves": [
+        {
+          "cost": "g",
+          "name": "Digital Diary",
+          "damage": 40,
+          "desc": "Posts the entry before it is finished. That is the format."
+        },
+        {
+          "cost": "gg",
+          "name": "Four Cities",
+          "damage": 110,
+          "desc": "Plays a room, leaves, plays another one. Repeat until it lands."
+        }
+      ],
+      "platform": "SATX",
+      "link": "https://www.instagram.com/haze.dt/",
+      "theme_song": "",
+      "lore": "Haze Dt Nightingale. Singer, performer, artist in every way, which is her own phrase and the reason for the seat.\n\nRuns between New York, Houston, San Antonio and Austin. Played Saint Mary's on 8/23.\n\nSeat filled 8/24. Song and card art are hers to set."
+    },
+    {
       "name": "The Hairstylist",
       "type": "color",
       "type_label": "THE HAIRSTYLIST · 001",

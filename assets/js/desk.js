@@ -243,6 +243,17 @@
       return patch;
     },
 
+    // Public card overlay for the homepage: every approved member's saved card
+    // fields in one request (the `cards` view folds featured tracks in with
+    // jsonb_agg, so this is ONE round trip, not one per member).
+    async cards() {
+      const c = sb(); if (!c) return [];
+      const { data, error } = await c.from("cards")
+        .select("card_slug,card_frame,card_photo,theme_song,theme_start,link_platform,link_handle,featured");
+      if (error) throw error;
+      return data || [];
+    },
+
     async myFeatured() {
       const c = sb(); if (!c) return [];
       const { data: { user } } = await c.auth.getUser();
@@ -285,13 +296,23 @@
       const { data: { user } } = await c.auth.getUser();
       if (!user) throw new Error("Log in first.");
       if (!/^image\//.test(file.type || "")) throw new Error("Card art has to be an image.");
-      const blob = await OTP.fitCardArt(file);
-      const name = `${user.id}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`;
-      const { error } = await c.storage.from("cards").upload(name, blob, {
+      // TWO derivatives, size encoded in the FILENAME (-full / -card), following
+      // the Spotify-cover-id precedent in index.html's sized(). Without the small
+      // one, member art paints full-res into 169px roster tiles on every homepage
+      // load, and 5GB/mo of free-tier egress does not survive that.
+      const full = await OTP.fitCardArt(file, 930, 1240);
+      const small = await OTP.fitCardArt(file, 570, 760);
+      const base = `${user.id}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+      const up1 = await c.storage.from("cards").upload(`${base}-full.jpg`, full, {
         cacheControl: "3600", upsert: false, contentType: "image/jpeg",
       });
-      if (error) throw error;
-      return c.storage.from("cards").getPublicUrl(name).data.publicUrl;
+      if (up1.error) throw up1.error;
+      const up2 = await c.storage.from("cards").upload(`${base}-card.jpg`, small, {
+        cacheControl: "3600", upsert: false, contentType: "image/jpeg",
+      });
+      if (up2.error) throw up2.error;
+      // The -full URL is what gets STORED; sized() derives -card from it.
+      return c.storage.from("cards").getPublicUrl(`${base}-full.jpg`).data.publicUrl;
     },
 
     // Portrait 3:4, long edge 1240, JPEG. Card art that is not portrait crops
