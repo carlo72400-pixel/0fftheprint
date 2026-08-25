@@ -24,7 +24,11 @@ TRACKED = ["assets/js/desk.js", "assets/js/door.js", "assets/js/composer.js", "s
 
 # every document that loads them
 DOCS = ["index.html", "join/index.html", "compose/index.html", "desk/index.html",
-        "desk/targets/index.html", "desk/goals/index.html"]
+        "desk/targets/index.html", "desk/goals/index.html",
+        # Any page that loads desk.js belongs here. A page left off this list
+        # silently serves whatever desk.js the browser cached, which is exactly
+        # the bug this script exists to prevent.
+        "card/index.html"]
 
 
 def short_hash(path: pathlib.Path) -> str:

@@ -190,6 +190,133 @@
       return v;
     },
 
+    // ---- THE CARD BUILDER (migration 007) --------------------------------
+    // Frames a member may pick without a grant. Kept in step with the CHECK in
+    // migration-007: `card_frame in (...) or card_frame = frame_grant`. This
+    // list is a CONVENIENCE for the picker, never the gate. The gate is the
+    // database, so a crafted request is refused whatever this array says.
+    OPEN_FRAMES: ["common", "uncommon", "rare", "rare-holo"],
+
+    // Every frame that has CSS behind it, for labelling a granted one.
+    ALL_FRAMES: ["common", "uncommon", "rare", "rare-holo", "rainbow-rare",
+      "tera-ex", "gold-rare", "full-art", "darklord", "warlord", "amazing",
+      "diamond-rare", "vampy", "stone", "tag-team"],
+
+    LINK_PLATFORMS: ["instagram", "tiktok", "youtube", "spotify", "soundcloud", "bandcamp"],
+
+    // Pull the bare 22-char id out of whatever a member pasted. Mirrors
+    // parseSpotifyId() in index.html. Storing the ID and never a URL is what
+    // makes a scheme unrepresentable in the column.
+    trackId(s) {
+      if (!s) return null;
+      const v = String(s);
+      const m = v.match(/(?:track\/|spotify:track:)([A-Za-z0-9]{22})/) ||
+                v.match(/^([A-Za-z0-9]{22})$/);
+      return m ? m[1] : null;
+    },
+
+    async saveCard(fields) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { data: { user } } = await c.auth.getUser();
+      if (!user) throw new Error("Log in first.");
+      const patch = {};
+      if ("card_frame" in fields) patch.card_frame = fields.card_frame || null;
+      if ("card_photo" in fields) patch.card_photo = fields.card_photo || null;
+      if ("theme_start" in fields) {
+        const n = parseInt(fields.theme_start, 10);
+        patch.theme_start = Number.isFinite(n) && n > 0 ? Math.min(n, 3600) : null;
+      }
+      if ("theme_song" in fields) patch.theme_track = OTP.trackId(fields.theme_song);
+      if ("link_platform" in fields) patch.link_platform = fields.link_platform || null;
+      if ("link_handle" in fields) {
+        const h = String(fields.link_handle || "").trim().replace(/^@/, "");
+        patch.link_handle = /^[A-Za-z0-9._-]{1,30}$/.test(h) ? h : null;
+      }
+      const { error } = await c.from("profiles").update(patch).eq("id", user.id);
+      // The database is the gate, so surface WHY rather than a raw code.
+      if (error) {
+        if (error.code === "22P02") throw new Error("That frame does not exist.");
+        if (error.code === "23514") throw new Error("That frame is not yours to pick yet.");
+        if (error.code === "42501") throw new Error("That photo is not in your folder.");
+        throw error;
+      }
+      return patch;
+    },
+
+    async myFeatured() {
+      const c = sb(); if (!c) return [];
+      const { data: { user } } = await c.auth.getUser();
+      if (!user) return [];
+      const { data, error } = await c.from("featured_tracks")
+        .select("slot,track").eq("profile_id", user.id).order("slot");
+      if (error) throw error;
+      return data || [];
+    },
+
+    // Replace all three slots in one go. Delete-then-insert, because a member
+    // reordering their three would otherwise trip `unique (profile_id, track)`
+    // mid-update.
+    async setFeatured(list) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { data: { user } } = await c.auth.getUser();
+      if (!user) throw new Error("Log in first.");
+      const rows = [];
+      const seen = new Set();
+      (list || []).slice(0, 3).forEach((raw, i) => {
+        const id = OTP.trackId(raw);
+        if (!id || seen.has(id)) return;   // dupes would hit 23505
+        seen.add(id);
+        rows.push({ profile_id: user.id, slot: rows.length + 1, track: id });
+      });
+      const del = await c.from("featured_tracks").delete().eq("profile_id", user.id);
+      if (del.error) throw del.error;
+      if (!rows.length) return [];
+      const { error } = await c.from("featured_tracks").insert(rows);
+      if (error) throw error;
+      return rows;
+    },
+
+    // Card art is a SEPARATE bucket from posts: posts allows 50MB and video,
+    // card art must not. The canvas re-encode is not politeness, it is what
+    // stops a 12MP phone photo being painted into a 169px grid tile on every
+    // homepage load. 5GB/mo of free-tier egress does not survive that.
+    async uploadCardArt(file) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { data: { user } } = await c.auth.getUser();
+      if (!user) throw new Error("Log in first.");
+      if (!/^image\//.test(file.type || "")) throw new Error("Card art has to be an image.");
+      const blob = await OTP.fitCardArt(file);
+      const name = `${user.id}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`;
+      const { error } = await c.storage.from("cards").upload(name, blob, {
+        cacheControl: "3600", upsert: false, contentType: "image/jpeg",
+      });
+      if (error) throw error;
+      return c.storage.from("cards").getPublicUrl(name).data.publicUrl;
+    },
+
+    // Portrait 3:4, long edge 1240, JPEG. Card art that is not portrait crops
+    // badly in every frame, so this cover-crops rather than letterboxing.
+    fitCardArt(file, W = 930, H = 1240) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          const cv = document.createElement("canvas");
+          cv.width = W; cv.height = H;
+          const ctx = cv.getContext("2d");
+          const s = Math.max(W / img.width, H / img.height);
+          const w = img.width * s, h = img.height * s;
+          // Bias upward: a portrait's subject sits above centre, and a straight
+          // centre crop takes the top of the head off.
+          ctx.drawImage(img, (W - w) / 2, (H - h) * 0.26, w, h);
+          cv.toBlob(b => b ? resolve(b) : reject(new Error("Could not read that image.")),
+                    "image/jpeg", 0.88);
+          URL.revokeObjectURL(img.src);
+        };
+        img.onerror = () => reject(new Error("Could not read that image."));
+        img.src = URL.createObjectURL(file);
+      });
+    },
+
     async myPosts(limit = 30) {
       const c = sb(); if (!c) return [];
       const { data: { user } } = await c.auth.getUser();

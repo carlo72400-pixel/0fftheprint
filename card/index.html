@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Your card · 0FF THE PRINT</title>
+<link rel="icon" href="../assets/favicon.svg">
+<link rel="stylesheet" href="../assets/css/auth.css">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@700;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+/* Page chrome only. Every .poke* rule is pulled from index.html at runtime so
+   the preview literally cannot drift from the real card. See loadCardStyles(). */
+.wrap{max-width:1040px;margin:0 auto;padding:0 18px 100px}
+.grid{display:grid;grid-template-columns:1fr;gap:26px}
+@media (min-width:900px){.grid{grid-template-columns:380px 1fr;align-items:start}
+  .stage{position:sticky;top:20px}}
+.stage{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:22px}
+.stage h2{font-family:var(--f-display);font-style:italic;font-size:20px;
+  text-transform:uppercase;margin-bottom:14px;letter-spacing:-.01em}
+#prev{max-width:340px;margin:0 auto}
+.hint{color:var(--muted);font-size:13px;margin-top:12px;line-height:1.5}
+fieldset{border:1px solid var(--line);border-radius:10px;padding:18px;margin-bottom:18px;
+  background:var(--panel)}
+legend{font-family:var(--f-display);font-style:italic;font-size:19px;
+  text-transform:uppercase;padding:0 8px;letter-spacing:-.01em}
+label{display:block;font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted);margin:14px 0 6px}
+input[type=text],input[type=number],select{width:100%;background:#0d0d12;color:var(--ink);
+  border:1px solid var(--line);border-radius:8px;padding:12px 13px;font-size:16px;
+  font-family:var(--f-body);min-height:44px}
+input:focus,select:focus{outline:2px solid var(--pink-deep);outline-offset:1px}
+.frames{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:9px;margin-top:6px}
+.fr{border:1px solid var(--line);background:#0d0d12;border-radius:8px;padding:11px 12px;
+  cursor:pointer;text-align:left;color:var(--ink);min-height:44px;font-family:var(--f-mono);
+  font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+.fr:hover{border-color:var(--pink-deep)}
+.fr.on{border-color:var(--pink-glow);background:rgba(255,121,198,.12);color:#fff}
+.fr .tag{display:block;font-size:9.5px;color:var(--muted);letter-spacing:.14em;margin-top:5px}
+.fr.granted .tag{color:var(--pink-deep)}
+.row{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}
+.row > *{flex:1;min-width:150px}
+.btn{background:var(--pink-deep);color:#12000a;border:0;border-radius:8px;padding:13px 20px;
+  font-weight:700;font-size:15px;cursor:pointer;min-height:44px;font-family:var(--f-body)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.5;cursor:default}
+.msg{margin-top:14px;font-size:14px;min-height:20px}
+.msg.ok{color:var(--ok)} .msg.bad{color:var(--bad)}
+.drop{border:1px dashed var(--line);border-radius:10px;padding:20px;text-align:center;
+  color:var(--muted);cursor:pointer;font-size:14px}
+.drop:hover{border-color:var(--pink-deep)}
+.gate{max-width:520px;margin:80px auto;text-align:center}
+.gate a{color:var(--pink-glow)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header style="padding:34px 0 22px">
+    <div style="font-family:var(--f-display);font-style:italic;font-weight:900;font-size:26px;text-transform:uppercase">Your card</div>
+    <div style="font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;color:var(--muted);margin-top:8px">
+      0FF THE PRINT &middot; CARD HOLDERS ONLY</div>
+  </header>
+
+  <div id="gate" class="gate" style="display:none"></div>
+
+  <div id="app" class="grid" style="display:none">
+    <div class="stage">
+      <h2>Preview</h2>
+      <div id="prev"></div>
+      <div class="hint">This is the real card renderer and the real stylesheet, pulled
+        from the homepage, so what you see here is what the roster shows.</div>
+    </div>
+
+    <div>
+      <fieldset>
+        <legend>Frame</legend>
+        <div class="frames" id="frames"></div>
+        <div class="hint">Four frames are open to everybody. Anything else is one the
+          desk hands out. If you were given one it shows up here.</div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Card art</legend>
+        <div class="drop" id="drop">Tap to pick a photo. Portrait works best, it gets
+          cropped to 3:4 and shrunk before it uploads.</div>
+        <input type="file" id="file" accept="image/*" style="display:none">
+        <button class="btn ghost" id="rmart" style="margin-top:10px;display:none">Remove art</button>
+      </fieldset>
+
+      <fieldset>
+        <legend>Opening song</legend>
+        <label for="theme">Spotify link or track id</label>
+        <input type="text" id="theme" placeholder="https://open.spotify.com/track/...">
+        <div class="row">
+          <div>
+            <label for="start">Start at (seconds)</label>
+            <input type="number" id="start" min="0" max="3600" placeholder="0">
+          </div>
+        </div>
+        <div class="hint">This plays when somebody opens your card. Heads up: anyone not
+          logged into Spotify only gets the 30 second preview, so a start past 0:30 does
+          nothing for them.</div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Featured, up to 3</legend>
+        <label for="f1">1</label><input type="text" id="f1" placeholder="Spotify link or track id">
+        <label for="f2">2</label><input type="text" id="f2" placeholder="Spotify link or track id">
+        <label for="f3">3</label><input type="text" id="f3" placeholder="Spotify link or track id">
+        <div class="hint">These sit on the back of your card. Same song twice gets dropped.</div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Your link</legend>
+        <div class="row">
+          <div>
+            <label for="plat">Platform</label>
+            <select id="plat"><option value="">none</option></select>
+          </div>
+          <div>
+            <label for="handle">Handle</label>
+            <input type="text" id="handle" placeholder="yourname">
+          </div>
+        </div>
+        <div class="hint">Handle only, no link. The site builds the address itself.</div>
+      </fieldset>
+
+      <button class="btn" id="save">Save card</button>
+      <div class="msg" id="msg"></div>
+    </div>
+  </div>
+</div>
+
+<script src="../supabase-config.js?v=f1348482"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="../assets/js/desk.js?v=7043a7bc" defer></script>
+<script defer>
+(() => {
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g,
+    c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+  let me = null, seed = null, state = {};
+
+  // ---- the preview cannot drift, because it uses the homepage's own CSS -----
+  // Extracting the 2294 interleaved lines of .poke rules into their own file is
+  // the right long-term fix, but it is a refactor and it belongs in its own
+  // commit. Until then: fetch index.html once and adopt its <style> block, so a
+  // frame tweak on the homepage shows up here with no second copy to maintain.
+  async function loadCardStyles(){
+    try {
+      const html = await fetch('../index.html', { cache: 'no-cache' }).then(r => r.text());
+      const blocks = html.match(/<style>[\s\S]*?<\/style>/gi) || [];
+      const css = blocks.map(b => b.replace(/<\/?style>/gi, '')).join('\n');
+      const el = document.createElement('style');
+      el.textContent = css;
+      document.head.appendChild(el);
+    } catch (e) { /* preview degrades to unstyled, the form still works */ }
+  }
+
+  // Mirrors renderPokeCard()'s DOM shape so the real classes apply.
+  function preview(){
+    const frame = state.card_frame || seed?.rarity || 'common';
+    const photo = state.card_photo || null;
+    const art = photo
+      ? `<div class="poke-art" style="background-image:url('${esc(photo)}');background-size:cover;background-position:50% 26%"></div>`
+      : `<div class="poke-art poke-art-pending"><span class="pend-seat">${esc(seed?.pending_glyph || '0FF')}</span><span class="pend-stamp">${esc(seed?.pending_stamp || 'PHOTO PENDING')}</span></div>`;
+    const moves = (seed?.moves || []).map(m => `
+      <div class="poke-move"><div class="poke-move-top">
+        <span class="poke-move-name">${esc(m.name)}</span>
+        <span class="poke-move-dmg">${esc(m.damage)}</span></div>
+        <div class="poke-move-desc">${esc(m.desc)}</div></div>`).join('');
+    $('prev').innerHTML = `
+      <div class="poke ${esc(frame)} poke-roster" data-type="${esc(seed?.type || '')}">
+        <div class="poke-inner">
+          <div class="poke-head">
+            <div class="poke-name">${esc(seed?.name || me.profile.display_name)}</div>
+            ${seed?.hp ? `<div class="poke-hp">HP <b>${esc(seed.hp)}</b></div>` : ''}
+          </div>
+          <div class="poke-type">${esc(seed?.type_label || '')}</div>
+          ${art}
+          <div class="poke-moves">${moves}</div>
+          <div class="poke-foot">
+            <span class="poke-flavor">${esc(seed?.flavor || '')}</span>
+            <span><span class="poke-rare">${esc(frame.replace('-', ' '))}</span> ·
+            <span class="poke-platform">${esc(seed?.platform || 'IG')}</span></span>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  function paintFrames(){
+    const grant = me.profile.frame_grant;
+    const list = OTP.OPEN_FRAMES.concat(grant && OTP.OPEN_FRAMES.indexOf(grant) === -1 ? [grant] : []);
+    $('frames').innerHTML = list.map(f => `
+      <button class="fr ${f === (state.card_frame || seed?.rarity) ? 'on' : ''}${f === grant ? ' granted' : ''}"
+              data-f="${esc(f)}" type="button">${esc(f.replace('-', ' '))}
+        <span class="tag">${f === grant ? 'yours' : 'open'}</span></button>`).join('');
+    $('frames').querySelectorAll('.fr').forEach(b => b.onclick = () => {
+      state.card_frame = b.dataset.f; paintFrames(); preview();
+    });
+  }
+
+  async function boot(){
+    await loadCardStyles();
+    if (!window.OTP || !OTP.configured) {
+      $('gate').style.display = 'block';
+      $('gate').innerHTML = '<p class="door-note">The backend is not switched on, so there is nothing to edit yet.</p>';
+      return;
+    }
+    me = await OTP.me();
+    if (!me) {
+      $('gate').style.display = 'block';
+      $('gate').innerHTML = '<p class="door-note">Card holders only. <a href="../join/">Log in</a> and this page becomes your card.</p>';
+      return;
+    }
+    if (!me.profile.approved) {
+      $('gate').style.display = 'block';
+      $('gate').innerHTML = '<p class="door-note">You are in the queue. The desk approves by hand, so give it a day.</p>';
+      return;
+    }
+
+    // The committed JSON is the render floor: whatever the desk authored is the
+    // starting point, and a NULL column just means "never touched".
+    try {
+      const r = await fetch('../content/roster.json', { cache: 'no-cache' }).then(x => x.json());
+      const c = await fetch('../content/creators.json', { cache: 'no-cache' }).then(x => x.json());
+      const slugify = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      seed = [...(c.items || []), ...(r.items || [])]
+        .find(x => slugify(x.name) === me.profile.card_slug) || null;
+    } catch (e) { seed = null; }
+
+    state.card_frame = me.profile.card_frame || seed?.rarity || 'common';
+    state.card_photo = me.profile.card_photo || seed?.photo || null;
+    $('theme').value = me.profile.theme_track || '';
+    $('start').value = me.profile.theme_start || '';
+    $('handle').value = me.profile.link_handle || '';
+    $('plat').innerHTML = '<option value="">none</option>' +
+      OTP.LINK_PLATFORMS.map(p => `<option value="${p}"${me.profile.link_platform === p ? ' selected' : ''}>${p}</option>`).join('');
+    if (state.card_photo) $('rmart').style.display = 'inline-block';
+
+    try {
+      const feat = await OTP.myFeatured();
+      feat.forEach(f => { const el = $('f' + f.slot); if (el) el.value = f.track; });
+    } catch (e) { /* non-fatal */ }
+
+    $('app').style.display = '';
+    paintFrames();
+    preview();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    $('drop').onclick = () => $('file').click();
+    $('file').onchange = async e => {
+      const f = e.target.files && e.target.files[0];
+      if (!f) return;
+      $('msg').className = 'msg'; $('msg').textContent = 'Shrinking and uploading...';
+      try {
+        state.card_photo = await OTP.uploadCardArt(f);
+        $('rmart').style.display = 'inline-block';
+        preview();
+        $('msg').className = 'msg ok'; $('msg').textContent = 'Art ready. Hit save.';
+      } catch (err) {
+        $('msg').className = 'msg bad'; $('msg').textContent = err.message;
+      }
+      e.target.value = '';
+    };
+    $('rmart').onclick = () => {
+      state.card_photo = null; $('rmart').style.display = 'none'; preview();
+    };
+    $('save').onclick = async () => {
+      $('save').disabled = true;
+      $('msg').className = 'msg'; $('msg').textContent = 'Saving...';
+      try {
+        await OTP.saveCard({
+          card_frame: state.card_frame,
+          card_photo: state.card_photo,
+          theme_song: $('theme').value,
+          theme_start: $('start').value,
+          link_platform: $('plat').value,
+          link_handle: $('handle').value,
+        });
+        await OTP.setFeatured([$('f1').value, $('f2').value, $('f3').value]);
+        $('msg').className = 'msg ok';
+        $('msg').textContent = 'Saved. It shows on the roster next time the page loads.';
+      } catch (err) {
+        $('msg').className = 'msg bad'; $('msg').textContent = err.message;
+      }
+      $('save').disabled = false;
+    };
+    boot();
+  });
+})();
+</script>
+</body>
+</html>
