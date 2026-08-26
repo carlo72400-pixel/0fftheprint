@@ -506,8 +506,15 @@
 
   /* ---- EDIT MODE (assets/js/edit.js). Only painted for a signed-in member,
      and only ever decides what to DRAW. RLS decides what may be written. ---- */
+  /* ⛔ .scroll-top is a 56px circle at bottom:22 right:22 with z-index:120.
+     This started at bottom:16 right:16 z-index:120, which put it ON TOP of that
+     button with the winner decided by DOM order. Stack above it instead, and
+     take an explicit z so the order is stated rather than inherited. */
   #edm-toggle{
-    position:fixed;right:16px;bottom:16px;z-index:120;
+    position:fixed;
+    right:calc(22px + env(safe-area-inset-right,0px));
+    bottom:calc(90px + env(safe-area-inset-bottom,0px));
+    z-index:121;
     font-family:var(--f-mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;
     color:var(--muted);background:rgba(10,10,13,.9);border:1px solid var(--line);
     border-radius:999px;padding:10px 16px;cursor:pointer;backdrop-filter:blur(8px);
@@ -528,8 +535,10 @@
   body.editing .track,
   body.editing .desk-item,
   body.editing #slate-marquee{outline:1px dashed rgba(255,121,198,.45);outline-offset:2px;}
+  /* Above the page's own overlays: .modal is 9000 and .booster-overlay is 9100,
+     so a panel at 200 could open BEHIND an open card modal. */
   .edm-back{
-    position:fixed;inset:0;z-index:200;background:rgba(6,6,9,.82);
+    position:fixed;inset:0;z-index:9500;background:rgba(6,6,9,.82);
     display:flex;align-items:center;justify-content:center;padding:20px;
     backdrop-filter:blur(3px);
   }
