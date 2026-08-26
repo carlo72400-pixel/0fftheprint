@@ -80,15 +80,33 @@
   try { await OTP.drainOrphans(); } catch (e) { console.warn('orphan drain skipped:', e.message); }
 
   async function render() {
-    const [pending, members, posts, orphans, wordEntries, rotTracks, memberStories, seedPosts, seedOvs] = await Promise.all([
+    const [pending, members, posts, orphans, wordEntries, rotTracks, memberStories, seedPosts, seedOvs, vidRows, siteOvs] = await Promise.all([
       OTP.pending(), OTP.members(), OTP.allPosts(40), OTP.orphanImages(),
-      // .catch keeps the desk usable before migrations 008/009 have run
+      // .catch keeps the desk usable before migrations 008/009/014 have run
       OTP.deskWord ? OTP.deskWord().catch(() => []) : [],
       OTP.rotationAll ? OTP.rotationAll().catch(() => []) : [],
       OTP.deskStories ? OTP.deskStories().catch(() => []) : [],
       fetch('../content/take.json', { cache: 'no-cache' }).then(r => r.json()).then(d => d.items || []).catch(() => []),
       OTP.seedOverrides ? OTP.seedOverrides().catch(() => []) : [],
+      OTP.videosAll ? OTP.videosAll().catch(() => []) : [],
+      OTP.siteOverrides ? OTP.siteOverrides().catch(() => []) : [],
     ]);
+    const nameOf = id => {
+      const m = members.find(x => x.id === id);
+      return m ? m.display_name : '?';
+    };
+    // videosAll reads the raw table, which has no link column: the public
+    // `videos` view is what rebuilds the host. The desk rebuilds it the same
+    // way so he can watch a submission BEFORE approving it.
+    const vidLink = v => {
+      const who = (members.find(x => x.id === v.submitted_by) || {}).card_slug || 'x';
+      if (v.provider === 'youtube')   return 'https://www.youtube.com/watch?v=' + v.vid;
+      if (v.provider === 'tiktok')    return 'https://www.tiktok.com/@' + who + '/video/' + v.vid;
+      if (v.provider === 'instagram') return 'https://www.instagram.com/reel/' + v.vid + '/';
+      return '#';
+    };
+    const vidPending = vidRows.filter(v => !v.published);
+    const vidLive = vidRows.filter(v => v.published);
     const seedRows = await Promise.all(seedPosts.map(async p => {
       const key = await OTP.seedKey(p.author, p.text);
       return { key, p, ov: seedOvs.find(o => o.key === key) || null };
@@ -238,6 +256,53 @@
 
       <div class="card">
         <b style="font-family:var(--f-display);font-style:italic;font-size:24px;text-transform:uppercase">
+          The Reel${vidPending.length ? ' · waiting ' + vidPending.length : ''}</b>
+        <div class="broke" style="margin-top:12px">Videos are links, never uploads, so nothing here costs storage.
+          Feature puts one at the front of the rail. Pull takes it off the site but keeps the row.</div>
+        ${vidPending.map(v => `
+          <div class="person">
+            <div><b style="font-size:14px;font-style:normal;text-transform:none">${esc(v.title)}</b>
+              <span class="meta"> · ${esc(v.provider)}</span>
+              <div class="meta">from ${esc(nameOf(v.submitted_by))}
+                &nbsp;·&nbsp; <a href="${esc(vidLink(v))}" target="_blank" rel="noopener" style="color:var(--pink-glow)">watch it first</a></div></div>
+            <div class="row">
+              <button class="btn ok sm" data-vd-ok="${v.id}" type="button">Approve</button>
+              <button class="btn bad sm" data-vd-del="${v.id}" type="button">Toss</button>
+            </div>
+          </div>`).join('') || '<div class="meta" style="margin-top:8px">Nothing waiting.</div>'}
+        ${vidLive.length ? vidLive.map(v => `
+          <div class="person gone-ok">
+            <div><b style="font-size:14px;font-style:normal;text-transform:none">${esc(v.title)}</b>
+              <span class="meta"> · ${esc(v.provider)} · UP${v.featured ? '' : ''}</span>
+              ${v.featured ? '<span class="pill ok">FEATURED</span>' : ''}
+              <div class="meta">${esc(nameOf(v.submitted_by))}
+                &nbsp;·&nbsp; <a href="${esc(vidLink(v))}" target="_blank" rel="noopener" style="color:var(--muted)">open</a></div></div>
+            <div class="row">
+              <button class="btn ghost sm" data-vd-feat="${v.id}" data-on="${v.featured ? '1' : ''}" type="button">${v.featured ? 'Unfeature' : 'Feature'}</button>
+              <button class="btn ghost sm" data-vd-pull="${v.id}" type="button">Pull</button>
+              <button class="btn bad sm" data-vd-del="${v.id}" type="button">Delete</button>
+            </div>
+          </div>`).join('') : ''}
+      </div>
+
+      <div class="card">
+        <b style="font-family:var(--f-display);font-style:italic;font-size:24px;text-transform:uppercase">
+          Front page edits${siteOvs.length ? ' · ' + siteOvs.length : ''}</b>
+        <div class="broke" style="margin-top:12px">Everything you changed with a pencil on the homepage.
+          The committed file is still the floor, so clearing one puts it straight back.</div>
+        ${siteOvs.length ? siteOvs.map(o => `
+          <div class="person">
+            <div><b style="font-size:14px;font-style:normal;text-transform:none">${esc(o.section)} ${esc(o.item_key || '(whole section)')}</b>
+              <div class="meta">${o.hidden ? 'HIDDEN' : esc(Object.keys(o.patch || {}).join(', ') || 'no fields')}
+                &nbsp;·&nbsp; ${when(o.updated_at)}</div></div>
+            <div class="row">
+              <button class="btn ghost sm" data-so-clear="${esc(o.section)}|${esc(o.item_key || '')}" type="button">Back to the file</button>
+            </div>
+          </div>`).join('') : '<div class="meta" style="margin-top:8px">Nothing overridden. The site is running straight off git.</div>'}
+      </div>
+
+      <div class="card">
+        <b style="font-family:var(--f-display);font-style:italic;font-size:24px;text-transform:uppercase">
           The seeds</b>
         <div class="broke" style="margin-top:12px">These live in the committed file, not the database.
           Hide or rewrite one here and the page obeys in seconds; bake.py writes it into git for good.</div>
@@ -377,6 +442,15 @@
     panel.querySelectorAll('[data-rt-ok]').forEach(b => b.onclick = rerun(b => OTP.setTrackPublished(b.dataset.rtOk, true)));
     panel.querySelectorAll('[data-rt-pull]').forEach(b => b.onclick = rerun(b => OTP.setTrackPublished(b.dataset.rtPull, false)));
     panel.querySelectorAll('[data-rt-del]').forEach(b => b.onclick = rerun(b => OTP.deleteTrack(b.dataset.rtDel)));
+
+    panel.querySelectorAll('[data-vd-ok]').forEach(b => b.onclick = rerun(b => OTP.setVideoPublished(b.dataset.vdOk, true)));
+    panel.querySelectorAll('[data-vd-pull]').forEach(b => b.onclick = rerun(b => OTP.setVideoPublished(b.dataset.vdPull, false)));
+    panel.querySelectorAll('[data-vd-feat]').forEach(b => b.onclick = rerun(b => OTP.setVideoFeatured(b.dataset.vdFeat, !b.dataset.on)));
+    panel.querySelectorAll('[data-vd-del]').forEach(b => b.onclick = rerun(b => OTP.deleteVideo(b.dataset.vdDel)));
+    panel.querySelectorAll('[data-so-clear]').forEach(b => b.onclick = rerun(b => {
+      const [section, key] = String(b.dataset.soClear).split('|');
+      return OTP.clearSiteOverride(section, key || '');
+    }));
     panel.querySelectorAll('[data-ok]').forEach(b => b.onclick = rerun(b => OTP.setApproved(b.dataset.ok, true)));
     panel.querySelectorAll('[data-okcard]').forEach(b => b.onclick = rerun(async b => {
       await OTP.setApproved(b.dataset.okcard, true);
