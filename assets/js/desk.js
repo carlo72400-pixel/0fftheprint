@@ -70,11 +70,17 @@
       return { user, profile: profile || null };
     },
 
-    async signUp(email, password, displayName, cardSlug) {
+    async signUp(email, password, displayName, cardSlug, instagram) {
       const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const ig = String(instagram || "").trim().replace(/^@/, "").toLowerCase();
       const { error } = await c.auth.signUp({
         email, password,
-        options: { data: { display_name: displayName, card_slug: cardSlug } },
+        options: { data: {
+          display_name: displayName,
+          card_slug: cardSlug,
+          // handle only; the trigger sanitizes again server side
+          instagram: /^[a-z0-9._]{1,30}$/.test(ig) ? ig : "",
+        } },
       });
       if (error) throw error;
     },

@@ -16,8 +16,9 @@
   <a class="back" href="../">&larr; 0FF THE PRINT</a>
   <h1 id="ttl">Join the Desk</h1>
   <div class="sub">card holders only &nbsp;·&nbsp; the desk approves by hand</div>
-  <p class="door-note">Card holders only. If you don't have one, this page can't give you one.</p>
-  <p class="door-note">The desk hands them out in person. The DMs are open and that's usually where it starts anyway.</p>
+  <p class="door-note">Card holders post here. If you don't have a card yet, knock:
+    sign up with your Instagram so the desk knows who's asking.</p>
+  <p class="door-note">The desk approves people by hand, usually after it wakes up.</p>
 
   <div class="setup" id="setup" style="display:none">
     <b>Backend not switched on yet</b>
@@ -36,6 +37,9 @@
       <div id="up-only" style="display:none">
         <label for="name">Your name</label>
         <input id="name" type="text" placeholder="how it shows on your posts" autocomplete="name">
+        <label for="ig">Your Instagram</label>
+        <input id="ig" type="text" maxlength="31" placeholder="@yourhandle" autocomplete="off"
+          autocapitalize="none" spellcheck="false">
         <label for="card">Your card</label>
         <select id="card"><option value="">loading…</option></select>
       </div>
@@ -62,7 +66,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="../supabase-config.js?v=f1348482"></script>
-<script src="../assets/js/desk.js?v=8934286a"></script>
+<script src="../assets/js/desk.js?v=f9c5e338"></script>
 <script>
 (async () => {
   const $ = id => document.getElementById(id);
@@ -97,7 +101,10 @@
     const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
     const opts = [...c.items, ...r.items]
       .map(x => `<option value="${slug(x.name)}">${x.name}</option>`).join('');
-    $('card').innerHTML = '<option value="">pick your card</option>' + opts;
+    // New artists have no seat yet, and that is the normal case now. The desk
+    // hands cards after approval; picking one here is only for people whose
+    // card already exists on the roster.
+    $('card').innerHTML = '<option value="">no card yet, I\'m new</option>' + opts;
   } catch (e) { $('card').innerHTML = '<option value="">(roster unavailable)</option>'; }
 
   const setMode = m => {
@@ -132,8 +139,11 @@
     try {
       if (mode === 'up') {
         if (!$('name').value.trim()) throw new Error('Need a name.');
+        if (!$('card').value && !$('ig').value.trim()) {
+          throw new Error('No card and no Instagram is just a mystery. Drop the handle.');
+        }
         await OTP.signUp($('email').value.trim(), $('pw').value,
-                         $('name').value.trim(), $('card').value);
+                         $('name').value.trim(), $('card').value, $('ig').value);
         msg("Request sent. You're in the queue now, the desk approves by hand.", 'good');
         $('form').reset();
       } else {

@@ -48,7 +48,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="../supabase-config.js?v=f1348482"></script>
-<script src="../assets/js/desk.js?v=8934286a"></script>
+<script src="../assets/js/desk.js?v=f9c5e338"></script>
 <script>
 (async () => {
   const $ = id => document.getElementById(id);
@@ -118,7 +118,10 @@
         ${pending.length ? pending.map(p => `
           <div class="person">
             <div><b>${esc(p.display_name)}</b>
-              <div class="meta">${p.requested_slug ? 'asked for: ' + esc(p.requested_slug) : 'no card asked for'}
+              <div class="meta">${p.requested_slug ? 'asked for: ' + esc(p.requested_slug) : 'new, no card yet'}
+                ${p.instagram && /^[A-Za-z0-9._]{1,30}$/.test(p.instagram)
+                  ? `&nbsp;·&nbsp; <a href="https://www.instagram.com/${esc(p.instagram)}/" target="_blank" rel="noopener" style="color:var(--pink-glow)">@${esc(p.instagram)}</a>`
+                  : ''}
                 &nbsp;·&nbsp; asked ${when(p.created_at)}</div></div>
             <div class="row">
               <button class="btn ok sm" data-ok="${p.id}" type="button">Approve</button>
@@ -135,6 +138,9 @@
           <div class="person">
             <div><b>${esc(p.display_name)}</b>
               <div class="meta"><span class="slug">${esc(p.card_slug || 'no card')}</span>
+                ${p.instagram && /^[A-Za-z0-9._]{1,30}$/.test(p.instagram)
+                  ? `<a href="https://www.instagram.com/${esc(p.instagram)}/" target="_blank" rel="noopener" style="color:var(--muted)">@${esc(p.instagram)}</a>`
+                  : ''}
                 ${p.is_admin ? '<span class="pill ok">DESK</span>' : ''}</div></div>
             <div class="row">
               <button class="btn ghost sm" data-card="${p.id}" data-cur="${esc(p.card_slug || '')}" type="button">Change card</button>
