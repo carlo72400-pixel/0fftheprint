@@ -48,7 +48,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="../supabase-config.js?v=f1348482"></script>
-<script src="../assets/js/desk.js?v=c4364d4f"></script>
+<script src="../assets/js/desk.js?v=97f5d37a"></script>
 <script>
 (async () => {
   const $ = id => document.getElementById(id);
@@ -80,12 +80,15 @@
   try { await OTP.drainOrphans(); } catch (e) { console.warn('orphan drain skipped:', e.message); }
 
   async function render() {
-    const [pending, members, posts, orphans, wordEntries, rotTracks] = await Promise.all([
+    const [pending, members, posts, orphans, wordEntries, rotTracks, memberStories] = await Promise.all([
       OTP.pending(), OTP.members(), OTP.allPosts(40), OTP.orphanImages(),
       // .catch keeps the desk usable before migrations 008/009 have run
       OTP.deskWord ? OTP.deskWord().catch(() => []) : [],
       OTP.rotationAll ? OTP.rotationAll().catch(() => []) : [],
+      OTP.deskStories ? OTP.deskStories().catch(() => []) : [],
     ]);
+    const storyPending = memberStories.filter(x => !x.published);
+    const storyLive = memberStories.filter(x => x.published && !x.baked);
     const wordPending = wordEntries.filter(e => !e.published);
     const wordLive = wordEntries.filter(e => e.published);
     const rotPending = rotTracks.filter(t => !t.published);
@@ -150,8 +153,29 @@
       <div class="card">
         <b style="font-family:var(--f-display);font-style:italic;font-size:24px;text-transform:uppercase">
           The Word${wordPending.length ? ' · waiting ' + wordPending.length : ''}</b>
-        <div class="broke" style="margin-top:12px">Entries go on the wall only after you approve them.
+        <div class="broke" style="margin-top:12px">Stories and entries go live only after you approve them.
           <a href="word/" style="color:var(--pink-glow)">Edit a story body &rarr;</a></div>
+        ${storyPending.map(x => `
+          <div class="person">
+            <div><b style="font-size:14px;font-style:normal;text-transform:none">${esc(x.title)}</b>
+              <span class="meta"> STORY from ${esc((x.profiles && x.profiles.display_name) || '?')}</span>
+              <div class="meta" style="text-transform:none;letter-spacing:0">${esc(x.dek)}
+                &nbsp;<a href="../word/live/?s=${esc(x.slug)}" target="_blank" rel="noopener" style="color:var(--pink-glow)">read it &rarr;</a></div></div>
+            <div class="row">
+              <button class="btn ok sm" data-st-ok="${x.id}" type="button">Approve</button>
+              <button class="btn bad sm" data-st-del="${x.id}" type="button">Toss</button>
+            </div>
+          </div>`).join('')}
+        ${storyLive.map(x => `
+          <div class="person">
+            <div><b style="font-size:14px;font-style:normal;text-transform:none">${esc(x.title)}</b>
+              <span class="meta"> STORY · LIVE, unbaked</span></div>
+            <div class="row">
+              <button class="btn ghost sm" data-st-pull="${x.id}" type="button">Pull</button>
+              <button class="btn ok sm" data-st-baked="${x.id}" type="button">Baked</button>
+              <button class="btn bad sm" data-st-del="${x.id}" type="button">Delete</button>
+            </div>
+          </div>`).join('')}
         ${wordPending.map(e => `
           <div class="person">
             <div><b style="font-size:14px;font-style:normal;text-transform:none">${esc((e.profiles && e.profiles.display_name) || '?')}</b>
@@ -268,6 +292,17 @@
       lastBatch = null; lastRetired = null;
     });
 
+    panel.querySelectorAll('[data-st-ok]').forEach(b => b.onclick = rerun(b => OTP.setStoryPublished(b.dataset.stOk, true)));
+    panel.querySelectorAll('[data-st-pull]').forEach(b => b.onclick = rerun(b => OTP.setStoryPublished(b.dataset.stPull, false)));
+    panel.querySelectorAll('[data-st-baked]').forEach(b => b.onclick = rerun(async b => {
+      if (!confirm('Baked means the story is committed as a real page. Only tap this after bake.py ran and pushed.')) return;
+      await OTP.setStoryBaked(b.dataset.stBaked);
+    }));
+    panel.querySelectorAll('[data-st-del]').forEach(b => b.onclick = rerun(async b => {
+      // A story is somebody's whole write-up, not a 500-char entry.
+      if (!confirm('Toss the whole story? The text goes with it and there is no undo.')) return;
+      await OTP.deleteStory(b.dataset.stDel);
+    }));
     panel.querySelectorAll('[data-we-ok]').forEach(b => b.onclick = rerun(b => OTP.setEntryPublished(b.dataset.weOk, true)));
     panel.querySelectorAll('[data-we-pull]').forEach(b => b.onclick = rerun(b => OTP.setEntryPublished(b.dataset.wePull, false)));
     panel.querySelectorAll('[data-we-del]').forEach(b => b.onclick = rerun(b => OTP.deleteEntry(b.dataset.weDel)));

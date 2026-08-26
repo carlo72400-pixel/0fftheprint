@@ -39,8 +39,7 @@ req = urllib.request.Request(
     headers={"apikey": KEY, "Authorization": f"Bearer {KEY}"})
 rows = json.load(urllib.request.urlopen(req))
 if not rows:
-    print("no story overrides in the database. nothing to bake.")
-    sys.exit(0)
+    print("no story overrides in the database.")
 
 baked = 0
 for row in rows:
@@ -75,6 +74,60 @@ for row in rows:
     baked += 1
     print(f"  baked {slug}  ({len(md)} chars, stamp {new_stamp})")
 
-print(f"\n{baked} page(s) rewritten. Now:")
+print(f"\n{baked} page(s) rewritten.")
+
+# ============================================================================
+# MEMBER STORIES (migration 010): promote published, unbaked stories into real
+# static catalog pages. Each one gets the next 0TP number, a cover, a thumb,
+# and a desk.json card via newstory.py, with the member's name on the byline.
+# ============================================================================
+import subprocess
+import tempfile
+
+sreq = urllib.request.Request(
+    f"{URL}/rest/v1/word_stories?select=slug,title,dek,body_md,cover_url,display_name,baked&baked=eq.false",
+    headers={"apikey": KEY, "Authorization": f"Bearer {KEY}"})
+try:
+    stories = json.load(urllib.request.urlopen(sreq))
+except Exception:
+    stories = []
+    print("  (word_stories view not reachable; migration 010 not run yet?)")
+promoted = []
+for st in stories:
+    slug = st["slug"]
+    if os.path.exists(os.path.join(WORD, slug)):
+        print(f"  SKIP story {slug}: a page already exists there")
+        continue
+    with tempfile.TemporaryDirectory() as td:
+        draft = os.path.join(td, "draft.md")
+        open(draft, "w").write(st["body_md"])
+        cover = os.path.join(td, "cover.jpg")
+        if st.get("cover_url"):
+            try:
+                urllib.request.urlretrieve(st["cover_url"], cover)
+            except Exception:
+                cover = None
+        else:
+            cover = None
+        if not cover:
+            # house plate when the member skipped the cover
+            cover = os.path.join(HERE, "assets", "take-01-manifesto.jpg")
+        r = subprocess.run(
+            [sys.executable, os.path.join(HERE, "newstory.py"), draft,
+             "--title", st["title"], "--dek", st["dek"], "--cover", cover,
+             "--kicker", "FROM THE FLOOR",
+             "--author", st.get("display_name") or "a card holder"],
+            capture_output=True, text=True)
+        if r.returncode != 0:
+            print(f"  FAILED story {slug}: {r.stderr.strip().splitlines()[-1] if r.stderr else r.stdout}")
+            continue
+    promoted.append(slug)
+    print(f"  promoted story {slug} into the catalog")
+
+print("\nNow:")
 print("  git add -A && git commit -m 'bake story edits' && git push")
-print("  then tap Clear override at /desk/word/ (stale ones are ignored either way)")
+print("  then at /desk/: tap Clear override for edited stories, and tap BAKED on each of:")
+for slug in promoted:
+    print(f"    - {slug}")
+if not promoted:
+    print("    (no member stories promoted this run)")

@@ -154,7 +154,7 @@ PAGE = """<!DOCTYPE html>
   <div class="kicker">{kicker}</div>
   <h1>{title}</h1>
   <div class="dek">{dek}</div>
-  <div class="byline">{num} &nbsp;·&nbsp; <b>0FF THE PRINT</b> &nbsp;·&nbsp; San Antonio &nbsp;·&nbsp; {datestr}</div>
+  <div class="byline">{num} &nbsp;·&nbsp; <b>{author}</b> &nbsp;·&nbsp; San Antonio &nbsp;·&nbsp; {datestr}</div>
   <div class="cover"><img src="cover.jpg" alt=""></div>
   <article data-stamp="{stamp}">
 {body}
@@ -184,6 +184,8 @@ def main():
     ap.add_argument("--link", help="outside article: card only, no page built")
     ap.add_argument("--num", help="override the auto 0TP number")
     ap.add_argument("--date", default=date.today().isoformat())
+    ap.add_argument("--author", default="0FF THE PRINT",
+                    help="byline; a member story bakes with the member's name")
     a = ap.parse_args()
     if not a.draft and not a.link:
         sys.exit("either a markdown draft or --link, one of the two")
@@ -215,7 +217,8 @@ def main():
         stamp = format(zlib.crc32(md_clean.encode()) & 0xFFFFFFFF, "08x")
         page = PAGE.format(title=html.escape(no_dash(a.title)), dek=html.escape(no_dash(a.dek)),
                            kicker=html.escape(no_dash(a.kicker).upper()), num=num,
-                           datestr=datestr, body=body, slug=slug, stamp=stamp)
+                           datestr=datestr, body=body, slug=slug, stamp=stamp,
+                           author=html.escape(no_dash(a.author)))
         with open(os.path.join(story_dir, "index.html"), "w") as f:
             f.write(page)
         # source.md is the editor's base text: the phone editor seeds from it,

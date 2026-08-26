@@ -38,7 +38,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Pirata+One&family=Luckiest+Guy&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" defer></script>
 <script src="supabase-config.js?v=f1348482" defer></script>
-<script src="assets/js/desk.js?v=c4364d4f" defer></script>
+<script src="assets/js/desk.js?v=97f5d37a" defer></script>
 <script src="assets/js/door.js?v=cb068ae4" defer></script>
 <script src="assets/js/composer.js?v=51127ffa" defer></script>
 <style>
@@ -4002,6 +4002,33 @@
   const dMount = document.getElementById('desk-grid');
   const dFilters = document.getElementById('desk-filters');
   if (dMount && desk) {
+    // Live member stories (migration 010) sit on top of the committed catalog.
+    // Baked ones are excluded by the query: once a story earns its number the
+    // git floor carries it and the overlay lets go. Slug-dedupe covers the day
+    // both exist between bake and clear.
+    try {
+      const liveStories = await Promise.race([
+        (window.OTP && OTP.configured && OTP.wordStories) ? OTP.wordStories(6) : Promise.resolve([]),
+        new Promise(r => setTimeout(() => r([]), LIVE_TIMEOUT_MS)),
+      ]);
+      if (liveStories && liveStories.length) {
+        const seededSlugs = new Set(desk.map(x => String(x.link || '')
+          .replace(/^word\//, '').replace(/\/$/, '')));
+        liveStories.filter(s => !seededSlugs.has(s.slug)).reverse().forEach(s => {
+          desk.unshift({
+            title: s.title,
+            kicker: 'FROM THE FLOOR',
+            dek: s.dek,
+            date: '',
+            lanes: ['story'],
+            platform: 'SITE',
+            thumb: safeUrl(s.cover_url) || 'assets/take-01-manifesto.jpg',
+            link: 'word/live/?s=' + encodeURIComponent(s.slug),
+            by: s.display_name || s.card_slug || '',
+          });
+        });
+      }
+    } catch (e) { console.warn('member stories overlay skipped:', e.message); }
     const platformLabel = { youtube:'YouTube', tiktok:'TikTok', instagram:'Instagram', spotify:'Spotify' };
     // Build the filter bar from what is really in the catalog, never a fixed list.
     if (dFilters) {

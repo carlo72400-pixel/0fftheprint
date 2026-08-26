@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Write a story · 0FF THE PRINT</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0a0a0d">
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/auth.css">
+<style>
+  textarea#body{min-height:46vh;font-family:'JetBrains Mono',monospace;line-height:1.6}
+  .hint{color:var(--muted);font-size:13px;line-height:1.6;margin:8px 0 0}
+  .drop{margin-top:8px;border:1px dashed var(--line);border-radius:12px;padding:16px;text-align:center;
+    font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;color:var(--muted);cursor:pointer;text-transform:uppercase}
+  .drop:hover{border-color:var(--pink-deep);color:var(--pink-glow)}
+  .cprev{margin-top:10px;border-radius:12px;overflow:hidden;border:1px solid var(--line);display:none;position:relative}
+  .cprev img{width:100%;display:block;max-height:240px;object-fit:cover}
+  .cprev button{position:absolute;top:8px;right:8px;background:rgba(10,10,13,.85);border:1px solid var(--line);
+    color:var(--ink);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px}
+  /* preview pane borrows the story article look */
+  #pv{display:none;border:1px solid var(--line);border-radius:12px;padding:20px;margin-top:14px;
+    font-size:16.5px;line-height:1.8}
+  #pv p{margin:0 0 18px}
+  #pv h2{font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;font-size:24px;margin:26px 0 12px}
+  #pv blockquote{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:22px;line-height:1.2;
+    text-transform:uppercase;color:var(--pink-glow);border-left:3px solid var(--pink-glow);padding-left:14px;margin:22px 0}
+  #pv a{color:var(--pink-glow)}
+  #pv figure{margin:18px 0}#pv img{max-width:100%}
+  .mine-row{display:flex;justify-content:space-between;align-items:center;gap:8px;border-top:1px solid var(--line);padding:10px 0}
+  .mine-row .st{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase}
+</style>
+</head>
+<body>
+<div class="leopard-bar"></div>
+<div class="wrap">
+  <a class="back" href="../../compose/">&larr; New Post</a>
+  <h1>Write a story</h1>
+  <div class="sub">the serious surface &nbsp;·&nbsp; goes to the desk first &nbsp;·&nbsp; live when it clears</div>
+
+  <div class="card" id="panel"><div class="empty">checking your card…</div></div>
+</div>
+
+<script src="../../supabase-config.js?v=f1348482"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="../../assets/js/desk.js?v=97f5d37a" defer></script>
+<script src="../../assets/js/word.js?v=faaae268" defer></script>
+<script defer>
+document.addEventListener('DOMContentLoaded', async () => {
+  const $ = id => document.getElementById(id);
+  const panel = $('panel');
+  const esc = s => OTPWord.esc(s);
+
+  if (!window.OTP || !OTP.configured) {
+    panel.innerHTML = '<div class="empty">The backend is not switched on yet.</div>'; return;
+  }
+  const me = await OTP.me().catch(() => null);
+  if (!me) { location.href = '../../join/'; return; }
+  if (!me.profile || !me.profile.approved) {
+    panel.innerHTML = '<div class="empty">You are in the queue. Stories open up when the desk approves you.</div>'; return;
+  }
+
+  let coverUrl = null, pendingRow = null;
+
+  async function paint() {
+    const mine = await OTP.myStories().catch(() => []);
+    pendingRow = mine.find(s => !s.published) || null;
+    const mineHtml = mine.length ? `
+      <label style="margin-top:22px">Your stories</label>
+      ${mine.map(s => `
+        <div class="mine-row">
+          <a href="../live/?s=${esc(s.slug)}" style="color:var(--ink);text-decoration:none;font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(s.title)}</a>
+          <span class="st" style="color:${s.baked ? 'var(--foil-2,#f7d046)' : s.published ? 'var(--pink-glow)' : 'var(--muted)'}">
+            ${s.baked ? 'IN THE CATALOG' : s.published ? 'LIVE' : 'ON THE DESK'}</span>
+        </div>`).join('')}` : '';
+
+    panel.innerHTML = `
+      <div class="who">writing as <b>${esc(me.profile.display_name)}</b></div>
+      ${pendingRow ? `<div class="note">You have one on the desk ("${esc(pendingRow.title)}").
+        Editing it below; it goes back to the desk when you save.</div>` : ''}
+      <label for="title">Title</label>
+      <input id="title" type="text" maxlength="80" placeholder="say it like a headline">
+      <label for="dek">The dek, one line under the title</label>
+      <input id="dek" type="text" maxlength="200" placeholder="what this is and why it matters">
+      <label for="body">The story</label>
+      <textarea id="body" placeholder="Plain paragraphs, blank line between them.&#10;&#10;## makes a heading&#10;> makes a pull quote&#10;**bold** *italic* [link](https://...)"></textarea>
+      <div class="hint">Same grammar as every house story. Keep it yours; the desk approves or tosses, it does not rewrite.</div>
+      <div class="drop" id="cdrop">Tap to add a cover photo (optional)</div>
+      <input type="file" id="cfile" accept="image/*" hidden>
+      <div class="cprev" id="cprev"><img id="cimg" alt=""><button id="crm" type="button">&times;</button></div>
+      <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+        <button class="btn" id="send" type="button">${pendingRow ? 'Save it back to the desk' : 'Send it to the desk'}</button>
+        <button class="btn ghost" id="pvbtn" type="button">Preview</button>
+        ${pendingRow ? '<button class="btn ghost" id="wd" type="button">Withdraw it</button>' : ''}
+      </div>
+      <div id="pv"></div>
+      <div class="msg" id="msg"></div>
+      ${mineHtml}`;
+
+    if (pendingRow) {
+      $('title').value = pendingRow.title;
+      $('dek').value = pendingRow.dek;
+      $('body').value = pendingRow.body_md;
+      coverUrl = pendingRow.cover_url || null;
+      if (coverUrl) { $('cimg').src = coverUrl; $('cprev').style.display = 'block'; }
+    }
+
+    const msg = (t, k) => { const m = $('msg'); m.textContent = t; m.className = 'msg show ' + (k || ''); };
+
+    $('cdrop').onclick = () => $('cfile').click();
+    $('cfile').onchange = async e => {
+      const f = e.target.files && e.target.files[0];
+      if (!f) return;
+      msg('Uploading the cover…');
+      try {
+        // Downscale before upload: a raw phone photo painted into a 440px
+        // catalog tile is the egress mistake the card builder already fixed.
+        const blob = await OTP.fitCardArt(f, 1280, 720);
+        coverUrl = await OTP.uploadImage(blob);
+        $('cimg').src = coverUrl; $('cprev').style.display = 'block';
+        msg('Cover is on.', 'good');
+      } catch (err) { msg(err.message, 'err'); }
+      e.target.value = '';
+    };
+    $('crm').onclick = () => { coverUrl = null; $('cprev').style.display = 'none'; };
+
+    $('pvbtn').onclick = () => {
+      const pv = $('pv');
+      if (pv.style.display === 'block') { pv.style.display = 'none'; $('pvbtn').textContent = 'Preview'; return; }
+      pv.innerHTML = OTPWord.mdToHtml($('body').value || '*nothing yet*');
+      pv.style.display = 'block';
+      $('pvbtn').textContent = 'Close preview';
+    };
+
+    $('send').onclick = async () => {
+      $('send').disabled = true;
+      try {
+        if (pendingRow) {
+          await OTP.updateMyStory(pendingRow.id, {
+            title: $('title').value, dek: $('dek').value,
+            body: $('body').value, coverUrl,
+          });
+          msg('Saved. Back on the desk.', 'good');
+        } else {
+          const slug = await OTP.submitStory({
+            title: $('title').value, dek: $('dek').value,
+            body: $('body').value, coverUrl,
+          });
+          msg('On the desk. When it clears it is live at word/live/?s=' + slug, 'good');
+        }
+        paint();
+      } catch (err) { msg(err.message || 'That did not go through.', 'err'); $('send').disabled = false; }
+    };
+
+    if ($('wd')) $('wd').onclick = async () => {
+      if (!confirm('Pull it off the desk? The text is gone with it.')) return;
+      try { await OTP.withdrawStory(pendingRow.id); paint(); }
+      catch (err) { msg(err.message, 'err'); }
+    };
+  }
+  paint();
+});
+</script>
+</body>
+</html>

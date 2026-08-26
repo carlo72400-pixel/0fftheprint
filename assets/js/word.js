@@ -11,11 +11,6 @@
    2. Render the wall (approved member entries) and, for a logged-in approved
       member, the entry box. Entries are pre-moderated: they go to the desk. */
 (function () {
-  const article = document.querySelector('article');
-  const wallEl = document.getElementById('wall');
-  const slug = wallEl ? wallEl.dataset.story : null;
-  if (!slug || !window.OTP || !OTP.configured) return;
-
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g,
     c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
@@ -55,6 +50,16 @@
       return '<p>' + inline(b.split('\n').map(l => l.trim()).join(' ')) + '</p>';
     }).filter(Boolean).join('\n');
   }
+
+  // Shared renderer: /word/new/ (preview) and /word/live/ (member stories)
+  // consume the SAME implementation, so there is exactly one markdown in the
+  // house and the byte-parity contract with newstory.py holds everywhere.
+  window.OTPWord = { esc, inline, mdToHtml };
+
+  const article = document.querySelector('article');
+  const wallEl = document.getElementById('wall');
+  const slug = wallEl ? wallEl.dataset.story : null;
+  if (!slug || !window.OTP || !OTP.configured) return;
 
   const race = p => Promise.race([
     p, new Promise(r => setTimeout(() => r(null), 1800)),

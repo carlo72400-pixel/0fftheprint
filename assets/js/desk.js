@@ -353,6 +353,135 @@
       if (error) throw error;
     },
 
+    // ---- MEMBER STORIES (migration 010) ----------------------------------
+    slugifyTitle(t) {
+      return String(t || "").toLowerCase().replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)/g, "").slice(0, 60);
+    },
+
+    async submitStory({ title, dek, body, coverUrl }) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { data: { user } } = await c.auth.getUser();
+      if (!user) throw new Error("Log in first.");
+      const slug = OTP.slugifyTitle(title);
+      if (slug.length < 3) throw new Error("That title needs more to it.");
+      if (/^!\[/m.test(body || "")) throw new Error("Images inside the story are not a thing yet. One cover photo is.");
+      const { error } = await c.from("member_stories").insert({
+        author_id: user.id, slug,
+        title: NO_DASH(title).trim(),
+        dek: NO_DASH(dek).trim(),
+        body_md: NO_DASH(body),
+        cover_url: coverUrl || null,
+      });
+      if (error) {
+        if (error.code === "23505") {
+          throw new Error(error.message.indexOf("one_pending") !== -1
+            ? "You already have one on the desk. One at a time."
+            : "A story already runs under that title. Pick another.");
+        }
+        throw error;
+      }
+      return slug;
+    },
+
+    async updateMyStory(id, { title, dek, body, coverUrl }) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const patch = {};
+      if (title !== undefined) patch.title = NO_DASH(title).trim();
+      if (dek !== undefined) patch.dek = NO_DASH(dek).trim();
+      if (body !== undefined) {
+        if (/^!\[/m.test(body || "")) throw new Error("Images inside the story are not a thing yet. One cover photo is.");
+        patch.body_md = NO_DASH(body);
+      }
+      if (coverUrl !== undefined) patch.cover_url = coverUrl || null;
+      const { data, error } = await c.from("member_stories")
+        .update(patch).eq("id", id).select("id");
+      if (error) throw error;
+      if (!data || !data.length) throw new Error("That one is live. Edits go through the desk now.");
+    },
+
+    async withdrawStory(id) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { data, error } = await c.from("member_stories").delete()
+        .eq("id", id).select("id");
+      if (error) throw error;
+      if (!data || !data.length) throw new Error("That one is live. The desk pulls it.");
+    },
+
+    async myStories() {
+      const c = sb(); if (!c) return [];
+      const { data: { user } } = await c.auth.getUser();
+      if (!user) return [];
+      const { data, error } = await c.from("member_stories")
+        .select("id,slug,title,dek,body_md,cover_url,published,baked,created_at")
+        .eq("author_id", user.id).order("created_at", { ascending: false });
+      if (error) throw error;
+      return data || [];
+    },
+
+    // Published, unbaked member stories for the homepage overlay. Baked ones
+    // are skipped because the committed desk.json floor carries them by then.
+    async wordStories(limit = 8) {
+      const c = sb(); if (!c) return [];
+      const { data, error } = await c.from("word_stories")
+        .select("slug,title,dek,cover_url,baked,created_at,display_name,card_slug")
+        .eq("baked", false)
+        .order("created_at", { ascending: false }).limit(limit);
+      if (error) throw error;
+      return data || [];
+    },
+
+    async wordStory(slug) {
+      const c = sb(); if (!c) return null;
+      const { data, error } = await c.from("word_stories")
+        .select("slug,title,dek,body_md,cover_url,created_at,display_name,card_slug")
+        .eq("slug", slug).maybeSingle();
+      if (error) throw error;
+      return data || null;
+    },
+
+    // The reader's fallback: RLS decides who sees an unpublished story
+    // (its author, or the desk). Anon gets published rows only.
+    async storyAnyRole(slug) {
+      const c = sb(); if (!c) return null;
+      const { data, error } = await c.from("member_stories")
+        .select("slug,title,dek,body_md,cover_url,published,created_at")
+        .eq("slug", slug).maybeSingle();
+      if (error) return null;
+      return data || null;
+    },
+
+    async deskStories() {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { data, error } = await c.from("member_stories")
+        .select("id,slug,title,dek,published,baked,created_at, profiles(display_name)")
+        .order("created_at", { ascending: false }).limit(50);
+      if (error) throw error;
+      return data || [];
+    },
+
+    async setStoryPublished(id, on) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { error } = await c.from("member_stories")
+        .update({ published: !!on }).eq("id", id);
+      if (error) throw error;
+    },
+
+    // The laptop's mark, tapped from the desk after bake.py + push: the git
+    // floor carries the story now, so the overlay lets go of it.
+    async setStoryBaked(id) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { error } = await c.from("member_stories")
+        .update({ baked: true }).eq("id", id);
+      if (error) throw error;
+    },
+
+    async deleteStory(id) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { error } = await c.from("member_stories").delete().eq("id", id);
+      if (error) throw error;
+    },
+
     // ---- MUSIC ON ROTATION (migration 009) -------------------------------
     // Submit resolves title + cover through Spotify's oEmbed (CORS-open,
     // verified live). The DB stores the track id and a 40-hex cover key,

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>The Word · 0FF THE PRINT</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0a0a0d">
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* Cloned from the static story template so a member story reads EXACTLY
+     like a house story. If the template's article styles change, change these
+     with them. */
+  :root{--ink:#f2eef5;--muted:#8d8798;--line:rgba(255,255,255,.1);--pink:#ff79c6;--bg:#0a0a0d}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif}
+  .leopard-bar{height:7px;background:linear-gradient(90deg,#ff79c6,#caa9ff,#2f6bff,#ff79c6);background-size:300% 100%}
+  .wrap{max-width:720px;margin:0 auto;padding:34px 20px 90px}
+  a.back{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--muted);text-decoration:none}
+  a.back:hover{color:var(--pink)}
+  .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.3em;
+    text-transform:uppercase;color:var(--pink);margin:34px 0 10px}
+  h1{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
+    text-transform:uppercase;font-size:clamp(34px,7vw,56px);line-height:.98}
+  .dek{font-size:17px;line-height:1.6;color:var(--muted);margin-top:14px}
+  .byline{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted);margin:18px 0 26px;
+    padding-bottom:18px;border-bottom:1px solid var(--line)}
+  .byline b{color:var(--ink)}
+  .cover{margin:0 0 30px;border-radius:14px;overflow:hidden;border:1px solid var(--line);display:none}
+  .cover img{width:100%;display:block}
+  article{font-size:17.5px;line-height:1.85}
+  article p{margin:0 0 22px}
+  article h2{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
+    text-transform:uppercase;font-size:27px;margin:38px 0 14px}
+  article a{color:var(--pink);text-decoration:none}
+  article a:hover{text-decoration:underline}
+  article blockquote{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
+    font-size:26px;line-height:1.2;text-transform:uppercase;color:var(--pink);
+    border-left:3px solid var(--pink);padding-left:18px;margin:32px 0}
+  article figure{margin:30px -20px}
+  article figure img{width:100%;display:block}
+  @media(min-width:760px){article figure{margin:30px 0}article figure img{border-radius:12px}}
+  .foot{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);
+    font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted)}
+  .foot a{color:var(--pink);text-decoration:none}
+  .empty{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);
+    letter-spacing:.1em;line-height:1.8;margin-top:40px}
+  .empty a{color:var(--pink)}
+</style>
+</head>
+<body>
+<div class="leopard-bar"></div>
+<div class="wrap">
+  <a class="back" href="../../#desk">&larr; The Word</a>
+  <div id="story" style="display:none">
+    <div class="kicker" id="kicker">FROM THE FLOOR</div>
+    <h1 id="ttl"></h1>
+    <div class="dek" id="dek"></div>
+    <div class="byline" id="byline"></div>
+    <div class="cover" id="cover"><img id="coverimg" alt=""></div>
+    <article id="art"></article>
+    <div class="foot">A card holder wrote this one. When it earns its number it moves
+      into the catalog for good. <a href="../../#desk">Back to The Word &rarr;</a></div>
+  </div>
+  <div class="empty" id="empty">loading the story…</div>
+</div>
+
+<script src="../../supabase-config.js?v=f1348482"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="../../assets/js/desk.js?v=97f5d37a" defer></script>
+<script src="../../assets/js/word.js?v=faaae268" defer></script>
+<script defer>
+document.addEventListener('DOMContentLoaded', async () => {
+  const $ = id => document.getElementById(id);
+  const gone = msg => { $('empty').innerHTML = msg +
+    ' <a href="../../#desk">Back to The Word.</a>'; };
+
+  const slug = new URLSearchParams(location.search).get('s') || '';
+  if (!/^[a-z0-9][a-z0-9-]{2,59}$/.test(slug)) { gone('No story named on this link.'); return; }
+  if (!window.OTP || !OTP.configured || !window.OTPWord) { gone('The backend is asleep, so this one is resting too.'); return; }
+
+  let row = null;
+  try { row = await OTP.wordStory(slug); } catch (e) { row = null; }
+  if (!row) {
+    // Author or desk reading a pending story: RLS decides who gets the row.
+    try {
+      row = await OTP.storyAnyRole(slug);
+      if (row && !row.published) row._pending = true;
+    } catch (e) { row = null; }
+  }
+  if (!row) { gone('That one is not up. It may still be on the desk.'); return; }
+
+  document.title = row.title + ' · 0FF THE PRINT';
+  $('ttl').textContent = row.title;
+  $('dek').textContent = row.dek;
+  const d = new Date(row.created_at);
+  $('byline').innerHTML = '<b>' + OTPWord.esc(row.display_name || row.card_slug || 'card holder') + '</b>' +
+    ' &nbsp;·&nbsp; FROM THE FLOOR' +
+    (isNaN(d) ? '' : ' &nbsp;·&nbsp; ' + d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase()) +
+    (row._pending ? ' &nbsp;·&nbsp; <span style="color:#ff6a7e">ON THE DESK, NOT PUBLIC YET</span>' : '');
+  if (row.cover_url) {
+    $('coverimg').src = row.cover_url;
+    $('cover').style.display = 'block';
+  }
+  $('art').innerHTML = OTPWord.mdToHtml(row.body_md);
+  $('empty').style.display = 'none';
+  $('story').style.display = '';
+});
+</script>
+</body>
+</html>
