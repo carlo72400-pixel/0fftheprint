@@ -56,6 +56,7 @@
 
   <div class="card" id="panel"><div class="empty">checking your card…</div></div>
   <div id="rot"></div>
+  <div id="vids"></div>
   <div class="mine" id="mine"></div>
 </div>
 
@@ -254,6 +255,88 @@
     });
   }
   renderRotation();
+
+  /* ================= FEATURED VIDEOS ================= */
+  // A LINK, never a file. Uploading clips would eat the free tier's 1GB and its
+  // 5GB/mo egress, and egress is shared with auth, so a popular clip takes the
+  // login down with it. Members already host on TikTok and YouTube.
+  // Degrades to nothing until migration 014 runs; .catch keeps the page whole.
+  const vidBox = $('vids');
+  async function renderVideos() {
+    if (!vidBox || !OTP.myVideos) return;
+    let minev = [];
+    try { minev = await OTP.myVideos(); } catch (e) { vidBox.innerHTML = ''; return; }
+    vidBox.innerHTML = `
+      <h2 style="margin-top:26px">Put a video up</h2>
+      <div class="card">
+        <div class="empty" style="margin-bottom:10px">Paste a YouTube, TikTok or Instagram link. The desk gets it first.</div>
+        <input type="text" id="vd-url" placeholder="https://www.tiktok.com/@you/video/..." autocomplete="off"
+          style="width:100%;background:#0d0d12;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:12px;font-size:16px;min-height:44px">
+        <input type="text" id="vd-title" placeholder="what is it" autocomplete="off" maxlength="80"
+          style="width:100%;background:#0d0d12;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:12px;font-size:16px;min-height:44px;margin-top:8px">
+        <div class="empty" id="vd-cover-note" style="margin:10px 0 6px;font-size:12px">
+          TikTok and Instagram need a cover. YouTube pulls its own.</div>
+        <div class="drop" id="vd-drop" style="margin-top:0">Tap to attach a cover image</div>
+        <input type="file" id="vd-file" accept="image/*" hidden>
+        <div style="display:flex;gap:10px;align-items:center;margin-top:10px">
+          <button class="btn" id="vd-send" type="button">Send it in</button>
+          <span class="empty" id="vd-msg" style="margin:0"></span>
+        </div>
+        ${minev.length ? `<div style="margin-top:14px">` + minev.map(v => `
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;border-top:1px solid var(--line);padding:9px 0">
+            <span style="font-size:13px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(v.title)} · ${esc(v.provider)}</span>
+            <span style="font-family:var(--f-mono);font-size:9.5px;letter-spacing:.14em;color:${v.published ? 'var(--pink-glow)' : 'var(--muted)'}">${v.published ? (v.featured ? 'FEATURED' : 'UP') : 'WAITING'}</span>
+            ${!v.published ? `<button class="btn ghost sm" data-vdw="${v.id}" type="button">Withdraw</button>` : ''}
+          </div>`).join('') + `</div>` : ''}
+      </div>`;
+
+    let coverFile = null;
+    const drop = $('vd-drop'), fileIn = $('vd-file');
+    drop.onclick = () => fileIn.click();
+    fileIn.onchange = () => {
+      coverFile = fileIn.files && fileIn.files[0] ? fileIn.files[0] : null;
+      drop.textContent = coverFile ? ('cover: ' + coverFile.name) : 'Tap to attach a cover image';
+    };
+
+    $('vd-send').onclick = async () => {
+      const msg = $('vd-msg'), btn = $('vd-send');
+      btn.disabled = true; msg.textContent = 'Reading the link…';
+      try {
+        const k = OTP.videoKey($('vd-url').value);
+        if (k && k.short === 'tiktok')
+          throw new Error('That is a short TikTok link. Open the video and copy the address bar link.');
+        if (!k) throw new Error('That is not a YouTube, TikTok or Instagram video link.');
+        let coverUrl = null;
+        if (coverFile) {
+          msg.textContent = 'Uploading the cover…';
+          // Downscale BEFORE upload, the egress lesson from member stories.
+          // Shape has to match how the rail draws that provider: 9/16 for
+          // tiktok and instagram, 16/9 for youtube. Forcing everything to
+          // landscape would crop a vertical cover to a ribbon.
+          const vertical = k.provider !== 'youtube';
+          const fitted = OTP.fitCardArt
+            ? await OTP.fitCardArt(coverFile, vertical ? 720 : 1280, vertical ? 1280 : 720)
+            : coverFile;
+          coverUrl = await OTP.uploadImage(fitted);
+        } else if (k.provider !== 'youtube') {
+          throw new Error('That one needs a cover image. YouTube is the only one that brings its own.');
+        }
+        msg.textContent = 'Sending…';
+        await OTP.submitVideo({ url: $('vd-url').value, title: $('vd-title').value, coverUrl });
+        msg.textContent = 'In the queue. The desk sees it next.';
+        $('vd-url').value = ''; $('vd-title').value = '';
+        renderVideos();
+      } catch (e) { msg.textContent = e.message; }
+      btn.disabled = false;
+    };
+
+    vidBox.querySelectorAll('[data-vdw]').forEach(b => b.onclick = async () => {
+      b.disabled = true;
+      try { await OTP.deleteVideo(b.dataset.vdw); renderVideos(); }
+      catch (e) { alert(e.message); b.disabled = false; }
+    });
+  }
+  renderVideos();
 
   /* ================= YOUR POSTS ================= */
   const mine = $('mine');

@@ -165,8 +165,116 @@ if ovs:
     else:
         print("  no seed overrides matched the current file")
 
+# ============================================================================
+# SITE OVERRIDES (migration 014): fold the desk's front-page edits into
+# content/work.json, content/roster.json and content/slate.json.
+#
+# ⚠️ THESE DO NOT SELF-HEAL, and that is the difference from seed_overrides
+# above. A seed override is keyed on sha256(author|text), so baking the edit
+# changes the hash and the row goes inert by itself. These are keyed on a
+# STABLE identity (a filename, a member name, the empty string), so after a
+# bake the row still matches and would silently re-apply on top of any LATER
+# git edit to the same field. So: bake, then report every row that is now
+# identical to the file as REDUNDANT so it gets cleared at the desk.
+#
+# bake.py reads with the publishable key and site_overrides is admin-write, so
+# it cannot delete the rows itself. Printing them is the whole mechanism.
+# ============================================================================
+CONTENT = os.path.join(HERE, "content")
+
+def _base(p):
+    """work.json stores assets/work/x.jpg, derive.py renders
+    assets/grid/work/x.jpg. The basename is the only key both agree on."""
+    return str(p or "").split("/")[-1]
+
+sreq2 = urllib.request.Request(
+    f"{URL}/rest/v1/site_overrides?select=section,item_key,patch,hidden,sort",
+    headers={"apikey": KEY, "Authorization": f"Bearer {KEY}"})
+try:
+    site_ovs = json.load(urllib.request.urlopen(sreq2))
+except Exception:
+    site_ovs = []
+    print("  (site_overrides not reachable; migration 014 not run yet?)")
+
+redundant = []
+
+def bake_list(section, filename, key_of):
+    """Apply the section's overrides to a {"items":[...]} content file."""
+    rows = [o for o in site_ovs if o.get("section") == section]
+    if not rows:
+        return 0
+    path = os.path.join(CONTENT, filename)
+    doc = json.load(open(path))
+    by_key = {o["item_key"]: o for o in rows}
+    out, changed = [], 0
+    for item in doc.get("items", []):
+        o = by_key.get(key_of(item))
+        if not o:
+            out.append(item)
+            continue
+        if o.get("hidden"):
+            changed += 1
+            print(f"  {section} dropped: {key_of(item)}")
+            continue
+        patch = o.get("patch") or {}
+        already = all(item.get(k) == v for k, v in patch.items())
+        if patch and not already:
+            item = dict(item)
+            item.update(patch)
+            changed += 1
+            print(f"  {section} patched: {key_of(item) or ''} "
+                  f"({', '.join(sorted(patch))})")
+        elif patch and already:
+            redundant.append((section, o["item_key"]))
+        if o.get("sort") is not None:
+            item = dict(item)
+            item["_sort"] = o["sort"]
+        out.append(item)
+    if any("_sort" in i for i in out):
+        out.sort(key=lambda i: i.get("_sort", 0))
+        for i in out:
+            i.pop("_sort", None)
+        changed += 1
+    if changed:
+        doc["items"] = out
+        json.dump(doc, open(path, "w"), indent=2, ensure_ascii=False)
+        open(path, "a").write("\n")
+        print(f"  {filename} updated ({changed} change(s) baked in)")
+    return changed
+
+if site_ovs:
+    bake_list("work", "work.json", lambda it: _base(it.get("src")))
+    bake_list("roster", "roster.json", lambda it: str(it.get("name") or ""))
+
+    # slate is a single object, not a list: item_key '' patches slate.next
+    sl = next((o for o in site_ovs
+               if o.get("section") == "slate" and o.get("item_key") == ""), None)
+    if sl:
+        spath = os.path.join(CONTENT, "slate.json")
+        sdoc = json.load(open(spath))
+        patch = sl.get("patch") or {}
+        nxt = sdoc.get("next") or {}
+        if sl.get("hidden"):
+            sdoc.pop("next", None)
+            json.dump(sdoc, open(spath, "w"), indent=2, ensure_ascii=False)
+            open(spath, "a").write("\n")
+            print("  slate.json: next removed (hidden at the desk)")
+        elif patch and not all(nxt.get(k) == v for k, v in patch.items()):
+            nxt.update(patch)
+            sdoc["next"] = nxt
+            json.dump(sdoc, open(spath, "w"), indent=2, ensure_ascii=False)
+            open(spath, "a").write("\n")
+            print(f"  slate.json updated ({', '.join(sorted(patch))})")
+        elif patch:
+            redundant.append(("slate", ""))
+
 print("\nNow:")
 print("  git add -A && git commit -m 'bake story edits' && git push")
+if redundant:
+    print("\n  ⛔ CLEAR THESE AT THE DESK, they now match the committed file and")
+    print("     would silently re-apply on top of a later git edit:")
+    for section, key in redundant:
+        print(f"    - {section} / {key or '(whole section)'}")
 print("  then at /desk/: tap Clear override for edited stories, and tap BAKED on each of:")
 for slug in promoted:
     print(f"    - {slug}")
