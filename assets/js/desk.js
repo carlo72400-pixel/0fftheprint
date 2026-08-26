@@ -353,6 +353,37 @@
       if (error) throw error;
     },
 
+    // ---- SEED OVERRIDES (migration 011) ----------------------------------
+    // Seeds have no ids, so the key is a content hash. Python (bake.py) and
+    // this function MUST hash identically: sha256(author + '|' + text), first
+    // 16 hex. Editing the seed in git changes the hash, which is the feature:
+    // a baked-in edit makes its override inert on its own.
+    async seedKey(author, text) {
+      const data = new TextEncoder().encode(String(author || "") + "|" + String(text || ""));
+      const buf = await crypto.subtle.digest("SHA-256", data);
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("").slice(0, 16);
+    },
+
+    async seedOverrides() {
+      const c = sb(); if (!c) return [];
+      const { data, error } = await c.from("seed_overrides").select("key,hidden,new_text");
+      if (error) throw error;
+      return data || [];
+    },
+
+    async setSeedOverride(key, { hidden, newText }) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const row = { key, hidden: !!hidden, new_text: newText || null };
+      const { error } = await c.from("seed_overrides").upsert(row);
+      if (error) throw error;
+    },
+
+    async clearSeedOverride(key) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { error } = await c.from("seed_overrides").delete().eq("key", key);
+      if (error) throw error;
+    },
+
     // ---- MEMBER STORIES (migration 010) ----------------------------------
     slugifyTitle(t) {
       return String(t || "").toLowerCase().replace(/[^a-z0-9]+/g, "-")

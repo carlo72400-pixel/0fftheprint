@@ -48,7 +48,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="../supabase-config.js?v=f1348482"></script>
-<script src="../assets/js/desk.js?v=97f5d37a"></script>
+<script src="../assets/js/desk.js?v=8934286a"></script>
 <script>
 (async () => {
   const $ = id => document.getElementById(id);
@@ -80,13 +80,20 @@
   try { await OTP.drainOrphans(); } catch (e) { console.warn('orphan drain skipped:', e.message); }
 
   async function render() {
-    const [pending, members, posts, orphans, wordEntries, rotTracks, memberStories] = await Promise.all([
+    const [pending, members, posts, orphans, wordEntries, rotTracks, memberStories, seedPosts, seedOvs] = await Promise.all([
       OTP.pending(), OTP.members(), OTP.allPosts(40), OTP.orphanImages(),
       // .catch keeps the desk usable before migrations 008/009 have run
       OTP.deskWord ? OTP.deskWord().catch(() => []) : [],
       OTP.rotationAll ? OTP.rotationAll().catch(() => []) : [],
       OTP.deskStories ? OTP.deskStories().catch(() => []) : [],
+      fetch('../content/take.json', { cache: 'no-cache' }).then(r => r.json()).then(d => d.items || []).catch(() => []),
+      OTP.seedOverrides ? OTP.seedOverrides().catch(() => []) : [],
     ]);
+    const seedRows = await Promise.all(seedPosts.map(async p => {
+      const key = await OTP.seedKey(p.author, p.text);
+      return { key, p, ov: seedOvs.find(o => o.key === key) || null };
+    }));
+    const staleOvs = seedOvs.filter(o => !seedRows.some(r => r.key === o.key));
     const storyPending = memberStories.filter(x => !x.published);
     const storyLive = memberStories.filter(x => x.published && !x.baked);
     const wordPending = wordEntries.filter(e => !e.published);
@@ -225,6 +232,39 @@
 
       <div class="card">
         <b style="font-family:var(--f-display);font-style:italic;font-size:24px;text-transform:uppercase">
+          The seeds</b>
+        <div class="broke" style="margin-top:12px">These live in the committed file, not the database.
+          Hide or rewrite one here and the page obeys in seconds; bake.py writes it into git for good.</div>
+        ${seedRows.map(r => `
+          <div class="post-row no-img ${r.ov && r.ov.hidden ? 'gone' : ''}" data-seedkey="${r.key}">
+            <div>
+              <div class="txt">${esc((r.ov && r.ov.new_text) || r.p.text || '')}</div>
+              <div class="meta">SEED · ${esc(r.p.author || '?')}
+                ${r.p.pinned ? '<span class="pill pin">PINNED</span>' : ''}
+                ${r.ov ? (r.ov.hidden ? '<span class="pill pulled">HIDDEN</span>' : '<span class="pill edited">EDITED</span>') : ''}</div>
+              <div class="acts">
+                <button class="btn ghost sm" data-seed-edit="${r.key}" type="button">Edit</button>
+                <button class="btn ghost sm" data-seed-hide="${r.key}" data-on="${r.ov && r.ov.hidden ? '1' : ''}" type="button">${r.ov && r.ov.hidden ? 'Show' : 'Hide'}</button>
+                ${r.ov ? `<button class="btn ghost sm" data-seed-clear="${r.key}" type="button">Back to the file</button>` : ''}
+              </div>
+              <div class="seed-editor" id="se-${r.key}" style="display:none;margin-top:10px">
+                <textarea style="width:100%;min-height:120px;background:#0d0d12;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px;font-size:14px">${esc((r.ov && r.ov.new_text) || r.p.text || '')}</textarea>
+                <div class="acts">
+                  <button class="btn ok sm" data-seed-save="${r.key}" type="button">Save</button>
+                  <button class="btn ghost sm" data-seed-cancel="${r.key}" type="button">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </div>`).join('') || '<div class="empty">no seed posts in the file</div>'}
+        ${staleOvs.length ? `
+          <div class="meta" style="margin-top:10px">Inert overrides (their seed changed in git):</div>
+          ${staleOvs.map(o => `
+            <div class="acts"><span class="slug">${o.key}</span>
+              <button class="btn ghost sm" data-seed-clear="${o.key}" type="button">Clear</button></div>`).join('')}` : ''}
+      </div>
+
+      <div class="card">
+        <b style="font-family:var(--f-display);font-style:italic;font-size:24px;text-transform:uppercase">
           Every post</b>
         ${posts.length ? posts.map(p => {
           const pulled = !p.published;
@@ -292,6 +332,28 @@
       lastBatch = null; lastRetired = null;
     });
 
+    panel.querySelectorAll('[data-seed-hide]').forEach(b => b.onclick = rerun(async b => {
+      const key = b.dataset.seedHide;
+      const cur = seedOvs.find(o => o.key === key);
+      await OTP.setSeedOverride(key, { hidden: !(cur && cur.hidden), newText: cur && cur.new_text });
+    }));
+    panel.querySelectorAll('[data-seed-clear]').forEach(b => b.onclick = rerun(b => OTP.clearSeedOverride(b.dataset.seedClear)));
+    panel.querySelectorAll('[data-seed-edit]').forEach(b => b.onclick = () => {
+      const ed = $('se-' + b.dataset.seedEdit);
+      if (ed) ed.style.display = ed.style.display === 'none' ? 'block' : 'none';
+    });
+    panel.querySelectorAll('[data-seed-cancel]').forEach(b => b.onclick = () => {
+      const ed = $('se-' + b.dataset.seedCancel);
+      if (ed) ed.style.display = 'none';
+    });
+    panel.querySelectorAll('[data-seed-save]').forEach(b => b.onclick = rerun(async b => {
+      const key = b.dataset.seedSave;
+      const ed = $('se-' + key);
+      const v = ed ? ed.querySelector('textarea').value.trim() : '';
+      if (!v) throw new Error('Empty is Hide, not Edit.');
+      const cur = seedOvs.find(o => o.key === key);
+      await OTP.setSeedOverride(key, { hidden: !!(cur && cur.hidden), newText: v });
+    }));
     panel.querySelectorAll('[data-st-ok]').forEach(b => b.onclick = rerun(b => OTP.setStoryPublished(b.dataset.stOk, true)));
     panel.querySelectorAll('[data-st-pull]').forEach(b => b.onclick = rerun(b => OTP.setStoryPublished(b.dataset.stPull, false)));
     panel.querySelectorAll('[data-st-baked]').forEach(b => b.onclick = rerun(async b => {

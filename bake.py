@@ -124,6 +124,47 @@ for st in stories:
     promoted.append(slug)
     print(f"  promoted story {slug} into the catalog")
 
+# ============================================================================
+# SEED OVERRIDES (migration 011): fold the desk's seed edits/hides into
+# content/take.json. Keys are sha256(author + '|' + text)[:16], identical to
+# OTP.seedKey in desk.js — once written here the hash changes and the override
+# goes inert on its own (the desk lists inert ones for a clear).
+# ============================================================================
+import hashlib
+
+oreq = urllib.request.Request(
+    f"{URL}/rest/v1/seed_overrides?select=key,hidden,new_text",
+    headers={"apikey": KEY, "Authorization": f"Bearer {KEY}"})
+try:
+    ovs = {o["key"]: o for o in json.load(urllib.request.urlopen(oreq))}
+except Exception:
+    ovs = {}
+    print("  (seed_overrides not reachable; migration 011 not run yet?)")
+if ovs:
+    take_path = os.path.join(HERE, "content", "take.json")
+    take = json.load(open(take_path))
+    kept, changed = [], 0
+    for item in take.get("items", []):
+        k = hashlib.sha256(
+            (str(item.get("author") or "") + "|" + str(item.get("text") or "")).encode()
+        ).hexdigest()[:16]
+        o = ovs.get(k)
+        if o and o.get("hidden"):
+            changed += 1
+            print(f"  seed dropped: {str(item.get('text'))[:50]!r}")
+            continue
+        if o and o.get("new_text"):
+            item["text"] = o["new_text"]
+            changed += 1
+            print(f"  seed rewritten: {o['new_text'][:50]!r}")
+        kept.append(item)
+    if changed:
+        take["items"] = kept
+        json.dump(take, open(take_path, "w"), indent=2, ensure_ascii=False)
+        print(f"  take.json updated ({changed} seed change(s) baked in)")
+    else:
+        print("  no seed overrides matched the current file")
+
 print("\nNow:")
 print("  git add -A && git commit -m 'bake story edits' && git push")
 print("  then at /desk/: tap Clear override for edited stories, and tap BAKED on each of:")

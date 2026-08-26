@@ -38,7 +38,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Pirata+One&family=Luckiest+Guy&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" defer></script>
 <script src="supabase-config.js?v=f1348482" defer></script>
-<script src="assets/js/desk.js?v=97f5d37a" defer></script>
+<script src="assets/js/desk.js?v=8934286a" defer></script>
 <script src="assets/js/door.js?v=cb068ae4" defer></script>
 <script src="assets/js/composer.js?v=51127ffa" defer></script>
 <style>
@@ -3770,6 +3770,29 @@
       const days = Math.floor(hrs / 24);
       if (days < 7) return days + 'd';
       return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+    }
+
+    // The desk's hand on the SEEDS (migration 011): hidden ones drop, edited
+    // ones swap their text. Keyed by content hash, so a seed already fixed in
+    // git simply stops matching and the override goes inert.
+    if (window.OTP && OTP.configured && OTP.seedOverrides && window.crypto && crypto.subtle) {
+      try {
+        const ovs = await Promise.race([
+          OTP.seedOverrides(),
+          new Promise(r => setTimeout(() => r([]), LIVE_TIMEOUT_MS)),
+        ]);
+        if (ovs && ovs.length) {
+          const byKey = {};
+          ovs.forEach(o => { byKey[o.key] = o; });
+          const keyed = await Promise.all(take.map(async p =>
+            [await OTP.seedKey(p.author, p.text), p]));
+          take = keyed
+            .filter(([k]) => !(byKey[k] && byKey[k].hidden))
+            .map(([k, p]) => (byKey[k] && byKey[k].new_text)
+              ? Object.assign({}, p, { text: byKey[k].new_text })
+              : p);
+        }
+      } catch (e) { console.warn('seed overrides skipped:', e.message); }
     }
 
     // Live posts from approved card holders sit on top of the JSON seeds.
