@@ -914,6 +914,20 @@
   /* Touch has no hover, so the control has to be visible at rest or it does
      not exist on a phone. */
   @media (hover:none){ .track-play{opacity:1;} }
+  /* the mounted embed. The shot is square at rest; the player is 152px, so the
+     tile stops forcing a square while one is open. */
+  .track.embedded .track-shot{aspect-ratio:auto;height:152px;background:#000;}
+  .track-embed{position:absolute;inset:0;}
+  .track-embed iframe,.track-iframe{width:100%;height:100%;border:0;display:block;}
+  .track-close{
+    position:absolute;top:6px;right:6px;z-index:6;
+    width:30px;height:30px;border-radius:50%;cursor:pointer;padding:0;
+    background:rgba(10,10,13,.85);border:1px solid var(--line);color:var(--ink);
+    font-size:16px;line-height:1;
+  }
+  .track-close:hover{border-color:var(--pink-deep);color:var(--pink-glow);}
+  /* the pink cursor halo and the hover hint are noise over a live player */
+  .track.embedded::after,.track.embedded .track-hint{display:none;}
   .track-hint{
     position:absolute;top:10px;right:10px;
     font-family:var(--f-mono);font-size:8px;letter-spacing:.22em;
@@ -4448,6 +4462,64 @@
 
   // ============ Music Rotation (hover-volume) ============
   let activeAudio = null;
+  // ---- SPOTIFY EMBED, mounted on demand ----
+  // A member's track has no preview mp3: the rotation view carries a track id
+  // and nothing else, and Spotify's oEmbed does not hand one over. The embed is
+  // the only way their song is audible, and it costs no storage and no egress.
+  // Mounted ONLY on tap, one at a time, so six iframes never load at once.
+  let openEmbedTile = null;
+  function closeTrackEmbed() {
+    if (!openEmbedTile) return;
+    const t = openEmbedTile; openEmbedTile = null;
+    const shot = t.querySelector('.track-shot');
+    if (shot && t._shotHTML != null) shot.innerHTML = t._shotHTML;
+    // the art is a CSSOM background, so it has to be repainted after a restore
+    const art = shot && shot.querySelector('.track-art');
+    if (art && t._artUrl) art.style.backgroundImage = 'url("' + t._artUrl + '")';
+    t.classList.remove('embedded');
+    const b = shot && shot.querySelector('.track-play');
+    if (b) { b.classList.remove('on'); b.innerHTML = '&#9654;'; }
+  }
+  function openTrackEmbed(tile, id) {
+    if (openEmbedTile === tile) { closeTrackEmbed(); return; }
+    closeTrackEmbed();
+    // an embed and an mp3 must never play over each other
+    if (activeAudio) {
+      activeAudio.pause(); activeAudio.currentTime = 0; activeAudio.volume = 0;
+      if (activeAudio._btn) { activeAudio._btn.classList.remove('on'); activeAudio._btn.innerHTML = '&#9654;'; }
+      activeAudio = null;
+    }
+    const shot = tile.querySelector('.track-shot');
+    if (!shot) return;
+    if (tile._shotHTML == null) tile._shotHTML = shot.innerHTML;
+    tile.classList.add('embedded');
+    openEmbedTile = tile;
+    const host = document.createElement('div');
+    host.className = 'track-embed';
+    shot.innerHTML = '';
+    shot.appendChild(host);
+    const close = document.createElement('button');
+    close.type = 'button'; close.className = 'track-close';
+    close.setAttribute('aria-label', 'Close the player');
+    close.innerHTML = '&times;';
+    close.addEventListener('click', ev => { ev.preventDefault(); ev.stopPropagation(); closeTrackEmbed(); });
+    shot.appendChild(close);
+    // Reuse the roster's loader. The plain embed URL ignores autoplay, so play()
+    // has to be gated on the controller, which is what this already solves.
+    loadSpotifyApi().then(API => {
+      if (openEmbedTile !== tile) return;             // closed while loading
+      if (!API) {
+        host.innerHTML = '<iframe class="track-iframe" src="https://open.spotify.com/embed/track/'
+          + id + '?utm_source=generator" width="100%" height="152" frameborder="0" loading="lazy"'
+          + ' allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>';
+        return;
+      }
+      API.createController(host, { uri: 'spotify:track:' + id, width: '100%', height: 152 }, ctrl => {
+        try { ctrl.play(); } catch (e) {}
+      });
+    });
+  }
+
   const rMount = document.getElementById('rotation-mount');
   if (rMount && rotation) {
     // Live tracks sit ABOVE the seeds, capped at 6 so approvals can never evict
@@ -4468,12 +4540,15 @@
       tile.href = tLink || '#';
       if (/^https?:\/\//.test(tLink)) { tile.target = '_blank'; tile.rel = 'noopener'; }
       const tPrev0 = safeUrl(entry.preview);
+      // entry.track exists on live rows; seeds only carry a link
+      const spId = entry.track || parseSpotifyId(entry.link);
+      if (spId) tile.dataset.sp = spId;
       tile.innerHTML = `
         <span class="track-shot">
           <span class="track-art${tArt ? '' : ' no-art'}">${tArt ? '' : `<span class="track-mark">${esc((entry.artist||'').slice(0,3))}</span>`}</span>
           <span class="track-platform ${esc(entry.platform)}">${esc(labels[entry.platform] || entry.platform)}</span>
-          <span class="track-hint">${tPrev0 ? 'preview' : (entry.start ? 'opens at ' + Math.floor(entry.start/60) + ':' + String(entry.start%60).padStart(2,'0') : 'opens in ' + esc(labels[entry.platform] || 'the app'))}</span>
-          ${tPrev0 ? '<button class="track-play" type="button" aria-label="Play a preview of ' + esc(entry.title) + '">&#9654;</button>' : ''}
+          <span class="track-hint">${spId ? 'play here' : 'opens in ' + esc(labels[entry.platform] || 'the app')}</span>
+          ${(tPrev0 || spId) ? '<button class="track-play" type="button" aria-label="Play ' + esc(entry.title) + '">&#9654;</button>' : ''}
         </span>
         <span class="track-info">
           <span class="track-title">${esc(entry.title)}</span>
@@ -4483,20 +4558,35 @@
       // Art through the CSSOM, never an inline style attribute. Same reason as the
       // timeline avatars: entities decode before CSS parses, so an escaped quote
       // still breaks out of url().
-      if (tArt) tile.querySelector('.track-art').style.backgroundImage = 'url("' + sized(tArt, 'thumb') + '")';
+      if (tArt) {
+        tile._artUrl = sized(tArt, 'thumb');
+        tile.querySelector('.track-art').style.backgroundImage = 'url("' + tile._artUrl + '")';
+      }
       rMount.appendChild(tile);
 
-      // ⛔ This used to be `if (!tPrev || TOUCH) return`, which meant every
-      // phone got silence even on the seeds that DO carry a preview, on a
-      // section whose whole point is hearing something. The play button works
-      // on both, and the hover-volume trick stays as a desktop extra.
-      const tPrev = safeUrl(entry.preview);
-      if (!tPrev) return;
+      // THE PLAY BUTTON MEANS THE SAME THING ON EVERY TILE: play it here.
+      // Seeds used to play a local mp3 and member tracks played nothing, which
+      // made the same control mean two different things depending on a detail
+      // nobody can see. It opens the Spotify embed now, which is also the only
+      // way a member's track is audible at all.
       const playBtn = tile.querySelector('.track-play');
+      if (playBtn && spId) {
+        playBtn.addEventListener('click', ev => {
+          ev.preventDefault(); ev.stopPropagation();   // it lives inside the <a>
+          openTrackEmbed(tile, spId);
+        });
+      }
+
+      // The hover-volume mp3 stays as a DESKTOP-ONLY flourish on the seeds that
+      // carry one. It is ambient, it never fights the embed, and touch has no
+      // hover so building the Audio there was always waste.
+      const tPrev = safeUrl(entry.preview);
+      if (!tPrev || TOUCH) return;
       const audio = new Audio(tPrev);
       audio.loop = true;
       audio.preload = 'metadata';
       audio.volume = 0;
+      audio._btn = null;
       let fadeTimer = null;
       const stopFade = () => { if (fadeTimer) { clearInterval(fadeTimer); fadeTimer = null; } };
       const upd = (cx2, cy2) => {
@@ -4509,56 +4599,16 @@
         const dist = Math.min(1, Math.hypot(dx, dy));
         audio.volume = Math.pow(Math.max(0, 1 - dist), 1.6);
       };
-      // one at a time, everywhere
-      const stopOthers = () => {
-        if (activeAudio && activeAudio !== audio) {
-          activeAudio.pause(); activeAudio.currentTime = 0; activeAudio.volume = 0;
-          if (activeAudio._btn) { activeAudio._btn.classList.remove('on'); activeAudio._btn.innerHTML = '&#9654;'; }
-        }
-      };
-      audio._btn = playBtn;
-      audio.addEventListener('ended', () => {
-        if (playBtn) { playBtn.classList.remove('on'); playBtn.innerHTML = '&#9654;'; }
-      });
-
-      if (playBtn) {
-        playBtn.addEventListener('click', ev => {
-          // it lives inside an <a> to Spotify, so this must not navigate
-          ev.preventDefault(); ev.stopPropagation();
-          stopFade();
-          if (!audio.paused) {
-            audio.pause(); audio.currentTime = 0;
-            playBtn.classList.remove('on'); playBtn.innerHTML = '&#9654;';
-            if (activeAudio === audio) activeAudio = null;
-            return;
-          }
-          stopOthers();
-          activeAudio = audio;
-          audio.volume = 1;                     // tapped on purpose, so full volume
-          playBtn.classList.add('on'); playBtn.innerHTML = '&#10073;&#10073;';
-          audio.play().catch(() => {
-            playBtn.classList.remove('on'); playBtn.innerHTML = '&#9654;';
-          });
-        });
-      }
-
-      // The hover-volume trick is a desktop bonus. It must not fight a preview
-      // the visitor deliberately started with the button.
-      if (TOUCH) return;
       tile.addEventListener('mouseenter', e => {
+        if (openEmbedTile) return;                    // an embed is playing, stay quiet
         stopFade();
-        if (playBtn && playBtn.classList.contains('on')) return;
-        stopOthers();
+        if (activeAudio && activeAudio !== audio) { activeAudio.pause(); activeAudio.currentTime = 0; activeAudio.volume = 0; }
         activeAudio = audio;
         upd(e.clientX, e.clientY);
         audio.play().catch(() => {});
       });
-      tile.addEventListener('mousemove', e => {
-        if (playBtn && playBtn.classList.contains('on')) return;
-        upd(e.clientX, e.clientY);
-      });
+      tile.addEventListener('mousemove', e => { if (!openEmbedTile) upd(e.clientX, e.clientY); });
       tile.addEventListener('mouseleave', () => {
-        if (playBtn && playBtn.classList.contains('on')) return;
         stopFade();
         fadeTimer = setInterval(() => {
           audio.volume = Math.max(0, audio.volume - 0.12);
