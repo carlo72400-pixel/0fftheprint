@@ -47,6 +47,9 @@
       <input id="pw" type="password" required minlength="8" placeholder="8 characters or more" autocomplete="current-password">
 
       <button class="btn" id="go" type="submit">Log in</button>
+      <button class="linky" id="forgot" type="button" style="background:none;border:0;cursor:pointer;
+        font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;color:var(--muted);
+        margin-top:10px;padding:8px 0;min-height:40px;display:block">Forgot your password? It goes through your email.</button>
     </form>
 
     <div class="msg" id="msg"></div>
@@ -59,7 +62,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="../supabase-config.js?v=f1348482"></script>
-<script src="../assets/js/desk.js?v=8bab1cb5"></script>
+<script src="../assets/js/desk.js?v=c4364d4f"></script>
 <script>
 (async () => {
   const $ = id => document.getElementById(id);
@@ -109,6 +112,19 @@
   };
   $('tab-in').onclick = () => setMode('in');
   $('tab-up').onclick = () => setMode('up');
+
+  // Reset runs on the email in the box; no email, no guessing.
+  $('forgot').onclick = async () => {
+    $('forgot').disabled = true;
+    try {
+      await OTP.requestPasswordReset($('email').value);
+      msg('Sent. Check that inbox (and spam) for a reset link. It lands back here.', 'good');
+    } catch (err) {
+      msg(err.message || 'That did not go through.', 'err');
+    } finally {
+      $('forgot').disabled = false;
+    }
+  };
 
   $('form').onsubmit = async (e) => {
     e.preventDefault();

@@ -90,6 +90,28 @@
       await c.auth.signOut();
     },
 
+    // ---- password reset, through the email and nothing else --------------
+    // Supabase mails a one-time recovery link that lands on /reset/ with a
+    // short-lived session. Nobody (including the desk) can set a password for
+    // somebody; the link in the inbox is the whole proof of identity.
+    async requestPasswordReset(email) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const e = String(email || "").trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) throw new Error("Put your email in the email box first.");
+      const { error } = await c.auth.resetPasswordForEmail(e, {
+        redirectTo: "https://0fftheprint.com/reset/",
+      });
+      if (error) throw error;
+    },
+
+    // Only works while the recovery-link session is live on /reset/.
+    async completePasswordReset(pw) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      if (String(pw || "").length < 8) throw new Error("8 characters or more.");
+      const { error } = await c.auth.updateUser({ password: pw });
+      if (error) throw error;
+    },
+
     /* ---- images ---- */
     isVideo,
 

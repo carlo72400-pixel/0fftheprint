@@ -29,7 +29,7 @@ DOCS = ["index.html", "join/index.html", "compose/index.html", "desk/index.html"
         # Any page that loads desk.js belongs here. A page left off this list
         # silently serves whatever desk.js the browser cached, which is exactly
         # the bug this script exists to prevent.
-        "card/index.html", "desk/word/index.html"] + [
+        "card/index.html", "desk/word/index.html", "reset/index.html"] + [
         # every story page carries desk.js + word.js
         str(p.relative_to(ROOT)) for p in sorted(ROOT.glob("word/*/index.html"))]
 

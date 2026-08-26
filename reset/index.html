@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>New password · 0FF THE PRINT</title>
+<meta name="theme-color" content="#0a0a0d">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/auth.css">
+</head>
+<body>
+<div class="leopard-bar"></div>
+<div class="wrap">
+  <a class="back" href="../">&larr; 0FF THE PRINT</a>
+  <h1 id="ttl">New password</h1>
+  <div class="sub">the reset link in your email is the key &nbsp;·&nbsp; nobody can do this for you</div>
+
+  <div class="card">
+    <form id="form" style="display:none">
+      <label for="pw">New password</label>
+      <input id="pw" type="password" required minlength="8" placeholder="8 characters or more" autocomplete="new-password">
+      <label for="pw2">Same one again</label>
+      <input id="pw2" type="password" required minlength="8" placeholder="so we know you know it" autocomplete="new-password">
+      <button class="btn" id="go" type="submit">Set it</button>
+    </form>
+    <div class="msg" id="msg"></div>
+    <div class="note" id="note">checking your link…</div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="../supabase-config.js?v=f1348482"></script>
+<script src="../assets/js/desk.js?v=c4364d4f"></script>
+<script>
+(async () => {
+  const $ = id => document.getElementById(id);
+  const msg = (t, k) => { const m = $('msg'); m.textContent = t; m.className = 'msg show ' + (k || ''); };
+
+  if (!OTP.configured) { $('note').textContent = 'Backend is not switched on.'; return; }
+
+  // Creating the client is what makes supabase-js read the recovery token out
+  // of the URL and open the short-lived session this page runs on.
+  const c = OTP.sb();
+
+  // A dead or already-used link comes back as an error in the fragment.
+  const frag = new URLSearchParams(location.hash.replace(/^#/, ''));
+  if (frag.get('error_description')) {
+    $('note').innerHTML = 'That link is dead or already used. ' +
+      '<a href="../join/" style="color:var(--pink-glow)">Ask for a fresh one</a> from the log in page.';
+    return;
+  }
+
+  // The session can land a beat after page load; take either signal.
+  let ready = false;
+  const show = () => {
+    if (ready) return; ready = true;
+    $('form').style.display = '';
+    $('note').textContent = 'Set it and it works everywhere you log in.';
+  };
+  c.auth.onAuthStateChange((ev) => {
+    if (ev === 'PASSWORD_RECOVERY' || ev === 'SIGNED_IN') show();
+  });
+  const { data: { session } } = await c.auth.getSession();
+  if (session) show();
+  setTimeout(() => {
+    if (!ready) $('note').innerHTML = 'No live reset link on this page. ' +
+      '<a href="../join/" style="color:var(--pink-glow)">Ask for one</a> from the log in page, then tap the email.';
+  }, 4000);
+
+  $('form').onsubmit = async (e) => {
+    e.preventDefault();
+    if ($('pw').value !== $('pw2').value) { msg('Those two do not match.', 'err'); return; }
+    $('go').disabled = true;
+    try {
+      await OTP.completePasswordReset($('pw').value);
+      msg('Done. That is your password now.', 'good');
+      $('note').innerHTML = '<a href="../join/" style="color:var(--pink-glow)">Log in with it</a> or head back to the site, you are already signed in here.';
+      $('form').style.display = 'none';
+    } catch (err) {
+      msg(err.message || 'That did not go through.', 'err');
+      $('go').disabled = false;
+    }
+  };
+})();
+</script>
+</body>
+</html>
