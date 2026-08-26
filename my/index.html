@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Your desk · 0FF THE PRINT</title>
+<meta name="theme-color" content="#0a0a0d">
+<link rel="icon" href="../assets/favicon.svg">
+<link rel="stylesheet" href="../assets/css/auth.css">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@700;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+.wrap{max-width:820px;margin:0 auto;padding:0 16px 90px}
+.grid{display:grid;grid-template-columns:1fr;gap:18px}
+@media (min-width:860px){.grid{grid-template-columns:300px 1fr;align-items:start}}
+#prev{max-width:260px;margin:0 auto}
+.quick{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:12px}
+.quick a{display:flex;align-items:center;justify-content:center;min-height:48px;
+  border:1px solid var(--line);border-radius:9px;color:var(--ink);text-decoration:none;
+  font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;text-align:center;padding:8px}
+.quick a:hover{border-color:var(--pink-deep);color:var(--pink-glow)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;
+  border-top:1px solid var(--line);padding:11px 0}
+.row:first-of-type{border-top:0}
+.row .t{font-size:14px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .st{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;flex:none}
+.st.wait{color:var(--muted)} .st.live{color:var(--pink-glow)} .st.gold{color:#f7d046}
+.row button{background:transparent;color:var(--ink);border:1px solid var(--line);border-radius:7px;
+  padding:8px 13px;font-size:12px;cursor:pointer;min-height:38px;flex:none}
+.row button:hover{border-color:var(--bad,#ff6a7e);color:var(--bad,#ff6a7e)}
+.sec{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:20px;
+  text-transform:uppercase;margin-bottom:6px}
+.hint{color:var(--muted);font-size:12.5px;line-height:1.6}
+.drop{border:1px dashed var(--line);border-radius:10px;padding:13px;text-align:center;
+  font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;color:var(--muted);
+  cursor:pointer;text-transform:uppercase;margin-top:10px}
+.drop:hover{border-color:var(--pink-deep);color:var(--pink-glow)}
+.msg{font-family:var(--f-mono);font-size:11.5px;min-height:16px;margin-top:8px;color:var(--muted)}
+.msg.ok{color:var(--ok)} .msg.bad{color:var(--bad)}
+.gate{max-width:520px;margin:80px auto;text-align:center}
+.who-line{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<div class="leopard-bar"></div>
+<div class="wrap">
+  <a class="back" href="../">&larr; 0FF THE PRINT</a>
+  <h1>Your desk</h1>
+  <div class="sub" id="sub">your card &nbsp;·&nbsp; your posts &nbsp;·&nbsp; what's waiting</div>
+
+  <div id="gate" class="gate" style="display:none"></div>
+
+  <div id="app" class="grid" style="display:none">
+    <div class="card">
+      <div class="sec">Your card</div>
+      <div id="prev"><div class="hint">loading the card…</div></div>
+      <div class="drop" id="pic">Tap to change your photo</div>
+      <input type="file" id="picfile" accept="image/*" hidden>
+      <div class="msg" id="picmsg"></div>
+      <div class="quick">
+        <a href="../card/">Card builder</a>
+        <a href="../compose/">New post</a>
+        <a href="../word/new/">Write a story</a>
+        <a href="../compose/#rot">Song on rotation</a>
+      </div>
+      <div class="hint" style="margin-top:12px">Your card photo is your face across the site.
+        Frames, songs and your link live in the builder.</div>
+    </div>
+
+    <div>
+      <div class="card" id="waitcard" style="display:none">
+        <div class="sec">Waiting on the desk</div>
+        <div class="hint">Sent, not live yet. The desk clears these by hand. Withdraw pulls one back.</div>
+        <div id="waitlist"></div>
+      </div>
+
+      <div class="card" id="livecard" style="display:none">
+        <div class="sec">Up right now</div>
+        <div id="livelist"></div>
+      </div>
+
+      <div class="card">
+        <div class="sec">Your posts</div>
+        <div id="postlist"><div class="hint">loading…</div></div>
+        <div class="quick" style="grid-template-columns:1fr">
+          <a href="../compose/">Manage your posts &rarr;</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="who-line">
+          <span class="hint" id="acct"></span>
+          <button class="btn ghost sm" id="out" type="button" style="width:auto">Sign out</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="../supabase-config.js?v=f1348482"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="../assets/js/desk.js?v=f8ebd412" defer></script>
+<script defer>
+document.addEventListener('DOMContentLoaded', async () => {
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g,
+    c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+  if (!window.OTP || !OTP.configured) {
+    $('gate').style.display = ''; $('gate').innerHTML =
+      '<p class="door-note">The backend is not switched on yet.</p>'; return;
+  }
+  const me = await OTP.me().catch(() => null);
+  if (!me) { location.href = '../join/'; return; }
+  if (!me.profile || !me.profile.approved) {
+    $('gate').style.display = ''; $('gate').innerHTML =
+      '<p class="door-note">You are in the queue. The desk approves by hand; this page opens up after.</p>'; return;
+  }
+  $('app').style.display = '';
+  $('acct').textContent = me.user.email;
+  $('out').onclick = async () => { await OTP.signOut(); location.href = '../join/'; };
+
+  // ---- the card preview: real renderer CSS, adopted from the homepage so it
+  // cannot drift (same trick as the builder) --------------------------------
+  let seed = null;
+  (async () => {
+    try {
+      const html = await fetch('../index.html', { cache: 'no-cache' }).then(r => r.text());
+      const css = (html.match(/<style>[\s\S]*?<\/style>/gi) || [])
+        .map(b => b.replace(/<\/?style>/gi, '')).join('\n');
+      const el = document.createElement('style'); el.textContent = css;
+      document.head.appendChild(el);
+      const [r, c] = await Promise.all([
+        fetch('../content/roster.json', { cache: 'no-cache' }).then(x => x.json()),
+        fetch('../content/creators.json', { cache: 'no-cache' }).then(x => x.json()),
+      ]);
+      const slugify = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      seed = [...(c.items || []), ...(r.items || [])]
+        .find(x => slugify(x.name) === me.profile.card_slug) || null;
+    } catch (e) { seed = null; }
+    paintCard();
+  })();
+
+  function paintCard() {
+    const frame = me.profile.card_frame || (seed && seed.rarity) || 'common';
+    const photo = me.profile.card_photo || (seed && seed.photo) || null;
+    const name = (seed && seed.name) || me.profile.display_name;
+    const art = photo
+      ? `<div class="poke-art" style="background-image:url('${esc(photo)}');background-size:cover;background-position:50% 26%"></div>`
+      : `<div class="poke-art poke-art-pending"><span class="pend-seat">${esc((seed && seed.pending_glyph) || '0FF')}</span><span class="pend-stamp">PHOTO PENDING</span></div>`;
+    $('prev').innerHTML = `
+      <div class="poke ${esc(frame)} poke-roster" data-type="${esc((seed && seed.type) || '')}">
+        <div class="poke-inner">
+          <div class="poke-head"><div class="poke-name">${esc(name)}</div>
+            ${seed && seed.hp ? `<div class="poke-hp">HP <b>${esc(seed.hp)}</b></div>` : ''}</div>
+          <div class="poke-type">${esc((seed && seed.type_label) || 'CARD HOLDER')}</div>
+          ${art}
+          <div class="poke-moves"></div>
+          <div class="poke-foot"><span class="poke-flavor">${esc((seed && seed.flavor) || '')}</span>
+            <span><span class="poke-rare">${esc(frame.replace('-', ' '))}</span></span></div>
+        </div>
+      </div>`;
+  }
+
+  // ---- one-tap photo: upload the pair, save it to the profile -------------
+  $('pic').onclick = () => $('picfile').click();
+  $('picfile').onchange = async e => {
+    const f = e.target.files && e.target.files[0];
+    if (!f) return;
+    const m = $('picmsg');
+    m.className = 'msg'; m.textContent = 'Shrinking and uploading…';
+    try {
+      const url = await OTP.uploadCardArt(f);
+      await OTP.saveCard({ card_photo: url });
+      me.profile.card_photo = url;
+      paintCard();
+      m.className = 'msg ok'; m.textContent = 'That is your face now.';
+    } catch (err) { m.className = 'msg bad'; m.textContent = err.message; }
+    e.target.value = '';
+  };
+
+  // ---- everything waiting, everything live --------------------------------
+  const [stories, tracks, entries, posts] = await Promise.all([
+    OTP.myStories ? OTP.myStories().catch(() => []) : [],
+    OTP.myRotation ? OTP.myRotation().catch(() => []) : [],
+    OTP.myEntriesAll ? OTP.myEntriesAll().catch(() => []) : [],
+    OTP.myPosts ? OTP.myPosts(3).catch(() => []) : [],
+  ]);
+
+  const waiting = [
+    ...stories.filter(x => !x.published).map(x => ({ kind: 'STORY', label: x.title, wd: () => OTP.withdrawStory(x.id), href: '../word/new/' })),
+    ...tracks.filter(x => !x.published).map(x => ({ kind: 'SONG', label: x.title + ' · ' + x.artist, wd: () => OTP.withdrawTrack(x.id) })),
+    ...entries.filter(x => !x.published).map(x => ({ kind: 'ENTRY', label: 'on ' + x.story_slug + ': ' + x.text.slice(0, 40), wd: () => OTP.withdrawEntry(x.id) })),
+  ];
+  const live = [
+    ...stories.filter(x => x.published).map(x => ({ kind: x.baked ? 'STORY · IN THE CATALOG' : 'STORY', label: x.title, href: '../word/live/?s=' + encodeURIComponent(x.slug), gold: x.baked })),
+    ...tracks.filter(x => x.published).map(x => ({ kind: 'ON ROTATION', label: x.title + ' · ' + x.artist, href: '../#music' })),
+    ...entries.filter(x => x.published).map(x => ({ kind: 'ENTRY', label: 'on ' + x.story_slug, href: '../word/' + x.story_slug + '/' })),
+  ];
+
+  if (waiting.length) {
+    $('waitcard').style.display = '';
+    $('waitlist').innerHTML = waiting.map((w, i) => `
+      <div class="row">
+        <span class="t">${w.href ? `<a href="${w.href}" style="color:var(--ink);text-decoration:none">${esc(w.label)}</a>` : esc(w.label)}</span>
+        <span class="st wait">${w.kind}</span>
+        <button type="button" data-wd="${i}">Withdraw</button>
+      </div>`).join('');
+    $('waitlist').querySelectorAll('[data-wd]').forEach(b => b.onclick = async () => {
+      b.disabled = true;
+      try { await waiting[+b.dataset.wd].wd(); location.reload(); }
+      catch (err) { alert(err.message); b.disabled = false; }
+    });
+  }
+  if (live.length) {
+    $('livecard').style.display = '';
+    $('livelist').innerHTML = live.map(l => `
+      <div class="row">
+        <span class="t"><a href="${l.href}" style="color:var(--ink);text-decoration:none">${esc(l.label)}</a></span>
+        <span class="st ${l.gold ? 'gold' : 'live'}">${esc(l.kind)}</span>
+      </div>`).join('');
+  }
+
+  $('postlist').innerHTML = posts.length ? posts.map(p => `
+    <div class="row">
+      <span class="t">${esc((p.text || '').slice(0, 60))}</span>
+      <span class="st ${p.published ? 'live' : 'wait'}">${p.published ? 'LIVE' : 'PULLED'}</span>
+    </div>`).join('') : '<div class="hint">Nothing posted yet. The timeline is right there.</div>';
+});
+</script>
+</body>
+</html>

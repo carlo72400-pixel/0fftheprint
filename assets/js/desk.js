@@ -313,6 +313,18 @@
       return data || [];
     },
 
+    // Every entry of mine across every story, for the member desk.
+    async myEntriesAll() {
+      const c = sb(); if (!c) return [];
+      const { data: { user } } = await c.auth.getUser();
+      if (!user) return [];
+      const { data, error } = await c.from("word_entries")
+        .select("id,story_slug,text,published,created_at")
+        .eq("author_id", user.id).order("created_at", { ascending: false });
+      if (error) throw error;
+      return data || [];
+    },
+
     async submitEntry(slug, text) {
       const c = sb(); if (!c) throw new Error("Backend not configured yet.");
       const { data: { user } } = await c.auth.getUser();
