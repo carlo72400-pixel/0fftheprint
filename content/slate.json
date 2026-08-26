@@ -13,5 +13,17 @@
     "title": "The Mix · Resident Evil vs Silent Hill",
     "count": "38 frames, full quality",
     "link": "events/2026-08-25-the-mix/"
-  }
+  },
+  "releases": [
+    {
+      "num": "0TP-002",
+      "kicker": "THE INK",
+      "title": "Smiley Onerr",
+      "line": "A working tattoo shop on North New Braunfels, and the man who never tells anyone his real name.",
+      "kind": "FILM",
+      "link": "ink/",
+      "art": "assets/card-ink-fullart.jpg",
+      "date": "2026-08-26"
+    }
+  ]
 }
