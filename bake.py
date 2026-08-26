@@ -246,6 +246,34 @@ if site_ovs:
     bake_list("work", "work.json", lambda it: _base(it.get("src")))
     bake_list("roster", "roster.json", lambda it: str(it.get("name") or ""))
 
+    # site.json is flat key/value, not a list of items: item_key IS the field
+    # name and patch.value is the new value. ticker_headlines is stored
+    # pipe-separated by the editor, so it splits back into a list here.
+    site_rows = [o for o in site_ovs if o.get("section") == "site" and o.get("item_key")]
+    if site_rows:
+        spath2 = os.path.join(CONTENT, "site.json")
+        sdoc2 = json.load(open(spath2))
+        n = 0
+        for o in site_rows:
+            if o.get("hidden"):
+                continue
+            k = o["item_key"]
+            v = (o.get("patch") or {}).get("value")
+            if v is None:
+                continue
+            if k == "ticker_headlines":
+                v = [x.strip() for x in str(v).split("|") if x.strip()]
+            if sdoc2.get(k) == v:
+                redundant.append(("site", k))
+                continue
+            sdoc2[k] = v
+            n += 1
+            print(f"  site patched: {k}")
+        if n:
+            json.dump(sdoc2, open(spath2, "w"), indent=2, ensure_ascii=False)
+            open(spath2, "a").write("\n")
+            print(f"  site.json updated ({n} field(s) baked in)")
+
     # slate is a single object, not a list: item_key '' patches slate.next
     sl = next((o for o in site_ovs
                if o.get("section") == "slate" and o.get("item_key") == ""), None)

@@ -150,6 +150,31 @@
         });
       });
 
+      /* THE HOUSE VOICE, desk only: the hero kicker, the one liner and the
+         ticker. These live in site.json with no overlay until now, so a typo
+         in the ticker meant a laptop and a git push. */
+      var hero = d.querySelector('.hero') || d.querySelector('header') || d.body;
+      var kick = d.querySelector('.kicker');
+      if (kick) pencil(kick.parentNode || kick, 'Edit the house voice', function () {
+        var g = function (k) {
+          var r = overrideFor('site', k);
+          return r && r.patch ? r.patch.value : '';
+        };
+        var tickerNow = [].slice.call(d.querySelectorAll('#ticker *'))
+          .map(function (e) { return e.textContent.replace(/^[⚡\s·]+/, '').trim(); })
+          .filter(Boolean).join(' | ');
+        panel('THE HOUSE VOICE', [
+          { key: 'kicker', label: 'Kicker (above the name)', value: g('kicker') || (kick ? kick.textContent.trim() : '') },
+          { key: 'one_liner', label: 'One liner', value: g('one_liner'), type: 'textarea', rows: 3 },
+          { key: 'ticker_headlines', label: 'Ticker, separate each with |', value: g('ticker_headlines') || tickerNow, type: 'textarea', rows: 4 }
+        ], async function (v) {
+          for (var k in v) {
+            if (!v[k]) { try { await OTP.clearSiteOverride('site', k); } catch (e) {} continue; }
+            await OTP.setSiteOverride('site', k, { value: v[k] });
+          }
+        });
+      });
+
       /* ROSTER lore, desk only. Keyed on the member name from roster.json. */
       d.querySelectorAll('#roster [data-src="roster"]').forEach(function (el) {
         var nm = (el.querySelector('.poke-name') || el.querySelector('h3') || {}).textContent;

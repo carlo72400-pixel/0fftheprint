@@ -41,7 +41,7 @@
 <script src="assets/js/desk.js?v=552a3c87" defer></script>
 <script src="assets/js/door.js?v=4fd82def" defer></script>
 <script src="assets/js/composer.js?v=51127ffa" defer></script>
-<script src="assets/js/edit.js?v=4b2b4deb" defer></script>
+<script src="assets/js/edit.js?v=5b24a6d7" defer></script>
 <style>
   :root{
     --bg:#0a0a0d;
@@ -3932,6 +3932,18 @@
         const base = v => String(v || '').split('/').pop();
         work   = applyList(work,   bySection.work,   it => base(it.src));
         roster = applyList(roster, bySection.roster, it => String(it.name || ''));
+
+        // 'site' is in 014's CHECK but nothing used it: the hero kicker, the
+        // one liner and the ticker were git-only, so a typo in the ticker meant
+        // opening a laptop. item_key is the field name.
+        (bySection.site || []).forEach(r => {
+          if (!r.item_key || r.hidden) return;
+          const v = (r.patch || {}).value;
+          if (v === undefined) return;
+          if (r.item_key === 'ticker_headlines')
+            site.ticker_headlines = String(v).split('|').map(x => x.trim()).filter(Boolean);
+          else site[r.item_key] = v;
+        });
 
         const sl0 = (bySection.slate || []).find(r => r.item_key === '');
         if (sl0) {
