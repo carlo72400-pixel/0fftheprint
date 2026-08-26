@@ -531,6 +531,140 @@
       if (error) throw error;
     },
 
+    // ---- FEATURED VIDEOS (migration 014) ---------------------------------
+    // The video is a LINK, never a file. Supabase free is 1GB of storage and
+    // 5GB/mo of egress shared with auth, so uploading clips would buy ~22
+    // videos and ~111 views a month sitewide and take the login down with it.
+    // Members already host on TikTok and YouTube.
+    //
+    // videoKey parses a pasted URL into {provider, vid}. The DB shape-checks
+    // the id per provider and the view rebuilds the host, so nothing a member
+    // types ever reaches the page as a URL.
+    videoKey(raw) {
+      const s = String(raw || "").trim();
+      if (!s) return null;
+      let m;
+      // youtube: watch?v=, youtu.be/, /shorts/, /embed/
+      m = /(?:youtube\.com\/(?:watch\?(?:.*&)?v=|shorts\/|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/.exec(s);
+      if (m) return { provider: "youtube", vid: m[1] };
+      // tiktok: /video/<digits>, and the short vm./vt. links cannot be resolved
+      // client-side (they 302 and the redirect is opaque to fetch), so they are
+      // rejected with a message that tells the member what to paste instead.
+      m = /tiktok\.com\/[^\s]*\/video\/(\d{17,21})/.exec(s);
+      if (m) return { provider: "tiktok", vid: m[1] };
+      if (/(?:vm|vt)\.tiktok\.com\//.test(s)) return { short: "tiktok" };
+      // instagram reels
+      m = /instagram\.com\/(?:reel|reels|p)\/([A-Za-z0-9_-]{5,30})/.exec(s);
+      if (m) return { provider: "instagram", vid: m[1] };
+      return null;
+    },
+
+    async submitVideo({ url, title, coverUrl }) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { data: { user } } = await c.auth.getUser();
+      if (!user) throw new Error("Log in first.");
+      const k = OTP.videoKey(url);
+      if (k && k.short === "tiktok")
+        throw new Error("That is a short TikTok link. Open the video and copy the address bar link instead.");
+      if (!k) throw new Error("That is not a YouTube, TikTok or Instagram video link.");
+      const t = NO_DASH(String(title || "").trim()).slice(0, 80);
+      if (!t) throw new Error("Give it a title.");
+      const { error } = await c.from("featured_videos").insert({
+        submitted_by: user.id, provider: k.provider, vid: k.vid,
+        title: t, cover_url: coverUrl || null,
+      });
+      if (error) {
+        if (error.code === "23505") throw new Error("That video is already up.");
+        throw error;
+      }
+      return k;
+    },
+
+    // The public rail. `by` is the member's card slug, which is what the
+    // per-member tabs group on.
+    async videos(limit = 60) {
+      const c = sb(); if (!c) return [];
+      const { data, error } = await c.from("videos")
+        .select("id,provider,vid,title,link,cover,featured,by,by_name,created_at")
+        .order("featured", { ascending: false })
+        .order("created_at", { ascending: false })
+        .limit(limit);
+      if (error) throw error;
+      return data || [];
+    },
+
+    async myVideos() {
+      const c = sb(); if (!c) return [];
+      const { data: { user } } = await c.auth.getUser();
+      if (!user) return [];
+      const { data, error } = await c.from("featured_videos")
+        .select("id,provider,vid,title,cover_url,published,featured,created_at")
+        .eq("submitted_by", user.id)
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data || [];
+    },
+
+    async videosAll() {
+      const c = sb(); if (!c) return [];
+      const { data, error } = await c.from("featured_videos")
+        .select("id,submitted_by,provider,vid,title,cover_url,published,featured,created_at")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data || [];
+    },
+
+    async setVideoPublished(id, on) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { error } = await c.from("featured_videos").update({ published: !!on }).eq("id", id);
+      if (error) throw error;
+    },
+
+    async setVideoFeatured(id, on) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { error } = await c.from("featured_videos").update({ featured: !!on }).eq("id", id);
+      if (error) throw error;
+    },
+
+    async deleteVideo(id) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { error } = await c.from("featured_videos").delete().eq("id", id);
+      if (error) throw error;
+    },
+
+    // ---- SITE OVERRIDES, the front-page CMS (migration 014) ---------------
+    // work.json / slate.json / roster.json are committed files and a browser
+    // cannot write to git, so the desk edits an overlay and bake.py folds it
+    // back down. Same shape as seed_overrides in 011.
+    async siteOverrides(section) {
+      const c = sb(); if (!c) return [];
+      let q = c.from("site_overrides").select("section,item_key,patch,hidden,sort,updated_at");
+      if (section) q = q.eq("section", section);
+      const { data, error } = await q;
+      if (error) throw error;
+      return data || [];
+    },
+
+    async setSiteOverride(section, itemKey, patch, opts) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const row = {
+        section, item_key: itemKey || "",
+        patch: patch && typeof patch === "object" && !Array.isArray(patch) ? patch : {},
+      };
+      if (opts && "hidden" in opts) row.hidden = !!opts.hidden;
+      if (opts && "sort" in opts) row.sort = opts.sort;
+      const { error } = await c.from("site_overrides")
+        .upsert(row, { onConflict: "section,item_key" });
+      if (error) throw error;
+    },
+
+    async clearSiteOverride(section, itemKey) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { error } = await c.from("site_overrides").delete()
+        .eq("section", section).eq("item_key", itemKey || "");
+      if (error) throw error;
+    },
+
     // ---- MUSIC ON ROTATION (migration 009) -------------------------------
     // Submit resolves title + cover through Spotify's oEmbed (CORS-open,
     // verified live). The DB stores the track id and a 40-hex cover key,

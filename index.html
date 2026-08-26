@@ -38,7 +38,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Pirata+One&family=Luckiest+Guy&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" defer></script>
 <script src="supabase-config.js?v=f1348482" defer></script>
-<script src="assets/js/desk.js?v=f8ebd412" defer></script>
+<script src="assets/js/desk.js?v=552a3c87" defer></script>
 <script src="assets/js/door.js?v=4fd82def" defer></script>
 <script src="assets/js/composer.js?v=51127ffa" defer></script>
 <style>
@@ -502,6 +502,64 @@
     letter-spacing:.32em;text-transform:uppercase;flex-shrink:0;
     padding-bottom:4px;
   }
+
+  /* ---- FEATURED VIDEOS: members paste links, each one gets their own tab ---- */
+  .vid-tabs{
+    display:flex;gap:8px;overflow-x:auto;padding-bottom:10px;margin-bottom:14px;
+    scrollbar-width:none;
+  }
+  .vid-tabs::-webkit-scrollbar{display:none;}
+  .vid-tab{
+    flex:0 0 auto;font-family:var(--f-mono);font-size:10px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--muted);background:var(--panel);
+    border:1px solid var(--line);border-radius:999px;padding:7px 14px;cursor:pointer;
+    transition:color .18s,border-color .18s,background .18s;
+  }
+  .vid-tab:hover{color:var(--ink);border-color:var(--pink-deep);}
+  .vid-tab.on{color:#0a0a0d;background:var(--pink-glow);border-color:var(--pink-glow);}
+  .vid-rail{
+    display:grid;grid-auto-flow:column;grid-auto-columns:minmax(210px,1fr);
+    gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px;
+    scrollbar-width:thin;scrollbar-color:var(--pink-deep) transparent;
+  }
+  .vid-rail::-webkit-scrollbar{height:6px;}
+  .vid-rail::-webkit-scrollbar-thumb{background:var(--pink-deep);border-radius:999px;}
+  .vid{
+    scroll-snap-align:start;display:block;text-decoration:none;color:inherit;
+    border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#16151c;
+    transition:transform .18s,border-color .18s,box-shadow .18s;
+  }
+  .vid:hover{transform:translateY(-3px);border-color:var(--pink-glow);box-shadow:0 6px 22px rgba(255,121,198,.18);}
+  .vid .shot{position:relative;display:block;aspect-ratio:9/16;background:#0a0a0d;}
+  .vid[data-provider="youtube"] .shot{aspect-ratio:16/9;}
+  .vid .shot img{width:100%;height:100%;object-fit:cover;display:block;}
+  .vid .shot .ply{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;
+    width:46px;height:46px;border-radius:50%;background:rgba(10,10,13,.72);
+    border:1px solid var(--pink-deep);color:var(--pink-glow);
+    display:flex;align-items:center;justify-content:center;font-size:15px;padding-left:3px;
+  }
+  .vid .shot .pv{
+    position:absolute;left:8px;top:8px;z-index:2;font-family:var(--f-mono);font-size:8px;
+    letter-spacing:.2em;text-transform:uppercase;color:#fff;background:rgba(10,10,13,.75);
+    border-radius:999px;padding:3px 7px;
+  }
+  .vid[data-provider="youtube"] .pv{color:#ff4d6a;}
+  .vid[data-provider="tiktok"] .pv{color:#69c9d0;}
+  .vid .cap{padding:10px 11px 12px;}
+  .vid .cap .ti{
+    font-size:13px;line-height:1.35;color:var(--ink);
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  }
+  .vid .cap .by{
+    font-family:var(--f-mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--pink-glow);margin-top:6px;display:block;
+  }
+  .vid-empty{
+    font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;color:var(--muted);
+    border:1px dashed var(--line);border-radius:10px;padding:18px;text-align:center;
+  }
+  @media (max-width:640px){ .vid-rail{grid-auto-columns:minmax(150px,46vw);} }
 
   /* ---- THE CATALOG: the house's own numbered work. The story pages already
      print "every drop gets a number" and nothing ever showed the sequence. ---- */
@@ -3483,6 +3541,16 @@
       <a class="slate-marquee" id="slate-marquee" href="#roster"></a>
     </section>
 
+    <!-- ===== FEATURED VIDEOS — members paste links, one tab each ===== -->
+    <section id="videos" hidden>
+      <div class="section-head">
+        <h2>The Reel <span class="accent">featured</span></h2>
+        <div class="sub">what the roster is putting out</div>
+      </div>
+      <div class="vid-tabs" id="vid-tabs"></div>
+      <div class="vid-rail" id="vid-rail"></div>
+    </section>
+
     <!-- ===== THE CATALOG — every drop gets a number, finally shown ===== -->
     <section id="catalog">
       <div class="section-head">
@@ -3781,6 +3849,68 @@
       });
     }
   }
+
+  // ---- FEATURED VIDEOS ----
+  // Links, not files. The section stays hidden until something is actually
+  // published, so an empty roster never shows an empty shelf.
+  (async () => {
+    const rail = document.getElementById('vid-rail');
+    const tabs = document.getElementById('vid-tabs');
+    const sec  = document.getElementById('videos');
+    if (!rail || !window.OTP || !OTP.configured) return;
+    let vids = [];
+    try { vids = await OTP.videos(60); }
+    catch (e) { console.warn('videos: ', e.message); return; }
+    if (!vids.length) return;
+
+    sec.hidden = false;
+    // one tab per member who actually has a video, ALL first
+    const people = [];
+    vids.forEach(v => {
+      const key = v.by || '';
+      if (!people.some(p => p.key === key)) people.push({ key, name: v.by_name || v.by || 'the house' });
+    });
+
+    const draw = (who) => {
+      rail.innerHTML = '';
+      const list = who ? vids.filter(v => (v.by || '') === who) : vids;
+      list.forEach(v => {
+        const a = document.createElement('a');
+        a.className = 'vid';
+        a.dataset.provider = v.provider;
+        a.href = safeUrl(v.link) || '#';
+        a.target = '_blank'; a.rel = 'noopener';
+        const cover = safeUrl(v.cover || '');
+        a.innerHTML =
+          '<span class="shot">' +
+            (cover ? '<img src="' + esc(cover) + '" alt="" loading="lazy">' : '') +
+            '<span class="pv">' + esc(v.provider) + '</span>' +
+            '<span class="ply">&#9654;</span>' +
+          '</span>' +
+          '<span class="cap">' +
+            '<span class="ti">' + esc(v.title) + '</span>' +
+            '<span class="by">' + esc(v.by_name || v.by || '') + '</span>' +
+          '</span>';
+        rail.appendChild(a);
+      });
+    };
+
+    const mkTab = (label, who) => {
+      const b = document.createElement('button');
+      b.className = 'vid-tab'; b.type = 'button'; b.textContent = label;
+      b.addEventListener('click', () => {
+        [...tabs.children].forEach(c => c.classList.remove('on'));
+        b.classList.add('on');
+        draw(who);
+      });
+      tabs.appendChild(b);
+      return b;
+    };
+    const all = mkTab('All', null);
+    people.forEach(p => mkTab(p.name, p.key));
+    all.classList.add('on');
+    draw(null);
+  })();
 
   // ---- THE CATALOG ----
   // One spine for everything the house puts out. Films come from slate.releases,
