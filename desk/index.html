@@ -99,7 +99,13 @@
     // `videos` view is what rebuilds the host. The desk rebuilds it the same
     // way so he can watch a submission BEFORE approving it.
     const vidLink = v => {
-      const who = (members.find(x => x.id === v.submitted_by) || {}).card_slug || 'x';
+      // ⛔ NO `|| 'x'` fallback here. The public view builds the tiktok link as
+      // '...@' || card_slug || '/video/...', and card_slug is NULLABLE while
+      // Approve does not require one. NULL anywhere in that concat makes the
+      // WHOLE link null, so the public tile is dead. Masking it here made his
+      // preview look fine while the site was broken.
+      const who = (members.find(x => x.id === v.submitted_by) || {}).card_slug;
+      if (v.provider === 'tiktok' && !who) return '';
       if (v.provider === 'youtube')   return 'https://www.youtube.com/watch?v=' + v.vid;
       if (v.provider === 'tiktok')    return 'https://www.tiktok.com/@' + who + '/video/' + v.vid;
       if (v.provider === 'instagram') return 'https://www.instagram.com/reel/' + v.vid + '/';
@@ -264,7 +270,7 @@
             <div><b style="font-size:14px;font-style:normal;text-transform:none">${esc(v.title)}</b>
               <span class="meta"> · ${esc(v.provider)}</span>
               <div class="meta">from ${esc(nameOf(v.submitted_by))}
-                &nbsp;·&nbsp; <a href="${esc(vidLink(v))}" target="_blank" rel="noopener" style="color:var(--pink-glow)">watch it first</a></div></div>
+                ${vidLink(v) ? `&nbsp;·&nbsp; <a href="${esc(vidLink(v))}" target="_blank" rel="noopener" style="color:var(--pink-glow)">watch it first</a>` : '<span class="pill pulled">NO CARD SLUG, THIS TILE WILL BE DEAD</span>'}</div></div>
             <div class="row">
               <button class="btn ok sm" data-vd-ok="${v.id}" type="button">Approve</button>
               <button class="btn bad sm" data-vd-del="${v.id}" type="button">Toss</button>

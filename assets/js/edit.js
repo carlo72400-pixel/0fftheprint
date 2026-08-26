@@ -228,13 +228,15 @@
     /* THE WORD. The dedicated body editor already exists and is better than a
        popover for long markdown, so this routes there instead of duplicating it. */
     d.querySelectorAll('#desk .desk-item').forEach(function (el) {
-      var href = el.getAttribute('href') || '';
-      var m = /word\/([^\/]+)\//.exec(href);
-      if (!m) return;
       if (!admin) return;
-      pencil(el, 'Edit this story', function () {
-        location.href = 'desk/word/?s=' + encodeURIComponent(m[1]);
-      });
+      var href = el.getAttribute('href') || '';
+      if (!/^word\//.test(href)) return;
+      // ⛔ Do NOT parse a slug out of this href. An unbaked member story links
+      // to word/live/?s=<slug>, so /word\/([^\/]+)\// captures the literal
+      // "live". And desk/word/ has no ?s= handling at all: it builds its list
+      // from content/desk.json, so it can only ever open a BAKED catalog story.
+      // Send him to the list and let him pick.
+      pencil(el, 'Edit story bodies', function () { location.href = 'desk/word/'; });
     });
   }
 

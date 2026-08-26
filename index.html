@@ -41,7 +41,7 @@
 <script src="assets/js/desk.js?v=552a3c87" defer></script>
 <script src="assets/js/door.js?v=4fd82def" defer></script>
 <script src="assets/js/composer.js?v=51127ffa" defer></script>
-<script src="assets/js/edit.js?v=5b24a6d7" defer></script>
+<script src="assets/js/edit.js?v=dc98afdd" defer></script>
 <style>
   :root{
     --bg:#0a0a0d;
@@ -3886,6 +3886,18 @@
     ]);
     events = (ev && ev.items) || [];
 
+    // ⛔ THESE MUST LAND BEFORE THE OVERLAY BLOCK BELOW. They used to sit
+    // after it, which meant applyList() ran on an undefined `work`/`roster`
+    // and then every overlay result was overwritten by the raw JSON anyway.
+    // It passed every test only because the overrides table was empty:
+    // applyList returns early on no rows, so nothing threw until the first
+    // real pencil edit existed.
+    site = s || {};
+    creators = (c && c.items) || []; take = (t && t.items) || [];
+    rotation = (m && m.items) || []; desk = (d && d.items) || [];
+    roster = (r && r.items) || []; work = (w && w.items) || [];
+    slate = sl || {};
+
     // ---- SITE OVERRIDES (migration 014) ----
     // work.json / slate.json / roster.json are committed files, so the desk
     // edits an overlay and bake.py folds it back down later. The git file is
@@ -3953,11 +3965,6 @@
         window.__OTP_OVERRIDES = bySection;
       }
     } catch (e) { console.warn('overrides skipped:', e.message); }
-    site = s || {};
-    creators = (c && c.items) || []; take = (t && t.items) || [];
-    rotation = (m && m.items) || []; desk = (d && d.items) || [];
-    roster = (r && r.items) || []; work = (w && w.items) || [];
-    slate = sl || {};
   } catch (err) {
     console.error('Content load failed', err);
     document.body.innerHTML = '<div style="padding:40px;color:#fff;font-family:system-ui;text-align:center;">Content failed to load. Refresh, or DM <a href="https://instagram.com/vamppsych" style="color:#ff79c6;">@vamppsych</a>.</div>';
