@@ -1,11 +1,12 @@
 {
   "next": {
     "num": "0TP-002",
+    "kicker": "OUT THE HOUSE NOW",
     "title": "The Ink",
-    "line": "Smiley Onerr at Legion Ink. Day one is shot. The sit down is its own day.",
-    "status": "IN PRODUCTION",
+    "line": "Smiley Onerr at Legion Ink. Six cuts from the sit down, and he saw it before you did.",
+    "status": "OUT NOW",
     "art": "assets/card-ink-fullart.jpg",
-    "link": "#roster"
+    "link": "ink/"
   },
   "latest_drop": {
     "label": "LATEST DROP",

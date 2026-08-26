@@ -3640,7 +3640,7 @@
     smq.href = safeUrl(n.link) || '#roster';
     smq.style.backgroundImage = 'url("' + sized(safeUrl(n.art), 'card') + '")';
     smq.innerHTML = `
-      <div class="slate-kicker">NEXT OUT THE HOUSE &nbsp;·&nbsp; ${esc(n.num || '')}</div>
+      <div class="slate-kicker">${esc(n.kicker || 'NEXT OUT THE HOUSE')} &nbsp;·&nbsp; ${esc(n.num || '')}</div>
       <div class="slate-title">${esc(n.title || '')}</div>
       <div class="slate-line">${esc(n.line || '')}</div>
       <div class="slate-status">${esc(n.status || 'IN PRODUCTION')}</div>`;
