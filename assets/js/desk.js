@@ -710,6 +710,45 @@
     // Submit resolves title + cover through Spotify's oEmbed (CORS-open,
     // verified live). The DB stores the track id and a 40-hex cover key,
     // never a URL a member typed.
+    // Shared by submit AND swap so the two can never drift on what a Spotify
+    // link resolves to. Returns the id, the title and the 40-hex art key.
+    async resolveTrack(url) {
+      const id = OTP.trackId(url);
+      if (!id) throw new Error("That is not a Spotify track link.");
+      let meta;
+      try {
+        meta = await fetch("https://open.spotify.com/oembed?url=https://open.spotify.com/track/" + id)
+          .then(r => r.ok ? r.json() : null);
+      } catch (e) { meta = null; }
+      if (!meta || !meta.title) throw new Error("Could not read that track. Try again in a minute.");
+      const km = /\/image\/([a-f0-9]{40})$/.exec(meta.thumbnail_url || "");
+      return { id, title: NO_DASH(meta.title).slice(0, 60), artKey: km ? km[1] : null,
+               thumb: meta.thumbnail_url || null };
+    },
+
+    // Swap the song on a row you already own. Migration 016 added the update
+    // policy that made this possible at all, and its guard flips published to
+    // false whenever the track id changes, so a swap goes back to the desk.
+    // Changing only the artist does not unpublish it.
+    async updateTrack(id, { url, artist }) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const patch = {};
+      if (url !== undefined && String(url).trim()) {
+        const r = await OTP.resolveTrack(url);
+        patch.track = r.id; patch.title = r.title; patch.art_key = r.artKey;
+      }
+      if (artist !== undefined) patch.artist = NO_DASH(artist).trim().slice(0, 40) || "unknown";
+      if (!Object.keys(patch).length) return;
+      const { data, error } = await c.from("rotation_tracks")
+        .update(patch).eq("id", id).select("id,published");
+      if (error) {
+        if (error.code === "23505") throw new Error("That song is already on the shelf.");
+        throw error;
+      }
+      if (!data || !data.length) throw new Error("That one is not yours to change.");
+      return data[0];
+    },
+
     async submitTrack({ url, artist }) {
       const c = sb(); if (!c) throw new Error("Backend not configured yet.");
       const { data: { user } } = await c.auth.getUser();

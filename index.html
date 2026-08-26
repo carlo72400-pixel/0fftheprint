@@ -38,10 +38,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Pirata+One&family=Luckiest+Guy&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" defer></script>
 <script src="supabase-config.js?v=f1348482" defer></script>
-<script src="assets/js/desk.js?v=cdc6496c" defer></script>
+<script src="assets/js/desk.js?v=fe859136" defer></script>
 <script src="assets/js/door.js?v=4fd82def" defer></script>
 <script src="assets/js/composer.js?v=51127ffa" defer></script>
-<script src="assets/js/edit.js?v=feeab36d" defer></script>
+<script src="assets/js/edit.js?v=ad003429" defer></script>
 <style>
   :root{
     --bg:#0a0a0d;
@@ -3993,6 +3993,9 @@
         // the element the pencil was attached to.
         const base = v => String(v || '').split('/').pop();
         work   = applyList(work,   bySection.work,   it => base(it.src));
+        // rotation seeds key on the spotify id in their link, which survives a
+        // reorder and a retitle in a way an array index does not
+        rotation = applyList(rotation, bySection.rotation, it => parseSpotifyId(it.link) || '');
         roster = applyList(roster, bySection.roster, it => String(it.name || ''));
 
         // 'site' is in 014's CHECK but nothing used it: the hero kicker, the

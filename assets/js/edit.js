@@ -200,6 +200,49 @@
       });
     }
 
+    /* MUSIC SEEDS, desk only. The six hand-picked tracks live in
+       content/rotation.json and were git-only until migration 016 allowed a
+       'rotation' section in site_overrides. Paste a new Spotify link and the
+       tile swaps; the committed file stays the floor until bake.py folds it. */
+    if (admin) {
+      d.querySelectorAll('#music .track').forEach(function (el) {
+        var a = el.matches('a') ? el : el.querySelector('a[href*="open.spotify.com/track/"]');
+        var href = a ? a.getAttribute('href') || '' : '';
+        var m = /track\/([A-Za-z0-9]{22})/.exec(href);
+        if (!m) return;
+        var key = m[1];
+        pencil(el, 'Swap this track', function () {
+          var cur = overrideFor('rotation', key);
+          var p = (cur && cur.patch) || {};
+          var t = el.querySelector('.track-title'), ar = el.querySelector('.track-artist');
+          panel('ROTATION · ' + (t ? t.textContent : ''), [
+            { key: 'link', label: 'New Spotify link (leave blank to keep)', value: p.link || '' },
+            { key: 'title', label: 'Title', value: p.title != null ? p.title : (t ? t.textContent : '') },
+            { key: 'artist', label: 'Artist', value: p.artist != null ? p.artist : (ar ? ar.textContent : '') },
+            { key: 'hidden', label: 'Take it off the grid', type: 'check', value: !!(cur && cur.hidden) }
+          ], async function (v, say) {
+            var patch = {};
+            if (v.link && v.link.trim()) {
+              say('Reading the track…');
+              // same resolver submit uses, so a swapped seed cannot drift from
+              // what a member submission of the same link would produce
+              var r = await OTP.resolveTrack(v.link);
+              patch.link = 'https://open.spotify.com/track/' + r.id;
+              patch.title = r.title;
+              if (r.thumb) patch.art = r.thumb;
+              // a swapped seed is a different song, so the old preview mp3 and
+              // its start offset belong to a track that is no longer there
+              patch.preview = '';
+              patch.start = '';
+            }
+            if (v.title !== undefined && !patch.title) patch.title = v.title;
+            if (v.artist !== undefined) patch.artist = v.artist;
+            await OTP.setSiteOverride('rotation', key, patch, { hidden: !!v.hidden });
+          });
+        });
+      });
+    }
+
     /* MUSIC. Desk can pull or delete any live track; a member can withdraw
        their own. Seeds from rotation.json carry no id and are not touched. */
     try {

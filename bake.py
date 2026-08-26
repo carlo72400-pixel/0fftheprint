@@ -207,29 +207,39 @@ def bake_list(section, filename, key_of):
     doc = json.load(open(path))
     by_key = {o["item_key"]: o for o in rows}
     out, changed = [], 0
+    matched = set()
     for item in doc.get("items", []):
-        o = by_key.get(key_of(item))
+        k = key_of(item)                      # BEFORE the patch: a swap moves it
+        o = by_key.get(k)
         if not o:
             out.append(item)
             continue
+        matched.add(k)
         if o.get("hidden"):
             changed += 1
-            print(f"  {section} dropped: {key_of(item)}")
+            print(f"  {section} dropped: {k}")
             continue
         patch = o.get("patch") or {}
-        already = all(item.get(k) == v for k, v in patch.items())
+        already = all(item.get(kk) == v for kk, v in patch.items())
         if patch and not already:
             item = dict(item)
             item.update(patch)
             changed += 1
-            print(f"  {section} patched: {key_of(item) or ''} "
-                  f"({', '.join(sorted(patch))})")
+            print(f"  {section} patched: {k} ({', '.join(sorted(patch))})")
         elif patch and already:
             redundant.append((section, o["item_key"]))
         if o.get("sort") is not None:
             item = dict(item)
             item["_sort"] = o["sort"]
         out.append(item)
+    # An override whose key matches nothing is INERT: either it was baked and the
+    # bake changed the very field its key derives from (a swapped rotation seed
+    # rewrites its own link, so the key moves), or the item is gone from the
+    # file. It can never apply again, and left alone it sits on the desk looking
+    # like a live edit forever.
+    for o in rows:
+        if o["item_key"] not in matched:
+            redundant.append((section, o["item_key"] + "  (matches nothing in the file)"))
     if any("_sort" in i for i in out):
         out.sort(key=lambda i: i.get("_sort", 0))
         for i in out:
@@ -245,6 +255,13 @@ def bake_list(section, filename, key_of):
 if site_ovs:
     bake_list("work", "work.json", lambda it: _base(it.get("src")))
     bake_list("roster", "roster.json", lambda it: str(it.get("name") or ""))
+
+    # rotation seeds key on the spotify id inside their link, matching
+    # parseSpotifyId on the page and the pencil in edit.js
+    def _sp(link):
+        m = re.search(r"(?:track/|spotify:track:)([A-Za-z0-9]{22})", str(link or ""))
+        return m.group(1) if m else ""
+    bake_list("rotation", "rotation.json", lambda it: _sp(it.get("link")))
 
     # site.json is flat key/value, not a list of items: item_key IS the field
     # name and patch.value is the new value. ticker_headlines is stored
