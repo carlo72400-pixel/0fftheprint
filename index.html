@@ -862,22 +862,58 @@
   .track-platform.spotify{color:#1ed760;}
   .track-platform.youtube{color:#ff0033;}
   .track-platform.soundcloud{color:#ff7700;}
+  /* ⛔ The title used to sit ON the cover with only a scrim under it. Most of
+     this roster's covers have their own big bottom-set type, so "YOU TRIED IT"
+     printed twice, offset, in two weights, and read as a rendering fault. The
+     text lives under the art now, same shape as the drops rail. The art keeps
+     its own square and nothing competes with it. */
+  .track{aspect-ratio:auto;}
+  .track-shot{position:relative;display:block;aspect-ratio:1/1;overflow:hidden;background:#0d0c11;}
   .track-info{
-    position:absolute;left:12px;right:12px;bottom:12px;z-index:4;
-    pointer-events:none;
+    padding:10px 12px 12px;
+    background:var(--panel);
+    border-top:1px solid var(--line);
   }
+  .track-info,.track-title,.track-artist,.track-by{display:block;}
   .track-title{
     font-family:var(--f-display);font-style:italic;font-weight:900;
     font-size:16px;line-height:1.05;letter-spacing:-.01em;
-    text-transform:uppercase;color:#fff;
-    text-shadow:0 2px 8px rgba(0,0,0,.8);
+    text-transform:uppercase;color:var(--ink);
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
   }
   .track-artist{
     margin-top:3px;
     font-family:var(--f-mono);font-size:10px;letter-spacing:.18em;
     text-transform:uppercase;color:var(--pink);
-    text-shadow:0 1px 4px rgba(0,0,0,.7);
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
   }
+  /* who put it on. The rotation view has always returned `by` and nothing
+     ever rendered it, so an approved member track looked like a house pick. */
+  .track-by{
+    margin-top:5px;
+    font-family:var(--f-mono);font-size:8.5px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--muted);
+  }
+  .track-by b{color:var(--pink-glow);font-weight:500;}
+  /* A REAL play control. The preview was hover-only and bailed on touch
+     (`if (!tPrev || TOUCH) return`), so every phone got silence even on the
+     seeds that do carry a preview. This works on both, and it is a button so
+     tapping it never follows the tile's link to Spotify. */
+  .track-play{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:54px;height:54px;border-radius:50%;cursor:pointer;z-index:5;
+    background:rgba(10,10,13,.66);border:1px solid var(--pink-deep);
+    color:var(--pink-glow);font-size:17px;line-height:1;padding:0 0 0 3px;
+    display:flex;align-items:center;justify-content:center;
+    backdrop-filter:blur(6px);
+    opacity:0;transition:opacity .2s,background .2s,transform .2s;
+  }
+  .track:hover .track-play,.track-play.on,.track-play:focus-visible{opacity:1;}
+  .track-play:hover{background:var(--pink-glow);color:#0a0a0d;}
+  .track-play.on{background:var(--pink-glow);color:#0a0a0d;padding-left:0;}
+  /* Touch has no hover, so the control has to be visible at rest or it does
+     not exist on a phone. */
+  @media (hover:none){ .track-play{opacity:1;} }
   .track-hint{
     position:absolute;top:10px;right:10px;
     font-family:var(--f-mono);font-size:8px;letter-spacing:.22em;
@@ -4431,24 +4467,32 @@
       const tArt  = safeUrl(entry.art);
       tile.href = tLink || '#';
       if (/^https?:\/\//.test(tLink)) { tile.target = '_blank'; tile.rel = 'noopener'; }
+      const tPrev0 = safeUrl(entry.preview);
       tile.innerHTML = `
-        <div class="track-art${tArt ? '' : ' no-art'}">${tArt ? '' : `<span class="track-mark">${esc((entry.artist||'').slice(0,3))}</span>`}</div>
-        <div class="track-platform ${esc(entry.platform)}">${esc(labels[entry.platform] || entry.platform)}</div>
-        <div class="track-hint">${entry.preview ? 'hover · move to center for volume' : (entry.start ? 'opens at ' + Math.floor(entry.start/60) + ':' + String(entry.start%60).padStart(2,'0') : 'click to open')}</div>
-        <div class="track-info">
-          <div class="track-title">${esc(entry.title)}</div>
-          <div class="track-artist">${esc(entry.artist)}</div>
-        </div>`;
+        <span class="track-shot">
+          <span class="track-art${tArt ? '' : ' no-art'}">${tArt ? '' : `<span class="track-mark">${esc((entry.artist||'').slice(0,3))}</span>`}</span>
+          <span class="track-platform ${esc(entry.platform)}">${esc(labels[entry.platform] || entry.platform)}</span>
+          <span class="track-hint">${tPrev0 ? 'preview' : (entry.start ? 'opens at ' + Math.floor(entry.start/60) + ':' + String(entry.start%60).padStart(2,'0') : 'opens in ' + esc(labels[entry.platform] || 'the app'))}</span>
+          ${tPrev0 ? '<button class="track-play" type="button" aria-label="Play a preview of ' + esc(entry.title) + '">&#9654;</button>' : ''}
+        </span>
+        <span class="track-info">
+          <span class="track-title">${esc(entry.title)}</span>
+          <span class="track-artist">${esc(entry.artist)}</span>
+          ${entry.by ? `<span class="track-by">put on by <b>${esc(entry.by)}</b></span>` : ''}
+        </span>`;
       // Art through the CSSOM, never an inline style attribute. Same reason as the
       // timeline avatars: entities decode before CSS parses, so an escaped quote
       // still breaks out of url().
       if (tArt) tile.querySelector('.track-art').style.backgroundImage = 'url("' + sized(tArt, 'thumb') + '")';
       rMount.appendChild(tile);
 
-      // TOUCH devices never fire the hover that plays this, so building the Audio
-      // there is pure waste on the phones most of this traffic is on.
+      // ⛔ This used to be `if (!tPrev || TOUCH) return`, which meant every
+      // phone got silence even on the seeds that DO carry a preview, on a
+      // section whose whole point is hearing something. The play button works
+      // on both, and the hover-volume trick stays as a desktop extra.
       const tPrev = safeUrl(entry.preview);
-      if (!tPrev || TOUCH) return;
+      if (!tPrev) return;
+      const playBtn = tile.querySelector('.track-play');
       const audio = new Audio(tPrev);
       audio.loop = true;
       audio.preload = 'metadata';
@@ -4465,15 +4509,56 @@
         const dist = Math.min(1, Math.hypot(dx, dy));
         audio.volume = Math.pow(Math.max(0, 1 - dist), 1.6);
       };
+      // one at a time, everywhere
+      const stopOthers = () => {
+        if (activeAudio && activeAudio !== audio) {
+          activeAudio.pause(); activeAudio.currentTime = 0; activeAudio.volume = 0;
+          if (activeAudio._btn) { activeAudio._btn.classList.remove('on'); activeAudio._btn.innerHTML = '&#9654;'; }
+        }
+      };
+      audio._btn = playBtn;
+      audio.addEventListener('ended', () => {
+        if (playBtn) { playBtn.classList.remove('on'); playBtn.innerHTML = '&#9654;'; }
+      });
+
+      if (playBtn) {
+        playBtn.addEventListener('click', ev => {
+          // it lives inside an <a> to Spotify, so this must not navigate
+          ev.preventDefault(); ev.stopPropagation();
+          stopFade();
+          if (!audio.paused) {
+            audio.pause(); audio.currentTime = 0;
+            playBtn.classList.remove('on'); playBtn.innerHTML = '&#9654;';
+            if (activeAudio === audio) activeAudio = null;
+            return;
+          }
+          stopOthers();
+          activeAudio = audio;
+          audio.volume = 1;                     // tapped on purpose, so full volume
+          playBtn.classList.add('on'); playBtn.innerHTML = '&#10073;&#10073;';
+          audio.play().catch(() => {
+            playBtn.classList.remove('on'); playBtn.innerHTML = '&#9654;';
+          });
+        });
+      }
+
+      // The hover-volume trick is a desktop bonus. It must not fight a preview
+      // the visitor deliberately started with the button.
+      if (TOUCH) return;
       tile.addEventListener('mouseenter', e => {
         stopFade();
-        if (activeAudio && activeAudio !== audio) { activeAudio.pause(); activeAudio.currentTime = 0; activeAudio.volume = 0; }
+        if (playBtn && playBtn.classList.contains('on')) return;
+        stopOthers();
         activeAudio = audio;
         upd(e.clientX, e.clientY);
         audio.play().catch(() => {});
       });
-      tile.addEventListener('mousemove', e => upd(e.clientX, e.clientY));
+      tile.addEventListener('mousemove', e => {
+        if (playBtn && playBtn.classList.contains('on')) return;
+        upd(e.clientX, e.clientY);
+      });
       tile.addEventListener('mouseleave', () => {
+        if (playBtn && playBtn.classList.contains('on')) return;
         stopFade();
         fadeTimer = setInterval(() => {
           audio.volume = Math.max(0, audio.volume - 0.12);
