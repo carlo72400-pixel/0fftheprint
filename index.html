@@ -41,6 +41,7 @@
 <script src="assets/js/desk.js?v=552a3c87" defer></script>
 <script src="assets/js/door.js?v=4fd82def" defer></script>
 <script src="assets/js/composer.js?v=51127ffa" defer></script>
+<script src="assets/js/edit.js?v=4b2b4deb" defer></script>
 <style>
   :root{
     --bg:#0a0a0d;
@@ -502,6 +503,76 @@
     letter-spacing:.32em;text-transform:uppercase;flex-shrink:0;
     padding-bottom:4px;
   }
+
+  /* ---- EDIT MODE (assets/js/edit.js). Only painted for a signed-in member,
+     and only ever decides what to DRAW. RLS decides what may be written. ---- */
+  #edm-toggle{
+    position:fixed;right:16px;bottom:16px;z-index:120;
+    font-family:var(--f-mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;
+    color:var(--muted);background:rgba(10,10,13,.9);border:1px solid var(--line);
+    border-radius:999px;padding:10px 16px;cursor:pointer;backdrop-filter:blur(8px);
+    transition:color .18s,border-color .18s,background .18s;
+  }
+  #edm-toggle:hover{color:var(--ink);border-color:var(--pink-deep);}
+  #edm-toggle.on{color:#0a0a0d;background:var(--pink-glow);border-color:var(--pink-glow);}
+  .edm-pen{
+    position:absolute;top:8px;right:8px;z-index:40;
+    width:30px;height:30px;border-radius:50%;cursor:pointer;
+    background:rgba(10,10,13,.86);border:1px solid var(--pink-deep);color:var(--pink-glow);
+    font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center;
+    padding:0;
+  }
+  .edm-pen:hover{background:var(--pink-glow);color:#0a0a0d;}
+  body.editing [data-src="roster"],
+  body.editing .work-item,
+  body.editing .track,
+  body.editing .desk-item,
+  body.editing #slate-marquee{outline:1px dashed rgba(255,121,198,.45);outline-offset:2px;}
+  .edm-back{
+    position:fixed;inset:0;z-index:200;background:rgba(6,6,9,.82);
+    display:flex;align-items:center;justify-content:center;padding:20px;
+    backdrop-filter:blur(3px);
+  }
+  .edm{
+    width:min(520px,100%);max-height:86vh;overflow:auto;
+    background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    box-shadow:0 24px 70px rgba(0,0,0,.6);
+  }
+  .edm-h{
+    font-family:var(--f-mono);font-size:10px;letter-spacing:.26em;text-transform:uppercase;
+    color:var(--pink-glow);padding:16px 18px;border-bottom:1px solid var(--line);
+  }
+  .edm-b{padding:16px 18px;display:grid;gap:13px;}
+  .edm-l{
+    display:block;font-family:var(--f-mono);font-size:9px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--muted);
+  }
+  .edm-l input,.edm-l textarea{
+    display:block;width:100%;margin-top:6px;box-sizing:border-box;
+    background:#0f0e14;border:1px solid var(--line);border-radius:8px;
+    color:var(--ink);font-family:var(--f-body,inherit);font-size:14px;padding:9px 11px;
+    letter-spacing:normal;text-transform:none;resize:vertical;
+  }
+  .edm-l input:focus,.edm-l textarea:focus{outline:none;border-color:var(--pink-deep);}
+  .edm-c{
+    display:flex;align-items:center;gap:9px;font-size:13px;color:var(--ink);cursor:pointer;
+  }
+  .edm-msg{
+    margin:0 18px;font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;
+    color:var(--pink-glow);
+  }
+  .edm-msg.bad{color:#ff6b6b;}
+  .edm-f{
+    display:flex;justify-content:flex-end;gap:9px;padding:16px 18px;
+    border-top:1px solid var(--line);margin-top:4px;
+  }
+  .edm-f button{
+    font-family:var(--f-mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+    border-radius:999px;padding:9px 16px;cursor:pointer;border:1px solid var(--line);
+    background:transparent;color:var(--muted);
+  }
+  .edm-f .edm-s{background:var(--pink-glow);border-color:var(--pink-glow);color:#0a0a0d;}
+  .edm-f button:disabled{opacity:.5;cursor:default;}
 
   /* ---- FEATURED VIDEOS: members paste links, each one gets their own tab ---- */
   .vid-tabs{
@@ -3805,6 +3876,51 @@
       grabEvents(),
     ]);
     events = (ev && ev.items) || [];
+
+    // ---- SITE OVERRIDES (migration 014) ----
+    // work.json / slate.json / roster.json are committed files, so the desk
+    // edits an overlay and bake.py folds it back down later. The git file is
+    // always the render floor: an empty table changes nothing, and a failed
+    // fetch costs the overlay only, never the page.
+    try {
+      if (window.OTP && OTP.configured) {
+        const ov = await OTP.siteOverrides();
+        const bySection = {};
+        (ov || []).forEach(o => { (bySection[o.section] = bySection[o.section] || []).push(o); });
+
+        const applyList = (list, rows, keyOf) => {
+          if (!rows || !rows.length) return list;
+          const map = {};
+          rows.forEach(r => { map[r.item_key] = r; });
+          return list
+            .filter(it => { const r = map[keyOf(it)]; return !(r && r.hidden); })
+            .map(it => {
+              const r = map[keyOf(it)];
+              return r ? Object.assign({}, it, r.patch || {}) : it;
+            })
+            .sort((a, b) => {
+              const ra = map[keyOf(a)], rb = map[keyOf(b)];
+              const sa = ra && ra.sort != null ? ra.sort : 0;
+              const sb = rb && rb.sort != null ? rb.sort : 0;
+              return sa - sb;
+            });
+        };
+
+        // key on the BASENAME. work.json stores assets/work/x.jpg but derive.py
+        // renders assets/grid/work/x.jpg, so a full-path key would never match
+        // the element the pencil was attached to.
+        const base = v => String(v || '').split('/').pop();
+        work   = applyList(work,   bySection.work,   it => base(it.src));
+        roster = applyList(roster, bySection.roster, it => String(it.name || ''));
+
+        const sl0 = (bySection.slate || []).find(r => r.item_key === '');
+        if (sl0) {
+          if (sl0.hidden) slate = {};
+          else if (slate.next) slate = Object.assign({}, slate, { next: Object.assign({}, slate.next, sl0.patch || {}) });
+        }
+        window.__OTP_OVERRIDES = bySection;
+      }
+    } catch (e) { console.warn('overrides skipped:', e.message); }
     site = s || {};
     creators = (c && c.items) || []; take = (t && t.items) || [];
     rotation = (m && m.items) || []; desk = (d && d.items) || [];

@@ -21,6 +21,7 @@ ROOT = pathlib.Path(__file__).resolve().parent
 
 # script path (relative to ROOT)  ->  how it appears in src="..."
 TRACKED = ["assets/js/desk.js", "assets/js/door.js", "assets/js/composer.js",
+           "assets/js/edit.js",
            "assets/js/word.js", "supabase-config.js"]
 
 # every document that loads them
