@@ -1,6 +1,15 @@
 {
   "items": [
     {
+      "slug": "2026-08-25-the-mix",
+      "title": "Resident Evil vs Silent Hill",
+      "venue": "The Mix",
+      "date": "2026-08-25",
+      "date_short": "08.25.26",
+      "count": 42,
+      "cover": "2026-08-25-the-mix/media/001_t.jpg"
+    },
+    {
       "slug": "2026-08-23-the-showcase",
       "title": "The Showcase",
       "venue": "The Mix",
