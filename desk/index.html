@@ -48,7 +48,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="../supabase-config.js?v=f1348482"></script>
-<script src="../assets/js/desk.js?v=552a3c87"></script>
+<script src="../assets/js/desk.js?v=cdc6496c"></script>
 <script>
 (async () => {
   const $ = id => document.getElementById(id);
@@ -98,6 +98,32 @@
     // videosAll reads the raw table, which has no link column: the public
     // `videos` view is what rebuilds the host. The desk rebuilds it the same
     // way so he can watch a submission BEFORE approving it.
+    // An approved story used to be frozen: updateMyStory's RLS refuses a
+    // published row, and nothing else could write one. This is the desk half.
+    const storyEditor = x => `
+      <div class="seed-editor" id="st-${x.id}" style="display:none;margin-top:10px;width:100%">
+        <input type="text" id="st-t-${x.id}" value="${esc(x.title || '')}" maxlength="120"
+          style="width:100%;background:#0d0d12;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px;font-size:15px;min-height:44px">
+        <input type="text" id="st-d-${x.id}" value="${esc(x.dek || '')}" maxlength="200"
+          style="width:100%;background:#0d0d12;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px;font-size:15px;min-height:44px;margin-top:8px">
+        <textarea id="st-b-${x.id}"
+          style="width:100%;min-height:220px;background:#0d0d12;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px;font-size:14px;margin-top:8px">${esc(x.body_md || '')}</textarea>
+        <div class="acts">
+          <button class="btn ok sm" data-st-save="${x.id}" type="button">Save</button>
+          <button class="btn ghost sm" data-st-cancel="${x.id}" type="button">Cancel</button>
+        </div>
+      </div>`;
+
+    const vidEditor = v => `
+      <div class="seed-editor" id="vd-${v.id}" style="display:none;margin-top:10px;width:100%">
+        <input type="text" id="vd-t-${v.id}" value="${esc(v.title || '')}" maxlength="80"
+          style="width:100%;background:#0d0d12;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px;font-size:15px;min-height:44px">
+        <div class="acts">
+          <button class="btn ok sm" data-vd-save="${v.id}" type="button">Save</button>
+          <button class="btn ghost sm" data-vd-cancel="${v.id}" type="button">Cancel</button>
+        </div>
+      </div>`;
+
     const vidLink = v => {
       // ⛔ NO `|| 'x'` fallback here. The public view builds the tiktok link as
       // '...@' || card_slug || '/video/...', and card_slug is NULLABLE while
@@ -199,19 +225,23 @@
               <div class="meta" style="text-transform:none;letter-spacing:0">${esc(x.dek)}
                 &nbsp;<a href="../word/live/?s=${esc(x.slug)}" target="_blank" rel="noopener" style="color:var(--pink-glow)">read it &rarr;</a></div></div>
             <div class="row">
+              <button class="btn ghost sm" data-st-edit="${x.id}" type="button">Edit</button>
               <button class="btn ok sm" data-st-ok="${x.id}" type="button">Approve</button>
               <button class="btn bad sm" data-st-del="${x.id}" type="button">Toss</button>
             </div>
+            ${storyEditor(x)}
           </div>`).join('')}
         ${storyLive.map(x => `
           <div class="person">
             <div><b style="font-size:14px;font-style:normal;text-transform:none">${esc(x.title)}</b>
               <span class="meta"> STORY · LIVE, unbaked</span></div>
             <div class="row">
+              <button class="btn ghost sm" data-st-edit="${x.id}" type="button">Edit</button>
               <button class="btn ghost sm" data-st-pull="${x.id}" type="button">Pull</button>
               <button class="btn ok sm" data-st-baked="${x.id}" type="button">Baked</button>
               <button class="btn bad sm" data-st-del="${x.id}" type="button">Delete</button>
             </div>
+            ${storyEditor(x)}
           </div>`).join('')}
         ${wordPending.map(e => `
           <div class="person">
@@ -267,27 +297,33 @@
           Feature puts one at the front of the rail. Pull takes it off the site but keeps the row.</div>
         ${vidPending.map(v => `
           <div class="person">
+            ${v.cover_url ? `<div class="pthumb" data-bg="${esc(v.cover_url)}"></div>` : ''}
             <div><b style="font-size:14px;font-style:normal;text-transform:none">${esc(v.title)}</b>
               <span class="meta"> · ${esc(v.provider)}</span>
               <div class="meta">from ${esc(nameOf(v.submitted_by))}
                 ${vidLink(v) ? `&nbsp;·&nbsp; <a href="${esc(vidLink(v))}" target="_blank" rel="noopener" style="color:var(--pink-glow)">watch it first</a>` : '<span class="pill pulled">NO CARD SLUG, THIS TILE WILL BE DEAD</span>'}</div></div>
             <div class="row">
+              <button class="btn ghost sm" data-vd-edit="${v.id}" type="button">Edit</button>
               <button class="btn ok sm" data-vd-ok="${v.id}" type="button">Approve</button>
               <button class="btn bad sm" data-vd-del="${v.id}" type="button">Toss</button>
             </div>
+            ${vidEditor(v)}
           </div>`).join('') || '<div class="meta" style="margin-top:8px">Nothing waiting.</div>'}
         ${vidLive.length ? vidLive.map(v => `
           <div class="person gone-ok">
+            ${v.cover_url ? `<div class="pthumb" data-bg="${esc(v.cover_url)}"></div>` : ''}
             <div><b style="font-size:14px;font-style:normal;text-transform:none">${esc(v.title)}</b>
-              <span class="meta"> · ${esc(v.provider)} · UP${v.featured ? '' : ''}</span>
+              <span class="meta"> · ${esc(v.provider)} · UP</span>
               ${v.featured ? '<span class="pill ok">FEATURED</span>' : ''}
               <div class="meta">${esc(nameOf(v.submitted_by))}
                 &nbsp;·&nbsp; <a href="${esc(vidLink(v))}" target="_blank" rel="noopener" style="color:var(--muted)">open</a></div></div>
             <div class="row">
+              <button class="btn ghost sm" data-vd-edit="${v.id}" type="button">Edit</button>
               <button class="btn ghost sm" data-vd-feat="${v.id}" data-on="${v.featured ? '1' : ''}" type="button">${v.featured ? 'Unfeature' : 'Feature'}</button>
               <button class="btn ghost sm" data-vd-pull="${v.id}" type="button">Pull</button>
               <button class="btn bad sm" data-vd-del="${v.id}" type="button">Delete</button>
             </div>
+            ${vidEditor(v)}
           </div>`).join('') : ''}
       </div>
 
@@ -302,6 +338,9 @@
               <div class="meta">${o.hidden ? 'HIDDEN' : esc(Object.keys(o.patch || {}).join(', ') || 'no fields')}
                 &nbsp;·&nbsp; ${when(o.updated_at)}</div></div>
             <div class="row">
+              ${o.item_key ? `
+                <button class="btn ghost sm" data-so-move="${esc(o.section)}|${esc(o.item_key)}|up" type="button">&uarr;</button>
+                <button class="btn ghost sm" data-so-move="${esc(o.section)}|${esc(o.item_key)}|down" type="button">&darr;</button>` : ''}
               <button class="btn ghost sm" data-so-clear="${esc(o.section)}|${esc(o.item_key || '')}" type="button">Back to the file</button>
             </div>
           </div>`).join('') : '<div class="meta" style="margin-top:8px">Nothing overridden. The site is running straight off git.</div>'}
@@ -456,6 +495,54 @@
     panel.querySelectorAll('[data-so-clear]').forEach(b => b.onclick = rerun(b => {
       const [section, key] = String(b.dataset.soClear).split('|');
       return OTP.clearSiteOverride(section, key || '');
+    }));
+
+    // Reorder. `sort` was already accepted by setSiteOverride, consumed by the
+    // homepage sorter AND folded down by bake.py, and nothing ever wrote it.
+    // Renumber the whole section on every tap so there are never gaps or ties.
+    panel.querySelectorAll('[data-so-move]').forEach(b => b.onclick = rerun(async b => {
+      const [section, key, dir] = String(b.dataset.soMove).split('|');
+      const rows = siteOvs.filter(o => o.section === section)
+        .slice().sort((x, y) => (x.sort == null ? 0 : x.sort) - (y.sort == null ? 0 : y.sort));
+      const i = rows.findIndex(o => o.item_key === key);
+      const j = dir === 'up' ? i - 1 : i + 1;
+      if (i < 0 || j < 0 || j >= rows.length) return;
+      const t = rows[i]; rows[i] = rows[j]; rows[j] = t;
+      for (let n = 0; n < rows.length; n++) {
+        await OTP.setSiteOverride(rows[n].section, rows[n].item_key, rows[n].patch || {},
+          { hidden: !!rows[n].hidden, sort: n });
+      }
+    }));
+
+    // Story editor, the gap between Approve and bake.
+    panel.querySelectorAll('[data-st-edit]').forEach(b => b.onclick = () => {
+      const box = document.getElementById('st-' + b.dataset.stEdit);
+      if (box) box.style.display = box.style.display === 'none' ? 'block' : 'none';
+    });
+    panel.querySelectorAll('[data-st-cancel]').forEach(b => b.onclick = () => {
+      const box = document.getElementById('st-' + b.dataset.stCancel);
+      if (box) box.style.display = 'none';
+    });
+    panel.querySelectorAll('[data-st-save]').forEach(b => b.onclick = rerun(b => {
+      const id = b.dataset.stSave;
+      return OTP.updateStory(id, {
+        title: document.getElementById('st-t-' + id).value,
+        dek:   document.getElementById('st-d-' + id).value,
+        body:  document.getElementById('st-b-' + id).value,
+      });
+    }));
+
+    panel.querySelectorAll('[data-vd-edit]').forEach(b => b.onclick = () => {
+      const box = document.getElementById('vd-' + b.dataset.vdEdit);
+      if (box) box.style.display = box.style.display === 'none' ? 'block' : 'none';
+    });
+    panel.querySelectorAll('[data-vd-cancel]').forEach(b => b.onclick = () => {
+      const box = document.getElementById('vd-' + b.dataset.vdCancel);
+      if (box) box.style.display = 'none';
+    });
+    panel.querySelectorAll('[data-vd-save]').forEach(b => b.onclick = rerun(b => {
+      const id = b.dataset.vdSave;
+      return OTP.updateVideo(id, { title: document.getElementById('vd-t-' + id).value });
     }));
     panel.querySelectorAll('[data-ok]').forEach(b => b.onclick = rerun(b => OTP.setApproved(b.dataset.ok, true)));
     panel.querySelectorAll('[data-okcard]').forEach(b => b.onclick = rerun(async b => {

@@ -122,9 +122,12 @@
             { key: 'alt', label: 'Alt text', value: p.alt || (img ? img.alt : '') },
             { key: 'hidden', label: 'Hide this frame', type: 'check', value: !!(cur && cur.hidden) }
           ], async function (v) {
+            // !== undefined, not truthiness: a falsy check let him rewrite a
+            // caption but never delete one, and the only escape was clearing the
+            // whole override. bake.py already handles an empty-string patch.
             var patch = {};
-            if (v.label) patch.label = v.label;
-            if (v.alt) patch.alt = v.alt;
+            if (v.label !== undefined) patch.label = v.label;
+            if (v.alt !== undefined) patch.alt = v.alt;
             await OTP.setSiteOverride('work', key, patch, { hidden: !!v.hidden });
           });
         });
@@ -145,7 +148,7 @@
           { key: 'hidden', label: 'Hide the slate entirely', type: 'check', value: !!(cur && cur.hidden) }
         ], async function (v) {
           var patch = {};
-          ['kicker', 'title', 'line', 'status', 'link'].forEach(function (k) { if (v[k]) patch[k] = v[k]; });
+          ['kicker', 'title', 'line', 'status', 'link'].forEach(function (k) { if (v[k] !== undefined) patch[k] = v[k]; });
           await OTP.setSiteOverride('slate', '', patch, { hidden: !!v.hidden });
         });
       });
@@ -190,7 +193,7 @@
             { key: 'hidden', label: 'Hide from the roster', type: 'check', value: !!(cur && cur.hidden) }
           ], async function (v) {
             var patch = {};
-            ['flavor', 'lore', 'pending_stamp'].forEach(function (k) { if (v[k]) patch[k] = v[k]; });
+            ['flavor', 'lore', 'pending_stamp'].forEach(function (k) { if (v[k] !== undefined) patch[k] = v[k]; });
             await OTP.setSiteOverride('roster', nm, patch, { hidden: !!v.hidden });
           });
         });

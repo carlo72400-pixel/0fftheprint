@@ -99,7 +99,7 @@
 
 <script src="../supabase-config.js?v=f1348482"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="../assets/js/desk.js?v=552a3c87" defer></script>
+<script src="../assets/js/desk.js?v=cdc6496c" defer></script>
 <script defer>
 document.addEventListener('DOMContentLoaded', async () => {
   const $ = id => document.getElementById(id);
@@ -180,22 +180,27 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
 
   // ---- everything waiting, everything live --------------------------------
-  const [stories, tracks, entries, posts] = await Promise.all([
+  const [stories, tracks, entries, posts, vids] = await Promise.all([
     OTP.myStories ? OTP.myStories().catch(() => []) : [],
     OTP.myRotation ? OTP.myRotation().catch(() => []) : [],
     OTP.myEntriesAll ? OTP.myEntriesAll().catch(() => []) : [],
     OTP.myPosts ? OTP.myPosts(3).catch(() => []) : [],
+    OTP.myVideos ? OTP.myVideos().catch(() => []) : [],
   ]);
 
   const waiting = [
     ...stories.filter(x => !x.published).map(x => ({ kind: 'STORY', label: x.title, wd: () => OTP.withdrawStory(x.id), href: '../word/new/' })),
     ...tracks.filter(x => !x.published).map(x => ({ kind: 'SONG', label: x.title + ' · ' + x.artist, wd: () => OTP.withdrawTrack(x.id) })),
     ...entries.filter(x => !x.published).map(x => ({ kind: 'ENTRY', label: 'on ' + x.story_slug + ': ' + x.text.slice(0, 40), wd: () => OTP.withdrawEntry(x.id) })),
+    // there is no withdrawVideo: the RLS delete policy already refuses a
+    // published row, so deleteVideo IS the withdraw for an unpublished one
+    ...vids.filter(x => !x.published).map(x => ({ kind: 'VIDEO', label: x.title + ' · ' + x.provider, wd: () => OTP.deleteVideo(x.id), href: '../compose/' })),
   ];
   const live = [
     ...stories.filter(x => x.published).map(x => ({ kind: x.baked ? 'STORY · IN THE CATALOG' : 'STORY', label: x.title, href: '../word/live/?s=' + encodeURIComponent(x.slug), gold: x.baked })),
     ...tracks.filter(x => x.published).map(x => ({ kind: 'ON ROTATION', label: x.title + ' · ' + x.artist, href: '../#music' })),
     ...entries.filter(x => x.published).map(x => ({ kind: 'ENTRY', label: 'on ' + x.story_slug, href: '../word/' + x.story_slug + '/' })),
+    ...vids.filter(x => x.published).map(x => ({ kind: x.featured ? 'ON THE REEL · FEATURED' : 'ON THE REEL', label: x.title + ' · ' + x.provider, href: '../#videos', gold: x.featured })),
   ];
 
   if (waiting.length) {

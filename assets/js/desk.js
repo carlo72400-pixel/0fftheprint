@@ -503,7 +503,7 @@
     async deskStories() {
       const c = sb(); if (!c) throw new Error("Backend not configured yet.");
       const { data, error } = await c.from("member_stories")
-        .select("id,slug,title,dek,published,baked,created_at, profiles(display_name)")
+        .select("id,slug,title,dek,body_md,published,baked,created_at, profiles(display_name)")
         .order("created_at", { ascending: false }).limit(50);
       if (error) throw error;
       return data || [];
@@ -523,6 +523,36 @@
       const { error } = await c.from("member_stories")
         .update({ baked: true }).eq("id", id);
       if (error) throw error;
+    },
+
+    // The desk's story editor. updateMyStory is author-scoped and its RLS
+    // refuses a PUBLISHED row ("That one is live. Edits go through the desk
+    // now."), so once a story was approved NOBODY could fix a typo in it. This
+    // is the "through the desk" half that message always promised.
+    async updateStory(id, { title, dek, body }) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const patch = {};
+      if (title !== undefined) patch.title = NO_DASH(title).trim();
+      if (dek !== undefined) patch.dek = NO_DASH(dek).trim();
+      if (body !== undefined) {
+        if (/^!\[/m.test(body || "")) throw new Error("Images inside the story are not a thing yet. One cover photo is.");
+        patch.body_md = NO_DASH(body);
+      }
+      const { data, error } = await c.from("member_stories")
+        .update(patch).eq("id", id).select("id");
+      if (error) throw error;
+      if (!data || !data.length) throw new Error("Could not write that story.");
+    },
+
+    async updateVideo(id, { title, coverUrl }) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const patch = {};
+      if (title !== undefined) patch.title = NO_DASH(title).trim().slice(0, 80);
+      if (coverUrl !== undefined) patch.cover_url = coverUrl || null;
+      const { data, error } = await c.from("featured_videos")
+        .update(patch).eq("id", id).select("id");
+      if (error) throw error;
+      if (!data || !data.length) throw new Error("Could not write that video.");
     },
 
     async deleteStory(id) {
@@ -628,8 +658,19 @@
 
     async deleteVideo(id) {
       const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      // Read the cover FIRST. 014 has no orphan trigger (002's is posts-only),
+      // so a bare row delete left the cover in the 1GB posts bucket forever.
+      let key = null;
+      try {
+        const { data } = await c.from("featured_videos")
+          .select("cover_url").eq("id", id).maybeSingle();
+        key = data ? objectName(data.cover_url) : null;   // the same parser posts use
+      } catch (e) { /* the row still has to go */ }
       const { error } = await c.from("featured_videos").delete().eq("id", id);
       if (error) throw error;
+      // Best effort: the row is already gone, so a failed unlink must not throw
+      // back at the desk. It just leaves one file, same as the orphan card.
+      if (key) { try { await c.storage.from("posts").remove([key]); } catch (e) {} }
     },
 
     // ---- SITE OVERRIDES, the front-page CMS (migration 014) ---------------
