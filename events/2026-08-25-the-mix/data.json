@@ -4,7 +4,7 @@
   "venue": "The Mix",
   "date": "2026-08-25",
   "date_short": "08.25.26",
-  "count": 42,
+  "count": 38,
   "media": [
     {
       "type": "photo",
@@ -168,22 +168,6 @@
     },
     {
       "type": "photo",
-      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-25-the-mix/021.jpg",
-      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-25-the-mix/021_full.jpg",
-      "thumb": "media/021_t.jpg",
-      "w": 1440,
-      "h": 2560
-    },
-    {
-      "type": "photo",
-      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-25-the-mix/022.jpg",
-      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-25-the-mix/022_full.jpg",
-      "thumb": "media/022_t.jpg",
-      "w": 1440,
-      "h": 2560
-    },
-    {
-      "type": "photo",
       "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-25-the-mix/023.jpg",
       "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-25-the-mix/023_full.jpg",
       "thumb": "media/023_t.jpg",
@@ -235,22 +219,6 @@
       "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-25-the-mix/029.jpg",
       "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-25-the-mix/029_full.jpg",
       "thumb": "media/029_t.jpg",
-      "w": 2560,
-      "h": 1440
-    },
-    {
-      "type": "photo",
-      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-25-the-mix/030.jpg",
-      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-25-the-mix/030_full.jpg",
-      "thumb": "media/030_t.jpg",
-      "w": 1440,
-      "h": 2560
-    },
-    {
-      "type": "photo",
-      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-25-the-mix/031.jpg",
-      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-25-the-mix/031_full.jpg",
-      "thumb": "media/031_t.jpg",
       "w": 2560,
       "h": 1440
     },
