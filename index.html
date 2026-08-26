@@ -503,6 +503,55 @@
     padding-bottom:4px;
   }
 
+  /* ---- THE DROPS: the reason most people are here, so it leads the page ----
+     A rail, not a single "latest drop" line. Somebody hunting their photo from
+     Saturday does not want the newest night, they want THEIR night. */
+  .drops-rail{
+    display:grid;grid-auto-flow:column;grid-auto-columns:minmax(230px,1fr);
+    gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;
+    padding-bottom:10px;-webkit-overflow-scrolling:touch;
+    scrollbar-width:thin;scrollbar-color:var(--pink-deep) transparent;
+  }
+  .drops-rail::-webkit-scrollbar{height:6px;}
+  .drops-rail::-webkit-scrollbar-thumb{background:var(--pink-deep);border-radius:999px;}
+  .drop{
+    scroll-snap-align:start;display:block;text-decoration:none;color:inherit;
+    border:1px solid var(--line);border-radius:12px;overflow:hidden;
+    background:#16151c;transition:transform .18s,border-color .18s,box-shadow .18s;
+  }
+  .drop:hover{transform:translateY(-3px);border-color:var(--pink-glow);box-shadow:0 6px 22px rgba(255,121,198,.18);}
+  .drop .shot{position:relative;display:block;aspect-ratio:4/3;background:#0a0a0d;}
+  /* width+height on the img give it an intrinsic box before the picture lands,
+     the same collapse the event grid shipped with once. */
+  .drop .shot img{width:100%;height:100%;object-fit:cover;display:block;}
+  .drop .shot .n{
+    position:absolute;right:8px;bottom:8px;z-index:2;
+    font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;
+    color:var(--ink);background:rgba(10,10,13,.82);
+    border:1px solid var(--line);border-radius:5px;padding:2px 7px;
+  }
+  .drop .cap{padding:11px 12px 13px;}
+  .drop .cap .v{
+    font-family:var(--f-display);font-style:italic;font-weight:900;
+    text-transform:uppercase;font-size:17px;line-height:1.02;color:var(--ink);
+  }
+  .drop .cap .t{
+    font-size:12px;line-height:1.35;color:var(--muted);margin-top:4px;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  }
+  .drop .cap .d{
+    font-family:var(--f-mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--pink-glow);margin-top:7px;
+  }
+  .drops-more{
+    display:inline-block;margin-top:14px;font-family:var(--f-mono);font-size:11px;
+    letter-spacing:.22em;text-transform:uppercase;color:var(--pink-glow);text-decoration:none;
+  }
+  .drops-more:hover{text-decoration:underline;}
+  @media (max-width:640px){
+    .drops-rail{grid-auto-columns:minmax(180px,72vw);}
+  }
+
   /* Interviews / Coverage tiles */
   .tile-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
   .tile-grid.two{grid-template-columns:repeat(2,1fr);}
@@ -3275,7 +3324,7 @@
       <h3>On The Slate</h3>
       <div class="featured" style="margin-bottom:8px;">
         <span class="dot"></span>
-        <span><em>Interview 002</em> · The Ink <span style="color:var(--muted);">(in production)</span></span>
+        <span><em>Interview 002</em> · <a href="ink/" style="color:inherit;">The Ink</a> <span style="color:var(--pink-glow);">(out now)</span></span>
       </div>
       <div class="featured" style="margin-bottom:8px;">
         <span class="dot" style="background:var(--dye-blue);box-shadow:0 0 8px var(--dye-blue),0 0 14px var(--dye-blue);"></span>
@@ -3378,10 +3427,19 @@
   <!-- ============ MAIN ============ -->
   <main class="feed">
 
-    <!-- ===== THE SLATE — the next piece leads the page, poster-style ===== -->
+    <!-- ===== THE DROPS — leads the page. Most arrivals want THEIR photos. ===== -->
+    <section id="drops">
+      <div class="section-head">
+        <h2>The Drops <span class="accent">find yours</span></h2>
+        <div class="sub">every night we shot &nbsp;·&nbsp; full quality</div>
+      </div>
+      <div class="drops-rail" id="drops-rail"></div>
+      <a class="drops-more" href="events/">every drop &rarr;</a>
+    </section>
+
+    <!-- ===== THE SLATE — the house's own work, below the drops ===== -->
     <section id="slate">
       <a class="slate-marquee" id="slate-marquee" href="#roster"></a>
-      <a class="slate-latest" id="slate-latest" href="events/"></a>
     </section>
 
     <!-- ===== THE TAKE — the timeline. Card holders post here. ===== -->
@@ -3598,6 +3656,7 @@
   // ============ Fetch all content ============
   let site, creators, take, rotation, desk, roster, work;  // `take` gets live posts merged in below
   let slate = {};
+  let events = [];
   try {
     // FAULT-ISOLATED ON PURPOSE. This used to be seven bare fetches under one catch,
     // so a single malformed JSON file blanked the entire homepage. Now one bad file
@@ -3610,7 +3669,13 @@
         .catch(err => { console.error('Content load failed:', file, err); return fallback; });
 
     const EMPTY = {items: []};
-    const [s, c, t, m, d, r, w, sl] = await Promise.all([
+    // events.json lives under events/, not content/, so it gets its own fetch
+    const grabEvents = () =>
+      fetch('events/events.json', {cache:'no-cache'})
+        .then(r => { if (!r.ok) throw new Error('events HTTP ' + r.status); return r.json(); })
+        .catch(err => { console.error('Content load failed: events.json', err); return EMPTY; });
+
+    const [s, c, t, m, d, r, w, sl, ev] = await Promise.all([
       grab('site.json', {}),
       grab('creators.json', EMPTY),
       grab('take.json', EMPTY),
@@ -3619,7 +3684,9 @@
       grab('roster.json', EMPTY),
       grab('work.json', EMPTY),
       grab('slate.json', {}),
+      grabEvents(),
     ]);
+    events = (ev && ev.items) || [];
     site = s || {};
     creators = (c && c.items) || []; take = (t && t.items) || [];
     rotation = (m && m.items) || []; desk = (d && d.items) || [];
@@ -3632,6 +3699,39 @@
   }
 
   // ============ Site bits ============
+  // ---- THE DROPS rail ----
+  const dropsRail = document.getElementById('drops-rail');
+  if (dropsRail) {
+    // newest first, and only nights that actually have frames
+    const drops = events
+      .filter(e => e && e.slug && (e.count | 0) > 0)
+      .sort((a, b) => String(b.date).localeCompare(String(a.date)))
+      .slice(0, 8);
+    if (!drops.length) {
+      dropsRail.closest('section').remove();
+    } else {
+      drops.forEach(e => {
+        const a = document.createElement('a');
+        a.className = 'drop';
+        a.href = 'events/' + e.slug + '/';
+        // cover is stored relative to events/, e.g. "<slug>/media/001_t.jpg"
+        const cover = e.cover ? 'events/' + e.cover : '';
+        const when = e.date_short || String(e.date || '');
+        a.innerHTML =
+          '<span class="shot">' +
+            (cover ? '<img src="' + esc(cover) + '" alt="" width="520" height="390">' : '') +
+            '<span class="n">' + (e.count | 0) + ' frames</span>' +
+          '</span>' +
+          '<span class="cap">' +
+            '<span class="v">' + esc(e.venue || e.title || '') + '</span>' +
+            '<span class="t">' + esc(e.title || '') + '</span>' +
+            '<span class="d">' + esc(when) + '</span>' +
+          '</span>';
+        dropsRail.appendChild(a);
+      });
+    }
+  }
+
   // ---- THE SLATE marquee ----
   const smq = document.getElementById('slate-marquee');
   const slt = document.getElementById('slate-latest');
