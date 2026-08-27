@@ -258,9 +258,11 @@
       hero.querySelector('.wall').style.backgroundImage = 'url("' + photo.replace(/"/g, '%22') + '")';
       hero.querySelector('.shot').style.backgroundImage = 'url("' + photo.replace(/"/g, '%22') + '")';
     }
-    var lr = linkRow(c);
-    if (lr) hero.querySelector('.nameblock').appendChild(lr);
     var meta = hero.querySelector('.meta');
+    // above the chips, not below them: on a link-in-bio page the links outrank
+    // the badges
+    var lr = linkRow(c);
+    if (lr) hero.querySelector('.nameblock').insertBefore(lr, meta);
     var chip = function (txt, href, hot) {
       var el = d.createElement(href ? 'a' : 'span');
       el.className = 'chip' + (hot ? ' hot' : '');
