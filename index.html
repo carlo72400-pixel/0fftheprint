@@ -5788,7 +5788,13 @@
     document.getElementById('modal-share-btn').onclick = async () => {
       const slug = slugify(data.name);
       const vid = modalCardMount._vidOf ? modalCardMount._vidOf(cur) : '';
-      const url = location.origin + location.pathname + '?card=' + slug
+      // When both lists hold this slug, a generic ?card= link would open the
+      // OTHER card, so the link has to say which one it means. Everybody else
+      // keeps minting the exact ?card= URL they minted before this existed.
+      const clash = (creators || []).some(c => slugify(c.name) === slug)
+                 && (roster   || []).some(c => slugify(c.name) === slug);
+      const key = clash ? (source === 'curator' ? 'curator' : 'roster') : 'card';
+      const url = location.origin + location.pathname + '?' + key + '=' + slug
                 + (vid ? '&v=' + encodeURIComponent(vid) : '');
       try {
         await navigator.clipboard.writeText(url);
@@ -5805,16 +5811,25 @@
   function openCardFromUrl(){
     try {
       const params = new URLSearchParams(location.search);
-      const slug = params.get('card') || params.get('curator') || params.get('roster');
+      // ⛔ THE PARAM NAME SCOPES THE SEARCH. Two different cards can slugify to
+      // the same string: creators 'VampPsych' and roster 'VAMPPSYCH' both make
+      // 'vamppsych'. Searching one combined creators-first list ignored which
+      // param was used, so ?roster=vamppsych opened the CURATOR card and the
+      // roster card was unreachable by any URL at all.
+      // ?card= deliberately keeps searching both, creators first, so every link
+      // already in the wild resolves to exactly the card it resolves to today.
+      const curated  = params.get('curator');
+      const rostered = params.get('roster');
+      const generic  = params.get('card');
+      const slug = generic || curated || rostered;
       if (!slug) return;
       // ?v=<variant id> opens straight onto that art. The person is still
       // resolved first-match, which is right: the person is the unique thing.
       const want = params.get('v') || '';
-      const all = [
-        ...(creators || []).map(c => ({data:c, src:'curator'})),
-        ...(roster || []).map(c => ({data:c, src:'roster'})),
-      ];
-      const match = all.find(x => slugify(x.data.name) === slug);
+      const asCurator = (creators || []).map(c => ({data:c, src:'curator'}));
+      const asRoster  = (roster   || []).map(c => ({data:c, src:'roster'}));
+      const pool = generic ? asCurator.concat(asRoster) : (curated ? asCurator : asRoster);
+      const match = pool.find(x => slugify(x.data.name) === slug);
       if (!match) return;
       let vIdx = 0;
       if (want){
