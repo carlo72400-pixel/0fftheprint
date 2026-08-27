@@ -2575,18 +2575,26 @@
     gap:14px;
   }
   @media (max-width:720px){.desk-grid{grid-template-columns:repeat(2,1fr);gap:10px;}}
-  /* Editorial story card: any item with a dek reads as press, not a tile. */
-  .desk-item.story{grid-column:span 2;aspect-ratio:16/9;}
-  @media (max-width:720px){.desk-item.story{grid-column:span 2;aspect-ratio:4/3;}}
+  /* Story cards used to SPAN TWO of three columns at 16/9, so six stories was
+     six banners and the section was a wall you scrolled past. Every item here
+     carries a dek, so every item got the treatment and the emphasis meant
+     nothing. They are previews now: one column, same tile as everything else,
+     and the piece itself is where the room is. */
+  .desk-item.story{grid-column:span 1;aspect-ratio:4/5;}
+  @media (max-width:720px){.desk-item.story{grid-column:span 1;aspect-ratio:4/5;}}
   .desk-kicker{
     font-family:var(--f-mono);font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;
     color:var(--pink-glow);margin-bottom:5px;
   }
   .desk-dek{
-    font-size:12.5px;line-height:1.5;color:rgba(255,255,255,.75);margin-top:6px;
+    font-size:11px;line-height:1.42;color:rgba(255,255,255,.7);margin-top:5px;
     display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
   }
-  .desk-item.story .desk-title{font-size:20px;line-height:1.12;}
+  /* At tile size two lines of dek is the preview; the third line was always
+     the one that got cut mid-word anyway. */
+  @media (max-width:720px){.desk-dek{-webkit-line-clamp:2;font-size:10.5px;}}
+  .desk-item.story .desk-title{font-size:14.5px;line-height:1.16;}
+  @media (min-width:1100px){.desk-item.story .desk-title{font-size:15.5px;}}
   .desk-item{
     position:relative;
     display:block;text-decoration:none;color:inherit;
@@ -3763,7 +3771,7 @@
   <a href="#work">The Work</a>
   <a href="events/"><span class="nav-short">Events</span><span class="nav-long">Event Photos</span></a>
   <a href="#pitch">DM</a>
-  <a href="#curators">This Is Us</a>
+  
   <span class="spacer"></span>
   <a href="#" target="_blank" rel="noopener" class="cta" id="nav-follow">Follow</a>
   <span class="nav-more" aria-hidden="true">&rsaquo;</span>
@@ -3833,8 +3841,11 @@
 
 
     <!-- ===== CREATOR SPOTLIGHT =====
-         Edit the list to feature creators you fuck with.
-         Just paste their handle + IG (or any) URL + a short tag. -->
+         Refreshed 8/27. Everyone here who holds a card now points at THEIR
+         OWN PAGE rather than off to somebody else's platform, because the
+         page is ours and it is the better destination. Cam is the one
+         outside name on the list, so Cam is the one link that leaves.
+         Add a name: copy a row, set the handle, the tag and the href. -->
     <section class="card">
       <h3>Creator Spotlight</h3>
       <p style="color:var(--muted);font-size:12px;margin:-6px 0 10px;font-family:var(--f-mono);letter-spacing:.12em;text-transform:uppercase;">people we&rsquo;re watching</p>
@@ -3843,47 +3854,79 @@
           <div class="creator-pic" style="background:linear-gradient(135deg, var(--pink-glow), var(--dye-blue));">C</div>
           <div class="creator-meta">
             <div class="creator-name">@cam_dyed</div>
-            <div class="creator-tag">alt-hair colorist · SA</div>
+            <div class="creator-tag">alt-hair colorist &middot; SA</div>
           </div>
           <div class="creator-platform">IG</div>
         </a>
-        <a class="creator" href="?card=kav-man">
+        <a class="creator" href="c/kav-man/">
           <div class="creator-pic" style="background:linear-gradient(135deg, #f7d046, #8a5a00);">K</div>
           <div class="creator-meta">
             <div class="creator-name">KAV-MAN</div>
-            <div class="creator-tag">artist · the voice</div>
+            <div class="creator-tag">artist &middot; the war chant</div>
           </div>
           <div class="creator-platform">0TP</div>
         </a>
-        <a class="creator" href="https://instagram.com/virgosgateway" target="_blank" rel="noopener">
+        <a class="creator" href="c/virgosgateway/">
           <div class="creator-pic" style="background:linear-gradient(135deg, #9a5cff, #1c4d2e);">V</div>
           <div class="creator-meta">
-            <div class="creator-name">@virgosgateway</div>
-            <div class="creator-tag">rapper · the signal</div>
+            <div class="creator-name">VIRGOSGATEWAY</div>
+            <div class="creator-tag">rapper &middot; the signal</div>
           </div>
-          <div class="creator-platform">IG</div>
+          <div class="creator-platform">0TP</div>
         </a>
-        <a class="creator" href="https://www.instagram.com/wrathfol/" target="_blank" rel="noopener">
+        <a class="creator" href="c/sinik/">
+          <div class="creator-pic" style="background:linear-gradient(135deg, #1de04a, #0b2e17);">S</div>
+          <div class="creator-meta">
+            <div class="creator-name">SINIK</div>
+            <div class="creator-tag">rapper &middot; runs his own night</div>
+          </div>
+          <div class="creator-platform">0TP</div>
+        </a>
+        <a class="creator" href="c/wrathfol/">
           <div class="creator-pic" style="background:linear-gradient(135deg, #f7d046, #6d1a1a);">W</div>
           <div class="creator-meta">
-            <div class="creator-name">@wrathfol</div>
-            <div class="creator-tag">producer · the board</div>
+            <div class="creator-name">WRATHFOL</div>
+            <div class="creator-tag">producer &middot; heavy hitter</div>
           </div>
-          <div class="creator-platform">IG</div>
+          <div class="creator-platform">0TP</div>
         </a>
-        <a class="creator" href="https://instagram.com/smiley_one98" target="_blank" rel="noopener">
+        <a class="creator" href="c/theink/">
           <div class="creator-pic" style="background:linear-gradient(135deg, #8f8a97, #3a0d0d);">S</div>
           <div class="creator-meta">
-            <div class="creator-name">@smiley_one98</div>
-            <div class="creator-tag">tattoo artist · 0TP-002</div>
+            <div class="creator-name">SMILEY</div>
+            <div class="creator-tag">tattoo artist &middot; 0TP-002</div>
           </div>
-          <div class="creator-platform">IG</div>
+          <div class="creator-platform">0TP</div>
+        </a>
+        <a class="creator" href="c/wunmor/">
+          <div class="creator-pic" style="background:linear-gradient(135deg, #c9c2d4, #2a2233);">M</div>
+          <div class="creator-meta">
+            <div class="creator-name">WUN MOR</div>
+            <div class="creator-tag">draws &middot; casts &middot; sets the teeth</div>
+          </div>
+          <div class="creator-platform">0TP</div>
+        </a>
+        <a class="creator" href="c/haze-dt/">
+          <div class="creator-pic" style="background:linear-gradient(135deg, #ff79c6, #4a1533);">H</div>
+          <div class="creator-meta">
+            <div class="creator-name">HAZE DT</div>
+            <div class="creator-tag">sings &middot; the diary</div>
+          </div>
+          <div class="creator-platform">0TP</div>
+        </a>
+        <a class="creator" href="c/kurlytop/">
+          <div class="creator-pic" style="background:linear-gradient(135deg, #7b3fbf, #14121a);">K</div>
+          <div class="creator-meta">
+            <div class="creator-name">KURLYTOP</div>
+            <div class="creator-tag">the sermon &middot; SATX</div>
+          </div>
+          <div class="creator-platform">0TP</div>
         </a>
         <a class="creator" href="#pitch">
           <div class="creator-pic" style="background:linear-gradient(135deg, var(--pink-deep), #5a1a44);">+</div>
           <div class="creator-meta">
             <div class="creator-name">open seat</div>
-            <div class="creator-tag">pitch yourself · the desk is reading</div>
+            <div class="creator-tag">pitch yourself &middot; the desk is reading</div>
           </div>
           <div class="creator-platform tba">TBA</div>
         </a>
@@ -3962,6 +4005,17 @@
       <div class="cat-list" id="cat-list"></div>
     </section>
 
+    <!-- ===== ROSTER — above the timeline as of 8/27. The people come before
+         what they said today: a stranger scrolling wants to know WHO this is
+         before they read a feed of one-liners from names they do not have yet. ===== -->
+    <section id="roster">
+      <div class="section-head">
+        <h2>The Roster <span class="accent">voices we&rsquo;ve tapped</span></h2>
+        <div class="sub">each one goes crazy at one thing</div>
+      </div>
+      <div class="roster" id="roster-mount"></div>
+    </section>
+
     <!-- ===== THE TAKE — the timeline. Card holders post here. ===== -->
     <section id="take">
       <div class="section-head">
@@ -4005,15 +4059,6 @@
         <div class="sub">cued up &nbsp;·&nbsp; loud &nbsp;·&nbsp; looping</div>
       </div>
       <div class="rotation-grid" id="rotation-mount"></div>
-    </section>
-
-    <!-- ===== ROSTER ===== -->
-    <section id="roster">
-      <div class="section-head">
-        <h2>The Roster <span class="accent">voices we&rsquo;ve tapped</span></h2>
-        <div class="sub">each one goes crazy at one thing</div>
-      </div>
-      <div class="roster" id="roster-mount"></div>
     </section>
 
     <!-- ===== THE WORK (real frames) ===== -->
@@ -4060,15 +4105,12 @@
       </div>
     </section>
 
-    <!-- ===== CURATORS HERO — one lens, the voices come to it.
-         Moved below the work 8/25: the frames are the face, not us. ===== -->
-    <section id="curators" class="curators-hero">
-      <div class="section-head">
-        <h2>This Is Us <span class="accent">the outlet</span></h2>
-        <div class="sub">one lens · a roster of voices · open seats that mean it</div>
-      </div>
-      <div class="curators-grid" id="curators-mount"></div>
-    </section>
+    <!-- THIS IS US came out 8/27. It was a whole section rendering ONE card,
+         his own, and that card was the second VAMPPSYCH on the page: the
+         roster already carries him. The prismatic DARK LORD art it held is not
+         lost, it is a variant on the roster card now. creators.json still
+         loads and still applies everywhere, it is simply empty, so every
+         `creators` reader stays a no-op instead of a null. -->
 
   </main>
 </div>

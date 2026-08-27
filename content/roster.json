@@ -293,7 +293,34 @@
       "platform": "SATX",
       "link": "https://instagram.com/vamppsych",
       "theme_song": "https://open.spotify.com/track/27OqNFBwYkOOZKhXShri4n",
-      "lore": "Gianni. FX6, Insta360, Full Sail Digital Cinematography, and a card in his own house because he shoots it every week like everybody else on this list.\n\nZenhouse Fridays, The Mix on the Strip, Paper Tiger, the raves, Legion Ink after hours. Directed VOLUME. Cuts gothic essays as Vamppsych.\n\nRuns the desk, which is why this card sits at the end of the roster and not the front of it."
+      "lore": "Gianni. FX6, Insta360, Full Sail Digital Cinematography, and a card in his own house because he shoots it every week like everybody else on this list.\n\nZenhouse Fridays, The Mix on the Strip, Paper Tiger, the raves, Legion Ink after hours. Directed VOLUME. Cuts gothic essays as Vamppsych.\n\nRuns the desk, which is why this card sits at the end of the roster and not the front of it.",
+      "card_label": "THE LENS",
+      "variants": [
+        {
+          "id": "dark-lord",
+          "label": "DARK LORD",
+          "photo": "assets/card-vamp-prismatic.jpg",
+          "rarity": "full-art"
+        },
+        {
+          "id": "rose-window",
+          "label": "ROSE WINDOW",
+          "photo": "assets/card-vamp-vampy.jpg",
+          "rarity": "vampy"
+        },
+        {
+          "id": "crystal",
+          "label": "CRYSTAL",
+          "photo": "assets/card-vamp-crystal.jpg",
+          "rarity": "diamond-rare"
+        },
+        {
+          "id": "rooftop",
+          "label": "THE ROOFTOP",
+          "photo": "assets/card-vamp-sir.jpg",
+          "rarity": "gold-rare"
+        }
+      ]
     }
   ],
   "_archived_unfilled_seats": [
