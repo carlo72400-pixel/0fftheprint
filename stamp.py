@@ -22,7 +22,7 @@ ROOT = pathlib.Path(__file__).resolve().parent
 # script path (relative to ROOT)  ->  how it appears in src="..."
 TRACKED = ["assets/js/desk.js", "assets/js/door.js", "assets/js/composer.js",
            "assets/js/edit.js", "assets/js/board.js", "assets/js/cardback.js",
-           "assets/js/dates.js", "assets/js/calendar.js",
+           "assets/js/dates.js", "assets/js/calendar.js", "assets/js/sealed.js",
            "assets/js/word.js", "supabase-config.js"]
 
 # every document that loads them
@@ -40,7 +40,10 @@ DOCS = ["index.html", "join/index.html", "compose/index.html", "desk/index.html"
         # these out of c/index.html, so a re-bake picks the new stamp up on its
         # own, but stamping WITHOUT re-baking would leave six pages serving a
         # cached script that no longer has the methods they call.
-        str(p.relative_to(ROOT)) for p in sorted(ROOT.glob("c/*/index.html"))]
+        str(p.relative_to(ROOT)) for p in sorted(ROOT.glob("c/*/index.html"))] + [
+        # every night dump carries sealed.js. newevent.py writes the tag into
+        # new ones; this keeps the ones already up on the current file.
+        str(p.relative_to(ROOT)) for p in sorted(ROOT.glob("events/*/index.html"))]
 
 
 def short_hash(path: pathlib.Path) -> str:

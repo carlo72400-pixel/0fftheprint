@@ -288,6 +288,7 @@ PAGE = """<!DOCTYPE html>
 <meta name="twitter:image" content="https://0fftheprint.com/events/__SLUG__/preview.jpg">
 <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/sealed.css">
 <style>
 :root{--bg:#0a0a0d;--panel:#121218;--line:#23222b;--ink:#f4eef2;--muted:#9a93a3;
 --pink:#f7b9dd;--pink-deep:#f48fc8;--pink-glow:#ff79c6;--dye-blue:#2f6bff;
@@ -395,7 +396,12 @@ document.addEventListener('keydown',e=>{
   if(!lb.classList.contains('open'))return;
   if(e.key==='Escape')close(); if(e.key==='ArrowRight')show(cur+1); if(e.key==='ArrowLeft')show(cur-1);
 });
+/* LAST NIGHT, SEALED reads the night through this and nothing else. It is a
+   separate deferred file, so this inline script has already run by the time it
+   looks. If it never loads, the grid above is the page and always was. */
+window.OTPNight = Object.assign({media:MEDIA, show:show}, __NIGHT__);
 </script>
+<script src="../../assets/js/sealed.js" defer></script>
 </body>
 </html>
 """
@@ -473,7 +479,12 @@ def main():
     # before writing anything, so an event that had already spent ten minutes
     # encoding video came out with no video in it.
 
-    page = (PAGE.replace("__MEDIA__", json.dumps(items))
+    # ⛔ json.dumps, not raw substitution: a venue with an apostrophe in it
+    # ("Papa's") would otherwise close the JS string and break the whole page.
+    night = json.dumps({"slug": slug, "title": title,
+                        "venue": a.venue, "dateShort": dateshort})
+    page = (PAGE.replace("__NIGHT__", night)
+                .replace("__MEDIA__", json.dumps(items))
                 .replace("__TITLE__", title)
                 .replace("__VENUE__", a.venue)
                 .replace("__DATELONG__", datelong)

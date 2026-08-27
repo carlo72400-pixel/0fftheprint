@@ -1,0 +1,168 @@
+/* 0FF THE PRINT — LAST NIGHT, SEALED.
+   The night arrives as a sealed pack instead of a wall of thumbnails.
+
+   ⛔ SELF-CONTAINED AND SCOPED. An /events/ page carries its own inline
+   stylesheet and already owns .wrap .back .grid .tile .lb .meta .foot and h1.
+   Nothing in here may use one of those names. Everything is .seal / .sl-*.
+
+   ⛔ The GRID IS NOT HIDDEN IN THE HTML. sealed.js hides it on boot, so a
+   browser that never runs this file gets the plain gallery that shipped before
+   the pack existed. Hiding it in markup would mean one failed request turns a
+   client's find-your-photo page into an empty screen. */
+
+.seal{margin-top:26px;display:grid;gap:20px;justify-items:center;text-align:center}
+/* ⛔ The acts row and the hand are both empty before the pack is torn. As grid
+   children they still take a row each and their gaps, which left a dead 60px
+   band between the odds and the escape link. :empty collapses them. */
+.seal > :empty{display:none}
+@media (min-width:860px){
+  .seal.has-hand{justify-items:stretch;text-align:left}
+}
+
+/* ---------------- the pack ---------------- */
+.sl-pack{
+  position:relative;width:min(268px,74vw);aspect-ratio:3/4;border-radius:14px;
+  border:1px solid rgba(255,121,198,.45);overflow:hidden;cursor:pointer;
+  background:#140a12;padding:0;display:block;
+  box-shadow:0 18px 50px rgba(0,0,0,.6), inset 0 0 0 1px rgba(255,255,255,.05);
+  transition:transform .18s ease, box-shadow .18s ease;
+}
+.sl-pack:hover{transform:translateY(-3px);box-shadow:0 24px 60px rgba(0,0,0,.7),0 0 34px rgba(255,121,198,.3)}
+.sl-pack:active{transform:translateY(0)}
+/* the night itself, dimmed under the foil so the pack looks like the room
+   without spending a frame */
+.sl-pack .art{position:absolute;inset:0;background:#140a12 center/cover no-repeat;
+  filter:brightness(.42) saturate(.75) blur(1px);}
+.sl-pack .foil{position:absolute;inset:0;
+  background:
+    repeating-linear-gradient(115deg,rgba(255,255,255,.10) 0 2px,transparent 2px 7px),
+    linear-gradient(150deg,rgba(255,121,198,.75),rgba(47,107,255,.55) 42%,rgba(255,121,198,.6) 72%,rgba(20,10,18,.9));
+  mix-blend-mode:screen;opacity:.85;}
+.sl-pack .glare{position:absolute;inset:0;
+  background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.34) 48%,transparent 58%);
+  transform:translateX(-60%);transition:transform .5s ease}
+.sl-pack:hover .glare{transform:translateX(60%)}
+.sl-pack .lip{position:absolute;left:0;right:0;top:0;height:34px;
+  background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,0));
+  border-bottom:1px dashed rgba(255,255,255,.35)}
+.sl-pack .face{position:absolute;inset:0;display:flex;flex-direction:column;
+  justify-content:space-between;padding:42px 16px 16px;text-align:center}
+.sl-pack .mk{font-family:var(--f-display);font-style:italic;font-weight:900;
+  text-transform:uppercase;font-size:26px;line-height:.95;color:#fff;
+  text-shadow:0 2px 14px rgba(0,0,0,.75)}
+.sl-pack .mk i{font-style:italic;display:block;font-size:15px;letter-spacing:.16em;
+  color:var(--pink);margin-top:5px}
+.sl-pack .bot{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.18em;
+  text-transform:uppercase;color:rgba(255,255,255,.86);text-shadow:0 1px 8px rgba(0,0,0,.8)}
+.sl-pack .bot b{display:block;color:#fff;font-weight:500;font-size:11px;margin-bottom:4px}
+
+/* tearing */
+.sl-pack.rip{pointer-events:none;animation:sl-shake .42s ease}
+.sl-pack.rip .lip{animation:sl-peel .5s .1s ease-in forwards}
+.sl-pack.gone{animation:sl-away .34s ease forwards}
+@keyframes sl-shake{
+  0%,100%{transform:rotate(0)} 20%{transform:rotate(-2.2deg)}
+  45%{transform:rotate(2deg)} 70%{transform:rotate(-1.2deg)} }
+@keyframes sl-peel{to{transform:translateY(-40px) rotate(-7deg);opacity:0}}
+@keyframes sl-away{to{transform:scale(.82) translateY(14px);opacity:0}}
+
+/* ---------------- the copy under it ---------------- */
+.sl-say{max-width:520px}
+.sl-say .big{font-family:var(--f-display);font-style:italic;font-weight:900;
+  text-transform:uppercase;font-size:clamp(23px,4.4vw,34px);line-height:1;color:var(--ink)}
+.sl-say .sub{font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted);margin-top:9px;line-height:1.9}
+.sl-say .odds{font-family:var(--f-mono);font-size:10px;letter-spacing:.13em;
+  text-transform:uppercase;color:#6f6a7b;margin-top:12px;line-height:1.9}
+.sl-say .odds b{color:var(--pink-deep);font-weight:500}
+
+/* ---------------- the hand ---------------- */
+.sl-hand{display:grid;grid-template-columns:repeat(auto-fill,minmax(0,168px));
+  gap:13px;width:100%;justify-content:center}
+@media (min-width:860px){ .sl-hand{justify-content:start} }
+
+.sl-card{position:relative;border-radius:11px;overflow:hidden;background:#0d0c11;
+  border:1px solid var(--line);cursor:zoom-in;padding:0;display:block;width:100%;
+  opacity:0;transform:translateY(16px) scale(.94);
+  animation:sl-deal .42s cubic-bezier(.2,.9,.3,1.2) forwards}
+@keyframes sl-deal{to{opacity:1;transform:none}}
+.sl-card img{width:100%;height:auto;display:block;aspect-ratio:3/4;object-fit:cover}
+.sl-card .tag{position:absolute;left:0;right:0;bottom:0;display:flex;
+  justify-content:space-between;align-items:center;gap:6px;padding:7px 9px;
+  background:linear-gradient(180deg,transparent,rgba(6,5,9,.92));
+  font-family:var(--f-mono);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase}
+.sl-card .no{color:rgba(255,255,255,.72)}
+.sl-card .rar{color:var(--muted)}
+
+/* rarity.
+   ⛔ THE SHEEN IS AN ::after OVERLAY, NEVER a blend on the image. Blending the
+   photograph itself is what erased the card art on the homepage: with
+   mix-blend-mode:lighten the brighter of photo and foil wins per channel, so
+   anywhere the foil is brighter the picture is simply gone.
+
+   ⛔⛔ AND IT IS AT A QUARTER OF INSTINCT. The first cut used .20 to .30 alpha
+   stripes over the whole card and the holo and gold pulls came out as rainbow
+   deckchairs with a person somewhere behind them. On a pack whose entire draw
+   is "you might pull yourself", burying the face is the one unforgivable bug.
+   THE BORDER AND THE GLOW CARRY THE RARITY. The sheen is a hint.
+
+   🔑 Every overlay is MASKED AWAY FROM THE CENTRE, because that is where the
+   face is. Strongest at the corners, gone across the middle third. */
+.sl-card::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  -webkit-mask-image:radial-gradient(115% 85% at 50% 50%,transparent 34%,#000 88%);
+          mask-image:radial-gradient(115% 85% at 50% 50%,transparent 34%,#000 88%);
+}
+.sl-card.common::after{display:none}
+
+.sl-card.shine{border-color:rgba(255,121,198,.5)}
+.sl-card.shine::after{
+  background:linear-gradient(115deg,transparent 42%,rgba(255,121,198,.16) 50%,transparent 58%)}
+.sl-card.shine .rar{color:var(--pink-deep)}
+
+.sl-card.holo{border-color:rgba(47,107,255,.7);box-shadow:0 0 20px rgba(47,107,255,.3)}
+.sl-card.holo::after{
+  background:repeating-linear-gradient(58deg,
+    rgba(255,121,198,.10) 0 6px, rgba(47,107,255,.10) 6px 12px,
+    rgba(110,231,168,.08) 12px 18px, transparent 18px 42px);
+  mix-blend-mode:screen}
+.sl-card.holo .rar{color:#9db9ff}
+
+.sl-card.hit{border-color:#f7d046;box-shadow:0 0 26px rgba(247,208,70,.42),inset 0 0 0 1px rgba(247,208,70,.5)}
+.sl-card.hit::after{
+  background:
+    repeating-linear-gradient(72deg,rgba(247,208,70,.13) 0 5px,transparent 5px 17px),
+    radial-gradient(90% 55% at 50% 0%,rgba(255,240,190,.17),transparent 62%);
+  mix-blend-mode:screen;animation:sl-swim 6s linear infinite}
+@keyframes sl-swim{to{background-position:220px 0, 0 0}}
+.sl-card.hit .rar{color:#f7d046}
+.sl-card.hit .no{color:#f7d046}
+/* the hit says so in words too, since the foil is now deliberately quiet */
+.sl-card.hit .rar::before{content:'\2605 '}
+
+/* ---------------- the buttons ---------------- */
+.sl-acts{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+@media (min-width:860px){ .seal.has-hand .sl-acts{justify-content:flex-start} }
+.sl-btn{font-family:var(--f-display);font-style:italic;font-weight:900;
+  text-transform:uppercase;font-size:16px;letter-spacing:.03em;
+  border-radius:999px;padding:11px 22px;cursor:pointer;border:0;
+  background:linear-gradient(180deg,var(--pink-deep),#d4589f);color:#1a0a14}
+.sl-btn:hover{filter:brightness(1.08)}
+.sl-btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+.sl-btn.ghost:hover{border-color:var(--pink-deep);color:var(--pink-glow)}
+.sl-btn:disabled{opacity:.45;cursor:not-allowed}
+
+.sl-done{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted)}
+
+/* Somebody hunting their own photo is not here to play a game. */
+.sl-skip{font-family:var(--f-mono);font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;color:#6f6a7b;background:none;border:0;cursor:pointer;
+  text-decoration:underline;text-underline-offset:3px;padding:4px}
+.sl-skip:hover{color:var(--pink-glow)}
+
+@media (prefers-reduced-motion:reduce){
+  .sl-pack,.sl-pack .glare,.sl-pack.rip,.sl-pack.rip .lip,.sl-pack.gone,
+  .sl-card,.sl-card.hit::after{animation:none!important;transition:none!important}
+  .sl-card{opacity:1;transform:none}
+}

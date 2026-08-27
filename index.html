@@ -772,6 +772,14 @@
     color:var(--ink);background:rgba(10,10,13,.82);
     border:1px solid var(--line);border-radius:5px;padding:2px 7px;
   }
+  /* LAST NIGHT, SEALED. Opposite corner from the frame count on purpose: the
+     count is what the night IS, this is what happens when you open it. */
+  .drop .shot .sealed{
+    position:absolute;left:8px;top:8px;z-index:2;
+    font-family:var(--f-mono);font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;
+    color:#f7d046;background:rgba(10,10,13,.8);
+    border:1px solid rgba(247,208,70,.55);border-radius:999px;padding:3px 8px;
+  }
   .drop .cap{padding:11px 12px 13px;}
   .drop .cap .v{
     font-family:var(--f-display);font-style:italic;font-weight:900;
@@ -3854,7 +3862,7 @@
     <section id="drops">
       <div class="section-head">
         <h2>The Drops <span class="accent">find yours</span></h2>
-        <div class="sub">every night we shot &nbsp;·&nbsp; full quality</div>
+        <div class="sub">every night we shot &nbsp;·&nbsp; sealed &nbsp;·&nbsp; full quality</div>
       </div>
       <div class="drops-rail" id="drops-rail"></div>
       <a class="drops-more" href="events/">every drop &rarr;</a>
@@ -4377,6 +4385,7 @@
         a.innerHTML =
           '<span class="shot">' +
             (cover ? '<img src="' + esc(cover) + '" alt="" width="520" height="390">' : '') +
+            '<span class="sealed">sealed</span>' +
             '<span class="n">' + (e.count | 0) + ' frames</span>' +
           '</span>' +
           '<span class="cap">' +
