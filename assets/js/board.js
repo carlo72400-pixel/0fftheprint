@@ -298,7 +298,8 @@
 
   /* ========================== the rails, in page order ==================
      Same order as index.html so the board reads like the site. If a section
-     moves on the homepage, move it here too. */
+     moves on the homepage, move it here too. THE WORD moved up under THE TAKE
+     on 8/26 and this list moved with it. */
 
   function railSpecs() {
     var R = [];
@@ -569,6 +570,67 @@
       }
     });
 
+    /* ---- THE WORD. Member stories and their entries. ---- */
+    R.push({
+      key: 'word', nm: 'THE WORD', src: 'member_stories + word_entries',
+      note: 'stories from the roster, and what people wrote under them',
+      tiles: function () {
+        var deskThumb = {};
+        ((C.desk && C.desk.items) || []).forEach(function (it) {
+          var m = /^word\/([^\/]+)\//.exec(String(it.link || ''));
+          if (m && it.thumb) deskThumb[m[1]] = it.thumb;
+        });
+        var out = (DB.stories || []).map(function (s) {
+          return {
+            img: deskThumb[s.slug] ? thumb(deskThumb[s.slug]) : '', glyph: '¶',
+            off: !s.published, t: s.title,
+            s: ((s.profiles && s.profiles.display_name) || 'member') + (s.baked ? ' · baked' : ''),
+            state: s.baked ? 'git' : (s.published ? 'live' : 'draft'),
+            open: function () {
+              sheet({
+                title: s.title || 'STORY',
+                why: (s.published ? 'live' : 'waiting') + (s.baked ? ' · baked into git' : ''),
+                fields: [
+                  { key: 'title', label: 'Title', value: s.title || '' },
+                  { key: 'dek', label: 'Dek', type: 'textarea', rows: 2, value: s.dek || '' },
+                  { key: 'published', label: 'Live on the page', type: 'check', value: !!s.published },
+                  { key: 'baked', label: 'Baked into git (the overlay lets go)', type: 'check', value: !!s.baked }
+                ],
+                body: '<div class="note">Long body edits open in the story editor, which is a better ' +
+                      'box for markdown than this one.</div>' +
+                      '<div class="row" style="margin-top:12px"><a class="btn ghost sm" href="../desk/word/">Open the story editor</a></div>',
+                save: async function (v) {
+                  if (v.title !== s.title || v.dek !== (s.dek || ''))
+                    await OTP.updateStory(s.id, { title: v.title, dek: v.dek });
+                  if (!!v.published !== !!s.published) await OTP.setStoryPublished(s.id, v.published);
+                  if (v.baked && !s.baked) await OTP.setStoryBaked(s.id);
+                },
+                kill: function () { return OTP.deleteStory(s.id); }
+              });
+            }
+          };
+        });
+        (DB.entries || []).forEach(function (e) {
+          out.push({
+            glyph: '“', off: !e.published, t: (e.text || '').slice(0, 70),
+            s: ((e.profiles && e.profiles.display_name) || 'member') + ' · ' + (e.story_slug || ''),
+            state: e.published ? 'live' : 'draft',
+            open: function () {
+              sheet({
+                title: 'ENTRY', why: 'under ' + (e.story_slug || 'a story'),
+                body: '<div class="note">' + esc(e.text || '') + '</div>',
+                fields: [{ key: 'published', label: 'Showing under the story', type: 'check', value: !!e.published }],
+                save: async function (v) { await OTP.setEntryPublished(e.id, v.published); },
+                kill: function () { return OTP.deleteEntry(e.id); }
+              });
+            }
+          });
+        });
+        return out;
+      },
+      add: { label: 'WRITE ONE', glyph: '✍', on: function () { location.href = '../word/new/'; } }
+    });
+
     /* ---- THE WORK. 37 frames, captions and order both editable from here.
        Adding a frame is still a git thing: the file has to exist and derive.py
        has to make its three sizes before the page can paint it. ---- */
@@ -761,67 +823,6 @@
           };
         });
       }
-    });
-
-    /* ---- THE WORD. Member stories and their entries. ---- */
-    R.push({
-      key: 'word', nm: 'THE WORD', src: 'member_stories + word_entries',
-      note: 'stories from the roster, and what people wrote under them',
-      tiles: function () {
-        var deskThumb = {};
-        ((C.desk && C.desk.items) || []).forEach(function (it) {
-          var m = /^word\/([^\/]+)\//.exec(String(it.link || ''));
-          if (m && it.thumb) deskThumb[m[1]] = it.thumb;
-        });
-        var out = (DB.stories || []).map(function (s) {
-          return {
-            img: deskThumb[s.slug] ? thumb(deskThumb[s.slug]) : '', glyph: '¶',
-            off: !s.published, t: s.title,
-            s: ((s.profiles && s.profiles.display_name) || 'member') + (s.baked ? ' · baked' : ''),
-            state: s.baked ? 'git' : (s.published ? 'live' : 'draft'),
-            open: function () {
-              sheet({
-                title: s.title || 'STORY',
-                why: (s.published ? 'live' : 'waiting') + (s.baked ? ' · baked into git' : ''),
-                fields: [
-                  { key: 'title', label: 'Title', value: s.title || '' },
-                  { key: 'dek', label: 'Dek', type: 'textarea', rows: 2, value: s.dek || '' },
-                  { key: 'published', label: 'Live on the page', type: 'check', value: !!s.published },
-                  { key: 'baked', label: 'Baked into git (the overlay lets go)', type: 'check', value: !!s.baked }
-                ],
-                body: '<div class="note">Long body edits open in the story editor, which is a better ' +
-                      'box for markdown than this one.</div>' +
-                      '<div class="row" style="margin-top:12px"><a class="btn ghost sm" href="../desk/word/">Open the story editor</a></div>',
-                save: async function (v) {
-                  if (v.title !== s.title || v.dek !== (s.dek || ''))
-                    await OTP.updateStory(s.id, { title: v.title, dek: v.dek });
-                  if (!!v.published !== !!s.published) await OTP.setStoryPublished(s.id, v.published);
-                  if (v.baked && !s.baked) await OTP.setStoryBaked(s.id);
-                },
-                kill: function () { return OTP.deleteStory(s.id); }
-              });
-            }
-          };
-        });
-        (DB.entries || []).forEach(function (e) {
-          out.push({
-            glyph: '“', off: !e.published, t: (e.text || '').slice(0, 70),
-            s: ((e.profiles && e.profiles.display_name) || 'member') + ' · ' + (e.story_slug || ''),
-            state: e.published ? 'live' : 'draft',
-            open: function () {
-              sheet({
-                title: 'ENTRY', why: 'under ' + (e.story_slug || 'a story'),
-                body: '<div class="note">' + esc(e.text || '') + '</div>',
-                fields: [{ key: 'published', label: 'Showing under the story', type: 'check', value: !!e.published }],
-                save: async function (v) { await OTP.setEntryPublished(e.id, v.published); },
-                kill: function () { return OTP.deleteEntry(e.id); }
-              });
-            }
-          });
-        });
-        return out;
-      },
-      add: { label: 'WRITE ONE', glyph: '✍', on: function () { location.href = '../word/new/'; } }
     });
 
     /* ---- THE ROSTER. Flavor, lore, stamp and order, all from here. ---- */

@@ -37,6 +37,30 @@
   let me = null;
   try { me = await OTP.me(); } catch (e) { console.warn('composer: no session', e.message); }
 
+  // ---------- THE WORD's write button ----------
+  // His ask: "have a create a story button so they dont have to go into the
+  // deck to create stories." It paints from HERE and not from its own file
+  // because this is the one place on the homepage that has already paid for a
+  // session lookup, and asking again would be a second round trip for a link.
+  //
+  // ⛔ It runs BEFORE the early returns below. Every one of those returns is a
+  //    valid state for the composer (signed out, in the queue) and none of them
+  //    should decide whether The Word has a button.
+  //
+  // Only an approved card holder sees it. A signed out visitor already gets
+  // "Got a card? Log in." on the timeline directly above this section, and a
+  // second copy of that line four inches lower reads as nagging.
+  (() => {
+    const wc = document.getElementById('word-cta');
+    if (!wc) return;
+    if (!me || !me.profile || !me.profile.approved) return;
+    wc.innerHTML = `<a class="word-write" href="word/new/">
+        <span class="ww-plus">&#43;</span>
+        <span class="ww-txt"><b>Write a story</b>
+          <span>Long form, with a cover. The desk reads it before it goes up.</span></span>
+      </a>`;
+  })();
+
   // ---------- signed out ----------
   if (!me) {
     line(`<span class="cav plain"></span>

@@ -40,7 +40,7 @@
 <script src="supabase-config.js?v=f1348482" defer></script>
 <script src="assets/js/desk.js?v=868e337f" defer></script>
 <script src="assets/js/door.js?v=4fd82def" defer></script>
-<script src="assets/js/composer.js?v=51127ffa" defer></script>
+<script src="assets/js/composer.js?v=9e82b159" defer></script>
 <script src="assets/js/edit.js?v=306e9e9c" defer></script>
 <style>
   :root{
@@ -2348,6 +2348,25 @@
   }
 
   /* The Desk — filterable feed */
+  /* The Word's write button. Deliberately shaped like the composer box above
+     it rather than like a section link, because it does the same job: start
+     something from the page you are already on. */
+  .word-write{
+    display:flex;align-items:center;gap:13px;margin:0 0 16px;padding:13px 15px;
+    background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    text-decoration:none;color:var(--ink);transition:border-color .16s,transform .16s;
+  }
+  .word-write:hover{border-color:var(--pink-deep);transform:translateY(-1px);}
+  .word-write .ww-plus{
+    flex:0 0 auto;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;
+    border:1px solid var(--pink-deep);color:var(--pink-glow);font-size:20px;line-height:1;
+  }
+  .word-write .ww-txt{display:block;min-width:0;}
+  .word-write .ww-txt b{display:block;font-family:var(--f-display);font-style:italic;
+    font-weight:900;text-transform:uppercase;font-size:19px;line-height:1;}
+  .word-write .ww-txt span{display:block;font-family:var(--f-mono);font-size:10.5px;
+    letter-spacing:.08em;color:var(--muted);margin-top:5px;line-height:1.5;}
+  @media(max-width:520px){ .word-write .ww-txt span{display:none;} }
   .desk-filters{
     display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;
   }
@@ -3532,9 +3551,9 @@
   <a href="join/" id="nav-key" class="key" title="Card holders log in here.">Log in</a>
   <a href="#curators">This Is Us</a>
   <a href="#take">The Take</a>
+  <a href="#desk">The Word</a>
   <a href="#work">The Work</a>
   <a href="#music">Music</a>
-  <a href="#desk">The Word</a>
   <a href="events/"><span class="nav-short">Events</span><span class="nav-long">Event Photos</span></a>
   <a href="#roster">Roster</a>
   <a href="#pitch">DM</a>
@@ -3722,6 +3741,28 @@
       </a>
     </section>
 
+    <!-- ===== THE WORD · filterable culture feed =====
+         Sits directly under the timeline on purpose. The Take is what the
+         house says in a sentence and The Word is what it says at length, so
+         reading one straight into the other is the order that makes sense.
+         It used to sit below the curators, four sections further down. -->
+    <section id="desk">
+      <div class="section-head">
+        <h2>The Word <span class="accent">stories from the house</span></h2>
+        <div class="sub">serious pieces only &nbsp;·&nbsp; every one gets a number &nbsp;·&nbsp; links worth your time</div>
+      </div>
+      <!-- Pills are generated from the lanes actually present in the catalog.
+           Hardcoded ones drifted: Hair and Fashion matched zero items and
+           filtered the grid to empty. -->
+      <!-- composer.js fills this: a card holder gets a Write a story button
+           here, so starting one is a tap from the page they are already on
+           instead of a trip through the desk. -->
+      <div id="word-cta"></div>
+      <div class="desk-filters" id="desk-filters"></div>
+      <div class="desk-grid" id="desk-grid"><!-- JS populates --></div>
+    </section>
+
+
     <!-- ===== THE WORK (real frames) ===== -->
     <section id="work">
       <div class="section-head">
@@ -3748,19 +3789,6 @@
         <div class="sub">one lens · a roster of voices · open seats that mean it</div>
       </div>
       <div class="curators-grid" id="curators-mount"></div>
-    </section>
-
-    <!-- ===== THE DESK · filterable culture feed ===== -->
-    <section id="desk">
-      <div class="section-head">
-        <h2>The Word <span class="accent">stories from the house</span></h2>
-        <div class="sub">serious pieces only &nbsp;·&nbsp; every one gets a number &nbsp;·&nbsp; links worth your time</div>
-      </div>
-      <!-- Pills are generated from the lanes actually present in the catalog.
-           Hardcoded ones drifted: Hair and Fashion matched zero items and
-           filtered the grid to empty. -->
-      <div class="desk-filters" id="desk-filters"></div>
-      <div class="desk-grid" id="desk-grid"><!-- JS populates --></div>
     </section>
 
     <!-- ===== ROSTER ===== -->
