@@ -21,12 +21,12 @@ ROOT = pathlib.Path(__file__).resolve().parent
 
 # script path (relative to ROOT)  ->  how it appears in src="..."
 TRACKED = ["assets/js/desk.js", "assets/js/door.js", "assets/js/composer.js",
-           "assets/js/edit.js", "assets/js/board.js",
+           "assets/js/edit.js", "assets/js/board.js", "assets/js/cardback.js",
            "assets/js/word.js", "supabase-config.js"]
 
 # every document that loads them
 DOCS = ["index.html", "join/index.html", "compose/index.html", "desk/index.html",
-        "board/index.html",
+        "board/index.html", "c/index.html",
         "desk/targets/index.html", "desk/goals/index.html",
         # Any page that loads desk.js belongs here. A page left off this list
         # silently serves whatever desk.js the browser cached, which is exactly

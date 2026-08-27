@@ -182,6 +182,12 @@ if ovs:
 # ============================================================================
 CONTENT = os.path.join(HERE, "content")
 
+def esc_html(v):
+    """Meta tag values are attribute content, so quotes and angles have to go."""
+    return (str(v or "").replace("&", "&amp;").replace("<", "&lt;")
+            .replace(">", "&gt;").replace('"', "&quot;"))
+
+
 def _base(p):
     """work.json stores assets/work/x.jpg, derive.py renders
     assets/grid/work/x.jpg. The basename is the only key both agree on."""
@@ -387,6 +393,64 @@ if site_ovs:
             json.dump(sdoc, open(spath, "w"), indent=2, ensure_ascii=False)
             open(spath, "a").write("\n")
             print(f"  slate.json updated ({n} change(s) baked in)")
+
+# ============================================================================
+# THE BACK OF THE CARD. One folder per card holder, so /c/<slug>/ is a real URL
+# with its own OG card instead of a query string nobody wants to paste into a
+# bio. The PAGE ITSELF is live: c/index.html reads the database on load, so this
+# only has to run when the desk hands out a NEW slug, not when a member changes
+# a word. Eight seats, so that is rare.
+#
+# ⛔ The folder is a THIN COPY of c/index.html with the OG tags rewritten, not a
+#    snapshot of their content. Baking their posts in would go stale the moment
+#    they posted again, and the whole point of this page is that it fills itself.
+# ============================================================================
+CDIR = os.path.join(HERE, "c")
+try:
+    creq = urllib.request.Request(
+        f"{URL}/rest/v1/cards?select=card_slug,display_name,tagline,card_photo",
+        headers={"apikey": KEY, "Authorization": f"Bearer {KEY}"})
+    holders = json.load(urllib.request.urlopen(creq))
+except Exception as e:
+    holders = []
+    print(f"  (card backs skipped: {e})")
+
+if holders:
+    shell = open(os.path.join(CDIR, "index.html")).read()
+    made = 0
+    for h in holders:
+        cslug = (h.get("card_slug") or "").strip()
+        if not cslug or not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,58}[a-z0-9]", cslug):
+            continue
+        name = h.get("display_name") or cslug
+        desc = h.get("tagline") or f"{name} holds a card at 0FF THE PRINT. San Antonio underground media house."
+        img = h.get("card_photo") or "https://0fftheprint.com/assets/preview.jpg"
+        page = shell
+        # The shell sits at /c/, the folder sits one deeper, so every relative
+        # asset in it has to climb one more level or the page loads nothing.
+        page = page.replace('href="../', 'href="../../').replace('src="../', 'src="../../')
+        page = page.replace("<title>The Card Back · 0FF THE PRINT</title>",
+                            f"<title>{esc_html(name)} · 0FF THE PRINT</title>")
+        page = page.replace('<meta property="og:title" content="0FF THE PRINT">',
+                            f'<meta property="og:title" content="{esc_html(name)} · 0FF THE PRINT">')
+        page = page.replace(
+            '<meta property="og:description" content="A card holder at 0FF THE PRINT. '
+            'San Antonio underground media house.">',
+            f'<meta property="og:description" content="{esc_html(desc)}">')
+        page = page.replace(
+            '<meta property="og:image" content="https://0fftheprint.com/assets/preview.jpg">',
+            f'<meta property="og:image" content="{esc_html(img)}">')
+        page = page.replace("</head>",
+            f'<meta property="og:url" content="https://0fftheprint.com/c/{cslug}/">\n</head>')
+        out_dir = os.path.join(CDIR, cslug)
+        os.makedirs(out_dir, exist_ok=True)
+        out_path = os.path.join(out_dir, "index.html")
+        old = open(out_path).read() if os.path.exists(out_path) else None
+        if old != page:
+            open(out_path, "w").write(page)
+            made += 1
+            print(f"  card back: /c/{cslug}/")
+    print(f"  {made} card back(s) written, {len(holders)} holder(s) seen")
 
 print("\nNow:")
 print("  git add -A && git commit -m 'bake story edits' && git push")

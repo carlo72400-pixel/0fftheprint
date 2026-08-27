@@ -834,10 +834,110 @@
     // jsonb_agg, so this is ONE round trip, not one per member).
     async cards() {
       const c = sb(); if (!c) return [];
-      const { data, error } = await c.from("cards")
-        .select("card_slug,card_frame,card_photo,theme_song,theme_start,link_platform,link_handle,featured");
-      if (error) throw error;
-      return data || [];
+      // 018 widened the view with the words on the back of the card. Asking for
+      // a column the view does not have yet is a 42703, not an empty field, so
+      // this falls back rather than taking the homepage down with it on a site
+      // whose database has not been migrated.
+      const WIDE = "card_slug,display_name,tagline,bio,accent,card_frame,card_photo," +
+                   "theme_song,theme_start,link_platform,link_handle,featured";
+      const NARROW = "card_slug,card_frame,card_photo,theme_song,theme_start," +
+                     "link_platform,link_handle,featured";
+      let r = await c.from("cards").select(WIDE);
+      if (r.error) {
+        console.warn("cards: falling back to the pre-018 shape,", r.error.message);
+        r = await c.from("cards").select(NARROW);
+      }
+      if (r.error) throw r.error;
+      return r.data || [];
+    },
+
+    // ---- THE BACK OF THE CARD (migration 018) ---------------------------
+    // Every public view already carries card_slug, so a member's page is five
+    // filters, not five new tables. Fired together because they do not depend
+    // on each other and a phone should not wait for them in series. Each one
+    // falls back to empty on its own: a member with no videos yet must still
+    // get a page, and a view that is missing because a migration has not run
+    // must cost that rail only.
+    async cardBack(slug) {
+      const c = sb(); if (!c || !slug) return null;
+      const one = async (fn) => { try { return await fn(); } catch (e) {
+        console.warn("card back:", e.message); return []; } };
+
+      const card = await one(async () => {
+        const { data, error } = await c.from("cards").select("*")
+          .eq("card_slug", slug).maybeSingle();
+        if (error) throw error;
+        return data;
+      });
+      if (!card || Array.isArray(card)) return null;    // no such card holder
+
+      const [posts, stories, videos, track] = await Promise.all([
+        one(async () => {
+          const { data, error } = await c.from("feed")
+            .select("id,text,image_url,image_alt,pinned,created_at,edited_at,display_name,card_slug")
+            .eq("card_slug", slug)
+            // A view's ORDER BY is not guaranteed to survive LIMIT, which is
+            // written on public.feed itself. Restate it here.
+            .order("pinned", { ascending: false })
+            .order("created_at", { ascending: false })
+            .limit(60);
+          if (error) throw error;
+          return data || [];
+        }),
+        one(async () => {
+          const { data, error } = await c.from("word_stories")
+            .select("slug,title,dek,cover_url,baked,created_at")
+            .eq("card_slug", slug).order("created_at", { ascending: false });
+          if (error) throw error;
+          return data || [];
+        }),
+        one(async () => {
+          const { data, error } = await c.from("videos")
+            .select("id,provider,vid,title,link,cover,featured,created_at")
+            .eq("by", slug).order("created_at", { ascending: false });
+          if (error) throw error;
+          return data || [];
+        }),
+        one(async () => {
+          const { data, error } = await c.from("rotation")
+            .select("track,title,artist,link,art,created_at")
+            .eq("by", slug).order("created_at", { ascending: false });
+          if (error) throw error;
+          return data || [];
+        }),
+      ]);
+      return { card, posts, stories, videos, tracks: track };
+    },
+
+    // The two things a card holder types. Everything else on their page is
+    // assembled from work they already did somewhere else on the site.
+    // The DB caps the length and strips em-dashes; this only trims and turns an
+    // emptied box into a real NULL so the page can tell "blank" from "unset".
+    async saveMyWords({ tagline, bio }) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { data: { user } } = await c.auth.getUser();
+      if (!user) throw new Error("Log in first.");
+      const patch = {};
+      if (tagline !== undefined) patch.tagline = String(tagline || "").trim() || null;
+      if (bio !== undefined) patch.bio = String(bio || "").trim() || null;
+      const { error } = await c.from("profiles").update(patch).eq("id", user.id);
+      if (error) {
+        if (error.code === "23514")
+          throw new Error("Too long. A tagline is one line up to 80, a bio is up to 600.");
+        throw error;
+      }
+    },
+
+    // Their own words even before the desk approves them, which the public
+    // `cards` view cannot return because it reads through the anon policy.
+    async myWords() {
+      const c = sb(); if (!c) return null;
+      const { data: { user } } = await c.auth.getUser();
+      if (!user) return null;
+      const { data, error } = await c.from("profiles")
+        .select("tagline,bio,card_slug,display_name").eq("id", user.id).maybeSingle();
+      if (error) return null;
+      return data || null;
     },
 
     async myFeatured() {
@@ -989,6 +1089,23 @@
       const { data, error } = await c.rpc("admin_set_card", { p_id: id, p_slug: slug || null });
       if (error) throw error;
       return data;
+    },
+
+    // The desk's copy of saveMyWords. Same two columns, someone else's row, and
+    // the "admin updates profiles" policy is what allows it. A member calling
+    // this against another id gets zero rows back from RLS, not a silent write.
+    async setMemberWords(id, { tagline, bio }) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const patch = {};
+      if (tagline !== undefined) patch.tagline = String(tagline || "").trim() || null;
+      if (bio !== undefined) patch.bio = String(bio || "").trim() || null;
+      const { data, error } = await c.from("profiles").update(patch).eq("id", id).select("id");
+      if (error) {
+        if (error.code === "23514")
+          throw new Error("Too long. A tagline is one line up to 80, a bio is up to 600.");
+        throw error;
+      }
+      if (!data || !data.length) throw new Error("The database refused that. Not yours to edit.");
     },
 
     async retireMember(id) {

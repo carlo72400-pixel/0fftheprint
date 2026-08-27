@@ -880,10 +880,12 @@
           };
         });
         (DB.members || []).forEach(function (p) {
+          var w = (DB.cards || []).filter(function (c) { return c.card_slug === p.card_slug; })[0] || {};
           out.push({
             img: art[p.card_slug] || '', tall: true,
             t: p.display_name || '(no name)',
-            s: (p.card_slug ? p.card_slug : 'no card') + (p.is_admin ? ' · desk' : ''),
+            s: (p.card_slug ? (w.tagline ? 'page written' : 'page blank') : 'no card') +
+               (p.is_admin ? ' · desk' : ''),
             state: 'live',
             open: function () { memberSheet(p, true); }
           });
@@ -929,16 +931,28 @@
   }
 
   function memberSheet(p, isIn) {
+    // The back of their card, from his side. Same two columns they type, and
+    // the words are the only part of a member page the desk writes: their
+    // posts, songs and stories are moderated where they already live.
+    var words = (DB.cards || []).filter(function (c) { return c.card_slug === p.card_slug; })[0] || {};
     sheet({
       title: p.display_name || 'MEMBER',
       why: isIn ? 'in the house' + (p.card_slug ? ' · ' + p.card_slug : '') : 'waiting at the door',
+      body: p.card_slug
+        ? '<div class="row" style="margin-top:14px"><a class="btn ghost sm" href="../c/' +
+          encodeURIComponent(p.card_slug) + '/" target="_blank" rel="noopener">Open their page</a></div>'
+        : '',
       fields: [
         { key: 'approved', label: 'In the house', type: 'check', value: !!p.approved },
-        { key: 'card', label: 'Card slug', value: p.card_slug || '', hint: 'the /card/ they hold. blank takes it away.' }
+        { key: 'card', label: 'Card slug', value: p.card_slug || '', hint: 'the /card/ they hold. blank takes it away.' },
+        { key: 'tagline', label: 'Their tagline', value: words.tagline || '', hint: 'one line, up to 80' },
+        { key: 'bio', label: 'Their bio', type: 'textarea', rows: 5, value: words.bio || '', hint: 'up to 600' }
       ],
       save: async function (v) {
         if (!!v.approved !== !!p.approved) await OTP.setApproved(p.id, v.approved);
         if ((v.card || '') !== (p.card_slug || '')) await OTP.setCard(p.id, v.card || null);
+        if ((v.tagline || '') !== (words.tagline || '') || (v.bio || '') !== (words.bio || ''))
+          await OTP.setMemberWords(p.id, { tagline: v.tagline, bio: v.bio });
       },
       kill: isIn ? async function () {
         var batch = await OTP.retireMember(p.id);
@@ -1130,6 +1144,8 @@
         ['Approve someone at the door', 'here', function () { jump('members'); }],
         ['Hand out or take back a card', 'here', function () { jump('members'); }],
         ['Retire a member and pull their posts', 'here', function () { jump('members'); }],
+        ['Write or fix any member\'s tagline and bio', 'here', function () { jump('members'); }],
+        ['Open any card holder\'s page', 'here', function () { jump('members'); }],
         ['Pull or pin any post', 'here', function () { jump('take'); }],
         ['Publish, feature or delete a video', 'here', function () { jump('videos'); }],
         ['Publish or delete a track', 'here', function () { jump('music'); }],

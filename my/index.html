@@ -62,9 +62,28 @@
         <a href="../compose/">New post</a>
         <a href="../word/new/">Write a story</a>
         <a href="../compose/#rot">Song on rotation</a>
+        <a id="backlink" href="#" style="display:none">See your page</a>
       </div>
       <div class="hint" style="margin-top:12px">Your card photo is your face across the site.
         Frames, songs and your link live in the builder.</div>
+    </div>
+
+    <!-- THE BACK OF THE CARD. Two fields, and they are the only two on the
+         whole page a member types. Everything else on /c/<slug>/ fills itself
+         in from what they post, write and get on rotation, which is the entire
+         reason it is easy to use: nobody has to sit down and build a profile. -->
+    <div class="card" id="wordscard" style="display:none">
+      <div class="sec">The back of your card</div>
+      <div class="hint">One line and a short paragraph. That is all you type. Your posts, your
+        songs, your stories and your clips show up on your page on their own.</div>
+      <label for="w-tag">Tagline</label>
+      <input type="text" id="w-tag" maxlength="80" placeholder="one line. who you are in the room.">
+      <div class="hint" id="w-tagc" style="text-align:right"></div>
+      <label for="w-bio">Bio</label>
+      <textarea id="w-bio" rows="6" maxlength="600" placeholder="a short paragraph. plain words, no links."></textarea>
+      <div class="hint" id="w-bioc" style="text-align:right"></div>
+      <div class="msg" id="w-msg"></div>
+      <button class="btn sm" id="w-save" type="button" style="width:auto">Save your words</button>
     </div>
 
     <div>
@@ -99,7 +118,7 @@
 
 <script src="../supabase-config.js?v=f1348482"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="../assets/js/desk.js?v=fe859136" defer></script>
+<script src="../assets/js/desk.js?v=868e337f" defer></script>
 <script defer>
 document.addEventListener('DOMContentLoaded', async () => {
   const $ = id => document.getElementById(id);
@@ -119,6 +138,42 @@ document.addEventListener('DOMContentLoaded', async () => {
   $('app').style.display = '';
   $('acct').textContent = me.user.email;
   $('out').onclick = async () => { await OTP.signOut(); location.href = '../join/'; };
+
+  // ---- the back of the card: the only two fields a member types -----------
+  // A member without a card_slug has no page to point at yet (the desk hands
+  // the slug out), so the block only appears once there is somewhere for it to
+  // go. Reading through myWords() and not the public `cards` view on purpose:
+  // this has to work for a member the desk has not approved, whose row the anon
+  // policy will not return.
+  (async () => {
+    const wc = $('wordscard');
+    if (!wc) return;
+    let w = null;
+    try { w = await OTP.myWords(); } catch (e) { /* the block just stays hidden */ }
+    if (!w || !w.card_slug) return;
+    wc.style.display = '';
+    const link = $('backlink');
+    if (link) { link.href = '../c/' + encodeURIComponent(w.card_slug) + '/'; link.style.display = ''; }
+    const tag = $('w-tag'), bio = $('w-bio'), msg = $('w-msg');
+    tag.value = w.tagline || '';
+    bio.value = w.bio || '';
+    const tick = () => {
+      $('w-tagc').textContent = tag.value.length + ' / 80';
+      $('w-bioc').textContent = bio.value.length + ' / 600';
+    };
+    tag.addEventListener('input', tick); bio.addEventListener('input', tick); tick();
+    $('w-save').onclick = async () => {
+      const b = $('w-save');
+      b.disabled = true; msg.className = 'msg'; msg.textContent = 'Saving…';
+      try {
+        await OTP.saveMyWords({ tagline: tag.value, bio: bio.value });
+        msg.textContent = 'Saved. It is on your page now.';
+      } catch (e) {
+        msg.className = 'msg bad'; msg.textContent = e.message || String(e);
+      }
+      b.disabled = false;
+    };
+  })();
 
   // ---- the card preview: real renderer CSS, adopted from the homepage so it
   // cannot drift (same trick as the builder) --------------------------------
