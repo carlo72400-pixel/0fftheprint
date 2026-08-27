@@ -30,12 +30,12 @@
 
 <!-- Favicons + app icons -->
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-<link rel="alternate icon" href="assets/logo.png">
-<link rel="apple-touch-icon" href="assets/logo.png">
+<link rel="alternate icon" href="assets/icon-180.png">
+<link rel="apple-touch-icon" href="assets/icon-180.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Pirata+One&family=Luckiest+Guy&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700..900&family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Pirata+One&family=Luckiest+Guy&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" defer></script>
 <script src="supabase-config.js?v=f1348482" defer></script>
 <script src="assets/js/desk.js?v=868e337f" defer></script>
@@ -55,7 +55,7 @@
     --pink-glow:#ff79c6;
     --dye-blue:#2f6bff;
 
-    --f-display:'Saira Condensed','Inter',system-ui,sans-serif;
+    --f-logo:'Cinzel',serif;--f-display:'Saira Condensed','Inter',system-ui,sans-serif;
     --f-body:'Inter',system-ui,-apple-system,'Helvetica Neue',sans-serif;
     --f-mono:'JetBrains Mono',ui-monospace,monospace;
   }
@@ -1467,8 +1467,8 @@
     max-width:1180px;margin:0 auto;flex-wrap:wrap;
   }
   footer.site .mark{
-    font-family:var(--f-display);font-style:italic;font-weight:900;
-    font-size:22px;letter-spacing:-.01em;text-transform:uppercase;color:var(--ink);
+    font-family:var(--f-logo);font-weight:900;font-style:normal;
+    font-size:18px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink);
   }
   footer.site .mark .zero{
     background:linear-gradient(180deg,#fff,var(--pink-glow),var(--pink));
@@ -2689,6 +2689,27 @@
      into the image: the same lockup the footer and the brand card use, so it
      stays pixel-sharp at any density and cannot drift from the rest of the
      site. Generated type at this aspect is exactly where that fails. */
+  /* ===== THE LOGO SYSTEM =====
+     One mark, one face. The mark stands in for the zero, so the logo spells the
+     first letter of the name instead of sitting next to it.
+     ⛔ --f-logo is Cinzel and is the LOGO face only. Section heads stay on Saira,
+     because swapping a display face across a whole page is never one line: the
+     tracking, the weights and the size-adjust were all tuned for the old one. */
+  .pm-lock{display:inline-flex;align-items:center;gap:.04em;
+    font-size:clamp(18px,3.3vw,33px)}
+  .pm-mk{display:block;width:1.42em;height:1.42em;flex:0 0 auto;
+    filter:drop-shadow(0 2px 8px rgba(0,0,0,.65)) drop-shadow(0 0 14px rgba(255,121,198,.45))}
+  .bc-lock{display:flex;flex-direction:column;align-items:center;text-align:center;padding:6px 0 2px}
+  .bc-mk{display:block;width:76px;height:76px;filter:drop-shadow(0 3px 14px rgba(0,0,0,.55))}
+  .bc-name{font-family:var(--f-logo);font-weight:900;text-transform:uppercase;
+    letter-spacing:.08em;font-size:22px;line-height:1;color:var(--ink);margin-top:12px}
+  .bc-sub{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--muted);margin-top:9px}
+  .bc-rule{font-family:var(--f-mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--muted);margin-top:12px;display:flex;align-items:center;gap:7px;justify-content:center}
+  .bc-rule span{border:1px solid var(--line);border-radius:3px;padding:3px 6px;color:var(--ink)}
+  footer.site .mark .fmk{display:inline-block;vertical-align:-.18em;width:1.18em;height:1.18em;margin-right:.02em}
+
   .pulse-mark{
     position:relative;width:min(680px,92vw);aspect-ratio:6/1;margin:0 auto;
     border-radius:12px;overflow:hidden;display:grid;place-items:center;
@@ -2702,8 +2723,8 @@
   }
   .pulse-mark .pm-txt{
     position:relative;z-index:2;
-    font-family:var(--f-display);font-style:italic;font-weight:900;
-    font-size:clamp(22px,4vw,40px);letter-spacing:-.01em;line-height:1;
+    font-family:var(--f-logo);font-weight:900;font-style:normal;
+    font-size:1em;letter-spacing:.06em;line-height:1;
     text-transform:uppercase;color:var(--ink);
     text-shadow:0 2px 10px rgba(0,0,0,.75), 0 0 26px rgba(0,0,0,.5);
   }
@@ -3637,7 +3658,8 @@
   <div class="pulse-kick">MEDIA HOUSE · SAN ANTONIO TX · SINCE WE FELT LIKE IT</div>
   <h1 class="pulse-line">THE CITY GOES DARK.<br><span class="blue">WE CLOCK IN.</span></h1>
   <div class="pulse-mark" role="img" aria-label="0FF THE PRINT">
-    <span class="pm-txt"><span class="zero">0</span>FF THE PRINT</span>
+    <span class="pm-lock"><img class="pm-mk" src="assets/mark-inline.svg" alt="" width="64" height="64">
+      <span class="pm-txt">FF THE PRINT</span></span>
   </div>
 </header>
 
@@ -3648,13 +3670,16 @@
   <aside class="sidebar">
 
     <section class="card brand-card">
-      <!-- 720px lossless WebP, not the 1120px PNG. It renders at 242 CSS px, so 720
-           still covers a DPR 3 phone, and the xerox grain is high-frequency noise
-           that PNG cannot pack: 318 KB -> 96 KB for a pixel-identical wordmark.
-           Lossless beats lossy WebP here because lossy spends its bits smoothing
-           exactly the toner speckle that is the whole point of the mark. -->
-      <img src="assets/logo-xerox-white.webp" alt="0FF THE PRINT — xerox print-stamp wordmark, white toner ink" width="280" height="280" decoding="async" style="display:block;width:100%;height:auto;margin:-6px -4px 8px;border-radius:8px;">
-      <div class="handle" style="text-align:center;">SAN ANTONIO · TX</div>
+      <!-- The real lockup, not a picture of one. This card used to carry a 720px
+           WebP of the xerox wordmark, which was a fourth mark competing with the
+           footer, the banner and the pack. Same mark as the favicon now. -->
+      <div class="bc-lock">
+        <img class="bc-mk" src="assets/mark.svg" alt="" width="88" height="88" decoding="async">
+        <div class="bc-name">0FF THE PRINT</div>
+        <div class="bc-sub">Underground media house &middot; SATX</div>
+        <div class="bc-rule"><span>NO. 0TP</span> Pretty-first &middot; with teeth</div>
+      </div>
+      <div class="handle" style="text-align:center;">SAN ANTONIO &middot; TX</div>
       <div class="strip"></div>
     </section>
 
@@ -3924,7 +3949,7 @@
 <footer class="site">
   <div class="row">
     <div>
-      <div class="mark"><span class="zero">0</span>FF THE PRINT</div>
+      <div class="mark"><img class="fmk" src="assets/mark-inline.svg" alt="" width="26" height="26">FF THE PRINT</div>
       <div style="margin-top:6px;" id="footer-meta">© 2026 · Underground-culture media · Curated by the desk</div>
     </div>
     <div style="text-align:right;" id="footer-social">
