@@ -5530,7 +5530,7 @@
     // outranks sending the visitor off to somebody else's platform.
     const primaryHtml = page
       ? `<a class="btn-primary" href="${esc(page)}">See their page →</a>` + (outHtml
-          ? `<a class="btn-secondary" href="${esc(link)}" ${isExt?'target="_blank" rel="noopener"':''}>${isExt?'Open '+(data.platform||'Instagram'):'Jump to roster'} →</a>`
+          ? `<a class="btn-secondary" href="${esc(link)}" ${isExt?'target="_blank" rel="noopener"':''}>${isExt?'Open '+outName(link):'Jump to roster'} →</a>`
           : '')
       : outHtml;
     modalActions.innerHTML = primaryHtml + `
