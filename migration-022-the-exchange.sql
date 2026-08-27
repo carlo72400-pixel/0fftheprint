@@ -229,16 +229,26 @@ end $$;
 -- role switch) rolls the SET ROLE back on its own and cannot strand this
 -- session as anon.
 do $$
-declare n int;
+declare n int; ok boolean := false; err text;
 begin
   begin
     set local role anon;
     select count(*) into n from public.calendar;
-    update _m022 set anon_reads = true;
+    ok := true;
   exception when others then
-    raise notice '022: reading public.calendar AS ANON failed: % (%)', sqlerrm, sqlstate;
+    err := sqlstate || ': ' || sqlerrm;
   end;
   reset role;
+  -- ⛔ WRITE THE ANSWER DOWN ONLY AFTER RESET ROLE. The first cut of this check
+  --    did `update _m022 ...` while still wearing anon, and anon has no
+  --    privileges on a temp table postgres created, so the SELECT it was
+  --    testing passed and the bookkeeping threw 42501 and the column reported
+  --    FALSE on a database where anon could read the view perfectly. A verify
+  --    that lies in the SAFE direction still costs a session.
+  update _m022 set anon_reads = ok;
+  if not ok then
+    raise notice '022: reading public.calendar AS ANON failed: %', err;
+  end if;
 end $$;
 
 select
