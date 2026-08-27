@@ -207,6 +207,35 @@
       "link": "https://www.instagram.com/wunmorwin/",
       "theme_song": "",
       "lore": "Wun. Draws in heavy black line on paper he stains first, and casts and paints his own figures when the paper is not enough.\n\nThe cast is gremlins, jesters and long toothed dogs, and the WUN MOR tag usually goes inside the piece instead of under it. Commissions open, and they have been for a while.\n\nSeat filled 8/26, shot at the booth with the mask on. The song is still his to set."
+    },
+    {
+      "name": "VAMPPSYCH",
+      "type": "lens",
+      "type_label": "THE LENS",
+      "hp": 220,
+      "rarity": "darklord",
+      "photo": "assets/card-vamp-darklord.jpg",
+      "pending_glyph": "VP",
+      "pending_stamp": "",
+      "flavor": "In the room every week. Never in the frame.",
+      "moves": [
+        {
+          "cost": "y",
+          "name": "Clock In",
+          "damage": 60,
+          "desc": "The city goes dark and he is already set up in the corner."
+        },
+        {
+          "cost": "yyy",
+          "name": "Full Quality",
+          "damage": 150,
+          "desc": "Every frame from the night, free, before anyone asks twice."
+        }
+      ],
+      "platform": "SATX",
+      "link": "https://instagram.com/vamppsych",
+      "theme_song": "https://open.spotify.com/track/27OqNFBwYkOOZKhXShri4n",
+      "lore": "Gianni. FX6, Insta360, Full Sail Digital Cinematography, and a card in his own house because he shoots it every week like everybody else on this list.\n\nZenhouse Fridays, The Mix on the Strip, Paper Tiger, the raves, Legion Ink after hours. Directed VOLUME. Cuts gothic essays as Vamppsych.\n\nRuns the desk, which is why this card sits at the end of the roster and not the front of it."
     }
   ],
   "_archived_unfilled_seats": [

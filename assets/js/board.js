@@ -631,56 +631,6 @@
       add: { label: 'WRITE ONE', glyph: '✍', on: function () { location.href = '../word/new/'; } }
     });
 
-    /* ---- THE WORK. 37 frames, captions and order both editable from here.
-       Adding a frame is still a git thing: the file has to exist and derive.py
-       has to make its three sizes before the page can paint it. ---- */
-    R.push({
-      key: 'work', nm: 'THE WORK', src: 'content/work.json + overlay',
-      note: 'tap a frame to fix the caption, arrows to move it',
-      tiles: function () {
-        var items = ((C.work && C.work.items) || []);
-        var keys = ordered('work', items, function (it) { return base(it.src); });
-        return keys.map(function (k, i) {
-          var it = items.filter(function (x) { return base(x.src) === k; })[0];
-          var p = ovPatch('work', k), row = ovRow('work', k);
-          var v = Object.assign({}, it, p);
-          return {
-            img: thumb(it.src), off: !!(row && row.hidden),
-            t: v.label || k, s: row && row.hidden ? 'hidden' : (row ? 'edited' : 'in git'),
-            state: row && row.hidden ? 'hidden' : (row && Object.keys(p).length ? 'draft' : 'git'),
-            move: function (dir) { nudge('work', keys, i, i + dir); },
-            open: function () {
-              sheet({
-                title: 'THE WORK', why: k, art: full(it.src),
-                fields: [
-                  { key: 'label', label: 'Caption', value: p.label != null ? p.label : (it.label || '') },
-                  { key: 'alt', label: 'Alt text', type: 'textarea', rows: 2, value: p.alt != null ? p.alt : (it.alt || '') },
-                  { key: 'hidden', label: 'Hide this frame', type: 'check', value: !!(row && row.hidden) }
-                ],
-                save: async function (val) {
-                  var patch = {};
-                  if (val.label !== undefined) patch.label = val.label;
-                  if (val.alt !== undefined) patch.alt = val.alt;
-                  await writeOv('work', k, patch, { hidden: !!val.hidden });
-                }
-              });
-            }
-          };
-        });
-      },
-      add: {
-        label: 'ADD A FRAME', glyph: '🖼', cold: true, on: function () {
-          tellSheet('ADD A FRAME', 'laptop only for now', [
-            'A frame needs the file in assets/work/ and derive.py to make its',
-            'thumb, grid and full sizes. The overlay can patch an item that is',
-            'already there, it cannot invent one the page has never seen.',
-            '',
-            'So: drop the jpg in, run derive.py, add the line to work.json, push.'
-          ]);
-        }
-      }
-    });
-
     /* ---- MUSIC. Six committed seeds that can be swapped for any Spotify
        link, plus whatever the members put on rotation. ---- */
     R.push({
@@ -776,55 +726,6 @@
       }
     });
 
-    /* ---- THIS IS US. creators.json has no overlay section yet. ---- */
-    R.push({
-      key: 'curators', nm: 'THIS IS US', src: 'content/creators.json',
-      note: 'the outlet, the lens, the open seats',
-      tiles: function () {
-        var items = ((C.creators && C.creators.items) || []);
-        var keys = ordered('creators', items, function (it) { return String(it.name || ''); });
-        return keys.map(function (k, i) {
-          var c = items.filter(function (x) { return String(x.name || '') === k; })[0];
-          var p = ovPatch('creators', k), row = ovRow('creators', k);
-          var v = Object.assign({}, c, p);
-          return {
-            img: thumb(c.photo), tall: true, off: !!(row && row.hidden),
-            t: v.name, s: row && row.hidden ? 'hidden' : (v.role || ''),
-            state: row && row.hidden ? 'hidden' : (row && Object.keys(p).length ? 'draft' : 'git'),
-            move: function (dir) { nudge('creators', keys, i, i + dir); },
-            open: function () {
-              sheet({
-                title: c.name, why: c.kind === 'ex' ? 'the lens' : 'a voice',
-                art: full(c.photo),
-                fields: [
-                  { key: 'role', label: 'Role', value: p.role != null ? p.role : (c.role || '') },
-                  { key: 'tag', label: 'Tag line', value: p.tag != null ? p.tag : (c.tag || '') },
-                  { key: 'flavor', label: 'Flavor line', value: p.flavor != null ? p.flavor : (c.flavor || '') },
-                  { key: 'lore', label: 'Lore', type: 'textarea', rows: 6, value: p.lore != null ? p.lore : (c.lore || '') },
-                  { key: 'hidden', label: 'Hide this card', type: 'check', value: !!(row && row.hidden) }
-                ],
-                save: async function (val) {
-                  var patch = {};
-                  ['role', 'tag', 'flavor', 'lore'].forEach(function (kk) {
-                    if (val[kk] !== undefined) patch[kk] = val[kk];
-                  });
-                  try {
-                    await writeOv('creators', k, patch, { hidden: !!val.hidden });
-                  } catch (e) {
-                    // The section CHECK is the only thing that can refuse this,
-                    // and it refuses with a constraint error nobody can read.
-                    if (/violates check|check constraint|23514/i.test(e.message || ''))
-                      throw new Error('The database still refuses a creators row. Run migration-017-the-board.sql, then try again.');
-                    throw e;
-                  }
-                }
-              });
-            }
-          };
-        });
-      }
-    });
-
     /* ---- THE ROSTER. Flavor, lore, stamp and order, all from here. ---- */
     R.push({
       key: 'roster', nm: 'THE ROSTER', src: 'content/roster.json + overlay',
@@ -862,6 +763,56 @@
             }
           };
         });
+      }
+    });
+
+    /* ---- THE WORK. 37 frames, captions and order both editable from here.
+       Adding a frame is still a git thing: the file has to exist and derive.py
+       has to make its three sizes before the page can paint it. ---- */
+    R.push({
+      key: 'work', nm: 'THE WORK', src: 'content/work.json + overlay',
+      note: 'tap a frame to fix the caption, arrows to move it',
+      tiles: function () {
+        var items = ((C.work && C.work.items) || []);
+        var keys = ordered('work', items, function (it) { return base(it.src); });
+        return keys.map(function (k, i) {
+          var it = items.filter(function (x) { return base(x.src) === k; })[0];
+          var p = ovPatch('work', k), row = ovRow('work', k);
+          var v = Object.assign({}, it, p);
+          return {
+            img: thumb(it.src), off: !!(row && row.hidden),
+            t: v.label || k, s: row && row.hidden ? 'hidden' : (row ? 'edited' : 'in git'),
+            state: row && row.hidden ? 'hidden' : (row && Object.keys(p).length ? 'draft' : 'git'),
+            move: function (dir) { nudge('work', keys, i, i + dir); },
+            open: function () {
+              sheet({
+                title: 'THE WORK', why: k, art: full(it.src),
+                fields: [
+                  { key: 'label', label: 'Caption', value: p.label != null ? p.label : (it.label || '') },
+                  { key: 'alt', label: 'Alt text', type: 'textarea', rows: 2, value: p.alt != null ? p.alt : (it.alt || '') },
+                  { key: 'hidden', label: 'Hide this frame', type: 'check', value: !!(row && row.hidden) }
+                ],
+                save: async function (val) {
+                  var patch = {};
+                  if (val.label !== undefined) patch.label = val.label;
+                  if (val.alt !== undefined) patch.alt = val.alt;
+                  await writeOv('work', k, patch, { hidden: !!val.hidden });
+                }
+              });
+            }
+          };
+        });
+      },
+      add: {
+        label: 'ADD A FRAME', glyph: '🖼', cold: true, on: function () {
+          tellSheet('ADD A FRAME', 'laptop only for now', [
+            'A frame needs the file in assets/work/ and derive.py to make its',
+            'thumb, grid and full sizes. The overlay can patch an item that is',
+            'already there, it cannot invent one the page has never seen.',
+            '',
+            'So: drop the jpg in, run derive.py, add the line to work.json, push.'
+          ]);
+        }
       }
     });
 
@@ -914,6 +865,55 @@
           { t: 'Pitch Us', glyph: '✉', s: 'get on the desk', state: 'git', open: function () { staticTell('Pitch Us'); } },
           { t: 'Why we are the experts', glyph: '★', s: 'credentials · craft · receipts', state: 'git', open: function () { staticTell('Why we are the experts'); } }
         ];
+      }
+    });
+
+    /* ---- THIS IS US. creators.json has no overlay section yet. ---- */
+    R.push({
+      key: 'curators', nm: 'THIS IS US', src: 'content/creators.json',
+      note: 'the outlet, the lens, the open seats',
+      tiles: function () {
+        var items = ((C.creators && C.creators.items) || []);
+        var keys = ordered('creators', items, function (it) { return String(it.name || ''); });
+        return keys.map(function (k, i) {
+          var c = items.filter(function (x) { return String(x.name || '') === k; })[0];
+          var p = ovPatch('creators', k), row = ovRow('creators', k);
+          var v = Object.assign({}, c, p);
+          return {
+            img: thumb(c.photo), tall: true, off: !!(row && row.hidden),
+            t: v.name, s: row && row.hidden ? 'hidden' : (v.role || ''),
+            state: row && row.hidden ? 'hidden' : (row && Object.keys(p).length ? 'draft' : 'git'),
+            move: function (dir) { nudge('creators', keys, i, i + dir); },
+            open: function () {
+              sheet({
+                title: c.name, why: c.kind === 'ex' ? 'the lens' : 'a voice',
+                art: full(c.photo),
+                fields: [
+                  { key: 'role', label: 'Role', value: p.role != null ? p.role : (c.role || '') },
+                  { key: 'tag', label: 'Tag line', value: p.tag != null ? p.tag : (c.tag || '') },
+                  { key: 'flavor', label: 'Flavor line', value: p.flavor != null ? p.flavor : (c.flavor || '') },
+                  { key: 'lore', label: 'Lore', type: 'textarea', rows: 6, value: p.lore != null ? p.lore : (c.lore || '') },
+                  { key: 'hidden', label: 'Hide this card', type: 'check', value: !!(row && row.hidden) }
+                ],
+                save: async function (val) {
+                  var patch = {};
+                  ['role', 'tag', 'flavor', 'lore'].forEach(function (kk) {
+                    if (val[kk] !== undefined) patch[kk] = val[kk];
+                  });
+                  try {
+                    await writeOv('creators', k, patch, { hidden: !!val.hidden });
+                  } catch (e) {
+                    // The section CHECK is the only thing that can refuse this,
+                    // and it refuses with a constraint error nobody can read.
+                    if (/violates check|check constraint|23514/i.test(e.message || ''))
+                      throw new Error('The database still refuses a creators row. Run migration-017-the-board.sql, then try again.');
+                    throw e;
+                  }
+                }
+              });
+            }
+          };
+        });
       }
     });
 

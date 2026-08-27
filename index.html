@@ -1997,6 +1997,15 @@
 
   /* Curators Hero — cheetah-bordered cards as landing */
   .curators-hero{margin-bottom:32px;}
+  /* One booster on its own. It used to be the last tile in the curators grid,
+     which gave it a column; standing alone it needs its own or the card stretches
+     the entire content width and reads as a poster instead of a pack.
+     ⛔ The first version of this rule got inserted next to `.curators-grid` inside
+     a max-width media block, so it only applied on a phone and the desktop pack
+     came out ~760px wide. Anchor on the BASE rule, not the first match. */
+  .booster-mount{display:grid;grid-template-columns:repeat(auto-fill,minmax(0,262px));gap:14px;}
+  @media (max-width:460px){ .booster-mount{grid-template-columns:minmax(0,1fr);} }
+
   .curators-grid{
     display:grid;
     grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
@@ -3549,14 +3558,15 @@
 <!-- ========== NAV ========== -->
 <nav class="site">
   <a href="join/" id="nav-key" class="key" title="Card holders log in here.">Log in</a>
-  <a href="#curators">This Is Us</a>
+  <a href="#open">Open A Pack</a>
   <a href="#take">The Take</a>
   <a href="#desk">The Word</a>
-  <a href="#work">The Work</a>
   <a href="#music">Music</a>
-  <a href="events/"><span class="nav-short">Events</span><span class="nav-long">Event Photos</span></a>
   <a href="#roster">Roster</a>
+  <a href="#work">The Work</a>
+  <a href="events/"><span class="nav-short">Events</span><span class="nav-long">Event Photos</span></a>
   <a href="#pitch">DM</a>
+  <a href="#curators">This Is Us</a>
   <span class="spacer"></span>
   <a href="#" target="_blank" rel="noopener" class="cta" id="nav-follow">Follow</a>
   <span class="nav-more" aria-hidden="true">&rsaquo;</span>
@@ -3692,6 +3702,16 @@
 
   <!-- ============ MAIN ============ -->
   <main class="feed">
+    <!-- ===== OPEN A PACK — leads the page now. The booster card used to sit
+         at the end of the curators grid, four screens down, which is a long walk
+         for the one thing on this page that is a toy. ===== -->
+    <section id="open">
+      <div class="section-head">
+        <h2>Open A Pack <span class="accent">one random card</span></h2>
+        <div class="sub">tap it &nbsp;·&nbsp; you get who you get</div>
+      </div>
+      <div class="booster-mount" id="booster-mount"></div>
+    </section>
 
     <!-- ===== THE DROPS — leads the page. Most arrivals want THEIR photos. ===== -->
     <section id="drops">
@@ -3763,15 +3783,6 @@
     </section>
 
 
-    <!-- ===== THE WORK (real frames) ===== -->
-    <section id="work">
-      <div class="section-head">
-        <h2>The Work <span class="accent">shot by the house</span></h2>
-        <div class="sub">nights, shops, stages, back rooms</div>
-      </div>
-      <div class="work-grid" id="work-grid"><!-- JS populates --></div>
-    </section>
-
     <!-- ===== MUSIC · SPOTIFY ROTATION ===== -->
     <section id="music">
       <div class="section-head">
@@ -3781,16 +3792,6 @@
       <div class="rotation-grid" id="rotation-mount"></div>
     </section>
 
-    <!-- ===== CURATORS HERO — one lens, the voices come to it.
-         Moved below the work 8/25: the frames are the face, not us. ===== -->
-    <section id="curators" class="curators-hero">
-      <div class="section-head">
-        <h2>This Is Us <span class="accent">the outlet</span></h2>
-        <div class="sub">one lens · a roster of voices · open seats that mean it</div>
-      </div>
-      <div class="curators-grid" id="curators-mount"></div>
-    </section>
-
     <!-- ===== ROSTER ===== -->
     <section id="roster">
       <div class="section-head">
@@ -3798,6 +3799,15 @@
         <div class="sub">each one goes crazy at one thing</div>
       </div>
       <div class="roster" id="roster-mount"></div>
+    </section>
+
+    <!-- ===== THE WORK (real frames) ===== -->
+    <section id="work">
+      <div class="section-head">
+        <h2>The Work <span class="accent">shot by the house</span></h2>
+        <div class="sub">nights, shops, stages, back rooms</div>
+      </div>
+      <div class="work-grid" id="work-grid"><!-- JS populates --></div>
     </section>
 
     <!-- ===== PITCH US ===== -->
@@ -3833,6 +3843,16 @@
           </ul>
         </div>
       </div>
+    </section>
+
+    <!-- ===== CURATORS HERO — one lens, the voices come to it.
+         Moved below the work 8/25: the frames are the face, not us. ===== -->
+    <section id="curators" class="curators-hero">
+      <div class="section-head">
+        <h2>This Is Us <span class="accent">the outlet</span></h2>
+        <div class="sub">one lens · a roster of voices · open seats that mean it</div>
+      </div>
+      <div class="curators-grid" id="curators-mount"></div>
     </section>
 
   </main>
@@ -4351,8 +4371,20 @@
     cMount.innerHTML = creators.map((c, i) => {
       if (c.open_seat) return ''; // legacy open-seat handled by booster instead
       return renderPokeCard(c, 'curator', i);
-    }).join('') + renderBoosterCard();
+    }).join('');
     wirePokeCards(cMount);
+  }
+
+  // ---- OPEN A PACK, at the top of the page ----
+  // The booster used to be the last tile in the curators grid, which is now the
+  // LAST section on the page. The one thing here that is a toy should not be
+  // four screens down, so it gets its own section at the top. Same card, same
+  // wiring: wirePokeCards routes .booster-pack to openBooster() before it looks
+  // at data-idx, so a card with no index behind it is not a problem.
+  const bMount = document.getElementById('booster-mount');
+  if (bMount) {
+    bMount.innerHTML = renderBoosterCard();
+    wirePokeCards(bMount);
   }
 
   // ============ The Take ============
