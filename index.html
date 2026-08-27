@@ -35,12 +35,14 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="assets/css/calendar.css">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700..900&family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Pirata+One&family=Luckiest+Guy&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" defer></script>
 <script src="supabase-config.js?v=f1348482" defer></script>
 <script src="assets/js/desk.js?v=0c4fa9b8" defer></script>
 <script src="assets/js/door.js?v=4fd82def" defer></script>
 <script src="assets/js/composer.js?v=9e82b159" defer></script>
+<script src="assets/js/calendar.js?v=1240b47b" defer></script>
 <script src="assets/js/edit.js?v=306e9e9c" defer></script>
 <style>
   :root{
@@ -714,11 +716,18 @@
      A rail, not a single "latest drop" line. Somebody hunting their photo from
      Saturday does not want the newest night, they want THEIR night. */
   /* THE RUN. Same rail grammar as the drops, one row, horizontal scroll. */
-  .run-rail{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(210px,238px);gap:12px;
+  .run-rail{display:none;grid-auto-flow:column;grid-auto-columns:minmax(210px,238px);gap:12px;
     overflow-x:auto;padding-bottom:8px;scroll-snap-type:x proximity;}
   .run-rail::-webkit-scrollbar{height:6px;}
   .run-rail::-webkit-scrollbar-thumb{background:var(--pink-deep);border-radius:999px;}
-  @media (max-width:640px){ .run-rail{grid-auto-columns:minmax(172px,74vw);} }
+  @media (max-width:640px){ .run-rail{display:grid;grid-auto-columns:minmax(172px,74vw);} }
+  #run-add{margin-bottom:14px}
+  .run-add-btn{display:inline-flex;align-items:center;gap:9px;background:var(--panel);
+    border:1px solid var(--line);border-radius:999px;color:var(--ink);cursor:pointer;
+    font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    padding:10px 16px;transition:border-color .14s}
+  .run-add-btn:hover{border-color:var(--pink-deep);color:var(--pink-glow)}
+  .run-add-btn i{font-style:normal;color:var(--pink-glow);font-size:14px}
   .run{scroll-snap-align:start;background:var(--panel);border:1px solid var(--line);
     border-radius:13px;padding:13px 14px;text-decoration:none;color:var(--ink);display:block;
     transition:border-color .14s,transform .14s;}
@@ -3842,6 +3851,8 @@
         <h2>The Run <span class="accent">what&rsquo;s coming</span></h2>
         <div class="sub">shows &nbsp;·&nbsp; drops &nbsp;·&nbsp; releases</div>
       </div>
+      <div id="run-add"></div>
+      <div class="cal-wrap" id="run-grid"></div>
       <div class="run-rail" id="run-rail"></div>
       <a class="drops-more" href="dates/">the whole calendar &rarr;</a>
     </section>
@@ -4243,41 +4254,83 @@
   }
 
   // ============ Site bits ============
-  // ---- THE RUN rail (migration 020) ----
-  // ⛔ Y-M-D strings only, never a Date built from the raw value: new
-  // Date('2026-09-15') is UTC MIDNIGHT, which is the evening BEFORE in San
-  // Antonio, and every date on the homepage would render a day early for the
-  // city it is written for.
+  // ---- THE RUN: the month grid, the phone rail, and the add button ----
+  // Same component /dates/ draws, from assets/js/calendar.js, because two
+  // implementations of a calendar is two calendars that drift.
+  // ⛔ Y-M-D strings only. new Date('2026-09-15') is UTC MIDNIGHT, the evening
+  // BEFORE in San Antonio, and every date here would render a day early for the
+  // exact city this site is written for.
   (async () => {
     const rail = document.getElementById('run-rail');
-    if (!rail) return;
-    const sec = rail.closest('section');
+    const gridMount = document.getElementById('run-grid');
+    const addMount = document.getElementById('run-add');
+    if (!rail && !gridMount) return;
+    const sec = (gridMount || rail).closest('section');
+
+    // calendar.js is deferred and this block is inline, so it can arrive first.
+    const Cal = await (async () => {
+      for (let i = 0; i < 40; i++) { if (window.OTPCal) return window.OTPCal; await new Promise(r => setTimeout(r, 50)); }
+      return null;
+    })();
+
     let run = [];
     try {
-      if (window.OTP && OTP.configured) run = await OTP.calendar(10);
+      if (window.OTP && OTP.configured) run = await OTP.calendar(200);
     } catch (e) {
-      // 020 not run yet, or the view is unreachable. The homepage does not get
-      // to break over a section that is additive.
+      // 020 not run, or the view is unreachable. An additive section does not
+      // get to take the homepage down with it.
       console.warn('the run: ' + e.message);
     }
-    if (!run.length) { if (sec) sec.remove(); return; }
-    const MON = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-    const DOW = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
-    rail.innerHTML = run.map(r => {
-      const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(r.on_date || ''));
-      let when = '';
-      if (m) {
-        const dt = new Date(+m[1], +m[2] - 1, +m[3]);
-        when = `${DOW[dt.getDay()]} ${MON[+m[2] - 1]} ${+m[3]}`;
+
+    let me = null;
+    try { if (window.OTP && OTP.configured) me = await OTP.me(); } catch (e) {}
+    const canAdd = !!(me && me.profile && me.profile.approved);
+
+    if (!run.length && !canAdd) { if (sec) sec.remove(); return; }
+
+    const draw = () => {
+      // the phone cut
+      if (rail) {
+        rail.innerHTML = run.slice(0, 10).map(r => {
+          const p = Cal ? Cal.parts(r.on_date) : null;
+          const when = p ? `${Cal.DOW[p.dow]} ${Cal.MON[p.mo]} ${p.day}` : '';
+          const bits = [r.venue, r.city, r.by_name].filter(Boolean).map(esc).join(' · ');
+          const href = (Cal && Cal.safeLink(r.link)) || 'dates/';
+          const ext = /^https:/.test(href);
+          return `<a class="run" href="${esc(href)}"${ext ? ' target="_blank" rel="noopener nofollow"' : ''}>
+            <span class="rw">${esc(when)}</span>
+            <span class="rt">${esc(r.title || '')}</span>
+            <span class="rm">${bits}</span></a>`;
+        }).join('');
       }
-      const bits = [r.venue, r.city, r.by_name].filter(Boolean).map(esc).join(' · ');
-      const href = safeUrl(r.link) || 'dates/';
-      const ext = /^https:/.test(href);
-      return `<a class="run" href="${esc(href)}"${ext ? ' target="_blank" rel="noopener nofollow"' : ''}>
-        <span class="rw">${esc(when)}</span>
-        <span class="rt">${esc(r.title || '')}</span>
-        <span class="rm">${bits}</span></a>`;
-    }).join('');
+      // the month
+      if (gridMount && Cal) {
+        Cal.grid(gridMount, run, gridState, {
+          onPick: (r) => {
+            const href = Cal.safeLink(r.link);
+            if (href) window.open(href, '_blank', 'noopener');
+            else location.href = 'dates/';
+          },
+          onMonth: () => draw(),
+        });
+      }
+    };
+    const now = new Date();
+    const gridState = Cal ? Cal.startMonth(run)
+      : { y: now.getFullYear(), mo: now.getMonth() };
+    draw();
+
+    if (canAdd && addMount && Cal) {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'run-add-btn';
+      b.innerHTML = '<i>+</i> Add a date';
+      b.onclick = () => Cal.sheet(null, async () => {
+        try { run = await OTP.calendar(200); } catch (e) {}
+        draw();
+      });
+      addMount.appendChild(b);
+    }
   })();
 
   // ---- THE DROPS rail ----
