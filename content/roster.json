@@ -221,9 +221,9 @@
       "moves": [
         {
           "cost": "p",
-          "name": "Pull Up",
-          "damage": 50,
-          "desc": "Arrives with the bottle and the whole parking lot knows."
+          "name": "Projekt Mayhem",
+          "damage": 60,
+          "desc": "Books the night himself, then headlines it."
         },
         {
           "cost": "ppp",
@@ -234,8 +234,9 @@
       ],
       "platform": "SATX",
       "link": "https://www.instagram.com/sinikfromtx/",
-      "theme_song": "",
-      "lore": "Sinik. San Antonio.\n\nSeat filled 8/27. The song, the words on the back of this card and the art are his to set, the same as everybody else on this list.\n\nShot outside the room on 8/23."
+      "theme_song": "https://open.spotify.com/track/1N08mkLZqSfq4RA8hbBztK",
+      "lore": "Sinik. San Antonio. Four singles out since July under SinikFromTx: LOAD UP!, She Don't, Don't Mind The Bleeding, LIKE ME.\n\nHe does not sit around waiting on a booking. Projekt Mayhem is his own night, he puts it together and then headlines it, and the shirt he had printed goes for twenty at the door.\n\nThe Cro-Mags cut off is not a costume. Punk records and rap records are the same shelf to him, and this card art is made the way that record was made: one photograph, one ink, the only red on it is the red that was on his chest.\n\nSeat filled 8/27, shot outside the room on 8/23, art swapped 8/27 off frames he picked himself. Next one is Y2K THIS WAY, September 4 on Nacogdoches, doors 6:30.",
+      "theme_start": 0
     },
     {
       "name": "VAMPPSYCH",
