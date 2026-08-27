@@ -975,9 +975,9 @@
             'at the door, and you tap approve.',
             '',
             'If you do not want them, open them and tick NOT THIS ONE. They drop',
-            'out of the queue instead of being re-read every time you open this,',
-            'they are never told a reason, and you can undo it. Undoing puts them',
-            'back at the door, not in the house.'
+            'out of your queue instead of being re-read every time you open this.',
+            'Their side does not change at all: it still says in the queue, the',
+            'same as it did before. Undo puts them back at the door, not in.'
           ], [{ label: 'The seats page', href: '../seats/', blank: true },
               { label: 'The door', href: '../join/', blank: true }]);
         }
@@ -1081,7 +1081,7 @@
           type: 'check', value: !!p.denied,
           hint: p.denied
             ? 'Untick and they go back to WAITING, not in. You still have to say yes on purpose.'
-            : 'Says no and clears them out of the queue. Reversible, and they are never told a reason.' },
+            : 'Says no and clears them out of your queue. They are never told: their side still reads "in the queue" exactly like before. Reversible.' },
         { key: 'card', label: 'Card slug', value: p.card_slug || '', hint: 'the /card/ they hold. blank takes it away.' },
         { key: 'tagline', label: 'Their tagline', value: words.tagline || '', hint: 'one line, up to 80' },
         { key: 'bio', label: 'Their bio', type: 'textarea', rows: 5, value: words.bio || '', hint: 'up to 600' }

@@ -1380,11 +1380,16 @@
     doorNote(profile) {
       if (!profile) return { state: "out", line: "Card holders log in here." };
       if (profile.is_admin)  return { state: "admin", line: "Approvals and pulls." };
-      if (profile.denied)    return { state: "refused",
-        line: "The desk looked at this one and it is not going forward." };
       if (profile.approved)  return { state: "in", line: "You are in." };
-      return { state: "wait",
-        line: "You are in the queue. The desk approves by hand, so give it a day." };
+      // ⛔ REFUSED READS EXACTLY LIKE WAITING, HIS CALL. The no is a DESK tool:
+      // it clears the queue so he stops re-reading the same name every time the
+      // board opens. It is not an announcement. A refused person is never told,
+      // which means they are also never handed something to argue with. The
+      // state is still distinct here so the desk can see it; only the LINE is
+      // the same, and it is the same line on every surface.
+      var wait = { line: "You are in the queue. The desk approves by hand, so give it a day." };
+      return profile.denied ? { state: "refused", line: wait.line }
+                            : { state: "wait",    line: wait.line };
     },
 
     async setCard(id, slug) {
