@@ -5507,8 +5507,23 @@
     const link = safeUrl(data.link) || '#';
     const isExt = /^https?:\/\//.test(link);
     const page = (window.__OTP_PAGE_FOR ? window.__OTP_PAGE_FOR(data.name) : '');
+    // ⛔ NOT data.platform. That field is the card's FOOTER label and on this
+    // roster it holds a city ("SATX"), so the outbound button was reading
+    // "Open SATX". The destination decides its own name; read the host.
+    const outName = (u) => {
+      try {
+        const h = new URL(u, location.href).hostname.replace(/^www\./, '');
+        if (/instagram/.test(h))    return 'Instagram';
+        if (/tiktok/.test(h))       return 'TikTok';
+        if (/youtu\.?be|youtube/.test(h)) return 'YouTube';
+        if (/spotify/.test(h))      return 'Spotify';
+        if (/soundcloud/.test(h))   return 'SoundCloud';
+        if (/bandcamp/.test(h))     return 'Bandcamp';
+        return h;
+      } catch (e) { return 'their link'; }
+    };
     const outHtml = (link && link !== '#')
-      ? `<a class="btn-primary" href="${esc(link)}" ${isExt?'target="_blank" rel="noopener"':''}>${isExt?'Open '+(data.platform||'Instagram'):'Jump to roster'} →</a>`
+      ? `<a class="btn-primary" href="${esc(link)}" ${isExt?'target="_blank" rel="noopener"':''}>${isExt?'Open '+outName(link):'Jump to roster'} →</a>`
       : '';
     // Their page leads when they have one. The card is the person; this is the
     // door to what that person actually has going on, and it is OURS, so it
