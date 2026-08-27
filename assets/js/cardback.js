@@ -42,6 +42,31 @@
     return (segs.length >= 2 && last.indexOf('.') === -1) ? '../../' : '../';
   })();
 
+  /* The rail's CSS ships from HERE, not from the page.
+     Every /c/<slug>/index.html is a byte-identical copy of c/index.html with a
+     different title, and the card-back CSS is inlined in each one. Nine copies
+     of a new rule is nine chances to drift, so the one thing all nine already
+     share, this file, carries it. */
+  (function () {
+    var css =
+      '.shotwrap{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:6px}' +
+      '.artrail{display:flex;align-items:center;justify-content:center;gap:1px;max-width:140px;' +
+        'flex-wrap:wrap}' +
+      '.artpip{width:22px;height:26px;padding:0;background:none;border:0;cursor:pointer;' +
+        'display:flex;align-items:center;justify-content:center}' +
+      '.artpip i{display:block;width:7px;height:7px;border-radius:50%;' +
+        'background:rgba(255,255,255,.24);transition:all .18s}' +
+      '.artpip:hover i{background:rgba(255,255,255,.5)}' +
+      '.artpip[aria-current="true"] i{background:var(--pink-glow,#ff79c6);width:9px;height:9px;' +
+        'box-shadow:0 0 8px rgba(255,121,198,.7)}' +
+      '.artname{font-family:var(--f-mono,ui-monospace,monospace);font-size:9px;letter-spacing:.14em;' +
+        'text-transform:uppercase;color:var(--muted,#8b8595);text-align:center;line-height:1;' +
+        'margin-top:-2px;min-height:9px}';
+    var el = document.createElement('style');
+    el.textContent = css;
+    document.head.appendChild(el);
+  })();
+
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
@@ -287,13 +312,52 @@
     var housePhoto = houseCard && houseCard.photo
       ? BASE + String(houseCard.photo).replace(/^\.\//, '') : '';
     var photo = c.card_photo || housePhoto;
+
+    /* ---- THE ARTS THEY HOLD -------------------------------------------
+       A member can hold more than one card (roster.json `variants`). Their own
+       upload still wins and still shows first; the house cards are the floor
+       underneath it, in the order the desk set them. Somebody holding one art
+       gets exactly the hero this page has always rendered, and the rail is not
+       built at all. */
+    var artUrl = function (u) {
+      // The shot is 132 CSS px and the wall is blurred at 34px, so the 760px
+      // derivative is the right file for both. Remote uploads are left alone:
+      // only assets/ paths have a derivative, and derive.py guarantees one for
+      // everything roster.json and creators.json name.
+      return /^https?:/i.test(u) ? u : u.replace(/(^|\/)assets\//, '$1assets/card/');
+    };
+    var arts = [];
+    if (c.card_photo) arts.push({ src: c.card_photo, label: 'THEIRS' });
+    if (housePhoto) {
+      arts.push({ src: housePhoto, label: (houseCard && houseCard.card_label) || 'ORIGINAL' });
+      ((houseCard && houseCard.variants) || []).forEach(function (v) {
+        if (!v || !v.photo) return;
+        arts.push({
+          src: BASE + String(v.photo).replace(/^\.\//, ''),
+          label: v.label || v.id || ''
+        });
+      });
+    }
+    var artAt = 0;
+
     var tagline = c.tagline || (houseCard && houseCard.flavor) || '';
     var bio = c.bio || (houseCard && houseCard.lore) || '';
     var bioIsTheirs = !!c.bio;
     hero.innerHTML =
       '<div class="wall"></div>' +
       '<div class="in">' +
-        '<div class="shot' + (photo ? '' : ' bare') + '">' + (photo ? '' : esc((c.display_name || '?').charAt(0))) + '</div>' +
+        '<div class="shotwrap">' +
+          '<div class="shot' + (photo ? '' : ' bare') + '">' + (photo ? '' : esc((c.display_name || '?').charAt(0))) + '</div>' +
+          (arts.length > 1
+            ? '<div class="artrail" role="group" aria-label="Cards this member holds">' +
+                arts.map(function (a, n) {
+                  return '<button class="artpip" type="button" data-go="' + n + '" aria-current="' +
+                    (n === 0 ? 'true' : 'false') + '" aria-label="Card ' + (n + 1) + ' of ' +
+                    arts.length + (a.label ? ', ' + esc(a.label) : '') + '"><i></i></button>';
+                }).join('') +
+              '</div><div class="artname"></div>'
+            : '') +
+        '</div>' +
         '<div class="nameblock">' +
           '<h1>' + esc(c.display_name || c.card_slug) + '</h1>' +
           '<div class="tag' + (tagline ? '' : ' none') + '">' +
@@ -301,9 +365,33 @@
           '<div class="meta"></div>' +
         '</div>' +
       '</div>';
+    var wallEl = hero.querySelector('.wall');
+    var shotEl = hero.querySelector('.shot');
+    var nameEl = hero.querySelector('.artname');
+    function paintArt(n) {
+      if (!arts.length) return;
+      artAt = (n + arts.length) % arts.length;
+      var u = artUrl(arts[artAt].src).replace(/"/g, '%22');
+      wallEl.style.backgroundImage = 'url("' + u + '")';
+      shotEl.style.backgroundImage = 'url("' + u + '")';
+      if (nameEl) nameEl.textContent = arts.length > 1
+        ? (artAt + 1) + '/' + arts.length + (arts[artAt].label ? '  ' + arts[artAt].label : '')
+        : '';
+      hero.querySelectorAll('.artpip').forEach(function (b) {
+        b.setAttribute('aria-current', String(+b.dataset.go === artAt));
+      });
+    }
     if (photo) {
-      hero.querySelector('.wall').style.backgroundImage = 'url("' + photo.replace(/"/g, '%22') + '")';
-      hero.querySelector('.shot').style.backgroundImage = 'url("' + photo.replace(/"/g, '%22') + '")';
+      paintArt(0);
+      hero.querySelectorAll('.artpip').forEach(function (b) {
+        b.addEventListener('click', function () { paintArt(+b.dataset.go); });
+      });
+      // The shot itself advances, because on a phone it is a far bigger target
+      // than any pip and it is the thing somebody's thumb is already on.
+      if (arts.length > 1) {
+        shotEl.style.cursor = 'pointer';
+        shotEl.addEventListener('click', function () { paintArt(artAt + 1); });
+      }
     }
     var meta = hero.querySelector('.meta');
     // above the chips, not below them: on a link-in-bio page the links outrank
