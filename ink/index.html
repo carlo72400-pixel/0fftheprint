@@ -157,7 +157,20 @@ font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;text-transform:uppe
 
 <script>
 (function(){
-  var REL = 'https://github.com/carlo72400-pixel/0tp-media/releases/download/0tp-002-the-ink/';
+  // ⛔ THE CLIPS ARE SERVED FROM THIS REPO, NOT THE RELEASES CDN, AND THAT IS
+  // THE WHOLE FIX. GitHub serves EVERY release asset as
+  //     content-type: application/octet-stream
+  //     content-disposition: attachment
+  // regardless of what the file is. An <img> does not care, it sniffs, which is
+  // why hero.jpg and the thumbnails were always fine. A <video> DOES care:
+  // iOS Safari will not play a source that is typed octet-stream and marked as
+  // an attachment, so the six cuts were dead on every iPhone that opened this
+  // page while working on desktop. There is no per-asset content-type control
+  // on that endpoint, so the files had to move.
+  // Re-encoded 1080x1920 6.1Mbps -> 720x1280 ~1.6Mbps with +faststart:
+  // 128MB down to 33MB, visually indistinguishable at phone size, and the moov
+  // atom is at the front so playback starts before the download finishes.
+  var REL = 'media/';
   var CUTS = [
     {f:'c01', t:'Impossible',      d:'0:20', c:'The AI tattoo pictures, and why the tiny ones on the fingers do not hold on real skin.'},
     {f:'c02', t:'Tears',           d:'0:20', c:'She cried in the chair. It was a piece for her dad.'},
