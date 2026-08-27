@@ -2155,6 +2155,64 @@
   .modal-card .poke{width:100%;aspect-ratio:2.5/3.5;}
   .modal-card .poke:hover{--ty:0px;}
 
+  /* ---- THE OTHER PULLS. A member can hold more than one card.
+     The Y axis is already spent on the flip, so switching card is a SWAP,
+     never a spin, and the rail never rotates anything. Rendered only when
+     the person actually holds more than one, so a one-card modal is
+     byte-identical to what it was before this existed. ---- */
+  .pulls{display:flex;align-items:center;gap:10px;width:100%;}
+  .pulls .nav{
+    flex:0 0 auto;width:34px;height:34px;border-radius:50%;
+    background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);
+    color:#efe9f2;font-size:15px;line-height:1;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .pulls .nav:hover:not(:disabled){border-color:var(--pink-deep);color:var(--pink-glow);}
+  .pulls .nav:disabled{opacity:.26;cursor:default;}
+  .pulls .strip{
+    flex:1 1 auto;display:flex;align-items:center;justify-content:center;
+    gap:2px;overflow-x:auto;scrollbar-width:none;
+  }
+  .pulls .strip::-webkit-scrollbar{display:none;}
+  /* 44px hit target, small visible dot: a phone needs the target, the eye
+     needs the dot. */
+  .pip{
+    flex:0 0 auto;width:30px;height:44px;padding:0;background:none;border:0;
+    cursor:pointer;display:flex;align-items:center;justify-content:center;
+  }
+  .pip i{
+    display:block;width:9px;height:9px;border-radius:50%;
+    background:rgba(255,255,255,.22);transition:all .18s;
+  }
+  .pip:hover i{background:rgba(255,255,255,.5);}
+  .pip[aria-current="true"] i{
+    background:var(--pink-glow);width:11px;height:11px;
+    box-shadow:0 0 10px rgba(255,121,198,.75);
+  }
+  .pulls-label{
+    width:100%;text-align:center;font-family:var(--f-mono);font-size:10.5px;
+    letter-spacing:.18em;text-transform:uppercase;color:var(--muted);
+    margin-top:-4px;
+  }
+  .pulls-label b{color:#efe9f2;font-weight:500;}
+  /* The grid tile has to say there is something behind the tap, or the whole
+     feature is invisible from the shopfront. */
+  .poke-count{
+    position:absolute;top:9px;right:9px;z-index:6;pointer-events:none;
+    font-family:var(--f-mono);font-size:9px;letter-spacing:.08em;
+    color:#efe9f2;background:rgba(8,7,10,.72);border:1px solid rgba(255,255,255,.22);
+    border-radius:999px;padding:3px 7px;line-height:1;
+    text-shadow:0 1px 2px rgba(0,0,0,.9);
+  }
+  /* cardsOf() strips `variants` off every card it hands out, so the badge
+     cannot appear inside the modal. The booster reveal renders the RAW
+     roster item, and a pull is a single-card moment with no tap-through,
+     so a badge promising five more arts there is a dead end. */
+  #booster-reveal .poke-count{display:none;}
+
+  /* The flip lives in its own slot so switching card re-renders ONLY the
+     card and never the song mounted beside it. */
+  .flip-slot{width:100%;}
   /* Card flip — front + back wrapped in transform-style:preserve-3d */
   .modal-flip{
     position:relative;width:100%;aspect-ratio:2.5/3.5;
@@ -5228,6 +5286,26 @@
     const map = {p:'',b:'b',g:'g',y:'y'};
     return String(c||'').split('').map(ch => `<i class="${map[ch]||''}"></i>`).join('');
   }
+  // ---- A member can hold more than one card. -------------------------------
+  // The roster item stays the PERSON and stays card 1; `variants` are sparse
+  // patches merged over it, so an item without the key behaves exactly as it
+  // did before. Card 1 deliberately carries no `_v`, which is what keeps its
+  // share URL byte-identical to the one already in the wild.
+  // ⛔ NOT modelled as `rarities`: pickRarity re-rolls Math.random() on every
+  // render, so the grid and the modal would disagree on every paint, and
+  // renderCardBack/weightOf/playChime all read flat `.rarity` anyway.
+  function cardsOf(v){
+    const base = Object.assign({}, v);
+    delete base.variants;
+    const list = [base];
+    (v.variants || []).forEach((va, n) => {
+      list.push(Object.assign({}, base, va, { _v: va.id || String(n + 1) }));
+    });
+    return list;
+  }
+  function pullLabel(v, card, idx){
+    return idx === 0 ? (v.card_label || 'ORIGINAL') : (card.label || ('ART ' + (idx + 1)));
+  }
   function pickRarity(v){
     if (Array.isArray(v.rarities) && v.rarities.length){
       return v.rarities[Math.floor(Math.random() * v.rarities.length)];
@@ -5271,8 +5349,10 @@
     const sourceClass = ' poke-' + source;
     const hpUnknown = typeof hp === 'string' && !Number.isFinite(+hp);
     const hpHtml = hp ? `<div class="poke-hp">HP <b class="${hpUnknown ? 'unknown' : ''}">${esc(hp)}</b></div>` : '';
+    const held = 1 + ((v.variants || []).length);
+    const countHtml = held > 1 ? `<span class="poke-count">\u25c8 ${held}</span>` : '';
     return `<div class="poke ${esc(rarity)}${trainerClass}${tagTeamClass}${sourceClass}" data-src="${esc(source)}" data-idx="${i}" data-type="${esc(type)}" data-link="${esc(v.link || '#')}">
-      ${cornersHtml}${teraHtml}
+      ${countHtml}${cornersHtml}${teraHtml}
       <div class="poke-inner">
         <div class="poke-head">
           <div class="poke-name">${esc(v.name)}</div>
@@ -5305,7 +5385,9 @@
       card.setAttribute('tabindex', '0');
       card.setAttribute('role', 'button');
       const name = card.querySelector('.poke-name')?.textContent || 'card';
-      card.setAttribute('aria-label', card.classList.contains('booster-pack') ? 'Open a booster pack' : `Open ${name} card`);
+      const held = card.querySelector('.poke-count');
+      const heldTxt = held ? `, ${held.textContent.replace(/\D+/g,'')} arts` : '';
+      card.setAttribute('aria-label', card.classList.contains('booster-pack') ? 'Open a booster pack' : `Open ${name} card${heldTxt}`);
       const activate = () => {
         if (card.classList.contains('booster-pack')){ openBooster(); return; }
         const src = card.dataset.src;
@@ -5543,26 +5625,93 @@
       </div>`;
   }
 
-  function openCardDetail(data, source){
+  function openCardDetail(data, source, vIdx){
     if (!modal) return;
-    const fixedRarity = data.rarity;
-    const dataFixed = Object.assign({}, data, { rarities: null, rarity: fixedRarity });
-    // 'full' here: the modal is the one place a card is looked at closely
-    // (408 CSS px wide, so 816 at DPR 2), and it only loads on a real tap.
-    const frontHtml = renderPokeCard(dataFixed, source || 'modal', 0, 'full');
-    const backHtml = renderCardBack(data);
+    // A person can hold several cards. The song belongs to the PERSON, so the
+    // embed is mounted once outside the flip slot and only the slot is
+    // re-rendered on a switch: re-rendering the whole mount would restart the
+    // track every time somebody looked at the next art.
+    const cards = cardsOf(data);
+    let cur = Math.max(0, Math.min(cards.length - 1, vIdx || 0));
     modalCardMount.innerHTML = `
-      <div class="modal-flip">
-        <div class="flip-front">${frontHtml}</div>
-        <div class="flip-back">${backHtml}</div>
+      <div class="flip-slot"></div>
+      ${cards.length > 1 ? `
+      <div class="pulls">
+        <button class="nav" type="button" data-step="-1" aria-label="Previous card">&#8249;</button>
+        <div class="strip">${cards.map((c, n) => `
+          <button class="pip" type="button" data-go="${n}" aria-current="false"
+            aria-label="Card ${n+1} of ${cards.length}, ${esc(pullLabel(data, c, n))}"><i></i></button>`).join('')}</div>
+        <button class="nav" type="button" data-step="1" aria-label="Next card">&#8250;</button>
       </div>
+      <div class="pulls-label"></div>` : ''}
       ${spotifyEmbed(data.theme_song, true, data.theme_start)}
     `;
-    paintBg(modalCardMount);
+    const slot = modalCardMount.querySelector('.flip-slot');
+    const label = modalCardMount.querySelector('.pulls-label');
+
+    function paintPull(){
+      const card = cards[cur];
+      // Pin the rarity off THE CARD ON SCREEN, not off the person. renderCardBack
+      // reads `.rarity` directly and never calls pickRarity, so handing it the
+      // base object prints card 1's rarity underneath card 2's art.
+      const fixed = Object.assign({}, card, { rarities: null, rarity: card.rarity });
+      // 'full' here: the modal is the one place a card is looked at closely
+      // (408 CSS px wide, so 816 at DPR 2), and it only loads on a real tap.
+      slot.innerHTML = `
+        <div class="modal-flip">
+          <div class="flip-front">${renderPokeCard(fixed, source || 'modal', 0, 'full')}</div>
+          <div class="flip-back">${renderCardBack(fixed)}</div>
+        </div>`;
+      // paintBg is one-shot (it strips data-bg once painted), so a repaint
+      // REQUIRES the re-render above. New card, front side up.
+      paintBg(slot);
+      wireTrackTaps(slot);
+      if (label){
+        label.innerHTML = `${cur + 1} / ${cards.length} &nbsp;&middot;&nbsp; <b>${esc(pullLabel(data, card, cur))}</b>`;
+      }
+      modalCardMount.querySelectorAll('.pip').forEach(b => {
+        b.setAttribute('aria-current', String(+b.dataset.go === cur));
+      });
+      modalCardMount.querySelectorAll('.pulls .nav').forEach(b => {
+        const n = cur + (+b.dataset.step);
+        b.disabled = n < 0 || n >= cards.length;
+      });
+    }
+    function goTo(n){
+      if (n < 0 || n >= cards.length || n === cur) return;
+      cur = n;
+      paintPull();
+    }
+    modalCardMount.querySelectorAll('.pip').forEach(b => {
+      b.addEventListener('click', () => goTo(+b.dataset.go));
+    });
+    modalCardMount.querySelectorAll('.pulls .nav').forEach(b => {
+      b.addEventListener('click', () => goTo(cur + (+b.dataset.step)));
+    });
+    // Phone: swipe the card sideways. The threshold is load-bearing — the
+    // flipped back face is a SCROLLING panel, so a Y-tolerant swipe would eat
+    // its vertical scroll.
+    if (cards.length > 1){
+      let sx = 0, sy = 0;
+      modalCardMount.addEventListener('touchstart', e => {
+        const t = e.changedTouches[0]; sx = t.clientX; sy = t.clientY;
+      }, { passive: true });
+      modalCardMount.addEventListener('touchend', e => {
+        const t = e.changedTouches[0];
+        const dx = t.clientX - sx, dy = t.clientY - sy;
+        if (Math.abs(dx) > 40 && Math.abs(dy) < 30) goTo(cur + (dx < 0 ? 1 : -1));
+      }, { passive: true });
+    }
+    modalCardMount._goTo = goTo;
+    modalCardMount._count = cards.length;
+    modalCardMount._vidOf = n => cards[n]._v || '';
+
     wireSpotifyEmbeds(modalCardMount);
+    paintPull();
     // Tracklist taps retarget the ONE mounted controller. A card with featured
     // songs but no opening song has no embed yet, so the first tap mounts one.
-    modalCardMount.querySelectorAll('.stat-track').forEach(btn => {
+    function wireTrackTaps(root){
+    (root || modalCardMount).querySelectorAll('.stat-track').forEach(btn => {
       btn.addEventListener('click', () => {
         const tid = btn.dataset.play;
         const tstart = parseInt(btn.dataset.start, 10) || 0;
@@ -5583,7 +5732,7 @@
     // Best-effort real titles via Spotify's oEmbed (title + cover, no auth). If
     // CORS or the network says no, the numbered labels stand; nothing depends
     // on this resolving.
-    modalCardMount.querySelectorAll('.stat-track[data-oembed]').forEach(btn => {
+    (root || modalCardMount).querySelectorAll('.stat-track[data-oembed]').forEach(btn => {
       fetch('https://open.spotify.com/oembed?url=https://open.spotify.com/track/' + btn.dataset.oembed)
         .then(r => r.ok ? r.json() : null)
         .then(j => {
@@ -5593,6 +5742,7 @@
         })
         .catch(() => {});
     });
+    }
     // Actions — primary OPEN IG (full width) + secondary row (FLIP / SHARE / CLOSE)
     const link = safeUrl(data.link) || '#';
     const isExt = /^https?:\/\//.test(link);
@@ -5632,11 +5782,14 @@
     `;
     document.getElementById('modal-close-btn-2').onclick = closeModal;
     document.getElementById('modal-flip-btn').onclick = () => {
-      modalCardMount.querySelector('.modal-flip').classList.toggle('flipped');
+      const f = modalCardMount.querySelector('.modal-flip');
+      if (f) f.classList.toggle('flipped');
     };
     document.getElementById('modal-share-btn').onclick = async () => {
       const slug = slugify(data.name);
-      const url = location.origin + location.pathname + '?card=' + slug;
+      const vid = modalCardMount._vidOf ? modalCardMount._vidOf(cur) : '';
+      const url = location.origin + location.pathname + '?card=' + slug
+                + (vid ? '&v=' + encodeURIComponent(vid) : '');
       try {
         await navigator.clipboard.writeText(url);
         const btn = document.getElementById('modal-share-btn');
@@ -5654,12 +5807,21 @@
       const params = new URLSearchParams(location.search);
       const slug = params.get('card') || params.get('curator') || params.get('roster');
       if (!slug) return;
+      // ?v=<variant id> opens straight onto that art. The person is still
+      // resolved first-match, which is right: the person is the unique thing.
+      const want = params.get('v') || '';
       const all = [
         ...(creators || []).map(c => ({data:c, src:'curator'})),
         ...(roster || []).map(c => ({data:c, src:'roster'})),
       ];
       const match = all.find(x => slugify(x.data.name) === slug);
-      if (match) setTimeout(() => openCardDetail(match.data, match.src), 250);
+      if (!match) return;
+      let vIdx = 0;
+      if (want){
+        const found = cardsOf(match.data).findIndex(c => c._v === want);
+        if (found > 0) vIdx = found;
+      }
+      setTimeout(() => openCardDetail(match.data, match.src, vIdx), 250);
     } catch(e){ console.warn(e); }
   }
   function closeModal(){
@@ -5672,6 +5834,17 @@
   modal?.addEventListener('click', e => { if (e.target === modal) closeModal(); });
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape'){ closeModal(); closeBooster(); }
+    // Left/Right walk a member's cards while the modal is open. Extends the
+    // handler that already owns the keyboard here instead of adding a second.
+    if (modal && modal.classList.contains('open') && modalCardMount._goTo){
+      const step = e.key === 'ArrowRight' ? 1 : (e.key === 'ArrowLeft' ? -1 : 0);
+      if (step){
+        e.preventDefault();
+        const pips = [...modalCardMount.querySelectorAll('.pip')];
+        const at = pips.findIndex(b => b.getAttribute('aria-current') === 'true');
+        modalCardMount._goTo(at + step);
+      }
+    }
   });
 
   // ============== BOOSTER PACK MINI-GAME ==============

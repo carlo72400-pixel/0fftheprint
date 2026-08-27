@@ -236,7 +236,35 @@
       "link": "https://www.instagram.com/sinikfromtx/",
       "theme_song": "https://open.spotify.com/track/1N08mkLZqSfq4RA8hbBztK",
       "lore": "Sinik. San Antonio. Four singles out since July under SinikFromTx: LOAD UP!, She Don't, Don't Mind The Bleeding, LIKE ME.\n\nHe does not sit around waiting on a booking. Projekt Mayhem is his own night, he puts it together and then headlines it, and the shirt he had printed goes for twenty at the door.\n\nThe Cro-Mags cut off is not a costume. Punk records and rap records are the same shelf to him, and this card art is made the way that record was made: one photograph, one ink, the only red on it is the red that was on his chest.\n\nSeat filled 8/27, shot outside the room on 8/23, art swapped 8/27 off frames he picked himself. Next one is Y2K THIS WAY, September 4 on Nacogdoches, doors 6:30.",
-      "theme_start": 0
+      "theme_start": 0,
+      "card_label": "QUARREL",
+      "variants": [
+        {
+          "id": "slab",
+          "label": "SLAB",
+          "photo": "assets/card-sinik-slab.jpg"
+        },
+        {
+          "id": "cadillac",
+          "label": "CADILLAC",
+          "photo": "assets/card-sinik-cadillac.jpg"
+        },
+        {
+          "id": "secondgen",
+          "label": "SECOND GEN",
+          "photo": "assets/card-sinik-secondgen.jpg"
+        },
+        {
+          "id": "bandana",
+          "label": "BANDANA",
+          "photo": "assets/card-sinik-bandana.jpg"
+        },
+        {
+          "id": "quarrel-ii",
+          "label": "QUARREL II",
+          "photo": "assets/card-sinik-quarrel2.jpg"
+        }
+      ]
     },
     {
       "name": "VAMPPSYCH",
