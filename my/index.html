@@ -39,6 +39,14 @@
 .msg.ok{color:var(--ok)} .msg.bad{color:var(--bad)}
 .gate{max-width:520px;margin:80px auto;text-align:center}
 .who-line{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+  .lk-row{display:grid;grid-template-columns:minmax(0,140px) minmax(0,1fr) 36px;gap:8px;
+    align-items:center;margin-top:8px}
+  .lk-row select,.lk-row input{margin:0}
+  .lk-x{background:none;border:1px solid var(--line);border-radius:8px;color:var(--muted);
+    height:42px;cursor:pointer;font-size:16px;line-height:1}
+  .lk-x:hover{border-color:rgba(255,93,126,.5);color:var(--bad)}
+  @media(max-width:520px){ .lk-row{grid-template-columns:minmax(0,1fr) 36px}
+    .lk-row select{grid-column:1 / -1} }
 </style>
 </head>
 <body>
@@ -86,6 +94,21 @@
       <button class="btn sm" id="w-save" type="button" style="width:auto">Save your words</button>
     </div>
 
+    <!-- THEIR LINKS. This is what makes /c/<slug>/ worth putting in a bio.
+         ⛔ Platform + handle, never a URL: the page rebuilds the host, so a
+         member cannot point their own page anywhere but their own profile. -->
+    <div class="card" id="linkscard" style="display:none">
+      <div class="sec">Your links</div>
+      <div class="hint">Up to five. They sit at the top of your page, under your name.
+        Give the handle only, not the whole address.</div>
+      <div id="lk-rows"></div>
+      <div class="row" style="margin-top:12px">
+        <button class="btn ghost sm" id="lk-add" type="button" style="width:auto">Add a link</button>
+        <button class="btn sm" id="lk-save" type="button" style="width:auto">Save links</button>
+      </div>
+      <div class="msg" id="lk-msg"></div>
+    </div>
+
     <div>
       <div class="card" id="waitcard" style="display:none">
         <div class="sec">Waiting on the desk</div>
@@ -118,7 +141,7 @@
 
 <script src="../supabase-config.js?v=f1348482"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="../assets/js/desk.js?v=0c4fa9b8" defer></script>
+<script src="../assets/js/desk.js?v=2371ef1f" defer></script>
 <script defer>
 document.addEventListener('DOMContentLoaded', async () => {
   const $ = id => document.getElementById(id);
@@ -162,6 +185,47 @@ document.addEventListener('DOMContentLoaded', async () => {
       $('w-bioc').textContent = bio.value.length + ' / 600';
     };
     tag.addEventListener('input', tick); bio.addEventListener('input', tick); tick();
+    // ---- their links ----
+    const PLATS = (window.OTP && OTP.LINK_PLATFORMS) ||
+      ['instagram','tiktok','youtube','x','twitch','threads','spotify','soundcloud','bandcamp'];
+    const lkCard = $('linkscard'), lkRows = $('lk-rows');
+    const drawLink = (l) => {
+      const row = document.createElement('div');
+      row.className = 'lk-row';
+      row.innerHTML =
+        '<select>' + PLATS.map(pl =>
+          `<option value="${pl}"${l && l.p === pl ? ' selected' : ''}>${pl}</option>`).join('') + '</select>' +
+        `<input type="text" maxlength="30" placeholder="handle" value="${(l && l.h ? String(l.h).replace(/"/g,'&quot;') : '')}">` +
+        '<button type="button" class="lk-x" aria-label="Remove">&times;</button>';
+      row.querySelector('.lk-x').onclick = () => row.remove();
+      lkRows.appendChild(row);
+    };
+    (async () => {
+      let mine = [];
+      try { mine = await OTP.myLinks(); } catch (e) {}
+      lkCard.style.display = '';
+      (mine.length ? mine : [null]).forEach(drawLink);
+      $('lk-add').onclick = () => {
+        if (lkRows.children.length >= 5) return;
+        drawLink(null);
+      };
+      $('lk-save').onclick = async () => {
+        const b = $('lk-save'), msg = $('lk-msg');
+        const list = [...lkRows.querySelectorAll('.lk-row')].map(r => ({
+          p: r.querySelector('select').value,
+          h: r.querySelector('input').value
+        })).filter(x => x.h.trim());
+        b.disabled = true; msg.className = 'msg'; msg.textContent = 'Saving…';
+        try {
+          const saved = await OTP.saveMyLinks(list);
+          msg.textContent = saved.length
+            ? `Saved. ${saved.length} link${saved.length > 1 ? 's' : ''} on your page.`
+            : 'Saved. No links on your page.';
+        } catch (e) { msg.className = 'msg bad'; msg.textContent = e.message || String(e); }
+        b.disabled = false;
+      };
+    })();
+
     $('w-save').onclick = async () => {
       const b = $('w-save');
       b.disabled = true; msg.className = 'msg'; msg.textContent = 'Saving…';

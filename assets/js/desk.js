@@ -839,7 +839,7 @@
       // this falls back rather than taking the homepage down with it on a site
       // whose database has not been migrated.
       const WIDE = "card_slug,display_name,tagline,bio,accent,card_frame,card_photo," +
-                   "theme_song,theme_start,link_platform,link_handle,featured";
+                   "theme_song,theme_start,link_platform,link_handle,links,featured";
       const NARROW = "card_slug,card_frame,card_photo,theme_song,theme_start," +
                      "link_platform,link_handle,featured";
       let r = await c.from("cards").select(WIDE);
@@ -1045,6 +1045,44 @@
         one(async () => await OTP.datesFor(slug, 12)),
       ]);
       return { card, posts, stories, videos, tracks: track, dates: dates || [] };
+    },
+
+    // ---- THEIR LINKS (migration 021) -------------------------------------
+    // ⛔ PLATFORM + HANDLE, never a URL. The page rebuilds the host from a
+    // hardcoded base, so a member cannot point their own page at anything but
+    // their profile on a site the house already trusts. Same doctrine as 007.
+    LINK_PLATFORMS: ["instagram", "tiktok", "youtube", "x", "twitch",
+                     "threads", "spotify", "soundcloud", "bandcamp"],
+
+    async myLinks() {
+      const c = sb(); if (!c) return [];
+      const { data: { user } } = await c.auth.getUser();
+      if (!user) return [];
+      const { data, error } = await c.from("profiles").select("links").eq("id", user.id).maybeSingle();
+      if (error) return [];
+      return Array.isArray(data && data.links) ? data.links : [];
+    },
+
+    async saveMyLinks(list) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { data: { user } } = await c.auth.getUser();
+      if (!user) throw new Error("Log in first.");
+      const clean = (Array.isArray(list) ? list : [])
+        .map(l => ({
+          p: String((l && l.p) || "").toLowerCase().trim(),
+          h: String((l && l.h) || "").trim().replace(/^@/, ""),
+        }))
+        .filter(l => OTP.LINK_PLATFORMS.indexOf(l.p) !== -1 && /^[A-Za-z0-9._-]{1,30}$/.test(l.h))
+        .slice(0, 5);
+      const { error } = await c.from("profiles").update({ links: clean }).eq("id", user.id);
+      if (error) {
+        if (error.code === "42703")
+          throw new Error("Links are not switched on yet. Run migration-021-their-links.sql.");
+        if (error.code === "23514")
+          throw new Error("A handle can only be letters, numbers, dots, dashes and underscores, up to 30.");
+        throw error;
+      }
+      return clean;
     },
 
     // The two things a card holder types. Everything else on their page is

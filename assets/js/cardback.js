@@ -65,20 +65,57 @@
     return isNaN(dt) ? '' : dt.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
   }
 
+  // ⛔ The HOST is ours, never theirs. A member gives a platform and a bare
+  // handle and this rebuilds the address, which is what makes a member link
+  // unable to point anywhere but their own profile on a known site.
   var LINK_BASE = {
-    instagram: 'https://instagram.com/',
-    tiktok: 'https://www.tiktok.com/@',
-    youtube: 'https://www.youtube.com/@',
-    spotify: 'https://open.spotify.com/artist/',
-    soundcloud: 'https://soundcloud.com/',
-    bandcamp: 'https://bandcamp.com/'
+    instagram:  ['Instagram',  'https://instagram.com/'],
+    tiktok:     ['TikTok',     'https://www.tiktok.com/@'],
+    youtube:    ['YouTube',    'https://www.youtube.com/@'],
+    x:          ['X',          'https://x.com/'],
+    twitch:     ['Twitch',     'https://twitch.tv/'],
+    threads:    ['Threads',    'https://www.threads.net/@'],
+    spotify:    ['Spotify',    'https://open.spotify.com/artist/'],
+    soundcloud: ['SoundCloud', 'https://soundcloud.com/'],
+    bandcamp:   ['Bandcamp',   'https://bandcamp.com/']
   };
   // ⛔ The base is hardcoded and the handle is a bare word. The database will
   // not hold a host (007's CHECK pins link_platform to a known list and the
   // handle to [A-Za-z0-9._-]), so no member-supplied scheme can reach an href.
   function outLink(p, h) {
-    if (!p || !h || !LINK_BASE[p]) return null;
-    return { url: LINK_BASE[p] + encodeURIComponent(h), label: '@' + h, plat: p };
+    var base = LINK_BASE[p];
+    if (!p || !h || !base) return null;
+    return { url: base[1] + encodeURIComponent(h), label: '@' + h, plat: p, name: base[0] };
+  }
+
+  /* THE LINK ROW. This page is the URL they put in their bio, so the links are
+     the second thing on it after their name, not a footnote. The single
+     link_platform/link_handle from 007 is folded in as one more entry so a
+     member who set that before 021 does not lose it. */
+  function linkRow(c) {
+    var out = [], seen = {};
+    var push = function (pl, hd) {
+      var l = outLink(pl, hd);
+      if (!l) return;
+      var k = l.plat + '|' + hd;
+      if (seen[k]) return;
+      seen[k] = 1; out.push(l);
+    };
+    (Array.isArray(c.links) ? c.links : []).forEach(function (l) { push(l && l.p, l && l.h); });
+    push(c.link_platform, c.link_handle);
+    if (!out.length) return null;
+    var row = d.createElement('div');
+    row.className = 'linkrow';
+    out.slice(0, 6).forEach(function (l) {
+      var a = d.createElement('a');
+      a.className = 'lk lk-' + l.plat;
+      a.href = l.url;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.innerHTML = '<b>' + esc(l.name) + '</b><span>' + esc(l.label) + '</span>';
+      row.appendChild(a);
+    });
+    return row;
   }
 
   function trackId(v) {
@@ -221,6 +258,8 @@
       hero.querySelector('.wall').style.backgroundImage = 'url("' + photo.replace(/"/g, '%22') + '")';
       hero.querySelector('.shot').style.backgroundImage = 'url("' + photo.replace(/"/g, '%22') + '")';
     }
+    var lr = linkRow(c);
+    if (lr) hero.querySelector('.nameblock').appendChild(lr);
     var meta = hero.querySelector('.meta');
     var chip = function (txt, href, hot) {
       var el = d.createElement(href ? 'a' : 'span');
@@ -231,8 +270,8 @@
     };
     chip('CARD HOLDER');
     if (c.card_frame) chip(String(c.card_frame).replace(/-/g, ' '));
-    var out = outLink(c.link_platform, c.link_handle);
-    if (out) chip(out.label + ' on ' + out.plat, out.url, true);
+    // the single 007 link already rides in the link row; a chip repeating it
+    // would be the same destination twice, four inches apart
     page.appendChild(hero);
 
     var body = d.createElement('div');
