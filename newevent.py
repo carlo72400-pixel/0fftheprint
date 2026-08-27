@@ -19,8 +19,17 @@ Then: git add . && git commit && git push.
 WHERE THE MEDIA LIVES (changed 2026-08-20):
 
 Only the small grid THUMBS get committed to the site repo, about 1.4MB an
-event. The full quality frames and the video go up as RELEASE ASSETS on a
-separate repo (0tp-media) and the gallery points at those URLs.
+event. The full quality frames go up as RELEASE ASSETS on a separate repo
+(0tp-media) and the gallery points at those URLs.
+
+⛔ VIDEO IS THE EXCEPTION AND IT IS NOT OPTIONAL. GitHub serves every release
+asset as content-type: application/octet-stream with content-disposition:
+attachment, whatever the file is, and iOS Safari refuses to play a source typed
+and dispositioned like that. An <img> sniffs and does not care, which is why
+photos were always fine and this hid for months. So the PLAYABLE clip is
+committed into 0tp-media under video/<slug>/ and served by that repo's Pages
+site, which types by extension. The full quality original still rides on the
+release, where "attachment" is exactly what a download wants.
 
 GitHub release assets have no total size limit and no bandwidth limit, and the
 per-file ceiling is 2GiB instead of 100MB. That is what killed the old
@@ -53,11 +62,24 @@ VIDEO_EXT = {".mp4", ".mov", ".m4v", ".MP4", ".MOV"}
 
 MEDIA_REPO = "carlo72400-pixel/0tp-media"   # release assets live here
 REL_BASE   = f"https://github.com/{MEDIA_REPO}/releases/download"
+# ⛔ VIDEO CANNOT PLAY FROM A RELEASE ASSET. GitHub serves every one of them as
+#    content-type: application/octet-stream + content-disposition: attachment,
+#    whatever the file is, and iOS Safari refuses to play a source typed and
+#    dispositioned like that. An <img> sniffs and does not care, which is why
+#    photos were always fine and this hid for months. There is no per-asset
+#    content-type control, so the PLAYABLE clip is committed to the media repo
+#    and served by its Pages site, which types by extension. The full quality
+#    original still rides on the release, where "attachment" is what you want.
+VID_BASE   = f"https://carlo72400-pixel.github.io/0tp-media/video"
 
 THUMB_W, THUMB_Q = 520, 72          # grid tile, the ONLY thing committed
 LIGHT_W, LIGHT_Q = 2560, 90         # lightbox view, on the release
 NATIVE_Q         = 92               # full native export, on the release
-VIDEO_H, VIDEO_CRF = 1080, 20       # clip, on the release. 4K: set 2160/22.
+# The web clip now lives in a REPO, which caps files at 100MB, and it is watched
+# on a phone in a lightbox. 1080/crf20 produced 100 to 160MB clips; this is a
+# tenth of that and indistinguishable at that size.
+VIDEO_H, VIDEO_CRF = 720, 26        # web clip, committed to the media repo
+VIDEO_MAXRATE      = "1600k"
 
 
 def slugify(s):
@@ -172,8 +194,13 @@ def build_photos(src, out_dir, stage_dir, tag, limit, mode='best'):
     return items
 
 
-def build_videos(src, out_dir, stage_dir, tag, limit):
-    """Clip -> stage_dir (released). Poster frame -> out_dir (committed)."""
+def build_videos(src, out_dir, stage_dir, tag, limit, vid_dir=None):
+    """Web clip -> vid_dir (committed to the media repo, served by its Pages).
+    Full quality original -> stage_dir (released). Poster -> out_dir (site repo).
+
+    ⛔ The web clip and the original go to DIFFERENT hosts on purpose. See the
+    VID_BASE note at the top: a release asset cannot be played by a <video>."""
+    vid_dir = vid_dir or stage_dir
     if not shutil.which("ffmpeg"):
         print("  ffmpeg not found, skipping videos")
         return []
@@ -184,11 +211,13 @@ def build_videos(src, out_dir, stage_dir, tag, limit):
     items = []
     for i, fn in enumerate(chosen, 1):
         stem = f"v{i:02d}"
-        outv = os.path.join(stage_dir, f"{stem}.mp4")
+        os.makedirs(vid_dir, exist_ok=True)
+        outv = os.path.join(vid_dir, f"{stem}.mp4")
         subprocess.run([
             "ffmpeg", "-y", "-i", os.path.join(src, fn),
             "-vf", f"scale=-2:{VIDEO_H}", "-c:v", "libx264", "-crf", str(VIDEO_CRF),
-            "-preset", "veryfast", "-c:a", "aac", "-b:a", "160k",
+            "-maxrate", VIDEO_MAXRATE, "-bufsize", "3200k", "-pix_fmt", "yuv420p",
+            "-preset", "slow", "-c:a", "aac", "-b:a", "128k",
             # faststart puts the index at the front so it plays before it finishes
             # downloading. On a release asset that is the difference between
             # "instant" and "stares at a black box".
@@ -198,11 +227,12 @@ def build_videos(src, out_dir, stage_dir, tag, limit):
             print(f"  video failed: {fn}")
             continue
         size = os.path.getsize(outv)
-        # No size gate any more. The old one deleted anything over 90MB because
-        # GitHub rejects files over 100MB inside a repo. Release assets take 2GiB,
-        # which is why both shipped events contain zero video.
-        if size > 2 * 1024 * 1024 * 1024:
-            print(f"  {fn} is {human(size)}, over the 2GiB release ceiling, left out")
+        # ⛔ The web clip is COMMITTED now, so GitHub's hard 100MB per-file limit
+        # is back in play for this file (the original still goes to the release
+        # and still gets 2GiB). At 720p/crf26 a five minute clip lands near
+        # 60MB, so this only ever trips on something very long.
+        if size > 95 * 1024 * 1024:
+            print(f"  {fn} web clip is {human(size)}, over the 95MB repo limit, left out")
             os.remove(outv)
             continue
         # the untouched original rides along, same as photos. 1080p copy stays
@@ -228,12 +258,56 @@ def build_videos(src, out_dir, stage_dir, tag, limit):
         except Exception:
             pass
         items.append({"type": "video",
-                      "src":   f"{REL_BASE}/{tag}/{stem}.mp4",
+                      # served by the media repo's Pages site so it is typed
+                      # video/mp4 and will actually play on a phone
+                      "src":   f"{VID_BASE}/{tag}/{stem}.mp4",
                       **({"full": full_url} if full_url else {}),
                       "thumb": f"media/{stem}_t.jpg",
                       "w": pw, "h": ph})
         print(f"  [{i}/{len(chosen)}] {fn} -> {human(size)}")
     return items
+
+
+def publish_video(tag, vid_dir):
+    """Commit the web clips into the media repo under video/<tag>/ and push.
+
+    They cannot go on the release: GitHub types every release asset
+    application/octet-stream and marks it an attachment, which iOS Safari will
+    not play. The media repo has Pages on, and Pages types by extension."""
+    clips = sorted(f for f in os.listdir(vid_dir) if f.endswith(".mp4")) \
+        if os.path.isdir(vid_dir) else []
+    if not clips:
+        return 0
+    if not shutil.which("gh"):
+        sys.exit("needs the GitHub CLI: brew install gh")
+    total = sum(os.path.getsize(os.path.join(vid_dir, f)) for f in clips)
+    print(f"  pushing {len(clips)} clip(s) ({human(total)}) to {MEDIA_REPO} video/{tag}/")
+    work = tempfile.mkdtemp(prefix="0tp-media-")
+    try:
+        r = subprocess.run(["gh", "repo", "clone", MEDIA_REPO, work, "--", "--depth", "1"],
+                           capture_output=True, text=True)
+        if r.returncode != 0:
+            sys.exit(f"  media repo clone failed: {r.stderr.strip()}")
+        dest = os.path.join(work, "video", tag)
+        # Replace rather than merge, so a rebuild never leaves a stale clip.
+        shutil.rmtree(dest, ignore_errors=True)
+        os.makedirs(dest, exist_ok=True)
+        for f in clips:
+            shutil.copy2(os.path.join(vid_dir, f), os.path.join(dest, f))
+        subprocess.run(["git", "-C", work, "add", "-A"], capture_output=True)
+        c = subprocess.run(["git", "-C", work, "commit", "-m",
+                            f"video: {tag} ({len(clips)} clips, {human(total)})"],
+                           capture_output=True, text=True)
+        if c.returncode != 0 and "nothing to commit" not in (c.stdout + c.stderr):
+            sys.exit(f"  media commit failed: {c.stderr.strip()}")
+        pu = subprocess.run(["git", "-C", work, "push", "origin", "HEAD"],
+                            capture_output=True, text=True)
+        if pu.returncode != 0:
+            sys.exit(f"  media push failed: {pu.stderr.strip()}")
+    finally:
+        shutil.rmtree(work, ignore_errors=True)
+    print(f"    {len(clips)} clip(s) live at {VID_BASE}/{tag}/")
+    return total
 
 
 def publish_release(tag, stage_dir, title):
@@ -467,7 +541,9 @@ def main():
     print(f"\nBuilding {slug}")
     items = build_photos(a.source, media_dir, stage, slug, a.limit, a.pick)
     if a.videos:
-        items += build_videos(a.videos, media_dir, stage, slug, a.video_limit)
+        vidstage = os.path.join(os.path.dirname(stage), "_video_" + slug)
+        items += build_videos(a.videos, media_dir, stage, slug, a.video_limit,
+                              vid_dir=vidstage)
 
     # OG card off the first LIGHTBOX frame, which lives in staging now
     first = os.path.join(stage, "001.jpg")
@@ -515,12 +591,23 @@ def main():
         print("  not in the repo. Check that publish_release actually ran.")
     # Page is on disk and correct at this point, so an upload failure is
     # recoverable: fix whatever broke and re-upload the same staging folder.
+    vidstage = locals().get("vidstage")
     if a.no_upload:
         print(f"\n  --no-upload: {len(os.listdir(stage))} files left in {stage}")
+        if vidstage and os.path.isdir(vidstage):
+            print(f"  --no-upload: web clips left in {vidstage}")
     else:
         released = publish_release(slug, stage, f"{title} · {datelong}")
         print(f"  released {human(released)} to {MEDIA_REPO}")
         shutil.rmtree(stage, ignore_errors=True)
+        # ⛔ Separate host, separate step. The clips are COMMITTED to the media
+        # repo and served by its Pages site, because a release asset is typed
+        # octet-stream + attachment and iOS will not play it.
+        if vidstage and os.path.isdir(vidstage):
+            pushed = publish_video(slug, vidstage)
+            if pushed:
+                print(f"  pushed {human(pushed)} of video to {MEDIA_REPO}")
+            shutil.rmtree(vidstage, ignore_errors=True)
 
     print(f"\n  live at /0fftheprint/events/{slug}/ once pushed")
     print("  git add -A && git commit -m 'event: " + slug + "' && git push\n")
