@@ -34,6 +34,11 @@
 .cal-ev.festival{background:rgba(255,212,121,.12);border-color:rgba(255,212,121,.34)}
 .cal-ev.drop,.cal-ev.release{background:rgba(47,107,255,.14);border-color:rgba(47,107,255,.36)}
 .cal-ev.pulled{opacity:.45}
+/* THE EXCHANGE. A left edge, not a colour swap: kind already owns the fill and
+   two colour systems on one 10px chip is mud. */
+.cal-ev.asking{border-left:3px solid rgba(255,212,121,.75)}
+.cal-ev.onlist{border-left:3px solid var(--pink-deep)}
+.cal-ev.shot{border-left:3px solid #6ee7a8}
 .cal-more{font-family:var(--f-mono);font-size:9px;color:var(--pink-glow);margin-top:3px;
   background:none;border:0;cursor:pointer;padding:0}
 
@@ -76,3 +81,24 @@
 .sh .say.bad{color:var(--bad,#ff5d7e)}
 .sh .foot{display:flex;gap:8px;margin-top:18px}
 .sh .foot .btn{flex:1}
+
+
+/* ---------------- the exchange, inside the sheet ----------------
+   ⛔ .sh label is display:block and .sh input is width:100%, so the tick box
+   has to undo both or it renders as a full width bar with a caption under it. */
+.sh label.ck{display:flex;gap:11px;align-items:flex-start;margin:18px 0 0;padding:13px;
+  border:1px solid var(--line);border-radius:11px;background:rgba(255,121,198,.05);
+  font-family:var(--f-body,'Inter',system-ui,sans-serif);font-size:14px;letter-spacing:0;
+  text-transform:none;color:var(--ink);cursor:pointer;line-height:1.45}
+.sh label.ck:hover{border-color:var(--pink-deep)}
+.sh label.ck input{width:19px;height:19px;flex:none;margin-top:1px;padding:0;accent-color:var(--pink-deep)}
+.sh label.ck b{display:block;font-weight:600}
+.sh label.ck em{display:block;margin-top:5px;font-style:normal;font-size:12.5px;
+  color:var(--muted);line-height:1.6}
+
+/* The desk's half. Boxed off so it never reads as something a member typed. */
+.sh .desk-half{margin-top:18px;padding:4px 14px 14px;border:1px dashed var(--line);
+  border-radius:11px;background:rgba(47,107,255,.05)}
+.sh .desk-half .dh-h{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.2em;
+  text-transform:uppercase;color:#9db9ff;margin-top:12px}
+.sh .desk-half .note{margin-top:8px}

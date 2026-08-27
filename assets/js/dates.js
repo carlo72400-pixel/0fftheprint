@@ -34,6 +34,16 @@
     var whoName = r.by_name || (r.profiles && r.profiles.display_name) || who;
     if (who) meta.push('<a class="by" href="../c/' + encodeURIComponent(who) + '/">' + esc(whoName) + '</a>');
     if (r.published === false) meta.push('<span class="pill off">pulled</span>');
+    // THE EXCHANGE. Public on purpose: a night the house is coming to should
+    // read as one on everybody's screen, not only on the member's own page.
+    var hx = C.houseLabel(r);
+    if (hx) {
+      var slug = hx.k === 'shot' && r.event_slug ? String(r.event_slug) : '';
+      meta.push(slug
+        ? '<a class="pill house ' + hx.k + '" href="../events/' + encodeURIComponent(slug) +
+          '/">' + esc(hx.t) + '</a>'
+        : '<span class="pill house ' + hx.k + '">' + esc(hx.t) + '</span>');
+    }
 
     el.innerHTML =
       '<div class="d-when"><span class="m">' + (p ? C.MON[p.mo] : '') + '</span>' +
@@ -54,9 +64,9 @@
         try { await OTP.setDatePublished(r.id, r.published === false); await load(); }
         catch (e) { alert(e.message); }
       }]);
-      acts.push(['Edit', null, function () { C.sheet(r, load); }]);
+      acts.push(['Edit', null, function () { C.sheet(r, load, { admin: admin }); }]);
     } else if (mine && me && me.profile && who === me.profile.card_slug) {
-      acts.push(['Edit', null, function () { C.sheet(r, load); }]);
+      acts.push(['Edit', null, function () { C.sheet(r, load, { admin: admin }); }]);
     }
     if (acts.length) {
       var bar = d.createElement('div');
@@ -118,7 +128,7 @@
       bar.className = 'addbar';
       var add = d.createElement('button');
       add.type = 'button'; add.className = 'btn'; add.textContent = 'Add a date';
-      add.onclick = function () { C.sheet(null, load); };
+      add.onclick = function () { C.sheet(null, load, { admin: admin }); };
       bar.appendChild(add);
       panel.appendChild(bar);
     } else {

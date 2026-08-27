@@ -8,6 +8,7 @@
 <meta name="theme-color" content="#0a0a0d">
 <link rel="icon" href="../assets/favicon.svg">
 <link rel="stylesheet" href="../assets/css/auth.css">
+<link rel="stylesheet" href="../assets/css/calendar.css">
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@700;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 .wrap{max-width:820px;margin:0 auto;padding:0 16px 90px}
@@ -39,6 +40,13 @@
 .msg.ok{color:var(--ok)} .msg.bad{color:var(--bad)}
 .gate{max-width:520px;margin:80px auto;text-align:center}
 .who-line{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.card.exch{border-color:rgba(47,107,255,.32);background:linear-gradient(180deg,rgba(47,107,255,.07),transparent)}
+.card.exch .sec{color:#9db9ff}
+.st.ask{color:#ffd479} .st.shot{color:#6ee7a8}
+.row a.t-link{color:var(--ink);text-decoration:none}
+.row a.t-link:hover{color:var(--pink-glow)}
+.ex-none{color:var(--muted);font-size:12.5px;line-height:1.6;margin-top:12px;
+  border-top:1px solid var(--line);padding-top:12px}
   .lk-row{display:grid;grid-template-columns:minmax(0,140px) minmax(0,1fr) 36px;gap:8px;
     align-items:center;margin-top:8px}
   .lk-row select,.lk-row input{margin:0}
@@ -110,6 +118,26 @@
     </div>
 
     <div>
+      <!-- THE EXCHANGE. /seats/ says "what it costs is nothing, what it asks is
+           that you post sometimes", and the house has never once said what it
+           gives back. This is that, and it is the only thing on this page that
+           is a reason to return rather than a chore to finish. -->
+      <div class="card exch" id="exchcard">
+        <div class="sec">The Exchange</div>
+        <div class="hint">A seat is not a badge. It is a trade, and this is our half of it.
+          Put your dates up. If we can make it we shoot the night, and the frames come back
+          with your name on them: on your page, in the drops, and yours to post anywhere
+          you want.</div>
+        <div class="hint" style="margin-top:9px">We are one camera, so sometimes the answer
+          is no. Asking costs nothing and the desk answers it itself.</div>
+        <div id="exchlist"></div>
+        <div class="row" style="margin-top:14px">
+          <button class="btn sm" id="ex-add" type="button" style="width:auto">Add a date</button>
+          <a class="btn ghost sm" href="../dates/" style="width:auto">The whole run</a>
+        </div>
+        <div class="msg" id="ex-msg"></div>
+      </div>
+
       <div class="card" id="waitcard" style="display:none">
         <div class="sec">Waiting on the desk</div>
         <div class="hint">Sent, not live yet. The desk clears these by hand. Withdraw pulls one back.</div>
@@ -141,7 +169,8 @@
 
 <script src="../supabase-config.js?v=f1348482"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="../assets/js/desk.js?v=2371ef1f" defer></script>
+<script src="../assets/js/desk.js?v=736d0b9f" defer></script>
+<script src="../assets/js/calendar.js?v=b7cd53c5" defer></script>
 <script defer>
 document.addEventListener('DOMContentLoaded', async () => {
   const $ = id => document.getElementById(id);
@@ -344,6 +373,77 @@ document.addEventListener('DOMContentLoaded', async () => {
         <span class="st ${l.gold ? 'gold' : 'live'}">${esc(l.kind)}</span>
       </div>`).join('');
   }
+
+  // ---- THE EXCHANGE: their dates, and one tap to ask ----------------------
+  // ⛔ myDates() returns EVERY date they have, past included, because the half
+  //    that brings somebody back is the one that has already happened and come
+  //    back with frames on it.
+  (async () => {
+    const card = $('exchcard'), list = $('exchlist'), msg = $('ex-msg');
+    if (!card) return;
+    const n = new Date();
+    const today = `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}`;
+    const MON = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+    const when = v => {
+      // ⛔ local date from the parts. new Date('2026-09-15') is UTC midnight,
+      //    which is the evening before in San Antonio.
+      const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(v || ''));
+      return m ? `${MON[+m[2]-1]} ${+m[3]}` : '';
+    };
+
+    async function draw() {
+      let dates = [];
+      try { dates = await OTP.myDates(); } catch (e) { dates = []; }
+      const coming = dates.filter(r => String(r.on_date) >= today)
+                          .sort((a,b) => String(a.on_date).localeCompare(String(b.on_date)));
+      const shot = dates.filter(r => r.house_status === 'shot' && r.event_slug)
+                        .sort((a,b) => String(b.on_date).localeCompare(String(a.on_date))).slice(0,4);
+
+      if (!coming.length && !shot.length) {
+        list.innerHTML = '<div class="ex-none">Nothing up yet. That is the only part of this ' +
+          'we cannot do for you.</div>';
+        return;
+      }
+      const rows = [];
+      coming.forEach((r, i) => {
+        const st = r.house_status === 'on_list'
+          ? '<span class="st live">WE ARE COMING</span>'
+          : r.want_house ? '<span class="st ask">ASKED</span>'
+          : '<span class="st wait">' + esc(r.kind || 'show').toUpperCase() + '</span>';
+        // house_status undefined means 022 has not run: offer nothing rather
+        // than a button whose click the database will refuse to record.
+        const btn = r.house_status === undefined ? ''
+          : r.house_status === 'on_list' ? ''
+          : `<button type="button" data-ask="${i}">${r.want_house ? 'Never mind' : 'Ask the house'}</button>`;
+        rows.push(`<div class="row"><span class="t">${esc(when(r.on_date))} &middot; ${esc(r.title || '')}</span>${st}${btn}</div>`);
+      });
+      shot.forEach(r => {
+        rows.push(`<div class="row">
+          <span class="t"><a class="t-link" href="../events/${encodeURIComponent(r.event_slug)}/">${esc(when(r.on_date))} &middot; ${esc(r.title || '')}</a></span>
+          <span class="st shot">FRAMES UP</span></div>`);
+      });
+      list.innerHTML = rows.join('');
+      list.querySelectorAll('[data-ask]').forEach(b => b.onclick = async () => {
+        const r = coming[+b.dataset.ask];
+        b.disabled = true; msg.className = 'msg'; msg.textContent = 'Sending…';
+        try {
+          await OTP.updateDate(r.id, { wantHouse: !r.want_house });
+          msg.className = 'msg ok';
+          msg.textContent = r.want_house ? 'Pulled the ask.' : 'Asked. The desk answers by hand.';
+          await draw();
+        } catch (e) {
+          msg.className = 'msg bad'; msg.textContent = e.message || String(e);
+          b.disabled = false;
+        }
+      });
+    }
+
+    $('ex-add').onclick = () => {
+      if (!window.OTPCal) { location.href = '../dates/'; return; }
+      OTPCal.sheet(null, draw, { admin: !!(me.profile && me.profile.is_admin) });
+    };
+    await draw();
+  })();
 
   $('postlist').innerHTML = posts.length ? posts.map(p => `
     <div class="row">

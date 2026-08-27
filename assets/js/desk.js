@@ -33,6 +33,23 @@
     return bits.length < 2 ? null : (bits[1].split(/[?#]/)[0] || null);
   };
 
+  // ---- THE EXCHANGE (022) ---------------------------------------------------
+  // want_house / house_status / event_slug are what turn the calendar from a
+  // listing into a trade. A database that has not run 022 answers 42703 to the
+  // WHOLE select rather than leaving three fields empty, so every calendar read
+  // asks wide and drops back to the 020 shape. Losing the exchange marks is a
+  // fair failure; losing the run of dates is not.
+  const CAL_EXCH = "want_house,house_status,event_slug";
+  const calTry = async (build, wide, narrow) => {
+    let r = await build(wide);
+    if (r.error && r.error.code === "42703") {
+      console.warn("calendar: falling back to the pre-022 shape,", r.error.message);
+      r = await build(narrow);
+    }
+    if (r.error) throw r.error;
+    return r.data || [];
+  };
+
   let client = null;
   function sb() {
     if (!READY) return null;
@@ -866,64 +883,64 @@
         const n = new Date();
         return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,"0")}-${String(n.getDate()).padStart(2,"0")}`;
       })();
-      const { data, error } = await c.from("calendar")
-        .select("id,title,kind,on_date,start_time,city,venue,link,note,by,by_name")
+      const BASE = "id,title,kind,on_date,start_time,city,venue,link,note,by,by_name";
+      return await calTry(cols => c.from("calendar")
+        .select(cols)
         .gte("on_date", d)
         // restate the order: a view's ORDER BY is not guaranteed to survive LIMIT
         .order("on_date", { ascending: true })
         .order("start_time", { ascending: true, nullsFirst: true })
-        .limit(limit);
-      if (error) throw error;
-      return data || [];
+        .limit(limit), BASE + "," + CAL_EXCH, BASE);
     },
 
     async calendarPast(limit = 40) {
       const c = sb(); if (!c) return [];
       const n = new Date();
       const today = `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,"0")}-${String(n.getDate()).padStart(2,"0")}`;
-      const { data, error } = await c.from("calendar")
-        .select("id,title,kind,on_date,start_time,city,venue,link,note,by,by_name")
+      const BASE = "id,title,kind,on_date,start_time,city,venue,link,note,by,by_name";
+      return await calTry(cols => c.from("calendar")
+        .select(cols)
         .lt("on_date", today)
-        .order("on_date", { ascending: false }).limit(limit);
-      if (error) throw error;
-      return data || [];
+        .order("on_date", { ascending: false }).limit(limit),
+        BASE + "," + CAL_EXCH, BASE);
     },
 
     // The desk's view: unpublished rows included, so a pulled date is still
     // visible to the person who has to decide about it.
     async calendarAll(limit = 200) {
       const c = sb(); if (!c) return [];
-      const { data, error } = await c.from("calendar_dates")
-        .select("id,submitted_by,title,kind,on_date,start_time,city,venue,link,note,published,created_at, profiles(display_name,card_slug)")
-        .order("on_date", { ascending: true }).limit(limit);
-      if (error) throw error;
-      return data || [];
+      const BASE = "id,submitted_by,title,kind,on_date,start_time,city,venue,link,note," +
+                   "published,created_at, profiles(display_name,card_slug)";
+      return await calTry(cols => c.from("calendar_dates")
+        .select(cols)
+        .order("on_date", { ascending: true }).limit(limit),
+        BASE + "," + CAL_EXCH, BASE);
     },
 
     async myDates() {
       const c = sb(); if (!c) return [];
       const { data: { user } } = await c.auth.getUser();
       if (!user) return [];
-      const { data, error } = await c.from("calendar_dates")
-        .select("id,title,kind,on_date,start_time,city,venue,link,note,published")
-        .eq("submitted_by", user.id).order("on_date", { ascending: true });
-      if (error) throw error;
-      return data || [];
+      const BASE = "id,title,kind,on_date,start_time,city,venue,link,note,published";
+      return await calTry(cols => c.from("calendar_dates")
+        .select(cols)
+        .eq("submitted_by", user.id).order("on_date", { ascending: true }),
+        BASE + "," + CAL_EXCH, BASE);
     },
 
     async datesFor(slug, limit = 12) {
       const c = sb(); if (!c || !slug) return [];
       const n = new Date();
       const today = `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,"0")}-${String(n.getDate()).padStart(2,"0")}`;
-      const { data, error } = await c.from("calendar")
-        .select("id,title,kind,on_date,start_time,city,venue,link,note")
+      const BASE = "id,title,kind,on_date,start_time,city,venue,link,note";
+      return await calTry(cols => c.from("calendar")
+        .select(cols)
         .eq("by", slug).gte("on_date", today)
-        .order("on_date", { ascending: true }).limit(limit);
-      if (error) throw error;
-      return data || [];
+        .order("on_date", { ascending: true }).limit(limit),
+        BASE + "," + CAL_EXCH, BASE);
     },
 
-    async addDate({ title, kind, onDate, startTime, city, venue, link, note }) {
+    async addDate({ title, kind, onDate, startTime, city, venue, link, note, wantHouse }) {
       const c = sb(); if (!c) throw new Error("Backend not configured yet.");
       const { data: { user } } = await c.auth.getUser();
       if (!user) throw new Error("Log in first.");
@@ -940,7 +957,17 @@
         link: (link || "").trim() || null,
         note: NO_DASH((note || "").trim()).slice(0, 240) || null,
       };
-      const { data, error } = await c.from("calendar_dates").insert(row).select("id").single();
+      // The ask, not the answer. house_status and event_slug are the desk's and
+      // the trigger pins them, so there is nothing to send for either.
+      if (wantHouse !== undefined) row.want_house = !!wantHouse;
+      let r = await c.from("calendar_dates").insert(row).select("id").single();
+      if (r.error && r.error.code === "42703" && "want_house" in row) {
+        // 022 has not been run here. The date is still worth putting up.
+        console.warn("addDate: no exchange columns yet, saving the date without the ask");
+        delete row.want_house;
+        r = await c.from("calendar_dates").insert(row).select("id").single();
+      }
+      const { data, error } = r;
       if (error) {
         // The link CHECK is the one a member will actually trip, so it gets a
         // sentence instead of a constraint name.
@@ -963,7 +990,14 @@
       if (f.venue !== undefined) patch.venue = (f.venue || "").trim() || null;
       if (f.link !== undefined) patch.link = (f.link || "").trim() || null;
       if (f.note !== undefined) patch.note = NO_DASH((f.note || "").trim()).slice(0, 240) || null;
-      const { data, error } = await c.from("calendar_dates").update(patch).eq("id", id).select("id");
+      if (f.wantHouse !== undefined) patch.want_house = !!f.wantHouse;
+      let r = await c.from("calendar_dates").update(patch).eq("id", id).select("id");
+      if (r.error && r.error.code === "42703" && "want_house" in patch) {
+        console.warn("updateDate: no exchange columns yet, saving the rest");
+        delete patch.want_house;
+        r = await c.from("calendar_dates").update(patch).eq("id", id).select("id");
+      }
+      const { data, error } = r;
       if (error) {
         if (error.code === "23514" && /link/.test(error.message || ""))
           throw new Error("That link has to start with https:// and be a real address.");
@@ -983,6 +1017,62 @@
       const c = sb(); if (!c) throw new Error("Backend not configured yet.");
       const { error } = await c.from("calendar_dates").update({ published: !!on }).eq("id", id);
       if (error) throw error;
+    },
+
+    // ---- THE EXCHANGE, the desk's half (022) --------------------------------
+    // A member asks with want_house. This answers. The trigger refuses it from
+    // anybody who is not the desk, so this failing quietly on a member is the
+    // database working, not a bug.
+    HOUSE_STATES: ["none", "on_list", "shot"],
+
+    async setDateHouse(id, { status, eventSlug }) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const patch = {};
+      if (status !== undefined) {
+        if (OTP.HOUSE_STATES.indexOf(status) === -1) throw new Error("Not a state the house has.");
+        patch.house_status = status;
+      }
+      if (eventSlug !== undefined) {
+        const v = String(eventSlug || "").trim().toLowerCase();
+        if (v && !/^[a-z0-9][a-z0-9-]{2,80}$/.test(v))
+          throw new Error("That is not an /events/ folder name.");
+        patch.event_slug = v || null;
+      }
+      // 'shot' with nothing to point at is a promise with no frames behind it.
+      // The CHECK refuses it too; this says why in words instead of a code.
+      if (patch.house_status === "shot" && patch.event_slug === null)
+        throw new Error("Say which /events/ folder the frames landed in first.");
+      const { data, error } = await c.from("calendar_dates")
+        .update(patch).eq("id", id).select("id,house_status,event_slug");
+      if (error) {
+        if (error.code === "42703")
+          throw new Error("Run migration-022-the-exchange.sql first.");
+        if (error.code === "23514")
+          throw new Error("A night marked shot needs an /events/ folder on it.");
+        throw error;
+      }
+      if (!data || !data.length) throw new Error("The desk is the only one who can answer that.");
+      return data[0];
+    },
+
+    // The nights the house actually shot for one card holder, newest first.
+    // ⛔ datesFor() is upcoming only. This is the OTHER half and it is the half
+    //    that brings somebody back: a date that has passed and come back with
+    //    frames on it is the only thing on a member page that changes without
+    //    them touching it.
+    async shotFor(slug, limit = 12) {
+      const c = sb(); if (!c || !slug) return [];
+      try {
+        const { data, error } = await c.from("calendar")
+          .select("id,title,kind,on_date,city,venue,house_status,event_slug")
+          .eq("by", slug).eq("house_status", "shot")
+          .order("on_date", { ascending: false }).limit(limit);
+        if (error) throw error;
+        return (data || []).filter(r => r.event_slug);
+      } catch (e) {
+        if (e && e.code === "42703") return [];
+        throw e;
+      }
     },
 
     // ---- THE BACK OF THE CARD (migration 018) ---------------------------
@@ -1005,7 +1095,7 @@
       });
       if (!card || Array.isArray(card)) return null;    // no such card holder
 
-      const [posts, stories, videos, track, dates] = await Promise.all([
+      const [posts, stories, videos, track, dates, shot] = await Promise.all([
         one(async () => {
           const { data, error } = await c.from("feed")
             .select("id,text,image_url,image_alt,pinned,created_at,edited_at,display_name,card_slug")
@@ -1043,8 +1133,12 @@
         // rail simply does not appear, which is the right failure for a section
         // that is additive to a page that already works.
         one(async () => await OTP.datesFor(slug, 12)),
+        // 022. The nights that already happened and came back with frames. This
+        // is the only rail on the page that fills up without them touching it.
+        one(async () => await OTP.shotFor(slug, 12)),
       ]);
-      return { card, posts, stories, videos, tracks: track, dates: dates || [] };
+      return { card, posts, stories, videos, tracks: track,
+               dates: dates || [], shot: shot || [] };
     },
 
     // ---- THEIR LINKS (migration 021) -------------------------------------

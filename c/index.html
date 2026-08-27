@@ -134,6 +134,21 @@
   .yours .row{margin-top:13px}
   .yours .btn{width:auto;margin:0;font-size:13px;padding:8px 15px}
 
+  /* THE EXCHANGE. Dye blue rather than pink: the pink block above it is what
+     they type, this one is what the house owes them, and two identical panels
+     stacked read as one long panel nobody finishes. */
+  .yours.exch{background:rgba(47,107,255,.07);border-color:rgba(47,107,255,.32)}
+  .yours.exch b{color:#9db9ff}
+  .yours.exch .note + .note{margin-top:9px}
+  .ex-state{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;
+    color:var(--ink);margin-top:13px;padding-top:12px;border-top:1px solid rgba(47,107,255,.25)}
+  /* the state mark on a date's kicker line */
+  .hx{border-radius:999px;padding:2px 7px;border:1px solid currentColor;font-size:8.5px;
+    letter-spacing:.14em;white-space:nowrap}
+  .hx.asking{color:#ffd479}
+  .hx.onlist{color:#ff9ed6}
+  .hx.shot{color:#6ee7a8}
+
   .sh-back{position:fixed;inset:0;background:rgba(6,5,9,.8);z-index:200;display:flex;
     align-items:flex-end;justify-content:center;backdrop-filter:blur(3px)}
   .sh{background:var(--panel);border:1px solid var(--line);border-bottom:0;
@@ -164,7 +179,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="../supabase-config.js?v=f1348482"></script>
-<script src="../assets/js/desk.js?v=2371ef1f"></script>
-<script src="../assets/js/cardback.js?v=9d14b413"></script>
+<script src="../assets/js/desk.js?v=736d0b9f"></script>
+<script src="../assets/js/cardback.js?v=438f086e"></script>
 </body>
 </html>

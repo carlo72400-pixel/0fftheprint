@@ -99,6 +99,13 @@
       if (f.type === 'check')
         return '<label class="chk"><input type="checkbox" data-k="' + esc(f.key) + '"' +
                (f.value ? ' checked' : '') + '> ' + esc(f.label) + '</label>';
+      if (f.type === 'select')
+        return lab + '<select data-k="' + esc(f.key) + '">' +
+               (f.options || []).map(function (o) {
+                 return '<option value="' + esc(o[0]) + '"' +
+                   (String(f.value) === String(o[0]) ? ' selected' : '') + '>' + esc(o[1]) + '</option>';
+               }).join('') + '</select>' +
+               (f.hint ? '<div class="note">' + esc(f.hint) + '</div>' : '');
       if (f.type === 'textarea')
         return lab + '<textarea data-k="' + esc(f.key) + '" rows="' + (f.rows || 4) + '">' +
                esc(f.value == null ? '' : f.value) + '</textarea>' +
@@ -417,9 +424,14 @@
           var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(r.on_date || ''));
           var when = m ? MON[+m[2] - 1] + ' ' + (+m[3]) : '';
           var who = (r.profiles && r.profiles.display_name) || 'member';
+          // THE EXCHANGE. An unanswered ask is the most time-sensitive thing on
+          // this whole board: the night happens whether or not anybody replied.
+          var hx = r.house_status === 'shot' ? ' · shot'
+                 : r.house_status === 'on_list' ? ' · we are going'
+                 : r.want_house ? ' · ASKING FOR THE HOUSE' : '';
           return {
             glyph: when.split(' ')[1] || '?', off: !r.published,
-            t: r.title, s: when + ' · ' + who,
+            t: r.title, s: when + ' · ' + who + hx,
             state: r.published ? 'live' : 'hidden',
             open: function () {
               sheet({
@@ -432,7 +444,31 @@
                   { key: 'city', label: 'City', value: r.city || '' },
                   { key: 'link', label: 'Link', value: r.link || '', hint: 'https:// or blank' },
                   { key: 'note', label: 'A line about it', type: 'textarea', rows: 3, value: r.note || '' },
-                  { key: 'published', label: 'On the calendar', type: 'check', value: r.published !== false }
+                  { key: 'published', label: 'On the calendar', type: 'check', value: r.published !== false },
+                  { key: 'house_status', label: 'The house', type: 'select',
+                    value: r.house_status || 'none',
+                    options: [['none', r.want_house ? 'they asked, no answer yet' : 'not asked'],
+                              ['on_list', 'on the list, we are going'],
+                              ['shot', 'shot it']],
+                    hint: r.want_house ? 'They asked for this one.' : 'They have not asked for this one.' },
+                  // ⛔ A PICKER, NOT A TEXT FIELD. This value becomes a link on
+                  // somebody else's page, and a typo there is a 404 with their
+                  // name on it. EV.items is the DEPLOYED events.json, so the
+                  // only slugs on offer are dumps that are actually live: you
+                  // cannot mark a night shot before its frames are up, which is
+                  // the correct order anyway.
+                  { key: 'event_slug', label: 'The dump it landed in', type: 'select',
+                    value: r.event_slug || '',
+                    options: [['', 'no dump yet']].concat(
+                      (EV.items || []).map(function (e) {
+                        return [e.slug, (e.date_short || e.date || '') + ' · ' + (e.venue || e.title || e.slug)];
+                      }),
+                      // an old value that has since left events.json still has to
+                      // be visible, or saving this sheet would quietly clear it
+                      (r.event_slug && !(EV.items || []).some(function (e) { return e.slug === r.event_slug; }))
+                        ? [[r.event_slug, r.event_slug + ' (not in events.json)']] : []),
+                    hint: 'Only nights that are already live show up here. Run newevent.py and ' +
+                          'push first, then come back and point at it.' }
                 ],
                 save: async function (v) {
                   await OTP.updateDate(r.id, {
@@ -441,6 +477,12 @@
                   });
                   if (!!v.published !== (r.published !== false))
                     await OTP.setDatePublished(r.id, v.published);
+                  // second call on purpose: the trigger pins these two for
+                  // anybody who is not the desk, so they never ride along with
+                  // a member's own patch
+                  if (v.house_status !== (r.house_status || 'none') ||
+                      (v.event_slug || '') !== (r.event_slug || ''))
+                    await OTP.setDateHouse(r.id, { status: v.house_status, eventSlug: v.event_slug });
                 },
                 kill: function () { return OTP.deleteDate(r.id); }
               });
@@ -1217,6 +1259,8 @@
         ['Publish, feature or delete a video', 'here', function () { jump('videos'); }],
         ['Publish or delete a track', 'here', function () { jump('music'); }],
         ['Pull or fix anyone\'s date', 'here', function () { jump('run'); }],
+        ['Answer a member asking for the house', 'here', function () { jump('run'); }],
+        ['Point a night you shot at its dump', 'here', function () { jump('run'); }],
         ['Publish, bake or delete a story', 'here', function () { jump('word'); }],
         ['Edit a live story body', 'away', '../desk/word/'],
         ['Undo a batch pull', 'away', '../desk/'],
@@ -1297,6 +1341,16 @@
     if (ws) chips.push([ws, 'stor' + (ws > 1 ? 'ies' : 'y') + ' waiting', function () { jump('word'); }, false]);
     var we = (DB.entries || []).filter(function (e) { return !e.published; }).length;
     if (we) chips.push([we, 'entr' + (we > 1 ? 'ies' : 'y') + ' waiting', function () { jump('word'); }, false]);
+    // THE EXCHANGE. Upcoming, asked for, and nobody has answered. This one
+    // EXPIRES: the night goes ahead either way, so it sits with the door.
+    var t0 = (function () { var n = new Date();
+      return n.getFullYear() + '-' + String(n.getMonth()+1).padStart(2,'0') +
+             '-' + String(n.getDate()).padStart(2,'0'); })();
+    var asks = (DB.dates || []).filter(function (r) {
+      return r.want_house && (r.house_status || 'none') === 'none' && String(r.on_date) >= t0;
+    }).length;
+    if (asks) chips.push([asks, asks === 1 ? 'asking for the house' : 'asking for the house',
+                          function () { jump('run'); }, false]);
     var orph = (DB.orphans || []).length;
     if (orph) chips.push([orph, 'stray photo' + (orph > 1 ? 's' : ''), drainNow, true]);
     var edits = 0;

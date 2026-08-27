@@ -225,6 +225,53 @@
     return e;
   }
 
+  /* THE EXCHANGE, and it only ever renders on a member's OWN page.
+     /seats/ says out loud "what it costs is nothing, what it asks is that you
+     post sometimes", and until now the house asked and offered nothing back.
+     That is the whole reason nobody posts twice. This is the other half in
+     writing, on the page they will actually come back to.
+     ⛔ MINE ONLY. On somebody else's page a house pitch is the outlet talking
+        over the person whose name is at the top, which is the one thing this
+        site is not for. The recruiting version of this copy lives on /seats/. */
+  function exchangeBlock() {
+    var coming  = (data.dates || []);
+    var asked   = coming.filter(function (r) { return r.want_house && r.house_status === 'none'; });
+    var onList  = coming.filter(function (r) { return r.house_status === 'on_list'; });
+    var shotN   = (data.shot || []).length;
+
+    // ⛔ On a database that has not run 022 the exchange columns come back
+    //    undefined, and telling somebody to tick a box that saves nothing is a
+    //    small lie on their own page. The promise still holds, the mechanism
+    //    just is not wired yet, so say the true half.
+    var wired = !coming.length || coming[0].house_status !== undefined;
+
+    var state;
+    if (!wired)             state = 'Ask the desk directly for now.';
+    else if (onList.length) state = 'We are coming to ' + onList[0].title + '.';
+    else if (asked.length)  state = 'You asked about ' + asked.length +
+                              (asked.length === 1 ? ' date' : ' dates') + '. We answer by hand, so give it a day.';
+    else if (shotN)         state = 'We have shot ' + shotN + (shotN === 1 ? ' night' : ' nights') +
+                              ' of yours so far. Put the next one up.';
+    else if (coming.length) state = 'You have dates up and none of them are asking. Open one and tick the box.';
+    else                    state = 'Nothing up yet. That is the only part we cannot do for you.';
+
+    var el = d.createElement('div');
+    el.className = 'yours exch';
+    el.innerHTML =
+      '<b>The Exchange</b>' +
+      '<div class="note">A seat is not a badge. It is a trade, and this is our half of it. ' +
+      'Put your dates up. If we can make it we shoot the night, and the frames come back with ' +
+      'your name on them: here, in the drops, and yours to post anywhere you want.</div>' +
+      '<div class="note">We are one camera, so sometimes the answer is no. Asking costs nothing ' +
+      'and the desk answers it itself.</div>' +
+      '<div class="ex-state">' + esc(state) + '</div>' +
+      '<div class="row">' +
+        '<a class="btn sm" href="' + BASE + 'dates/">Put a date up</a>' +
+        '<a class="btn ghost sm" href="' + BASE + 'events/">See the drops</a>' +
+      '</div>';
+    return el;
+  }
+
   /* ---------- paint ---------- */
   function paint() {
     var page = d.getElementById('page');
@@ -297,6 +344,7 @@
         '</div>';
       body.appendChild(y);
       y.querySelector('#y-words').onclick = wordsSheet;
+      body.appendChild(exchangeBlock());
     }
 
     /* the bio */
@@ -360,7 +408,13 @@
         var a = d.createElement(href ? 'a' : 'div');
         if (href) { a.href = href; a.target = '_blank'; a.rel = 'noopener nofollow'; }
         a.className = 'row2 no-im';
-        a.innerHTML = '<div class="tt"><div class="k">' + esc(when) + ' &middot; ' + esc(r.kind || 'show') + '</div>' +
+        // THE EXCHANGE, on the kicker line. An unanswered ask is desk business
+        // and stays off a page strangers read; "we are coming" is the part
+        // worth saying out loud.
+        var hx = r.house_status === 'shot' ? ' <span class="hx shot">the house shot this</span>'
+               : r.house_status === 'on_list' ? ' <span class="hx onlist">the house is coming</span>'
+               : (mine && r.want_house) ? ' <span class="hx asking">you asked for the house</span>' : '';
+        a.innerHTML = '<div class="tt"><div class="k">' + esc(when) + ' &middot; ' + esc(r.kind || 'show') + hx + '</div>' +
           '<div class="n">' + esc(r.title || '') + '</div>' +
           ([r.venue, r.city].filter(Boolean).length
             ? '<div class="d">' + esc([r.venue, r.city].filter(Boolean).join(' \u00b7 ')) + '</div>' : '') +
@@ -369,6 +423,35 @@
       });
       ds.appendChild(dr);
       body.appendChild(ds);
+    }
+
+    /* the nights the house actually shot for them. ⛔ THIS IS THE RAIL THAT
+       BRINGS SOMEBODY BACK: it is the only thing on the page that fills up
+       without them typing anything, because a night they played turns into
+       frames with their name on them a few days later. */
+    if ((data.shot || []).length) {
+      var MON2 = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+      var ns = d.createElement('section');
+      ns.appendChild(h2('The Nights', 'shot by the house'));
+      var nr = d.createElement('div');
+      nr.className = 'rows';
+      data.shot.forEach(function (r) {
+        if (!r.event_slug) return;               // the CHECK forbids it, belt and braces
+        var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(r.on_date || ''));
+        var when = m ? MON2[+m[2] - 1] + ' ' + (+m[3]) + ' ' + m[1] : '';
+        var a = d.createElement('a');
+        a.href = BASE + 'events/' + encodeURIComponent(r.event_slug) + '/';
+        a.className = 'row2 no-im';
+        a.innerHTML = '<div class="tt">' +
+          '<div class="k">' + esc(when) + ' <span class="hx shot">the frames</span></div>' +
+          '<div class="n">' + esc(r.title || '') + '</div>' +
+          ([r.venue, r.city].filter(Boolean).length
+            ? '<div class="d">' + esc([r.venue, r.city].filter(Boolean).join(' \u00b7 ')) + '</div>' : '') +
+          '</div>';
+        nr.appendChild(a);
+      });
+      ns.appendChild(nr);
+      body.appendChild(ns);
     }
 
     /* their posts */

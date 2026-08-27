@@ -18,6 +18,17 @@
                'September','October','November','December'];
   var DOW   = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
 
+  /* ⛔ HOW DEEP ARE WE. This file is loaded by the homepage (root), /dates/ and
+     /my/, so a hardcoded '../events/events.json' is right on two of the three.
+     Same rule cardback.js uses: a trailing segment with a dot in it is a FILE,
+     not a folder. */
+  var BASE = (function () {
+    var segs = location.pathname.replace(/\/+$/, '').split('/').filter(Boolean);
+    var last = segs[segs.length - 1] || '';
+    var depth = segs.length - (last.indexOf('.') !== -1 ? 1 : 0);
+    return depth <= 0 ? '' : new Array(depth + 1).join('../');
+  })();
+
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
@@ -49,12 +60,47 @@
     return /^https:\/\/[A-Za-z0-9.-]+\.[A-Za-z]{2,}/.test(v) ? v : '';
   }
 
-  /* ------------------------------ the sheet ------------------------------ */
-  function sheet(row, onDone) {
+  /* ------------------------------ the sheet ------------------------------
+     opts: { admin } — the desk's half of the exchange only renders for the desk.
+     ⛔ It defaults OFF. A caller that forgets to pass it gets the member sheet,
+        which is the failure that costs nothing. The trigger is the real gate
+        either way: these fields are pinned for everybody but the desk. */
+  function sheet(row, onDone, opts) {
+    opts = opts || {};
     var back = d.createElement('div');
     back.className = 'sh-back';
     var r = row || {};
     var kinds = (w.OTP && OTP.CAL_KINDS) || ['show','drop','release','booth','festival','other'];
+    var states = [['none', 'nobody has answered'], ['on_list', 'on the list, the house is coming'],
+                  ['shot', 'shot it']];
+    // THE ASK. This is the whole reason a seat is worth keeping: it is the one
+    // box on this site where a card holder asks the house for something instead
+    // of the other way round.
+    var askBlock =
+      '<label class="ck" for="cf-house">' +
+        '<input id="cf-house" type="checkbox"' + (r.want_house ? ' checked' : '') + '>' +
+        '<span><b>Ask the house to shoot it</b>' +
+        '<em>If we can make it, we shoot the night and the frames come back with your name on ' +
+        'them. We are one camera and we say no sometimes, so this is an ask, not a booking.</em>' +
+        '</span>' +
+      '</label>';
+    // THE ANSWER, desk only, and only on a date that already exists. Answering
+    // an ask that has not been made yet is not a thing.
+    var deskBlock = (opts.admin && row) ?
+      '<div class="desk-half">' +
+        '<div class="dh-h">The house' + (r.want_house ? ' &middot; they asked' : '') + '</div>' +
+        '<label for="cf-hstate">Are we going</label>' +
+        '<select id="cf-hstate">' + states.map(function (st) {
+            return '<option value="' + st[0] + '"' +
+              ((r.house_status || 'none') === st[0] ? ' selected' : '') + '>' + st[1] + '</option>';
+          }).join('') + '</select>' +
+        '<label for="cf-hslug">The dump it landed in</label>' +
+        '<input id="cf-hslug" type="text" maxlength="81" value="' + esc(r.event_slug || '') + '" ' +
+          'placeholder="2026-08-25-the-mix">' +
+        '<div class="note">Only nights that are already live are on this list. ' +
+          'Run newevent.py and push first, then come back and point at it. A night marked ' +
+          'shot needs one, or the link on their page goes nowhere.</div>' +
+      '</div>' : '';
     back.innerHTML =
       '<div class="sh">' +
         '<h3>' + (row ? 'Edit the date' : 'Add a date') + '</h3>' +
@@ -83,6 +129,8 @@
         '<div class="note">Has to start with https://</div>' +
         '<label for="cf-note">A line about it (optional)</label>' +
         '<textarea id="cf-note" rows="3" maxlength="240">' + esc(r.note || '') + '</textarea>' +
+        askBlock +
+        deskBlock +
         '<div class="say"></div>' +
         '<div class="foot">' +
           '<button class="btn" id="cf-go">' + (row ? 'Save' : 'Put it up') + '</button>' +
@@ -109,17 +157,55 @@
         venue: back.querySelector('#cf-venue').value,
         city: back.querySelector('#cf-city').value,
         link: back.querySelector('#cf-link').value,
-        note: back.querySelector('#cf-note').value
+        note: back.querySelector('#cf-note').value,
+        wantHouse: back.querySelector('#cf-house').checked
       };
+      var hs = back.querySelector('#cf-hstate'), hl = back.querySelector('#cf-hslug');
       b.disabled = true; say.className = 'say'; say.textContent = 'Saving…';
       try {
         if (row) await OTP.updateDate(row.id, v); else await OTP.addDate(v);
+        // The desk's half is a SECOND call on purpose: the trigger pins these
+        // columns for a member, so folding them into updateDate would send
+        // every card holder a patch the database is always going to ignore.
+        if (hs) await OTP.setDateHouse(row.id, { status: hs.value, eventSlug: hl.value });
         shut(); if (onDone) await onDone();
       } catch (e) {
         say.className = 'say bad'; say.textContent = e.message || String(e);
         b.disabled = false;
       }
     };
+    /* ⛔ THE DUMP FIELD BECOMES A PICKER. This value turns into a link on
+       somebody else's page, so a typo is a 404 with their name on it. It starts
+       as a text input and upgrades once events.json lands, which means the
+       sheet still works if the fetch fails: the DB CHECK is the real gate
+       either way. Only nights that are ALREADY LIVE are offered, so a night
+       cannot be marked shot before its frames are up. */
+    if (opts.admin && row) (async function () {
+      var input = back.querySelector('#cf-hslug');
+      if (!input) return;
+      var items = [];
+      try {
+        var j = await fetch(BASE + 'events/events.json', { cache: 'no-cache' }).then(function (x) { return x.json(); });
+        items = (j && j.items) || [];
+      } catch (e) { return; }                     // leave the text field alone
+      if (!items.length) return;
+      var cur = r.event_slug || '';
+      var opt = [['', 'no dump yet']].concat(items.map(function (e) {
+        return [e.slug, (e.date_short || e.date || '') + ' \u00b7 ' + (e.venue || e.title || e.slug)];
+      }));
+      // a value that has since left events.json still has to be selectable, or
+      // saving this sheet would quietly clear it
+      if (cur && !items.some(function (e) { return e.slug === cur; }))
+        opt.push([cur, cur + ' (not in events.json)']);
+      var sel = d.createElement('select');
+      sel.id = 'cf-hslug';
+      sel.innerHTML = opt.map(function (o) {
+        return '<option value="' + esc(o[0]) + '"' + (o[0] === cur ? ' selected' : '') +
+               '>' + esc(o[1]) + '</option>';
+      }).join('');
+      input.parentNode.replaceChild(sel, input);
+    })();
+
     var del = back.querySelector('#cf-del');
     if (del) del.onclick = async function () {
       if (this.dataset.sure !== '1') {
@@ -196,7 +282,12 @@
       list.slice(0, 2).forEach(function (r) {
         var b = d.createElement('button');
         b.type = 'button';
-        b.className = 'cal-ev ' + esc(r.kind || 'show') + (r.published === false ? ' pulled' : '');
+        // the exchange, at a glance: asked and unanswered, coming, or shot
+        var hx = r.house_status === 'shot' ? ' shot'
+               : r.house_status === 'on_list' ? ' onlist'
+               : r.want_house ? ' asking' : '';
+        b.className = 'cal-ev ' + esc(r.kind || 'show') +
+                      (r.published === false ? ' pulled' : '') + hx;
         b.textContent = r.title || '';
         b.title = [r.title, r.venue, r.city].filter(Boolean).join(' · ');
         b.onclick = function () { if (opts.onPick) opts.onPick(r); };
@@ -230,8 +321,20 @@
     return p ? { y: p.y, mo: p.mo } : { y: y, mo: mo };
   }
 
+  /* One place that turns the exchange columns into words. Four surfaces render
+     this (the grid, /dates/, the card back, /my/) and four spellings of "the
+     house is coming" is four things to fix when the wording changes. */
+  function houseLabel(r) {
+    if (!r) return null;
+    if (r.house_status === 'shot')    return { k: 'shot',   t: 'the house shot this' };
+    if (r.house_status === 'on_list') return { k: 'onlist', t: 'the house is coming' };
+    if (r.want_house)                 return { k: 'asking', t: 'asked for the house' };
+    return null;
+  }
+
   w.OTPCal = {
     startMonth: startMonth,
+    houseLabel: houseLabel,
     MON: MON, MONTH: MONTH, DOW: DOW,
     esc: esc, parts: parts, todayYMD: todayYMD, ymd: ymd, clock: clock, safeLink: safeLink,
     sheet: sheet, grid: grid
