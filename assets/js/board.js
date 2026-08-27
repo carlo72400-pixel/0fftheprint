@@ -986,12 +986,17 @@
 
     /* ---- PITCH and WHY, both written straight into index.html. ---- */
     R.push({
-      key: 'static', nm: 'PITCH + WHY', src: 'index.html',
-      note: 'written into the page itself, no overlay',
+      key: 'static', nm: 'PITCH + WHY', src: 'content/site.json',
+      note: 'the DM block and the receipts, both editable now',
       tiles: function () {
+        var edited = Object.keys(OV.site || {}).some(function (k) {
+          return k.indexOf('pitch.') === 0 || k.indexOf('why.') === 0;
+        });
         return [
-          { t: 'Pitch Us', glyph: '✉', s: 'get on the desk', state: 'git', open: function () { staticTell('Pitch Us'); } },
-          { t: 'Why we are the experts', glyph: '★', s: 'credentials · craft · receipts', state: 'git', open: function () { staticTell('Why we are the experts'); } }
+          { t: 'Pitch Us', glyph: '✉', s: (C.site && C.site.pitch && C.site.pitch.accent) || 'get on the desk',
+            state: edited ? 'draft' : 'live', open: function () { jump('voice'); } },
+          { t: 'Why we are the experts', glyph: '★', s: (C.site && C.site.why && C.site.why.sub) || 'credentials · craft · receipts',
+            state: edited ? 'draft' : 'live', open: function () { jump('voice'); } }
         ];
       }
     });
@@ -1046,17 +1051,6 @@
     });
 
     return R;
-  }
-
-  function staticTell(nm) {
-    tellSheet(nm, 'literal HTML, the last one', [
-      'This block is written straight into index.html. Everything else on the',
-      'board reads a JSON file the overlay can patch, so it can be changed from',
-      'a phone. These two never got moved out of the markup.',
-      '',
-      'They are also the two that almost never change, which is why they are',
-      'last. Say the word and they move into site.json like the banner did.'
-    ]);
   }
 
   function memberSheet(p, isIn) {
@@ -1170,6 +1164,28 @@
         { k: 'social.youtube', l: 'YouTube' }
       ]]
     ];
+    // PITCH US and WHY. Moved out of index.html markup and into site.json, so
+    // the last two literal blocks on the front page are editable from a phone
+    // like everything else. The board's own explainer promised this.
+    g.push(['PITCH US', 'the DM block at the bottom of the page', [
+      { k: 'pitch.title', l: 'Heading' },
+      { k: 'pitch.accent', l: 'Heading, pink half' },
+      { k: 'pitch.sub', l: 'Sub line' },
+      { k: 'pitch.lead', l: 'Lead line', t: 'area' },
+      { k: 'pitch.btn_label', l: 'Button, big text' },
+      { k: 'pitch.btn_sub', l: 'Button, small text' },
+      { k: 'pitch.btn_href', l: 'Button link', hint: 'https:// only, the page refuses anything else' },
+      { k: 'pitch.fine', l: 'The fine print', t: 'area' }
+    ]]);
+    g.push(['WHY WE ARE THE EXPERTS', 'credentials, craft, receipts', [
+      { k: 'why.title', l: 'Heading' },
+      { k: 'why.accent', l: 'Heading, pink half' },
+      { k: 'why.sub', l: 'Sub line' },
+      { k: 'why.name', l: 'Whose block it is' },
+      { k: 'why.role', l: 'Their role' },
+      { k: 'why.bullets', l: 'The receipts', t: 'ticker' }
+    ]]);
+
     var mic = (C.site && C.site.mic_check) || {};
     var micFields = Object.keys(mic).map(function (k) {
       return { k: 'mic_check.' + k, l: MIC_LABELS[k] || k };
@@ -1279,7 +1295,7 @@
         ['Any numbered release in the catalog', 'here', function () { jump('catalog'); }],
         ['Curator cards', 'here', function () { jump('curators'); }],
         ['The one liner that search sees', 'cold', 'edit here, then bake and push'],
-        ['Pitch Us and Why blocks', 'cold', 'literal HTML in index.html'],
+        ['Pitch Us and Why blocks', 'here', function () { jump('voice'); }],
         ['Add a new work frame', 'cold', 'file plus derive.py, laptop']
       ]],
       ['DECIDE WHAT STAYS UP', [

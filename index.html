@@ -4240,8 +4240,13 @@
           if (!r.item_key || r.hidden) return;
           const v = (r.patch || {}).value;
           if (v === undefined) return;
-          if (r.item_key === 'ticker_headlines')
-            site.ticker_headlines = String(v).split('|').map(x => x.trim()).filter(Boolean);
+          // ⛔ LIST-VALUED KEYS. The board stores these as one ' | ' joined
+          // string, so anything on this list has to be split back into an array
+          // HERE, in bake.py, and read as an array by whatever paints it.
+          // Three places. Miss one and the committed file and the live page
+          // disagree about the type.
+          if (r.item_key === 'ticker_headlines' || r.item_key === 'why.bullets')
+            setPath(site, r.item_key, String(v).split('|').map(x => x.trim()).filter(Boolean));
           else setPath(site, r.item_key, v);
         });
 
@@ -4545,6 +4550,50 @@
       (site.pulse_line_2 ? '<br><span class="blue">' + esc(site.pulse_line_2) + '</span>' : '');
   const pr = document.querySelector('.pulse-route');
   if (pr && site.pulse_route) pr.textContent = site.pulse_route;
+
+  // PITCH US and WHY. These were the last two blocks written straight into this
+  // markup, which is what made them the last two things he could not touch
+  // without a laptop. Same contract as the banner above: the HTML is the FLOOR,
+  // so an empty or missing field renders exactly what shipped, and every field
+  // is a real site.json key the overlay can patch from a phone.
+  // ⛔ Selectors are verified against the live DOM, not against the stylesheet.
+  //    edit.js once hunted a `.kicker` element that existed only in CSS.
+  const paintHead = (sel, block) => {
+    if (!block) return;
+    const h2 = document.querySelector(sel + ' .section-head h2');
+    if (h2 && (block.title || block.accent)) {
+      h2.innerHTML = esc(block.title || '') +
+        (block.accent ? ' <span class="accent">' + esc(block.accent) + '</span>' : '');
+    }
+    const sub = document.querySelector(sel + ' .section-head .sub');
+    if (sub && block.sub) sub.textContent = block.sub;
+  };
+
+  const pitch = site.pitch || {};
+  paintHead('#pitch', pitch);
+  const pLead = document.querySelector('#pitch .pitch-lead');
+  if (pLead && pitch.lead) pLead.textContent = pitch.lead;
+  const pBtn = document.querySelector('#pitch .pitch-btn');
+  if (pBtn) {
+    if (pitch.btn_href && safeUrl(pitch.btn_href)) pBtn.href = safeUrl(pitch.btn_href);
+    const bb = pBtn.querySelector('b'), bs = pBtn.querySelector('span');
+    if (bb && pitch.btn_label) bb.textContent = pitch.btn_label;
+    if (bs && pitch.btn_sub) bs.textContent = pitch.btn_sub;
+  }
+  const pFine = document.querySelector('#pitch .pitch-fine');
+  if (pFine && pitch.fine) pFine.textContent = pitch.fine;
+
+  const why = site.why || {};
+  paintHead('#experts', why);
+  const wH3 = document.querySelector('#experts .expert-block h3');
+  if (wH3 && (why.name || why.role)) {
+    wH3.innerHTML = esc(why.name || '') +
+      (why.role ? ' <span class="role">&middot; ' + esc(why.role) + '</span>' : '');
+  }
+  const wUl = document.querySelector('#experts .expert-block ul');
+  if (wUl && Array.isArray(why.bullets) && why.bullets.length) {
+    wUl.innerHTML = why.bullets.map(b => '<li>' + esc(b) + '</li>').join('');
+  }
 
   // Nav overflow state. Measured, never assumed: `scrolls` says there is more
   // than one screen of links, `at-end` says you have reached the right edge.

@@ -43,5 +43,29 @@
     "signature": "The pink leopard. One bold hit per asset.",
     "voice": "Insider · opinionated · provocative",
     "not_interested_in": "Corporate. Algorithms. Permission."
+  },
+  "pitch": {
+    "title": "Pitch Us",
+    "accent": "get on the desk",
+    "sub": "slide it under the door. we answer it ourselves.",
+    "lead": "No inbox nobody reads. The desk answers DMs.",
+    "btn_label": "DM The Lens",
+    "btn_sub": "@vamppsych · interviews · scene tips · footage · bookings",
+    "btn_href": "https://instagram.com/vamppsych",
+    "fine": "Give us the energy in one paragraph. Say what's on the record and what's off. Off the record stays off the record."
+  },
+  "why": {
+    "title": "Why",
+    "accent": "we're the experts",
+    "sub": "credentials · craft · receipts",
+    "name": "VampPsych",
+    "role": "The Lens",
+    "bullets": [
+      "Cinematographer · Full Sail Digital Cinematography · Sony FX6 + Insta360 fleet",
+      "Directed VOLUME · music videos + campaign visuals for SA artists",
+      "In the rooms weekly: Zenhouse, The Mix, Paper Tiger, the raves, the Strip",
+      "Concert documentation: Carti, Ken Carson, Snow Strippers, BKtheRula",
+      "Brand systems + Illustrator label work · gothic essays as Vamppsych"
+    ]
   }
 }

@@ -307,7 +307,9 @@ if site_ovs:
             v = (o.get("patch") or {}).get("value")
             if v is None:
                 continue
-            if k == "ticker_headlines":
+            # ⛔ Same list as index.html's applier. Both split, or the baked
+            # file gets a string where the page expects an array.
+            if k in ("ticker_headlines", "why.bullets"):
                 v = [x.strip() for x in str(v).split("|") if x.strip()]
             if _get(sdoc2, k) == v:
                 redundant.append(("site", k))
