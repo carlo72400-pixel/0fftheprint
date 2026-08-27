@@ -209,6 +209,35 @@
       "lore": "Wun. Draws in heavy black line on paper he stains first, and casts and paints his own figures when the paper is not enough.\n\nThe cast is gremlins, jesters and long toothed dogs, and the WUN MOR tag usually goes inside the piece instead of under it. Commissions open, and they have been for a while.\n\nSeat filled 8/26, shot at the booth with the mask on. The song is still his to set."
     },
     {
+      "name": "SINIK",
+      "type": "street",
+      "type_label": "THE STREET",
+      "hp": 160,
+      "rarity": "rare-holo",
+      "photo": "assets/card-sinik.jpg",
+      "pending_glyph": "SK",
+      "pending_stamp": "",
+      "flavor": "Outside the room before he was inside it.",
+      "moves": [
+        {
+          "cost": "p",
+          "name": "Pull Up",
+          "damage": 50,
+          "desc": "Arrives with the bottle and the whole parking lot knows."
+        },
+        {
+          "cost": "ppp",
+          "name": "From Tx",
+          "damage": 140,
+          "desc": "San Antonio on the shirt, San Antonio in the record."
+        }
+      ],
+      "platform": "SATX",
+      "link": "https://www.instagram.com/sinikfromtx/",
+      "theme_song": "",
+      "lore": "Sinik. San Antonio.\n\nSeat filled 8/27. The song, the words on the back of this card and the art are his to set, the same as everybody else on this list.\n\nShot outside the room on 8/23."
+    },
+    {
       "name": "VAMPPSYCH",
       "type": "lens",
       "type_label": "THE LENS",
