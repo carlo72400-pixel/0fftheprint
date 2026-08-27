@@ -406,6 +406,71 @@
       }
     });
 
+    /* ---- THE RUN. Dates go live the moment a card holder adds one, so this
+       rail is a PULL surface, not an approval queue. ---- */
+    R.push({
+      key: 'run', nm: 'THE RUN', src: 'calendar_dates',
+      note: 'what the roster has coming. live on add, pull it here',
+      tiles: function () {
+        var MON = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+        return (DB.dates || []).map(function (r) {
+          var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(r.on_date || ''));
+          var when = m ? MON[+m[2] - 1] + ' ' + (+m[3]) : '';
+          var who = (r.profiles && r.profiles.display_name) || 'member';
+          return {
+            glyph: when.split(' ')[1] || '?', off: !r.published,
+            t: r.title, s: when + ' · ' + who,
+            state: r.published ? 'live' : 'hidden',
+            open: function () {
+              sheet({
+                title: r.title || 'DATE',
+                why: when + ' · ' + (r.venue || '') + (r.city ? ' · ' + r.city : '') + ' · ' + who,
+                fields: [
+                  { key: 'title', label: 'What it is', value: r.title || '' },
+                  { key: 'on_date', label: 'Date', value: r.on_date || '', hint: 'YYYY-MM-DD' },
+                  { key: 'venue', label: 'Venue', value: r.venue || '' },
+                  { key: 'city', label: 'City', value: r.city || '' },
+                  { key: 'link', label: 'Link', value: r.link || '', hint: 'https:// or blank' },
+                  { key: 'note', label: 'A line about it', type: 'textarea', rows: 3, value: r.note || '' },
+                  { key: 'published', label: 'On the calendar', type: 'check', value: r.published !== false }
+                ],
+                save: async function (v) {
+                  await OTP.updateDate(r.id, {
+                    title: v.title, onDate: v.on_date, venue: v.venue,
+                    city: v.city, link: v.link, note: v.note
+                  });
+                  if (!!v.published !== (r.published !== false))
+                    await OTP.setDatePublished(r.id, v.published);
+                },
+                kill: function () { return OTP.deleteDate(r.id); }
+              });
+            }
+          };
+        });
+      },
+      add: {
+        label: 'ADD A DATE', glyph: '📅', on: function () {
+          sheet({
+            title: 'ADD A DATE', why: 'goes on the calendar straight away',
+            fields: [
+              { key: 'title', label: 'What it is' },
+              { key: 'on_date', label: 'Date', hint: 'YYYY-MM-DD' },
+              { key: 'venue', label: 'Venue' },
+              { key: 'city', label: 'City' },
+              { key: 'link', label: 'Link', hint: 'https:// or blank' },
+              { key: 'note', label: 'A line about it', type: 'textarea', rows: 3 }
+            ],
+            saveLabel: 'Put it on',
+            save: async function (v) {
+              await OTP.addDate({ title: v.title, onDate: v.on_date, venue: v.venue,
+                                  city: v.city, link: v.link, note: v.note });
+            },
+            done: 'On the calendar.'
+          });
+        }
+      }
+    });
+
     /* ---- THE REEL. Fully live: submit, publish, feature, delete. ---- */
     R.push({
       key: 'videos', nm: 'THE REEL', src: 'featured_videos',
@@ -1118,6 +1183,7 @@
         ['Post to the take, photo or clip or text', 'here', postSheet],
         ['Put a video on the reel', 'here', function () { jump('videos'); }],
         ['Put a song on rotation', 'here', function () { jump('music'); }],
+        ['Add a date to the calendar', 'here', function () { jump('run'); }],
         ['Write a story', 'away', '../word/new/'],
         ['Build or change a member card', 'away', '../card/'],
         ['Compose with the full editor', 'away', '../compose/'],
@@ -1150,6 +1216,7 @@
         ['Pull or pin any post', 'here', function () { jump('take'); }],
         ['Publish, feature or delete a video', 'here', function () { jump('videos'); }],
         ['Publish or delete a track', 'here', function () { jump('music'); }],
+        ['Pull or fix anyone\'s date', 'here', function () { jump('run'); }],
         ['Publish, bake or delete a story', 'here', function () { jump('word'); }],
         ['Edit a live story body', 'away', '../desk/word/'],
         ['Undo a batch pull', 'away', '../desk/'],
@@ -1434,6 +1501,7 @@
       pending: OTP.pending(),
       members: OTP.members(),
       cards: OTP.cards(),
+      dates: OTP.calendarAll(200),
       orphans: OTP.orphanImages()
     };
     await Promise.all(Object.keys(jobs).map(async function (k) {

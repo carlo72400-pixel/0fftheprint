@@ -269,6 +269,39 @@
       body.appendChild(ms);
     }
 
+    /* what they have coming. Above the timeline on purpose: a date is the one
+       thing on this page a reader can still act on. */
+    if ((data.dates || []).length) {
+      var MON = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+      var DOW = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+      var ds = d.createElement('section');
+      ds.appendChild(h2('The Run', data.dates.length + ' coming'));
+      var dr = d.createElement('div');
+      dr.className = 'rows';
+      data.dates.forEach(function (r) {
+        // ⛔ local date, never new Date(ymd): that parses UTC MIDNIGHT and reads
+        // a day early everywhere west of Greenwich, which is all of Texas.
+        var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(r.on_date || ''));
+        var when = '';
+        if (m) {
+          var dt = new Date(+m[1], +m[2] - 1, +m[3]);
+          when = DOW[dt.getDay()] + ' ' + MON[+m[2] - 1] + ' ' + (+m[3]);
+        }
+        var href = /^https:\/\/[A-Za-z0-9.-]+\.[A-Za-z]{2,}/.test(String(r.link || '')) ? r.link : '';
+        var a = d.createElement(href ? 'a' : 'div');
+        if (href) { a.href = href; a.target = '_blank'; a.rel = 'noopener nofollow'; }
+        a.className = 'row2 no-im';
+        a.innerHTML = '<div class="tt"><div class="k">' + esc(when) + ' &middot; ' + esc(r.kind || 'show') + '</div>' +
+          '<div class="n">' + esc(r.title || '') + '</div>' +
+          ([r.venue, r.city].filter(Boolean).length
+            ? '<div class="d">' + esc([r.venue, r.city].filter(Boolean).join(' \u00b7 ')) + '</div>' : '') +
+          '</div>';
+        dr.appendChild(a);
+      });
+      ds.appendChild(dr);
+      body.appendChild(ds);
+    }
+
     /* their posts */
     var ps = d.createElement('section');
     ps.appendChild(h2('The Take', (data.posts.length || 0) + ' up'));

@@ -851,6 +851,140 @@
       return r.data || [];
     },
 
+    // ---- THE CALENDAR (migration 020) -----------------------------------
+    // 0TP-006 ended with "if your show belongs on this list and is not, the DMs
+    // are open", which is a submission form being run by hand. This is it.
+    // published defaults TRUE at the database, so a card holder's date is live
+    // the moment they add it and the desk pulls it if it is wrong.
+    CAL_KINDS: ["show", "drop", "release", "booth", "festival", "other"],
+
+    async calendar(limit = 60, fromDate = null) {
+      const c = sb(); if (!c) return [];
+      // Today in the VIEWER's own timezone, not UTC. toISOString() would roll a
+      // date over at 7pm in San Antonio and drop tonight's show off the rail.
+      const d = fromDate || (() => {
+        const n = new Date();
+        return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,"0")}-${String(n.getDate()).padStart(2,"0")}`;
+      })();
+      const { data, error } = await c.from("calendar")
+        .select("id,title,kind,on_date,start_time,city,venue,link,note,by,by_name")
+        .gte("on_date", d)
+        // restate the order: a view's ORDER BY is not guaranteed to survive LIMIT
+        .order("on_date", { ascending: true })
+        .order("start_time", { ascending: true, nullsFirst: true })
+        .limit(limit);
+      if (error) throw error;
+      return data || [];
+    },
+
+    async calendarPast(limit = 40) {
+      const c = sb(); if (!c) return [];
+      const n = new Date();
+      const today = `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,"0")}-${String(n.getDate()).padStart(2,"0")}`;
+      const { data, error } = await c.from("calendar")
+        .select("id,title,kind,on_date,start_time,city,venue,link,note,by,by_name")
+        .lt("on_date", today)
+        .order("on_date", { ascending: false }).limit(limit);
+      if (error) throw error;
+      return data || [];
+    },
+
+    // The desk's view: unpublished rows included, so a pulled date is still
+    // visible to the person who has to decide about it.
+    async calendarAll(limit = 200) {
+      const c = sb(); if (!c) return [];
+      const { data, error } = await c.from("calendar_dates")
+        .select("id,submitted_by,title,kind,on_date,start_time,city,venue,link,note,published,created_at, profiles(display_name,card_slug)")
+        .order("on_date", { ascending: true }).limit(limit);
+      if (error) throw error;
+      return data || [];
+    },
+
+    async myDates() {
+      const c = sb(); if (!c) return [];
+      const { data: { user } } = await c.auth.getUser();
+      if (!user) return [];
+      const { data, error } = await c.from("calendar_dates")
+        .select("id,title,kind,on_date,start_time,city,venue,link,note,published")
+        .eq("submitted_by", user.id).order("on_date", { ascending: true });
+      if (error) throw error;
+      return data || [];
+    },
+
+    async datesFor(slug, limit = 12) {
+      const c = sb(); if (!c || !slug) return [];
+      const n = new Date();
+      const today = `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,"0")}-${String(n.getDate()).padStart(2,"0")}`;
+      const { data, error } = await c.from("calendar")
+        .select("id,title,kind,on_date,start_time,city,venue,link,note")
+        .eq("by", slug).gte("on_date", today)
+        .order("on_date", { ascending: true }).limit(limit);
+      if (error) throw error;
+      return data || [];
+    },
+
+    async addDate({ title, kind, onDate, startTime, city, venue, link, note }) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { data: { user } } = await c.auth.getUser();
+      if (!user) throw new Error("Log in first.");
+      if (!title || !String(title).trim()) throw new Error("Needs a name.");
+      if (!onDate) throw new Error("Needs a date.");
+      const row = {
+        submitted_by: user.id,
+        title: NO_DASH(String(title).trim()).slice(0, 90),
+        kind: OTP.CAL_KINDS.indexOf(kind) !== -1 ? kind : "show",
+        on_date: onDate,
+        start_time: startTime || null,
+        city: (city || "").trim() || null,
+        venue: (venue || "").trim() || null,
+        link: (link || "").trim() || null,
+        note: NO_DASH((note || "").trim()).slice(0, 240) || null,
+      };
+      const { data, error } = await c.from("calendar_dates").insert(row).select("id").single();
+      if (error) {
+        // The link CHECK is the one a member will actually trip, so it gets a
+        // sentence instead of a constraint name.
+        if (error.code === "23514" && /link/.test(error.message || ""))
+          throw new Error("That link has to start with https:// and be a real address.");
+        if (error.code === "23514") throw new Error("Something is too long, or the date is not a real one.");
+        throw error;
+      }
+      return data;
+    },
+
+    async updateDate(id, f) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const patch = {};
+      if (f.title !== undefined) patch.title = NO_DASH(String(f.title).trim()).slice(0, 90);
+      if (f.kind !== undefined && OTP.CAL_KINDS.indexOf(f.kind) !== -1) patch.kind = f.kind;
+      if (f.onDate !== undefined) patch.on_date = f.onDate;
+      if (f.startTime !== undefined) patch.start_time = f.startTime || null;
+      if (f.city !== undefined) patch.city = (f.city || "").trim() || null;
+      if (f.venue !== undefined) patch.venue = (f.venue || "").trim() || null;
+      if (f.link !== undefined) patch.link = (f.link || "").trim() || null;
+      if (f.note !== undefined) patch.note = NO_DASH((f.note || "").trim()).slice(0, 240) || null;
+      const { data, error } = await c.from("calendar_dates").update(patch).eq("id", id).select("id");
+      if (error) {
+        if (error.code === "23514" && /link/.test(error.message || ""))
+          throw new Error("That link has to start with https:// and be a real address.");
+        throw error;
+      }
+      if (!data || !data.length) throw new Error("That date is not yours to edit.");
+    },
+
+    async deleteDate(id) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { data, error } = await c.from("calendar_dates").delete().eq("id", id).select("id");
+      if (error) throw error;
+      if (!data || !data.length) throw new Error("That date is not yours to remove.");
+    },
+
+    async setDatePublished(id, on) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { error } = await c.from("calendar_dates").update({ published: !!on }).eq("id", id);
+      if (error) throw error;
+    },
+
     // ---- THE BACK OF THE CARD (migration 018) ---------------------------
     // Every public view already carries card_slug, so a member's page is five
     // filters, not five new tables. Fired together because they do not depend
@@ -871,7 +1005,7 @@
       });
       if (!card || Array.isArray(card)) return null;    // no such card holder
 
-      const [posts, stories, videos, track] = await Promise.all([
+      const [posts, stories, videos, track, dates] = await Promise.all([
         one(async () => {
           const { data, error } = await c.from("feed")
             .select("id,text,image_url,image_alt,pinned,created_at,edited_at,display_name,card_slug")
@@ -905,8 +1039,12 @@
           if (error) throw error;
           return data || [];
         }),
+        // 020 may not be run on this database yet. one() swallows that and the
+        // rail simply does not appear, which is the right failure for a section
+        // that is additive to a page that already works.
+        one(async () => await OTP.datesFor(slug, 12)),
       ]);
-      return { card, posts, stories, videos, tracks: track };
+      return { card, posts, stories, videos, tracks: track, dates: dates || [] };
     },
 
     // The two things a card holder types. Everything else on their page is

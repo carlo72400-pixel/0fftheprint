@@ -38,7 +38,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700..900&family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Pirata+One&family=Luckiest+Guy&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" defer></script>
 <script src="supabase-config.js?v=f1348482" defer></script>
-<script src="assets/js/desk.js?v=868e337f" defer></script>
+<script src="assets/js/desk.js?v=0c4fa9b8" defer></script>
 <script src="assets/js/door.js?v=4fd82def" defer></script>
 <script src="assets/js/composer.js?v=9e82b159" defer></script>
 <script src="assets/js/edit.js?v=306e9e9c" defer></script>
@@ -713,6 +713,26 @@
   /* ---- THE DROPS: the reason most people are here, so it leads the page ----
      A rail, not a single "latest drop" line. Somebody hunting their photo from
      Saturday does not want the newest night, they want THEIR night. */
+  /* THE RUN. Same rail grammar as the drops, one row, horizontal scroll. */
+  .run-rail{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(210px,238px);gap:12px;
+    overflow-x:auto;padding-bottom:8px;scroll-snap-type:x proximity;}
+  .run-rail::-webkit-scrollbar{height:6px;}
+  .run-rail::-webkit-scrollbar-thumb{background:var(--pink-deep);border-radius:999px;}
+  @media (max-width:640px){ .run-rail{grid-auto-columns:minmax(172px,74vw);} }
+  .run{scroll-snap-align:start;background:var(--panel);border:1px solid var(--line);
+    border-radius:13px;padding:13px 14px;text-decoration:none;color:var(--ink);display:block;
+    transition:border-color .14s,transform .14s;}
+  .run:hover{border-color:var(--pink-deep);transform:translateY(-2px);}
+  .run .rw{font-family:var(--f-mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--pink-glow);}
+  .run .rt{font-weight:700;font-size:15px;line-height:1.3;margin-top:8px;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+  .run .rm{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--muted);margin-top:9px;display:-webkit-box;-webkit-line-clamp:2;
+    -webkit-box-orient:vertical;overflow:hidden;}
+  .run-empty{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:#5f5b6b;border:1px dashed var(--line);border-radius:12px;padding:20px;text-align:center;}
+
   .drops-rail{
     display:grid;grid-auto-flow:column;grid-auto-columns:minmax(230px,1fr);
     gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;
@@ -3640,6 +3660,7 @@
 <nav class="site">
   <a href="join/" id="nav-key" class="key" title="Card holders log in here.">Log in</a>
   <a href="#open">Open A Pack</a>
+  <a href="dates/">The Run</a>
   <a href="#take">The Take</a>
   <a href="#desk">The Word</a>
   <a href="#music">Music</a>
@@ -3813,6 +3834,16 @@
     <!-- ===== THE SLATE — the house's own work, below the drops ===== -->
     <section id="slate">
       <a class="slate-marquee" id="slate-marquee" href="#roster"></a>
+    </section>
+
+    <!-- ===== THE RUN — the calendar's next few, full list at /dates/ ===== -->
+    <section id="dates">
+      <div class="section-head">
+        <h2>The Run <span class="accent">what&rsquo;s coming</span></h2>
+        <div class="sub">shows &nbsp;·&nbsp; drops &nbsp;·&nbsp; releases</div>
+      </div>
+      <div class="run-rail" id="run-rail"></div>
+      <a class="drops-more" href="dates/">the whole calendar &rarr;</a>
     </section>
 
     <!-- ===== FEATURED VIDEOS — members paste links, one tab each ===== -->
@@ -4212,6 +4243,43 @@
   }
 
   // ============ Site bits ============
+  // ---- THE RUN rail (migration 020) ----
+  // ⛔ Y-M-D strings only, never a Date built from the raw value: new
+  // Date('2026-09-15') is UTC MIDNIGHT, which is the evening BEFORE in San
+  // Antonio, and every date on the homepage would render a day early for the
+  // city it is written for.
+  (async () => {
+    const rail = document.getElementById('run-rail');
+    if (!rail) return;
+    const sec = rail.closest('section');
+    let run = [];
+    try {
+      if (window.OTP && OTP.configured) run = await OTP.calendar(10);
+    } catch (e) {
+      // 020 not run yet, or the view is unreachable. The homepage does not get
+      // to break over a section that is additive.
+      console.warn('the run: ' + e.message);
+    }
+    if (!run.length) { if (sec) sec.remove(); return; }
+    const MON = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+    const DOW = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+    rail.innerHTML = run.map(r => {
+      const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(r.on_date || ''));
+      let when = '';
+      if (m) {
+        const dt = new Date(+m[1], +m[2] - 1, +m[3]);
+        when = `${DOW[dt.getDay()]} ${MON[+m[2] - 1]} ${+m[3]}`;
+      }
+      const bits = [r.venue, r.city, r.by_name].filter(Boolean).map(esc).join(' · ');
+      const href = safeUrl(r.link) || 'dates/';
+      const ext = /^https:/.test(href);
+      return `<a class="run" href="${esc(href)}"${ext ? ' target="_blank" rel="noopener nofollow"' : ''}>
+        <span class="rw">${esc(when)}</span>
+        <span class="rt">${esc(r.title || '')}</span>
+        <span class="rm">${bits}</span></a>`;
+    }).join('');
+  })();
+
   // ---- THE DROPS rail ----
   const dropsRail = document.getElementById('drops-rail');
   if (dropsRail) {
