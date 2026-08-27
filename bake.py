@@ -454,10 +454,11 @@ if holders:
 
 print("\nNow:")
 print("  git add -A && git commit -m 'bake story edits' && git push")
-print("\n  \u26d4 RE-RUN THIS AFTER ANY display_name CHANGE. A card back's <title>")
-print("     and og: tags are baked from display_name, so renaming somebody")
-print("     leaves the OLD name in every link preview of their page until a")
-print("     re-bake. The live page corrects itself in JS; the share card does not.")
+print("\n  \u26d4 RE-RUN THIS AFTER ANY display_name CHANGE **OR** ANY EDIT TO")
+print("     c/index.html. A card back is a COPY of that file, so its <title>,")
+print("     its og: tags AND its inline stylesheet all freeze at bake time.")
+print("     Renaming somebody leaves the OLD name in every link preview, and")
+print("     new CSS simply never reaches the seven baked pages, until a re-bake.")
 if redundant:
     print("\n  ⛔ CLEAR THESE AT THE DESK, they now match the committed file and")
     print("     would silently re-apply on top of a later git edit:")

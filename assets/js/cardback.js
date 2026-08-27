@@ -29,6 +29,19 @@
 
   var me = null, admin = false, mine = false, slug = '', data = null;
 
+  /* ⛔ HOW DEEP ARE WE. This file serves TWO shapes of URL: /c/?s=slug is one
+     level down, and a baked /c/<slug>/ is TWO. Every relative path in here was
+     hardcoded '../', so on a baked page "Your card" went to /c/card/, the back
+     link went to /c/, every story link 404'd and the roster fetch this fallback
+     needs resolved to /c/content/roster.json. bake.py rewrites the ../ in the
+     HTML it copies; it cannot rewrite the ones built in JS.
+     A trailing segment with a dot in it is a FILE (/c/index.html), not a folder. */
+  var BASE = (function () {
+    var segs = location.pathname.replace(/\/+$/, '').split('/').filter(Boolean);
+    var last = segs[segs.length - 1] || '';
+    return (segs.length >= 2 && last.indexOf('.') === -1) ? '../../' : '../';
+  })();
+
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
@@ -186,15 +199,21 @@
     /* header */
     var hero = d.createElement('header');
     hero.className = 'hero';
-    var photo = c.card_photo || '';
+    // their upload wins; the house card art is the floor
+    var housePhoto = houseCard && houseCard.photo
+      ? BASE + String(houseCard.photo).replace(/^\.\//, '') : '';
+    var photo = c.card_photo || housePhoto;
+    var tagline = c.tagline || (houseCard && houseCard.flavor) || '';
+    var bio = c.bio || (houseCard && houseCard.lore) || '';
+    var bioIsTheirs = !!c.bio;
     hero.innerHTML =
       '<div class="wall"></div>' +
       '<div class="in">' +
         '<div class="shot' + (photo ? '' : ' bare') + '">' + (photo ? '' : esc((c.display_name || '?').charAt(0))) + '</div>' +
         '<div class="nameblock">' +
           '<h1>' + esc(c.display_name || c.card_slug) + '</h1>' +
-          '<div class="tag' + (c.tagline ? '' : ' none') + '">' +
-            esc(c.tagline || (mine ? 'no tagline yet. tap edit and say who you are.' : '')) + '</div>' +
+          '<div class="tag' + (tagline ? '' : ' none') + '">' +
+            esc(tagline || (mine ? 'no tagline yet. tap edit and say who you are.' : '')) + '</div>' +
           '<div class="meta"></div>' +
         '</div>' +
       '</div>';
@@ -231,9 +250,9 @@
         'page shows up on its own when you post, write, or get a song on rotation.</div>' +
         '<div class="row">' +
           '<button class="btn sm" id="y-words">Your words</button>' +
-          '<a class="btn ghost sm" href="../card/">Your card</a>' +
-          '<a class="btn ghost sm" href="../compose/">Post something</a>' +
-          '<a class="btn ghost sm" href="../my/">Your desk</a>' +
+          '<a class="btn ghost sm" href="' + BASE + 'card/">Your card</a>' +
+          '<a class="btn ghost sm" href="' + BASE + 'compose/">Post something</a>' +
+          '<a class="btn ghost sm" href="' + BASE + 'my/">Your desk</a>' +
         '</div>';
       body.appendChild(y);
       y.querySelector('#y-words').onclick = wordsSheet;
@@ -242,10 +261,19 @@
     /* the bio */
     var bs = d.createElement('section');
     bs.appendChild(h2('The Words', 'in their own', true));
-    var bio = d.createElement('div');
-    bio.className = 'bio' + (c.bio ? '' : ' none');
-    bio.textContent = c.bio || (mine ? 'Nothing written yet. Tap edit.' : 'No bio yet.');
-    bs.appendChild(bio);
+    var bioEl = d.createElement('div');
+    bioEl.className = 'bio' + (bio ? '' : ' none');
+    bioEl.textContent = bio || (mine ? 'Nothing written yet. Tap edit.' : 'No bio yet.');
+    bs.appendChild(bioEl);
+    // Say whose words these are. Passing off the house's copy as theirs would be
+    // a small lie on somebody else's page.
+    if (bio && !bioIsTheirs) {
+      var src = d.createElement('div');
+      src.className = 'bio-src';
+      src.textContent = mine ? 'From your card. Write your own and it replaces this.'
+                             : 'From the back of their card.';
+      bs.appendChild(src);
+    }
     body.appendChild(bs);
 
     /* the music: their theme song, their three, and anything of theirs the
@@ -341,8 +369,8 @@
         // ⛔ A BAKED story lives in git at word/<slug>/. An unbaked one only
         // exists in the database and is read at word/live/?s=<slug>. Sending a
         // reader to word/<slug>/ before the bake is a 404 with their name on it.
-        a.href = s.baked ? '../word/' + encodeURIComponent(s.slug) + '/'
-                         : '../word/live/?s=' + encodeURIComponent(s.slug);
+        a.href = s.baked ? BASE + 'word/' + encodeURIComponent(s.slug) + '/'
+                         : BASE + 'word/live/?s=' + encodeURIComponent(s.slug);
         a.className = 'row2' + (s.cover_url ? '' : ' no-im');
         a.innerHTML = (s.cover_url ? '<span class="im"></span>' : '') +
           '<div class="tt"><div class="k">THE WORD</div>' +
@@ -381,7 +409,7 @@
 
     var f = d.createElement('footer');
     f.className = 'back-foot';
-    f.innerHTML = '<a href="../">&larr; 0FF THE PRINT</a>';
+    f.innerHTML = '<a href="' + BASE + '">&larr; 0FF THE PRINT</a>';
     page.appendChild(f);
 
     d.title = (c.display_name || c.card_slug) + ' · 0FF THE PRINT';
@@ -392,8 +420,27 @@
       '<div class="pad"><div class="card" style="margin-top:26px">' +
       '<b style="font-family:var(--f-display);font-style:italic;font-size:24px;text-transform:uppercase">' +
       esc(head) + '</b><div class="note">' + esc(note) + '</div>' +
-      '<div class="row" style="margin-top:14px"><a class="btn ghost sm" href="../">' +
+      '<div class="row" style="margin-top:14px"><a class="btn ghost sm" href="' + BASE + '">' +
       esc(link || 'Back to 0FF THE PRINT') + '</a></div></div></div>';
+  }
+
+  /* THE HOUSE ALREADY WROTE THESE PEOPLE. Every card holder has a lore
+     paragraph, a flavor line and card art committed in roster.json or
+     creators.json, rendering on the back of their card, while this page read the
+     empty database columns and showed a grey "?" and nothing else. Five of seven
+     pages were blank with the copy sitting right there.
+     The member's own words still win. This is the floor, not the ceiling. */
+  var houseCard = null;
+  async function loadHouseCard() {
+    var tight = function (v) { return String(v || '').toLowerCase().replace(/[^a-z0-9]/g, ''); };
+    try {
+      var pair = await Promise.all([
+        fetch(BASE + 'content/roster.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }),
+        fetch(BASE + 'content/creators.json', { cache: 'no-cache' }).then(function (r) { return r.json(); })
+      ]);
+      var all = (pair[1].items || []).concat(pair[0].items || []);
+      houseCard = all.filter(function (x) { return tight(x.name) === tight(slug); })[0] || null;
+    } catch (e) { houseCard = null; }
   }
 
   async function load() {
@@ -422,6 +469,7 @@
     }
     try { me = await OTP.me(); } catch (e) { me = null; }
     admin = !!(me && me.profile && me.profile.is_admin);
+    await loadHouseCard();
     try { await load(); }
     catch (e) {
       console.error(e);
