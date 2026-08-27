@@ -1168,7 +1168,13 @@
   }
   .poke.rainbow-rare .poke-art{
     filter:saturate(1.15) brightness(1.05);
-    mix-blend-mode:lighten;
+    /* ⛔ NO mix-blend-mode HERE. `lighten` composites the ART against the foil
+       BEHIND it and takes the brighter of the two per channel, so anywhere the
+       foil is brighter than the photo, the foil wins and the photo is simply
+       gone. It half-survives at 90px in the grid and disappears completely at
+       386px in the modal, which is the one place a card is looked at closely.
+       Every other rarity blends on a ::before/::after OVERLAY, never on the
+       image itself. This one did it to the image. */
     background-color:rgba(255,255,255,.04);
   }
   .poke.rainbow-rare .poke-name{

@@ -454,6 +454,10 @@ if holders:
 
 print("\nNow:")
 print("  git add -A && git commit -m 'bake story edits' && git push")
+print("\n  \u26d4 RE-RUN THIS AFTER ANY display_name CHANGE. A card back's <title>")
+print("     and og: tags are baked from display_name, so renaming somebody")
+print("     leaves the OLD name in every link preview of their page until a")
+print("     re-bake. The live page corrects itself in JS; the share card does not.")
 if redundant:
     print("\n  ⛔ CLEAR THESE AT THE DESK, they now match the committed file and")
     print("     would silently re-apply on top of a later git edit:")
