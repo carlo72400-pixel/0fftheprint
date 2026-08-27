@@ -181,7 +181,7 @@
     },
     {
       "name": "WUN MOR",
-      "type": "canvas",
+      "type": "void",
       "type_label": "THE HAND",
       "hp": 140,
       "rarity": "rare-holo",
