@@ -1,6 +1,45 @@
 {
  "items": [
   {
+   "title": "The Studio Took The Money",
+   "kicker": "THE DEAL",
+   "dek": "Google put seventy five million into A24 and named storyboards as the first use. We are not writing this from a high place: we pulled an AI plate off our own card this morning.",
+   "date": "08.27.26",
+   "lanes": [
+    "story"
+   ],
+   "platform": "SITE",
+   "thumb": "word/the-studio-took-the-money/thumb.jpg",
+   "link": "word/the-studio-took-the-money/",
+   "num": "0TP-012"
+  },
+  {
+   "title": "Seventeen, A Laptop, Four Hundred Million",
+   "kicker": "THE DEBUT",
+   "dek": "Kane Parsons made a Backrooms short in Blender at seventeen. A24 put the feature in theatres in May and it has taken close to four hundred million.",
+   "date": "08.27.26",
+   "lanes": [
+    "story"
+   ],
+   "platform": "SITE",
+   "thumb": "word/seventeen-a-laptop-four-hundred-million/thumb.jpg",
+   "link": "word/seventeen-a-laptop-four-hundred-million/",
+   "num": "0TP-011"
+  },
+  {
+   "title": "Opium Bought The Whole Convention",
+   "kicker": "THE TAKEOVER",
+   "dek": "ComplexCon turns ten and the label built on never being looked at is headlining it. Ken Carson is playing Austin on September 15.",
+   "date": "08.27.26",
+   "lanes": [
+    "story"
+   ],
+   "platform": "SITE",
+   "thumb": "word/opium-bought-the-whole-convention/thumb.jpg",
+   "link": "word/opium-bought-the-whole-convention/",
+   "num": "0TP-010"
+  },
+  {
    "title": "Nobody Says A Word",
    "kicker": "THE FILM",
    "dek": "VOLUME is three minutes of silent comedy in a library. The desk wrote it, shot it, cut it, and is in it.",
