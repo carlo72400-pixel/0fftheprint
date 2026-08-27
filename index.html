@@ -483,10 +483,21 @@
 
   /* ============ MAIN ============ */
   main.feed > section{margin-bottom:44px;}
+  /* ⛔ THE SUB USED TO CRUSH THE HEADING. This was a nowrap flex row with the
+     sub at flex-shrink:0, so a long tagline ("serious pieces only · every one
+     gets a number · links worth your time" at .32em tracking) took whatever
+     width it wanted and the h2 shrank to fit what was left. It did not shrink
+     the TYPE, it shrank the BOX, so the title broke one word per line:
+     THE / WORD / STORIES / FROM / THE / HOUSE.
+     The fix is a row that wraps plus a real flex-basis on the heading, so when
+     the pair will not fit the SUB drops to its own line and the title keeps its
+     width. Nothing here changes a font size. */
   .section-head{
     display:flex;align-items:end;justify-content:space-between;
     margin-bottom:18px;border-bottom:1px solid var(--line);padding-bottom:14px;
     gap:24px;
+    flex-wrap:wrap;
+    row-gap:8px;
   }
   .section-head h2{
     font-family:var(--f-display);
@@ -496,6 +507,10 @@
     line-height:.95;
     text-transform:uppercase;
     color:var(--ink);
+    /* wants 24rem before it will let the sub sit beside it */
+    flex:1 1 24rem;
+    /* and when it does wrap, break it evenly instead of orphaning one word */
+    text-wrap:balance;
   }
   .section-head h2 .accent{color:var(--pink-glow);text-shadow:0 0 14px rgba(255,121,198,.5);}
   .section-head .sub{
@@ -1765,6 +1780,12 @@
     .section-head h2{
       font-size:32px;
       line-height:.95;
+      /* ⛔ RESET THE BASIS. This block flips .section-head to a COLUMN, and a
+         flex-basis is measured along the MAIN axis, so the 24rem the desktop
+         rule uses to hold the heading's WIDTH became 384px of HEIGHT here: a
+         dead gap under every title, with the text overflowing sideways because
+         nothing was constraining the width any more. */
+      flex:0 1 auto;
     }
     .section-head .sub{font-size:10px;letter-spacing:.24em;}
 
