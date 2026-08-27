@@ -90,6 +90,8 @@
      save(values, say) may be async. Throwing shows the message in the sheet
      instead of a browser alert he has to dismiss before he can read it. */
 
+  var SONGS = {};   // track id -> the read-out html, so a re-type is one request
+
   function sheet(o) {
     var back = d.createElement('div');
     back.className = 'sh-back';
@@ -114,6 +116,16 @@
       if (f.type === 'textarea')
         return lab + '<textarea data-k="' + esc(f.key) + '" rows="' + (f.rows || 4) + '">' +
                esc(f.value == null ? '' : f.value) + '</textarea>' +
+               (f.hint ? '<div class="note">' + esc(f.hint) + '</div>' : '');
+      if (f.type === 'song')
+        // A bare text box makes a wrong Spotify link and a right one look
+        // identical until the card is already wrong. This one says which song
+        // it is, out loud, before Save is ever tapped.
+        return lab + '<input type="text" data-k="' + esc(f.key) + '" data-song="1" ' +
+               'inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" ' +
+               'placeholder="https://open.spotify.com/track/..." value="' +
+               esc(f.value == null ? '' : f.value) + '">' +
+               '<div class="songsay"></div>' +
                (f.hint ? '<div class="note">' + esc(f.hint) + '</div>' : '');
       if (f.type === 'file')
         return lab + '<input type="file" data-k="' + esc(f.key) + '" accept="' +
@@ -143,6 +155,41 @@
     function onKey(e) { if (e.key === 'Escape') shut(); }
     var say = back.querySelector('.say');
     function speak(m, bad) { say.textContent = m || ''; say.classList.toggle('bad', !!bad); }
+
+    // Spotify's oembed needs no key and no login, so the sheet can name the
+    // actual track. Cached per id so re-typing the same link is one request.
+    back.querySelectorAll('input[data-song]').forEach(function (inp) {
+      var out = inp.parentNode.querySelector('.songsay')
+             || inp.nextElementSibling;
+      if (!out) return;
+      var seq = 0, timer = null;
+      function show(cls, html) { out.className = 'songsay' + (cls ? ' ' + cls : ''); out.innerHTML = html; }
+      function run() {
+        var mine = ++seq;
+        var t = (w.OTP && OTP.readTrack) ? OTP.readTrack(inp.value) : { id: null, empty: !inp.value };
+        if (t.empty) { show('', 'No song on this card.'); return; }
+        if (!t.id) { show('bad', esc(t.why || 'That is not a Spotify track link.')); return; }
+        if (SONGS[t.id]) { show('ok', SONGS[t.id]); return; }
+        show('', 'reading\u2026');
+        fetch('https://open.spotify.com/oembed?url=https://open.spotify.com/track/' + t.id)
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .catch(function () { return null; })
+          .then(function (meta) {
+            if (mine !== seq) return;                       // they kept typing
+            if (!meta || !meta.title) {
+              show('ok', 'Track id looks right. Spotify did not answer, that is fine.');
+              return;
+            }
+            var html = (meta.thumbnail_url ? '<img src="' + esc(meta.thumbnail_url) + '" alt="">' : '') +
+                       '<span><b>' + esc(meta.title) + '</b></span>';
+            SONGS[t.id] = html;
+            show('ok', html);
+          });
+      }
+      inp.addEventListener('input', function () { clearTimeout(timer); timer = setTimeout(run, 320); });
+      inp.addEventListener('blur', run);
+      run();
+    });
 
     function read() {
       var v = {};
@@ -841,7 +888,7 @@
     /* ---- THE ROSTER. Flavor, lore, stamp and order, all from here. ---- */
     R.push({
       key: 'roster', nm: 'THE ROSTER', src: 'content/roster.json + overlay',
-      note: 'the cards. lore and order are editable, the art is not',
+      note: 'the cards. song, lore and order are editable, the art is not',
       tiles: function () {
         var items = ((C.roster && C.roster.items) || []);
         var keys = ordered('roster', items, function (it) { return String(it.name || ''); });
@@ -859,6 +906,13 @@
                 title: it.name, why: (it.rarity || '') + ' · hp ' + (it.hp || ''),
                 art: full(it.photo),
                 fields: [
+                  { key: 'theme_song', label: 'Opening song', type: 'song',
+                    value: p.theme_song != null ? p.theme_song : (it.theme_song || ''),
+                    hint: 'Plays when somebody opens the card. Empty means no song. ' +
+                          'If they hold an account and set their own song at /card/, theirs wins over this.' },
+                  { key: 'theme_start', label: 'Start at (seconds)',
+                    value: p.theme_start != null ? p.theme_start : (it.theme_start || ''),
+                    hint: 'Anyone not logged into Spotify only gets the 30 second preview, so past 0:30 does nothing for them.' },
                   { key: 'flavor', label: 'Flavor line', value: p.flavor != null ? p.flavor : (it.flavor || '') },
                   { key: 'lore', label: 'Lore', type: 'textarea', rows: 7, value: p.lore != null ? p.lore : (it.lore || '') },
                   { key: 'pending_stamp', label: 'Stamp', value: p.pending_stamp != null ? p.pending_stamp : (it.pending_stamp || '') },
@@ -869,6 +923,18 @@
                   ['flavor', 'lore', 'pending_stamp'].forEach(function (kk) {
                     if (val[kk] !== undefined) patch[kk] = val[kk];
                   });
+                  if (val.theme_song !== undefined) {
+                    var raw = String(val.theme_song || '').trim();
+                    var t = (w.OTP && OTP.readTrack) ? OTP.readTrack(raw) : { id: raw ? null : null, empty: !raw };
+                    // ⛔ Refuse rather than write a link the card cannot play.
+                    // Clearing the box on purpose still clears the song.
+                    if (raw && !t.id) throw new Error(t.why || 'That is not a Spotify track link.');
+                    // Store the canonical URL, not whatever shape got pasted, so
+                    // roster.json ends up holding one format after bake.py folds it in.
+                    patch.theme_song = t.id ? 'https://open.spotify.com/track/' + t.id : '';
+                    var st = parseInt(String(val.theme_start || '').trim(), 10);
+                    patch.theme_start = (isFinite(st) && st > 0) ? st : 0;
+                  }
                   await writeOv('roster', k, patch, { hidden: !!val.hidden });
                 }
               });

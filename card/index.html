@@ -44,6 +44,14 @@ input:focus,select:focus{outline:2px solid var(--pink-deep);outline-offset:1px}
   font-weight:700;font-size:15px;cursor:pointer;min-height:44px;font-family:var(--f-body)}
 .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
 .btn:disabled{opacity:.5;cursor:default}
+/* The song fields tell you what you picked BEFORE you save, because the whole
+   problem with a bare text box is that a wrong link and a right link look
+   identical until the card is already wrong. */
+.songsay{display:flex;align-items:center;gap:9px;margin:7px 0 2px;min-height:34px;
+  font-size:13px;color:var(--muted);line-height:1.35}
+.songsay img{width:34px;height:34px;border-radius:5px;flex:0 0 auto;object-fit:cover}
+.songsay.ok{color:var(--ok)} .songsay.bad{color:var(--bad)}
+.songsay b{color:var(--ink,#efe9f2);font-weight:600}
 .msg{margin-top:14px;font-size:14px;min-height:20px}
 .msg.ok{color:var(--ok)} .msg.bad{color:var(--bad)}
 .drop{border:1px dashed var(--line);border-radius:10px;padding:20px;text-align:center;
@@ -91,6 +99,7 @@ input:focus,select:focus{outline:2px solid var(--pink-deep);outline-offset:1px}
         <legend>Opening song</legend>
         <label for="theme">Spotify link or track id</label>
         <input type="text" id="theme" placeholder="https://open.spotify.com/track/...">
+        <div class="songsay" id="say-theme"></div>
         <div class="row">
           <div>
             <label for="start">Start at (seconds)</label>
@@ -105,8 +114,11 @@ input:focus,select:focus{outline:2px solid var(--pink-deep);outline-offset:1px}
       <fieldset>
         <legend>Featured, up to 3</legend>
         <label for="f1">1</label><input type="text" id="f1" placeholder="Spotify link or track id">
+        <div class="songsay" id="say-f1"></div>
         <label for="f2">2</label><input type="text" id="f2" placeholder="Spotify link or track id">
+        <div class="songsay" id="say-f2"></div>
         <label for="f3">3</label><input type="text" id="f3" placeholder="Spotify link or track id">
+        <div class="songsay" id="say-f3"></div>
         <div class="hint">These sit on the back of your card. Same song twice gets dropped.</div>
       </fieldset>
 
@@ -133,7 +145,7 @@ input:focus,select:focus{outline:2px solid var(--pink-deep);outline-offset:1px}
 
 <script src="../supabase-config.js?v=f1348482"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="../assets/js/desk.js?v=ffaa8999" defer></script>
+<script src="../assets/js/desk.js?v=08537a4c" defer></script>
 <script defer>
 (() => {
   const $ = id => document.getElementById(id);
@@ -251,6 +263,11 @@ input:focus,select:focus{outline:2px solid var(--pink-deep);outline-offset:1px}
     $('app').style.display = '';
     paintFrames();
     preview();
+    // The boxes were just filled from the DB and setting .value fires no
+    // event, so nothing would name those songs until you touched a field.
+    ['theme', 'f1', 'f2', 'f3'].forEach(k => {
+      const el = $(k); if (el && el._sayNow) el._sayNow();
+    });
   }
 
   document.addEventListener('DOMContentLoaded', () => {
@@ -272,6 +289,42 @@ input:focus,select:focus{outline:2px solid var(--pink-deep);outline-offset:1px}
     $('rmart').onclick = () => {
       state.card_photo = null; $('rmart').style.display = 'none'; preview();
     };
+    /* ---- SAY WHAT THE LINK IS, WHILE THEY TYPE -------------------------
+       Spotify's oembed needs no key and no login, so the box can name the
+       actual song. A wrong link now says so on the spot instead of saving
+       quietly and playing nothing. */
+    const songCache = {};
+    function wireSong(inputId, sayId) {
+      const inp = $(inputId), say = $(sayId);
+      if (!inp || !say) return;
+      let seq = 0;
+      const show = (cls, html) => { say.className = 'songsay' + (cls ? ' ' + cls : ''); say.innerHTML = html; };
+      const run = async () => {
+        const mine = ++seq;
+        const t = OTP.readTrack(inp.value);
+        if (t.empty) { show('', ''); return; }
+        if (!t.id) { show('bad', esc(t.why)); return; }
+        if (songCache[t.id]) { show('ok', songCache[t.id]); return; }
+        show('', 'reading&hellip;');
+        let meta = null;
+        try {
+          meta = await fetch('https://open.spotify.com/oembed?url=https://open.spotify.com/track/' + t.id)
+            .then(r => r.ok ? r.json() : null);
+        } catch (e) { meta = null; }
+        if (mine !== seq) return;               // they kept typing
+        if (!meta || !meta.title) { show('ok', 'Track id looks right. Spotify did not answer, that is fine.'); return; }
+        const html = (meta.thumbnail_url ? '<img src="' + esc(meta.thumbnail_url) + '" alt="">' : '') +
+                     '<span><b>' + esc(meta.title) + '</b></span>';
+        songCache[t.id] = html;
+        show('ok', html);
+      };
+      let timer = null;
+      inp.addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(run, 320); });
+      inp.addEventListener('blur', run);
+      inp._sayNow = run;
+    }
+    ['theme', 'f1', 'f2', 'f3'].forEach(k => wireSong(k, 'say-' + k));
+
     $('save').onclick = async () => {
       $('save').disabled = true;
       $('msg').className = 'msg'; $('msg').textContent = 'Saving...';
@@ -285,9 +338,12 @@ input:focus,select:focus{outline:2px solid var(--pink-deep);outline-offset:1px}
         };
         if (state.card_frame) payload.card_frame = state.card_frame;
         await OTP.saveCard(payload);
-        await OTP.setFeatured([$('f1').value, $('f2').value, $('f3').value]);
-        $('msg').className = 'msg ok';
-        $('msg').textContent = 'Saved. It shows on the roster next time the page loads.';
+        const feat = await OTP.setFeatured([$('f1').value, $('f2').value, $('f3').value]);
+        const dropped = (feat && feat.skipped) || [];
+        $('msg').className = dropped.length ? 'msg bad' : 'msg ok';
+        $('msg').textContent = 'Saved. It shows on the roster next time the page loads.'
+          + (dropped.length ? '  Featured ' + dropped.map(x => x.n).join(' and ')
+              + ' did not take: ' + dropped[0].why : '');
       } catch (err) {
         $('msg').className = 'msg bad'; $('msg').textContent = err.message;
       }

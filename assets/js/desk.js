@@ -253,11 +253,33 @@
     // parseSpotifyId() in index.html. Storing the ID and never a URL is what
     // makes a scheme unrepresentable in the column.
     trackId(s) {
-      if (!s) return null;
-      const v = String(s);
+      return OTP.readTrack(s).id;
+    },
+    // Same matching trackId always did, plus a REASON when it fails. Nothing
+    // that parsed before stops parsing: the loose /track\/<22>/ pattern already
+    // covers open.spotify.com, spotify: URIs and the /intl-xx/ prefix a phone
+    // in another locale hands you.
+    // ⛔ This exists because every surface that took a song used to save
+    // trackId()'s null and then say "Saved." A link that did not parse wiped
+    // the song and reported success, which is the worst possible pairing.
+    readTrack(s) {
+      const v = String(s == null ? "" : s).trim();
+      if (!v) return { id: null, empty: true };
       const m = v.match(/(?:track\/|spotify:track:)([A-Za-z0-9]{22})/) ||
                 v.match(/^([A-Za-z0-9]{22})$/);
-      return m ? m[1] : null;
+      if (m) return { id: m[1] };
+      if (/spotify\.link\//i.test(v)) return { id: null, why:
+        "That is a Spotify short link. Open it once and copy the address it lands on." };
+      const kind = (v.match(/spotify\.com\/(?:intl-[a-z-]+\/)?(album|playlist|artist|episode|show)\//i) || [])[1];
+      if (kind) return { id: null, why:
+        "That is " + (/^[aeiou]/i.test(kind) ? "an " : "a ") + kind.toLowerCase() +
+        " link. Open the song itself and copy that one." };
+      if (/music\.apple|soundcloud|youtu|bandcamp|tidal|deezer/i.test(v)) return { id: null, why:
+        "Cards play Spotify only. Find the same song on Spotify and copy that link." };
+      if (/^https?:/i.test(v)) return { id: null, why:
+        "That link has no Spotify track in it." };
+      return { id: null, why:
+        "Paste a Spotify song link, or the 22 character track id on its own." };
     },
 
     async saveCard(fields) {
@@ -271,7 +293,12 @@
         const n = parseInt(fields.theme_start, 10);
         patch.theme_start = Number.isFinite(n) && n > 0 ? Math.min(n, 3600) : null;
       }
-      if ("theme_song" in fields) patch.theme_track = OTP.trackId(fields.theme_song);
+      if ("theme_song" in fields) {
+        const t = OTP.readTrack(fields.theme_song);
+        // Refuse rather than wipe. Clearing the box on purpose still clears it.
+        if (!t.id && !t.empty) throw new Error(t.why);
+        patch.theme_track = t.id;
+      }
       if ("link_platform" in fields) patch.link_platform = fields.link_platform || null;
       if ("link_handle" in fields) {
         const h = String(fields.link_handle || "").trim().replace(/^@/, "");
@@ -730,8 +757,9 @@
     // Shared by submit AND swap so the two can never drift on what a Spotify
     // link resolves to. Returns the id, the title and the 40-hex art key.
     async resolveTrack(url) {
-      const id = OTP.trackId(url);
-      if (!id) throw new Error("That is not a Spotify track link.");
+      const t = OTP.readTrack(url);
+      if (!t.id) throw new Error(t.why || "That is not a Spotify track link.");
+      const id = t.id;
       let meta;
       try {
         meta = await fetch("https://open.spotify.com/oembed?url=https://open.spotify.com/track/" + id)
@@ -770,8 +798,9 @@
       const c = sb(); if (!c) throw new Error("Backend not configured yet.");
       const { data: { user } } = await c.auth.getUser();
       if (!user) throw new Error("Log in first.");
-      const id = OTP.trackId(url);
-      if (!id) throw new Error("That is not a Spotify track link.");
+      const t = OTP.readTrack(url);
+      if (!t.id) throw new Error(t.why || "That is not a Spotify track link.");
+      const id = t.id;
       let meta;
       try {
         meta = await fetch("https://open.spotify.com/oembed?url=https://open.spotify.com/track/" + id)
@@ -1229,17 +1258,24 @@
       if (!user) throw new Error("Log in first.");
       const rows = [];
       const seen = new Set();
+      const skipped = [];
       (list || []).slice(0, 3).forEach((raw, i) => {
-        const id = OTP.trackId(raw);
-        if (!id || seen.has(id)) return;   // dupes would hit 23505
-        seen.add(id);
-        rows.push({ profile_id: user.id, slot: rows.length + 1, track: id });
+        const t = OTP.readTrack(raw);
+        // A typo in slot 2 must not block slots 1 and 3, but it must not
+        // vanish either: the caller is handed what did not take, and why.
+        if (!t.id) { if (!t.empty) skipped.push({ n: i + 1, why: t.why }); return; }
+        if (seen.has(t.id)) { skipped.push({ n: i + 1, why: "same song twice." }); return; }
+        seen.add(t.id);
+        rows.push({ profile_id: user.id, slot: rows.length + 1, track: t.id });
       });
       const del = await c.from("featured_tracks").delete().eq("profile_id", user.id);
       if (del.error) throw del.error;
-      if (!rows.length) return [];
+      // `skipped` rides ON the array rather than changing the return shape, so
+      // a caller that only counts rows is untouched.
+      if (!rows.length) { const none = []; none.skipped = skipped; return none; }
       const { error } = await c.from("featured_tracks").insert(rows);
       if (error) throw error;
+      rows.skipped = skipped;
       return rows;
     },
 
