@@ -2681,6 +2681,38 @@
   .pulse-kick{font-family:var(--f-mono);font-size:11px;letter-spacing:.34em;color:var(--muted);text-transform:uppercase;}
   .pulse-line{font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;font-size:clamp(36px,6vw,82px);line-height:.94;letter-spacing:-.01em;margin:12px 0 14px;background:linear-gradient(180deg,#fff 8%,var(--pink) 36%,#8f8a97 52%,#fff 62%,var(--pink-deep) 95%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 4px 22px rgba(255,121,198,.22));}
   .pulse-line .blue{background:linear-gradient(180deg,#cfe0ff 10%,var(--dye-blue) 58%,#9db9ff 95%);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  /* THE HOUSE MARK ON FOIL. This slot used to be a venue list, which is
+     information; the top of the page wants identity. The plate is generated
+     pink leopard foil cut to a 6:1 band and taken well down in level, because
+     it is a BACKGROUND and the wordmark has to win over it at 115px tall.
+     ⛔ The mark itself is LIVE TEXT in the site's own display face, not baked
+     into the image: the same lockup the footer and the brand card use, so it
+     stays pixel-sharp at any density and cannot drift from the rest of the
+     site. Generated type at this aspect is exactly where that fails. */
+  .pulse-mark{
+    position:relative;width:min(680px,92vw);aspect-ratio:6/1;margin:0 auto;
+    border-radius:12px;overflow:hidden;display:grid;place-items:center;
+    background:#0a0a0d url('assets/banner-foil.jpg') center/cover no-repeat;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.10), inset 0 0 40px rgba(0,0,0,.55);
+  }
+  .pulse-mark::after{
+    /* the same scrim the card art wears, so the type never sits on bare foil */
+    content:'';position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(ellipse 54% 130% at 50% 50%, rgba(10,10,13,.80), rgba(10,10,13,.16) 72%);
+  }
+  .pulse-mark .pm-txt{
+    position:relative;z-index:2;
+    font-family:var(--f-display);font-style:italic;font-weight:900;
+    font-size:clamp(22px,4vw,40px);letter-spacing:-.01em;line-height:1;
+    text-transform:uppercase;color:var(--ink);
+    text-shadow:0 2px 10px rgba(0,0,0,.75), 0 0 26px rgba(0,0,0,.5);
+  }
+  .pulse-mark .pm-txt .zero{
+    background:linear-gradient(180deg,#fff 0%,#ffcfeb 30%,#ff79c6 55%,#f7b9dd 78%,#fff 100%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:transparent;
+  }
+
   .pulse-route{display:inline-flex;flex-wrap:wrap;justify-content:center;gap:6px 12px;font-family:var(--f-mono);font-size:12px;letter-spacing:.2em;color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:9px 20px;background:linear-gradient(180deg,rgba(244,143,200,.10),rgba(47,107,255,.06));}
   .pulse-route b{color:var(--pink-glow);font-weight:600;}
   .pulse-route .nx{color:var(--muted);}
@@ -3597,7 +3629,9 @@
 <header class="pulse-banner">
   <div class="pulse-kick">MEDIA HOUSE · SAN ANTONIO TX · SINCE WE FELT LIKE IT</div>
   <h1 class="pulse-line">THE CITY GOES DARK.<br><span class="blue">WE CLOCK IN.</span></h1>
-  <div class="pulse-route">ZEN HAUS FRI · THE MIX · PAPER TIGER · LEGION INK · HOME BY 3</div>
+  <div class="pulse-mark" role="img" aria-label="0FF THE PRINT">
+    <span class="pm-txt"><span class="zero">0</span>FF THE PRINT</span>
+  </div>
 </header>
 
 <!-- ========== MAIN GRID ========== -->
