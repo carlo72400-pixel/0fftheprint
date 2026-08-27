@@ -13,6 +13,16 @@
            b:"You're in the queue.",
            s:"The desk approves by hand. Nobody's ignoring you, it just moves when it moves.",
            foot:"You're in the queue →"},
+    // 023. A refused person used to read "you're in the queue" forever, on
+    // eight surfaces, which is a promise the desk had already decided not to
+    // keep. No reason is given and no appeal is offered: /seats/ says "that is
+    // a fair answer and there is no follow up", and this is the same answer
+    // pointed the other way.
+    refused:{label:'Log in', href:'join/', on:false,
+           title:'The desk has looked at this one.',
+           b:'This one is not going forward.',
+           s:'The desk looked and said no. Nothing else is coming, and there is no queue to wait in.',
+           foot:'Log in →'},
     in:   {label:'Your desk', href:'my/', on:true,
            title:'Your side of the desk.',
            b:'Your desk.',
@@ -66,6 +76,8 @@
       try { s.n = (await OTP.pending()).length || 0; } catch(e){}
     } else if (me && me.profile && me.profile.approved) {
       s = S.in;
+    } else if (me && me.profile && me.profile.denied) {
+      s = S.refused;
     } else if (me) {
       s = S.wait;
     }

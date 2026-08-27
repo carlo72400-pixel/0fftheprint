@@ -97,8 +97,13 @@
     var rows = fields.map(function (f) {
       var lab = '<label>' + esc(f.label) + '</label>';
       if (f.type === 'check')
+        // ⛔ THE HINT USED TO BE SILENTLY DROPPED HERE. Every other field type
+        // renders f.hint and this one ignored it, so a checkbox could carry an
+        // explanation that never reached the screen. Found while adding the
+        // door's no, whose whole point is saying what unticking does.
         return '<label class="chk"><input type="checkbox" data-k="' + esc(f.key) + '"' +
-               (f.value ? ' checked' : '') + '> ' + esc(f.label) + '</label>';
+               (f.value ? ' checked' : '') + '> ' + esc(f.label) + '</label>' +
+               (f.hint ? '<div class="note">' + esc(f.hint) + '</div>' : '');
       if (f.type === 'select')
         return lab + '<select data-k="' + esc(f.key) + '">' +
                (f.options || []).map(function (o) {
@@ -949,6 +954,17 @@
             open: function () { memberSheet(p, true); }
           });
         });
+        // 023: the ones the desk said no to, LAST and dimmed. They are here so
+        // the decision is reversible, not so it gets re-litigated every time
+        // this rail paints.
+        (DB.refused || []).forEach(function (p) {
+          out.push({
+            tall: true, off: true, glyph: '\u2715',
+            t: p.display_name || '(no name)', s: 'not going forward',
+            state: 'hidden',
+            open: function () { memberSheet(p, false); }
+          });
+        });
         return out;
       },
       add: {
@@ -956,7 +972,12 @@
           tellSheet('SEATS', 'they let themselves in', [
             'There is no invite button because there is no invite.',
             'Someone holding a card signs up at /join/, then shows up here as',
-            'at the door, and you tap approve.'
+            'at the door, and you tap approve.',
+            '',
+            'If you do not want them, open them and tick NOT THIS ONE. They drop',
+            'out of the queue instead of being re-read every time you open this,',
+            'they are never told a reason, and you can undo it. Undoing puts them',
+            'back at the door, not in the house.'
           ], [{ label: 'The seats page', href: '../seats/', blank: true },
               { label: 'The door', href: '../join/', blank: true }]);
         }
@@ -1045,19 +1066,31 @@
     var words = (DB.cards || []).filter(function (c) { return c.card_slug === p.card_slug; })[0] || {};
     sheet({
       title: p.display_name || 'MEMBER',
-      why: isIn ? 'in the house' + (p.card_slug ? ' · ' + p.card_slug : '') : 'waiting at the door',
+      why: p.denied ? 'refused. not going forward'
+         : isIn ? 'in the house' + (p.card_slug ? ' · ' + p.card_slug : '')
+         : 'waiting at the door',
       body: p.card_slug
         ? '<div class="row" style="margin-top:14px"><a class="btn ghost sm" href="../c/' +
           encodeURIComponent(p.card_slug) + '/" target="_blank" rel="noopener">Open their page</a></div>'
         : '',
       fields: [
         { key: 'approved', label: 'In the house', type: 'check', value: !!p.approved },
+        // 023. Ticking this takes the seat back in the same write (the trigger
+        // does it), so the two boxes can never both end up true.
+        { key: 'denied', label: p.denied ? 'Refused (untick to put them back at the door)' : 'Not this one',
+          type: 'check', value: !!p.denied,
+          hint: p.denied
+            ? 'Untick and they go back to WAITING, not in. You still have to say yes on purpose.'
+            : 'Says no and clears them out of the queue. Reversible, and they are never told a reason.' },
         { key: 'card', label: 'Card slug', value: p.card_slug || '', hint: 'the /card/ they hold. blank takes it away.' },
         { key: 'tagline', label: 'Their tagline', value: words.tagline || '', hint: 'one line, up to 80' },
         { key: 'bio', label: 'Their bio', type: 'textarea', rows: 5, value: words.bio || '', hint: 'up to 600' }
       ],
       save: async function (v) {
-        if (!!v.approved !== !!p.approved) await OTP.setApproved(p.id, v.approved);
+        // ⛔ THE NO GOES FIRST. It clears approved server side, so sending an
+        // approve after it would just undo the thing that was asked for.
+        if (!!v.denied !== !!p.denied) await OTP.setDenied(p.id, v.denied);
+        if (!v.denied && !!v.approved !== !!p.approved) await OTP.setApproved(p.id, v.approved);
         if ((v.card || '') !== (p.card_slug || '')) await OTP.setCard(p.id, v.card || null);
         if ((v.tagline || '') !== (words.tagline || '') || (v.bio || '') !== (words.bio || ''))
           await OTP.setMemberWords(p.id, { tagline: v.tagline, bio: v.bio });
@@ -1251,12 +1284,13 @@
       ]],
       ['DECIDE WHAT STAYS UP', [
         ['Approve someone at the door', 'here', function () { jump('members'); }],
+        ['Say no to someone at the door', 'here', function () { jump('members'); }],
         ['Hand out or take back a card', 'here', function () { jump('members'); }],
         ['Retire a member and pull their posts', 'here', function () { jump('members'); }],
         ['Write or fix any member\'s tagline and bio', 'here', function () { jump('members'); }],
         ['Open any card holder\'s page', 'here', function () { jump('members'); }],
         ['Pull or pin any post', 'here', function () { jump('take'); }],
-        ['Publish, feature or delete a video', 'here', function () { jump('videos'); }],
+        ['Pull, feature or delete a video (they go up on their own)', 'here', function () { jump('videos'); }],
         ['Publish or delete a track', 'here', function () { jump('music'); }],
         ['Pull or fix anyone\'s date', 'here', function () { jump('run'); }],
         ['Answer a member asking for the house', 'here', function () { jump('run'); }],
@@ -1556,6 +1590,7 @@
       members: OTP.members(),
       cards: OTP.cards(),
       dates: OTP.calendarAll(200),
+      refused: OTP.refused ? OTP.refused().catch(function () { return []; }) : [],
       orphans: OTP.orphanImages()
     };
     await Promise.all(Object.keys(jobs).map(async function (k) {

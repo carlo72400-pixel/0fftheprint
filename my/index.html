@@ -169,7 +169,7 @@
 
 <script src="../supabase-config.js?v=f1348482"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="../assets/js/desk.js?v=736d0b9f" defer></script>
+<script src="../assets/js/desk.js?v=610139f4" defer></script>
 <script src="../assets/js/calendar.js?v=b7cd53c5" defer></script>
 <script defer>
 document.addEventListener('DOMContentLoaded', async () => {
@@ -185,7 +185,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!me) { location.href = '../join/'; return; }
   if (!me.profile || !me.profile.approved) {
     $('gate').style.display = ''; $('gate').innerHTML =
-      '<p class="door-note">You are in the queue. The desk approves by hand; this page opens up after.</p>'; return;
+      '<p class="door-note">' + esc(OTP.doorNote(me.profile).line) + '</p>'; return;
   }
   $('app').style.display = '';
   $('acct').textContent = me.user.email;

@@ -62,7 +62,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="../supabase-config.js?v=f1348482"></script>
-<script src="../assets/js/desk.js?v=736d0b9f"></script>
+<script src="../assets/js/desk.js?v=610139f4"></script>
 <script>
 (async () => {
   const $ = id => document.getElementById(id);
@@ -360,7 +360,7 @@
         }
         msg.textContent = 'Sending…';
         await OTP.submitVideo({ url: $('vd-url').value, title: $('vd-title').value, coverUrl });
-        msg.textContent = 'In the queue. The desk sees it next.';
+        msg.textContent = 'Up. It is on the reel now.';
         $('vd-url').value = ''; $('vd-title').value = '';
         renderVideos();
       } catch (e) { msg.textContent = e.message; }

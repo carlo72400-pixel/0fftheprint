@@ -1345,13 +1345,46 @@
       return data || [];
     },
 
-    async pending() { return (await OTP.deskProfiles()).filter(p => !p.approved); },
+    // ⛔ THREE STATES SINCE 023, not two. "Waiting" means nobody has looked yet;
+    // a refused row is not waiting for anything and must not sit in the queue
+    // being re-read every time the board opens, which is the entire reason the
+    // no exists. On a database without 023 p.denied is undefined, !undefined is
+    // true, and pending() behaves exactly as it did before.
+    async pending() { return (await OTP.deskProfiles()).filter(p => !p.approved && !p.denied); },
     async members() { return (await OTP.deskProfiles()).filter(p => p.approved); },
+    async refused() { return (await OTP.deskProfiles()).filter(p => !!p.denied); },
 
     async setApproved(id, approved) {
       const c = sb(); if (!c) throw new Error("Backend not configured yet.");
       const { error } = await c.from("profiles").update({ approved }).eq("id", id);
       if (error) throw error;
+    },
+
+    // The no. The trigger stamps denied_at and takes the seat back in the same
+    // write, so this never has to send approved:false itself and can never race
+    // with it. Undoing sends denied:false and leaves them WAITING, not in: the
+    // desk still has to say yes on purpose.
+    async setDenied(id, denied) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { error } = await c.from("profiles").update({ denied: !!denied }).eq("id", id);
+      if (error) {
+        if (error.code === "42703") throw new Error("Run migration-023-no-queue-and-the-no.sql first.");
+        throw error;
+      }
+    },
+
+    // ONE PLACE that turns a profile into what the door should say to them.
+    // Eight surfaces used to hardcode "you're in the queue", which meant a
+    // refused person read a promise that was never going to land, on every one
+    // of them.
+    doorNote(profile) {
+      if (!profile) return { state: "out", line: "Card holders log in here." };
+      if (profile.is_admin)  return { state: "admin", line: "Approvals and pulls." };
+      if (profile.denied)    return { state: "refused",
+        line: "The desk looked at this one and it is not going forward." };
+      if (profile.approved)  return { state: "in", line: "You are in." };
+      return { state: "wait",
+        line: "You are in the queue. The desk approves by hand, so give it a day." };
     },
 
     async setCard(id, slug) {

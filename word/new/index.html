@@ -37,14 +37,14 @@
 <div class="wrap">
   <a class="back" href="../../compose/">&larr; New Post</a>
   <h1>Write a story</h1>
-  <div class="sub">the serious surface &nbsp;·&nbsp; goes to the desk first &nbsp;·&nbsp; live when it clears</div>
+  <div class="sub">the serious surface &nbsp;·&nbsp; yours &nbsp;·&nbsp; live when you send it</div>
 
   <div class="card" id="panel"><div class="empty">checking your card…</div></div>
 </div>
 
 <script src="../../supabase-config.js?v=f1348482"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="../../assets/js/desk.js?v=736d0b9f" defer></script>
+<script src="../../assets/js/desk.js?v=610139f4" defer></script>
 <script src="../../assets/js/word.js?v=faaae268" defer></script>
 <script defer>
 document.addEventListener('DOMContentLoaded', async () => {
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const me = await OTP.me().catch(() => null);
   if (!me) { location.href = '../../join/'; return; }
   if (!me.profile || !me.profile.approved) {
-    panel.innerHTML = '<div class="empty">You are in the queue. Stories open up when the desk approves you.</div>'; return;
+    panel.innerHTML = '<div class="empty">' + esc(OTP.doorNote(me.profile).line) + '</div>'; return;
   }
 
   let coverUrl = null, pendingRow = null;
@@ -85,12 +85,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       <input id="dek" type="text" maxlength="200" placeholder="what this is and why it matters">
       <label for="body">The story</label>
       <textarea id="body" placeholder="Plain paragraphs, blank line between them.&#10;&#10;## makes a heading&#10;> makes a pull quote&#10;**bold** *italic* [link](https://...)"></textarea>
-      <div class="hint">Same grammar as every house story. Keep it yours; the desk approves or tosses, it does not rewrite.</div>
+      <div class="hint">Same grammar as every house story. Keep it yours; the desk can pull one, it does not rewrite them.</div>
       <div class="drop" id="cdrop">Tap to add a cover photo (optional)</div>
       <input type="file" id="cfile" accept="image/*" hidden>
       <div class="cprev" id="cprev"><img id="cimg" alt=""><button id="crm" type="button">&times;</button></div>
       <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
-        <button class="btn" id="send" type="button">${pendingRow ? 'Save it back to the desk' : 'Send it to the desk'}</button>
+        <button class="btn" id="send" type="button">${pendingRow ? 'Save it' : 'Put it up'}</button>
         <button class="btn ghost" id="pvbtn" type="button">Preview</button>
         ${pendingRow ? '<button class="btn ghost" id="wd" type="button">Withdraw it</button>' : ''}
       </div>
@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             title: $('title').value, dek: $('dek').value,
             body: $('body').value, coverUrl,
           });
-          msg('On the desk. When it clears it is live at word/live/?s=' + slug, 'good');
+          msg('Up. It is live at word/live/?s=' + slug, 'good');
         }
         paint();
       } catch (err) { msg(err.message || 'That did not go through.', 'err'); $('send').disabled = false; }
