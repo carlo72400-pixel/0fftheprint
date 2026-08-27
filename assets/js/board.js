@@ -916,14 +916,45 @@
         });
       },
       add: {
-        label: 'ADD A FRAME', glyph: '🖼', cold: true, on: function () {
-          tellSheet('ADD A FRAME', 'laptop only for now', [
-            'A frame needs the file in assets/work/ and derive.py to make its',
-            'thumb, grid and full sizes. The overlay can patch an item that is',
-            'already there, it cannot invent one the page has never seen.',
-            '',
-            'So: drop the jpg in, run derive.py, add the line to work.json, push.'
-          ]);
+        label: 'ADD A FRAME', glyph: '🖼', on: function () {
+          sheet({
+            title: 'ADD A FRAME', why: 'straight onto the grid, no laptop',
+            fields: [
+              { key: 'file', label: 'The frame', type: 'file', accept: 'image/*',
+                hint: 'shrunk before it uploads. landscape reads best on the grid.' },
+              { key: 'label', label: 'Caption', hint: 'ROOM · what it is · 08.27' },
+              { key: 'alt', label: 'Alt text', type: 'textarea', rows: 2,
+                hint: 'what is in the frame, for anyone who cannot see it' }
+            ],
+            body: '<div class="note">Goes straight to the FRONT of the six frames ' +
+                  'the front page features. The full archive at /work/ reads the ' +
+                  'committed file, so it picks this up on the next bake and push.</div>',
+            saveLabel: 'Put it up',
+            save: async function (v, say) {
+              if (!v.file) throw new Error('Pick a frame first.');
+              if (!v.label) throw new Error('Give it a caption.');
+              say('Shrinking…');
+              // ⛔ Downscale BEFORE upload. A phone hands over a 12MP jpg and
+              // the grid renders it at 250px; shipping the original torches the
+              // egress budget for nothing. Same reason card art has fitCardArt.
+              var f = OTP.fitCardArt ? await OTP.fitCardArt(v.file, 1600, 1600) : v.file;
+              say('Uploading…');
+              var url = await OTP.uploadImage(f);
+              // The item_key is the uploaded BASENAME, which is what
+              // applyList and bake.py both key work items on. Anything else and
+              // the row would never match itself again.
+              var key = String(url).split('/').pop().split('?')[0];
+              say('Putting it up…');
+              // ⛔ sort -1 puts it FIRST. Committed frames have no sort, which
+              // reads as 0, and an addition is appended, so without this a new
+              // frame lands at position 38 of 37 and the homepage only features
+              // the top SIX. It would upload fine and be invisible.
+              await OTP.setSiteOverride('work', key, {
+                src: url, label: v.label, alt: v.alt || ''
+              }, { sort: -1 });
+            },
+            done: 'Up, at the front of the grid.'
+          });
         }
       }
     });
@@ -1296,7 +1327,7 @@
         ['Curator cards', 'here', function () { jump('curators'); }],
         ['The one liner that search sees', 'cold', 'edit here, then bake and push'],
         ['Pitch Us and Why blocks', 'here', function () { jump('voice'); }],
-        ['Add a new work frame', 'cold', 'file plus derive.py, laptop']
+        ['Add a new work frame', 'here', function () { jump('work'); }]
       ]],
       ['DECIDE WHAT STAYS UP', [
         ['Approve someone at the door', 'here', function () { jump('members'); }],

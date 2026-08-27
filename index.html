@@ -4193,29 +4193,46 @@
         const bySection = {};
         (ov || []).forEach(o => { (bySection[o.section] = bySection[o.section] || []).push(o); });
 
-        const applyList = (list, rows, keyOf) => {
+        // allowAdd is OPT IN, and only THE WORK passes it. An override whose
+        // key matches nothing was always treated as inert, which is correct for
+        // a rotation seed whose link got rewritten, but it is what made "add a
+        // frame" laptop only: the overlay could patch a frame the page already
+        // knew about and could not introduce one. A row carrying its own src is
+        // not a failed patch, it is a new item.
+        const applyList = (list, rows, keyOf, allowAdd) => {
           if (!rows || !rows.length) return list;
           const map = {};
           rows.forEach(r => { map[r.item_key] = r; });
-          return list
+          const seen = {};
+          list.forEach(it => { seen[keyOf(it)] = 1; });
+          // ⛔ SORT TRAVELS WITH THE ENTRY, it is not looked up again at compare
+          // time. An ADDED item's keyOf() is its src basename, which need not
+          // equal the item_key its row is filed under, so a second lookup finds
+          // nothing and silently reads sort 0. That is how a frame written with
+          // sort -1 still landed at the end of thirty seven and never showed.
+          const built = list
             .filter(it => { const r = map[keyOf(it)]; return !(r && r.hidden); })
             .map(it => {
               const r = map[keyOf(it)];
-              return r ? Object.assign({}, it, r.patch || {}) : it;
-            })
-            .sort((a, b) => {
-              const ra = map[keyOf(a)], rb = map[keyOf(b)];
-              const sa = ra && ra.sort != null ? ra.sort : 0;
-              const sb = rb && rb.sort != null ? rb.sort : 0;
-              return sa - sb;
+              return { it: r ? Object.assign({}, it, r.patch || {}) : it,
+                       s: r && r.sort != null ? r.sort : 0 };
             });
+          if (allowAdd) {
+            rows.forEach(r => {
+              if (seen[r.item_key] || r.hidden) return;
+              const patch = r.patch || {};
+              if (!patch.src) return;          // no picture, no frame
+              built.push({ it: Object.assign({}, patch), s: r.sort != null ? r.sort : 0 });
+            });
+          }
+          return built.sort((a, b) => a.s - b.s).map(e => e.it);
         };
 
         // key on the BASENAME. work.json stores assets/work/x.jpg but derive.py
         // renders assets/grid/work/x.jpg, so a full-path key would never match
         // the element the pencil was attached to.
         const base = v => String(v || '').split('/').pop();
-        work   = applyList(work,   bySection.work,   it => base(it.src));
+        work   = applyList(work,   bySection.work,   it => base(it.src), true);
         // rotation seeds key on the spotify id in their link, which survives a
         // reorder and a retitle in a way an array index does not
         rotation = applyList(rotation, bySection.rotation, it => parseSpotifyId(it.link) || '');

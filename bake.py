@@ -204,7 +204,7 @@ except Exception:
 
 redundant = []
 
-def bake_list(section, filename, key_of):
+def bake_list(section, filename, key_of, allow_add=False):
     """Apply the section's overrides to a {"items":[...]} content file."""
     rows = [o for o in site_ovs if o.get("section") == section]
     if not rows:
@@ -243,6 +243,24 @@ def bake_list(section, filename, key_of):
     # rewrites its own link, so the key moves), or the item is gone from the
     # file. It can never apply again, and left alone it sits on the desk looking
     # like a live edit forever.
+    # ⛔ OPT IN, and only THE WORK passes it. A row that matches nothing is
+    # normally inert, but for work a row carrying its own src is an ADDITION
+    # made from a phone, and folding it in is the whole point of the bake.
+    if allow_add:
+        for o in rows:
+            k = o["item_key"]
+            if k in matched or o.get("hidden"):
+                continue
+            patch = o.get("patch") or {}
+            if not patch.get("src"):
+                continue
+            item = dict(patch)
+            if o.get("sort") is not None:
+                item["_sort"] = o["sort"]
+            out.append(item)
+            matched.add(k)
+            changed += 1
+            print(f"  {section} ADDED: {k}")
     for o in rows:
         if o["item_key"] not in matched:
             redundant.append((section, o["item_key"] + "  (matches nothing in the file)"))
@@ -259,7 +277,7 @@ def bake_list(section, filename, key_of):
     return changed
 
 if site_ovs:
-    bake_list("work", "work.json", lambda it: _base(it.get("src")))
+    bake_list("work", "work.json", lambda it: _base(it.get("src")), allow_add=True)
     bake_list("roster", "roster.json", lambda it: str(it.get("name") or ""))
     # creators only ever has rows once migration 017 widens the section CHECK.
     # Before that this is a no-op, which is why it is safe to ship first.
