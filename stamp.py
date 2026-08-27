@@ -34,7 +34,12 @@ DOCS = ["index.html", "join/index.html", "compose/index.html", "desk/index.html"
         "card/index.html", "desk/word/index.html", "reset/index.html",
         "word/new/index.html", "word/live/index.html", "my/index.html"] + [
         # every story page carries desk.js + word.js
-        str(p.relative_to(ROOT)) for p in sorted(ROOT.glob("word/*/index.html"))]
+        str(p.relative_to(ROOT)) for p in sorted(ROOT.glob("word/*/index.html"))] + [
+        # every baked card back carries desk.js + cardback.js. bake.py copies
+        # these out of c/index.html, so a re-bake picks the new stamp up on its
+        # own, but stamping WITHOUT re-baking would leave six pages serving a
+        # cached script that no longer has the methods they call.
+        str(p.relative_to(ROOT)) for p in sorted(ROOT.glob("c/*/index.html"))]
 
 
 def short_hash(path: pathlib.Path) -> str:
