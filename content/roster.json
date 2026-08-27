@@ -178,6 +178,34 @@
       "link": "https://www.instagram.com/haze.dt/",
       "theme_song": "",
       "lore": "Haze Dt Nightingale. Singer, performer, artist in every way, which is her own phrase and the reason for the seat.\n\nRuns between New York, Houston, San Antonio and Austin. Played Saint Mary's on 8/23.\n\nSeat filled 8/24. Song and card art are hers to set."
+    },
+    {
+      "name": "WUN MOR",
+      "type": "canvas",
+      "type_label": "THE HAND",
+      "hp": 140,
+      "rarity": "rare-holo",
+      "photo": "",
+      "pending_glyph": "WM",
+      "pending_stamp": "ART PENDING",
+      "flavor": "Commissions open. They come back with teeth.",
+      "moves": [
+        {
+          "cost": "p",
+          "name": "Wet Ink",
+          "damage": 40,
+          "desc": "Heavy black line first, colour after. Nothing gets drawn twice."
+        },
+        {
+          "cost": "ppp",
+          "name": "Gold Grill",
+          "damage": 120,
+          "desc": "Casts it, paints it, sets the teeth. It leaves meaner than it came in."
+        }
+      ],
+      "link": "https://www.instagram.com/wunmorwin/",
+      "theme_song": "",
+      "lore": "Wun. Draws in heavy black line on paper he stains first, and casts and paints his own figures when the paper is not enough.\n\nThe cast is gremlins, jesters and long toothed dogs, and the WUN MOR tag usually goes inside the piece instead of under it. Commissions open, and they have been for a while.\n\nSeat filled 8/26. Card art and song are his to set."
     }
   ],
   "_archived_unfilled_seats": [
