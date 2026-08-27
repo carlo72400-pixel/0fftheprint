@@ -2210,6 +2210,14 @@
     flex-shrink:0;
   }
   .theme-iframe{border-radius:10px;display:block;}
+  .post-who .who-page{text-decoration:none;color:inherit;border-bottom:1px solid transparent;}
+  .post-who .who-page:hover{border-bottom-color:var(--pink-deep);}
+  .post-who .who-page:hover b{color:var(--pink-glow);}
+  .modal-actions .btn-secondary{display:block;text-align:center;text-decoration:none;
+    border:1px solid var(--line);border-radius:999px;color:var(--ink);padding:11px 18px;
+    font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    margin-top:8px;}
+  .modal-actions .btn-secondary:hover{border-color:var(--pink-deep);color:var(--pink-glow);}
   .modal-actions{
     position:static;width:min(420px, 90vw);
     display:flex;flex-direction:column;gap:8px;
@@ -4615,6 +4623,16 @@
   if (tMount && take) {
     // Authors resolve out of the roster + curator cards, so a member's avatar
     // and handle stay in sync with whatever their card is currently running.
+    // The page for a person, if that person holds a card. Anything else (a
+    // release, a seat nobody sits in) has no page and gets no link.
+    const tightKey = v => String(v || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+    const pageFor = name => {
+      const m = window.__OTP_SLUGS || {};
+      const slug = m[tightKey(name)];
+      return slug ? 'c/' + encodeURIComponent(slug) + '/' : '';
+    };
+    window.__OTP_PAGE_FOR = pageFor;
+
     const cardPeople = {};
     [...(creators || []), ...(roster || [])].forEach(c => {
       const key = slugify(c.name);
@@ -4701,6 +4719,13 @@
         if (rows && rows.length) {
           const by = {};
           rows.forEach(rw => { if (rw && rw.card_slug) by[rw.card_slug] = rw; });
+          window.__OTP_SLUGS = window.__OTP_SLUGS || {};
+          rows.forEach(rw => {
+            if (!rw || !rw.card_slug) return;
+            const tight = v => String(v || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+            window.__OTP_SLUGS[tight(rw.card_slug)] = rw.card_slug;
+            if (rw.display_name) window.__OTP_SLUGS[tight(rw.display_name)] = rw.card_slug;
+          });
           // The handle is regex-pinned at the database; the HOST is ours, never
           // theirs. This is what makes a member link unable to point anywhere
           // but their own profile on a known platform.
@@ -4777,7 +4802,9 @@
         <a class="post-av" href="${esc(safeUrl(who.link) || '#')}" ${isExt ? 'target="_blank" rel="noopener"' : ''}>${av}</a>
         <div class="post-main">
           <div class="post-who">
-            <b>${esc(who.name)}</b>
+            ${(() => { const pg = pageFor(p.author || who.name);
+              return pg ? `<a class="who-page" href="${esc(pg)}"><b>${esc(who.name)}</b></a>`
+                        : `<b>${esc(who.name)}</b>`; })()}
             ${who.handle ? `<span class="hnd">${esc(who.handle)}</span>` : ''}
             ${who.seat ? `<span class="seat">${esc(who.seat)}</span>` : ''}
             <span class="dot">·</span><span class="when">${esc(timeAgo(p.date))}</span>
@@ -5479,9 +5506,18 @@
     // Actions — primary OPEN IG (full width) + secondary row (FLIP / SHARE / CLOSE)
     const link = safeUrl(data.link) || '#';
     const isExt = /^https?:\/\//.test(link);
-    const primaryHtml = (link && link !== '#')
+    const page = (window.__OTP_PAGE_FOR ? window.__OTP_PAGE_FOR(data.name) : '');
+    const outHtml = (link && link !== '#')
       ? `<a class="btn-primary" href="${esc(link)}" ${isExt?'target="_blank" rel="noopener"':''}>${isExt?'Open '+(data.platform||'Instagram'):'Jump to roster'} →</a>`
       : '';
+    // Their page leads when they have one. The card is the person; this is the
+    // door to what that person actually has going on, and it is OURS, so it
+    // outranks sending the visitor off to somebody else's platform.
+    const primaryHtml = page
+      ? `<a class="btn-primary" href="${esc(page)}">See their page →</a>` + (outHtml
+          ? `<a class="btn-secondary" href="${esc(link)}" ${isExt?'target="_blank" rel="noopener"':''}>${isExt?'Open '+(data.platform||'Instagram'):'Jump to roster'} →</a>`
+          : '')
+      : outHtml;
     modalActions.innerHTML = primaryHtml + `
       <div class="row">
         <button class="btn-ghost" id="modal-flip-btn" type="button">↻ Flip</button>
