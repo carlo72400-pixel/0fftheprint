@@ -156,8 +156,12 @@
       /* THE HOUSE VOICE, desk only: the hero kicker, the one liner and the
          ticker. These live in site.json with no overlay until now, so a typo
          in the ticker meant a laptop and a git push. */
-      var hero = d.querySelector('.hero') || d.querySelector('header') || d.body;
-      var kick = d.querySelector('.kicker');
+      // ⛔ NOT '.kicker'. That class exists in the stylesheet and on NO element:
+      // this markup calls the banner line `.pulse-kick`, so querySelector came
+      // back null and the whole house-voice pencil silently never attached. It
+      // shipped dead. The board found it by listing what each surface actually
+      // paints instead of trusting the selector.
+      var kick = d.querySelector('.pulse-kick');
       if (kick) pencil(kick.parentNode || kick, 'Edit the house voice', function () {
         var g = function (k) {
           var r = overrideFor('site', k);
@@ -166,9 +170,14 @@
         var tickerNow = [].slice.call(d.querySelectorAll('#ticker *'))
           .map(function (e) { return e.textContent.replace(/^[⚡\s·]+/, '').trim(); })
           .filter(Boolean).join(' | ');
+        var line1 = d.querySelector('.pulse-line'), route = d.querySelector('.pulse-route');
+        var l1 = line1 ? (line1.childNodes[0] ? String(line1.childNodes[0].textContent).trim() : '') : '';
+        var l2 = line1 && line1.querySelector('.blue') ? line1.querySelector('.blue').textContent.trim() : '';
         panel('THE HOUSE VOICE', [
-          { key: 'kicker', label: 'Kicker (above the name)', value: g('kicker') || (kick ? kick.textContent.trim() : '') },
-          { key: 'one_liner', label: 'One liner', value: g('one_liner'), type: 'textarea', rows: 3 },
+          { key: 'kicker', label: 'Kicker (top line of the banner)', value: g('kicker') || (kick ? kick.textContent.trim() : '') },
+          { key: 'pulse_line_1', label: 'Headline, first line', value: g('pulse_line_1') || l1 },
+          { key: 'pulse_line_2', label: 'Headline, blue line', value: g('pulse_line_2') || l2 },
+          { key: 'pulse_route', label: 'Route line', value: g('pulse_route') || (route ? route.textContent.trim() : '') },
           { key: 'ticker_headlines', label: 'Ticker, separate each with |', value: g('ticker_headlines') || tickerNow, type: 'textarea', rows: 4 }
         ], async function (v) {
           for (var k in v) {
@@ -287,6 +296,15 @@
   }
 
   function paintToggle() {
+    // The desk gets a way OFF the homepage and onto the board, because the
+    // pencils only reach what is on screen and the board reaches everything.
+    if (admin && !d.getElementById('edm-board')) {
+      var lnk = d.createElement('a');
+      lnk.id = 'edm-board';
+      lnk.href = 'board/';
+      lnk.textContent = 'BOARD';
+      d.body.appendChild(lnk);
+    }
     var b = d.createElement('button');
     b.type = 'button';
     b.id = 'edm-toggle';

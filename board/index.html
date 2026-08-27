@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>The Board · 0FF THE PRINT</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0a0a0d">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/auth.css">
+<style>
+  /* THE BOARD. One screen, the whole house.
+     Built wide on purpose: nothing here is a menu you have to remember. */
+  .wrap.board{max-width:1180px;padding:18px 16px 120px}
+
+  /* ---- sticky jump bar. The only navigation, and it never leaves. ---- */
+  .jump{position:sticky;top:0;z-index:60;background:rgba(10,10,13,.93);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+    margin:0 -16px 18px;padding:9px 16px;display:flex;gap:6px;overflow-x:auto;
+    scrollbar-width:none}
+  .jump::-webkit-scrollbar{display:none}
+  .jump a{flex:0 0 auto;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted);text-decoration:none;border:1px solid var(--line);
+    border-radius:999px;padding:6px 11px;white-space:nowrap}
+  .jump a:hover,.jump a.on{color:var(--pink-glow);border-color:var(--pink-deep)}
+  .jump .n{color:var(--ink);opacity:.5;margin-left:5px}
+
+  /* ---- the legend. Four dots, learned once. ---- */
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-family:var(--f-mono);font-size:10px;
+    letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:14px 0 4px}
+  .legend b{font-weight:400;display:inline-flex;align-items:center;gap:6px}
+  .dot{width:8px;height:8px;border-radius:50%;flex:0 0 auto;display:inline-block}
+  .dot.live{background:var(--ok)}
+  .dot.hidden{background:#4a4753}
+  .dot.draft{background:var(--pink-glow)}
+  .dot.git{background:var(--dye-blue)}
+
+  /* ---- NOW. Only ever shows what is actually waiting. ---- */
+  .now{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
+  .now:empty{display:none}
+  .nowchip{display:flex;align-items:center;gap:9px;background:rgba(255,121,198,.09);
+    border:1px solid rgba(255,121,198,.4);border-radius:12px;padding:10px 14px;cursor:pointer;
+    color:var(--ink);font-family:var(--f-body);font-size:13.5px;text-align:left}
+  .nowchip:hover{border-color:var(--pink-glow);background:rgba(255,121,198,.15)}
+  .nowchip b{font-family:var(--f-display);font-style:italic;font-size:21px;line-height:1;
+    color:var(--pink-glow)}
+  .nowchip.cool{background:rgba(47,107,255,.08);border-color:rgba(47,107,255,.4)}
+  .nowchip.cool b{color:#9db9ff}
+  .now-quiet{font-family:var(--f-mono);font-size:11px;color:var(--muted);letter-spacing:.14em;
+    text-transform:uppercase;margin-top:16px}
+
+  /* ---- MAKE. Six doors, all the same size, no reading required. ---- */
+  h2.bh{font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;
+    font-size:23px;letter-spacing:.01em;margin:34px 0 3px;color:var(--ink)}
+  h2.bh span{color:var(--muted);font-size:12px;font-family:var(--f-mono);font-style:normal;
+    letter-spacing:.16em;margin-left:9px;vertical-align:middle}
+  .make{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:10px;margin-top:12px}
+  .mk{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:15px 12px;
+    cursor:pointer;text-align:left;color:var(--ink);text-decoration:none;display:block;
+    transition:border-color .12s,transform .12s}
+  .mk:hover{border-color:var(--pink-deep);transform:translateY(-2px)}
+  .mk .g{font-size:24px;line-height:1;display:block}
+  .mk .l{font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;
+    font-size:17px;margin-top:9px;display:block;line-height:1}
+  .mk .h{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--muted);margin-top:5px;display:block}
+  .mk.cold{opacity:.62}
+  .mk.cold:hover{border-color:var(--line);transform:none}
+
+  /* ---- RAILS. One per section of the real page, in page order. ---- */
+  .rail{margin-top:26px;border-top:1px solid var(--line);padding-top:16px}
+  .rail-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .rail-h .nm{font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;
+    font-size:21px;line-height:1}
+  .rail-h .ct{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;color:var(--muted)}
+  .rail-h .src{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+    color:#5f5b6b;margin-left:auto}
+  .rail-note{font-family:var(--f-mono);font-size:10.5px;color:var(--muted);letter-spacing:.06em;
+    margin-top:3px}
+  .strip{display:flex;gap:10px;overflow-x:auto;padding:13px 2px 6px;scroll-snap-type:x proximity}
+  .strip::-webkit-scrollbar{height:6px}
+  .strip::-webkit-scrollbar-thumb{background:var(--pink-deep);border-radius:999px}
+  .strip::-webkit-scrollbar-track{background:#17161d;border-radius:999px}
+
+  .tile{flex:0 0 auto;width:132px;scroll-snap-align:start;position:relative;
+    background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;
+    cursor:pointer;text-align:left;color:var(--ink);padding:0;display:block;
+    transition:border-color .12s}
+  .tile:hover{border-color:var(--pink-deep)}
+  .tile .shot{display:block;width:100%;height:99px;background:#0d0c11 center/cover no-repeat;
+    border-bottom:1px solid var(--line)}
+  /* A tile with no picture still has to be findable by shape, so it gets one
+     big glyph instead of an empty rectangle he has to read his way past. */
+  .tile .shot.bare{display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(160deg,#15141b,#0d0c11)}
+  .tile .shot.bare i{font-family:var(--f-display);font-style:italic;font-weight:900;
+    font-size:38px;line-height:1;color:#3a3744}
+  .tile .shot.tall{height:150px}
+  .tile .cap{padding:8px 9px 10px;display:block}
+  .tile .t{font-size:12px;line-height:1.35;font-weight:600;display:-webkit-box;-webkit-line-clamp:2;
+    -webkit-box-orient:vertical;overflow:hidden}
+  .tile .s{font-family:var(--f-mono);font-size:9px;letter-spacing:.09em;text-transform:uppercase;
+    color:var(--muted);margin-top:5px;display:flex;align-items:center;gap:5px}
+  .tile.off{opacity:.42}
+  .tile .nudge{position:absolute;top:6px;right:6px;display:flex;gap:3px;opacity:0;transition:opacity .12s}
+  .tile:hover .nudge,.tile.touch .nudge{opacity:1}
+  .nudge button{width:24px;height:24px;border-radius:7px;border:1px solid var(--line);
+    background:rgba(10,10,13,.86);color:var(--ink);font-size:12px;line-height:1;cursor:pointer;
+    padding:0;display:flex;align-items:center;justify-content:center}
+  .nudge button:hover{border-color:var(--pink-deep);color:var(--pink-glow)}
+  .tile.add{border-style:dashed;display:flex;align-items:center;justify-content:center;
+    min-height:150px;color:var(--muted)}
+  .tile.add:hover{color:var(--pink-glow)}
+  .tile.add .p{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:16px;
+    text-transform:uppercase;text-align:center;padding:0 8px;line-height:1.15}
+  .tile.add .p em{display:block;font-size:26px;font-style:normal;margin-bottom:5px}
+  .strip .empty-rail{font-family:var(--f-mono);font-size:11px;color:var(--muted);padding:22px 4px;
+    letter-spacing:.12em;text-transform:uppercase}
+
+  .lock{font-family:var(--f-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+    color:#7d7889;border:1px solid var(--line);border-radius:999px;padding:2px 8px;
+    display:inline-block}
+  .lock.warm{color:#9db9ff;border-color:rgba(47,107,255,.4)}
+
+  /* ---- THE VOICE. Flat key/value, one tile each. ---- */
+  h4.vgroup{font-family:var(--f-mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--muted);margin:22px 0 0;border-bottom:1px solid var(--line);padding-bottom:7px;
+    display:flex;gap:10px;flex-wrap:wrap;align-items:baseline}
+  h4.vgroup span{color:#5f5b6b;letter-spacing:.1em;text-transform:none;font-size:10.5px}
+  .voice{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-top:13px}
+  .vt{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px 14px;
+    cursor:pointer;text-align:left;color:var(--ink);transition:border-color .12s}
+  .vt:hover{border-color:var(--pink-deep)}
+  .vt .k{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--muted);display:flex;align-items:center;gap:6px}
+  .vt .v{font-size:13.5px;line-height:1.45;margin-top:7px;display:-webkit-box;-webkit-line-clamp:3;
+    -webkit-box-orient:vertical;overflow:hidden;color:#ded7e2}
+  .vt .v:empty::before{content:'not set';color:#5f5b6b;font-style:italic}
+
+  /* ---- THE SHEET. One at a time, big, thumb-reachable. ---- */
+  .sh-back{position:fixed;inset:0;background:rgba(6,5,9,.78);z-index:200;display:flex;
+    align-items:flex-end;justify-content:center;padding:0;backdrop-filter:blur(3px)}
+  .sh{background:var(--panel);border:1px solid var(--line);border-bottom:0;
+    border-radius:20px 20px 0 0;width:100%;max-width:560px;max-height:92vh;overflow-y:auto;
+    padding:20px 20px calc(24px + env(safe-area-inset-bottom));animation:up .18s ease}
+  @keyframes up{from{transform:translateY(26px);opacity:.5}to{transform:none;opacity:1}}
+  @media(min-width:640px){.sh-back{align-items:center;padding:24px}
+    .sh{border-radius:18px;border-bottom:1px solid var(--line)}}
+  .sh h3{font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;
+    font-size:26px;line-height:1;color:var(--pink)}
+  .sh .why{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--muted);margin-top:7px}
+  .sh .art{width:100%;max-height:190px;object-fit:contain;border-radius:10px;margin-top:14px;
+    background:#0d0c11;border:1px solid var(--line)}
+  .sh label{margin-top:15px}
+  .sh .say{font-family:var(--f-mono);font-size:11px;color:var(--pink-glow);margin-top:12px;min-height:16px}
+  .sh .say.bad{color:var(--bad)}
+  .sh .foot{display:flex;gap:8px;margin-top:20px;flex-wrap:wrap}
+  .sh .foot .btn{flex:1 1 130px;margin:0}
+  .sh .kill{background:none;border:0;color:var(--bad);font-family:var(--f-mono);font-size:11px;
+    letter-spacing:.12em;text-transform:uppercase;cursor:pointer;padding:10px 0;margin-top:6px}
+  .chk{display:flex;align-items:center;gap:10px;margin-top:14px;font-size:14px;cursor:pointer}
+  .chk input{width:20px;height:20px;flex:0 0 auto;accent-color:var(--pink-deep)}
+
+  /* ---- THE MAP. Everything the house can do, and where it lives. ---- */
+  .capg{margin-top:16px}
+  .capg h4{font-family:var(--f-mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--muted);margin:18px 0 8px;border-bottom:1px solid var(--line);padding-bottom:7px}
+  .caprow{display:grid;grid-template-columns:auto 1fr auto;gap:11px;align-items:center;
+    padding:8px 2px;font-size:13.5px;border-bottom:1px solid rgba(35,34,43,.55)}
+  .caprow:last-child{border-bottom:0}
+  .caprow .st{width:9px;height:9px;border-radius:50%}
+  .st.here{background:var(--ok)}
+  .st.away{background:var(--dye-blue)}
+  .st.cold{background:#4a4753}
+  .caprow .go{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--muted);text-decoration:none}
+  .caprow a.go:hover{color:var(--pink-glow)}
+  .caprow button.go{background:none;border:0;cursor:pointer;color:var(--pink-glow)}
+
+  .lift{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:70;
+    background:var(--panel);border:1px solid var(--line);border-radius:999px;color:var(--ink);
+    font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+    padding:11px 15px;cursor:pointer}
+  .lift:hover{border-color:var(--pink-deep);color:var(--pink-glow)}
+  .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(22px + env(safe-area-inset-bottom));
+    z-index:300;background:var(--panel);border:1px solid var(--pink-deep);border-radius:999px;
+    padding:11px 19px;font-family:var(--f-mono);font-size:11.5px;color:var(--ink);
+    box-shadow:0 8px 30px rgba(0,0,0,.5);max-width:88vw;text-align:center}
+  .toast.bad{border-color:rgba(255,93,126,.6);color:#ffb3c4}
+</style>
+</head>
+<body>
+<div class="leopard-bar"></div>
+<div class="wrap board">
+  <a class="back" href="../">&larr; 0FF THE PRINT</a>
+  <h1>The Board</h1>
+  <div class="sub">everything the house can do &nbsp;·&nbsp; one screen</div>
+  <div id="panel"><div class="note">opening the house&hellip;</div></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="../supabase-config.js?v=f1348482"></script>
+<script src="../assets/js/desk.js?v=fe859136"></script>
+<script src="../assets/js/board.js?v=7cb07ec7"></script>
+</body>
+</html>

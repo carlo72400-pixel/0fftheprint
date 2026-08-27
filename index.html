@@ -41,7 +41,7 @@
 <script src="assets/js/desk.js?v=fe859136" defer></script>
 <script src="assets/js/door.js?v=4fd82def" defer></script>
 <script src="assets/js/composer.js?v=51127ffa" defer></script>
-<script src="assets/js/edit.js?v=ad003429" defer></script>
+<script src="assets/js/edit.js?v=306e9e9c" defer></script>
 <style>
   :root{
     --bg:#0a0a0d;
@@ -521,6 +521,19 @@
     transition:color .18s,border-color .18s,background .18s;
   }
   #edm-toggle:hover{color:var(--ink);border-color:var(--pink-deep);}
+  /* Sits directly above EDIT, same pill, because the pencils only reach what is
+     painted on this page and the board reaches everything else. */
+  #edm-board{
+    position:fixed;
+    right:calc(22px + env(safe-area-inset-right,0px));
+    bottom:calc(134px + env(safe-area-inset-bottom,0px));
+    z-index:121;
+    font-family:var(--f-mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;
+    color:var(--muted);background:rgba(10,10,13,.9);border:1px solid var(--line);
+    border-radius:999px;padding:10px 16px;text-decoration:none;backdrop-filter:blur(8px);
+    transition:color .18s,border-color .18s;
+  }
+  #edm-board:hover{color:var(--pink-glow);border-color:var(--pink-deep);}
   #edm-toggle.on{color:#0a0a0d;background:var(--pink-glow);border-color:var(--pink-glow);}
   .edm-pen{
     position:absolute;top:8px;right:8px;z-index:40;
@@ -4001,20 +4014,54 @@
         // 'site' is in 014's CHECK but nothing used it: the hero kicker, the
         // one liner and the ticker were git-only, so a typo in the ticker meant
         // opening a laptop. item_key is the field name.
+        // A DOTTED item_key writes into a nested block: 'mic_check.vibe' and
+        // 'social.instagram' had nowhere to land while this was a flat
+        // assignment, which is why half of site.json was laptop-only.
+        const setPath = (obj, path, val) => {
+          const parts = String(path).split('.');
+          let o = obj;
+          for (let i = 0; i < parts.length - 1; i++) {
+            if (typeof o[parts[i]] !== 'object' || o[parts[i]] === null) o[parts[i]] = {};
+            o = o[parts[i]];
+          }
+          o[parts[parts.length - 1]] = val;
+        };
         (bySection.site || []).forEach(r => {
           if (!r.item_key || r.hidden) return;
           const v = (r.patch || {}).value;
           if (v === undefined) return;
           if (r.item_key === 'ticker_headlines')
             site.ticker_headlines = String(v).split('|').map(x => x.trim()).filter(Boolean);
-          else site[r.item_key] = v;
+          else setPath(site, r.item_key, v);
         });
 
-        const sl0 = (bySection.slate || []).find(r => r.item_key === '');
+        // '' patches slate.next, 'latest_drop' patches the strip under it, and
+        // 'release:<num>' patches one row of the catalog. Before this, only the
+        // marquee could be touched without a push.
+        const slRows = (bySection.slate || []);
+        const sl0 = slRows.find(r => r.item_key === '');
         if (sl0) {
           if (sl0.hidden) slate = {};
           else if (slate.next) slate = Object.assign({}, slate, { next: Object.assign({}, slate.next, sl0.patch || {}) });
         }
+        const slLatest = slRows.find(r => r.item_key === 'latest_drop');
+        if (slLatest) {
+          if (slLatest.hidden) slate = Object.assign({}, slate, { latest_drop: null });
+          else if (slate.latest_drop)
+            slate = Object.assign({}, slate, { latest_drop: Object.assign({}, slate.latest_drop, slLatest.patch || {}) });
+        }
+        const slRel = {};
+        slRows.forEach(r => { const m = /^release:(.+)$/.exec(r.item_key || ''); if (m) slRel[m[1]] = r; });
+        if (Object.keys(slRel).length && Array.isArray(slate.releases)) {
+          slate = Object.assign({}, slate, {
+            releases: slate.releases
+              .filter(x => { const r = slRel[String(x.num || '')]; return !(r && r.hidden); })
+              .map(x => { const r = slRel[String(x.num || '')]; return r ? Object.assign({}, x, r.patch || {}) : x; })
+          });
+        }
+        // creators only applies once migration 017 widens the section CHECK.
+        // Until then bySection.creators is simply empty and this is a no-op.
+        creators = applyList(creators, bySection.creators, it => String(it.name || ''));
         window.__OTP_OVERRIDES = bySection;
       }
     } catch (e) { console.warn('overrides skipped:', e.message); }
@@ -4190,6 +4237,21 @@
 
   const ticker = document.getElementById('ticker');
   if (ticker) ticker.innerHTML = (site.ticker_headlines || []).map(h => '⚡ ' + esc(h)).join(' &nbsp;·&nbsp; ');
+
+  // THE PULSE BANNER. This was three lines of literal HTML, which meant the
+  // first thing anyone reads on the site was the one thing he could not change
+  // without a laptop. site.kicker already existed in site.json and nothing on
+  // the page had ever read it: edit.js hunted for a `.kicker` element that does
+  // not exist in this markup, so the house-voice pencil never even attached.
+  // The HTML stays as the floor, so an empty field renders exactly as before.
+  const pk = document.querySelector('.pulse-kick');
+  if (pk && site.kicker) pk.textContent = site.kicker;
+  const pl = document.querySelector('.pulse-line');
+  if (pl && (site.pulse_line_1 || site.pulse_line_2))
+    pl.innerHTML = esc(site.pulse_line_1 || '') +
+      (site.pulse_line_2 ? '<br><span class="blue">' + esc(site.pulse_line_2) + '</span>' : '');
+  const pr = document.querySelector('.pulse-route');
+  if (pr && site.pulse_route) pr.textContent = site.pulse_route;
 
   // Nav overflow state. Measured, never assumed: `scrolls` says there is more
   // than one screen of links, `at-end` says you have reached the right edge.

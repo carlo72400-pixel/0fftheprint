@@ -255,6 +255,9 @@ def bake_list(section, filename, key_of):
 if site_ovs:
     bake_list("work", "work.json", lambda it: _base(it.get("src")))
     bake_list("roster", "roster.json", lambda it: str(it.get("name") or ""))
+    # creators only ever has rows once migration 017 widens the section CHECK.
+    # Before that this is a no-op, which is why it is safe to ship first.
+    bake_list("creators", "creators.json", lambda it: str(it.get("name") or ""))
 
     # rotation seeds key on the spotify id inside their link, matching
     # parseSpotifyId on the page and the pencil in edit.js
@@ -271,6 +274,26 @@ if site_ovs:
         spath2 = os.path.join(CONTENT, "site.json")
         sdoc2 = json.load(open(spath2))
         n = 0
+        # A DOTTED key writes into a nested block, matching what the page does
+        # with setPath(): 'mic_check.vibe' and 'social.instagram' are ordinary
+        # fields now, not laptop-only ones.
+        def _get(doc, path):
+            cur = doc
+            for part in str(path).split("."):
+                if not isinstance(cur, dict) or part not in cur:
+                    return None
+                cur = cur[part]
+            return cur
+
+        def _set(doc, path, val):
+            parts = str(path).split(".")
+            cur = doc
+            for part in parts[:-1]:
+                if not isinstance(cur.get(part), dict):
+                    cur[part] = {}
+                cur = cur[part]
+            cur[parts[-1]] = val
+
         for o in site_rows:
             if o.get("hidden"):
                 continue
@@ -280,10 +303,10 @@ if site_ovs:
                 continue
             if k == "ticker_headlines":
                 v = [x.strip() for x in str(v).split("|") if x.strip()]
-            if sdoc2.get(k) == v:
+            if _get(sdoc2, k) == v:
                 redundant.append(("site", k))
                 continue
-            sdoc2[k] = v
+            _set(sdoc2, k, v)
             n += 1
             print(f"  site patched: {k}")
         if n:
@@ -312,6 +335,58 @@ if site_ovs:
             print(f"  slate.json updated ({', '.join(sorted(patch))})")
         elif patch:
             redundant.append(("slate", ""))
+
+    # 'latest_drop' patches the strip under the marquee, 'release:<num>' patches
+    # one row of the catalog. Same overlay, same file, different item_key.
+    slate_extra = [o for o in site_ovs
+                   if o.get("section") == "slate" and o.get("item_key") not in ("", None)]
+    if slate_extra:
+        spath = os.path.join(CONTENT, "slate.json")
+        sdoc = json.load(open(spath))
+        n = 0
+        for o in slate_extra:
+            key = o["item_key"]
+            patch = o.get("patch") or {}
+            if key == "latest_drop":
+                if o.get("hidden"):
+                    if sdoc.pop("latest_drop", None) is not None:
+                        n += 1
+                        print("  slate.json: latest_drop removed")
+                    continue
+                cur = sdoc.get("latest_drop") or {}
+                if patch and not all(cur.get(k) == v for k, v in patch.items()):
+                    cur.update(patch)
+                    sdoc["latest_drop"] = cur
+                    n += 1
+                    print(f"  slate.json latest_drop patched ({', '.join(sorted(patch))})")
+                elif patch:
+                    redundant.append(("slate", key))
+                continue
+            m = re.match(r"^release:(.+)$", key)
+            if not m:
+                redundant.append(("slate", key + "  (unknown key)"))
+                continue
+            num = m.group(1)
+            rels = sdoc.get("releases") or []
+            hit = next((r for r in rels if str(r.get("num") or "") == num), None)
+            if hit is None:
+                redundant.append(("slate", key + "  (matches no release)"))
+                continue
+            if o.get("hidden"):
+                sdoc["releases"] = [r for r in rels if r is not hit]
+                n += 1
+                print(f"  slate.json release dropped: {num}")
+                continue
+            if patch and not all(hit.get(k) == v for k, v in patch.items()):
+                hit.update(patch)
+                n += 1
+                print(f"  slate.json release patched: {num} ({', '.join(sorted(patch))})")
+            elif patch:
+                redundant.append(("slate", key))
+        if n:
+            json.dump(sdoc, open(spath, "w"), indent=2, ensure_ascii=False)
+            open(spath, "a").write("\n")
+            print(f"  slate.json updated ({n} change(s) baked in)")
 
 print("\nNow:")
 print("  git add -A && git commit -m 'bake story edits' && git push")
