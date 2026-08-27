@@ -2707,10 +2707,17 @@
     text-transform:uppercase;color:var(--ink);
     text-shadow:0 2px 10px rgba(0,0,0,.75), 0 0 26px rgba(0,0,0,.5);
   }
+  /* ⛔ NO background-clip:text HERE. The footer and the brand card can run the
+     gradient zero because nothing above them puts a text-shadow on the glyph.
+     This mark sits on foil and needs a heavy shadow to hold, and a transparent
+     text-fill lets you see straight THROUGH the letter to that shadow: what
+     rendered was the gradient painting its rectangular box with a zero-shaped
+     hole punched down to the dark. It read as a chopped-in-half zero.
+     A solid pink zero carries the same device and cannot fail this way. */
   .pulse-mark .pm-txt .zero{
-    background:linear-gradient(180deg,#fff 0%,#ffcfeb 30%,#ff79c6 55%,#f7b9dd 78%,#fff 100%);
-    -webkit-background-clip:text;background-clip:text;
-    -webkit-text-fill-color:transparent;color:transparent;
+    color:var(--pink);
+    -webkit-text-fill-color:currentColor;
+    background:none;
   }
 
   .pulse-route{display:inline-flex;flex-wrap:wrap;justify-content:center;gap:6px 12px;font-family:var(--f-mono);font-size:12px;letter-spacing:.2em;color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:9px 20px;background:linear-gradient(180deg,rgba(244,143,200,.10),rgba(47,107,255,.06));}
