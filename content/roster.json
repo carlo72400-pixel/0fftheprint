@@ -292,7 +292,7 @@
       ],
       "platform": "SATX",
       "link": "https://instagram.com/vamppsych",
-      "theme_song": "https://open.spotify.com/track/27OqNFBwYkOOZKhXShri4n",
+      "theme_song": "https://open.spotify.com/track/0sKUd3PxqITdWs8NqzpCBV",
       "lore": "Gianni. FX6, Insta360, Full Sail Digital Cinematography, and a card in his own house because he shoots it every week like everybody else on this list.\n\nZenhouse Fridays, The Mix on the Strip, Paper Tiger, the raves, Legion Ink after hours. Directed VOLUME. Cuts gothic essays as Vamppsych.\n\nRuns the desk, which is why this card sits at the end of the roster and not the front of it.",
       "card_label": "THE LENS",
       "variants": [
@@ -320,7 +320,8 @@
           "photo": "assets/card-vamp-sir.jpg",
           "rarity": "gold-rare"
         }
-      ]
+      ],
+      "theme_start": 0
     }
   ],
   "_archived_unfilled_seats": [

@@ -444,7 +444,20 @@ if holders:
             continue
         name = h.get("display_name") or cslug
         desc = h.get("tagline") or f"{name} holds a card at 0FF THE PRINT. San Antonio underground media house."
-        img = h.get("card_photo") or "https://0fftheprint.com/assets/preview.jpg"
+        # ⛔ THE OG IMAGE, IN PRIORITY ORDER, AND THE ORDER IS THE POINT.
+        # 1. card_photo, the member's own upload. Theirs always wins.
+        # 2. assets/og/<slug>.jpg, rendered by ogcards.py off the card art the
+        #    house already wrote into roster.json. This is what was missing:
+        #    card_photo is null for every holder, so every /c/<slug>/ paste into
+        #    a bio or a promoter DM unfurled as the HOUSE's stock card.
+        # 3. preview.jpg, only if nobody has art at all.
+        # ⛔ Checked on DISK, not assumed. A missing file here would print a
+        #    broken image into somebody's link preview and nothing would say so.
+        og_local = os.path.join(HERE, "assets", "og", f"{cslug}.jpg")
+        img = (h.get("card_photo")
+               or (f"https://0fftheprint.com/assets/og/{cslug}.jpg"
+                   if os.path.exists(og_local) else None)
+               or "https://0fftheprint.com/assets/preview.jpg")
         page = shell
         # The shell sits at /c/, the folder sits one deeper, so every relative
         # asset in it has to climb one more level or the page loads nothing.
@@ -460,8 +473,16 @@ if holders:
         page = page.replace(
             '<meta property="og:image" content="https://0fftheprint.com/assets/preview.jpg">',
             f'<meta property="og:image" content="{esc_html(img)}">')
+        # Dimensions let an unfurler reserve the card and render it LARGE
+        # instead of falling back to a thumbnail while it fetches. Only stated
+        # for the cards this script generated, because those are the only ones
+        # whose size is known here.
+        dims = ('<meta property="og:image:width" content="1200">\n'
+                '<meta property="og:image:height" content="630">\n'
+                f'<meta property="og:image:alt" content="{esc_html(name)}, a card holder at 0FF THE PRINT">\n'
+                ) if img.endswith(f"/assets/og/{cslug}.jpg") else ""
         page = page.replace("</head>",
-            f'<meta property="og:url" content="https://0fftheprint.com/c/{cslug}/">\n</head>')
+            f'<meta property="og:url" content="https://0fftheprint.com/c/{cslug}/">\n{dims}</head>')
         out_dir = os.path.join(CDIR, cslug)
         os.makedirs(out_dir, exist_ok=True)
         out_path = os.path.join(out_dir, "index.html")
@@ -474,6 +495,9 @@ if holders:
 
 print("\nNow:")
 print("  git add -A && git commit -m 'bake story edits' && git push")
+print("  \u26d4 A NEW HOLDER, OR NEW CARD ART, NEEDS ogcards.py RUN FIRST.")
+print("     bake.py only POINTS at assets/og/<slug>.jpg. It does not draw it,")
+print("     and a slug with no file there falls back to the house card.")
 print("\n  \u26d4 RE-RUN THIS AFTER ANY display_name CHANGE **OR** ANY EDIT TO")
 print("     c/index.html. A card back is a COPY of that file, so its <title>,")
 print("     its og: tags AND its inline stylesheet all freeze at bake time.")
