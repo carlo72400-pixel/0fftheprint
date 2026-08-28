@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>0FF THE PRINT — underground media house · San Antonio, TX</title>
+<title>0FF THE PRINT · underground media house · San Antonio, TX</title>
 <meta name="description" content="Underground media house in San Antonio. Interviews, night photos, shows, music visuals, all of it shot while the work is happening.">
 <meta name="theme-color" content="#0a0a0d">
 <meta name="color-scheme" content="dark">
@@ -15,12 +15,12 @@
 <!-- Social share cards -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="0FF THE PRINT">
-<meta property="og:title" content="0FF THE PRINT — we are the underground">
+<meta property="og:title" content="0FF THE PRINT · we are the underground">
 <meta property="og:description" content="Underground media house in San Antonio. Interviews, night photos, shows, music visuals, all of it shot while the work is happening.">
 <meta property="og:image" content="https://0fftheprint.com/assets/preview.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="0FF THE PRINT — chrome wordmark, San Antonio's underground">
+<meta property="og:image:alt" content="0FF THE PRINT · chrome wordmark, San Antonio's underground">
 <meta property="og:url" content="https://0fftheprint.com/">
 <link rel="canonical" href="https://0fftheprint.com/">
 <meta name="twitter:card" content="summary_large_image">
@@ -3611,7 +3611,7 @@
   .post-body p:last-child{margin-bottom:0;}
   .post-body em{color:var(--pink-glow);font-style:italic;}
   .post-img{display:block;margin-top:10px;border-radius:12px;overflow:hidden;border:1px solid var(--line);}
-  .post-vid video{width:100%;display:block;max-height:520px;background:#000;}
+  .post-vid video{width:100%;display:block;max-height:520px;background:#000;aspect-ratio:4/5;object-fit:contain;}
 
   /* ============ THE COMPOSER (top of the timeline) ============ */
   .cbox{
@@ -3676,7 +3676,16 @@
     .cbox textarea{font-size:16px;}   /* 16px or iOS zooms the whole page on focus */
     .cpost{font-size:15px;padding:9px 17px;}
   }
-  .post-img img{width:100%;display:block;max-height:520px;object-fit:cover;}
+  /* ⛔ NO INTRINSIC SIZE = 1038px OF SHOVE. The three live feed images are
+     4:5, 16:9 and 9:16, the img tags carry no width/height, and the posts
+     table has no column to get them from, so the box was 0px tall until the
+     bytes landed and then jumped 361px, 163px and 514px under the reader's
+     thumb. A reserved 4:5 box costs a centre crop in the FEED only: .post-img
+     is already an <a> to the full frame, one tap away, uncropped.
+     ⛔ The escape hatch is load-bearing. The day a post carries real width and
+     height attributes they win automatically and nothing here needs revisiting. */
+  .post-img img{width:100%;display:block;max-height:520px;object-fit:cover;aspect-ratio:4/5;}
+  .post-img img[width][height]{aspect-ratio:auto;}
   .post-t .react-bar{margin-top:9px;border-top:0;padding-top:0;gap:6px;}
   .feed-cta{
     display:flex;flex-direction:column;gap:3px;margin-top:18px;padding:16px 18px;
@@ -3831,11 +3840,11 @@
       <h3>The Rooms</h3>
       <p style="color:var(--muted);font-size:12px;margin:-6px 0 10px;font-family:var(--f-mono);letter-spacing:.12em;text-transform:uppercase;">where the desk stands</p>
       <div class="featured" style="font-size:12.5px;line-height:1.9;display:block;color:#d6d0da;font-family:var(--f-mono);">
-        ZENHOUSE — <em style="color:var(--pink);">fridays</em><br>
-        THE MIX — <em style="color:var(--pink);">st mary's strip</em><br>
-        RAH RAH ROOM — <em style="color:var(--pink);">they called us</em><br>
-        PAPER TIGER — <em style="color:var(--pink);">live</em><br>
-        THE STRIP — <em style="color:var(--pink);">always</em>
+        ZENHOUSE · <em style="color:var(--pink);">fridays</em><br>
+        THE MIX · <em style="color:var(--pink);">st mary's strip</em><br>
+        RAH RAH ROOM · <em style="color:var(--pink);">they called us</em><br>
+        PAPER TIGER · <em style="color:var(--pink);">live</em><br>
+        THE STRIP · <em style="color:var(--pink);">always</em>
       </div>
     </section>
 
@@ -4083,7 +4092,8 @@
       <div class="pitch-dm">
         <p class="pitch-lead">No inbox nobody reads. The desk answers DMs.</p>
         <div class="pitch-actions">
-          <a class="pitch-btn" href="https://instagram.com/vamppsych" target="_blank" rel="noopener"><b>DM The Lens</b><span>@vamppsych · interviews · scene tips · footage · bookings</span></a>
+          <a class="pitch-btn" href="https://instagram.com/vamppsych" target="_blank" rel="noopener"><b>DM The Lens</b><span>@vamppsych · interviews · scene tips · footage</span></a>
+          <a class="pitch-btn blue" href="mailto:offtheprintcollective@gmail.com"><b>Email The Desk</b><span>offtheprintcollective@gmail.com · bookings · quotes · paperwork</span></a>
         </div>
         <p class="pitch-fine">Give us the energy in one paragraph. Say what's on the record and what's off. Off the record stays off the record.</p>
       </div>
@@ -4097,7 +4107,7 @@
       </div>
       <div class="experts-grid">
         <div class="expert-block">
-          <h3>VampPsych <span class="role">— The Lens</span></h3>
+          <h3>VampPsych <span class="role">· The Lens</span></h3>
           <ul>
             <li>Cinematographer · Full Sail Digital Cinematography · Sony FX6 + Insta360 fleet</li>
             <li>Directed <em>VOLUME</em> · music videos + campaign visuals for SA artists</li>
@@ -4701,6 +4711,20 @@
     if (bb && pitch.btn_label) bb.textContent = pitch.btn_label;
     if (bs && pitch.btn_sub) bs.textContent = pitch.btn_sub;
   }
+  // ⛔ safeUrl() REFUSES a mailto:. Its allow-list is https, root-relative,
+  // bare path and #anchor, and 'mailto:x@y.z' matches none of them, so running
+  // the second button through it would blank the href on every single load.
+  // One narrow test instead, and the hardcoded href in the markup is the floor
+  // if site.json never carries a btn2_href at all.
+  const safeMailto = u => /^mailto:[^\s"'<>@]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(String(u ?? '').trim())
+    ? String(u).trim() : '';
+  const pBtn2 = document.querySelector('#pitch .pitch-btn.blue');
+  if (pBtn2) {
+    if (pitch.btn2_href && safeMailto(pitch.btn2_href)) pBtn2.href = safeMailto(pitch.btn2_href);
+    const b2 = pBtn2.querySelector('b'), s2 = pBtn2.querySelector('span');
+    if (b2 && pitch.btn2_label) b2.textContent = pitch.btn2_label;
+    if (s2 && pitch.btn2_sub) s2.textContent = pitch.btn2_sub;
+  }
   const pFine = document.querySelector('#pitch .pitch-fine');
   if (pFine && pitch.fine) pFine.textContent = pitch.fine;
 
@@ -4761,7 +4785,7 @@
     hq.innerHTML = '&ldquo;' + q + '&rdquo;';
   }
   const hqa = document.getElementById('house-quote-attribution');
-  if (hqa && site.house_quote_attribution) hqa.textContent = '— ' + site.house_quote_attribution;
+  if (hqa && site.house_quote_attribution) hqa.textContent = '· ' + site.house_quote_attribution;
 
   const fm = document.getElementById('footer-meta');
   if (fm) fm.innerHTML = '© 2026 · ' + esc(site.site_name) + ' · Underground media house · ' + esc(site.city);

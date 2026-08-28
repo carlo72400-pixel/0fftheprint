@@ -1272,6 +1272,12 @@
       { k: 'pitch.btn_label', l: 'Button, big text' },
       { k: 'pitch.btn_sub', l: 'Button, small text' },
       { k: 'pitch.btn_href', l: 'Button link', hint: 'https:// only, the page refuses anything else' },
+      { k: 'pitch.btn2_label', l: 'Second button, big text' },
+      { k: 'pitch.btn2_sub', l: 'Second button, small text' },
+      // ⛔ Different rule from btn_href on purpose. safeUrl() refuses a mailto:,
+      // so the page checks this one against a mailto test instead. An https link
+      // typed here will be dropped, not painted.
+      { k: 'pitch.btn2_href', l: 'Second button link', hint: 'mailto: only, the page refuses anything else' },
       { k: 'pitch.fine', l: 'The fine print', t: 'area' }
     ]]);
     g.push(['WHY WE ARE THE EXPERTS', 'credentials, craft, receipts', [

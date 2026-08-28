@@ -426,7 +426,8 @@ font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;color:var(--muted)}
   <div class="grid" id="grid"></div>
   <div class="foot">Shot by 0FF THE PRINT &nbsp;·&nbsp;
     <a href="https://instagram.com/vamppsych" target="_blank" rel="noopener">@vamppsych</a>
-    &nbsp;·&nbsp; Tagged in one of these? DM for the full-res file.</div>
+    &nbsp;·&nbsp; Tagged in one of these? DM for the full-res file.<br>
+    Want your own night shot? DM, or <a href="mailto:offtheprintcollective@gmail.com">offtheprintcollective@gmail.com</a>.</div>
 </div>
 <div class="lb" id="lb">
   <button class="lb-x" id="lbx" aria-label="Close">&times;</button>
