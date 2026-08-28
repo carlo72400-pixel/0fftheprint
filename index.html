@@ -43,7 +43,7 @@
 <script src="assets/js/door.js?v=d2ef8848" defer></script>
 <script src="assets/js/composer.js?v=9e82b159" defer></script>
 <script src="assets/js/calendar.js?v=b7cd53c5" defer></script>
-<script src="assets/js/edit.js?v=306e9e9c" defer></script>
+<script src="assets/js/edit.js?v=f019eef7" defer></script>
 <style>
   :root{
     --bg:#0a0a0d;
@@ -611,6 +611,10 @@
     background:transparent;color:var(--muted);
   }
   .edm-f .edm-s{background:var(--pink-glow);border-color:var(--pink-glow);color:#0a0a0d;}
+  /* Delete sits on the far side of the footer so a thumb going for Save cannot
+     land on it. It is never the pink button. */
+  .edm-f .edm-del{margin-right:auto;color:#c9566b;border-color:rgba(201,86,107,.45);}
+  .edm-f .edm-del:hover{color:#ff6f88;border-color:#ff6f88;}
   .edm-f button:disabled{opacity:.5;cursor:default;}
 
   /* ---- FEATURED VIDEOS: members paste links, each one gets their own tab ---- */
@@ -4988,7 +4992,12 @@
                <img src="${esc(imgUrl)}" alt="${esc(p.image_alt || '')}" loading="lazy" decoding="async"></a>`;
       const pin = p.pinned ? `<span class="pin">PINNED</span>` : '';
       // live post's own accent, else the accent sitting on their card, else house
-      return `<article class="post-t${p.pinned ? ' pinned' : ''}${accClass(p.accent || who.accent)}">
+      // EDIT MODE reads both of these. A seeded post from take.json has no id,
+      // so it gets no data-pid and edit.js leaves it alone: there is no DB row
+      // behind it to write to. Author is slugified the same way the cardPeople
+      // lookup above slugifies it, so the two can never disagree.
+      const pid = p.id != null ? ` data-pid="${esc(String(p.id))}"` : '';
+      return `<article class="post-t${p.pinned ? ' pinned' : ''}${accClass(p.accent || who.accent)}"${pid} data-author="${esc(slugify(p.author || ''))}">
         <a class="post-av" href="${esc(safeUrl(who.link) || '#')}" ${isExt ? 'target="_blank" rel="noopener"' : ''}>${av}</a>
         <div class="post-main">
           <div class="post-who">

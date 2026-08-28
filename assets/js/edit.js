@@ -280,6 +280,63 @@
       });
     } catch (e) { console.warn('edit: music', e.message); }
 
+    /* THE TAKE. The one live surface edit.js named in its own header and never
+       wired. Every write method already existed on OTP.
+
+       ⛔ THE RENDERED BODY IS NOT THE POST. #take paints p.text through md(),
+       so reading .post-body back out of the DOM would put HTML in the textarea
+       and save it over the member's markdown. The raw rows are fetched instead,
+       ONCE, and the fetch doubles as the permission check for DRAWING: myPosts()
+       returns only yours and allPosts() only runs for the desk, so an id that is
+       not in the map gets no pencil. RLS still decides the write either way.
+
+       ⛔ A seeded post out of take.json carries no data-pid, so it is skipped.
+       There is no row behind it. Those are edited by committing take.json or
+       through 011's seed overrides, not here. */
+    try {
+      var feed = [].slice.call(d.querySelectorAll('#take .post-t[data-pid]'));
+      if (feed.length) {
+        var raw = {};
+        (admin ? await OTP.allPosts(60) : await OTP.myPosts(60)).forEach(function (r) {
+          if (r && r.id != null) raw[String(r.id)] = r;
+        });
+        feed.forEach(function (el) {
+          var id = el.getAttribute('data-pid');
+          var row = raw[id];
+          if (!row) return;                       // not yours, or not loaded
+          pencil(el, 'Edit this post', function () {
+            var fields = [
+              { key: 'text', label: 'The post, in their words', type: 'textarea',
+                rows: 5, value: row.text || '' },
+              { key: 'alt', label: 'Image description (blank if there is no image)',
+                value: row.image_alt || '' }
+            ];
+            // published is the desk's switch, same as everywhere else on this
+            // site. A member editing their own post keeps whatever the desk left.
+            if (admin) fields.push({ key: 'up', label: 'Up on the front page',
+                                     type: 'check', value: row.published !== false });
+            var pn = panel('THE TAKE · post ' + id, fields, async function (v, say) {
+              await OTP.updatePost(id, { text: v.text, imageAlt: v.alt });
+              if (admin && (v.up === false) !== (row.published === false)) {
+                say('Saving…');
+                await OTP.setPublished(id, !!v.up);
+              }
+            }, '<button type="button" class="edm-del">Delete</button>');
+            var del = pn.el.querySelector('.edm-del');
+            if (del) del.addEventListener('click', async function () {
+              if (!w.confirm('Delete this post for good? Pulling it instead keeps the row.')) return;
+              this.disabled = true;
+              try {
+                await OTP.deletePost(id);
+                pn.say('Deleted. Reloading…');
+                setTimeout(function () { location.reload(); }, 550);
+              } catch (e) { this.disabled = false; pn.say(e.message || String(e), true); }
+            });
+          });
+        });
+      }
+    } catch (e) { console.warn('edit: take', e.message); }
+
     /* THE WORD. The dedicated body editor already exists and is better than a
        popover for long markdown, so this routes there instead of duplicating it. */
     d.querySelectorAll('#desk .desk-item').forEach(function (el) {
