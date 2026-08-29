@@ -40,15 +40,38 @@
   // asks wide and drops back to the 020 shape. Losing the exchange marks is a
   // fair failure; losing the run of dates is not.
   const CAL_EXCH = "want_house,house_status,event_slug";
-  const calTry = async (build, wide, narrow) => {
-    let r = await build(wide);
-    if (r.error && r.error.code === "42703") {
-      console.warn("calendar: falling back to the pre-022 shape,", r.error.message);
-      r = await build(narrow);
+  // ---- WHOSE NIGHT IT IS (025) ----------------------------------------------
+  // `by` is who typed the date in. `credit` is whose night it is, and they are
+  // different questions: every row on this calendar was entered by the desk.
+  const CAL_CREDIT = "credit,credit_name";
+
+  // ⛔ THREE SHAPES NOW, NOT TWO, AND THE BUILDER IS TOLD WHICH ONE IT IS ON.
+  // 025 (credit) degrades to 022 (the exchange) degrades to 020 (a bare run of
+  // dates). The tier argument matters because a reader does not just SELECT the
+  // new column, it FILTERS on it, and PostgREST answers 42703 to an unknown
+  // column in a filter exactly as it does in a select. A fallback that kept
+  // sending the credit filter would fail for the same reason as the attempt it
+  // was falling back from, and the whole calendar would go dark on a database
+  // that had not run 025 yet.
+  const calTry = async (build, ...shapes) => {
+    let r;
+    for (let tier = 0; tier < shapes.length; tier++) {
+      r = await build(shapes[tier], tier);
+      if (!(r.error && r.error.code === "42703")) break;
+      if (tier < shapes.length - 1)
+        console.warn("calendar: dropping back a shape,", r.error.message);
     }
     if (r.error) throw r.error;
     return r.data || [];
   };
+
+  // ⛔ THE SLUG GOES INTO A RAW PostgREST FILTER, SO IT GETS CHECKED FIRST.
+  // .eq() is encoded by the client library; .or() is not, it is filter grammar.
+  // The slug reaching these readers comes off the URL (cardback.js readSlug
+  // takes it from the path or from ?s=), so a comma or a paren in it would
+  // rewrite the query. Shape it the way 002 shapes card_slug, or do not use the
+  // or() branch at all.
+  const CAL_SLUG_OK = /^[a-z0-9][a-z0-9-]{0,58}[a-z0-9]$/;
 
   let client = null;
   function sb() {
@@ -940,10 +963,13 @@
       const c = sb(); if (!c) return [];
       const BASE = "id,submitted_by,title,kind,on_date,start_time,city,venue,link,note," +
                    "published,created_at, profiles(display_name,card_slug)";
+      // The DESK reads the base table, not the view, so it wants the raw uuid.
+      // The board resolves it against its own members list rather than paying
+      // for a second embed.
       return await calTry(cols => c.from("calendar_dates")
         .select(cols)
         .order("on_date", { ascending: true }).limit(limit),
-        BASE + "," + CAL_EXCH, BASE);
+        BASE + "," + CAL_EXCH + ",credited_to", BASE + "," + CAL_EXCH, BASE);
     },
 
     async myDates() {
@@ -962,11 +988,21 @@
       const n = new Date();
       const today = `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,"0")}-${String(n.getDate()).padStart(2,"0")}`;
       const BASE = "id,title,kind,on_date,start_time,city,venue,link,note";
-      return await calTry(cols => c.from("calendar")
-        .select(cols)
-        .eq("by", slug).gte("on_date", today)
-        .order("on_date", { ascending: true }).limit(limit),
-        BASE + "," + CAL_EXCH, BASE);
+      const orable = CAL_SLUG_OK.test(slug);
+      return await calTry((cols, tier) => {
+        let q = c.from("calendar").select(cols);
+        // Tier 0 is the only shape that knows the column exists.
+        // ⛔ NOT `by.eq.X,credit.eq.X`. That COPIES a credited night onto two
+        // pages: the desk typed every row on this calendar, so a night credited
+        // to Sinik would still sit on the desk's own page too, which is the exact
+        // thing this column exists to stop. A credit MOVES a night. It belongs to
+        // whoever is credited, and falls back to the submitter only when nobody is.
+        q = (tier === 0 && orable)
+          ? q.or(`credit.eq.${slug},and(credit.is.null,by.eq.${slug})`)
+          : q.eq("by", slug);
+        return q.gte("on_date", today)
+                .order("on_date", { ascending: true }).limit(limit);
+      }, BASE + "," + CAL_EXCH + "," + CAL_CREDIT, BASE + "," + CAL_EXCH, BASE);
     },
 
     async addDate({ title, kind, onDate, startTime, city, venue, link, note, wantHouse }) {
@@ -1084,6 +1120,41 @@
       return data[0];
     },
 
+    // ---- WHOSE NIGHT IT IS (025) -----------------------------------------
+    // Separate from setDateHouse on purpose: house_status answers "is the house
+    // coming", credited_to answers "whose night is this", and folding them into
+    // one call would mean every touch of one rewrote the other.
+    //
+    // ⛔ Takes a card_slug and resolves it here, because the column is a uuid.
+    //    025 explains why it is a uuid: profiles' only uniqueness on card_slug
+    //    is an expression index AND a partial one, and Postgres will not hang a
+    //    foreign key on either.
+    async setDateCredit(id, cardSlug) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      let who = null;
+      const slug = String(cardSlug || "").trim().toLowerCase();
+      if (slug) {
+        const { data: p, error: pe } = await c.from("profiles")
+          .select("id,card_slug").eq("card_slug", slug).limit(1);
+        if (pe) throw pe;
+        if (!p || !p.length) throw new Error("Nobody holds the card " + slug + ".");
+        who = p[0].id;
+      }
+      const { data, error } = await c.from("calendar_dates")
+        .update({ credited_to: who }).eq("id", id).select("id,credited_to");
+      if (error) {
+        if (error.code === "42703")
+          throw new Error("Run migration-025-whose-night-it-is.sql first.");
+        throw error;
+      }
+      // The guard pins this for anybody who is not the desk, so a silent no-op
+      // here is a permission answer, not a missing row.
+      if (!data || !data.length) throw new Error("The desk is the only one who can say whose night it is.");
+      if ((data[0].credited_to || null) !== who)
+        throw new Error("The database kept the old credit. That write was not yours to make.");
+      return data[0];
+    },
+
     // The nights the house actually shot for one card holder, newest first.
     // ⛔ datesFor() is upcoming only. This is the OTHER half and it is the half
     //    that brings somebody back: a date that has passed and come back with
@@ -1091,14 +1162,31 @@
     //    them touching it.
     async shotFor(slug, limit = 12) {
       const c = sb(); if (!c || !slug) return [];
+      const BASE = "id,title,kind,on_date,city,venue,house_status,event_slug";
+      // ⛔ This one kept its own try/catch instead of using calTry, and the
+      // catch returned [] on 42703, which was right when the only thing that
+      // could be missing was the whole exchange. Now that there are two
+      // possible missing columns it has to step DOWN rather than give up: a
+      // database on 022 still has real shot nights to show, it just cannot
+      // answer the credit half of the question.
       try {
-        const { data, error } = await c.from("calendar")
-          .select("id,title,kind,on_date,city,venue,house_status,event_slug")
-          .eq("by", slug).eq("house_status", "shot")
-          .order("on_date", { ascending: false }).limit(limit);
-        if (error) throw error;
-        return (data || []).filter(r => r.event_slug);
+        const orable = CAL_SLUG_OK.test(slug);
+        return (await calTry((cols, tier) => {
+          let q = c.from("calendar").select(cols);
+          // ⛔ NOT `by.eq.X,credit.eq.X`. That COPIES a credited night onto two
+          // pages: the desk typed every row on this calendar, so a night credited
+          // to Sinik would still sit on the desk's own page too, which is the exact
+          // thing this column exists to stop. A credit MOVES a night. It belongs to
+          // whoever is credited, and falls back to the submitter only when nobody is.
+          q = (tier === 0 && orable)
+            ? q.or(`credit.eq.${slug},and(credit.is.null,by.eq.${slug})`)
+            : q.eq("by", slug);
+          return q.eq("house_status", "shot")
+                  .order("on_date", { ascending: false }).limit(limit);
+        }, BASE + "," + CAL_CREDIT, BASE)).filter(r => r.event_slug);
       } catch (e) {
+        // A database with no exchange at all has no house_status to filter on,
+        // so there is nothing to show and that is not an error worth throwing.
         if (e && e.code === "42703") return [];
         throw e;
       }

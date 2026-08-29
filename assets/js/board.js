@@ -525,6 +525,14 @@
           var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(r.on_date || ''));
           var when = m ? MON[+m[2] - 1] + ' ' + (+m[3]) : '';
           var who = (r.profiles && r.profiles.display_name) || 'member';
+          // 025. Whose night it is, when that is not the person who typed it in.
+          // Resolved off the members list the board already loaded rather than
+          // a second embed on every date.
+          var creditOf = function (uuid) {
+            if (!uuid) return null;
+            return (DB.members || []).filter(function (mb) { return mb.id === uuid; })[0] || null;
+          };
+          var cred = creditOf(r.credited_to);
           // THE EXCHANGE. An unanswered ask is the most time-sensitive thing on
           // this whole board: the night happens whether or not anybody replied.
           var hx = r.house_status === 'shot' ? ' · shot'
@@ -532,7 +540,9 @@
                  : r.want_house ? ' · ASKING FOR THE HOUSE' : '';
           return {
             glyph: when.split(' ')[1] || '?', off: !r.published,
-            t: r.title, s: when + ' · ' + who + hx,
+            t: r.title,
+            s: when + ' · ' + (cred ? (cred.display_name || cred.card_slug) + ' · put up by ' + who
+                                    : who) + hx,
             state: r.published ? 'live' : 'hidden',
             open: function () {
               sheet({
@@ -569,7 +579,20 @@
                       (r.event_slug && !(EV.items || []).some(function (e) { return e.slug === r.event_slug; }))
                         ? [[r.event_slug, r.event_slug + ' (not in events.json)']] : []),
                     hint: 'Only nights that are already live show up here. Run newevent.py and ' +
-                          'push first, then come back and point at it.' }
+                          'push first, then come back and point at it.' },
+                  // 025. A PICKER, not a text field, for the same reason the
+                  // /events/ folder above it is a picker: a typo here credits a
+                  // night to nobody and says nothing about it.
+                  { key: 'credit', label: 'Whose night is it', type: 'select',
+                    value: (cred && cred.card_slug) || '',
+                    options: [['', 'whoever put it up (' + who + ')']].concat(
+                      (DB.members || [])
+                        .filter(function (mb) { return mb.card_slug; })
+                        .map(function (mb) {
+                          return [mb.card_slug, mb.display_name || mb.card_slug];
+                        })),
+                    hint: 'Only changes whose page it lands on. It does NOT say they ' +
+                          'put it up, the byline still reads ' + who + '.' }
                 ],
                 save: async function (v) {
                   await OTP.updateDate(r.id, {
@@ -584,6 +607,10 @@
                   if (v.house_status !== (r.house_status || 'none') ||
                       (v.event_slug || '') !== (r.event_slug || ''))
                     await OTP.setDateHouse(r.id, { status: v.house_status, eventSlug: v.event_slug });
+                  // Its own call, its own column. house_status answers whether
+                  // the house is coming; this answers whose night it is.
+                  if ((v.credit || '') !== ((cred && cred.card_slug) || ''))
+                    await OTP.setDateCredit(r.id, v.credit);
 
                   // THE EXCHANGE, the half that leaves the building. Only on a
                   // CHANGE, so re-saving a sheet to fix a typo does not ask him
@@ -591,7 +618,20 @@
                   var was = r.house_status || 'none';
                   if (v.house_status !== was &&
                       (v.house_status === 'on_list' || v.house_status === 'shot')) {
-                    var slug = (r.profiles && r.profiles.card_slug) || '';
+                    // ⛔ THE MESSAGE GOES TO WHOEVER THE NIGHT BELONGS TO, WHICH
+                    // AFTER 025 IS NOT ALWAYS WHO TYPED IT IN. The desk entered
+                    // every row on this calendar, so reading the recipient off
+                    // r.profiles would greet the desk by name and link the
+                    // desk's own page on the exact night a credit just moved it
+                    // to somebody else. Read the credit as it stands AFTER this
+                    // save, and fall back to the submitter when there is none.
+                    var toRow = (v.credit
+                      ? (DB.members || []).filter(function (mb) {
+                          return mb.card_slug === v.credit; })[0]
+                      : null) || null;
+                    var toName = (toRow && (toRow.display_name || toRow.card_slug)) || who;
+                    var slug = (toRow && toRow.card_slug) ||
+                               (r.profiles && r.profiles.card_slug) || '';
                     var mine = v.house_status === 'shot';
                     var night = (v.title || r.title || 'your night') +
                                 (when ? ', ' + when : '');
@@ -606,11 +646,11 @@
                           : ['You put the house on ' + (r.title || 'this night') + '.',
                              'It says so on /dates/ now. It does not say so to them.'],
                         text: mine
-                          ? (who !== 'member' ? who + ', ' : '') + night +
+                          ? (toName !== 'member' ? toName + ', ' : '') + night +
                             ' is up. Every frame from the night: ' +
                             SITE + '/events/' + (v.event_slug || '') + '/' +
                             (slug ? '\n\nIt is on your page too: ' + SITE + '/c/' + slug + '/' : '')
-                          : (who !== 'member' ? who + ', ' : '') +
+                          : (toName !== 'member' ? toName + ', ' : '') +
                             'the house is coming to ' + night +
                             '. We shoot it, and the frames come back with your name on them.' +
                             '\n\nIt is on the calendar now: ' + SITE + '/dates/',
