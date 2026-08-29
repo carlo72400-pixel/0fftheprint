@@ -62,9 +62,15 @@
 .sh .note{font-family:var(--f-mono);font-size:11px;color:var(--muted);margin-top:10px;line-height:1.7}
 .sh label{display:block;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.2em;
   text-transform:uppercase;color:var(--muted);margin:14px 0 6px}
+/* ⛔ 16px, NOT 15px, and for the same reason auth.css:51 says so. iOS Safari
+   zooms the whole page in on focus for any control under 16px. These are the
+   SHEET controls, and calendar.css is loaded by index.html, dates/index.html
+   and my/index.html, so this is the box a member types their own date into on
+   a phone. The auth.css fix alone did not cover it: that file styles /join/ and
+   /reset/, this one styles every sheet on the three member-facing pages. */
 .sh input,.sh select,.sh textarea{width:100%;background:#0d0c11;border:1px solid var(--line);
   border-radius:8px;color:var(--ink);font-family:var(--f-body,'Inter',system-ui,sans-serif);
-  font-size:15px;padding:11px 13px;outline:none}
+  font-size:16px;padding:11px 13px;outline:none}
 .sh textarea{resize:vertical;min-height:80px;line-height:1.5}
 .sh input:focus,.sh select:focus,.sh textarea:focus{border-color:var(--pink-deep);
   box-shadow:0 0 0 3px rgba(244,143,200,.13)}

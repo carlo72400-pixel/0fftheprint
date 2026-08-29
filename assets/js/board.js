@@ -234,10 +234,21 @@
   }
 
   // A sheet with nothing to save: it exists to tell him where a thing lives.
-  function tellSheet(title, why, lines, links) {
+  // `copy` is optional: {label, text}. It renders the text in an editable box
+  // with a copy button, for the one job this site cannot do itself.
+  var TELL_N = 0;
+  function tellSheet(title, why, lines, links, copy) {
+    var id = 'tell-copy-' + (++TELL_N);
     sheet({
       title: title, why: why,
       body: '<div class="note">' + lines.map(function (l) { return esc(l); }).join('<br>') + '</div>' +
+        (copy
+          ? '<textarea id="' + id + '" class="tell-copy" rows="5">' + esc(copy.text) + '</textarea>' +
+            '<div class="row" style="margin-top:10px">' +
+              '<button type="button" class="btn ghost sm" data-copy="' + id + '">' +
+              esc(copy.label || 'Copy it') + '</button>' +
+            '</div>'
+          : '') +
         (links && links.length
           ? '<div class="row" style="margin-top:16px">' + links.map(function (l) {
               return '<a class="btn ghost sm" href="' + esc(l.href) + '"' +
@@ -245,6 +256,44 @@
             }).join('') + '</div>'
           : '')
     });
+    if (!copy) return;
+    // sheet() appends synchronously, so the node is here by now.
+    var btn = d.querySelector('[data-copy="' + id + '"]');
+    var box = d.getElementById(id);
+    if (!btn || !box) return;
+    btn.onclick = async function () {
+      // ⛔ The textarea is not decoration. navigator.clipboard is undefined on
+      // a page served over plain http and throws when the document is not
+      // focused, and this sheet is the ONLY place the message exists. Select it
+      // so he can copy by hand when the API is not there.
+      try {
+        await navigator.clipboard.writeText(box.value);
+        btn.textContent = 'Copied. Now send it.';
+      } catch (e) {
+        box.focus(); box.select();
+        btn.textContent = 'Selected it, copy by hand.';
+      }
+    };
+  }
+
+  /* ===================== THE DESK SAYS YES ==============================
+     Nothing on this site reaches a member off it. No mail, no webhook, no
+     push: the only outbound path in the whole codebase is Supabase's own
+     password-reset mail. So the strongest moment in the system, the desk
+     agreeing to shoot somebody's night, produced no signal at all and sat
+     there until they happened to come back and look.
+
+     This does not add a channel. It writes the message and puts it one tap
+     from his clipboard, because his channels are a DM and an email and he
+     sends both by hand anyway.
+
+     ⛔ NOTHING FIRES ON A NO. 023 made the refusal deliberately silent: a
+        denied member is never told and their side still reads "in the queue".
+        Only on_list, shot and approved get a prompt. */
+  var SITE = 'https://0fftheprint.com';
+  function saidYes(o) {
+    tellSheet(o.title, 'nothing on the site tells them, so this is the part you send',
+              o.lines, o.links, { label: 'Copy the message', text: o.text });
   }
 
   /* ========================= overrides, read + write =====================
@@ -535,6 +584,42 @@
                   if (v.house_status !== (r.house_status || 'none') ||
                       (v.event_slug || '') !== (r.event_slug || ''))
                     await OTP.setDateHouse(r.id, { status: v.house_status, eventSlug: v.event_slug });
+
+                  // THE EXCHANGE, the half that leaves the building. Only on a
+                  // CHANGE, so re-saving a sheet to fix a typo does not ask him
+                  // to send the same message twice.
+                  var was = r.house_status || 'none';
+                  if (v.house_status !== was &&
+                      (v.house_status === 'on_list' || v.house_status === 'shot')) {
+                    var slug = (r.profiles && r.profiles.card_slug) || '';
+                    var mine = v.house_status === 'shot';
+                    var night = (v.title || r.title || 'your night') +
+                                (when ? ', ' + when : '');
+                    // setTimeout so this lands AFTER sheet() shuts the one that
+                    // is still open behind it.
+                    setTimeout(function () {
+                      saidYes({
+                        title: mine ? 'THE FRAMES ARE UP' : 'THE HOUSE IS COMING',
+                        lines: mine
+                          ? ['You marked ' + (r.title || 'this night') + ' as shot.',
+                             'They have no idea until you say so.']
+                          : ['You put the house on ' + (r.title || 'this night') + '.',
+                             'It says so on /dates/ now. It does not say so to them.'],
+                        text: mine
+                          ? (who !== 'member' ? who + ', ' : '') + night +
+                            ' is up. Every frame from the night: ' +
+                            SITE + '/events/' + (v.event_slug || '') + '/' +
+                            (slug ? '\n\nIt is on your page too: ' + SITE + '/c/' + slug + '/' : '')
+                          : (who !== 'member' ? who + ', ' : '') +
+                            'the house is coming to ' + night +
+                            '. We shoot it, and the frames come back with your name on them.' +
+                            '\n\nIt is on the calendar now: ' + SITE + '/dates/',
+                        links: mine && v.event_slug
+                          ? [{ label: 'Open the dump', href: '../events/' + v.event_slug + '/', blank: true }]
+                          : [{ label: 'Open the calendar', href: '../dates/', blank: true }]
+                      });
+                    }, 0);
+                  }
                 },
                 kill: function () { return OTP.deleteDate(r.id); }
               });
@@ -1185,6 +1270,29 @@
         if ((v.card || '') !== (p.card_slug || '')) await OTP.setCard(p.id, v.card || null);
         if ((v.tagline || '') !== (words.tagline || '') || (v.bio || '') !== (words.bio || ''))
           await OTP.setMemberWords(p.id, { tagline: v.tagline, bio: v.bio });
+
+        // ⛔ Only on the way IN, and never alongside a no. A refusal stays
+        // silent on purpose (023), and re-saving an already-approved member to
+        // fix their bio must not ask him to welcome them a second time.
+        if (!v.denied && v.approved && !p.approved) {
+          var slug = (v.card || p.card_slug || '').trim();
+          var nm = p.display_name || 'You';
+          setTimeout(function () {
+            saidYes({
+              title: 'THEY ARE IN',
+              lines: ['You just let ' + (p.display_name || 'them') + ' in.',
+                      'Their side does not announce it. This is the part that does.'],
+              text: nm + ', you are in.' +
+                (slug ? '\n\nYour page is live: ' + SITE + '/c/' + slug + '/' : '') +
+                '\n\nLog in at ' + SITE + '/join/ and it fills itself. Put a date up, ' +
+                'and if the house can make it we shoot it and the frames come back with ' +
+                'your name on them.',
+              links: slug
+                ? [{ label: 'Open their page', href: '../c/' + encodeURIComponent(slug) + '/', blank: true }]
+                : []
+            });
+          }, 0);
+        }
       },
       kill: isIn ? async function () {
         var batch = await OTP.retireMember(p.id);

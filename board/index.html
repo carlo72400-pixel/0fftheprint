@@ -14,6 +14,13 @@
      Built wide on purpose: nothing here is a menu you have to remember. */
   .wrap.board{max-width:1180px;padding:18px 16px 120px}
 
+  /* The message the desk sends by hand. Editable on purpose: he tweaks a line
+     before it goes, and it is the fallback when navigator.clipboard is not
+     there to copy from. */
+  /* No font-size here on purpose: auth.css and calendar.css both set their
+     control rules to 16px now, and both are more specific than a bare class. */
+  .sh textarea.tell-copy{margin-top:14px;line-height:1.5;min-height:132px;}
+
   /* ---- sticky jump bar. The only navigation, and it never leaves. ---- */
   .jump{position:sticky;top:0;z-index:60;background:rgba(10,10,13,.93);
     backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
@@ -209,6 +216,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="../supabase-config.js?v=f1348482"></script>
 <script src="../assets/js/desk.js?v=08537a4c"></script>
-<script src="../assets/js/board.js?v=3b6766cd"></script>
+<script src="../assets/js/board.js?v=bb98ef0b"></script>
 </body>
 </html>

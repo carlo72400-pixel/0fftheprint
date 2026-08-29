@@ -40,8 +40,16 @@ padding:0;position:relative;transition:transform .12s,border-color .12s}
 .door-note + .door-note{margin-top:4px}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;margin-top:22px}
 label{display:block;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px}
+/* ⛔ 16px, NOT 15px. iOS Safari zooms the whole page in on focus for any form
+   control under 16px, so /join/ and /reset/, the two doors a card holder walks
+   through from a DM link on a phone, scaled up about 7% and jumped the moment
+   somebody tapped a field. index.html:3676 already carries this exact rule with
+   this exact comment on the composer textarea. auth.css never got it, and it has
+   no media queries at all, so the 15px was unconditional across all 22 pages
+   that load this file. Nothing here hard-codes an input height, so the control
+   grows about 1px and nothing else moves. */
 input,select,textarea{width:100%;background:#0d0c11;border:1px solid var(--line);border-radius:8px;
-color:var(--ink);font-family:var(--f-body);font-size:15px;padding:11px 13px;outline:none}
+color:var(--ink);font-family:var(--f-body);font-size:16px;padding:11px 13px;outline:none}
 textarea{resize:vertical;min-height:130px;line-height:1.5}
 input:focus,select:focus,textarea:focus{border-color:var(--pink-deep);box-shadow:0 0 0 3px rgba(244,143,200,.13)}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:18px;
