@@ -17,6 +17,7 @@ loader never fires and the grid renders empty.
 """
 import io
 import json
+import re
 import os
 import sys
 import importlib.util
@@ -67,12 +68,27 @@ def repage(ne, slug):
 
     from datetime import datetime
     datelong = datetime.strptime(data["date"], "%Y-%m-%d").strftime("%b %-d, %Y")
-    page = (ne.PAGE.replace("__MEDIA__", json.dumps(items))
+    # ⛔ __NIGHT__ MUST BE SUBSTITUTED HERE TOO. It was added to the template with
+    #    LAST NIGHT, SEALED and repage.py was never taught about it, so every page
+    #    this rebuilt shipped the literal token. `__NIGHT__` is an undefined
+    #    identifier, so the inline script threw a ReferenceError on its last line,
+    #    window.OTPNight was never set, and the sealed pack silently vanished. The
+    #    grid still rendered, which is exactly why it was easy to miss.
+    # ⛔ json.dumps, not raw: a venue with an apostrophe would close the JS string.
+    night = json.dumps({"slug": slug, "title": data["title"],
+                        "venue": data["venue"],
+                        "dateShort": data.get("date_short", "")})
+    page = (ne.PAGE.replace("__NIGHT__", night)
+                   .replace("__MEDIA__", json.dumps(items))
                    .replace("__TITLE__", data["title"])
                    .replace("__VENUE__", data["venue"])
                    .replace("__DATELONG__", datelong)
                    .replace("__COUNT__", str(len(items)))
                    .replace("__SLUG__", slug))
+    left = re.findall(r"__[A-Z]+__", page)
+    if left:
+        print(f"  {slug}: REFUSED, template placeholders unfilled: {sorted(set(left))}")
+        return
     io.open(os.path.join(d, "index.html"), "w", encoding="utf-8").write(page)
 
     data["media"] = items
