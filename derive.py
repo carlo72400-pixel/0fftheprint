@@ -63,7 +63,10 @@ ASSETS = os.path.join(HERE, "assets")
 SIZES = [
     (96, "av", 82, None),
     (440, "thumb", 84, None),
-    (760, "card", 86, ("roster.json", "creators.json")),
+    # slate.json is in scope because slate.next.art renders through
+    # sized(url,'card'); without it the marquee asks for assets/card/<name>.jpg
+    # and 404s to a blank hero the moment the slate points at a new picture.
+    (760, "card", 86, ("roster.json", "creators.json", "slate.json")),
     (1000, "grid", 85, ("work.json",)),
 ]
 

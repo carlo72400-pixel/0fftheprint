@@ -194,7 +194,25 @@ def build_photos(src, out_dir, stage_dir, tag, limit, mode='best'):
     return items
 
 
-def build_videos(src, out_dir, stage_dir, tag, limit, vid_dir=None):
+def probe_dims(path):
+    """(width, height) of the first video stream, or (None, None).
+
+    ⛔ ffprobe csv over multiple streams prints a line per stream and the audio
+    line has no dims, so pin it to v:0 and read exactly one line."""
+    r = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0",
+                        "-show_entries", "stream=width,height",
+                        "-of", "csv=p=0:s=x", path], capture_output=True, text=True)
+    line = (r.stdout or "").strip().splitlines()
+    if not line:
+        return None, None
+    try:
+        w, h = line[0].split("x")[:2]
+        return int(w), int(h)
+    except ValueError:
+        return None, None
+
+
+def build_videos(src, out_dir, stage_dir, tag, limit, vid_dir=None, want_full=True):
     """Web clip -> vid_dir (committed to the media repo, served by its Pages).
     Full quality original -> stage_dir (released). Poster -> out_dir (site repo).
 
@@ -213,9 +231,18 @@ def build_videos(src, out_dir, stage_dir, tag, limit, vid_dir=None):
         stem = f"v{i:02d}"
         os.makedirs(vid_dir, exist_ok=True)
         outv = os.path.join(vid_dir, f"{stem}.mp4")
+        # ⛔ SCALE THE SHORT EDGE, NOT THE HEIGHT. "scale=-2:720" is correct for a
+        #    landscape clip and wrong for a vertical one: a 1728x3072 phone clip
+        #    comes out 404x720, a third of the pixels it should have. The Ink cuts
+        #    established 720x1280 as the vertical web size and this matches it.
+        vw, vh = probe_dims(os.path.join(src, fn))
+        if vw and vh and vh > vw:
+            scale = f"scale={VIDEO_H}:-2"          # vertical: width 720
+        else:
+            scale = f"scale=-2:{VIDEO_H}"          # landscape: height 720
         subprocess.run([
             "ffmpeg", "-y", "-i", os.path.join(src, fn),
-            "-vf", f"scale=-2:{VIDEO_H}", "-c:v", "libx264", "-crf", str(VIDEO_CRF),
+            "-vf", scale, "-c:v", "libx264", "-crf", str(VIDEO_CRF),
             "-maxrate", VIDEO_MAXRATE, "-bufsize", "3200k", "-pix_fmt", "yuv420p",
             "-preset", "slow", "-c:a", "aac", "-b:a", "128k",
             # faststart puts the index at the front so it plays before it finishes
@@ -239,7 +266,13 @@ def build_videos(src, out_dir, stage_dir, tag, limit, vid_dir=None):
         # for instant playback; the original is the real file. 2GiB ceiling.
         full_url = None
         srcsize = os.path.getsize(os.path.join(src, fn))
-        if srcsize <= 2 * 1024 * 1024 * 1024:
+        if not want_full:
+            # --no-video-full. A 4K HEVC master runs about a gigabyte a clip, so a
+            # night of them is several hours of upload and twice that in staging
+            # disk, to serve a download almost nobody takes off a phone gallery.
+            # The 720p clip still PLAYS and the photos still keep their originals.
+            print(f"  {fn} original held back (--no-video-full, {human(srcsize)})")
+        elif srcsize <= 2 * 1024 * 1024 * 1024:
             oext = os.path.splitext(fn)[1].lower() or ".mp4"
             ofullname = f"{stem}_full{oext}"
             shutil.copy2(os.path.join(src, fn), os.path.join(stage_dir, ofullname))
@@ -482,6 +515,26 @@ window.OTPNight = Object.assign({media:MEDIA, show:show}, __NIGHT__);
 """
 
 
+def og_source(stage, override=None):
+    """The frame the share card is built from: the first LANDSCAPE one.
+
+    ⛔ A portrait frame centre cropped to 1200x630 loses the face, and the share
+    card is the single most seen image of a dump."""
+    if override:
+        return override if os.path.exists(override) else None
+    frames = sorted(f for f in os.listdir(stage)
+                    if re.fullmatch(r"\d+\.jpg", f)) if os.path.isdir(stage) else []
+    for f in frames:
+        p = os.path.join(stage, f)
+        try:
+            with Image.open(p) as im:
+                if im.width >= im.height:
+                    return p
+        except Exception:
+            continue
+    return os.path.join(stage, frames[0]) if frames else None
+
+
 def make_og(first_photo, out_path, title, venue, datelong):
     """Event OG card: the night's own frame, darkened, so links unfurl."""
     im = load_image(first_photo)
@@ -520,7 +573,12 @@ def main():
     ap.add_argument("--pick", choices=["best", "even"], default="best",
                     help="best = score and keep the keepers (default); even = sample across the shoot")
     ap.add_argument("--video-limit", type=int, default=6)
+    ap.add_argument("--no-video-full", action="store_true",
+                    help="skip the full quality video originals on the release "
+                         "(the playable 720p clip still goes up; photos unaffected)")
     ap.add_argument("--slug", help="override the url slug")
+    ap.add_argument("--og", help="explicit image for the share card "
+                                 "(default: the first horizontal frame)")
     ap.add_argument("--no-upload", action="store_true",
                     help="build everything but skip the release upload (dry run)")
     a = ap.parse_args()
@@ -544,11 +602,17 @@ def main():
     if a.videos:
         vidstage = os.path.join(os.path.dirname(stage), "_video_" + slug)
         items += build_videos(a.videos, media_dir, stage, slug, a.video_limit,
-                              vid_dir=vidstage)
+                              vid_dir=vidstage, want_full=not a.no_video_full)
 
-    # OG card off the first LIGHTBOX frame, which lives in staging now
-    first = os.path.join(stage, "001.jpg")
-    if os.path.exists(first):
+    # OG card off a LIGHTBOX frame, which lives in staging now.
+    # ⛔ IT MUST BE A HORIZONTAL FRAME. The card is 1200x630 and make_og centre
+    #    crops to fill, so a portrait frame gets cut to a torso with the face
+    #    outside the crop, and that torso is what every DM and link preview
+    #    shows. Take the first landscape frame in shoot order; fall back to 001
+    #    only if the night is entirely vertical.
+    first = og_source(stage, a.og)
+    if first:
+        print(f"  og card from {os.path.basename(first)}")
         make_og(first, os.path.join(out, "preview.jpg"), title, a.venue, datelong)
 
     # NOTE: the upload happens at the END, after the page and data.json are

@@ -1,6 +1,15 @@
 {
   "items": [
     {
+      "slug": "2026-08-30-clown-church",
+      "title": "Clown Church",
+      "venue": "Rah Rah Room",
+      "date": "2026-08-30",
+      "date_short": "08.30.26",
+      "count": 48,
+      "cover": "2026-08-30-clown-church/media/001_t.jpg"
+    },
+    {
       "slug": "2026-08-25-the-mix",
       "title": "Resident Evil vs Silent Hill",
       "venue": "The Mix",

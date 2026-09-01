@@ -1,18 +1,18 @@
 {
   "next": {
-    "num": "0TP-002",
+    "num": "0TP-014",
     "kicker": "OUT THE HOUSE NOW",
-    "title": "The Ink",
-    "line": "Smiley Onerr at Legion Ink. Six cuts from the sit down, and he saw it before you did.",
+    "title": "They Will Think You Are A Lunatic",
+    "line": "Andrew E. put rap on Philippine radio in 1990. He played San Antonio for the first time, then ate lunch on the South Side and told us how it started.",
     "status": "OUT NOW",
-    "art": "assets/card-ink-fullart.jpg",
-    "link": "ink/"
+    "art": "assets/slate-andrewe.jpg",
+    "link": "word/they-will-think-you-are-a-lunatic/"
   },
   "latest_drop": {
     "label": "LATEST DROP",
-    "title": "The Mix · Resident Evil vs Silent Hill",
-    "count": "38 frames, full quality",
-    "link": "events/2026-08-25-the-mix/"
+    "title": "Clown Church · Rah Rah Room",
+    "count": "40 frames and 8 clips, full quality",
+    "link": "events/2026-08-30-clown-church/"
   },
   "releases": [
     {

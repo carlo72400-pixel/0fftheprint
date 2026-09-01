@@ -70,8 +70,31 @@ def md_to_html(md, story_dir, src_dir):
         elif b.startswith("> "):
             quote = " ".join(ln.lstrip("> ").strip() for ln in b.splitlines())
             out.append(f'<blockquote>{inline(quote)}</blockquote>')
-        elif (m := re.match(r"^!\[([^\]]*)\]\(([^)\s]+)\)$", b)):
-            alt, src = m.group(1), m.group(2)
+        elif (m := re.match(r"^!\[([^\]]*)\]\(([^)\s]+)\)(?:\{poster=([^}\s]+)\})?$", b)):
+            alt, src, poster = m.group(1), m.group(2), m.group(3)
+            # ⛔ A VIDEO SOURCE MUST NOT BE A GITHUB RELEASE ASSET. GitHub types every
+            #    one application/octet-stream + content-disposition: attachment, and
+            #    iOS Safari refuses to play that. Pass an http src from the media
+            #    repo's Pages site, which types by extension. An <img> sniffs and does
+            #    not care, which is why photos are fine on releases and video is not.
+            if os.path.splitext(src)[1].lower() in (".mp4", ".m4v", ".mov"):
+                if not src.startswith("http"):
+                    sys.exit(f"video must be an http url on the media Pages site: {src}")
+                pa = ""
+                if poster:
+                    if not poster.startswith("http"):
+                        pp = os.path.join(src_dir, poster)
+                        if not os.path.exists(pp):
+                            sys.exit(f"poster not found next to the draft: {poster}")
+                        shutil.copy2(pp, os.path.join(story_dir, os.path.basename(poster)))
+                        poster = os.path.basename(poster)
+                    pa = f' poster="{html.escape(poster)}"'
+                out.append(
+                    f'<figure class="clip"><video controls playsinline preload="none"'
+                    f'{pa} src="{html.escape(src)}"></video>'
+                    + (f"<figcaption>{inline(alt)}</figcaption>" if alt else "")
+                    + "</figure>")
+                continue
             if not src.startswith("http"):
                 src_path = os.path.join(src_dir, src)
                 if not os.path.exists(src_path):
@@ -128,8 +151,14 @@ PAGE = """<!DOCTYPE html>
     font-size:26px;line-height:1.2;text-transform:uppercase;color:var(--pink);
     border-left:3px solid var(--pink);padding-left:18px;margin:32px 0}}
   article figure{{margin:30px -20px}}
-  article figure img{{width:100%;display:block;border-radius:0}}
-  @media(min-width:760px){{article figure{{margin:30px 0}}article figure img{{border-radius:12px}}}}
+  article figure img,article figure video{{width:100%;display:block;border-radius:0;background:#000}}
+  article figure.clip video{{width:auto;max-width:100%;max-height:82vh;aspect-ratio:9/16;margin:0 auto}}
+  article figcaption{{font-family:'JetBrains Mono',monospace;font-size:10.5px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+    padding:10px 20px 0;text-align:center}}
+  @media(min-width:760px){{article figure{{margin:30px 0}}
+    article figure img,article figure video{{border-radius:12px}}
+    article figcaption{{padding:10px 0 0}}}}
   .foot{{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);
     font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;
     text-transform:uppercase;color:var(--muted)}}
@@ -239,7 +268,9 @@ def main():
         "num": num,
     })
     with open(DESK, "w") as f:
-        json.dump(desk, f, indent=1)
+        # indent 2 to match bake.py and every other content/*.json, or every
+        # story run rewrites the whole file and buries its own one line change
+        json.dump(desk, f, indent=2, ensure_ascii=False)
         f.write("\n")
 
     print(f"  {num} · {a.title}")
