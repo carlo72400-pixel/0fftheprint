@@ -1,20 +1,6 @@
 {
   "items": [
     {
-      "slug": "ae-the-next-day",
-      "title": "The Next Day",
-      "kind": "CUT",
-      "line": "Andrew E. at Sari-Sari the afternoon after his first Texas show.",
-      "src": "https://carlo72400-pixel.github.io/0tp-media/video/0tp-014-andrew-e/the-next-day.mp4",
-      "poster": "media/ae-the-next-day.jpg",
-      "w": 720,
-      "h": 1280,
-      "dur": "0:40",
-      "from": "They Will Think You Are A Lunatic",
-      "link": "word/they-will-think-you-are-a-lunatic/",
-      "date": "2026-08-30"
-    },
-    {
       "slug": "ae-loudest",
       "title": "You Are The Loudest",
       "kind": "CUT",
