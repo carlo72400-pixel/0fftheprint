@@ -267,6 +267,36 @@
       ]
     },
     {
+      "name": "JOSH FUEGO",
+      "type": "label",
+      "type_label": "THE OUTPUT",
+      "hp": 180,
+      "rarity": "full-art",
+      "photo": "assets/card-joshfuego-fullart.jpg",
+      "pending_glyph": "JF",
+      "pending_stamp": "",
+      "flavor": "Eight records in one year, and the year is not done.",
+      "moves": [
+        {
+          "cost": "p",
+          "name": "No Signal Found",
+          "damage": 60,
+          "desc": "Track thirteen, him and Kurly Top."
+        },
+        {
+          "cost": "ppp",
+          "name": "Outrage",
+          "damage": 170,
+          "desc": "Fourteen tracks in January. Seven more after."
+        }
+      ],
+      "platform": "SATX",
+      "link": "https://www.instagram.com/joshdelfuego/",
+      "theme_song": "https://open.spotify.com/track/1X9fSsWevINdy5iYyN2IpQ",
+      "theme_start": 0,
+      "lore": "Releases as El Fuego. OUTRAGE came out 16 January 2026: fourteen tracks, fifty seven minutes, and it is one of eight records with his name on them that year.\n\nTrack thirteen is NO SIGNAL FOUND, him and Kurly Top. Two seats on this roster were already working together before either of them held a card here.\n\nThe rest of that guest list reads like its own scene report: PNDR, AP, Guy Flores, DSB DISO, katrillions, Sincerely Deathnotes, Atla$.\n\nEvery one of those records says El Fuego on the copyright line. Nobody put them out but him.\n\nShot at the bar, in the room, the way everything here gets shot."
+    },
+    {
       "name": "VAMPPSYCH",
       "type": "lens",
       "type_label": "THE LENS",
