@@ -4,7 +4,7 @@
   "venue": "Rah Rah Room",
   "date": "2026-08-30",
   "date_short": "08.30.26",
-  "count": 48,
+  "count": 60,
   "media": [
     {
       "type": "photo",
@@ -336,6 +336,13 @@
     },
     {
       "type": "video",
+      "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-30-clown-church/v09.mp4",
+      "thumb": "media/v09_t.jpg",
+      "w": 520,
+      "h": 924
+    },
+    {
+      "type": "video",
       "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-30-clown-church/v02.mp4",
       "thumb": "media/v02_t.jpg",
       "w": 520,
@@ -344,11 +351,53 @@
     },
     {
       "type": "video",
+      "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-30-clown-church/v10.mp4",
+      "thumb": "media/v10_t.jpg",
+      "w": 520,
+      "h": 924
+    },
+    {
+      "type": "video",
       "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-30-clown-church/v03.mp4",
       "thumb": "media/v03_t.jpg",
       "w": 520,
       "h": 924,
       "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-30-clown-church/v03_full.mp4"
+    },
+    {
+      "type": "video",
+      "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-30-clown-church/v11.mp4",
+      "thumb": "media/v11_t.jpg",
+      "w": 520,
+      "h": 924
+    },
+    {
+      "type": "video",
+      "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-30-clown-church/v12.mp4",
+      "thumb": "media/v12_t.jpg",
+      "w": 520,
+      "h": 924
+    },
+    {
+      "type": "video",
+      "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-30-clown-church/v13.mp4",
+      "thumb": "media/v13_t.jpg",
+      "w": 520,
+      "h": 924
+    },
+    {
+      "type": "video",
+      "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-30-clown-church/v14.mp4",
+      "thumb": "media/v14_t.jpg",
+      "w": 520,
+      "h": 924
+    },
+    {
+      "type": "video",
+      "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-30-clown-church/v15.mp4",
+      "thumb": "media/v15_t.jpg",
+      "w": 520,
+      "h": 924
     },
     {
       "type": "video",
@@ -376,11 +425,46 @@
     },
     {
       "type": "video",
+      "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-30-clown-church/v16.mp4",
+      "thumb": "media/v16_t.jpg",
+      "w": 520,
+      "h": 924
+    },
+    {
+      "type": "video",
+      "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-30-clown-church/v17.mp4",
+      "thumb": "media/v17_t.jpg",
+      "w": 520,
+      "h": 924
+    },
+    {
+      "type": "video",
       "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-30-clown-church/v07.mp4",
       "thumb": "media/v07_t.jpg",
       "w": 520,
       "h": 292,
       "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-30-clown-church/v07_full.mp4"
+    },
+    {
+      "type": "video",
+      "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-30-clown-church/v18.mp4",
+      "thumb": "media/v18_t.jpg",
+      "w": 520,
+      "h": 924
+    },
+    {
+      "type": "video",
+      "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-30-clown-church/v19.mp4",
+      "thumb": "media/v19_t.jpg",
+      "w": 520,
+      "h": 924
+    },
+    {
+      "type": "video",
+      "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-30-clown-church/v20.mp4",
+      "thumb": "media/v20_t.jpg",
+      "w": 520,
+      "h": 924
     },
     {
       "type": "video",

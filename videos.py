@@ -46,10 +46,16 @@ def dur_str(seconds):
     return f"{s // 60}:{s % 60:02d}"
 
 
-def night_items():
-    """Every clip already on an event page, pointed at that page's own poster."""
+def night_items(skip=()):
+    """Every clip already on an event page, pointed at that page's own poster.
+
+    `skip` is content/video.json's exclude_nights: a night whose clips stay on its
+    own dump but do not ride the tape. The tape is curated, the event page is the
+    record, and those are allowed to disagree."""
     out = []
     for slug in sorted(os.listdir(EVENTS)):
+        if slug in skip:
+            continue
         dj = os.path.join(EVENTS, slug, "data.json")
         if not os.path.isdir(os.path.join(EVENTS, slug)) or not os.path.exists(dj):
             continue
@@ -77,10 +83,14 @@ def night_items():
 
 
 def build():
-    cuts = json.load(open(os.path.join(ROOT, "content", "video.json")))["items"]
+    cfg = json.load(open(os.path.join(ROOT, "content", "video.json")))
+    cuts = cfg["items"]
     for c in cuts:
         c.setdefault("kind", "CUT")
-    items = cuts + night_items()
+    skip = set(cfg.get("exclude_nights", []))
+    if skip:
+        print(f"  nights kept off the tape: {', '.join(sorted(skip))}")
+    items = cuts + night_items(skip)
 
     # Newest first, and inside a day the authored cut leads the raw clip.
     # ⛔ reverse=True flips EVERY key, so `kind == "NIGHT"` sorted True first and

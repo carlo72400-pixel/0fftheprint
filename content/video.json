@@ -1,4 +1,7 @@
 {
+  "exclude_nights": [
+    "2026-08-14-blade-rave"
+  ],
   "items": [
     {
       "slug": "ae-loudest",
