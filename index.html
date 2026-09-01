@@ -3782,6 +3782,7 @@
   <a href="#music">Music</a>
   <a href="#roster">Roster</a>
   <a href="#work">The Work</a>
+  <a href="video/">The Tape</a>
   <a href="events/"><span class="nav-short">Events</span><span class="nav-long">Event Photos</span></a>
   <a href="#pitch">DM</a>
   
@@ -4007,6 +4008,17 @@
       </div>
       <div class="vid-tabs" id="vid-tabs"></div>
       <div class="vid-rail" id="vid-rail"></div>
+    </section>
+
+    <!-- ===== THE TAPE — the house's own video. THE REEL below is different on
+         purpose: that one is the roster's links out, this one is our footage. ===== -->
+    <section id="tape" hidden>
+      <div class="section-head">
+        <h2>The Tape <span class="accent">on video</span></h2>
+        <div class="sub">cuts &nbsp;·&nbsp; interviews &nbsp;·&nbsp; straight off the nights</div>
+      </div>
+      <div class="drops-rail" id="tape-rail"></div>
+      <a class="drops-more" href="video/">the whole tape &rarr;</a>
     </section>
 
     <!-- ===== THE CATALOG — every drop gets a number, finally shown ===== -->
@@ -4240,6 +4252,7 @@
 
   // ============ Fetch all content ============
   let site, creators, take, rotation, desk, roster, work;  // `take` gets live posts merged in below
+  let tape = [];
   let slate = {};
   let events = [];
   try {
@@ -4260,7 +4273,7 @@
         .then(r => { if (!r.ok) throw new Error('events HTTP ' + r.status); return r.json(); })
         .catch(err => { console.error('Content load failed: events.json', err); return EMPTY; });
 
-    const [s, c, t, m, d, r, w, sl, ev] = await Promise.all([
+    const [s, c, t, m, d, r, w, sl, ev, vid] = await Promise.all([
       grab('site.json', {}),
       grab('creators.json', EMPTY),
       grab('take.json', EMPTY),
@@ -4270,8 +4283,10 @@
       grab('work.json', EMPTY),
       grab('slate.json', {}),
       grabEvents(),
+      grab('video.json', EMPTY),
     ]);
     events = (ev && ev.items) || [];
+    tape = (vid && vid.items) || [];
 
     // ⛔ THESE MUST LAND BEFORE THE OVERLAY BLOCK BELOW. They used to sit
     // after it, which meant applyList() ran on an undefined `work`/`roster`
@@ -4530,6 +4545,39 @@
             '<span class="d">' + esc(when) + '</span>' +
           '</span>';
         dropsRail.appendChild(a);
+      });
+    }
+  }
+
+  // ---- THE TAPE ----
+  // The newest authored cuts. Posters only, no <video> on the homepage: 8 clips
+  // preloading would put ~70MB on the wire before anyone taps anything.
+  const tapeRail = document.getElementById('tape-rail');
+  if (tapeRail) {
+    const cuts = (tape || []).filter(v => v && v.src && v.poster).slice(0, 8);
+    if (!cuts.length) {
+      tapeRail.closest('section').remove();
+    } else {
+      tapeRail.closest('section').hidden = false;
+      cuts.forEach(v => {
+        const a = document.createElement('a');
+        a.className = 'drop';
+        a.href = 'video/';
+        // posters in video.json are written relative to video/, so ../ from there
+        // is the site root and everything else is relative to video/ itself
+        const cover = String(v.poster).startsWith('../')
+          ? String(v.poster).slice(3) : 'video/' + v.poster;
+        a.innerHTML =
+          '<span class="shot">' +
+            '<img src="' + esc(cover) + '" alt="" width="520" height="924" loading="lazy">' +
+            '<span class="n">' + esc(v.dur || 'clip') + '</span>' +
+          '</span>' +
+          '<span class="cap">' +
+            '<span class="v">' + esc(v.from || '') + '</span>' +
+            '<span class="t">' + esc(v.title || '') + '</span>' +
+            '<span class="d">watch &rarr;</span>' +
+          '</span>';
+        tapeRail.appendChild(a);
       });
     }
   }

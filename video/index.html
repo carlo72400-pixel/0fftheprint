@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>The Tape · 0FF THE PRINT</title>
+<meta name="description" content="Every piece of video the house has put out. Cuts, interviews and clips straight off the nights.">
+<meta property="og:title" content="The Tape · 0FF THE PRINT">
+<meta property="og:description" content="37 pieces. Cuts, interviews and clips straight off the nights.">
+<meta property="og:image" content="https://0fftheprint.com/video/preview.jpg">
+<meta name="theme-color" content="#0a0a0d">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#f2eef5;--muted:#8d8798;--line:rgba(255,255,255,.1);--pink:#ff79c6;--bg:#0a0a0d}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif}
+  .leopard-bar{height:7px;background:linear-gradient(90deg,#ff79c6,#caa9ff,#2f6bff,#ff79c6);background-size:300% 100%}
+  .wrap{max-width:1180px;margin:0 auto;padding:28px 18px 90px}
+  a.back{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--muted);text-decoration:none}
+  a.back:hover{color:var(--pink)}
+  h1{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
+    text-transform:uppercase;font-size:clamp(38px,9vw,72px);line-height:.95;margin:26px 0 8px}
+  .sub{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--muted)}
+  .tabs{display:flex;gap:8px;margin:24px 0 22px;flex-wrap:wrap}
+  .tab{background:transparent;color:var(--muted);border:1px solid var(--line);border-radius:999px;
+    padding:9px 16px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;
+    text-transform:uppercase;cursor:pointer;min-height:38px}
+  .tab.on{color:#12070f;background:var(--pink);border-color:var(--pink);font-weight:600}
+  /* CSS columns, not grid. The tape mixes 9:16 cuts with 16:9 night clips, and a
+     grid row is as tall as its tallest tile, so every short clip beside a tall one
+     leaves a hole. Columns pack by height instead. Same layout the event galleries
+     use. 2 columns on a phone: one 9:16 tile per row is a whole screen. */
+  .grid{columns:2 168px;column-gap:12px;margin-top:4px}
+  @media(min-width:760px){.grid{columns:4 210px}}
+  .card{background:transparent;border:0;padding:0;text-align:left;cursor:pointer;color:inherit;
+    display:block;width:100%;font:inherit;break-inside:avoid;margin:0 0 16px}
+  .shot{position:relative;display:block;border-radius:12px;overflow:hidden;
+    border:1px solid var(--line);background:#141119}
+  /* the poster's own aspect drives the tile. A lazy img with no w/h collapses
+     to 2px and takes the whole column with it. */
+  .shot img{width:100%;height:auto;display:block;aspect-ratio:9/16}
+  .shot img[width][height]{aspect-ratio:auto}
+  .card:hover .shot{border-color:var(--pink)}
+  .ply{position:absolute;inset:0;display:grid;place-items:center;font-size:30px;
+    color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.65);opacity:.92}
+  .dur{position:absolute;right:7px;bottom:7px;background:rgba(8,6,10,.82);
+    font-family:'JetBrains Mono',monospace;font-size:10.5px;padding:3px 7px;border-radius:5px;color:#fff}
+  .kd{position:absolute;left:7px;top:7px;font-family:'JetBrains Mono',monospace;font-size:9.5px;
+    letter-spacing:.16em;padding:3px 7px;border-radius:5px;background:rgba(8,6,10,.82);color:var(--pink)}
+  .ti{display:block;margin-top:9px;font-family:'Saira Condensed',sans-serif;font-style:italic;
+    font-weight:900;text-transform:uppercase;font-size:16px;line-height:1.04}
+  .fr{display:block;margin-top:3px;font-family:'JetBrains Mono',monospace;font-size:9.5px;
+    letter-spacing:.12em;text-transform:uppercase;color:var(--muted);line-height:1.45}
+  .empty{color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:12px;padding:30px 0}
+  /* ---- lightbox ---- */
+  .lb{position:fixed;inset:0;background:rgba(6,5,8,.96);display:none;z-index:60;
+    grid-template-rows:1fr auto;padding:14px}
+  .lb.on{display:grid}
+  .lb-stage{display:grid;place-items:center;min-height:0}
+  .lb video{max-width:100%;max-height:100%;border-radius:10px;background:#000;display:block}
+  .lb-bar{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap;padding:12px 4px 2px}
+  .lb-t{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
+    text-transform:uppercase;font-size:20px}
+  .lb-l{font-size:13px;color:var(--muted);flex:1 1 240px;line-height:1.5}
+  .lb a,.lb button{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--pink);text-decoration:none;background:transparent;
+    border:0;cursor:pointer;padding:8px 2px;min-height:38px}
+  .lb-x{position:absolute;top:10px;right:14px;font-size:26px;color:#fff;background:transparent;
+    border:0;cursor:pointer;line-height:1;padding:6px 10px}
+  .nav{position:absolute;top:50%;transform:translateY(-50%);font-size:34px;color:#fff;
+    background:transparent;border:0;cursor:pointer;padding:10px 14px;opacity:.75}
+  .nav:hover{opacity:1}.pv{left:2px}.nx{right:2px}
+  .foot{margin-top:46px;padding-top:20px;border-top:1px solid var(--line);
+    font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted);line-height:2}
+  .foot a{color:var(--pink);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="leopard-bar"></div>
+<div class="wrap">
+  <a class="back" href="../">&larr; 0FF THE PRINT</a>
+  <h1>The Tape</h1>
+  <div class="sub">37 pieces &nbsp;·&nbsp; 22 cuts &nbsp;·&nbsp; 15 off the nights</div>
+  <div class="tabs" id="tabs"></div>
+  <div class="grid" id="grid"></div>
+  <div class="foot">
+    Shot by 0FF THE PRINT &nbsp;·&nbsp; <a href="https://instagram.com/vamppsych">@vamppsych</a><br>
+    Every drop gets a number. <a href="../#catalog">The catalog &rarr;</a>
+  </div>
+</div>
+
+<div class="lb" id="lb">
+  <button class="lb-x" id="lbx" aria-label="Close">&times;</button>
+  <button class="nav pv" id="lbp" aria-label="Previous">&#8249;</button>
+  <button class="nav nx" id="lbn" aria-label="Next">&#8250;</button>
+  <div class="lb-stage"><video id="lbv" controls playsinline preload="none"></video></div>
+  <div class="lb-bar">
+    <span class="lb-t" id="lbt"></span>
+    <span class="lb-l" id="lbl"></span>
+    <a id="lbfrom" href="#"></a>
+    <a id="lbdl" href="#" target="_blank" rel="noopener" hidden>full res &darr;</a>
+  </div>
+</div>
+
+<script>
+const ITEMS = [{"slug": "ae-the-next-day", "title": "The Next Day", "kind": "CUT", "line": "Andrew E. at Sari-Sari the afternoon after his first Texas show.", "src": "https://carlo72400-pixel.github.io/0tp-media/video/0tp-014-andrew-e/the-next-day.mp4", "poster": "media/ae-the-next-day.jpg", "w": 720, "h": 1280, "dur": "0:40", "from": "They Will Think You Are A Lunatic", "link": "word/they-will-think-you-are-a-lunatic/", "date": "2026-08-30"}, {"slug": "ae-loudest", "title": "You Are The Loudest", "kind": "CUT", "line": "What San Antonio sounded like from the stage.", "src": "https://carlo72400-pixel.github.io/0tp-media/video/0tp-014-andrew-e/loudest.mp4", "poster": "../word/they-will-think-you-are-a-lunatic/loudest.jpg", "w": 520, "h": 924, "dur": "0:40", "from": "They Will Think You Are A Lunatic", "link": "word/they-will-think-you-are-a-lunatic/", "date": "2026-08-30"}, {"slug": "ae-handpick", "title": "A Handpick City", "kind": "CUT", "line": "He could have gone to Houston. He could have gone to Dallas.", "src": "https://carlo72400-pixel.github.io/0tp-media/video/0tp-014-andrew-e/handpick.mp4", "poster": "../word/they-will-think-you-are-a-lunatic/handpick.jpg", "w": 520, "h": 924, "dur": "0:31", "from": "They Will Think You Are A Lunatic", "link": "word/they-will-think-you-are-a-lunatic/", "date": "2026-08-30"}, {"slug": "ae-delicious", "title": "Delicious All The Time", "kind": "CUT", "line": "Whether a dish only tastes right made far from home. He refused the premise.", "src": "https://carlo72400-pixel.github.io/0tp-media/video/0tp-014-andrew-e/delicious.mp4", "poster": "../word/they-will-think-you-are-a-lunatic/delicious.jpg", "w": 520, "h": 924, "dur": "0:29", "from": "They Will Think You Are A Lunatic", "link": "word/they-will-think-you-are-a-lunatic/", "date": "2026-08-30"}, {"slug": "ae-lunatic", "title": "They Will Think You Are A Lunatic", "kind": "CUT", "line": "Rapping in the street in 1988, when nobody had a word for it.", "src": "https://carlo72400-pixel.github.io/0tp-media/video/0tp-014-andrew-e/lunatic.mp4", "poster": "../word/they-will-think-you-are-a-lunatic/lunatic.jpg", "w": 520, "h": 924, "dur": "0:25", "from": "They Will Think You Are A Lunatic", "link": "word/they-will-think-you-are-a-lunatic/", "date": "2026-08-30"}, {"slug": "ae-euphoria", "title": "The Golden Ladder", "kind": "CUT", "line": "Euphoria, 1988, two thousand pesos a month, and the demo tape he handed over on his way out.", "src": "https://carlo72400-pixel.github.io/0tp-media/video/0tp-014-andrew-e/euphoria.mp4", "poster": "../word/they-will-think-you-are-a-lunatic/euphoria.jpg", "w": 520, "h": 924, "dur": "0:53", "from": "They Will Think You Are A Lunatic", "link": "word/they-will-think-you-are-a-lunatic/", "date": "2026-08-30"}, {"slug": "ae-believe", "title": "Believe In Yourself", "kind": "CUT", "line": "What he tells the kids who want to do what he does.", "src": "https://carlo72400-pixel.github.io/0tp-media/video/0tp-014-andrew-e/believe.mp4", "poster": "../word/they-will-think-you-are-a-lunatic/believe.jpg", "w": 520, "h": 924, "dur": "0:27", "from": "They Will Think You Are A Lunatic", "link": "word/they-will-think-you-are-a-lunatic/", "date": "2026-08-30"}, {"slug": "cc-clown-church", "title": "Clown Church", "kind": "CUT", "line": "The night in one pass, cut to a church organ.", "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-30-clown-church/m01.mp4", "poster": "media/cc-clown-church.jpg", "w": 720, "h": 1280, "dur": "0:45", "from": "Clown Church \u00b7 Rah Rah Room", "link": "events/2026-08-30-clown-church/", "date": "2026-08-30"}, {"slug": "cc-go-clowns-go", "title": "Go Clowns Go", "kind": "CUT", "line": "The stage acts, cut hard. The banner behind them said it first.", "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-30-clown-church/m02.mp4", "poster": "media/cc-go-clowns-go.jpg", "w": 720, "h": 1280, "dur": "0:43", "from": "Clown Church \u00b7 Rah Rah Room", "link": "events/2026-08-30-clown-church/", "date": "2026-08-30"}, {"slug": "cc-slow-burn", "title": "Slow Burn", "kind": "CUT", "line": "The cool grade and the slowest music. Hoops, poms, an empty stage.", "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-30-clown-church/m03.mp4", "poster": "media/cc-slow-burn.jpg", "w": 720, "h": 1280, "dur": "0:44", "from": "Clown Church \u00b7 Rah Rah Room", "link": "events/2026-08-30-clown-church/", "date": "2026-08-30"}, {"slug": "cc-the-match", "title": "The Match", "kind": "CUT", "line": "Out on the patio, a clown in stripes refereeing two men on a mat. Original audio.", "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-30-clown-church/m05.mp4", "poster": "media/cc-the-match.jpg", "w": 720, "h": 1280, "dur": "0:39", "from": "Clown Church \u00b7 Rah Rah Room", "link": "events/2026-08-30-clown-church/", "date": "2026-08-30"}, {"slug": "cc-the-finish", "title": "The Finish", "kind": "CUT", "line": "How the match ended, and the room it emptied into.", "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-30-clown-church/m06.mp4", "poster": "media/cc-the-finish.jpg", "w": 720, "h": 1280, "dur": "0:31", "from": "Clown Church \u00b7 Rah Rah Room", "link": "events/2026-08-30-clown-church/", "date": "2026-08-30"}, {"slug": "cc-ringside", "title": "Ringside", "kind": "CUT", "line": "The crowd standing in a ring under the string lights, which is half of it.", "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-30-clown-church/m07.mp4", "poster": "media/cc-ringside.jpg", "w": 720, "h": 1280, "dur": "0:31", "from": "Clown Church \u00b7 Rah Rah Room", "link": "events/2026-08-30-clown-church/", "date": "2026-08-30"}, {"slug": "cc-the-room", "title": "The Room", "kind": "CUT", "line": "The patio between bouts. Full paint, no stage, nobody performing.", "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-30-clown-church/m08.mp4", "poster": "media/cc-the-room.jpg", "w": 720, "h": 1280, "dur": "0:33", "from": "Clown Church \u00b7 Rah Rah Room", "link": "events/2026-08-30-clown-church/", "date": "2026-08-30"}, {"slug": "cc-the-show", "title": "The Show", "kind": "CUT", "line": "Inside, on the stage, one act at a time.", "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-30-clown-church/m09.mp4", "poster": "media/cc-the-show.jpg", "w": 720, "h": 1280, "dur": "0:37", "from": "Clown Church \u00b7 Rah Rah Room", "link": "events/2026-08-30-clown-church/", "date": "2026-08-30"}, {"slug": "cc-after-dark", "title": "After Dark", "kind": "CUT", "line": "The back end of the night. A guitar, red on everything, the room still up.", "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-30-clown-church/m10.mp4", "poster": "media/cc-after-dark.jpg", "w": 720, "h": 1280, "dur": "0:31", "from": "Clown Church \u00b7 Rah Rah Room", "link": "events/2026-08-30-clown-church/", "date": "2026-08-30"}, {"slug": "2026-08-30-clown-church-01", "title": "Clown Church", "kind": "NIGHT", "line": "Clip 1 of 8, straight off the night.", "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-30-clown-church/v01.mp4", "poster": "../events/2026-08-30-clown-church/media/v01_t.jpg", "w": 520, "h": 292, "dur": "", "from": "Rah Rah Room \u00b7 08.30.26", "link": "events/2026-08-30-clown-church/", "date": "2026-08-30", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-30-clown-church/v01_full.mp4"}, {"slug": "2026-08-30-clown-church-02", "title": "Clown Church", "kind": "NIGHT", "line": "Clip 2 of 8, straight off the night.", "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-30-clown-church/v02.mp4", "poster": "../events/2026-08-30-clown-church/media/v02_t.jpg", "w": 520, "h": 292, "dur": "", "from": "Rah Rah Room \u00b7 08.30.26", "link": "events/2026-08-30-clown-church/", "date": "2026-08-30", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-30-clown-church/v02_full.mp4"}, {"slug": "2026-08-30-clown-church-03", "title": "Clown Church", "kind": "NIGHT", "line": "Clip 3 of 8, straight off the night.", "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-30-clown-church/v03.mp4", "poster": "../events/2026-08-30-clown-church/media/v03_t.jpg", "w": 520, "h": 924, "dur": "", "from": "Rah Rah Room \u00b7 08.30.26", "link": "events/2026-08-30-clown-church/", "date": "2026-08-30", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-30-clown-church/v03_full.mp4"}, {"slug": "2026-08-30-clown-church-04", "title": "Clown Church", "kind": "NIGHT", "line": "Clip 4 of 8, straight off the night.", "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-30-clown-church/v04.mp4", "poster": "../events/2026-08-30-clown-church/media/v04_t.jpg", "w": 520, "h": 292, "dur": "", "from": "Rah Rah Room \u00b7 08.30.26", "link": "events/2026-08-30-clown-church/", "date": "2026-08-30", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-30-clown-church/v04_full.mp4"}, {"slug": "2026-08-30-clown-church-05", "title": "Clown Church", "kind": "NIGHT", "line": "Clip 5 of 8, straight off the night.", "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-30-clown-church/v05.mp4", "poster": "../events/2026-08-30-clown-church/media/v05_t.jpg", "w": 520, "h": 292, "dur": "", "from": "Rah Rah Room \u00b7 08.30.26", "link": "events/2026-08-30-clown-church/", "date": "2026-08-30", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-30-clown-church/v05_full.mp4"}, {"slug": "2026-08-30-clown-church-06", "title": "Clown Church", "kind": "NIGHT", "line": "Clip 6 of 8, straight off the night.", "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-30-clown-church/v06.mp4", "poster": "../events/2026-08-30-clown-church/media/v06_t.jpg", "w": 520, "h": 292, "dur": "", "from": "Rah Rah Room \u00b7 08.30.26", "link": "events/2026-08-30-clown-church/", "date": "2026-08-30", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-30-clown-church/v06_full.mp4"}, {"slug": "2026-08-30-clown-church-07", "title": "Clown Church", "kind": "NIGHT", "line": "Clip 7 of 8, straight off the night.", "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-30-clown-church/v07.mp4", "poster": "../events/2026-08-30-clown-church/media/v07_t.jpg", "w": 520, "h": 292, "dur": "", "from": "Rah Rah Room \u00b7 08.30.26", "link": "events/2026-08-30-clown-church/", "date": "2026-08-30", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-30-clown-church/v07_full.mp4"}, {"slug": "2026-08-30-clown-church-08", "title": "Clown Church", "kind": "NIGHT", "line": "Clip 8 of 8, straight off the night.", "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-30-clown-church/v08.mp4", "poster": "../events/2026-08-30-clown-church/media/v08_t.jpg", "w": 520, "h": 292, "dur": "", "from": "Rah Rah Room \u00b7 08.30.26", "link": "events/2026-08-30-clown-church/", "date": "2026-08-30", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-30-clown-church/v08_full.mp4"}, {"slug": "ink-impossible", "title": "Impossible", "kind": "CUT", "line": "The AI tattoo pictures, and why the tiny ones on the fingers do not hold on real skin.", "src": "../ink/media/c01.mp4", "poster": "../ink/media/c01_t.jpg", "w": 520, "h": 924, "dur": "0:20", "from": "The Ink \u00b7 0TP-002", "link": "ink/", "date": "2026-08-26"}, {"slug": "ink-tears", "title": "Tears", "kind": "CUT", "line": "She cried in the chair. It was a piece for her dad.", "src": "../ink/media/c02.mp4", "poster": "../ink/media/c02_t.jpg", "w": 520, "h": 924, "dur": "0:20", "from": "The Ink \u00b7 0TP-002", "link": "ink/", "date": "2026-08-26"}, {"slug": "ink-risk", "title": "Take The Risk", "kind": "CUT", "line": "Think about it too long and you are already wasting time.", "src": "../ink/media/c03.mp4", "poster": "../ink/media/c03_t.jpg", "w": 520, "h": 924, "dur": "0:27", "from": "The Ink \u00b7 0TP-002", "link": "ink/", "date": "2026-08-26"}, {"slug": "ink-real-job", "title": "A Real Job", "kind": "CUT", "line": "The in laws came around once the money started coming in.", "src": "../ink/media/c04.mp4", "poster": "../ink/media/c04_t.jpg", "w": 520, "h": 924, "dur": "0:38", "from": "The Ink \u00b7 0TP-002", "link": "ink/", "date": "2026-08-26"}, {"slug": "ink-fake-skin", "title": "Fake Skin", "kind": "CUT", "line": "Get the apprenticeship and finish it. He learned that one the long way.", "src": "../ink/media/c05.mp4", "poster": "../ink/media/c05_t.jpg", "w": 520, "h": 924, "dur": "0:35", "from": "The Ink \u00b7 0TP-002", "link": "ink/", "date": "2026-08-26"}, {"slug": "ink-coverup", "title": "The Cover Up", "kind": "CUT", "line": "A full name across her back in seven inch letters, covered on the fourth of July.", "src": "../ink/media/c06.mp4", "poster": "../ink/media/c06_t.jpg", "w": 520, "h": 924, "dur": "0:40", "from": "The Ink \u00b7 0TP-002", "link": "ink/", "date": "2026-08-26"}, {"slug": "2026-08-16-the-mix-01", "title": "The Mix", "kind": "NIGHT", "line": "Clip 1 of 3, straight off the night.", "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-16-the-mix/v01.mp4", "poster": "../events/2026-08-16-the-mix/media/v01_t.jpg", "w": 520, "h": 924, "dur": "", "from": "The Mix \u00b7 08.16.26", "link": "events/2026-08-16-the-mix/", "date": "2026-08-16", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-16-the-mix/v01_full.mp4"}, {"slug": "2026-08-16-the-mix-02", "title": "The Mix", "kind": "NIGHT", "line": "Clip 2 of 3, straight off the night.", "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-16-the-mix/v02.mp4", "poster": "../events/2026-08-16-the-mix/media/v02_t.jpg", "w": 520, "h": 924, "dur": "", "from": "The Mix \u00b7 08.16.26", "link": "events/2026-08-16-the-mix/", "date": "2026-08-16", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-16-the-mix/v02_full.mp4"}, {"slug": "2026-08-16-the-mix-03", "title": "The Mix", "kind": "NIGHT", "line": "Clip 3 of 3, straight off the night.", "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-16-the-mix/v03.mp4", "poster": "../events/2026-08-16-the-mix/media/v03_t.jpg", "w": 520, "h": 924, "dur": "", "from": "The Mix \u00b7 08.16.26", "link": "events/2026-08-16-the-mix/", "date": "2026-08-16", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-16-the-mix/v03_full.mp4"}, {"slug": "2026-08-14-blade-rave-01", "title": "Blade Rave", "kind": "NIGHT", "line": "Clip 1 of 4, straight off the night.", "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-14-blade-rave/v01.mp4", "poster": "../events/2026-08-14-blade-rave/media/v01_t.jpg", "w": 520, "h": 292, "dur": "", "from": "Paper Tiger \u00b7 08.14.26", "link": "events/2026-08-14-blade-rave/", "date": "2026-08-14", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/v01_full.mp4"}, {"slug": "2026-08-14-blade-rave-02", "title": "Blade Rave", "kind": "NIGHT", "line": "Clip 2 of 4, straight off the night.", "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-14-blade-rave/v02.mp4", "poster": "../events/2026-08-14-blade-rave/media/v02_t.jpg", "w": 520, "h": 292, "dur": "", "from": "Paper Tiger \u00b7 08.14.26", "link": "events/2026-08-14-blade-rave/", "date": "2026-08-14", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/v02_full.mp4"}, {"slug": "2026-08-14-blade-rave-03", "title": "Blade Rave", "kind": "NIGHT", "line": "Clip 3 of 4, straight off the night.", "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-14-blade-rave/v03.mp4", "poster": "../events/2026-08-14-blade-rave/media/v03_t.jpg", "w": 520, "h": 292, "dur": "", "from": "Paper Tiger \u00b7 08.14.26", "link": "events/2026-08-14-blade-rave/", "date": "2026-08-14", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/v03_full.mp4"}, {"slug": "2026-08-14-blade-rave-04", "title": "Blade Rave", "kind": "NIGHT", "line": "Clip 4 of 4, straight off the night.", "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-08-14-blade-rave/v04.mp4", "poster": "../events/2026-08-14-blade-rave/media/v04_t.jpg", "w": 520, "h": 292, "dur": "", "from": "Paper Tiger \u00b7 08.14.26", "link": "events/2026-08-14-blade-rave/", "date": "2026-08-14", "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-08-14-blade-rave/v04_full.mp4"}];
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g,
+  c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+/* Only http(s) and same-origin relative paths. Nothing here should ever be able
+   to put javascript: in an href. */
+const safeUrl = u => {
+  const v = String(u == null ? '' : u).trim();
+  if (!v) return '';
+  return /^(https?:\/\/|\.{0,2}\/|[\w.-]+\/)/.test(v) && !/^javascript:/i.test(v) ? v : '';
+};
+
+const grid = document.getElementById('grid');
+const tabs = document.getElementById('tabs');
+let view = ITEMS;
+
+function draw(kind){
+  view = kind ? ITEMS.filter(i => i.kind === kind) : ITEMS;
+  if (!view.length){ grid.innerHTML = '<div class="empty">nothing here yet</div>'; return; }
+  grid.innerHTML = view.map((m,i) => {
+    const p = safeUrl(m.poster);
+    return '<button class="card" data-i="'+i+'" type="button">'
+      + '<span class="shot">'
+        + (p ? '<img src="'+esc(p)+'" alt="" loading="lazy" width="'+(m.w||520)+'" height="'+(m.h||924)+'">' : '')
+        + '<span class="kd">'+esc(m.kind)+'</span>'
+        + (m.dur ? '<span class="dur">'+esc(m.dur)+'</span>' : '')
+        + '<span class="ply">&#9654;</span>'
+      + '</span>'
+      + '<span class="ti">'+esc(m.title)+'</span>'
+      + '<span class="fr">'+esc(m.from)+'</span>'
+      + '</button>';
+  }).join('');
+}
+
+const mkTab = (label, kind) => {
+  const b = document.createElement('button');
+  b.className = 'tab'; b.type = 'button'; b.textContent = label;
+  b.addEventListener('click', () => {
+    [...tabs.children].forEach(c => c.classList.remove('on'));
+    b.classList.add('on'); draw(kind);
+  });
+  tabs.appendChild(b); return b;
+};
+const tAll = mkTab('All', null); mkTab('Cuts', 'CUT'); mkTab('Off the nights', 'NIGHT');
+tAll.classList.add('on');
+draw(null);
+
+/* ---- lightbox ---- */
+const lb=document.getElementById('lb'), lbv=document.getElementById('lbv'),
+      lbt=document.getElementById('lbt'), lbl=document.getElementById('lbl'),
+      lbf=document.getElementById('lbfrom'), lbd=document.getElementById('lbdl');
+let at = 0;
+
+function show(i){
+  at = (i + view.length) % view.length;
+  const m = view[at];
+  lbv.pause();
+  lbv.src = safeUrl(m.src);
+  lbv.poster = safeUrl(m.poster) || '';
+  lbt.textContent = m.title || '';
+  lbl.textContent = m.line || '';
+  lbf.textContent = m.from ? (m.from + ' \u2192') : '';
+  lbf.href = safeUrl(m.link) ? '../' + m.link : '#';
+  lbf.style.display = m.link ? '' : 'none';
+  if (m.full){ lbd.href = safeUrl(m.full); lbd.hidden = false; } else { lbd.hidden = true; }
+  lb.classList.add('on');
+  lbv.play().catch(()=>{});          /* a blocked autoplay is fine, controls are there */
+}
+/* ⛔ clear src on close or the clip keeps downloading behind the closed lightbox */
+function hide(){ lb.classList.remove('on'); lbv.pause(); lbv.removeAttribute('src'); lbv.load(); }
+
+grid.addEventListener('click', e => {
+  const b = e.target.closest('.card'); if (b) show(+b.dataset.i);
+});
+document.getElementById('lbx').addEventListener('click', hide);
+document.getElementById('lbp').addEventListener('click', () => show(at - 1));
+document.getElementById('lbn').addEventListener('click', () => show(at + 1));
+lb.addEventListener('click', e => { if (e.target === lb) hide(); });
+document.addEventListener('keydown', e => {
+  if (!lb.classList.contains('on')) return;
+  if (e.key === 'Escape') hide();
+  if (e.key === 'ArrowLeft') show(at - 1);
+  if (e.key === 'ArrowRight') show(at + 1);
+});
+</script>
+</body>
+</html>
