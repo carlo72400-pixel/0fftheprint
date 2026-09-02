@@ -46,12 +46,26 @@
     border:1px solid var(--line);background:#141119}
   /* the poster's own aspect drives the tile. A lazy img with no w/h collapses
      to 2px and takes the whole column with it. */
-  /* ⛔ THE TILE IS A FIXED 9:16 NOW, so a rail cannot go ragged. The 28 vertical
-     posters fit it exactly. The 7 landscape night clips are COVER cropped rather
-     than letterboxed, because a bar-boxed tile in a uniform rail reads as broken;
-     the uncropped frame is one tap away in the lightbox, which never crops. */
+  /* ⛔ THE TILE IS A FIXED 9:16, so a rail cannot go ragged. The 28 vertical
+     posters fit it exactly. The 7 landscape night clips are LETTERBOXED, his call:
+     a wide club frame centre cropped to 9:16 threw away most of the room, and the
+     room is the subject of a night clip. Contain, on the page's own ground so the
+     bars read as the card and not as a broken image. */
   .shot{aspect-ratio:9/16}
   .shot img{width:100%;height:100%;display:block;object-fit:cover}
+  .shot img.main{width:100%;height:100%}
+  .shot.wide{background:#0a0a0d}
+  .shot.wide img.main{object-fit:contain;position:relative;z-index:1}
+  /* A 16:9 frame contained in a 9:16 tile only fills 81/256 of it, so two thirds
+     of the card was dead black and read as a broken image. The dead space gets a
+     blurred, darkened copy of the SAME poster (same URL, so no second request) and
+     the tile reads as a deliberate window. Kept heavy and dim on purpose: it is
+     ground, not a second picture competing with the frame. */
+  .shot.wide .bed{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+    filter:blur(22px) saturate(1.15) brightness(.42);transform:scale(1.15);z-index:0}
+  .shot.wide::after{content:'';position:absolute;left:0;right:0;top:50%;
+    height:calc(100% * 81 / 256);transform:translateY(-50%);
+    box-shadow:0 0 0 1px rgba(255,255,255,.09);pointer-events:none;z-index:2}
   .card:hover .shot{border-color:var(--pink)}
   .ply{position:absolute;inset:0;display:grid;place-items:center;font-size:30px;
     color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.65);opacity:.92}
@@ -142,9 +156,12 @@ function draw(kind){
   if (note) note.textContent = view.length + ' in this rail · scroll →';
   grid.innerHTML = view.map((m,i) => {
     const p = safeUrl(m.poster);
+    // landscape posters are letterboxed into the 9:16 tile, not cropped
+    const wide = (m.w || 0) > (m.h || 0);
     return '<button class="card" data-i="'+i+'" type="button">'
-      + '<span class="shot">'
-        + (p ? '<img src="'+esc(p)+'" alt="" loading="lazy" width="'+(m.w||520)+'" height="'+(m.h||924)+'">' : '')
+      + '<span class="shot' + (wide ? ' wide' : '') + '">'
+        + (p ? (wide ? '<img class="bed" src="'+esc(p)+'" alt="" aria-hidden="true" loading="lazy">' : '')
+             + '<img class="main" src="'+esc(p)+'" alt="" loading="lazy" width="'+(m.w||520)+'" height="'+(m.h||924)+'">' : '')
         + '<span class="kd">'+esc(m.kind)+'</span>'
         + (m.dur ? '<span class="dur">'+esc(m.dur)+'</span>' : '')
         + '<span class="ply">&#9654;</span>'
