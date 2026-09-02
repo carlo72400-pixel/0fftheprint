@@ -2573,12 +2573,26 @@
   @media (max-width:640px){.slate-latest .c{display:none;}}
 
   .desk-play{background:rgba(255,121,198,.2);border-color:rgba(255,121,198,.6);color:#ffd7ee;}
+  /* THE WORD is a rail, same grammar as the drops, the run and the tape. It was
+     the one section on this page still laid out as a wall of tiles, which made
+     the newest story look like the oldest one. A rail says "these are in order,
+     newest first" without a single word of chrome.
+     ⚠️ A horizontal scroller has to LOOK scrollable or nobody scrolls it. That
+     already shipped broken once on the nav. Two affordances, same as the other
+     rails: a real styled scrollbar, and column widths that leave the next card
+     PEEKING at the frame edge instead of ending flush. */
   .desk-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:14px;
+    display:grid;grid-auto-flow:column;grid-auto-columns:minmax(206px,1fr);
+    gap:14px;overflow-x:auto;scroll-snap-type:x proximity;
+    padding-bottom:10px;-webkit-overflow-scrolling:touch;
+    scrollbar-width:thin;scrollbar-color:var(--pink-deep) transparent;
   }
-  @media (max-width:720px){.desk-grid{grid-template-columns:repeat(2,1fr);gap:10px;}}
+  .desk-grid::-webkit-scrollbar{height:6px;}
+  .desk-grid::-webkit-scrollbar-thumb{background:var(--pink-deep);border-radius:999px;}
+  .desk-item{scroll-snap-align:start;}
+  /* 160 was too narrow for a 4:5 tile carrying a kicker, a title and two lines
+     of dek. 200 keeps the card readable and still leaves the next one peeking. */
+  @media (max-width:720px){.desk-grid{grid-auto-columns:minmax(200px,70vw);gap:10px;}}
   /* Story cards used to SPAN TWO of three columns at 16/9, so six stories was
      six banners and the section was a wall you scrolled past. Every item here
      carries a dek, so every item got the treatment and the emphasis meant
@@ -4074,6 +4088,7 @@
       <div id="word-cta"></div>
       <div class="desk-filters" id="desk-filters"></div>
       <div class="desk-grid" id="desk-grid"><!-- JS populates --></div>
+      <a class="drops-more" href="#catalog">every drop gets a number &rarr;</a>
     </section>
 
 
