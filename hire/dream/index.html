@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Giancarlo Ortiz | Dream in Log</title>
+<meta name="description" content="A portfolio you grade back to life. Giancarlo Ortiz, director and colorist, San Antonio TX.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,300;1,9..144,600&family=Instrument+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --fog:#757770; --log:#1A1C1B; --void:#08090C;
+  --amber:#FF9A3D; --blood:#F0233F; --teal:#1BC4D1; --bruise:#7E4CFF; --cream:#F4ECDD;
+  --grade:0; --mx:0; --my:0;
+  --serif:'Fraunces',Georgia,serif; --mono:'Space Mono','Courier New',monospace; --sans:'Instrument Sans',-apple-system,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--log);color:var(--cream);font-family:var(--sans);font-size:16px;line-height:1.6;overflow-x:hidden}
+::selection{background:var(--bruise);color:var(--cream)}
+a{color:inherit}
+
+/* ---------- the room (fixed atmosphere) ---------- */
+#room{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background:radial-gradient(120% 90% at 50% 35%, #232524 0%, var(--log) 55%, #0d0e10 100%)}
+.fogl{position:absolute;width:140vmax;height:140vmax;border-radius:50%;filter:blur(60px);opacity:.5;will-change:transform}
+.fogl.grey{background:radial-gradient(circle, rgba(117,119,112,.32) 0%, rgba(117,119,112,0) 62%)}
+.fogl.violet{background:radial-gradient(circle, rgba(126,76,255,.20) 0%, rgba(126,76,255,0) 62%)}
+.fogl.teal{background:radial-gradient(circle, rgba(27,196,209,.16) 0%, rgba(27,196,209,0) 60%)}
+.fogl.amber{background:radial-gradient(circle, rgba(255,154,61,.16) 0%, rgba(255,154,61,0) 58%)}
+.fogl.grey{opacity:calc(.55*(1 - var(--grade)))}
+.fogl.violet{opacity:calc(.42*var(--grade))}
+.fogl.teal{opacity:calc(.36*var(--grade))}
+.fogl.amber{opacity:calc(.3*var(--grade))}
+#f1{top:-46vmax;left:-38vmax;animation:drift1 44s ease-in-out infinite alternate}
+#f2{bottom:-52vmax;right:-40vmax;animation:drift2 56s ease-in-out infinite alternate}
+#f3{top:-34vmax;right:-48vmax;animation:drift1 63s ease-in-out infinite alternate-reverse}
+#f4{bottom:-44vmax;left:-46vmax;animation:drift2 49s ease-in-out infinite alternate-reverse}
+@keyframes drift1{from{transform:translate3d(calc(var(--mx)*18px),calc(var(--my)*12px),0) scale(1)}to{transform:translate3d(calc(6vw + var(--mx)*18px),calc(3vh + var(--my)*12px),0) scale(1.12)}}
+@keyframes drift2{from{transform:translate3d(calc(var(--mx)*-24px),calc(var(--my)*-14px),0) scale(1.08)}to{transform:translate3d(calc(-5vw + var(--mx)*-24px),calc(-4vh + var(--my)*-14px),0) scale(.96)}}
+#dust{position:absolute;inset:0;opacity:.5}
+#breath{position:absolute;inset:0;background:#000;opacity:.06;animation:breathe 7s ease-in-out infinite}
+@keyframes breathe{0%,100%{opacity:.075}50%{opacity:.015}}
+#vig{position:absolute;inset:0;background:radial-gradient(ellipse at center, transparent 46%, rgba(5,6,8,.72) 100%)}
+
+/* the room carries the log-to-color arc: grey fog crossfades to graded fog as --grade rises.
+   content develops per-element so a developed frame always shows TRUE color */
+.station>.inner{opacity:calc(.88 + .12*var(--grade))}
+
+/* ---------- the hanging bulb ---------- */
+#rig{position:fixed;top:0;left:0;z-index:60;pointer-events:none}
+#cord{position:fixed;top:0;width:2px;background:linear-gradient(180deg,#3a3c3b,#141615);transform-origin:top center;z-index:60;pointer-events:none}
+#bulb{position:fixed;z-index:61;width:46px;height:46px;margin:-23px 0 0 -23px;cursor:grab;pointer-events:auto;touch-action:none}
+#bulb:active{cursor:grabbing}
+#bulb .glass{position:absolute;inset:8px;border-radius:50%;background:radial-gradient(circle at 42% 38%, #fff8e8 0%, var(--amber) 34%, rgba(240,35,63,.85) 72%, rgba(240,35,63,0) 100%);box-shadow:0 0 18px 6px rgba(255,154,61,.55), 0 0 70px 26px rgba(255,154,61,.22), 0 0 160px 70px rgba(240,35,63,.10)}
+#bulb .neck{position:absolute;top:-2px;left:50%;width:10px;height:12px;margin-left:-5px;background:#2c2e2d;border-radius:2px}
+#halo{position:fixed;z-index:2;width:0;height:0;pointer-events:none;border-radius:50%;background:radial-gradient(circle, rgba(255,220,170,.16) 0%, rgba(255,154,61,.08) 40%, transparent 70%);transform:translate(-50%,-50%)}
+#bulbhint{position:fixed;z-index:62;font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--cream);text-shadow:0 1px 6px #000;opacity:0;transition:opacity .6s;pointer-events:none;white-space:nowrap}
+#bulbhint.on{opacity:.85}
+
+/* ---------- structure ---------- */
+main{position:relative;z-index:10}
+.station{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:14vh 22px}
+.place{position:absolute;top:9vh;left:50%;transform:translateX(-50%);text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:5px;color:var(--cream);opacity:.55;white-space:nowrap}
+.place::before{content:'· · '}.place::after{content:' · ·'}
+.inner{max-width:980px;width:100%}
+.scrim{background:rgba(8,9,12,.55);backdrop-filter:blur(3px);border:1px solid rgba(244,236,221,.09);padding:34px 36px;border-radius:2px}
+h1,h2{font-family:var(--serif);font-weight:600;line-height:1.06}
+.whisper{font-family:var(--mono);font-size:10.5px;letter-spacing:1.6px;color:rgba(244,236,221,.6)}
+
+/* reveal on approach */
+.fade{opacity:0;transform:translateY(34px) scale(.985);transition:opacity 1.1s ease,transform 1.1s cubic-bezier(.19,1,.22,1)}
+.fade.in{opacity:1;transform:none}
+
+/* ---------- arrival ---------- */
+#arrival{min-height:112vh;flex-direction:column;text-align:center}
+#arrival h1{font-size:clamp(44px,8.4vw,110px);font-weight:300;letter-spacing:.5px}
+#arrival h1 b{font-weight:900}
+#arrival .tag{font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(19px,2.6vw,28px);color:rgba(244,236,221,.82);margin-top:18px}
+#arrival .who{max-width:520px;margin:26px auto 0;color:rgba(244,236,221,.75);font-size:15px}
+#arrival .down{margin-top:7vh;font-family:var(--mono);font-size:11px;letter-spacing:3px;opacity:.5;animation:sink 2.6s ease-in-out infinite}
+@keyframes sink{0%,100%{transform:translateY(0)}50%{transform:translateY(9px)}}
+
+/* ---------- developing wall ---------- */
+#wall .frames{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,3vw,34px);perspective:900px}
+.frame{position:relative;aspect-ratio:16/10;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.19,1,.22,1)}
+.frame .art{position:absolute;inset:0;overflow:hidden;border:1px solid rgba(244,236,221,.14);box-shadow:0 18px 60px -18px rgba(0,0,0,.85);background:#101211}
+.frame img{width:100%;height:100%;object-fit:cover;display:block}
+.frame .raw{position:absolute;inset:0}
+.frame .raw img{filter:saturate(.12) contrast(.68) brightness(1.22)}
+.frame .dev{position:absolute;inset:0;clip-path:circle(calc(var(--d,0)*142%) at var(--dx,50%) var(--dy,50%));transition:clip-path .18s linear}
+.frame .lut{position:absolute;left:0;right:0;bottom:-24px;display:flex;justify-content:space-between;gap:8px;font-family:var(--mono);font-size:10px;letter-spacing:1.4px;color:rgba(244,236,221,.55);opacity:0;transition:opacity .7s}
+.frame .lut span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.frame.lit .lut{opacity:1}
+.frame.lit{transform:translateZ(26px)}
+.frame:nth-child(2){transform:translateY(26px)}
+.frame:nth-child(5){transform:translateY(-18px)}
+.frame:nth-child(2).lit{transform:translateY(26px) translateZ(26px)}
+.frame:nth-child(5).lit{transform:translateY(-18px) translateZ(26px)}
+.frame.sway{animation:sway 9s ease-in-out infinite}
+.frame:nth-child(odd).sway{animation-duration:11s;animation-delay:-4s}
+@keyframes sway{0%,100%{rotate:.5deg}50%{rotate:-.6deg}}
+#wall .lede{max-width:560px;margin:0 auto 8vh;text-align:center;color:rgba(244,236,221,.8)}
+#wall .lede h2{font-size:clamp(30px,4.6vw,52px);margin-bottom:14px}
+#wallmeter{margin:7vh auto 0;max-width:400px;text-align:center}
+#wallmeter .bar{height:2px;background:rgba(244,236,221,.14);position:relative;margin-top:10px}
+#wallmeter .bar i{position:absolute;left:0;top:0;bottom:0;width:calc(var(--grade)*100%);background:linear-gradient(90deg,var(--teal),var(--amber),var(--blood));transition:width .3s}
+
+/* ---------- the line (sa current) ---------- */
+#line .wire{position:relative;padding-top:34px}
+#line .wire::before{content:'';position:absolute;top:0;left:-6vw;right:-6vw;height:2px;background:linear-gradient(90deg,transparent,rgba(244,236,221,.28) 12%,rgba(244,236,221,.28) 88%,transparent);transform:rotate(-.6deg)}
+#line .tapes{display:flex;gap:clamp(12px,3vw,30px);justify-content:center;align-items:flex-start}
+.tape{position:relative;width:min(230px,28vw);transform-origin:top center;animation:hang 8s ease-in-out infinite}
+.tape:nth-child(2){animation-delay:-3s;margin-top:22px}
+.tape:nth-child(3){animation-delay:-6s}
+@keyframes hang{0%,100%{rotate:1deg}50%{rotate:-1.1deg}}
+.tape::before{content:'';position:absolute;top:-30px;left:50%;width:1px;height:30px;background:rgba(244,236,221,.3)}
+.tape video{width:100%;aspect-ratio:9/16;object-fit:cover;display:block;border:1px solid rgba(244,236,221,.14);background:#000;filter:saturate(calc(.22 + .78*var(--grade))) contrast(calc(.84 + .16*var(--grade)))}
+.tape .whisper{display:block;text-align:center;margin-top:9px}
+#line .lede{text-align:center;max-width:560px;margin:0 auto 9vh;color:rgba(244,236,221,.8)}
+#line .lede h2{font-size:clamp(28px,4vw,46px);margin-bottom:12px}
+
+/* ---------- screening ---------- */
+#beam{position:absolute;top:0;left:50%;width:min(88vw,980px);height:78%;transform:translateX(-50%);background:linear-gradient(180deg,rgba(244,236,221,.10) 0%,rgba(244,236,221,.028) 55%,transparent 100%);clip-path:polygon(46% 0,54% 0,100% 100%,0 100%);filter:blur(2px);pointer-events:none}
+#screening .screen{position:relative;border:1px solid rgba(244,236,221,.16);box-shadow:0 0 90px 8px rgba(244,236,221,.06), 0 34px 90px -30px #000}
+#screening .yt{position:relative;width:100%;aspect-ratio:16/9;background:#000}
+#screening iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+#screening .marquee{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+#screening .marquee h2{font-size:clamp(28px,4.4vw,50px)}
+#screening .award{font-family:var(--mono);font-size:10.5px;letter-spacing:1.6px;color:var(--amber)}
+.orbits{display:flex;gap:18px;margin-top:22px;justify-content:center}
+.orbit{width:min(300px,44vw)}
+.orbit .yt2{position:relative;aspect-ratio:16/9;background:#000;border:1px solid rgba(244,236,221,.12)}
+.orbit iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.orbit .whisper{display:block;margin-top:7px;text-align:center}
+
+/* ---------- call sheet ---------- */
+#callsheet .sheet{background:rgba(10,11,14,.78);border:1px solid rgba(244,236,221,.14);padding:clamp(24px,4vw,44px)}
+#callsheet h2{font-size:clamp(30px,4.6vw,52px);text-align:center}
+#callsheet .sub{text-align:center;color:rgba(244,236,221,.68);margin:10px 0 26px;font-size:14.5px}
+.menu{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1px;background:rgba(244,236,221,.1);border:1px solid rgba(244,236,221,.1)}
+.mi{background:rgba(8,9,12,.92);padding:16px 18px}
+.mi .k{font-family:var(--mono);font-size:9.5px;letter-spacing:1.6px;color:var(--teal);margin-bottom:5px}
+.mi .n{font-weight:600;font-size:15px}
+.mi .p{font-family:var(--serif);font-weight:600;font-size:26px;color:var(--amber);margin:2px 0 5px}
+.mi .d{font-size:12.5px;color:rgba(244,236,221,.6);line-height:1.5}
+#callsheet .fine{margin-top:18px;text-align:center;font-family:var(--mono);font-size:10px;letter-spacing:1.2px;color:rgba(244,236,221,.5);line-height:2}
+#callsheet .fine b{color:var(--amber);font-weight:400}
+
+/* ---------- exit ---------- */
+#exit{min-height:118vh;flex-direction:column;text-align:center}
+#door{position:relative;width:150px;height:230px;margin:0 auto 5vh;background:linear-gradient(180deg,rgba(244,236,221,.92),rgba(255,200,140,.85));box-shadow:0 0 60px 14px rgba(244,236,221,.35), 0 0 220px 80px rgba(255,154,61,.16);clip-path:polygon(8% 0,92% 0,100% 100%,0 100%)}
+#door::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.14),transparent 30%,transparent 70%,rgba(0,0,0,.14))}
+#exit h2{font-size:clamp(34px,6vw,72px);font-weight:300}
+#exit h2 b{font-weight:900}
+#exit .mail{display:inline-block;margin-top:26px;font-family:var(--serif);font-size:clamp(20px,3.2vw,32px);color:var(--cream);text-decoration:none;border:1px solid rgba(255,154,61,.5);padding:14px 34px;transition:background .3s,color .3s}
+#exit .mail:hover{background:var(--amber);color:#1a1006}
+#exit .creds{margin-top:6vh;font-family:var(--mono);font-size:10.5px;letter-spacing:2.4px;color:rgba(244,236,221,.55);line-height:2.4}
+#exit .creds b{color:var(--cream);font-weight:400}
+#exit .socials{margin-top:16px;font-size:13.5px;color:rgba(244,236,221,.6)}
+#exit .socials a{margin:0 8px}
+
+/* ---------- chrome: skip ember + back link + leader flash ---------- */
+#ember{position:fixed;right:18px;bottom:18px;z-index:70;display:flex;align-items:center;gap:8px;background:rgba(8,9,12,.7);border:1px solid rgba(240,35,63,.4);padding:9px 13px;font-family:var(--mono);font-size:10px;letter-spacing:1.6px;color:var(--cream);text-decoration:none;transition:border-color .3s,background .3s}
+#ember i{width:7px;height:7px;border-radius:50%;background:var(--blood);box-shadow:0 0 10px var(--blood);animation:emberp 2.4s ease-in-out infinite}
+@keyframes emberp{50%{opacity:.35}}
+#ember:hover{border-color:var(--blood);background:rgba(240,35,63,.14)}
+#back{position:fixed;left:18px;bottom:18px;z-index:70;font-family:var(--mono);font-size:10px;letter-spacing:1.6px;color:rgba(244,236,221,.55);text-decoration:none;background:rgba(8,9,12,.7);border:1px solid rgba(244,236,221,.14);padding:9px 13px}
+#back:hover{color:var(--cream)}
+#leader{position:fixed;inset:0;z-index:90;background:#0e0f11;display:none;align-items:center;justify-content:center;pointer-events:none}
+#leader.flash{display:flex;animation:leadout .45s steps(1) forwards}
+#leader .num{font-family:var(--serif);font-weight:900;font-size:34vh;color:var(--cream)}
+#leader .ring{position:absolute;width:56vh;height:56vh;border:3px solid rgba(244,236,221,.55);border-radius:50%}
+@keyframes leadout{99%{opacity:1}100%{opacity:0;display:none}}
+
+/* ---------- responsive + reduced motion ---------- */
+@media(max-width:760px){
+  #wall .frames{grid-template-columns:repeat(2,1fr);row-gap:44px}
+  .frame .lut{font-size:8.5px;bottom:-20px;letter-spacing:.8px}
+  #ember,#back{font-size:9px;padding:7px 9px}
+  .frame:nth-child(2),.frame:nth-child(5){transform:none}
+  .frame:nth-child(2).lit,.frame:nth-child(5).lit{transform:translateZ(26px)}
+  #line .tapes{flex-wrap:wrap}
+  .tape{width:min(46vw,220px)}
+  .orbits{flex-direction:column;align-items:center}
+  .scrim{padding:24px 20px}
+  #bulbhint{font-size:10px}
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none !important;transition:none !important}
+  html{scroll-behavior:auto}
+  .fade{opacity:1;transform:none}
+  #bulb,#cord,#halo,#bulbhint{display:none}
+  .frame .dev{clip-path:none}
+  .frame .raw{display:none}
+  :root{--grade:1}
+}
+</style>
+</head>
+<body>
+
+<div id="room" aria-hidden="true">
+  <div class="fogl grey" id="f1"></div>
+  <div class="fogl violet" id="f2"></div>
+  <div class="fogl teal" id="f3"></div>
+  <div class="fogl amber" id="f4"></div>
+  <canvas id="dust"></canvas>
+  <div id="breath"></div>
+  <div id="vig"></div>
+</div>
+<div id="halo" aria-hidden="true"></div>
+<div id="cord" aria-hidden="true"></div>
+<div id="bulb" role="slider" aria-label="Hanging bulb. Drag it near a frame to develop the color grade" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
+  <span class="neck"></span><span class="glass"></span>
+</div>
+<div id="bulbhint">GRAB THE BULB. LIGHT THE FRAMES.</div>
+
+<div id="leader" aria-hidden="true"><div class="ring"></div><div class="num">2</div></div>
+
+<a id="ember" href="#callsheet"><i></i>SKIP TO THE CALL SHEET</a>
+<a id="back" href="../index.html">WAKE UP · MAIN SITE</a>
+
+<main>
+
+  <section class="station" id="arrival">
+    <div class="inner fade">
+      <p class="whisper" style="letter-spacing:4px">SAN ANTONIO, TX · 3:04 AM · UNGRADED</p>
+      <h1>GIANCARLO <b>ORTIZ</b></h1>
+      <p class="tag">Dream in log. Wake in color.</p>
+      <p class="who">Director and colorist. You are standing inside raw footage, flat and grey, the way every frame looks before I touch it. Everything you develop in here stays developed. Walk.</p>
+      <div class="down">SCROLL TO WALK ▾</div>
+    </div>
+  </section>
+
+  <section class="station" id="wall">
+    <span class="place">THE DEVELOPING WALL</span>
+    <div class="inner">
+      <div class="lede fade">
+        <h2>Grade it yourself</h2>
+        <p>These are my frames from a 65,000 seat night at the Alamodome. They hang here in log. Drag the bulb across them and my grade develops where the light passes. The room follows.</p>
+      </div>
+      <div class="frames" id="framesbox"></div>
+      <div id="wallmeter" class="fade">
+        <span class="whisper">ROOM GRADE · <span id="gradepct">0</span>% DEVELOPED</span>
+        <div class="bar"><i></i></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="station" id="line">
+    <span class="place">THE LINE · FIELD WORK</span>
+    <div class="inner">
+      <div class="lede fade">
+        <h2>Hung to dry, same night</h2>
+        <p>Client tapes for the San Antonio Current. Shot solo, cut the same night, posted while the event was still warm. This is the fast lane of the job.</p>
+      </div>
+      <div class="wire fade">
+        <div class="tapes">
+          <div class="tape"><video muted loop playsinline preload="none" data-src="../assets/sacurrent/tape1_topshelf.mp4"></video><span class="whisper">TOP SHELF · FOOD FEST</span></div>
+          <div class="tape"><video muted loop playsinline preload="none" data-src="../assets/sacurrent/tape2_culinaria.mp4"></video><span class="whisper">SERVICE · ON THE LINE</span></div>
+          <div class="tape"><video muted loop playsinline preload="none" data-src="../assets/sacurrent/tape3_beerfest.mp4"></video><span class="whisper">BEER FEST · FIELD DAY</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="station" id="screening">
+    <span class="place">THE SCREENING</span>
+    <div id="beam" aria-hidden="true"></div>
+    <div class="inner">
+      <div class="fade">
+        <div class="marquee">
+          <h2>VOLUME</h2>
+          <span class="award">★ COURSE DIRECTOR'S AWARD · FULL SAIL</span>
+        </div>
+        <div class="screen">
+          <div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/pQ0W-conqwE" title="VOLUME, a short film by Giancarlo Ortiz" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+        </div>
+        <p class="whisper" style="display:block;margin-top:10px;text-align:center">WRITTEN, DIRECTED, EDITED, AND COLORED BY G. ORTIZ · 2026</p>
+        <div class="orbits">
+          <div class="orbit">
+            <div class="yt2"><iframe src="https://www.youtube-nocookie.com/embed/KuMfghV9hmA" title="VOLUME BTS episode one, rehearsal" loading="lazy" allowfullscreen></iframe></div>
+            <span class="whisper">THE DREAM REMEMBERS THE SHOOT · BTS 01</span>
+          </div>
+          <div class="orbit">
+            <div class="yt2"><iframe src="https://www.youtube-nocookie.com/embed/psxQ4pLF4fw" title="VOLUME BTS episode two, the process" loading="lazy" allowfullscreen></iframe></div>
+            <span class="whisper">THE EDIT, THE GRADE, THE FINISH · BTS 02</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="station" id="callsheet">
+    <span class="place">THE CALL SHEET</span>
+    <div class="inner fade">
+      <div class="sheet">
+        <h2>What it runs</h2>
+        <p class="sub">Market rates, pro pipeline. Same FX6, same custom color, same deadline discipline. Full card on the main site.</p>
+        <div class="menu">
+          <div class="mi"><div class="k">EVENTS · FLAGSHIP</div><div class="n">Event Recap</div><div class="p">$600</div><div class="d">2 hrs on site, 60 to 90s delivered within 24 hours, 3 verticals, graded in a custom look</div></div>
+          <div class="mi"><div class="k">EVENTS</div><div class="n">Event Full</div><div class="p">$900</div><div class="d">4 hrs, everything in Recap, 5 verticals, 4K stills pulled from the footage</div></div>
+          <div class="mi"><div class="k">PERSONAL · PHOTO</div><div class="n">Follow Day</div><div class="p">$1,400</div><div class="d">Up to 6 hrs shadowing your day, candid graded stills, gallery within 48 hours</div></div>
+          <div class="mi"><div class="k">COMMERCIAL</div><div class="n">Spot 30</div><div class="p">$2,500</div><div class="d">30 second commercial, half-day directed shoot, all formats, 2 revision rounds</div></div>
+          <div class="mi"><div class="k">COMMERCIAL · FLAGSHIP</div><div class="n">Full Production</div><div class="p">$7,500</div><div class="d">Script to screen, storyboards, full-day shoot, 60s hero plus every cutdown</div></div>
+          <div class="mi"><div class="k">ARTISTS</div><div class="n">Music Video</div><div class="p">$1,750</div><div class="d">Half-day shoot, performance plus b-roll, graded in-house, teaser for the drop</div></div>
+        </div>
+        <p class="fine">50% DEPOSIT BOOKS THE DATE · NET 15 · <b>EVENT RECAP IN 24 HOURS, FULL EVENT AND FOLLOW DAY IN 48, COMMERCIAL BY BOOKING DATE</b> · COMMERCIAL TIERS INCLUDE 2 REVISION ROUNDS<br><a href="../index.html#rates" style="color:var(--teal)">SEE THE FULL RATE CARD →</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="station" id="exit">
+    <div class="inner fade">
+      <span class="place" style="position:static;display:block;margin-bottom:6vh">THE EXIT</span>
+      <div id="door"></div>
+      <h2>You graded the room.<br><b>Now book the guy.</b></h2>
+      <a class="mail" href="mailto:carlo72400@gmail.com?subject=Booking%20request">carlo72400@gmail.com</a>
+      <p class="creds"><b>DIRECTOR · COLORIST · EDITOR · SHOOTER</b><br>GIANCARLO ORTIZ · SAN ANTONIO TX · FUTURE FILM DIRECTOR, McCONAUGHEY ARC IN PROGRESS</p>
+      <p class="socials">
+        <a href="https://www.tiktok.com/@vamp.psych" target="_blank" rel="noopener">TikTok</a> ·
+        <a href="https://www.instagram.com/vamppsych" target="_blank" rel="noopener">Instagram</a> ·
+        <a href="https://www.youtube.com/@Vamppsych" target="_blank" rel="noopener">YouTube</a> ·
+        <a href="../index.html">Main site</a>
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<script>
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const COARSE = matchMedia('(pointer:coarse)').matches;
+const R = document.documentElement;
+/* viewport dims cached against zero-size blips (backgrounded webviews report 0) */
+let VW = 1280, VH = 800;
+function measure(){
+  const w = innerWidth || R.clientWidth, h = innerHeight || R.clientHeight;
+  if(w > 0) VW = w;
+  if(h > 0) VH = h;
+}
+measure();
+addEventListener('resize', measure);
+addEventListener('visibilitychange', measure);
+
+/* ---------- frames data: real stills, real look names ---------- */
+const STILLS = [
+  ['01_globe-wide.jpg','FR_01 · GLOBE WIDE','EDITORIAL_SLUDGE'],
+  ['05_at-the-mic.jpg','FR_02 · AT THE MIC','EDITORIAL_SLUDGE'],
+  ['07_red-crowd.jpg','FR_03 · RED CROWD','SLEAZE'],
+  ['10_molten-dome.jpg','FR_04 · MOLTEN DOME','NIGHT_CITY'],
+  ['09_lone-profile.jpg','FR_05 · LONE PROFILE','AVANT_EDITORIAL'],
+  ['12_finale.jpg','FR_06 · FINALE','NIGHT_CITY']
+];
+const box = document.getElementById('framesbox');
+STILLS.forEach(([f,tag,lut])=>{
+  const el=document.createElement('div');el.className='frame sway fade';
+  el.innerHTML=`<div class="art">
+      <div class="raw"><img src="../assets/stills/${f}" alt="" loading="lazy"></div>
+      <div class="dev"><img src="../assets/stills/${f}" alt="${tag.split('·')[1]||'graded still'}, graded" loading="lazy"></div>
+    </div>
+    <div class="lut"><span>${tag}</span><span>${lut}</span></div>`;
+  box.appendChild(el);
+});
+const frames=[...document.querySelectorAll('.frame')];
+
+/* ---------- grade state ---------- */
+let developed = frames.map(()=>0);
+let grade = 0;
+function setGrade(){
+  const devAvg = developed.reduce((a,b)=>a+b,0)/developed.length;
+  const scrollBase = Math.min(.35, (scrollY/Math.max(1,document.body.scrollHeight-VH))*.45);
+  grade = Math.min(1, scrollBase + devAvg*.75);
+  R.style.setProperty('--grade', grade.toFixed(3));
+  const pct=document.getElementById('gradepct'); if(pct) pct.textContent=Math.round(grade*100);
+  document.getElementById('bulb').setAttribute('aria-valuenow',Math.round(grade*100));
+}
+
+/* ---------- the bulb ---------- */
+(function(){
+  if(REDUCED) return;
+  const bulb=document.getElementById('bulb'), cord=document.getElementById('cord'),
+        halo=document.getElementById('halo'), hint=document.getElementById('bulbhint');
+  let bx=VW*.72, by=VH*.34, tx=bx, ty=by, anchor=VW*.72;
+  let dragging=false, everDragged=false, t=0;
+  addEventListener('resize',()=>{anchor=VW*.72;});
+  function down(e){dragging=true;everDragged=true;hint.classList.remove('on');try{bulb.setPointerCapture(e.pointerId);}catch(_){}e.preventDefault();}
+  function move(e){if(!dragging)return;tx=e.clientX;ty=Math.max(40,Math.min(VH-60,e.clientY));}
+  function up(){dragging=false;}
+  bulb.addEventListener('pointerdown',down);
+  addEventListener('pointermove',move,{passive:true});
+  addEventListener('pointerup',up);
+  bulb.addEventListener('keydown',e=>{
+    const step=40;
+    if(e.key==='ArrowLeft'){tx-=step;e.preventDefault();}
+    if(e.key==='ArrowRight'){tx+=step;e.preventDefault();}
+    if(e.key==='ArrowUp'){ty-=step;e.preventDefault();}
+    if(e.key==='ArrowDown'){ty+=step;e.preventDefault();}
+    everDragged=true;
+  });
+  /* tap a frame on touch: bulb flies to it */
+  if(COARSE){
+    frames.forEach((f,i)=>f.addEventListener('click',()=>{
+      const r=f.getBoundingClientRect();tx=r.left+r.width/2;ty=r.top+r.height/2;everDragged=true;
+    }));
+  }
+  let tick=0;
+  function loop(){
+    t+=.016;
+    if(++tick%120===0){measure();anchor=VW*.72;}
+    if(!dragging && !everDragged){ tx=anchor+Math.sin(t*.7)*26; ty=VH*.34+Math.sin(t*1.1)*10; }
+    else if(!dragging){ ty+= (Math.sin(t*1.3)*.3); }
+    bx+=(tx-bx)*.14; by+=(ty-by)*.14;
+    bulb.style.transform=`translate(${bx}px,${by}px)`;
+    halo.style.left=bx+'px'; halo.style.top=by+'px';
+    const hw=Math.max(260,VW*.3);
+    halo.style.width=hw+'px'; halo.style.height=hw+'px';
+    cord.style.left=(anchor)+'px';
+    const dx=bx-anchor, dy=by;
+    const len=Math.hypot(dx,dy), ang=Math.atan2(dx,dy);
+    cord.style.height=len+'px';
+    cord.style.transform=`rotate(${-ang}rad)`;
+    /* develop frames near the light */
+    const radius=Math.max(200,VW*.17);
+    frames.forEach((f,i)=>{
+      const r=f.getBoundingClientRect();
+      if(r.bottom<0||r.top>VH) {f.classList.remove('lit');return;}
+      const cx=r.left+r.width/2, cy=r.top+r.height/2;
+      const d=Math.hypot(bx-cx,by-cy);
+      if(d<radius){
+        f.classList.add('lit');
+        const localX=((bx-r.left)/r.width*100).toFixed(1), localY=((by-r.top)/r.height*100).toFixed(1);
+        f.style.setProperty('--dx',localX+'%'); f.style.setProperty('--dy',localY+'%');
+        developed[i]=Math.min(1, developed[i] + (1-d/radius)*.035);
+        f.style.setProperty('--d',developed[i].toFixed(3));
+      } else f.classList.remove('lit');
+    });
+    setGrade();
+    requestAnimationFrame(loop);
+  }
+  loop();
+  /* hint when the wall arrives */
+  let hintTimer=null;
+  new IntersectionObserver(es=>es.forEach(e=>{
+    if(e.isIntersecting && !everDragged && !hintTimer){
+      hint.classList.add('on');
+      hintTimer=setInterval(()=>{
+        if(everDragged){hint.classList.remove('on');clearInterval(hintTimer);return;}
+        hint.style.left=Math.max(8,bx-70)+'px'; hint.style.top=(by+40)+'px';
+      },250);
+    }
+  }),{threshold:.3}).observe(document.getElementById('wall'));
+})();
+if(REDUCED){
+  R.style.setProperty('--grade',1);
+  document.querySelectorAll('.frame').forEach(f=>f.style.setProperty('--d',1));
+  const p=document.getElementById('gradepct'); if(p)p.textContent='100';
+  document.getElementById('bulb').setAttribute('aria-valuenow','100');
+}
+
+/* ---------- dust motes ---------- */
+(function(){
+  if(REDUCED) return;
+  const c=document.getElementById('dust'),ctx=c.getContext('2d');
+  let W,H,motes=[];
+  function size(){measure();W=c.width=VW;H=c.height=VH;motes=Array.from({length:VW<760?26:52},()=>({
+    x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.6+.4,s:Math.random()*.35+.08,o:Math.random()*.4+.12,w:Math.random()*6.28
+  }));}
+  size();addEventListener('resize',size);
+  let last=0;
+  (function draw(ts){
+    if(ts-last>40 && !document.hidden){
+      last=ts;ctx.clearRect(0,0,W,H);
+      motes.forEach(m=>{
+        m.y-=m.s;m.x+=Math.sin(m.w+=.01)*.18;
+        if(m.y<-4){m.y=H+4;m.x=Math.random()*W;}
+        ctx.beginPath();ctx.arc(m.x,m.y,m.r,0,6.28);
+        ctx.fillStyle=`rgba(244,236,221,${m.o})`;ctx.fill();
+      });
+    }
+    requestAnimationFrame(draw);
+  })(0);
+})();
+
+/* ---------- mouse parallax ---------- */
+if(!REDUCED && !COARSE){
+  addEventListener('mousemove',e=>{
+    R.style.setProperty('--mx',((e.clientX/VW)-.5).toFixed(3));
+    R.style.setProperty('--my',((e.clientY/VH)-.5).toFixed(3));
+  },{passive:true});
+}
+
+/* ---------- frames notice you ---------- */
+if(!COARSE && !REDUCED){
+  frames.forEach(f=>{
+    f.addEventListener('pointermove',e=>{
+      const r=f.getBoundingClientRect();
+      const px=(e.clientX-r.left)/r.width-.5, py=(e.clientY-r.top)/r.height-.5;
+      f.style.transition='transform .15s ease-out';
+      f.style.transform=`translateZ(30px) rotateY(${px*7}deg) rotateX(${-py*7}deg)`;
+    });
+    f.addEventListener('pointerleave',()=>{f.style.transition='';f.style.transform='';});
+  });
+}
+
+/* ---------- reveals + scroll grade ---------- */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.16});
+document.querySelectorAll('.fade').forEach(el=>io.observe(el));
+addEventListener('scroll',()=>{if(!REDUCED)setGrade();},{passive:true});
+setGrade();
+
+/* ---------- lazy tapes ---------- */
+const vio=new IntersectionObserver(es=>es.forEach(e=>{
+  const v=e.target;
+  if(e.isIntersecting){ if(!v.src){v.src=v.dataset.src;} v.play().catch(()=>{}); }
+  else v.pause();
+}),{threshold:.2});
+document.querySelectorAll('.tape video').forEach(v=>vio.observe(v));
+
+/* ---------- proof hook: ?proof renders the developed state at first paint (testing only) ---------- */
+if(location.search.includes('proof')){
+  developed=frames.map((_,i)=>i===4?0.42:1);
+  frames.forEach((f,i)=>{
+    if(i===4){f.style.setProperty('--d','0.42');f.style.setProperty('--dx','32%');f.style.setProperty('--dy','55%');}
+    else f.style.setProperty('--d','1');
+    f.classList.add('lit');
+  });
+  setGrade();
+  document.querySelectorAll('.fade').forEach(el=>el.classList.add('in'));
+  const st=new URLSearchParams(location.search).get('st');
+  if(st){const el=document.getElementById(st); if(el){document.querySelector('main').style.transform=`translateY(${-el.offsetTop}px)`;}}
+}
+
+/* ---------- exit-intent: the cut that never comes ---------- */
+(function(){
+  if(REDUCED||COARSE) return;
+  let fired=false;
+  document.documentElement.addEventListener('mouseleave',()=>{
+    if(fired) return; fired=true;
+    const l=document.getElementById('leader');
+    l.classList.add('flash');
+    setTimeout(()=>l.classList.remove('flash'),500);
+  });
+})();
+</script>
+</body>
+</html>

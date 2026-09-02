@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="light">
+<title>THE 9.29 FILE</title>
+<meta property="og:type" content="website">
+<meta property="og:title" content="THE 9.29 FILE">
+<meta property="og:description" content="SUBJECT: VIRGOSGATEWAY. The world, the look, the machine, the dates. Punk rock trap anarchy. Approved for release 09.29.2026.">
+<meta property="og:image" content="https://0fftheprint.com/hire/gateway/preview.jpg">
+<meta property="og:url" content="https://0fftheprint.com/hire/gateway/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#e9dfc8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&family=Allerta+Stencil&family=Permanent+Marker&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#e9dfc8;
+  --paper2:#e2d5b8;
+  --ink:#1a1712;
+  --xerox:#141210;
+  --red:#b3202c;
+  --static:#1d7a3a;
+  --dim:#5c5340;
+  --line:#c9bb9a;
+  --hl:#f4e04d;
+  --type:"Special Elite","Courier New",monospace;
+  --body:"Courier Prime","Courier New",monospace;
+  --stencil:"Allerta Stencil",Impact,sans-serif;
+  --marker:"Permanent Marker",cursive;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--body);
+  font-size:16px;
+  line-height:1.62;
+  overflow-x:hidden;
+  padding-bottom:4rem;
+}
+/* xerox grain over everything */
+body::after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.16;
+  mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+/* copier vignette */
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(130% 90% at 50% 0%, transparent 62%, rgba(26,23,18,.14)),
+    linear-gradient(90deg, rgba(26,23,18,.10), transparent 7%, transparent 93%, rgba(26,23,18,.10));
+}
+.wrap{position:relative;z-index:1;max-width:700px;margin:0 auto;padding:0 20px}
+
+a{color:var(--red)}
+
+/* ===== top classification strip ===== */
+.clsbar{
+  background:var(--xerox);color:var(--paper);
+  font-family:var(--type);font-size:.68rem;letter-spacing:.28em;
+  text-align:center;padding:.6em 1em;text-transform:uppercase;
+  position:relative;z-index:2;
+}
+/* ===== header ===== */
+header{padding:44px 0 30px;position:relative}
+.caseno{font-family:var(--type);font-size:.75rem;letter-spacing:.2em;color:var(--dim);text-transform:uppercase}
+.caseno b{color:var(--ink)}
+h1{
+  font-family:var(--type);font-weight:400;text-transform:uppercase;
+  font-size:clamp(1.6rem,7.4vw,2.9rem);line-height:1.14;margin:14px 0 6px;
+  letter-spacing:.01em;
+}
+h1 .lbl{display:block;font-size:.46em;letter-spacing:.34em;color:var(--dim);margin-bottom:.2em}
+/* ransom letters */
+.ransom{display:block}
+.ransom span{
+  display:inline-block;padding:.02em .12em;margin:.05em .015em;
+  border:1.5px solid var(--xerox);background:#f4ecd8;
+  box-shadow:2px 2px 0 rgba(26,23,18,.28);
+}
+.ransom span:nth-child(2n){transform:rotate(2.4deg);font-family:var(--stencil)}
+.ransom span:nth-child(2n+1){transform:rotate(-2.2deg)}
+.ransom span:nth-child(3n){background:var(--xerox);color:var(--paper)}
+.ransom span:nth-child(5n){background:var(--red);color:#f4ecd8;border-color:var(--red)}
+.sub{font-family:var(--body);color:var(--dim);font-size:.95rem;margin-top:14px;max-width:46ch}
+.penright{
+  font-family:var(--marker);color:var(--red);font-size:1.06rem;line-height:1.3;
+  transform:rotate(-2deg);margin-top:16px;
+}
+.penright small{display:block;color:var(--ink);opacity:.75;font-size:.82em}
+/* the big stamp */
+.stampbox{
+  display:inline-block;margin-top:22px;
+  border:3px double var(--red);color:var(--red);
+  font-family:var(--stencil);text-transform:uppercase;
+  padding:.45em .9em;letter-spacing:.16em;font-size:.95rem;
+  transform:rotate(-3.4deg);
+  mix-blend-mode:multiply;opacity:.92;
+  mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='60'%3E%3Cfilter id='r'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.12' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .92 .2'/%3E%3C/filter%3E%3Crect width='160' height='60' fill='%23fff' filter='url(%23r)'/%3E%3C/svg%3E");
+  -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='60'%3E%3Cfilter id='r'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.12' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .92 .2'/%3E%3C/filter%3E%3Crect width='160' height='60' fill='%23fff' filter='url(%23r)'/%3E%3C/svg%3E");
+}
+.stampbox s{display:block;font-size:.62em;letter-spacing:.3em;opacity:.8}
+.datestrip{
+  margin-top:20px;font-family:var(--type);font-size:.78rem;letter-spacing:.14em;
+  border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);
+  padding:.5em 0;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
+}
+/* ===== zener divider ===== */
+.zener{display:flex;gap:10px;justify-content:center;padding:26px 0 4px}
+.zener .zc{
+  width:46px;height:60px;border:1.5px solid var(--ink);background:#f4ecd8;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:2px 2px 0 rgba(26,23,18,.22);
+}
+.zener .zc:nth-child(2){transform:rotate(1.6deg)}
+.zener .zc:nth-child(4){transform:rotate(-1.8deg)}
+.zener svg{width:26px;height:26px;stroke:var(--ink);fill:none;stroke-width:2}
+.zener .zc.hit{border-color:var(--red)}
+.zener .zc.hit svg{stroke:var(--red)}
+
+/* ===== sections ===== */
+section{padding:30px 0 2px}
+.shead{display:flex;align-items:baseline;gap:12px;margin-bottom:4px}
+.snum{
+  font-family:var(--type);font-size:.8rem;background:var(--xerox);color:var(--paper);
+  padding:.2em .55em;letter-spacing:.1em;
+}
+.stitle{
+  font-family:var(--stencil);font-weight:400;text-transform:uppercase;
+  font-size:clamp(1.3rem,5.6vw,1.8rem);letter-spacing:.05em;
+}
+.stag{font-family:var(--type);font-size:.72rem;letter-spacing:.2em;color:var(--dim);text-transform:uppercase;margin:0 0 14px 2px}
+
+.doc{
+  background:#f2ead6;border:1.5px solid var(--ink);
+  box-shadow:3px 3px 0 rgba(26,23,18,.22);
+  padding:18px 18px 16px;margin-bottom:14px;position:relative;
+}
+.doc.torn{border-style:dashed}
+.doc h3{font-family:var(--type);font-size:.92rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;color:var(--ink)}
+.doc h3 .r{color:var(--red)}
+.doc p{color:#3d382d;font-size:.95rem;margin-bottom:10px}
+.doc p:last-child{margin-bottom:0}
+.doc p b{color:var(--ink)}
+.doc ul{list-style:none;margin:2px 0}
+.doc li{padding:7px 0 7px 24px;position:relative;color:#3d382d;font-size:.95rem;border-bottom:1px dashed var(--line)}
+.doc li:last-child{border-bottom:0}
+.doc li::before{content:"▣";position:absolute;left:0;top:7px;font-size:.75rem;color:var(--red)}
+.doc li b{color:var(--ink)}
+.dl{font-family:var(--type);font-size:.72rem;color:var(--red);letter-spacing:.08em;white-space:nowrap}
+
+/* story voice */
+.lore{
+  font-family:var(--type);background:#f4ecd8;border-left:4px solid var(--xerox);
+  padding:16px 16px 14px;margin:0 0 14px;font-size:.97rem;line-height:1.75;color:#2c2820;
+}
+.lore .h{letter-spacing:.22em;font-size:.7rem;color:var(--dim);display:block;margin-bottom:8px}
+/* tap-to-reveal redactions */
+.rdx{
+  display:inline-block;border:0;cursor:pointer;font:inherit;line-height:1;
+  background:var(--xerox);color:var(--xerox);padding:.05em .35em;vertical-align:baseline;
+  letter-spacing:.05em;user-select:none;
+}
+.rdx.open{background:var(--hl);color:var(--ink);font-family:var(--marker)}
+.rdxhint{font-family:var(--marker);color:var(--red);font-size:.85rem;transform:rotate(-1.4deg);display:inline-block}
+
+/* palette chips */
+.chips{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 10px}
+.chip{flex:1 1 84px;border:1.5px solid var(--ink);box-shadow:2px 2px 0 rgba(26,23,18,.2)}
+.chip .nm{white-space:nowrap;overflow:hidden}
+.chip .sw{height:44px}
+.chip .nm{font-family:var(--type);font-size:.66rem;letter-spacing:.12em;padding:.45em .6em;text-transform:uppercase;background:#f4ecd8}
+/* smpte strip */
+.smpte{height:14px;margin:18px 0 4px;border:1.5px solid var(--ink);
+  background:linear-gradient(90deg,#c8c8c8 0 14.28%,#c8c832 0 28.57%,#32c8c8 0 42.85%,#32c832 0 57.14%,#c832c8 0 71.42%,#c83232 0 85.71%,#3232c8 0 100%);
+  filter:saturate(.7) contrast(.92);
+}
+/* format cards */
+.fmt{display:grid;grid-template-columns:1fr;gap:0}
+.fmt .doc{margin-bottom:12px}
+.fcode{font-family:var(--stencil);color:var(--red);font-size:.8rem;letter-spacing:.2em}
+
+/* calendar */
+.cal .row{display:flex;gap:14px;align-items:baseline;padding:10px 2px;border-bottom:1px dashed var(--line)}
+.cal .row:last-child{border-bottom:0}
+.cal .when{font-family:var(--type);font-size:.74rem;letter-spacing:.06em;color:var(--red);min-width:96px}
+.cal .what{color:#3d382d;font-size:.94rem}
+.cal .what b{color:var(--ink)}
+.cal .row.big{background:#f4ecd8;outline:1.5px solid var(--ink);padding:12px 10px;margin:6px 0}
+.cal .row.big .what b{font-family:var(--type);letter-spacing:.06em}
+
+/* court checkboxes */
+.court li::before{content:"☐";font-size:1rem;top:5px;color:var(--ink)}
+
+footer{margin-top:44px;text-align:center;color:var(--dim);font-family:var(--type);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase}
+footer .vp{font-family:var(--stencil);font-size:1rem;color:var(--ink);margin-bottom:6px}
+footer .gag{margin-top:8px;color:var(--red)}
+footer a{color:var(--dim)}
+</style>
+</head>
+<body>
+
+<div class="clsbar">COPY 1 OF 1 &nbsp;//&nbsp; EYES ONLY &nbsp;//&nbsp; HANDLE VIA ART CHANNELS</div>
+
+<div class="wrap">
+
+<header>
+  <p class="caseno">CASE Nº <b>0929-TX-SA</b> &nbsp;·&nbsp; OPENED AUG 18 2026</p>
+  <h1>
+    <span class="lbl">SUBJECT:</span>
+    <span class="ransom"><span>V</span><span>I</span><span>R</span><span>G</span><span>O</span><span>S</span></span>
+    <span class="ransom"><span>G</span><span>A</span><span>T</span><span>E</span><span>W</span><span>A</span><span>Y</span></span>
+  </h1>
+  <p class="sub">The drop plan: the world, the look, the machine, the dates. Six weeks, then the file leaks.</p>
+  <div class="stampbox"><s>CLASSIFIED</s>APPROVED FOR RELEASE 09.29.26</div>
+  <p class="penright">punk rock, trap, anarchy.<small>"universal divinity receives alignment."</small></p>
+  <div class="datestrip"><span>AUG 18 2026</span><span>→</span><span>SEPT 29 2026, TUESDAY</span></div>
+</header>
+
+<div class="zener" aria-hidden="true">
+  <div class="zc"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></svg></div>
+  <div class="zc"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/></svg></div>
+  <div class="zc hit"><svg viewBox="0 0 24 24"><path d="M6 3c-3 3 3 6 0 9s3 6 0 9M12 3c-3 3 3 6 0 9s3 6 0 9M18 3c-3 3 3 6 0 9s3 6 0 9"/></svg></div>
+  <div class="zc"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16"/></svg></div>
+  <div class="zc"><svg viewBox="0 0 24 24"><polygon points="12,2.5 14.7,8.9 21.5,9.4 16.3,13.9 18,20.5 12,16.9 6,20.5 7.7,13.9 2.5,9.4 9.3,8.9"/></svg></div>
+</div>
+
+<section>
+  <div class="shead"><span class="snum">00</span><h2 class="stitle">The World</h2></div>
+  <p class="stag">inspo: the world. literally.</p>
+
+  <div class="doc">
+    <p><b>The references are real, that is the whole trick.</b> The Gateway papers sit in the CIA's own reading room: a 1983 analysis of training a mind to leave the body, page 25 famously missing. The government ran remote-viewing programs for twenty-plus years before shutting them down in '95. Agenda 2030 is a published schedule. Blue Beam is the name somebody gave the sky show. We are not inventing a villain. We are quoting one. Real scans from the reading room are free props.</p>
+    <p><b>And the name was already his.</b> The program was called GATEWAY. The artist is called VIRGOSGATEWAY. He is not referencing the file. He walked out of it and kept the name.</p>
+  </div>
+
+  <div class="lore">
+    <span class="h">THE STORY (every caption speaks in this voice)</span>
+    The Program found kids born with something extra and dimmed the switch before they learned what it was. Intake at age <button class="rdx" type="button" data-r="8">████</button>. Tones, tests, suppression. One subject never recorded clean: every tape came back static except audio channel 2, and channel 2 came back <button class="rdx" type="button" data-r="music">██████</button>. The Program closed in the 90s and released the kids into the population. They are grown now. One of them kept the Program's name, learned the console, and runs the experiments on himself. Producer. Engineer. Risk taker. He is at large in <button class="rdx" type="button" data-r="San Antonio, TX">████ ████████</button>, and on 9.29 his file leaks. <span class="rdxhint">← tap the black</span>
+  </div>
+
+  <div class="doc">
+    <h3>THE CAMPAIGN IN ONE LINE: <span class="r">the drop is a leak</span></h3>
+    <p>Every post is a page from the file. Every teaser is recovered footage. Release day is full disclosure. Story voice always, news voice never: the file claims a story, not a headline.</p>
+    <p><b>And the look walks.</b> The same file pages wheat-paste around the city and ride to every show he plays. The drop's look IS the street campaign.</p>
+  </div>
+</section>
+
+<section>
+  <div class="shead"><span class="snum">01</span><h2 class="stitle">The Look</h2></div>
+  <p class="stag">three layers, photocopied together</p>
+
+  <div class="doc">
+    <ul>
+      <li><b>THE FILE.</b> Manila, typewriter, redaction bars, rubber stamps, Zener cards, polygraph strips, CCTV timecode. Real props, scanned. Never clean vectors.</li>
+      <li><b>THE RIOT.</b> Xerox grain, ransom letters cut from real magazines, stencil spray, safety pins, staples, wheat-paste. If it looks designed, photocopy it until it doesn't.</li>
+      <li><b>THE RAGE.</b> The sound's layer: strobe, pit footage, distortion, static. The VP Glitch pack lives here.</li>
+    </ul>
+  </div>
+
+  <div class="chips">
+    <div class="chip"><div class="sw" style="background:#e8dcc4"></div><div class="nm">MANILA E8DCC4</div></div>
+    <div class="chip"><div class="sw" style="background:#141210"></div><div class="nm">XEROX 141210</div></div>
+    <div class="chip"><div class="sw" style="background:#b3202c"></div><div class="nm">STAMP B3202C</div></div>
+    <div class="chip"><div class="sw" style="background:#59d97c"></div><div class="nm">NIGHTVISION 59D97C</div></div>
+  </div>
+
+  <div class="doc">
+    <h3>Rules of the look</h3>
+    <ul>
+      <li>Four colors max. The whole identity prints on a toner budget, which is the point. The stamp red already matches his red-on-black logo, so the file sits under his existing brand instead of fighting it.</li>
+      <li>Type: the typewriter (Special Elite), the stencil (Allerta), the handler's pen (marker), and real cut letters, made by hand and scanned once.</li>
+      <li><b>Cover art gets shot, not generated:</b> a real manila folder, or a reel-to-reel tape box stenciled GATEWAY SESSION TAPES, paperclipped portrait, scanned dirty. Stamps land in Photoshop. Singles reuse inner pages so the catalog reads as one file on the DSP grid.</li>
+      <li>No real agency seals on props or merch (federal seal rules are a real thing). Stamps and redactions carry the look without them.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="shead"><span class="snum">02</span><h2 class="stitle">The Machine</h2></div>
+  <p class="stag">four repeatable formats. nothing one-off.</p>
+
+  <div class="fmt">
+    <div class="doc">
+      <h3><span class="fcode">F1</span> · THE FILES <span class="r">weekly carousel</span></h3>
+      <p>Scanned pages from the subject file, one release a week, each with one redacted line for people to argue about:</p>
+      <ul>
+        <li><b>FILE 001, INTAKE.</b> Intake form, Zener score sheet reading 20/25 with "chance is 5" circled, handler note: <b>"subject hums during testing. recommend suppression."</b></li>
+        <li><b>FILE 002, INCIDENT.</b> Suppression session blackout. Every recorder returned static except audio channel 2, which returned music. Recommend termination of study.</li>
+        <li><b>FILE 003, CLOSURE.</b> Program shutdown memo, subjects released. Final line unredacted: <b>SUBJECT V. STATUS: AT LARGE. NEXT TRANSMISSION 09.29.26.</b></li>
+        <li><b>Every file carries one KNOWN ASSOCIATES page:</b> the credits list with names redacted and handles legible. The flex does the marketing on its own.</li>
+      </ul>
+    </div>
+    <div class="doc">
+      <h3><span class="fcode">F2</span> · THE FOOTAGE <span class="r">15-30s recovered tape</span></h3>
+      <p>CCTV high angle, timecode burn, nightvision green. Lights fail when he walks past. The camera glitches when it lands on his face. And in one tape he is on the wrong side of the glass, running the console himself: the subject became the engineer. Graded and broken with the VP packs.</p>
+    </div>
+    <div class="smpte" aria-hidden="true"></div>
+    <div class="doc">
+      <h3><span class="fcode">F3</span> · THE BROADCAST <span class="r">interrupt clips</span></h3>
+      <p>A slate cuts in mid-scroll: WE INTERRUPT THIS PROGRAM. Our own alarm tone from the sound bank, not the real EAS tones (those get clips pulled). Snippet hits over static. Final week these become the nightly countdown.</p>
+    </div>
+    <div class="doc">
+      <h3><span class="fcode">F4</span> · THE REAL <span class="r">the human layer</span></h3>
+      <p>Studio clips, console hands, live sets, the homies. The lore never touches this layer: file world on the grid, real world in between. That contrast is what makes both land.</p>
+    </div>
+  </div>
+
+  <div class="doc torn">
+    <p><b>Cadence floor from Sept 7:</b> three posts a week. One FILE or BROADCAST, one FOOTAGE, one REAL. Everything cut in batches on shoot days, nothing made day-of.</p>
+  </div>
+</section>
+
+<section>
+  <div class="shead"><span class="snum">03</span><h2 class="stitle">The Video</h2></div>
+  <p class="stag">focus track. one day, two looks.</p>
+
+  <div class="doc">
+    <ul>
+      <li><b>LOOK A, THE LISTENING ROOM.</b> A government studio: reel-to-reel, oscilloscope, VU meters pinning when his hands touch the faders, wires to the temples, Zener cards, strobe. The nosebleed at the peak. FX6 on sticks, controlled room.</li>
+      <li><b>LOOK B, AT LARGE.</b> Handheld night run: the homies as grown subjects, streets, pasting his own file over ads, the folder burning. Compact rigs in the crowd.</li>
+      <li><b>THE CUT.</b> Intercut A and B. The tape degrades as the ability peaks, and the only clean channel is the song. End slate: <b>SUBJECT AT LARGE. LAST KNOWN LOCATION: SAN ANTONIO, TX.</b></li>
+      <li><b>CASTING.</b> Everybody grown. The kids aged out: that is the lore, and it keeps a set about experiments on kids clean of actual kids.</li>
+      <li><b>PROPS, UNDER $150.</b> Folders, printed docs, thrift-store CRT, home-printed Zener deck, medical wristbands, fake blood, flour paste. His real console dresses the lab. Broke on purpose, that is the genre.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="shead"><span class="snum">04</span><h2 class="stitle">The Dates</h2></div>
+  <p class="stag">six weeks. everything gets a date.</p>
+
+  <div class="doc cal">
+    <div class="row"><span class="when">AUG 22</span><span class="what"><b>Decisions locked</b> (section 05). File kit built, cover shot.</span></div>
+    <div class="row"><span class="when">SEPT 01</span><span class="what"><b>9.29 locked in the pipeline:</b> release scheduled through EMPIRE / the distro, date confirmed on DSPs.</span></div>
+    <div class="row"><span class="when">SEPT 05</span><span class="what"><b>Masters final, handed off.</b> Snippets, visualizer, and the upload all hang on it.</span></div>
+    <div class="row"><span class="when">SEPT 07</span><span class="what"><b>TRANSMISSION 001 posts.</b> No caption. No explanation.</span></div>
+    <div class="row"><span class="when">SEPT 08</span><span class="what"><b>Pre-save live,</b> link in both bios.</span></div>
+    <div class="row"><span class="when">SEPT 12</span><span class="what"><b>Press day, stacked:</b> cover extras + LOOK A listening-room plates for teasers.</span></div>
+    <div class="row"><span class="when">SEPT 14</span><span class="what"><b>FILE 001 · INTAKE</b> posts.</span></div>
+    <div class="row"><span class="when">SEPT 19</span><span class="what"><b>VIDEO DAY.</b> Both looks, one day. Teaser pulls same week.</span></div>
+    <div class="row"><span class="when">SEPT 21</span><span class="what"><b>FILE 002 · INCIDENT</b> + first open snippet.</span></div>
+    <div class="row"><span class="when">SEPT 22</span><span class="what"><b>Virgo season ends. GATEWAY WEEK begins:</b> the gateway is closing, and the countdown says so.</span></div>
+    <div class="row"><span class="when">SEPT 24</span><span class="what"><b>FILE 003 · CLOSURE.</b> The date goes public unredacted.</span></div>
+    <div class="row"><span class="when">SEPT 25-28</span><span class="what"><b>Countdown:</b> numbers-station stories nightly, paste run (paste where it peels clean).</span></div>
+    <div class="row big"><span class="when">SEPT 29</span><span class="what"><b>FULL DISCLOSURE.</b> Tape live, full file posted unredacted, broadcast visualizer out. A Tuesday, on purpose: leaks don't wait for Friday.</span></div>
+    <div class="row"><span class="when">OCT 01</span><span class="what"><b>THE VIDEO drops.</b> Second hit of the week.</span></div>
+  </div>
+</section>
+
+<section>
+  <div class="shead"><span class="snum">05</span><h2 class="stitle">His Court</h2></div>
+  <p class="stag">virgosgateway decides, by aug 22</p>
+
+  <div class="doc">
+    <ul class="court">
+      <li><b>Title.</b> The tape has a name or the file does it for you (everything here works either way).</li>
+      <li><b>Body.</b> What lands 9.29: single with the world attached, EP, or full tape.</li>
+      <li><b>Focus track</b> for THE VIDEO.</li>
+      <li><b>Masters to me by Sept 5.</b> Snippets, visualizer, and the upload all hang on it.</li>
+      <li><b>The pipeline.</b> Confirm 9.29 goes through EMPIRE / the partner channel, and who clicks upload, by Sept 1.</li>
+      <li><b>Voice memos for the file pages:</b> bars, dates, names to bury in the redactions. The lore should quote him.</li>
+      <li><b>The stagger:</b> tape 9.29 + video Oct 1 (two hits in one week), or collapse to one day. I vote stagger.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="shead"><span class="snum">06</span><h2 class="stitle">The Trade</h2></div>
+  <div class="doc">
+    <p><b>One line:</b> he owns the music, I own the footage and stills, we both post everything. Partnership, not an invoice.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="vp">VAMPPSYCH</div>
+  <div>CASE 0929-TX-SA · SAN ANTONIO TX · AUG 18 2026</div>
+  <div class="gag">COPY 1 OF 1. DO NOT DISTRIBUTE. (distribute.)</div>
+</footer>
+
+</div>
+
+<script>
+document.querySelectorAll('.rdx').forEach(function(b){
+  b.addEventListener('click',function(){
+    if(b.classList.contains('open')){b.classList.remove('open');b.textContent=b.dataset.bar;}
+    else{b.dataset.bar=b.textContent;b.classList.add('open');b.textContent=b.dataset.r;}
+  });
+});
+</script>
+</body>
+</html>

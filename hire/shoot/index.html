@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>CALL SHEET</title>
+<meta name="theme-color" content="#0a0a0d">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0a0d; --bg2:#131318; --card:#17171d; --line:#2a2a33;
+  --ink:#e8e6e3; --dim:#8d8a94; --red:#c0323f; --amber:#d99a2b; --go:#4fa87a;
+  --disp:"Bebas Neue",Impact,sans-serif;
+  --sans:"Inter",-apple-system,system-ui,sans-serif;
+  --mono:"JetBrains Mono",Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5;
+  font-size:16px;padding-bottom:60px}
+.top{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:2px solid var(--red);
+  padding:12px 16px;display:flex;align-items:baseline;gap:10px}
+.top .rec{width:9px;height:9px;border-radius:50%;background:var(--red);
+  animation:blink 2s infinite;flex:0 0 auto;align-self:center}
+@keyframes blink{0%,45%{opacity:1}50%,100%{opacity:.25}}
+.top h1{font-family:var(--disp);font-size:22px;letter-spacing:.06em}
+.top .when{font-family:var(--mono);font-size:11px;color:var(--dim);margin-left:auto}
+nav{display:flex;gap:6px;overflow-x:auto;padding:10px 16px;background:var(--bg2);
+  border-bottom:1px solid var(--line);position:sticky;top:47px;z-index:19}
+nav a{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--dim);
+  text-decoration:none;border:1px solid var(--line);padding:7px 11px;border-radius:20px;
+  white-space:nowrap}
+nav a:active{color:var(--ink);border-color:var(--red)}
+main{padding:0 16px}
+section{padding:26px 0;border-bottom:1px solid var(--line);scroll-margin-top:96px}
+h2{font-family:var(--disp);font-size:27px;letter-spacing:.03em;margin-bottom:4px}
+h2 .n{color:var(--red);margin-right:8px}
+.sub{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--dim);
+  text-transform:uppercase;margin-bottom:14px}
+
+.hero{background:linear-gradient(180deg,#1a1116,var(--bg2));border:1px solid var(--red);
+  border-radius:12px;padding:18px;margin:22px 0 4px}
+.hero .big{font-family:var(--disp);font-size:clamp(38px,11vw,60px);line-height:.92;color:var(--red)}
+.hero p{margin-top:8px;font-size:15px;color:var(--ink)}
+
+/* checklist */
+label.ck{display:flex;gap:12px;align-items:flex-start;padding:13px 12px;background:var(--card);
+  border:1px solid var(--line);border-radius:9px;margin-bottom:7px;cursor:pointer}
+label.ck input{appearance:none;width:24px;height:24px;flex:0 0 auto;border:2px solid #4a4a56;
+  border-radius:6px;margin-top:1px;position:relative;background:transparent}
+label.ck input:checked{background:var(--go);border-color:var(--go)}
+label.ck input:checked::after{content:"";position:absolute;left:7px;top:2px;width:6px;height:12px;
+  border:solid #0a0a0d;border-width:0 3px 3px 0;transform:rotate(45deg)}
+label.ck span{font-size:15px}
+label.ck input:checked+span{color:var(--dim);text-decoration:line-through}
+label.ck span b{color:var(--amber)}
+
+/* timeline */
+.t{display:flex;gap:12px;padding:14px 0;border-bottom:1px dashed var(--line)}
+.t:last-child{border-bottom:none}
+.t .clock{font-family:var(--disp);font-size:20px;color:var(--amber);flex:0 0 74px;line-height:1.15;
+  letter-spacing:.02em}
+.t .b h3{font-size:15.5px;font-weight:700;margin-bottom:3px}
+.t .b p{font-size:14px;color:var(--dim)}
+.t.key{background:#1a1116;border:1px solid var(--red);border-radius:10px;padding:14px 12px;
+  margin:8px 0;border-bottom:1px solid var(--red)}
+.t.key .clock{color:var(--red)}
+.t.key .b p{color:var(--ink)}
+
+.grid{display:grid;grid-template-columns:1fr;gap:9px}
+.c{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--red);
+  border-radius:8px;padding:13px 14px}
+.c b{display:block;font-size:15px;margin-bottom:3px}
+.c i{font-style:normal;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
+  color:var(--amber);text-transform:uppercase;display:block;margin-bottom:6px}
+.c p{font-size:14px;color:var(--dim)}
+
+ul.warn{list-style:none}
+ul.warn li{padding:12px 0 12px 30px;border-bottom:1px dashed var(--line);font-size:14.5px;
+  position:relative}
+ul.warn li:last-child{border-bottom:none}
+ul.warn li::before{content:"!";position:absolute;left:4px;top:11px;color:var(--bg);
+  background:var(--red);width:18px;height:18px;border-radius:50%;font-family:var(--mono);
+  font-weight:700;font-size:12px;display:grid;place-items:center}
+
+.facts{font-family:var(--mono);font-size:13px}
+.facts div{display:flex;justify-content:space-between;gap:14px;padding:10px 0;
+  border-bottom:1px dashed var(--line)}
+.facts div:last-child{border-bottom:none}
+.facts span:first-child{color:var(--dim)}
+.facts b{color:var(--amber);text-align:right}
+
+.reset{display:block;width:100%;margin-top:16px;background:transparent;border:1px solid var(--line);
+  color:var(--dim);font-family:var(--mono);font-size:11px;letter-spacing:.12em;padding:13px;
+  border-radius:8px}
+footer{padding:26px 16px 40px;text-align:center;font-family:var(--mono);font-size:10.5px;
+  color:#55525c;letter-spacing:.1em}
+</style>
+</head>
+<body>
+
+<div class="top"><span class="rec"></span><h1>CALL SHEET</h1><span class="when">SAT 8/22 · 80TH</span></div>
+
+<nav>
+  <a href="#prep">PREP</a><a href="#run">THE RUN</a><a href="#vid">VIDEOS</a>
+  <a href="#miss">DON'T MISS</a><a href="#facts">FACTS</a><a href="#sun">SUNDAY</a>
+</nav>
+
+<main>
+
+<div class="hero">
+  <div class="big">SUNSET<br>8:08 PM</div>
+  <p>Ten family groups happen between 7 and 8, or they happen under a flash in a dark house. That one hour is the entire job.</p>
+</div>
+
+<section id="prep">
+  <h2><span class="n">01</span>PREP</h2>
+  <div class="sub">Before you leave · taps save</div>
+  <div id="cklist"></div>
+  <button class="reset" id="rst">CLEAR ALL CHECKS</button>
+</section>
+
+<section id="run">
+  <h2><span class="n">02</span>THE RUN</h2>
+  <div class="sub">In order</div>
+
+  <div class="t"><div class="clock">6:30</div><div class="b">
+    <h3>Shoot the room empty</h3>
+    <p>Table, food, cake, decorations, front of the house. 8 to 10 delivered photos and it's gone the second guests walk in. Ask Adrian right now: what time is cake, and where are the groups.</p></div></div>
+
+  <div class="t"><div class="clock">6:45</div><div class="b">
+    <h3>Build ONE portrait station</h3>
+    <p>One spot, softbox up, framed, exposure locked. Families come to you. Relighting ten times is how you run out of light. Outside if there's any yard, porch or driveway.</p></div></div>
+
+  <div class="t key"><div class="clock">7:00<br>8:00</div><div class="b">
+    <h3>THE TEN FAMILY GROUPS</h3>
+    <p>Start at 7 sharp, don't wait for stragglers. Four or five frames per group so a blink doesn't cost you it. Kids in front, and shoot the kids first inside each group before they melt. Adrian's crew calls families up, you keep the line moving.</p></div></div>
+
+  <div class="t"><div class="clock">8:00</div><div class="b">
+    <h3>The uncle, alone</h3>
+    <p>Three minutes. Best light of the night is right now. Two setups, one looking at you, one not. This is the photo the family keeps.</p></div></div>
+
+  <div class="t key"><div class="clock">TBC</div><div class="b">
+    <h3>THE PRAYER · mic on 2 min early</h3>
+    <p>Transmitter on his collar the moment Adrian warns you. 32-bit float, recording onboard, cannot clip. Then DON'T lock off. Move: bowed heads, folded hands, the food, faces, kids peeking. Audio runs continuous so the picture is free.</p></div></div>
+
+  <div class="t key"><div class="clock">AMEN</div><div class="b">
+    <h3>BIG GROUP, IMMEDIATELY</h3>
+    <p>Only moment all night everyone is assembled and standing still. Two minutes instead of twenty. Get it before anybody moves toward the food.</p></div></div>
+
+  <div class="t"><div class="clock">DINNER</div><div class="b">
+    <h3>Candids, stop directing</h3>
+    <p>20 to 25 of your 60 live here. Plates, hands, laughing, the aunties. Move quiet, shoot wide open, no flash in faces while people eat.</p></div></div>
+
+  <div class="t"><div class="clock">CAKE</div><div class="b">
+    <h3>Roll video through the whole thing</h3>
+    <p>Candles, his face lit from below, the singing, the blow, the reaction, the cut. Pull stills from the video if you have to. You cannot ask them to do it again.</p></div></div>
+
+  <div class="t"><div class="clock">LAST<br>30</div><div class="b">
+    <h3>Sweep</h3>
+    <p>Anything on the list you missed. One more pass on the room. Goodbyes at the door as people leave.</p></div></div>
+</section>
+
+<section id="vid">
+  <h2><span class="n">03</span>THE 4 VIDEOS</h2>
+  <div class="sub">Know the cut before you shoot it</div>
+  <div class="grid">
+    <div class="c"><i>The hero · his idea</i><b>The prayer</b><p>His voice over slow shots of the family. Deliver this one best, it's the one Adrian is picturing in his head.</p></div>
+    <div class="c"><i>Shoot it twice, early</i><b>The walk in</b><p>One take on the gimbal, front door, through the tables, landing on him. Do it while the room still looks set.</p></div>
+    <div class="c"><i>Real audio, no music</i><b>Cake and candles</b><p>The singing carries it. Let it run long, cut tight.</p></div>
+    <div class="c"><i>The one they all share</i><b>Everybody came</b><p>Fast cuts of all ten groups plus candids. Proof of the turnout.</p></div>
+  </div>
+</section>
+
+<section id="miss">
+  <h2><span class="n">04</span>DON'T MISS</h2>
+  <div class="sub">The five ways this goes wrong</div>
+  <ul class="warn">
+    <li>You start groups late and finish in the dark. <b>7:00 sharp.</b></li>
+    <li>Somebody leaves before the big group. That's why it's right after the prayer.</li>
+    <li>Cake happens and nobody told you. <b>Ask when you walk in.</b></li>
+    <li>Prayer starts and the mic isn't on. Clip it early and let it roll.</li>
+    <li>400 candids and six group frames. <b>The groups are what he paid for.</b></li>
+  </ul>
+</section>
+
+<section id="facts">
+  <h2><span class="n">05</span>FACTS</h2>
+  <div class="sub">If anyone asks</div>
+  <div class="facts">
+    <div><span>Sunset</span><b>8:08 PM</b></div>
+    <div><span>Light fully gone</span><b>8:31 PM</b></div>
+    <div><span>Call time</span><b>6:30 PM</b></div>
+    <div><span>Wrap</span><b>9 or 10 PM</b></div>
+    <div><span>Owed</span><b>~60 photos + 3-4 verticals</b></div>
+    <div><span>Delivery</span><b>Sunday night</b></div>
+    <div><span>Surprise?</span><b>No</b></div>
+    <div><span>Camera shy</span><b>Nobody flagged</b></div>
+    <div><span>Money talk tonight</span><b>None. Already paid.</b></div>
+  </div>
+</section>
+
+<section id="sun">
+  <h2><span class="n">06</span>SUNDAY</h2>
+  <div class="sub">Read before you start cutting</div>
+  <ul class="warn">
+    <li>Insta360 writes <b>no orientation flag</b>. Fix rotation with the YuNet pass, never Haar.</li>
+    <li>Luna Ultra video is <b>flat but tagged bt709</b> while the stills are normal. De-log uniformly, never per-clip auto-levels.</li>
+    <li>The <b>DNG ignores digital zoom</b>, so RAW is a wider, differently framed photo. Grade the JPG.</li>
+    <li>Dark room, brown skin: open the subject <b>on the source first, gamma not lift</b>. Subjects never blow out, background never goes void.</li>
+    <li>Run it through <b>shoot-delivery-engine</b>, per-photo grades, not a preset.</li>
+  </ul>
+</section>
+
+</main>
+
+<footer>VAMPPSYCH · REPLACED EACH JOB · NOT FOR THE CLIENT</footer>
+
+<script>
+const ITEMS=[
+ "Luna Ultra + <b>batteries</b> + cards formatted. A-cam, stills and video both.",
+ "Insta360 Mic Pro, <b>both TX charged</b>, onboard recording ON.",
+ "Gridded softbox + stand. One light, one station, all night.",
+ "5-in-1 reflector + white bounce card.",
+ "Manfrotto tripod.",
+ "Ace Pro 2 (B-cam) + GO Ultra (anything mounted high).",
+ "FX6 optional. <b>Sticks only, for the portrait.</b> Don't carry it around the party.",
+ "Phone charged + power bank.",
+ "Leave the house by <b>6:10</b>."
+];
+const K='vp_call_80th';
+let st={};try{st=JSON.parse(localStorage.getItem(K))||{}}catch(e){}
+const wrap=document.getElementById('cklist');
+ITEMS.forEach((t,i)=>{
+  const l=document.createElement('label');l.className='ck';
+  l.innerHTML='<input type="checkbox" '+(st[i]?'checked':'')+'><span>'+t+'</span>';
+  l.querySelector('input').addEventListener('change',e=>{
+    st[i]=e.target.checked;try{localStorage.setItem(K,JSON.stringify(st))}catch(e){}
+  });
+  wrap.appendChild(l);
+});
+document.getElementById('rst').addEventListener('click',()=>{
+  st={};try{localStorage.removeItem(K)}catch(e){}
+  wrap.querySelectorAll('input').forEach(i=>i.checked=false);
+});
+</script>
+</body>
+</html>

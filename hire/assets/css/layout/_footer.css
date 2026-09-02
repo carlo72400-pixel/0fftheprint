@@ -1,0 +1,54 @@
+/* ------- footer ------- */
+footer{padding:80px 0 60px;position:relative;text-align:center}
+footer h2{margin-bottom:18px}
+.standby{font-family:var(--mono);font-size:11px;letter-spacing:2.5px;color:var(--dim);margin-bottom:14px}
+.standby i{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--mint);box-shadow:0 0 8px var(--mint);margin-right:8px;animation:recblink 2s steps(1) infinite;vertical-align:middle}
+.email{display:inline-block;font-family:var(--disp);font-weight:600;letter-spacing:.3px;font-size:clamp(22px,3.6vw,36px);color:var(--rose-deep);text-decoration:none;border:2px solid var(--rose);border-radius:999px;padding:12px 34px;background:#fff;transition:background .25s,color .25s,transform .1s ease-out}
+.email:hover{background:var(--rose);color:#fff}
+.email-wrap{position:relative;display:inline-block}
+.email-stk{position:absolute;image-rendering:pixelated;z-index:3;pointer-events:none}
+.email-stk.s1{top:-14px;left:-18px;width:52px;transform:rotate(-14deg)}
+.email-stk.s2{bottom:-12px;right:-20px;width:40px;transform:rotate(12deg)}
+/* two ways to reach him: the mail pill, or a straight IG DM */
+.reach{display:flex;flex-direction:column;align-items:center;gap:14px}
+.reach-or{font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim)}
+.dm{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--rose-deep);text-decoration:none;border:1.5px solid var(--rose);border-radius:999px;padding:11px 21px;background:#fff;transition:background .25s,color .25s,transform .3s var(--spring)}
+.dm:hover{background:var(--rose);color:#fff;transform:translateY(-2px)}
+.dm svg{width:15px;height:15px;flex:none}
+.dm b{font-weight:600;opacity:.72}
+.book{margin-top:30px;padding-top:26px;border-top:2px dashed var(--line2)}
+.book-line{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--amber);margin-bottom:16px}
+.book-fine{margin-top:12px;font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.3px}
+.foot-meta{margin-top:28px;font-size:13px;color:var(--dim)}
+.foot-meta a{color:var(--dim)}
+.foot-meta a:hover{color:var(--rose-deep)}
+.fine{margin-top:34px;font-family:var(--mono);font-size:11px;color:#8d7183;letter-spacing:.5px}
+.fine b{color:var(--rose-deep);font-weight:500}
+
+a,button{-webkit-tap-highlight-color:rgba(232,106,134,.2);touch-action:manipulation}
+nav ul a{padding:8px 2px}
+@media(max-width:640px){
+  .grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .sac-photos{grid-template-columns:repeat(2,1fr)}
+  .monitors,.tapes{grid-template-columns:1fr}
+  section{padding:54px 0}
+  .datestamp{font-size:10px;left:10px;bottom:8px}
+}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+  .rv{opacity:1;transform:none}.stag>*{opacity:1;transform:none}
+  #af-cursor{display:none}
+  .logo,h1{animation:none}
+}
+/* section crew mascots: each sticker marks the job that section proves */
+.sec-mascot{position:absolute;width:128px;right:26px;top:-34px;z-index:6;transform:rotate(6deg);filter:drop-shadow(0 8px 14px rgba(180,110,140,.3));pointer-events:none}
+.sec-mascot.flip{right:170px;top:-52px;transform:rotate(-7deg)}
+.sec-mascot.curtain{width:220px;top:4px;right:60px;transform:none;image-rendering:pixelated;opacity:.95}
+#playback .sec-mascot{width:72px;top:-14px;transform:rotate(5deg)}
+footer .sec-mascot{width:120px}
+footer .sec-mascot{top:18px}
+@media(max-width:640px){.sec-mascot{width:64px;right:12px;top:-28px}.sec-mascot.flip{display:none}}
+/* testing hook: ?proof renders fully-revealed state at first paint */
+html.proof .rv,html.proof .stag>*{opacity:1 !important;transform:none !important;transition:none !important}
+html.proof header{min-height:860px !important}

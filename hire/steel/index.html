@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Giancarlo Ortiz | Chrome &amp; Roses</title>
+<meta name="description" content="Director, colorist, editor. San Antonio TX. Cinematic pastel prototype.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/wordmark.png" fetchpriority="high">
+<style>
+:root{
+  --ink:#0F0B15; --ink2:#151020; --veil:rgba(255,255,255,.045); --line:rgba(233,224,246,.14);
+  --blush:#F7C6DA; --lilac:#C9B7F7; --mint:#AEEBD5; --butter:#FFE3AE; --sky:#BBDDF7;
+  --rose:#E9628F; --chrome:#E4E2EC;
+  --text:#EDE9F4; --dim:#A79FB8;
+  --serif:'Instrument Serif',Georgia,serif;
+  --sans:'Space Grotesk',-apple-system,sans-serif;
+  --mono:'JetBrains Mono','Courier New',monospace;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--text);font-family:var(--sans);font-weight:300;font-size:16px;line-height:1.75;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::selection{background:var(--lilac);color:#170f22}
+a{color:inherit}
+img{display:block;max-width:100%}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+
+/* ---------- ambient: aurora + fine grain, low and calm ---------- */
+.amb{position:fixed;inset:0;z-index:-2;background:url(assets/aurora.jpg) center/cover no-repeat;opacity:.34;filter:saturate(.85)}
+.amb2{position:fixed;inset:0;z-index:-1;background:
+  radial-gradient(90% 60% at 78% 6%, rgba(201,183,247,.10), transparent 60%),
+  radial-gradient(70% 50% at 8% 92%, rgba(247,198,218,.08), transparent 60%),
+  linear-gradient(180deg, rgba(15,11,21,.55) 0%, rgba(15,11,21,.9) 55%, var(--ink) 100%)}
+body::after{content:'';position:fixed;inset:0;z-index:200;pointer-events:none;opacity:.045;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+.wrap{max-width:1120px;margin:0 auto;padding:0 26px}
+section{padding:clamp(80px,11vh,132px) 0}
+
+/* ---------- shared type ---------- */
+.kicker{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:10.5px;letter-spacing:3.4px;text-transform:uppercase;color:var(--dim);margin-bottom:14px}
+.kicker::before{content:'';width:22px;height:1px;background:linear-gradient(90deg,var(--lilac),transparent)}
+.kicker b{color:var(--blush);font-weight:400}
+h2{font-family:var(--serif);font-weight:400;font-size:clamp(34px,5vw,58px);line-height:1.06;letter-spacing:.3px;margin-bottom:14px}
+h2 em{font-style:italic;color:var(--blush)}
+.lede{color:var(--dim);max-width:60ch;font-size:15.5px}
+.lede b{color:var(--text);font-weight:400}
+
+/* soft glass card, the whole system rests on this */
+.glass{background:var(--veil);border:1px solid var(--line);border-radius:18px;-webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px)}
+
+/* ---------- nav ---------- */
+nav{position:sticky;top:0;z-index:120;background:rgba(15,11,21,.72);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:62px;gap:16px}
+.brand{display:flex;align-items:center;gap:9px;font-family:var(--serif);font-size:21px;letter-spacing:.4px;text-decoration:none;white-space:nowrap}
+.brand img{width:19px;height:auto;flex:0 0 auto}
+.brand i{font-style:normal;color:var(--blush)}
+nav ul{display:flex;gap:22px;list-style:none}
+nav ul a{position:relative;text-decoration:none;font-family:var(--mono);font-size:10.5px;letter-spacing:1.8px;text-transform:uppercase;color:var(--dim);padding:6px 0;transition:color .2s var(--ease)}
+nav ul a::after{content:'';position:absolute;left:0;bottom:0;height:1px;width:0;background:linear-gradient(90deg,var(--blush),var(--lilac));transition:width .35s var(--ease)}
+nav ul a:hover,nav ul a.cur{color:var(--text)}
+nav ul a:hover::after,nav ul a.cur::after{width:100%}
+.progress{position:fixed;top:0;left:0;height:2px;width:0;z-index:130;background:linear-gradient(90deg,var(--blush),var(--lilac),var(--mint))}
+
+/* ---------- hero ---------- */
+header{position:relative;min-height:88svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 26px 40px}
+.bars{position:absolute;left:0;right:0;height:clamp(26px,5vh,54px);background:rgba(9,6,13,.72);z-index:2;pointer-events:none}
+.bars.t{top:0;border-bottom:1px solid rgba(233,224,246,.07)}
+.bars.b{bottom:0;border-top:1px solid rgba(233,224,246,.07)}
+.hero-tag{font-family:var(--mono);font-size:10.5px;letter-spacing:4px;text-transform:uppercase;color:var(--dim)}
+.hero-tag b{color:var(--mint);font-weight:400}
+.wordmark{width:min(720px,92%);margin:34px auto 0;filter:drop-shadow(0 12px 44px rgba(201,183,247,.22))}
+.hero-sub{font-family:var(--serif);font-size:clamp(21px,3vw,30px);font-style:italic;color:var(--text);margin-top:26px;max-width:22ch;line-height:1.35}
+.hero-line{max-width:52ch;margin:20px auto 0;color:var(--dim);font-size:15px}
+.btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:34px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 26px;border-radius:100px;text-decoration:none;font-family:var(--mono);font-size:11px;letter-spacing:1.8px;text-transform:uppercase;border:1px solid var(--line);color:var(--text);background:var(--veil);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:transform .3s var(--ease),border-color .3s,background .3s,color .3s}
+.btn:hover{transform:translateY(-3px);border-color:transparent;background:linear-gradient(100deg,var(--blush),var(--lilac));color:#1a1024}
+.btn.ghost:hover{background:var(--veil);border-color:var(--blush);color:var(--blush)}
+.scrolltip{margin-top:38px;font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--dim);opacity:.7;animation:sink 2.8s ease-in-out infinite}
+@keyframes sink{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
+
+/* ---------- ticker ---------- */
+.mq{border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;padding:12px 0;background:rgba(255,255,255,.02)}
+.mq-track{display:flex;width:max-content;animation:mq 42s linear infinite;font-family:var(--mono);font-size:10.5px;letter-spacing:3.4px;text-transform:uppercase;color:var(--dim);white-space:nowrap}
+.mq:hover .mq-track{animation-play-state:paused}
+.mq-track span{padding:0 18px}
+.mq-track b{color:var(--blush);font-weight:400}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* ---------- info ---------- */
+.info-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:34px;align-items:start;margin-top:34px}
+.info-body p+p{margin-top:16px}
+.spec{padding:26px 28px}
+.spec h3{font-family:var(--mono);font-size:10px;letter-spacing:2.6px;text-transform:uppercase;color:var(--dim);margin-bottom:16px;font-weight:400}
+.spec dl{display:grid;grid-template-columns:auto 1fr;gap:10px 16px;font-size:13.5px}
+.spec dt{font-family:var(--mono);font-size:10.5px;letter-spacing:1.4px;text-transform:uppercase;color:var(--dim);padding-top:3px}
+.spec dd{color:var(--text)}
+.award{display:inline-flex;align-items:center;gap:8px;margin-top:20px;padding:9px 15px;border-radius:100px;background:linear-gradient(100deg,rgba(247,198,218,.14),rgba(201,183,247,.14));border:1px solid rgba(247,198,218,.3);font-family:var(--mono);font-size:10px;letter-spacing:1.6px;text-transform:uppercase;color:var(--blush)}
+.award img{width:15px}
+
+/* ---------- photo mode ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin-top:36px}
+.grid a{position:relative;display:block;aspect-ratio:16/10;overflow:hidden;border-radius:14px;border:1px solid var(--line);transition:transform .5s var(--ease),border-color .3s}
+.grid a:hover{transform:translateY(-5px);border-color:rgba(247,198,218,.45)}
+.grid img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--ease)}
+.grid a:hover img{transform:scale(1.06)}
+.grid .tag{position:absolute;left:0;right:0;bottom:0;padding:22px 12px 10px;font-family:var(--mono);font-size:9.5px;letter-spacing:1.4px;color:#fff;background:linear-gradient(0deg,rgba(10,7,15,.9),transparent);opacity:0;transform:translateY(8px);transition:opacity .3s,transform .4s var(--ease)}
+.grid a:hover .tag{opacity:1;transform:none}
+.grid .tag b{color:var(--blush);font-weight:400}
+dialog{border:0;background:transparent;padding:0;max-width:min(1180px,94vw)}
+dialog::backdrop{background:rgba(9,6,13,.9);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+dialog img{border-radius:14px;max-height:88vh;object-fit:contain}
+
+/* A/B grade slider */
+.ab{position:relative;margin-top:44px;border-radius:16px;overflow:hidden;border:1px solid var(--line);aspect-ratio:16/9;cursor:ew-resize;touch-action:pan-y;user-select:none}
+.ab img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;-webkit-user-drag:none}
+.ab .top{clip-path:inset(0 calc(100% - var(--cut,50%)) 0 0)}
+.ab .bar{position:absolute;top:0;bottom:0;left:var(--cut,50%);width:1.5px;background:linear-gradient(180deg,var(--blush),var(--lilac));transform:translateX(-.75px);z-index:3;pointer-events:none}
+.ab .grip{position:absolute;top:50%;left:var(--cut,50%);transform:translate(-50%,-50%);z-index:4;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.1);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.5);display:grid;place-items:center;font-family:var(--mono);font-size:11px;color:#fff;cursor:ew-resize}
+.ab .grip:focus-visible{outline:2px solid var(--blush);outline-offset:3px}
+.ab .lb{position:absolute;top:14px;z-index:3;font-family:var(--mono);font-size:9.5px;letter-spacing:1.6px;padding:5px 10px;border-radius:100px;background:rgba(9,6,13,.6);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);color:#fff;pointer-events:none}
+.ab .lb.l{left:14px}
+.ab .lb.r{right:14px;color:var(--blush)}
+.cap{margin-top:14px;font-family:var(--mono);font-size:10.5px;letter-spacing:1.4px;color:var(--dim)}
+
+/* ---------- archive ---------- */
+.tapes{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:36px;max-width:720px}
+.tape{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#000;transition:transform .5s var(--ease)}
+.tape:hover{transform:translateY(-5px)}
+.tape video{width:100%;aspect-ratio:9/16;object-fit:cover}
+.tape .t{position:absolute;left:0;right:0;bottom:0;padding:20px 10px 9px;font-family:var(--mono);font-size:9px;letter-spacing:1.2px;color:#fff;background:linear-gradient(0deg,rgba(10,7,15,.86),transparent)}
+.sac{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:22px}
+.sac a{border-radius:11px;overflow:hidden;border:1px solid var(--line);aspect-ratio:1;transition:transform .45s var(--ease)}
+.sac a:hover{transform:translateY(-4px)}
+.sac img{width:100%;height:100%;object-fit:cover}
+
+/* ---------- playback: the decora frame ---------- */
+.reel{margin-top:38px}
+.reel .fr{position:relative}
+.decora{border:clamp(34px,5vw,64px) solid transparent;border-image:url(assets/frame_decora.jpg) 179 203 173 203 stretch;border-radius:4px;background:#000;box-shadow:0 40px 90px -40px rgba(0,0,0,.9)}
+.yt{position:relative;width:100%;aspect-ratio:16/9;background:#000}
+.yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.scan{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:.5;
+  background:repeating-linear-gradient(180deg,rgba(0,0,0,0) 0 3px,rgba(0,0,0,.13) 3px 4px)}
+.reel-meta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:14px;font-family:var(--mono);font-size:10.5px;letter-spacing:1.5px;color:var(--dim);text-transform:uppercase}
+.reel-meta b{color:var(--text);font-weight:400}
+.bts{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:30px}
+.bts .yt{border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+.bts .lbl{margin-top:9px;font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--dim);text-transform:uppercase}
+.washi{position:absolute;pointer-events:none;z-index:6;filter:drop-shadow(0 4px 10px rgba(0,0,0,.45))}
+#w1{top:-16px;left:-18px;width:118px;transform:rotate(-7deg)}
+#w2{top:-14px;right:-12px;width:96px;transform:rotate(6deg)}
+
+/* ---------- feed ---------- */
+.mons{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:36px}
+.mon{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line);text-decoration:none;background:#0b0810;transition:transform .5s var(--ease),border-color .3s}
+.mon:hover{transform:translateY(-5px);border-color:rgba(201,183,247,.45)}
+.mon .view{position:relative;aspect-ratio:4/5;background:#000}
+.mon .view img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .9s var(--ease)}
+.mon .view img.on{opacity:1}
+.mon .head,.mon .foot{display:flex;justify-content:space-between;padding:9px 12px;font-family:var(--mono);font-size:9px;letter-spacing:1.3px;color:var(--dim);text-transform:uppercase}
+.mon .head{border-bottom:1px solid var(--line)}
+.mon .foot{border-top:1px solid var(--line)}
+.mon .head b{color:var(--blush);font-weight:400}
+.mon .go{color:var(--lilac)}
+.mon.tt .view{display:grid;place-items:center;align-content:center;gap:8px;background:linear-gradient(160deg,rgba(247,198,218,.1),rgba(201,183,247,.06))}
+.mon.tt .av{position:static;width:62px;height:62px;border-radius:50%;object-fit:cover;opacity:1;border:1px solid var(--line)}
+.mon.tt .h{font-family:var(--serif);font-size:21px}
+.mon.tt .stats{display:flex;gap:16px;font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:1px}
+.mon.tt .stats b{display:block;color:var(--text);font-size:14px;font-family:var(--sans);font-weight:500}
+.socials{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+.socials a{padding:16px 18px;border-radius:12px;text-decoration:none;transition:transform .4s var(--ease),border-color .3s}
+.socials a:hover{transform:translateY(-3px);border-color:rgba(174,235,213,.4)}
+.socials .h{font-size:14px}
+.socials .h span{color:var(--dim);font-size:12px;font-family:var(--mono)}
+.socials .s{font-size:12px;color:var(--dim);margin-top:3px}
+
+/* ---------- rates ---------- */
+.rates{display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:14px;margin-top:34px}
+.rate{position:relative;padding:24px 24px 22px;border-radius:16px;transition:transform .45s var(--ease),border-color .3s}
+.rate:hover{transform:translateY(-5px);border-color:rgba(247,198,218,.4)}
+.rate .t{font-family:var(--mono);font-size:9.5px;letter-spacing:1.8px;text-transform:uppercase;color:var(--mint);margin-bottom:8px}
+.rate .n{font-family:var(--serif);font-size:23px}
+.rate .p{font-family:var(--serif);font-size:42px;line-height:1.1;margin:4px 0 2px;background:linear-gradient(100deg,var(--blush),var(--lilac));-webkit-background-clip:text;background-clip:text;color:transparent}
+.rate .p span{font-size:15px;color:var(--dim);-webkit-text-fill-color:var(--dim)}
+.rate .mk{font-family:var(--mono);font-size:9.5px;letter-spacing:1.1px;color:var(--dim);margin-bottom:14px}
+.rate ul{list-style:none;font-size:13.5px;color:var(--dim)}
+.rate li{position:relative;padding:6px 0 6px 15px;border-bottom:1px solid rgba(233,224,246,.07)}
+.rate li:last-child{border-bottom:0}
+.rate li::before{content:'';position:absolute;left:0;top:14px;width:5px;height:5px;border-radius:50%;background:var(--blush)}
+.rate li b{color:var(--text);font-weight:400}
+.rate .flag{position:absolute;top:-9px;right:16px;padding:3px 11px;border-radius:100px;font-family:var(--mono);font-size:8.5px;letter-spacing:1.4px;text-transform:uppercase;background:linear-gradient(100deg,var(--blush),var(--lilac));color:#1a1024}
+.subhead{display:flex;align-items:center;gap:12px;margin:44px 0 4px;font-family:var(--mono);font-size:10px;letter-spacing:2.6px;text-transform:uppercase;color:var(--dim)}
+.subhead::after{content:'';flex:1;height:1px;background:var(--line)}
+.subhead b{color:var(--mint);font-weight:400}
+.ala{display:flex;flex-wrap:wrap;gap:9px;margin-top:22px}
+.ala span{padding:8px 14px;border-radius:100px;border:1px solid var(--line);font-family:var(--mono);font-size:10px;letter-spacing:1.2px;color:var(--dim);text-transform:uppercase}
+.ala b{color:var(--text);font-weight:400}
+.fine{margin-top:20px;font-family:var(--mono);font-size:10px;letter-spacing:1.3px;color:var(--dim);line-height:2.1;text-transform:uppercase}
+.fine b{color:var(--blush);font-weight:400}
+
+/* ---------- standby ---------- */
+footer{position:relative;padding:clamp(80px,10vh,120px) 0 60px;text-align:center;border-top:1px solid var(--line)}
+.standby{font-family:var(--mono);font-size:10px;letter-spacing:3.4px;text-transform:uppercase;color:var(--dim);display:inline-flex;align-items:center;gap:8px}
+.standby i{width:6px;height:6px;border-radius:50%;background:var(--mint);box-shadow:0 0 10px var(--mint);animation:blink 2.4s ease-in-out infinite}
+@keyframes blink{50%{opacity:.3}}
+footer h2{margin:16px 0 22px}
+.mail{display:inline-block;font-family:var(--serif);font-size:clamp(24px,4vw,40px);text-decoration:none;padding:14px 40px;border-radius:100px;border:1px solid var(--line);background:var(--veil);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:transform .3s var(--ease),background .3s,color .3s}
+.mail:hover{transform:translateY(-3px);background:linear-gradient(100deg,var(--blush),var(--lilac));color:#1a1024}
+.book{max-width:560px;margin:30px auto 0;font-size:13.5px;color:var(--dim)}
+.book a{color:var(--blush)}
+.foot-links{margin-top:34px;display:flex;gap:8px 20px;justify-content:center;flex-wrap:wrap;font-family:var(--mono);font-size:10.5px;letter-spacing:1.4px;text-transform:uppercase}
+.foot-links a{color:var(--dim);text-decoration:none;transition:color .2s}
+.foot-links a:hover{color:var(--text)}
+.sig{margin-top:34px;font-family:var(--mono);font-size:9.5px;letter-spacing:1.8px;color:#8b839c;text-transform:uppercase;line-height:2}
+.sig b{color:var(--rose);font-weight:400}
+
+/* ---------- reveal ---------- */
+.rv{opacity:0;transform:translateY(24px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.rv.in{opacity:1;transform:none}
+
+/* ---------- responsive ---------- */
+@media(max-width:900px){
+  .info-grid{grid-template-columns:1fr;gap:24px}
+  .mons{grid-template-columns:1fr}
+  .bts{grid-template-columns:1fr}
+  .socials{grid-template-columns:1fr}
+  .sac{grid-template-columns:repeat(3,1fr)}
+  nav ul{gap:13px}
+  nav ul a{font-size:9.5px;letter-spacing:1.2px}
+  .brand span{display:none}
+}
+@media(max-width:620px){
+  nav ul li:nth-child(3),nav ul li:nth-child(5){display:none}
+  .grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .tapes{grid-template-columns:1fr;max-width:340px;margin-inline:auto}
+  .ala span{font-size:9px}
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none !important;transition:none !important}
+  html{scroll-behavior:auto}
+  .rv{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<div class="amb" aria-hidden="true"></div>
+<div class="amb2" aria-hidden="true"></div>
+<div class="progress" id="prog" aria-hidden="true"></div>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#top"><img src="assets/charm.png" alt="" aria-hidden="true"><span>Giancarlo <i>Ortiz</i></span></a>
+    <ul>
+      <li><a href="#info">Info</a></li>
+      <li><a href="#photo">Photo</a></li>
+      <li><a href="#archive">Archive</a></li>
+      <li><a href="#playback">Playback</a></li>
+      <li><a href="#feed">Feed</a></li>
+      <li><a href="#rates">Rates</a></li>
+      <li><a href="#standby">Standby</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+<header id="top">
+  <div class="bars t" aria-hidden="true"></div>
+  <div class="bars b" aria-hidden="true"></div>
+  <p class="hero-tag">San Antonio, TX <b>&middot;</b> Available SA / Austin / Remote</p>
+  <h1 class="sr">Giancarlo Ortiz, director, colorist and editor</h1>
+  <img class="wordmark" src="assets/wordmark.png" alt="Giancarlo Ortiz" width="1200" height="239" fetchpriority="high">
+  <p class="hero-sub">Director, colorist, editor.</p>
+  <p class="hero-line">I write, direct, shoot, cut, grade, and design end to end. Custom color pipeline, 24-hour event turnaround, and a short film with an award on it.</p>
+  <div class="btns">
+    <a class="btn" href="#playback">Roll playback</a>
+    <a class="btn ghost" href="#rates">See the rates</a>
+    <a class="btn ghost" href="../assets/docs/GiancarloOrtiz-Resume-VideoEditor.pdf">Resume</a>
+  </div>
+  <p class="scrolltip">SCROLL &darr;</p>
+</header>
+
+<div class="mq" aria-hidden="true"><div class="mq-track">
+  <span>DIRECTING <b>&middot;</b> COLOR <b>&middot;</b> EDIT <b>&middot;</b> DAVINCI RESOLVE <b>&middot;</b> PREMIERE <b>&middot;</b> AFTER EFFECTS <b>&middot;</b> SONY FX6 <b>&middot;</b> CUSTOM DCTL LOOKS <b>&middot;</b> FUSION <b>&middot;</b> 24-HOUR EVENT TURNAROUND <b>&middot;</b> SAN ANTONIO TX <b>&middot;</b>&nbsp;</span>
+</div></div>
+
+<section id="info" aria-labelledby="info-h"><div class="wrap rv">
+  <div class="kicker">01 <b>&middot;</b> Info</div>
+  <h2 id="info-h">The <em>operator</em></h2>
+  <div class="info-grid">
+    <div class="info-body">
+      <p class="lede">I am a director and colorist finishing my B.S. in Digital Cinematography at Full Sail, based in San Antonio. I write, direct, shoot, cut, and grade my own work, which means you deal with one person from the idea to the delivery.</p>
+      <p class="lede">My edge is color. I build my own looks as DCTLs in DaVinci Resolve, so nothing I hand you looks like a preset. My other edge is speed. I ran event coverage for the San Antonio Current as their one-person unit and turned edits around the <b>same night</b>, while the event was still warm.</p>
+      <p class="lede">Fun on set, serious in the timeline. <b>Directing is the goal.</b></p>
+      <div class="award"><img src="assets/charm.png" alt="" aria-hidden="true">Course Director's Award &middot; Full Sail</div>
+    </div>
+    <div class="spec glass">
+      <h3>Spec sheet</h3>
+      <dl>
+        <dt>Roles</dt><dd>Director, colorist, editor, shooter</dd>
+        <dt>Camera</dt><dd>Sony FX6, Insta360 Ace Pro 2</dd>
+        <dt>Post</dt><dd>Resolve Studio, Premiere, After Effects, Fusion</dd>
+        <dt>Color</dt><dd>Custom DCTL looks, node-built, no presets</dd>
+        <dt>Turnaround</dt><dd>24 to 48 hours on event work</dd>
+        <dt>Reach</dt><dd>7.6K on TikTok, video essays and edits</dd>
+        <dt>Based</dt><dd>San Antonio TX, travels</dd>
+      </dl>
+    </div>
+  </div>
+</div></section>
+
+<section id="photo" aria-labelledby="photo-h"><div class="wrap rv">
+  <div class="kicker">02 <b>&middot;</b> Photo mode</div>
+  <h2 id="photo-h">Frames from the <em>floor</em></h2>
+  <p class="lede">Pulled and graded from my live stadium coverage. Click any frame to open it full size.</p>
+  <div class="grid" id="gallery"></div>
+
+  <div class="ab" id="ab">
+    <img src="../assets/stills/grade_sludge.jpg" alt="The same frame with my finished grade applied" loading="lazy">
+    <img class="top" src="../assets/stills/grade_source.jpg" alt="A frame straight off the sensor, ungraded" loading="lazy">
+    <span class="lb l">SOURCE</span>
+    <span class="lb r">GRADED &middot; EDITORIAL SLUDGE</span>
+    <div class="bar"></div>
+    <div class="grip" role="slider" tabindex="0" aria-label="Grade comparison wipe, arrow keys or drag" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">&lt;&nbsp;&gt;</div>
+  </div>
+  <p class="cap">DRAG THE LINE &middot; LEFT IS WHAT THE SENSOR SAW, RIGHT IS THE LOOK I BUILT AS A DCTL</p>
+</div></section>
+
+<section id="archive" aria-labelledby="archive-h"><div class="wrap rv">
+  <div class="kicker">03 <b>&middot;</b> Archive</div>
+  <h2 id="archive-h">On assignment: <em>SA Current</em></h2>
+  <p class="lede">I was the alt-weekly's on-the-ground event unit. Sent solo into events across San Antonio to shoot photo and video, cut the coverage the <b>same night</b>, and hand back organized delivery packages ready to post. Ran the posting too: five-plus posts a week, a <b>15% engagement lift</b> in three months.</p>
+  <div class="tapes">
+    <div class="tape"><video muted loop playsinline preload="none" poster="assets/poster1.jpg" data-src="../assets/sacurrent/tape1_topshelf.mp4"></video><span class="t">TOP SHELF &middot; FOOD FEST</span></div>
+    <div class="tape"><video muted loop playsinline preload="none" poster="assets/poster2.jpg" data-src="../assets/sacurrent/tape2_culinaria.mp4"></video><span class="t">SERVICE &middot; ON THE LINE</span></div>
+    <div class="tape"><video muted loop playsinline preload="none" poster="assets/poster3.jpg" data-src="../assets/sacurrent/tape3_beerfest.mp4"></video><span class="t">BEER FEST &middot; FIELD DAY</span></div>
+  </div>
+  <p class="cap" style="margin-top:26px">STILLS PULL &middot; TOP SHELF, RIVERWALK &middot; SHOT AND EDITED THE SAME NIGHT</p>
+  <div class="sac" id="sac"></div>
+  <p class="cap" style="margin-top:16px">FULL LOG: TOP SHELF &middot; BEER FESTIVAL &middot; DOSEUM &middot; REVOLUTIONARY WINGS</p>
+</div></section>
+
+<section id="playback" aria-labelledby="playback-h"><div class="wrap rv">
+  <div class="kicker">04 <b>&middot;</b> Playback</div>
+  <h2 id="playback-h">The work, rolled from the <em>top</em></h2>
+  <p class="lede">The short film I wrote, directed, and edited, and the behind-the-scenes of how it got made.</p>
+
+  <div class="reel">
+    <div class="fr">
+      <img class="washi" id="w1" src="assets/washi_pink.png" alt="" aria-hidden="true" loading="lazy">
+      <img class="washi" id="w2" src="assets/washi_mint.png" alt="" aria-hidden="true" loading="lazy">
+      <div class="decora">
+        <div class="yt">
+          <iframe src="https://www.youtube-nocookie.com/embed/pQ0W-conqwE" title="VOLUME, a short film by Giancarlo Ortiz" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+          <div class="scan" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+    <div class="reel-meta">
+      <span><b>VOLUME</b> &middot; NARRATIVE SHORT &middot; 2026</span>
+      <span>WRITER / DIRECTOR / EDITOR: <b>G. ORTIZ</b></span>
+      <span style="color:var(--blush)">&#9733; COURSE DIRECTOR'S AWARD</span>
+    </div>
+  </div>
+
+  <div class="bts">
+    <div>
+      <div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/KuMfghV9hmA" title="VOLUME BTS episode one, rehearsal vlog" loading="lazy" allowfullscreen></iframe></div>
+      <p class="lbl">BTS 01 &middot; HOW I RUN A SET: REHEARSAL, DIRECTION, COVERAGE</p>
+    </div>
+    <div>
+      <div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/psxQ4pLF4fw" title="VOLUME BTS episode two, the process" loading="lazy" allowfullscreen></iframe></div>
+      <p class="lbl">BTS 02 &middot; THE EDIT, THE GRADE, THE FINISH</p>
+    </div>
+  </div>
+</div></section>
+
+<section id="feed" aria-labelledby="feed-h"><div class="wrap rv">
+  <div class="kicker">05 <b>&middot;</b> Feed</div>
+  <h2 id="feed-h">On the grid <em>right now</em></h2>
+  <p class="lede">The Alamodome coverage drops and the account they live on. Monitors cycle on their own, click through for the full posts.</p>
+  <div class="mons">
+    <a class="mon" href="https://www.instagram.com/vamppsych/p/Dabz36_EeHb/" target="_blank" rel="noopener">
+      <div class="head"><span><b>MON 1</b> &middot; IG CAROUSEL</span><span>COLOR</span></div>
+      <div class="view" data-slides="color" data-n="5"></div>
+      <div class="foot"><span>ALAMODOME &middot; 07.04.26</span><span class="go">OPEN &rarr;</span></div>
+    </a>
+    <a class="mon" href="https://www.instagram.com/vamppsych/p/Dab07C8kRjq/" target="_blank" rel="noopener">
+      <div class="head"><span><b>MON 2</b> &middot; IG CAROUSEL</span><span>B&amp;W</span></div>
+      <div class="view" data-slides="bw" data-n="7"></div>
+      <div class="foot"><span>ALAMODOME &middot; 07.04.26</span><span class="go">OPEN &rarr;</span></div>
+    </a>
+    <a class="mon tt" href="https://www.tiktok.com/@vamp.psych" target="_blank" rel="noopener">
+      <div class="head"><span><b>MON 3</b> &middot; TIKTOK</span><span>LIVE</span></div>
+      <div class="view">
+        <img class="av" src="../assets/feed/tt_avatar.jpg" alt="@vamp.psych profile picture" loading="lazy">
+        <span class="h">@vamp.psych</span>
+        <span class="stats"><span><b>7.6K</b>followers</span><span><b>31.6K</b>likes</span></span>
+      </div>
+      <div class="foot"><span>SHORT-FORM &middot; ESSAYS</span><span class="go">OPEN &rarr;</span></div>
+    </a>
+  </div>
+  <div class="socials">
+    <a class="glass" href="https://www.tiktok.com/@vamp.psych" target="_blank" rel="noopener"><div class="h">TikTok <span>@vamp.psych</span></div><div class="s">7.6K+ followers, short-form and video essays</div></a>
+    <a class="glass" href="https://www.instagram.com/vamppsych" target="_blank" rel="noopener"><div class="h">Instagram <span>@vamppsych</span></div><div class="s">Visual systems, posters, graded stills</div></a>
+    <a class="glass" href="https://www.youtube.com/@Vamppsych" target="_blank" rel="noopener"><div class="h">YouTube <span>@Vamppsych</span></div><div class="s">VOLUME, the BTS series, long-form edits</div></a>
+  </div>
+</div></section>
+
+<section id="rates" aria-labelledby="rates-h"><div class="wrap rv">
+  <div class="kicker">06 <b>&middot;</b> Rate card</div>
+  <h2 id="rates-h">Market rates, <em>pro pipeline</em></h2>
+  <p class="lede">San Antonio market rates for the full pipeline: FX6 coverage, custom color, and real deadline discipline. The market ranges next to each package come from current San Antonio pricing research, so you can see where each one lands.</p>
+
+  <div class="rates">
+    <div class="rate glass"><span class="flag">Start here</span>
+      <div class="t">Events &middot; Flagship</div><div class="n">Event Recap</div><div class="p">$600</div>
+      <div class="mk">SA MARKET: $500&ndash;700 FOR 2 HRS</div>
+      <ul><li>Up to 2 hours on site</li><li>60 to 90s recap delivered <b>within 24 hours</b></li><li>3 vertical cutdowns</li><li>Graded in a custom look</li></ul>
+    </div>
+    <div class="rate glass">
+      <div class="t">Events</div><div class="n">Event Full</div><div class="p">$900</div>
+      <div class="mk">SA MARKET: $700&ndash;1,000</div>
+      <ul><li>Up to 4 hours on site</li><li>Everything in Recap</li><li>5 vertical cutdowns</li><li>4K stills pulled from the footage</li></ul>
+    </div>
+    <div class="rate glass">
+      <div class="t">Personal &middot; Photo</div><div class="n">Follow Day</div><div class="p">$1,400</div>
+      <div class="mk">SA MARKET: $800&ndash;2,000 FOR DAY COVERAGE</div>
+      <ul><li>Up to 6 hours shadowing your day</li><li>Quince, birthday, proposal, family day</li><li>Candid photos, graded like film frames</li><li>Gallery delivered <b>within 48 hours</b></li></ul>
+    </div>
+    <div class="rate glass">
+      <div class="t">Social</div><div class="n">Content Day</div><div class="p">$850</div>
+      <div class="mk">AGENCY RETAINERS: $1,500&ndash;3,500/MO</div>
+      <ul><li>One shoot visit at your spot</li><li>4 reels shot and cut</li><li>Hooks, captions, platform formatting</li><li>Ready-to-post files</li></ul>
+    </div>
+    <div class="rate glass">
+      <div class="t">Social &middot; Retainer</div><div class="n">Monthly 8</div><div class="p">$2,200<span>/mo</span></div>
+      <div class="mk">AGENCY RETAINERS: $1,500&ndash;3,500/MO</div>
+      <ul><li>Two shoot visits a month</li><li>8 reels shot and cut</li><li>Posting calendar included</li><li>Priority turnaround</li></ul>
+    </div>
+    <div class="rate glass">
+      <div class="t">Brand</div><div class="n">Brand Film</div><div class="p">$2,500</div>
+      <div class="mk">SA MARKET: $1,500&ndash;3,500</div>
+      <ul><li>Half-day shoot</li><li>60 to 90s brand film</li><li>Custom DCTL color grade</li><li>2 vertical cutdowns</li></ul>
+    </div>
+    <div class="rate glass">
+      <div class="t">Artists &middot; Music</div><div class="n">Music Video</div><div class="p">$1,750</div>
+      <div class="mk">INDIE MARKET: $1,500+</div>
+      <ul><li>Half-day shoot, performance and b-roll</li><li>Graded in custom in-house looks</li><li>Vertical teaser for the drop</li><li>I know the scene. Bring the track.</li></ul>
+    </div>
+  </div>
+
+  <div class="subhead">Commercial work <b>&middot; 2 revision rounds on every tier</b></div>
+  <div class="rates">
+    <div class="rate glass">
+      <div class="t">Commercial &middot; Entry</div><div class="n">Ad Reel</div><div class="p">$800</div>
+      <div class="mk">SOCIAL AD PRODUCTION: $1,500+</div>
+      <ul><li>One 15 to 30s vertical ad</li><li>Hook scripted, shot, cut, graded</li><li>Built to sell, not just to post</li><li><b>2 revision rounds</b> included</li></ul>
+    </div>
+    <div class="rate glass">
+      <div class="t">Commercial</div><div class="n">Spot 30</div><div class="p">$2,500</div>
+      <div class="mk">SA MARKET: $1,500&ndash;3,500 FOR A 30S SPOT</div>
+      <ul><li>30 second commercial, half-day shoot</li><li>Directed: shot list, blocking, talent direction</li><li>Horizontal, vertical, and a 15s cutdown</li><li><b>2 revision rounds</b> included</li></ul>
+    </div>
+    <div class="rate glass">
+      <div class="t">Commercial &middot; Flagship</div><div class="n">Full Production</div><div class="p">$7,500</div>
+      <div class="mk">SA MARKET: $3,500&ndash;25,000</div>
+      <ul><li>Script to screen: concept, script, storyboards</li><li>Full-day directed shoot</li><li>60s hero spot, plus 30s, 15s, 3 verticals</li><li>Graded, mixed, every format</li></ul>
+    </div>
+  </div>
+
+  <div class="ala">
+    <span>SINGLE REEL <b>$300</b></span>
+    <span>LISTING / SPACE TOUR <b>$500</b></span>
+    <span>EDIT ONLY <b>$65/HR</b></span>
+    <span>COLOR GRADE <b>$75/HR</b></span>
+    <span>EXTRA VERTICAL <b>$100</b></span>
+    <span>EXTRA ON-SITE HOUR <b>$125</b></span>
+    <span>RAW HANDOFF <b>+$150</b></span>
+    <span>NEXT-DAY RUSH <b>+$150</b></span>
+    <span>EXTRA REVISION ROUND <b>$125</b></span>
+  </div>
+  <p class="fine">50% deposit books the date &middot; Net 15 &middot; Free travel inside Loop 410, $0.50/mi beyond &middot; W-9 on request &middot; <b>Event Recap delivers in 24 hours, full event, content day and follow day in 48, brand, music video and commercial get a delivery date at booking</b> &middot; <a href="../assets/docs/GiancarloOrtiz-RateCard.pdf" style="color:var(--lilac)">Download the rate card (PDF)</a></p>
+</div></section>
+</main>
+
+<footer id="standby"><div class="wrap rv">
+  <p class="standby"><i></i>Standby</p>
+  <h2>Let's cut <em>something</em></h2>
+  <a class="mail" href="mailto:carlo72400@gmail.com?subject=Booking%20request%20%E2%80%A2%20%5Bproject%5D&body=Project%3A%0ADate(s)%3A%0ALocation%3A%0AWhat%20you%20need%20(shoot%20%2F%20edit%20%2F%20both)%3A%0ADeliverables%3A%0ABudget%20range%3A%0ADeadline%3A">carlo72400@gmail.com</a>
+  <p class="book">Booking event coverage, commercials, music videos, follow-day photo, edit and color. Written estimate within 24 hours. Full <a href="#rates">rate card above</a>, invoices and W-9 on request.</p>
+  <div class="foot-links">
+    <a href="https://www.tiktok.com/@vamp.psych" target="_blank" rel="noopener">TikTok</a>
+    <a href="https://www.instagram.com/vamppsych" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://www.youtube.com/@Vamppsych" target="_blank" rel="noopener">YouTube</a>
+    <a href="../assets/docs/GiancarloOrtiz-Resume-VideoEditor.pdf">Editor resume</a>
+    <a href="../assets/docs/GiancarloOrtiz-Resume-Content.pdf">Content resume</a>
+    <a href="../assets/docs/GiancarloOrtiz-RateCard.pdf">Rate card</a>
+    <a href="../index.html">Main site</a>
+    <a href="../dream/">Dream.alt</a>
+  </div>
+  <p class="sig">GIANCARLO ORTIZ &middot; SAN ANTONIO TX &middot; EST. VAMPPSYCH 2023 &middot; FUTURE FILM DIRECTOR<br><b>chrome and roses. soft on the eyes, sharp in the timeline.</b></p>
+</div></footer>
+
+<dialog id="lb"><img id="lbimg" alt=""></dialog>
+
+<script>
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const R = document.documentElement;
+
+/* ---- photo mode gallery ---- */
+const STILLS = [
+  ['01_globe-wide.jpg','Globe wide','EDITORIAL SLUDGE'],
+  ['02_red-dome.jpg','Red dome','EDITORIAL SLUDGE'],
+  ['03_beam-dome.jpg','Beam dome','EDITORIAL SLUDGE'],
+  ['04_moon-dome.jpg','Moon dome','EDITORIAL SLUDGE'],
+  ['05_at-the-mic.jpg','At the mic','EDITORIAL SLUDGE'],
+  ['06_pov-armup.jpg','From the pit','EDITORIAL SLUDGE'],
+  ['07_red-crowd.jpg','Red crowd','SLEAZE'],
+  ['08_negative-space.jpg','Negative space','AVANT EDITORIAL'],
+  ['09_lone-profile.jpg','Lone profile','AVANT EDITORIAL'],
+  ['10_molten-dome.jpg','Molten dome','NIGHT CITY'],
+  ['11_beam-ring.jpg','Beam ring','EDITORIAL SLUDGE'],
+  ['12_finale.jpg','Finale','NIGHT CITY']
+];
+const g = document.getElementById('gallery');
+const lb = document.getElementById('lb');
+const lbimg = document.getElementById('lbimg');
+STILLS.forEach(([f,name,look],i)=>{
+  const a=document.createElement('a');
+  a.href='../assets/stills/'+f;
+  a.innerHTML='<img src="../assets/stills/'+f+'" alt="'+name+', graded still" loading="lazy">'
+    +'<span class="tag">FR_'+String(i+1).padStart(2,'0')+' &middot; '+name.toUpperCase()+' &middot; <b>'+look+'</b></span>';
+  a.addEventListener('click',e=>{e.preventDefault();lbimg.src=a.href;lbimg.alt=name;lb.showModal();});
+  g.appendChild(a);
+});
+const sac=document.getElementById('sac');
+for(let i=1;i<=6;i++){
+  const src='../assets/sacurrent/photo_'+String(i).padStart(2,'0')+'.jpg';
+  const alt='Top Shelf event photo '+i+' of 6, shot for the San Antonio Current';
+  const a=document.createElement('a');a.href=src;
+  a.innerHTML='<img src="'+src+'" alt="'+alt+'" loading="lazy">';
+  a.addEventListener('click',e=>{e.preventDefault();lbimg.src=src;lbimg.alt=alt;lb.showModal();});
+  sac.appendChild(a);
+}
+lb.addEventListener('click',()=>lb.close());
+
+/* ---- A/B grade slider ---- */
+(function(){
+  const ab=document.getElementById('ab');
+  const grip=ab.querySelector('.grip');
+  let cut=50;
+  const apply=()=>{ab.style.setProperty('--cut',cut+'%');grip.setAttribute('aria-valuenow',Math.round(cut));};
+  const fromX=x=>{const r=ab.getBoundingClientRect();cut=Math.max(2,Math.min(98,(x-r.left)/r.width*100));apply();};
+  ab.addEventListener('pointerdown',e=>{e.preventDefault();try{ab.setPointerCapture(e.pointerId);}catch(_){}fromX(e.clientX);});
+  ab.addEventListener('pointermove',e=>{if(e.buttons)fromX(e.clientX);});
+  grip.addEventListener('keydown',e=>{
+    if(e.key==='ArrowLeft'){cut=Math.max(2,cut-4);apply();e.preventDefault();}
+    if(e.key==='ArrowRight'){cut=Math.min(98,cut+4);apply();e.preventDefault();}
+  });
+  apply();
+})();
+
+/* ---- seamless ticker: second copy so -50% lands on identical content ---- */
+document.querySelectorAll('.mq-track').forEach(t=>{t.innerHTML+=t.innerHTML;});
+
+/* ---- feed monitors ---- */
+document.querySelectorAll('.view[data-slides]').forEach(v=>{
+  const pre=v.dataset.slides, n=+v.dataset.n, imgs=[];
+  for(let i=1;i<=n;i++){
+    const im=document.createElement('img');
+    im.src='../assets/feed/'+pre+'_'+String(i).padStart(2,'0')+'.jpg';
+    im.alt='';im.loading='lazy';v.appendChild(im);imgs.push(im);
+  }
+  imgs[0].classList.add('on');
+  if(REDUCED) return;
+  let cur=0;
+  setInterval(()=>{
+    if(document.hidden) return;
+    imgs[cur].classList.remove('on');
+    cur=(cur+1)%n;
+    imgs[cur].classList.add('on');
+  },3000);
+});
+
+/* ---- lazy tapes ---- */
+const vio=new IntersectionObserver(es=>es.forEach(e=>{
+  const v=e.target;
+  if(e.isIntersecting){ if(!v.src) v.src=v.dataset.src; if(!REDUCED) v.play().catch(()=>{}); else v.controls=true; }
+  else v.pause();
+}),{threshold:.2});
+document.querySelectorAll('.tape video').forEach(v=>vio.observe(v));
+
+/* ---- reveals ---- */
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}
+}),{threshold:.1});
+document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+
+/* ---- scroll progress + section-aware nav ---- */
+const prog=document.getElementById('prog');
+addEventListener('scroll',()=>{
+  const max=document.documentElement.scrollHeight-innerHeight;
+  prog.style.width=(max>0?scrollY/max*100:0)+'%';
+},{passive:true});
+const links=[...document.querySelectorAll('nav ul a')];
+const map={};links.forEach(a=>map[a.getAttribute('href').slice(1)]=a);
+const so=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){
+    links.forEach(a=>a.classList.remove('cur'));
+    if(map[e.target.id]) map[e.target.id].classList.add('cur');
+  }
+}),{rootMargin:'-40% 0px -55% 0px'});
+['info','photo','archive','playback','feed','rates','standby'].forEach(id=>{
+  const s=document.getElementById(id); if(s) so.observe(s);
+});
+</script>
+</body>
+</html>

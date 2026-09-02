@@ -1,0 +1,10 @@
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:74px}
+body{background:
+   radial-gradient(1100px 700px at 82% -6%, #fde6f0 0%, transparent 55%),
+   radial-gradient(900px 600px at 8% 8%, #e8f1fb 0%, transparent 50%),
+   radial-gradient(1000px 800px at 50% 108%, #f0e9fb 0%, transparent 55%),
+   var(--bg);
+  color:var(--ink);font-family:Inter,-apple-system,sans-serif;line-height:1.62;font-size:16px;overflow-x:hidden}
+::selection{background:var(--pink);color:#5a2b3e}
+a{color:inherit}

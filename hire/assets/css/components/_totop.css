@@ -1,0 +1,8 @@
+/* ---- back-to-top button ---- */
+.fab-top{width:46px;height:46px;padding:0;border-radius:50%;border:1.5px solid var(--rose);background:#fff;color:var(--rose-deep);cursor:pointer;font-size:20px;line-height:1;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 22px -6px rgba(214,120,155,.6);opacity:0;pointer-events:none;transform:translateY(8px) scale(.9);transition:opacity .3s,transform .3s var(--spring)}
+.fab-top.show{opacity:1;pointer-events:auto;transform:none}
+.fab-top:hover{transform:translateY(-3px)}
+
+/* ---- covered-text fixes ---- */
+.client-credits{margin-top:26px}
+@media(max-width:640px){ .hint{padding-right:106px} .datestamp{display:none} }

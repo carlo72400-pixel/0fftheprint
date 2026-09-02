@@ -1,0 +1,12 @@
+/* ---- mobile swipe-chip nav (all sections visible + jumpable) ---- */
+@media(max-width:760px){
+  nav .wrap{flex-wrap:wrap;height:auto;min-height:52px;padding-top:8px;padding-bottom:6px;gap:6px 12px}
+  .nav-tc{order:1}
+  nav ul{order:3;width:100%;flex-wrap:nowrap;overflow-x:auto;gap:8px;padding:2px 2px 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 16px,#000 calc(100% - 16px),transparent);mask-image:linear-gradient(90deg,transparent,#000 16px,#000 calc(100% - 16px),transparent)}
+  nav ul::-webkit-scrollbar{display:none}
+  nav ul li{flex:0 0 auto}
+  nav ul a{display:block;font-size:11px;letter-spacing:1px;padding:8px 14px;background:#fff;border:1.5px solid var(--line2);border-radius:999px;color:var(--ink)}
+  nav ul a::after{display:none}
+  nav ul a.cur{background:var(--rose);border-color:var(--rose);color:#fff}
+}

@@ -1,0 +1,14 @@
+/* ------- disclosure (progressive detail: keep the page light, detail one tap deep) ------- */
+.more{margin-top:26px;border:2px dashed var(--line2);border-radius:16px;background:var(--panel2);overflow:hidden}
+.more>summary{list-style:none;cursor:pointer;padding:15px 20px;font-family:var(--mono);font-size:11px;letter-spacing:1.4px;
+  text-transform:uppercase;color:var(--rose-deep);font-weight:600;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  transition:background .25s}
+.more>summary::-webkit-details-marker{display:none}
+.more>summary:hover{background:var(--panel)}
+.more>summary::after{content:'▾';font-size:13px;color:var(--pink);transition:transform .35s var(--spring)}
+.more[open]>summary::after{transform:rotate(180deg)}
+.more>summary .n{font-family:var(--mono);font-size:10px;letter-spacing:.6px;color:var(--dim);text-transform:none;font-weight:400}
+.more-body{padding:2px 20px 22px}
+.more-body .rate-grid{margin-top:14px}
+.more-body .alacarte{margin-top:0;border:0;padding:0;background:none}
+@media (prefers-reduced-motion:reduce){.more>summary::after{transition:none}}

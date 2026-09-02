@@ -1,0 +1,36 @@
+/* ---- floating rates + share buttons ---- */
+.fab-stack{position:fixed;right:15px;bottom:15px;z-index:70;display:flex;flex-direction:column;gap:10px;align-items:flex-end}
+.fab{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:1.5px;padding:12px 18px;border-radius:999px;border:0;cursor:pointer;text-decoration:none;line-height:1;box-shadow:0 8px 22px -6px rgba(214,120,155,.6);transition:transform .3s var(--spring),box-shadow .3s}
+.fab:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 12px 26px -6px rgba(214,120,155,.7)}
+.fab-rates{background:#fff;color:var(--rose-deep);border:1.5px solid var(--rose)}
+.fab-rates::before{content:'\2661 '}
+.fab-share{background:var(--rose);color:#fff}
+.fab-share::before{content:'\25C9 '}
+@media(max-width:560px){.fab{font-size:10px;padding:11px 15px}}
+@media print{.fab-stack{display:none}}
+
+/* ---- share sheet ---- */
+#share{width:min(380px,92vw);max-width:min(380px,92vw);height:auto;max-height:90vh;padding:22px 20px 20px;background:linear-gradient(180deg,#ffffff,#fdf4f8);border:2px solid #fff;border-radius:22px;overflow-y:auto;text-align:center}
+#share::backdrop{background:rgba(120,80,100,.5);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.sheet-x{position:absolute;top:10px;right:12px;width:30px;height:30px;border:0;border-radius:50%;background:var(--panel2);color:var(--dim);font-size:19px;cursor:pointer;line-height:26px;z-index:2}
+.sheet-kick{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--rose-deep);margin-bottom:12px;font-weight:600}
+/* share sheet now shows the real contact card (front + back) instead of the old
+   decoden-camera QR sticker; the back carries the scannable QR. */
+.sheet-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sheet-card{display:block;position:relative;border-radius:12px;overflow:hidden;box-shadow:var(--shadow-sm);cursor:zoom-in;transition:transform .3s var(--spring)}
+.sheet-card:hover{transform:translateY(-3px)}
+.sheet-card img{width:100%;height:auto;display:block}
+.sheet-card-cap{position:absolute;left:0;right:0;bottom:0;font-family:var(--mono);font-size:8.5px;letter-spacing:1px;color:#fff;background:linear-gradient(to top,rgba(90,43,62,.9),rgba(90,43,62,.55) 55%,transparent);padding:16px 4px 5px;text-align:center;pointer-events:none}
+.sheet-card-cap b{font-weight:700}
+.sheet-cards-tap{font-family:var(--mono);font-size:9px;letter-spacing:1px;color:var(--dim);text-align:center;margin-top:8px}
+.sheet-label{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--dim);text-align:left;margin:17px 0 8px;font-weight:600}
+.sheet-socials{display:flex;flex-direction:column;gap:8px}
+.sheet-socials a{display:flex;justify-content:space-between;align-items:center;text-decoration:none;font-size:13px;color:var(--dim);background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:11px 14px;transition:border-color .2s,transform .2s}
+.sheet-socials a b{color:var(--ink);font-weight:700}
+.sheet-socials a:hover{border-color:var(--rose);transform:translateX(2px)}
+.sheet-socials a::after{content:'\2197';color:var(--rose-deep);font-weight:700}
+.sheet-rates{display:flex;justify-content:space-between;align-items:center;text-decoration:none;font-size:13px;background:var(--rose);color:#fff;border-radius:12px;padding:13px 15px;font-weight:600}
+.sheet-rates b{color:#fff}
+.sheet-rates span{font-size:17px}
+.sheet-copy{margin-top:14px;width:100%;font-family:var(--mono);font-size:11px;letter-spacing:1px;padding:11px;border:1.5px dashed var(--line2);border-radius:12px;background:#fff;color:var(--dim);cursor:pointer;transition:color .2s,border-color .2s}
+.sheet-copy.done{color:#3a9c6a;border-color:#b6e3cf}

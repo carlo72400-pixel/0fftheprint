@@ -1,0 +1,46 @@
+/* ------- client tapes ------- */
+.tapes{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-top:24px;max-width:1010px}
+.tape{position:relative;border:2px solid #fff;border-radius:16px;background:#000;overflow:hidden;box-shadow:var(--shadow-sm);transition:transform .35s var(--spring)}
+.tape:hover{transform:translateY(-6px)}
+.tape video{display:block;width:100%;aspect-ratio:9/16;object-fit:cover}
+.tape .t-label{position:absolute;top:8px;left:8px;right:8px;display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:1px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.9)}
+.tape .t-label .r{color:var(--pink)}
+.tape .t-foot{position:absolute;bottom:8px;left:8px;font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--butter);text-shadow:0 1px 3px rgba(0,0,0,.9)}
+/* align-items:start is load-bearing: the default stretch fights .sacp's aspect-ratio,
+   sizing items taller than their row so they spill past the grid and cover the caption below. */
+.sac-photos{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px 10px;margin-top:26px;max-width:960px;align-items:start}
+.sacp{display:block;aspect-ratio:4/5;overflow:hidden;border:2px solid #fff;border-radius:14px;box-shadow:var(--shadow-sm);transition:transform .35s var(--spring)}
+.sacp:hover{transform:translateY(-5px)}
+.sacp{position:relative;overflow:visible}
+.sacp::before{content:'';position:absolute;top:-12px;left:-14px;width:84px;height:34px;z-index:3;
+  background:url('/steel/assets/washi_pink.png') no-repeat center / contain;transform:rotate(-38deg);opacity:.92;pointer-events:none}
+.sacp:nth-child(2)::before{background-image:url('/steel/assets/washi_mint.png');transform:rotate(-42deg)}
+.sacp:nth-child(3)::before{background-image:url('/steel/assets/washi_lilac.png');transform:rotate(-35deg)}
+.sacp:nth-child(5)::before{background-image:url('/steel/assets/washi_mint.png');transform:rotate(-40deg)}
+.sacp:nth-child(6)::before{background-image:url('/steel/assets/washi_lilac.png');transform:rotate(-36deg)}
+.sacp img{border-radius:12px}
+/* dense backfills the col-3 gap the leading span-2 rooftop frame would otherwise leave open */
+.blue-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px;max-width:1000px;grid-auto-flow:dense}
+.bluep{display:block;overflow:hidden;border:2px solid #fff;border-radius:14px;box-shadow:var(--shadow-sm);transition:transform .35s var(--spring);cursor:zoom-in;aspect-ratio:1/1}
+.bluep.bhero{grid-column:span 2;grid-row:span 2;aspect-ratio:auto}
+.bluep.bwide{grid-column:span 2;aspect-ratio:2/1.05}
+.bluep img{width:100%;height:100%;object-fit:cover;transition:transform .45s var(--spring)}
+.bluep:hover{transform:translateY(-5px)}
+.bluep:hover img{transform:scale(1.05)}
+@media(max-width:640px){.blue-grid{grid-template-columns:repeat(2,1fr)}.bluep.bhero{grid-column:span 2;grid-row:span 1}}
+.sacp img{width:100%;height:100%;object-fit:cover;transition:transform .45s var(--spring)}
+.sacp:hover img{transform:scale(1.06)}
+.client-credits{margin-top:18px;font-family:var(--mono);font-size:12px;letter-spacing:.4px;color:var(--dim);max-width:640px}
+.client-credits b{color:var(--ink);font-weight:600}
+
+/* .tape.play = a tape you actually watch, not a silent loop: native controls, real audio,
+   preload:none so the page only pays for the poster until someone presses play. */
+.tapes.watch{grid-template-columns:repeat(auto-fit,minmax(215px,1fr));max-width:760px}
+.tape.play{border-color:var(--pink)}
+.tape.play video{cursor:pointer}
+.tape.play .t-foot{bottom:auto;top:26px;left:8px;color:#fff;opacity:.85}
+.tape.play .t-dur{position:absolute;bottom:46px;right:10px;font-family:var(--mono);font-size:10px;
+  letter-spacing:1px;color:var(--butter);text-shadow:0 1px 3px rgba(0,0,0,.9);pointer-events:none}
+@media(max-width:640px){.tape.play .t-dur{display:none}}
+/* the weekend montage runs alone, so it gets one column instead of the auto-fit row */
+.tapes.solo{grid-template-columns:minmax(0,300px);max-width:300px}

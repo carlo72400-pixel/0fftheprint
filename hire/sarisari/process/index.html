@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>THE PROCESS · Gianni Ortiz</title>
+<meta property="og:type" content="website">
+<meta property="og:title" content="THE PROCESS">
+<meta property="og:description" content="How the work actually gets made. Treatment, script, shot list, boards, paperwork, then the camera.">
+<meta property="og:image" content="https://0fftheprint.com/hire/sarisari/process/preview.jpg">
+<meta property="og:url" content="https://0fftheprint.com/hire/sarisari/process/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#9C4A2F">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fugaz+One&family=Bungee&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F7F2EA;
+  --paper2:#F1E9DC;
+  --card:#FFFDF8;
+  --ink:#2A1B12;
+  --dim:#6E5A4C;
+  --terra:#9C4A2F;
+  --terra-deep:#7C3821;
+  --gold:#DFA32E;
+  --gold-soft:#F3D48A;
+  --leaf:#4A6B3C;
+  --line:#E2D5C2;
+  --disp:"Fugaz One",Impact,sans-serif;
+  --sign:"Bungee",Impact,sans-serif;
+  --sans:"Inter",-apple-system,system-ui,sans-serif;
+  --mono:"JetBrains Mono",Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.65;font-size:clamp(15px,1.6vw,17px)}
+a{color:var(--terra)}
+::selection{background:var(--gold-soft)}
+
+.marquee{background:var(--terra);color:var(--paper);font-family:var(--sign);
+  font-size:clamp(10px,2.4vw,13px);letter-spacing:.14em;
+  padding:9px 0;white-space:nowrap;overflow:hidden;
+  border-top:3px solid var(--gold);border-bottom:3px solid var(--gold);
+  box-shadow:inset 0 0 0 1.5px var(--terra),inset 0 0 0 3px rgba(247,242,234,.35)}
+.marquee .track{display:inline-block;padding-left:100%;animation:roll 26s linear infinite}
+@keyframes roll{to{transform:translateX(-100%)}}
+.marquee .st{color:var(--gold);padding:0 .55em}
+@media (prefers-reduced-motion:reduce){
+  .marquee{text-align:center}
+  .marquee .track{animation:none;padding-left:0}
+}
+@media (min-width:900px){
+  .marquee{text-align:center}
+  .marquee .track{animation:none;padding-left:0}
+}
+
+.hero{position:relative;text-align:center;padding:clamp(44px,9vw,90px) 20px clamp(36px,7vw,70px);
+  background:
+    repeating-linear-gradient(45deg,rgba(156,74,47,.05) 0 1.5px,transparent 1.5px 14px),
+    repeating-linear-gradient(-45deg,rgba(156,74,47,.05) 0 1.5px,transparent 1.5px 14px),
+    var(--paper2);
+  border-bottom:3px double var(--terra)}
+.kick{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim)}
+.hero h1{font-family:var(--disp);font-size:clamp(46px,12vw,116px);line-height:.95;margin:14px 0 6px;
+  color:var(--terra);text-shadow:3px 3px 0 var(--gold),6px 6px 0 rgba(42,27,18,.14)}
+.hero .mean{font-family:var(--sans);font-weight:600;font-size:clamp(15px,2.4vw,19px);color:var(--ink)}
+.hero .lede{max-width:580px;margin:14px auto 0;color:var(--dim)}
+.pin{height:10px;background:
+  linear-gradient(var(--gold),var(--gold)) 0 2px/100% 2px no-repeat,
+  linear-gradient(var(--terra),var(--terra)) 0 7px/100% 3px no-repeat}
+
+main{max-width:880px;margin:0 auto;padding:0 20px 40px}
+section{padding:clamp(34px,6vw,58px) 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:none}
+.tag{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--paper);background:var(--terra);padding:4px 10px;border-radius:3px;margin-bottom:14px;
+  box-shadow:2px 2px 0 var(--gold)}
+h2{font-family:var(--disp);font-size:clamp(26px,5vw,40px);line-height:1.08;color:var(--ink);margin-bottom:14px}
+h2 .em{color:var(--terra)}
+h3{font-family:var(--disp);font-size:clamp(18px,3vw,23px);color:var(--terra);margin:26px 0 8px}
+p{margin-bottom:12px;max-width:640px}
+p.big{font-size:clamp(17px,2.6vw,21px);font-weight:600;line-height:1.45;max-width:600px}
+.dim{color:var(--dim)}
+.punch{background:var(--terra);color:var(--paper);border-radius:8px;padding:18px 20px;margin-top:18px;max-width:640px;
+  font-weight:600;font-size:clamp(15px,2.4vw,18px);box-shadow:4px 4px 0 var(--gold)}
+
+/* the numbered steps, price-tag chips */
+.steps{display:flex;flex-direction:column;gap:14px;margin-top:14px}
+.strow{display:flex;gap:14px;align-items:flex-start}
+.snum{flex:0 0 auto;font-family:var(--sign);font-size:12px;color:var(--terra-deep);background:var(--gold);
+  padding:8px 9px;border-radius:4px;transform:rotate(-2deg);box-shadow:2px 2px 0 var(--terra);
+  min-width:40px;text-align:center;line-height:1.25}
+.strow:nth-child(even) .snum{transform:rotate(1.5deg)}
+.sb{padding-top:2px}
+.sb b{display:block;font-size:15.5px;font-family:var(--sans);font-weight:700}
+.sb span{display:block;font-size:14px;color:var(--dim)}
+.sb em{font-style:normal;color:var(--terra);font-weight:600}
+
+/* paper list */
+ul.paper{list-style:none;max-width:640px;margin-top:6px}
+ul.paper li{padding:10px 0 10px 34px;border-bottom:1px dashed var(--line);position:relative;font-size:14.5px}
+ul.paper li::before{content:"✓";position:absolute;left:6px;color:var(--gold);-webkit-text-stroke:.6px var(--terra);font-weight:700}
+ul.paper li b{color:var(--ink)}
+
+/* lesson cards */
+.lessons{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:12px;margin-top:16px}
+.lc{background:var(--card);border:1.5px solid var(--line);border-left:5px solid var(--gold);border-radius:6px;padding:14px 16px}
+.lc b{display:block;font-size:14.5px;margin-bottom:4px}
+.lc span{font-size:13.5px;color:var(--dim)}
+
+/* video */
+.yt{position:relative;width:100%;padding-top:56.25%;border:2px solid var(--terra);border-radius:8px;
+  overflow:hidden;box-shadow:5px 5px 0 var(--gold-soft);background:#000;margin-top:8px}
+.yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.clab{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:space-between;align-items:baseline;
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);
+  margin-top:22px}
+.clab b{color:var(--ink);letter-spacing:.08em}
+.clab .aw{color:var(--terra-deep);background:var(--gold-soft);padding:2px 7px;border-radius:3px;font-weight:600;
+  white-space:nowrap;display:inline-block}
+
+.callout{background:var(--card);border:2px solid var(--terra);border-radius:10px;padding:18px 20px;max-width:640px;
+  box-shadow:5px 5px 0 var(--gold-soft);margin-top:18px}
+.callout b{color:var(--terra)}
+.callout p{margin:0}
+.callout p + p{margin-top:9px}
+
+.who{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:baseline;margin-top:12px;font-size:14px}
+.who a{font-family:var(--mono);font-size:13px}
+.backlink{font-family:var(--mono);font-size:12px;letter-spacing:.06em;margin-top:20px}
+
+a.src{font-family:var(--mono);font-size:.55em;vertical-align:super;color:var(--terra);
+  text-decoration:none;font-weight:700;letter-spacing:0;padding-left:2px}
+ol.sources{list-style:none;counter-reset:src;max-width:680px}
+ol.sources li{counter-increment:src;position:relative;padding:10px 0 10px 40px;
+  border-bottom:1px dashed var(--line);font-size:13px;line-height:1.5}
+ol.sources li::before{content:counter(src,decimal-leading-zero);position:absolute;left:0;top:12px;
+  font-family:var(--sign);font-size:11px;color:var(--paper);background:var(--terra);
+  padding:2px 5px;border-radius:3px;box-shadow:1.5px 1.5px 0 var(--gold)}
+ol.sources b{display:block;font-size:13.5px}
+ol.sources a{font-family:var(--mono);font-size:12px;word-break:break-all}
+footer{margin-top:8px}
+.foot-in{text-align:center;padding:22px 16px;color:var(--dim);font-family:var(--mono);font-size:11px;letter-spacing:.12em}
+</style>
+</head>
+<body>
+
+<div class="marquee"><span class="track">TREATMENT <span class="st">★</span> SCRIPT <span class="st">★</span> SHOT LIST <span class="st">★</span> BOARDS <span class="st">★</span> RELEASES <span class="st">★</span> THEN THE CAMERA</span></div>
+
+<div class="hero">
+  <div class="kick">How the work gets made · Gianni Ortiz · August 2026</div>
+  <h1>THE PROCESS</h1>
+  <div class="mean">Everything that happens before the camera comes out of the bag.</div>
+  <p class="lede">You asked how I make this stuff. Here is the whole thing, in order, plus the films that taught me each part of it.</p>
+</div>
+<div class="pin"></div>
+
+<main>
+
+<section>
+  <div class="tag">01 · The short version</div>
+  <h2>I make content the way a <span class="em">film</span> gets made.</h2>
+  <p>Most social video is made by pointing a phone at something and hoping. Mine gets written first, drawn second, signed for third, and shot fourth. By the time I show up with a camera, everybody already knows what we are making, how long it runs, who is in it, and where it ends.</p>
+  <p>That is not me being fancy. It is the only way a shoot day finishes on time, and it is the only way you know what you are getting before you spend a dollar on it.</p>
+  <div class="punch">Nothing goes out that you have not watched first. Ever.</div>
+</section>
+
+<section>
+  <div class="tag">02 · The pipeline</div>
+  <h2>Ten steps, <span class="em">every single time.</span></h2>
+  <p class="dim">Same order for a sixty second commercial, an interview, or a birthday party. The scale changes, the order does not.</p>
+  <div class="steps">
+
+    <div class="strow"><div class="snum">01</div><div class="sb">
+      <b>The talk</b>
+      <span>What are you actually pushing this month, who do you want walking through the door, and what does the room look like on a normal Tuesday. Nothing gets written before that answer exists.</span>
+    </div></div>
+
+    <div class="strow"><div class="snum">02</div><div class="sb">
+      <b>The treatment</b>
+      <span>The whole piece written out in plain paragraphs. Opening image, what happens, how it feels, how it ends. Yours ran <em>244 words</em> and it opens at the kitchen pass before the doors are unlocked and ends at the kamayan table. If it does not work on paper it will not work on a screen.</span>
+    </div></div>
+
+    <div class="strow"><div class="snum">03</div><div class="sb">
+      <b>The script</b>
+      <span>Two columns. Left side is everything you see, right side is everything you hear, lined up next to each other. Every shot, every spoken line, and the exact point where music starts and stops.</span>
+    </div></div>
+
+    <div class="strow"><div class="snum">04</div><div class="sb">
+      <b>The shot list</b>
+      <span>Every camera setup on one sheet: shot size, inside or outside, day or night, angle, how many seconds it runs, who is in it, which room. Grouped by room, so we shoot out one space completely and never drag the crew back and forth.</span>
+    </div></div>
+
+    <div class="strow"><div class="snum">05</div><div class="sb">
+      <b>The boards</b>
+      <span>The piece drawn frame by frame before shoot day. Yours is <em>thirteen frames that add up to exactly sixty seconds</em>. Anything that is not on the board does not get shot, and anything missing shows up now instead of at 9pm on the shoot day.</span>
+    </div></div>
+
+    <div class="strow"><div class="snum">06</div><div class="sb">
+      <b>The paper</b>
+      <span>Releases signed before we roll, not after. Full list in the next section.</span>
+    </div></div>
+
+    <div class="strow"><div class="snum">07</div><div class="sb">
+      <b>The schedule</b>
+      <span>Days picked around your service, not mine. Yours is three days, <em>October 1, October 8, October 17</em>, built off hours wherever possible so your guests never have to sign anything or be told to move.</span>
+    </div></div>
+
+    <div class="strow"><div class="snum">08</div><div class="sb">
+      <b>Shoot day</b>
+      <span>Kit matched to the room, not to what looks impressive. Two cameras, one on the face and one on the hands. The room light stays the room light. Nobody performs, people just do their job and talk while they do it.</span>
+    </div></div>
+
+    <div class="strow"><div class="snum">09</div><div class="sb">
+      <b>Post</b>
+      <span>I cut it, I color every shot by hand, I do the sound, and the music is written for the piece instead of borrowed. Borrowed music is how a good video gets muted or pulled six months later.</span>
+    </div></div>
+
+    <div class="strow"><div class="snum">10</div><div class="sb">
+      <b>Your eyes, then delivery</b>
+      <span>You watch it before the internet does. Changes come back to me, not to a comment section. Then it ships in the actual sizes you post in, plus the stills.</span>
+    </div></div>
+
+  </div>
+</section>
+
+<section>
+  <div class="tag">03 · The paperwork</div>
+  <h2>Permissions are not <span class="em">an afterthought.</span></h2>
+  <p>This is the part nobody talks about and it is the part that decides whether a video can stay online forever or has to come down. Every person in the frame and every room we stand in has a say in it, and the only version of a yes that counts is the one on paper.</p>
+  <ul class="paper">
+    <li><b>Talent release</b>, one per person on camera. Staff, owners, anyone recognizable.</li>
+    <li><b>Location release</b>, one per room, plus a second copy signed at wrap when we walk out.</li>
+    <li><b>Copyright release</b> from the business, because the name, the logo and the recipes are yours and not mine. Yours was signed August 19.</li>
+    <li><b>Music release</b>, or no borrowed music at all, which is the route I take.</li>
+    <li><b>Crew paperwork</b> for anybody I bring with me, so a second shooter is my responsibility and not yours.</li>
+    <li><b>Blank spares on shoot day</b>, because somebody unplanned always walks in and ends up being the best thing in the video.</li>
+  </ul>
+  <div class="callout">
+    <p><b>And when the answer is no, you get the reason.</b></p>
+    <p>A drone came up for one of the jobs. The answer was no. Any drone flight tied to a payment is a commercial flight, and it needs an FAA Part 107 certificate that attaches to the <b>pilot</b>, not to the rented aircraft.<a class="src" href="#s1">1</a> Hiring somebody without one puts the business on the hook too, not just the operator.<a class="src" href="#s2">2</a> So the answer was a gimbal walking shot instead: one take, in the front door, through the tables, landing on the person the night is about.</p>
+    <p>I would rather lose a shot than hand you a liability. When I do have the certificate, you will hear about it.</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag">04 · The silent film</div>
+  <h2>Three minutes, no dialogue, <span class="em">and that was the point.</span></h2>
+  <p>This is the one that shows the directing. VOLUME is a short film I wrote, directed, shot and edited for my program. Nobody in it says a single word. It earned the Course Director's Award for directing in that class.</p>
+
+  <div class="clab"><span><b>VOLUME</b> (2026) · NARRATIVE SHORT · <span class="aw">★ COURSE DIRECTOR'S AWARD</span></span><span>03:10</span></div>
+  <div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/pQ0W-conqwE" title="VOLUME · the new kid" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+
+  <h3>What making it silent actually taught me</h3>
+  <div class="lessons">
+    <div class="lc"><b>Every shot has to say something alone.</b><span>With no dialogue, the story lives in blocking, faces and cuts. If a shot is not doing a job it gets cut. That is the same test a video has to pass on a phone with the sound off, which is how most people are going to see yours.</span></div>
+    <div class="lc"><b>Know the frame before you are in it.</b><span>I was acting in most of it and operating the camera on all of it, so every shot I appear in is a locked off tripod I set and walked into. You learn very fast to design a shot instead of chasing one.</span></div>
+    <div class="lc"><b>Scout with more than your eyes.</b><span>I 3D scanned the library before the shoot and blocked the whole thing off site, so shoot day was execution instead of discovery.</span></div>
+    <div class="lc"><b>Rehearse, then sign.</b><span>Full cast rehearsal a week ahead. Every release, including the location, was signed that same day, four days before it was due. Nothing was left to shoot day.</span></div>
+    <div class="lc"><b>The making of is content too.</b><span>The shoot got covered as it happened and cut into a two part behind the scenes series. Same footage, second piece, no extra shoot day. That applies directly to a restaurant.</span></div>
+    <div class="lc"><b>Short, and out.</b><span>The note I got on it was that it gets in, gets out, and leaves people smiling. Three minutes. A commercial has sixty seconds and the same job.</span></div>
+  </div>
+
+  <div class="clab"><span><b>VOLUME BTS EP02</b> · THE PROCESS</span><span>08:49</span></div>
+  <div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/psxQ4pLF4fw" title="VOLUME BTS EP02: THE PROCESS" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+  <p class="dim" style="margin-top:12px;font-size:14px">That second video is literally this page in motion, if you would rather watch than read.</p>
+</section>
+
+<section>
+  <div class="tag">05 · The interviews</div>
+  <h2>People talk better <span class="em">while their hands are busy.</span></h2>
+  <p>Every interview I shoot follows the same rules, and they came out of doing it wrong first.</p>
+  <div class="lessons">
+    <div class="lc"><b>Never a sit down against a wall.</b><span>The subject works while they talk. The case, the wok, the register, the back door. People sound like themselves when their hands are doing something they know how to do.</span></div>
+    <div class="lc"><b>You never hear me.</b><span>My questions get cut out of the audio and become cards on screen that read ASKED OFF CAMERA. One voice the whole way through, so it plays like a piece and not like a Zoom call.</span></div>
+    <div class="lc"><b>The music is written for it.</b><span>Original score under the voice. Nothing gets claimed, muted, or pulled down later, which matters when the video is supposed to run for years.</span></div>
+    <div class="lc"><b>Check the finished cut, not the notes.</b><span>Every final piece gets transcribed back and checked line by line before it ships. I have caught my own voice in somebody else's mouth that way. Never again.</span></div>
+  </div>
+</section>
+
+<section>
+  <div class="tag">06 · The event work</div>
+  <h2>The best idea on the job <span class="em">usually comes from the family.</span></h2>
+  <p>The 80th birthday in August is the clearest example of how this goes when it is not a scripted piece.</p>
+  <div class="lessons">
+    <div class="lc"><b>Ask the host what they will want in a year.</b><span>Not what looks good tonight. That is where the one big family photo and the ten separate family groups came from, and those are the frames that get printed.</span></div>
+    <div class="lc"><b>The prayer was Adrian's idea.</b><span>They pray before they eat, so we miked him and let the prayer carry the video instead of music. Best note in the entire job and it came from the client. My job was to hear it and build for it.</span></div>
+    <div class="lc"><b>Plan the dark half before it arrives.</b><span>Sun was down by 8 on a 7 to 9 party. The camera and the plan for the back half were picked in advance, not improvised when the room went orange.</span></div>
+    <div class="lc"><b>Shoot past the order.</b><span>The job called for thirty photos and a few videos. The cards came back with 201 frames and 35 clips. You get the set you asked for, and I keep the rest so the next thing you need already exists.</span></div>
+  </div>
+</section>
+
+<section>
+  <div class="tag">07 · Who is asking</div>
+  <h2>Gianni Ortiz. <span class="em">San Antonio.</span></h2>
+  <p>Digital Cinematography at Full Sail, finishing 2027. I shoot commercial, event and interview work here, and I write, cut, color and score everything myself, which is why the whole process above is one person's to answer for.</p>
+  <div class="who">
+    <a href="https://instagram.com/vamppsych">@vamppsych</a>
+    <a href="mailto:carlo72400@gmail.com">carlo72400@gmail.com</a>
+    <a href="https://0fftheprint.com/hire/">0fftheprint.com/hire</a>
+  </div>
+  <p class="backlink"><a href="https://0fftheprint.com/hire/sarisari/">★ The Sari-Sari plan is still here →</a></p>
+</section>
+
+<section id="sources">
+  <div class="tag">08 · Sources</div>
+  <h2>Two claims above have <span class="em">receipts.</span></h2>
+  <ol class="sources">
+    <li id="s1"><b>FAA, commercial drone operation</b> Part 107 remote pilot certificate required for any non recreational flight. <a href="https://www.faa.gov/uas/commercial_operators">faa.gov/uas/commercial_operators</a></li>
+    <li id="s2"><b>Client exposure for hiring an uncertified pilot</b> Why the business, not only the operator, carries risk. <a href="https://www.droneacademy.com/clients-of-unlicensed-drone-pilots-can-also-face-penalties/">droneacademy.com</a></li>
+  </ol>
+</section>
+
+</main>
+
+<div class="marquee"><span class="track">WRITE IT <span class="st">★</span> DRAW IT <span class="st">★</span> SIGN IT <span class="st">★</span> SHOOT IT <span class="st">★</span> SHOW YOU FIRST <span class="st">★</span> THEN POST IT</span></div>
+<footer><div class="foot-in">GIANNI ORTIZ · SAN ANTONIO · AUGUST 2026</div></footer>
+
+</body>
+</html>

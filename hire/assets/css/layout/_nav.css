@@ -1,0 +1,13 @@
+/* ------- nav ------- */
+nav{position:sticky;top:0;z-index:50;background:rgba(251,245,248,.82);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:58px;gap:14px}
+.logo{font-family:var(--disp);font-weight:680;font-size:23px;font-variation-settings:'SOFT' 100,'WONK' 0;letter-spacing:.3px;text-decoration:none;white-space:nowrap;
+  background:linear-gradient(92deg,#e88aa6,#c9a7e6,#9fc6ee,#a9e0c8,#e88aa6);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;background-size:220% auto;animation:chrome 9s linear infinite}
+@keyframes chrome{to{background-position:220% center}}
+.logo span{-webkit-text-fill-color:var(--rose)}
+.nav-tc{display:flex;align-items:center;gap:16px}
+nav ul{display:flex;gap:18px;list-style:none}
+nav ul a{text-decoration:none;font-family:var(--mono);font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:var(--dim);position:relative;font-weight:500}
+nav ul a::after{content:'';position:absolute;left:0;bottom:-5px;height:2px;width:0;background:var(--rose);border-radius:2px;transition:width .25s var(--spring)}
+nav ul a:hover{color:var(--ink)}
+nav ul a:hover::after{width:100%}
