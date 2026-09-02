@@ -2637,6 +2637,15 @@
     transition:transform 1s cubic-bezier(.2,.7,.3,1);
   }
   .desk-item:hover .desk-thumb{transform:scale(1.08);}
+  /* Letterbox, not crop, when a cover is not 4:5. Same answer as the tape and the
+     work rail: contain the real frame, and fill the dead space with a blurred,
+     darkened copy of it so the tile is a window rather than a hole. Only ever
+     applied by JS after measuring the file, so a tile that already fits is
+     untouched and pays for none of this. */
+  .desk-bed{position:absolute;inset:0;background-size:cover;background-position:center;
+    filter:blur(22px) saturate(1.15) brightness(.42);transform:scale(1.14);z-index:0;}
+  .desk-item.off-ratio .desk-thumb{background-size:contain;background-repeat:no-repeat;z-index:1;}
+  .desk-item.off-ratio:hover .desk-thumb{transform:none;}
   .desk-thumb::after{
     content:'';position:absolute;inset:0;
     background:linear-gradient(180deg, transparent 45%, rgba(0,0,0,.85) 100%);
@@ -5364,6 +5373,7 @@
       const lanesHtml = (it.lanes || []).map(l => `<span class="desk-lane">${esc(l)}</span>`).join('')
         + (ytId ? `<span class="desk-lane desk-play">&#9654; watch</span>` : '');
       el.innerHTML = `
+        <div class="desk-bed"></div>
         <div class="desk-thumb"></div>
         <div class="desk-platform ${esc(it.platform)}">${esc(platformLabel[it.platform] || it.platform)}</div>
         <div class="desk-lanes">${lanesHtml}</div>
@@ -5377,7 +5387,27 @@
           <div class="desk-title">${esc(it.title)}</div>
           ${it.dek ? `<div class="desk-dek">${esc(it.dek)}</div>` : ''}
         </div>`;
-      if (cThumb) el.querySelector('.desk-thumb').style.backgroundImage = 'url("' + sized(cThumb, 'thumb') + '")';
+      if (cThumb) {
+        const tUrl = sized(cThumb, 'thumb');
+        el.querySelector('.desk-thumb').style.backgroundImage = 'url("' + tUrl + '")';
+        // ⛔ COVER CROPS. Every committed story tile is cut to 4:5 so it fills the
+        //    4:5 box exactly and nothing is lost, but a LIVE member story arrives
+        //    with a cover of any shape and would silently get its edges cut off.
+        //    Measure the real ratio, and only when it does not match the box swap
+        //    to contain and light the blurred bed behind it. Costs nothing for the
+        //    tiles that already fit: no class, no second paint, no blur layer.
+        // 🔑 new Image() is the honest probe. A CSS background never reports its
+        //    natural size, and an <img> in a hidden tab never fires load.
+        const probe = new Image();
+        probe.onload = () => {
+          const r = probe.naturalWidth / probe.naturalHeight;
+          if (probe.naturalHeight && Math.abs(r - 0.8) > 0.02) {
+            el.classList.add('off-ratio');
+            el.querySelector('.desk-bed').style.backgroundImage = 'url("' + tUrl + '")';
+          }
+        };
+        probe.src = tUrl;
+      }
       dMount.appendChild(el);
     });
   }
