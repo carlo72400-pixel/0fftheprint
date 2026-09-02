@@ -181,9 +181,14 @@ const mkTab = (label, kind) => {
   });
   tabs.appendChild(b); return b;
 };
-const tAll = mkTab('All', null); mkTab('Cuts', 'CUT'); mkTab('Off the nights', 'NIGHT');
-tAll.classList.add('on');
-draw(null);
+const tAll = mkTab('All', null), tCut = mkTab('Cuts', 'CUT'), tNight = mkTab('Off the nights', 'NIGHT');
+// ?k=cut / ?k=night opens the page ON that rail, so a link sent to somebody
+// who only wants the interview cuts does not land them in 23 night clips.
+// Anything else falls through to All, which is the old behaviour.
+const want = (new URLSearchParams(location.search).get('k') || '').toUpperCase();
+const start = want === 'CUT' ? [tCut, 'CUT'] : want === 'NIGHT' ? [tNight, 'NIGHT'] : [tAll, null];
+start[0].classList.add('on');
+draw(start[1]);
 
 /* ---- lightbox ---- */
 const lb=document.getElementById('lb'), lbv=document.getElementById('lbv'),
