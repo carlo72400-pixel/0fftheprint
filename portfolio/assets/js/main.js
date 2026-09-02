@@ -176,7 +176,7 @@ const vio = new IntersectionObserver(es=>es.forEach(e=>{
 document.querySelectorAll('.tape:not(.play) video, .mon-vid').forEach(v=>vio.observe(v));
 
 /* ---- scroll reveal ---- */
-const io = new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);} }),{threshold:.12});
+const io = new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);} }),{threshold:0,rootMargin:'0px 0px -8% 0px'});
 document.querySelectorAll('.rv').forEach(el=>io.observe(el));
 
 /* ---- magnetic email ---- */
@@ -253,7 +253,7 @@ document.querySelectorAll('.rate-grid,#gallery,.tapes,.monitors,.social-row,.sac
   const so=new IntersectionObserver(es=>es.forEach(e=>{
     if(e.isIntersecting){links.forEach(a=>a.classList.remove('cur'));(map[e.target.id]||{classList:{add(){}}}).classList.add('cur');}
   }),{rootMargin:'-38% 0px -55% 0px'});
-  ['about','stills','archive','playback','feed','rates','contact'].forEach(id=>{const s=document.getElementById(id);if(s)so.observe(s);});
+  ['about','stills','nights','archive','design','playback','feed','rates','contact'].forEach(id=>{const s=document.getElementById(id);if(s)so.observe(s);});
 })();
 
 /* rate cards: price odometer + tilt */
