@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0a0a0d">
+<title>THE INK &middot; 0FF THE PRINT Interview 02</title>
+<meta name="description" content="What the shoot looks like, start to finish. Smiley Onerr at Legion Ink, San Antonio, for 0FF THE PRINT Interview 02.">
+<meta name="author" content="Giancarlo Ortiz">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="0FF THE PRINT">
+<meta property="og:title" content="THE INK &middot; Interview 02">
+<meta property="og:description" content="What the shoot looks like, start to finish. Smiley Onerr at Legion Ink, San Antonio.">
+<meta property="og:url" content="https://0fftheprint.com/portfolio/theink/">
+<meta property="og:image" content="https://0fftheprint.com/portfolio/theink/preview.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="THE INK &middot; Interview 02">
+<meta name="twitter:description" content="What the shoot looks like, start to finish. Smiley Onerr at Legion Ink, San Antonio.">
+<meta name="twitter:image" content="https://0fftheprint.com/portfolio/theink/preview.jpg">
+</head>
+<body>
+<style>
+  :root{
+    --bg:#0a0a0d;
+    --panel:#121218;
+    --panel-2:#16161d;
+    --line:#23222b;
+    --ink:#f4eef2;
+    --muted:#9a93a3;
+    --pink:#f7b9dd;
+    --pink-deep:#f48fc8;
+    --pink-glow:#ff79c6;
+    --stencil:#2f6bff;
+
+    --f-display:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+    --f-body:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',sans-serif;
+    --f-mono:ui-monospace,'SF Mono',Menlo,'JetBrains Mono',monospace;
+  }
+
+  *{box-sizing:border-box;}
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--f-body);
+    font-size:16px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .wrap{
+    max-width:620px;
+    margin:0 auto;
+    padding:0 20px 72px;
+  }
+
+  /* ---------- ticker ---------- */
+  .ticker{
+    border-bottom:1px solid var(--line);
+    background:#08080b;
+    overflow:hidden;
+    white-space:nowrap;
+  }
+  .ticker-inner{
+    display:inline-block;
+    padding:9px 0;
+    font-family:var(--f-mono);
+    font-size:10px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--muted);
+    animation:slide 34s linear infinite;
+  }
+  .ticker-inner span{padding:0 22px;}
+  .ticker-inner b{color:var(--pink-deep);font-weight:500;}
+  @keyframes slide{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+  @media (prefers-reduced-motion:reduce){
+    .ticker-inner{animation:none;}
+  }
+
+  /* ---------- masthead ---------- */
+  header{
+    padding:38px 0 30px;
+    border-bottom:1px solid var(--line);
+  }
+  .eyebrow{
+    font-family:var(--f-mono);
+    font-size:10.5px;
+    letter-spacing:.24em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin:0 0 16px;
+  }
+  .eyebrow em{color:var(--pink-deep);font-style:normal;}
+
+  h1{
+    font-family:var(--f-display);
+    font-weight:800;
+    font-stretch:87.5%;
+    font-size:clamp(58px,19vw,104px);
+    line-height:.84;
+    letter-spacing:-.035em;
+    text-transform:uppercase;
+    margin:0;
+    color:var(--ink);
+    text-wrap:balance;
+  }
+  h1 .thin{
+    display:block;
+    color:var(--pink-deep);
+  }
+
+  .who{
+    margin:22px 0 0;
+    font-size:15px;
+    color:var(--muted);
+  }
+  .who b{color:var(--ink);font-weight:600;}
+
+  /* ---------- generic section ---------- */
+  section{padding:34px 0 4px;}
+  .kicker{
+    font-family:var(--f-mono);
+    font-size:10.5px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--pink-deep);
+    margin:0 0 14px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .kicker::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:var(--line);
+  }
+  h2{
+    font-family:var(--f-display);
+    font-weight:800;
+    font-stretch:87.5%;
+    font-size:29px;
+    line-height:1.06;
+    letter-spacing:-.02em;
+    text-transform:uppercase;
+    margin:0 0 14px;
+    text-wrap:balance;
+  }
+  p{margin:0 0 15px;}
+  .lede{
+    font-size:20px;
+    line-height:1.45;
+    color:var(--ink);
+  }
+  .lede b{
+    color:var(--pink);
+    font-weight:600;
+  }
+  .muted{color:var(--muted);}
+
+  /* ---------- not-this list ---------- */
+  .nots{
+    list-style:none;
+    margin:18px 0 0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .nots li{
+    background:var(--panel);
+    padding:13px 16px;
+    font-size:14.5px;
+    color:var(--muted);
+    display:flex;
+    gap:12px;
+    align-items:baseline;
+  }
+  .nots li s{
+    color:#5d5766;
+    text-decoration-color:var(--pink-deep);
+    text-decoration-thickness:1px;
+  }
+  .nots li i{
+    font-family:var(--f-mono);
+    font-style:normal;
+    font-size:10px;
+    letter-spacing:.16em;
+    color:var(--pink-deep);
+    text-transform:uppercase;
+    flex:0 0 auto;
+  }
+
+  /* ---------- timeline ---------- */
+  .run{
+    margin:6px 0 0;
+    padding:0 0 0 26px;
+    list-style:none;
+    border-left:1px solid var(--line);
+    position:relative;
+  }
+  .run li{
+    position:relative;
+    padding:0 0 26px;
+  }
+  .run li::before{
+    content:"";
+    position:absolute;
+    left:-30px;
+    top:6px;
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:var(--bg);
+    border:1px solid var(--pink-deep);
+  }
+  .run li.hot::before{
+    background:var(--pink-deep);
+    box-shadow:0 0 0 4px rgba(244,143,200,.14);
+  }
+  .t{
+    font-family:var(--f-mono);
+    font-size:10.5px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--muted);
+    display:block;
+    margin-bottom:5px;
+  }
+  .run h3{
+    font-family:var(--f-display);
+    font-weight:700;
+    font-size:17px;
+    letter-spacing:-.01em;
+    text-transform:uppercase;
+    margin:0 0 5px;
+  }
+  .run p{
+    margin:0;
+    font-size:14.5px;
+    color:var(--muted);
+  }
+
+  .day{
+    margin:26px 0 16px;
+    padding:11px 14px;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-left:3px solid var(--pink-deep);
+  }
+  .day b{
+    display:block;
+    font-family:var(--f-mono);
+    font-size:10.5px;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--ink);
+    margin-bottom:3px;
+  }
+  .day i{ font-style:normal; font-size:13.5px; color:var(--muted); }
+
+  /* ---------- camera diagram ---------- */
+  figure{
+    margin:20px 0 0;
+    border:1px solid var(--line);
+    background:var(--panel);
+    padding:18px 16px 14px;
+  }
+  figure svg{display:block;width:100%;height:auto;}
+  figcaption{
+    margin-top:14px;
+    font-family:var(--f-mono);
+    font-size:11px;
+    line-height:1.6;
+    letter-spacing:.04em;
+    color:var(--muted);
+    text-transform:uppercase;
+  }
+  figcaption b{color:var(--pink-deep);font-weight:500;}
+
+  /* ---------- questions ---------- */
+  .qs{
+    margin:16px 0 0;
+    padding:0;
+    list-style:none;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .qs li{
+    border-left:2px solid var(--pink-deep);
+    padding:2px 0 2px 15px;
+    font-size:17px;
+    line-height:1.4;
+  }
+
+  /* ---------- get / need ---------- */
+  .cols{
+    display:grid;
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    margin-top:6px;
+  }
+  .cols div{
+    background:var(--panel);
+    padding:16px;
+  }
+  .cols h3{
+    font-family:var(--f-mono);
+    font-size:10.5px;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin:0 0 10px;
+  }
+  .cols ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px;}
+  .cols li{
+    font-size:15px;
+    padding-left:16px;
+    position:relative;
+  }
+  .cols li::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:9px;
+    width:6px;
+    height:1px;
+    background:var(--pink-deep);
+  }
+  @media (min-width:560px){
+    .cols{grid-template-columns:1fr 1fr;}
+  }
+
+  .rule{
+    margin-top:26px;
+    border:1px solid var(--stencil);
+    background:rgba(47,107,255,.07);
+    padding:15px 16px;
+    font-size:15px;
+    line-height:1.5;
+  }
+  .rule b{
+    display:block;
+    font-family:var(--f-mono);
+    font-size:10.5px;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:#7ea2ff;
+    margin-bottom:7px;
+    font-weight:500;
+  }
+
+  footer{
+    margin-top:44px;
+    padding-top:22px;
+    border-top:1px solid var(--line);
+    font-size:14px;
+    color:var(--muted);
+  }
+  footer b{color:var(--ink);font-weight:600;}
+  footer .sig{
+    font-family:var(--f-mono);
+    font-size:10.5px;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    margin-top:16px;
+    color:#5d5766;
+  }
+</style>
+
+<div class="ticker">
+  <div class="ticker-inner">
+    <span>Interview 02 <b>· The Ink ·</b> Legion Ink SA</span>
+    <span>Black and grey stays black and grey</span>
+    <span><b>Off the record stays off the record</b></span>
+    <span>Two days · the second one is the interview</span>
+    <span>Interview 02 <b>· The Ink ·</b> Legion Ink SA</span>
+    <span>Black and grey stays black and grey</span>
+    <span><b>Off the record stays off the record</b></span>
+    <span>Two days · the second one is the interview</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">0ff The Print <em>/</em> Interview 02</p>
+    <h1>The<span class="thin">Ink</span></h1>
+    <p class="who"><b>Smiley Onerr</b> · @smiley_one98<br>Legion Ink · 719 N New Braunfels Ave · San Antonio</p>
+  </header>
+
+  <section>
+    <p class="kicker">What it is</p>
+    <p class="lede">You tattooing, start to finish, talking while you work. <b>Four to six minutes.</b> The machine is running through the whole thing.</p>
+    <p class="muted">Nothing gets staged for me, nothing gets moved, and you don't have to perform. You work, I ask you stuff, the camera stays out of your light.</p>
+    <p class="muted"><b style="color:var(--ink);">We're doing it across two days.</b> Friday I just shoot the shop and you working, no interview, nothing you have to get ready for. The real one is its own day, with the client you're lining up, and that's the day we actually sit down and talk.</p>
+
+    <ul class="nots">
+      <li><i>Not</i> <s>a commercial for the shop</s></li>
+      <li><i>Not</i> <s>a talking head against a blank wall</s></li>
+      <li><i>Not</i> <s>scripted, rehearsed, or done in takes</s></li>
+    </ul>
+  </section>
+
+  <section>
+    <p class="kicker">How it runs</p>
+    <h2>Two days, and the second one is the one</h2>
+
+    <div class="day"><b>Day one · Friday</b><i>About two hours. No interview. Nothing to prepare.</i></div>
+    <ol class="run">
+      <li>
+        <span class="t">Before you start</span>
+        <h3>The shop empty</h3>
+        <p>I get there early and shoot the room with nobody in it. Flash on the walls, the tray, the chair, the front door. This is the opening of the video.</p>
+      </li>
+      <li>
+        <span class="t">Two minutes</span>
+        <h3>Paper</h3>
+        <p>You sign one page, and whoever owns the shop signs one. Plain English, one page each, nothing about owning your work.</p>
+      </li>
+      <li class="hot">
+        <span class="t">Whatever you're already booked for</span>
+        <h3>You working</h3>
+        <p>Stencil, machine, your hands, the wipe. I'll put a mic on you and leave it running, but I'm not interviewing you today. If you feel like talking, talk. If you don't, don't.</p>
+      </li>
+    </ol>
+
+    <div class="day"><b>Day two · the interview</b><i>About three hours, with the client you're setting up.</i></div>
+    <ol class="run">
+      <li class="hot">
+        <span class="t">Client in the chair</span>
+        <h3>The session</h3>
+        <p>Start to finish, same as any other day you work. Your client seeing it in the mirror at the end is the ending of the piece.</p>
+      </li>
+      <li class="hot">
+        <span class="t">30 to 40 minutes</span>
+        <h3>Sitting down</h3>
+        <p>This is the part I want. You in your own chair at your own station, not against a blank wall, and I get to actually ask you things instead of catching you between lines. Your answers are what the whole piece is built on.</p>
+      </li>
+      <li>
+        <span class="t">Last 5 minutes</span>
+        <h3>Just you</h3>
+        <p>Shop quiet, client gone. Stills of you at the station. Those are the photos that go on the site and on your card.</p>
+      </li>
+    </ol>
+
+    <p class="kicker">Where the cameras sit</p>
+    <h2>Two, and neither one is in your way</h2>
+
+    <figure>
+      <svg viewBox="0 0 360 210" role="img" aria-label="Top down layout of the tattoo station showing camera A at three quarter front and camera B locked over Smiley's shoulder">
+        <!-- station floor -->
+        <rect x="1" y="1" width="358" height="208" fill="none" stroke="#23222b"/>
+
+        <!-- client chair -->
+        <rect x="120" y="58" width="150" height="46" rx="10" fill="#16161d" stroke="#3a3844"/>
+        <circle cx="132" cy="81" r="12" fill="#1d1c25" stroke="#3a3844"/>
+        <text x="196" y="86" font-family="ui-monospace,Menlo,monospace" font-size="10" letter-spacing="1.6" fill="#9a93a3" text-anchor="middle">CLIENT</text>
+
+        <!-- the arm being worked on -->
+        <rect x="150" y="108" width="72" height="15" rx="7" fill="#1d1c25" stroke="#f48fc8" stroke-dasharray="3 3"/>
+
+        <!-- smiley on the stool -->
+        <circle cx="186" cy="152" r="19" fill="#16161d" stroke="#f48fc8"/>
+        <text x="186" y="156" font-family="ui-monospace,Menlo,monospace" font-size="9" letter-spacing="1" fill="#f7b9dd" text-anchor="middle">YOU</text>
+
+        <!-- camera B over the shoulder -->
+        <path d="M186 133 L186 124" stroke="#f48fc8" stroke-width="1"/>
+        <rect x="236" y="140" width="46" height="26" rx="3" fill="#121218" stroke="#f48fc8"/>
+        <text x="259" y="157" font-family="ui-monospace,Menlo,monospace" font-size="11" letter-spacing="1" fill="#f48fc8" text-anchor="middle">B</text>
+        <path d="M236 150 L200 128" stroke="#f48fc8" stroke-width="1" stroke-dasharray="4 3"/>
+
+        <!-- camera A on sticks -->
+        <rect x="42" y="150" width="46" height="26" rx="3" fill="#121218" stroke="#2f6bff"/>
+        <text x="65" y="167" font-family="ui-monospace,Menlo,monospace" font-size="11" letter-spacing="1" fill="#2f6bff" text-anchor="middle">A</text>
+        <path d="M88 156 L166 120" stroke="#2f6bff" stroke-width="1" stroke-dasharray="4 3"/>
+        <path d="M65 150 L65 132" stroke="#2f6bff" stroke-width="1"/>
+        <path d="M56 132 L74 132" stroke="#2f6bff" stroke-width="1"/>
+
+        <!-- labels -->
+        <text x="65" y="192" font-family="ui-monospace,Menlo,monospace" font-size="9" letter-spacing="1.2" fill="#6f6a7a" text-anchor="middle">ON STICKS</text>
+        <text x="259" y="182" font-family="ui-monospace,Menlo,monospace" font-size="9" letter-spacing="1.2" fill="#6f6a7a" text-anchor="middle">CLIPPED, LOCKED</text>
+        <path d="M118 115 L146 115" stroke="#f48fc8" stroke-width="1" stroke-dasharray="3 3"/>
+        <text x="112" y="119" font-family="ui-monospace,Menlo,monospace" font-size="9" letter-spacing="1.2" fill="#f7b9dd" text-anchor="end">THE PIECE</text>
+      </svg>
+      <figcaption>
+        <b>A</b> · your face and your hands, from the side, on a tripod. It does not move all day.<br>
+        <b>B</b> · a small one clipped over your shoulder looking straight down at the skin.
+      </figcaption>
+    </figure>
+
+    <p class="muted" style="margin-top:16px;">No lights in your face. Shop light is the look. Your work is black and grey and I am not putting some color filter over the top of it and fighting the piece.</p>
+  </section>
+
+  <section>
+    <p class="kicker">What it sounds like</p>
+    <h2>The machine is the soundtrack</h2>
+    <p class="muted">No music laid over your voice, no narrator, no questions read off a card. It's a conversation, not a quiz, and you'll have already been on camera a whole day by the time we get to it. Three of the kind of things I'll ask, so you know what you're walking into:</p>
+    <ul class="qs">
+      <li>Where does Smiley come from? Who gave it to you?</li>
+      <li>Why black and grey and not color?</li>
+      <li>What's the piece you'd redo if you could?</li>
+    </ul>
+    <div class="rule">
+      <b>House rule</b>
+      Anything you don't want in it, say so and it's gone. Doesn't matter if it's already on camera. Off the record stays off the record, that's a real rule here, not a line.
+    </div>
+  </section>
+
+  <section>
+    <p class="kicker">The trade</p>
+    <h2>What you get, what I need</h2>
+    <div class="cols">
+      <div>
+        <h3>You get</h3>
+        <ul>
+          <li>The finished piece, 4 to 6 minutes</li>
+          <li>Three vertical cuts for your page</li>
+          <li>Stills of you, the station, and the tattoo</li>
+          <li>All of it before it goes anywhere public</li>
+          <li>No charge, ever, for any of it</li>
+        </ul>
+      </div>
+      <div>
+        <h3>I need</h3>
+        <ul>
+          <li>Friday: a couple hours while you work</li>
+          <li>Day two: the client you're lining up, cool with being filmed</li>
+          <li>Forearm, hand or neck piece if you get any say in it</li>
+          <li>The shop owner's OK on me shooting there</li>
+          <li>30 to 40 minutes of you sitting down on day two</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p><b>Gianni Ortiz</b> · @vamppsych · San Antonio<br>
+    Cinematography student at Full Sail. I shoot venues, shows, and people who make things here.</p>
+    <p class="muted">0FF THE PRINT is an outlet I run out of SA. Interviews with the people who actually build the scene. Interview 01 was a hairstylist doing color on camera. You're 02.</p>
+    <p class="sig">Pretty first, with teeth</p>
+  </footer>
+
+</div>
+
+</body>
+</html>

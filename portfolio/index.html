@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>Giancarlo Ortiz | Video Editor, Colorist, Content Creator</title>
+<meta name="description" content="Giancarlo Ortiz. Video editor, colorist, and content creator in San Antonio, TX. Short-form specialist, DaVinci Resolve and Premiere, creator of Vamppsych.">
+<meta name="theme-color" content="#fbf5f8">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Giancarlo Ortiz | Video Editor, Colorist, Content Creator">
+<meta property="og:description" content="Editor and colorist. Short-form specialist. San Antonio / Austin / remote. You're looking through my viewfinder.">
+<meta property="og:image" content="https://0fftheprint.com/portfolio/assets/hero.jpg">
+<meta property="og:url" content="https://0fftheprint.com/portfolio/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Giancarlo Ortiz | Video Editor & Colorist">
+<meta name="twitter:description" content="Editor and colorist. Short-form specialist. San Antonio / Austin / remote.">
+<meta name="twitter:image" content="https://0fftheprint.com/portfolio/assets/hero.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23fbf5f8'/%3E%3Cg stroke='%23a9b2c4' stroke-width='2.4' fill='none' opacity='.9'%3E%3Cpath d='M7 11V7h4'/%3E%3Cpath d='M21 7h4v4'/%3E%3Cpath d='M25 21v4h-4'/%3E%3Cpath d='M11 25H7v-4'/%3E%3C/g%3E%3Ccircle cx='16' cy='16' r='4.4' fill='%23e86a86'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,400..700,0..100,0..1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/base/_variables.css?v=20260730">
+<link rel="stylesheet" href="assets/css/base/_reset.css?v=20260730">
+<link rel="stylesheet" href="assets/css/base/_base.css?v=20260730">
+<link rel="stylesheet" href="assets/css/components/_chrome.css?v=20260730">
+<link rel="stylesheet" href="assets/css/layout/_nav.css?v=20260730">
+<link rel="stylesheet" href="assets/css/layout/_hero.css?v=20260730">
+<link rel="stylesheet" href="assets/css/components/_playback.css?v=20260730">
+<link rel="stylesheet" href="assets/css/components/_photomode.css?v=20260730">
+<link rel="stylesheet" href="assets/css/components/_kinetic.css?v=20260730">
+<link rel="stylesheet" href="assets/css/components/_tapes.css?v=20260902b">
+<link rel="stylesheet" href="assets/css/components/_monitors.css?v=20260730">
+<link rel="stylesheet" href="assets/css/components/_about.css?v=20260730">
+<link rel="stylesheet" href="assets/css/components/_rates.css?v=20260730">
+<link rel="stylesheet" href="assets/css/layout/_footer.css?v=20260820b">
+<link rel="stylesheet" href="assets/css/layout/_mobile-nav.css?v=20260730">
+<link rel="stylesheet" href="assets/css/components/_floating.css?v=20260730">
+<link rel="stylesheet" href="assets/css/layout/_bands.css?v=20260730">
+<link rel="stylesheet" href="assets/css/components/_totop.css?v=20260730">
+<link rel="stylesheet" href="assets/css/components/_disclosure.css?v=20260730b">
+</head>
+<body data-look="night-city">
+<div class="datestamp" id="datestamp" aria-hidden="true"></div>
+<div class="scrollbar" id="scrollbar" aria-hidden="true"></div>
+<div id="af-cursor" aria-hidden="true"><i></i><i></i><i></i><i></i><span class="st">AF LOCK</span></div>
+
+<nav><div class="wrap">
+  <a class="logo" href="#top">G<span>.</span>ORTIZ</a>
+  <div class="nav-tc">
+    <span class="rec-chip"><span class="rec-dot"></span>REC</span>
+    <span class="tc" id="timecode"><b>00:00:00:00</b></span>
+  </div>
+  <ul>
+    <li><a href="#about">Info</a></li>
+    <li><a href="#stills">Photo</a></li>
+    <li><a href="#nights">Nights</a></li>
+    <li><a href="#archive">Archive</a></li>
+    <li><a href="#design">Design</a></li>
+    <li><a href="#playback">Playback</a></li>
+    <li><a href="#feed">Feed</a></li>
+    <li><a href="#rates">Rates</a></li>
+    <li><a href="#contact">Standby</a></li>
+  </ul>
+</div></nav>
+
+<header id="top" class="vf">
+  <div class="hero-bg"></div>
+  <div class="hero-vin"></div>
+  <div class="hero-shade"></div>
+  <i class="bk tl"></i><i class="bk tr"></i><i class="bk bl"></i><i class="bk br"></i>
+  <div class="osd tl">CAM A · FX6 · 4K 24P</div>
+  <div class="osd tr">ISO 800 · T2.8<br>WB 3200K</div>
+  <div class="osd crosshair" aria-hidden="true"></div>
+  <img class="hero-mascot hm-star" src="assets/kawaii/ribbon_bow.png" alt="" aria-hidden="true">
+  <img class="hero-mascot hm-charm" src="steel/assets/charm.png" alt="" aria-hidden="true">
+  <button class="look-chip" id="lookChip" title="cycle the picture profile" aria-label="Picture profile. Tap to cycle the grade."><span class="pp-led" aria-hidden="true"></span><span class="tag">PP<b id="lookIdx">1</b></span><span class="lbl" id="lookName">NIGHT CITY</span><span class="pp-dots" id="lookDots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i><i></i></span><span class="hnt" id="lookHint">resize me</span></button>
+  <div class="wrap hero-in">
+    <div class="kicker">San Antonio TX · Avail SA / Austin / Remote</div>
+    <h1 id="heroName" aria-label="Giancarlo Ortiz">Giancarlo Ortiz</h1>
+    <p class="hero-sub"><b>Video editor, colorist, and director.</b> Short-form specialist behind the brand Vamppsych. You're looking through my viewfinder. I write, direct, shoot, cut, grade, and design end to end.</p>
+    <div class="btns">
+      <a class="btn solid" href="#playback">Roll playback</a>
+      <a class="btn ghost" href="assets/docs/GiancarloOrtiz-Resume-VideoEditor.pdf">Resume (PDF)</a>
+      <a class="btn ghost" href="#contact">Contact</a>
+    </div>
+    <div class="hint" id="ppHint">psst. <b>drag the window edge</b> and the picture profile regrades. or hit the PP chip.</div>
+  </div>
+</header>
+
+<div class="mq" aria-hidden="true"><div class="mq-track">
+  <span>EDIT <b>·</b> COLOR <b>·</b> DIRECTING <b>·</b> SHORT-FORM <b>·</b> DAVINCI RESOLVE <b>·</b> PREMIERE <b>·</b> AFTER EFFECTS <b>·</b> SONY FX6 <b>·</b> CUSTOM DCTL LOOKS <b>·</b> FUSION <b>·</b> CAPCUT <b>·</b> SAN ANTONIO TX <b>·</b>&nbsp;</span>
+</div></div>
+
+<section id="about"><div class="wrap rv">
+  <div class="kicker">Info</div>
+  <h2>Editor first, one-person studio when needed</h2>
+  <div class="about-grid">
+    <div>
+      <p>Four-plus years cutting daily. I built <b>Vamppsych</b> from zero into an audience by writing, shooting, editing, grading, and designing every post myself. I am fast, I finish, and I do not need hand-holding anywhere in the pipeline.</p>
+      <p><b>A.S. in Digital Cinematography, Full Sail University</b>, B.S. finishing 2027. I wrote, directed, and edited the short film <b>VOLUME</b>. Based in San Antonio, available for staff, freelance, and crew work in SA and Austin, and remote anywhere.</p>
+      <div class="offclock">off the clock: underground rap, horror movies, and a good pair of New Rock boots.</div>
+    </div>
+    <ul class="credits">
+      <li><b>VOLUME</b><span class="r">Writer / Director / Editor</span><span>Narrative short, Full Sail · 2026</span><span class="aw">★ Course Director's Award, Directing</span></li>
+      <li><b>SA Current</b><span class="r">Social Media &amp; Content Creator</span><span>Alt-weekly client work · San Antonio</span></li>
+      <li><b>Stadium concert coverage</b><span class="r">Shooter / Editor / Colorist</span><span>Live event, 65,000-seat venue · 2026</span></li>
+      <li><b>Full Sail student productions</b><span class="r">Camera / Lighting / Audio crew</span><span>2025 to 2026</span></li>
+      <li><b>Vamppsych</b><span class="r">Founder / Creative Director</span><span>2023 to present</span></li>
+    </ul>
+  </div>
+
+  <div class="clip-label" style="margin-top:44px"><span><b>THE FIELD KIT</b> · WHAT THE WORK GETS SHOT ON</span><span class="r">OWNED · NOT RENTED</span></div>
+  <div class="kit-row">
+    <div class="polaroid k1"><img class="washi" src="steel/assets/washi_pink.png" alt="" aria-hidden="true"><a class="kitzoom" href="assets/kawaii/kit/kit_fx6_full.jpg"><img class="cam" width="1600" height="2000" src="assets/kawaii/kit/kit_fx6_web.jpg" loading="lazy" alt="Field kit card: Sony FX6 cinema body on the studio desk"></a><div class="cap"><b>SONY FX6</b> · the rig · tap to read</div></div>
+    <div class="polaroid k2"><img class="washi" src="steel/assets/washi_mint.png" alt="" aria-hidden="true"><a class="kitzoom" href="assets/kawaii/kit/kit_acepro2_full.jpg"><img class="cam" width="1600" height="2000" src="assets/kawaii/kit/kit_acepro2_web.jpg" loading="lazy" alt="Field kit card: Insta360 Ace Pro 2 action camera"></a><div class="cap"><b>ACE PRO 2</b> · the runner · tap to read</div></div>
+    <div class="polaroid k3"><img class="washi" src="steel/assets/washi_lilac.png" alt="" aria-hidden="true"><a class="kitzoom" href="assets/kawaii/kit/kit_goultra_full.jpg"><img class="cam" width="1600" height="2000" src="assets/kawaii/kit/kit_goultra_web.jpg" loading="lazy" alt="Field kit card: Insta360 GO Ultra pocket camera"></a><div class="cap"><b>GO ULTRA</b> · the pocket · tap to read</div></div>
+  </div>
+
+  <div style="height:44px"></div>
+
+  <div class="kicker">Menu · What I Do</div>
+  <h2>Three lanes, one pipeline</h2>
+  <div class="social-row" style="margin-top:24px">
+    <div class="social-card">
+      <div class="h">Edit <span>+</span> Color</div>
+      <div class="s"><b style="color:var(--ink)">Premiere, After Effects, Resolve, CapCut.</b> Short-form built for retention, narrative editing, shot-matched grades, custom DCTL looks, Fusion composites. I build my own Resolve and Premiere plugins.</div>
+    </div>
+    <div class="social-card">
+      <div class="h">Content <span>+</span> Social</div>
+      <div class="s">Founder of <b style="color:var(--ink)">Vamppsych</b>, 7.6K+ on TikTok. Hooks, pacing, thumbnails, analytics, title cards, motion graphics. Every post is mine end to end.</div>
+    </div>
+    <div class="social-card">
+      <div class="h">Production</div>
+      <div class="s"><b style="color:var(--ink)">Sony FX6, Insta360 Ace Pro 2 / X4</b>, on-set lighting and audio. Full Sail set training, my own camera package, two years of large-venue event work. Long days do not scare me.</div>
+    </div>
+  </div>
+</div></section>
+
+<section id="stills"><img class="sec-mascot" src="assets/kawaii/ribbon_bow.png" alt="" aria-hidden="true"><div class="wrap rv">
+  <div class="kicker">Photo Mode</div>
+  <h2>Frames from the floor</h2>
+  <p style="color:var(--dim)">Pulled and graded from my live stadium coverage. Click to view full.</p>
+  <div class="grid" id="gallery"></div>
+
+  <div class="clip-label" style="margin-top:40px"><span><b>GRADE A/B</b> · ALAMODOME FLOOR · ONE FRAME, TWO STATES</span><span class="r">DRAG THE LINE</span></div>
+  <div class="ab vf" id="abwrap" role="slider" aria-label="Color grade before and after comparison, drag to compare" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" tabindex="0">
+    <img src="assets/stills/grade_sludge.jpg" alt="Graded frame in the Editorial Sludge look" loading="lazy">
+    <img class="ab-top" src="assets/stills/grade_source.jpg" alt="Same frame straight off the sensor" loading="lazy">
+    <span class="ab-tag a">SOURCE</span>
+    <span class="ab-tag b">GRADED · EDITORIAL SLUDGE</span>
+    <div class="ab-line"></div>
+    <div class="ab-grip">&lt;&nbsp;&gt;</div>
+    <span class="bk tl"></span><span class="bk tr"></span><span class="bk bl"></span><span class="bk br"></span>
+  </div>
+  <p style="color:var(--dim);font-size:14px;margin-top:10px;max-width:660px">Left of the line is what the sensor saw. Right is the finished grade, an in-house look built as a DCTL and run through my Resolve color pipeline.</p>
+</div></section>
+
+<div class="mq" aria-hidden="true"><div class="mq-track">
+  <span>NIGHT CITY <b>·</b> EDITORIAL DREAM <b>·</b> DARKROOM <b>·</b> CHROME <b>·</b> SLEAZE <b>·</b> SUPER 8 <b>·</b> LOOKS BUILT IN-HOUSE <b>·</b> NIGHT CITY <b>·</b> EDITORIAL DREAM <b>·</b> DARKROOM <b>·</b> CHROME <b>·</b> SLEAZE <b>·</b> SUPER 8 <b>·</b> LOOKS BUILT IN-HOUSE <b>·</b>&nbsp;</span>
+</div></div>
+
+<section id="nights"><img class="sec-mascot" src="steel/assets/charm.png" loading="lazy" alt="" aria-hidden="true"><div class="wrap rv">
+  <div class="kicker">Nights &middot; Venue + Event</div>
+  <h2>I shoot the room the way it felt</h2>
+  <p style="color:var(--dim);max-width:680px">Club nights, bar nights, showcases, touring rooms, and the shops that keep the same street alive in the daytime. Compact rigs so nothing is in anybody's way, flash that does not flatten a face, and a grade built for that specific room. A red stage and a green dive bar are not the same problem, so they do not get the same look.</p>
+
+  <div class="clip-label" style="margin-top:26px"><span><b>BLADE RAVE</b> &middot; PAPER TIGER &middot; N ST MARY'S</span><span class="r">195 FRAMES &middot; SET DELIVERED NEXT MORNING</span></div>
+  <div class="blue-grid">
+    <a class="bluep bwide" href="assets/bladerave/br_01.jpg"><img src="assets/bladerave/br_01.jpg" alt="Blade Rave: the dance floor with hands up, dancers on the riser, backlit haze" loading="lazy"></a>
+    <a class="bluep bhero" href="assets/bladerave/br_02.jpg"><img src="assets/bladerave/br_02.jpg" alt="Blade Rave: performer in white corpse paint framing the camera with his hand, magenta beams behind him" loading="lazy"></a>
+    <a class="bluep" href="assets/bladerave/br_03.jpg"><img src="assets/bladerave/br_03.jpg" alt="Blade Rave: the DJ booth under the lit BLADE RAVE wall, a green beam cutting the haze" loading="lazy"></a>
+    <a class="bluep" href="assets/bladerave/br_04.jpg"><img src="assets/bladerave/br_04.jpg" alt="Blade Rave: guest posing in front of the red Paper Tiger mural" loading="lazy"></a>
+    <a class="bluep" href="assets/bladerave/br_05.jpg"><img src="assets/bladerave/br_05.jpg" alt="Blade Rave: two guests on the red-lit stage" loading="lazy"></a>
+    <a class="bluep" href="assets/bladerave/br_06.jpg"><img src="assets/bladerave/br_06.jpg" alt="Blade Rave: two guests in corpse paint and harnesses on the patio under string lights" loading="lazy"></a>
+    <a class="bluep" href="assets/bladerave/br_07.jpg"><img src="assets/bladerave/br_07.jpg" alt="Blade Rave: guest in a leather jacket against the graffiti wall" loading="lazy"></a>
+    <a class="bluep" href="assets/bladerave/br_08.jpg"><img src="assets/bladerave/br_08.jpg" alt="Blade Rave: flash portrait of two guests, the black room falling away behind them" loading="lazy"></a>
+  </div>
+  <p class="client-credits">ONE NIGHT, <b>195 stills and 32 clips</b>, the edit in the venue's inbox the next morning. The club look was picked by measuring five rooms against five candidate grades, not by eye. Flash-lit portraits in the black room were split onto a second, quieter look so no face blows out and no corner turns to murk.</p>
+
+  <div class="clip-label" style="margin-top:40px"><span><b>THE MIX</b> &middot; N ST MARY'S &middot; UNDERGROUND SHOWCASE</span><span class="r">159 FRAMES &middot; RING FLASH &middot; 21 MIN SET</span></div>
+  <div class="blue-grid">
+    <a class="bluep bwide" href="assets/themix/mix_01.jpg"><img src="assets/themix/mix_01.jpg" alt="The Mix: the whole crew posed together under a green flood" loading="lazy"></a>
+    <a class="bluep bhero" href="assets/themix/mix_02.jpg"><img src="assets/themix/mix_02.jpg" alt="The Mix: portrait in a red jacket, arms open, ring-flash halo against the bar neon" loading="lazy"></a>
+    <a class="bluep" href="assets/themix/mix_03.jpg"><img src="assets/themix/mix_03.jpg" alt="The Mix: portrait with tattoos and a watch, neon signs burning behind him" loading="lazy"></a>
+    <a class="bluep" href="assets/themix/mix_04.jpg"><img src="assets/themix/mix_04.jpg" alt="The Mix: guest at the lit dartboard against the sticker-covered wall" loading="lazy"></a>
+    <a class="bluep" href="assets/themix/mix_05.jpg"><img src="assets/themix/mix_05.jpg" alt="The Mix: a hand reaching into the lens, sunglasses, blue neon behind" loading="lazy"></a>
+    <a class="bluep" href="assets/themix/mix_06.jpg"><img src="assets/themix/mix_06.jpg" alt="The Mix: portrait under the disco ball in red and blue neon" loading="lazy"></a>
+    <a class="bluep" href="assets/themix/mix_07.jpg"><img src="assets/themix/mix_07.jpg" alt="The Mix: portrait in a band tee, hair over the eyes" loading="lazy"></a>
+    <a class="bluep" href="assets/themix/mix_08.jpg"><img src="assets/themix/mix_08.jpg" alt="The Mix: full-length in the purple-washed back room" loading="lazy"></a>
+  </div>
+  <p class="client-credits">A dive bar lit almost entirely in neon and one green flood. <b>159 frames plus the full set on video</b>, cut into a venue reel, a carousel, and a set of 3000px square album grabs pulled off the graded master so the artist can use them as cover art.</p>
+
+  <div class="clip-label" style="margin-top:40px"><span><b>ZEN HAUS</b> &middot; THIRD FRIDAY NIGHT MARKET &middot; DOWNTOWN SA</span><span class="r">301 FRAMES &middot; 3 VERSIONS &middot; PUBLIC GALLERY NEXT DAY</span></div>
+  <div class="blue-grid">
+    <a class="bluep bwide" href="assets/zenhaus/zh_01.jpg"><img src="assets/zenhaus/zh_01.jpg" alt="Zen Haus night market: the courtyard from above, string lights over the vendor tables and the crowd" loading="lazy"></a>
+    <a class="bluep bhero" href="assets/zenhaus/zh_02.jpg"><img src="assets/zenhaus/zh_02.jpg" alt="Zen Haus night market: two shoppers holding up plush blind-box toys in the magenta-lit room" loading="lazy"></a>
+    <a class="bluep" href="assets/zenhaus/zh_03.jpg"><img src="assets/zenhaus/zh_03.jpg" alt="Zen Haus night market: the street packed between the vendor tents, shot from the balcony" loading="lazy"></a>
+    <a class="bluep" href="assets/zenhaus/zh_04.jpg"><img src="assets/zenhaus/zh_04.jpg" alt="Zen Haus night market: vendor in a painted mask throwing up both hands behind his table" loading="lazy"></a>
+    <a class="bluep" href="assets/zenhaus/zh_05.jpg"><img src="assets/zenhaus/zh_05.jpg" alt="Zen Haus night market: ceramics table under the string lights, the makers working behind it" loading="lazy"></a>
+    <a class="bluep" href="assets/zenhaus/zh_06.jpg"><img src="assets/zenhaus/zh_06.jpg" alt="Zen Haus night market: couple with a paleta in front of the frozen banana truck" loading="lazy"></a>
+    <a class="bluep" href="assets/zenhaus/zh_07.jpg"><img src="assets/zenhaus/zh_07.jpg" alt="Zen Haus night market: flash portrait of two guests throwing peace signs, purple light behind them" loading="lazy"></a>
+    <a class="bluep" href="assets/zenhaus/zh_08.jpg"><img src="assets/zenhaus/zh_08.jpg" alt="Zen Haus night market: four guests posed together inside the salon" loading="lazy"></a>
+  </div>
+  <p class="client-credits">An outdoor market that opens in daylight and ends in the dark, so one night asks two different things of the camera. <b>301 frames</b>, each one graded on its own instead of off a single preset, delivered in three versions: clean, black and white, and a print look. Vendors, crowd, and walk-up portraits, all on a compact rig so nobody had a lens in their way. The whole night is up as a <a href="zenhaus/" style="color:var(--ink);text-decoration:underline">public gallery</a> so anyone who was there can find their own photo and save it full size.</p>
+
+  <div class="clip-label" style="margin-top:40px"><span><b>LEGION INK</b> &middot; SMILEY ONERR &middot; N NEW BRAUNFELS</span><span class="r">27 FRAMES &middot; 3 LOOKS &middot; SHOP + SIT DOWN</span></div>
+  <div class="blue-grid">
+    <a class="bluep bwide" href="assets/legionink/li_01.jpg"><img src="assets/legionink/li_01.jpg" alt="Legion Ink: Smiley bent over the arm he is working on, a painted skull on the wall behind him" loading="lazy"></a>
+    <a class="bluep bhero" href="assets/legionink/li_02.jpg"><img src="assets/legionink/li_02.jpg" alt="Legion Ink: the machine in his hand, close on the line going into skin" loading="lazy"></a>
+    <a class="bluep" href="assets/legionink/li_03.jpg"><img src="assets/legionink/li_03.jpg" alt="Legion Ink: Smiley in profile between passes, face and neck tattoos lit by the window" loading="lazy"></a>
+    <a class="bluep" href="assets/legionink/li_04.jpg"><img src="assets/legionink/li_04.jpg" alt="Legion Ink: the needle laying line work across a half finished sleeve" loading="lazy"></a>
+    <a class="bluep" href="assets/legionink/li_05.jpg"><img src="assets/legionink/li_05.jpg" alt="Legion Ink: the bench, ink bottles and the machine laid out on the tray" loading="lazy"></a>
+    <a class="bluep" href="assets/legionink/li_06.jpg"><img src="assets/legionink/li_06.jpg" alt="Legion Ink: Smiley working against the airbrushed panel in the back room" loading="lazy"></a>
+    <a class="bluep" href="assets/legionink/li_07.jpg"><img src="assets/legionink/li_07.jpg" alt="Legion Ink: the finished piece, a black and grey sun and roses across the thigh" loading="lazy"></a>
+    <a class="bluep" href="assets/legionink/li_08.jpg"><img src="assets/legionink/li_08.jpg" alt="Legion Ink: Smiley out front of the shop under the piercing sign" loading="lazy"></a>
+  </div>
+  <p class="client-credits">A working tattoo shop on North New Braunfels, shot in one afternoon while he was actually tattooing. <b>27 stills in three looks</b>, plus the sit down interview on video. The room is small, lit by one window and the lamp over the chair, so the grade is solved per frame off the skin in that frame instead of off the room. The black and grey set is a real editorial monochrome, not a desaturation, because his line work reads harder without colour in the way.</p>
+
+  <div class="clip-label" style="margin-top:40px"><span><b>THE MIX</b> &middot; RESIDENT EVIL VS SILENT HILL &middot; HORROR NIGHT</span><span class="r">165 FRAMES &middot; 3 LOOKS &middot; PUBLIC GALLERY NEXT DAY</span></div>
+  <div class="blue-grid">
+    <a class="bluep bwide" href="assets/mixhorror/mh_01.jpg"><img src="assets/mixhorror/mh_01.jpg" alt="The Mix horror night: the bartender in a clown mask behind the bar, backlit through the haze" loading="lazy"></a>
+    <a class="bluep bhero" href="assets/mixhorror/mh_02.jpg"><img src="assets/mixhorror/mh_02.jpg" alt="The Mix horror night: guest in corpse paint holding a red Pyramid Head helmet in the pink back room" loading="lazy"></a>
+    <a class="bluep" href="assets/mixhorror/mh_03.jpg"><img src="assets/mixhorror/mh_03.jpg" alt="The Mix horror night: two guests in black posed against the red bar wall" loading="lazy"></a>
+    <a class="bluep" href="assets/mixhorror/mh_04.jpg"><img src="assets/mixhorror/mh_04.jpg" alt="The Mix horror night: guest lining up a shot at the pool table, arcade cabinets glowing behind her" loading="lazy"></a>
+    <a class="bluep" href="assets/mixhorror/mh_05.jpg"><img src="assets/mixhorror/mh_05.jpg" alt="The Mix horror night: full length portrait in a black corset and veil beside the flyer wall" loading="lazy"></a>
+    <a class="bluep" href="assets/mixhorror/mh_06.jpg"><img src="assets/mixhorror/mh_06.jpg" alt="The Mix horror night: tattooed guest in glasses lit by the red bar lights" loading="lazy"></a>
+    <a class="bluep" href="assets/mixhorror/mh_07.jpg"><img src="assets/mixhorror/mh_07.jpg" alt="The Mix horror night: guest in a cap leaning on the arcade machines under the yellow marquee" loading="lazy"></a>
+    <a class="bluep" href="assets/mixhorror/mh_08.jpg"><img src="assets/mixhorror/mh_08.jpg" alt="The Mix horror night: guest smiling in the purple lit back room" loading="lazy"></a>
+  </div>
+  <p class="client-credits">A horror themed night that lit itself in two halves, so the grade follows the room instead of flattening both into one house look. The red rooms keep their red while a compressor pulls saturation off everything except skin, so faces climb out of the wash. The fog rooms get ash desaturation and the haze is held down rather than lifted, so it reads as fog instead of milk. <b>165 frames, each solved for its own exposure and white balance off the skin in it</b>, delivered in three looks. Nothing clipped, no frame with pure black in it, checked frame by frame rather than by eye. The selects are up as a <a href="https://0fftheprint.com/events/2026-08-25-the-mix/" style="color:var(--ink);text-decoration:underline">public gallery</a>.</p>
+
+  <div class="clip-label" style="margin-top:40px"><span><b>ANDREW E.</b> &middot; STABLE HALL &middot; WHOLESOME AGAIN WORLD TOUR</span><span class="r">196 FRAMES &middot; 3 LOOKS &middot; PROMOTER HAD IT NEXT DAY</span></div>
+  <div class="blue-grid">
+    <a class="bluep bwide" href="assets/stablehall/sh_01.jpg"><img src="assets/stablehall/sh_01.jpg" alt="Andrew E. at Stable Hall: arms thrown wide beside the word STUPID projected across the pink stage wall, the crowd in silhouette below" loading="lazy"></a>
+    <a class="bluep bhero" href="assets/stablehall/sh_02.jpg"><img src="assets/stablehall/sh_02.jpg" alt="Andrew E. on the mic, lit red from one side and blue from the other, holding a fan's phone up as he raps" loading="lazy"></a>
+    <a class="bluep" href="assets/stablehall/sh_03.jpg"><img src="assets/stablehall/sh_03.jpg" alt="The ANDREW E. banner lit on the Stable Hall stage under the fringed valance, hands up across the whole room" loading="lazy"></a>
+    <a class="bluep" href="assets/stablehall/sh_04.jpg"><img src="assets/stablehall/sh_04.jpg" alt="Andrew E. at the lip of the stage reaching down into a forest of raised phones" loading="lazy"></a>
+    <a class="bluep" href="assets/stablehall/sh_05.jpg"><img src="assets/stablehall/sh_05.jpg" alt="Andrew E. sharing the mic with a fan he pulled up on stage, both lit against the white LED wall" loading="lazy"></a>
+    <a class="bluep" href="assets/stablehall/sh_06.jpg"><img src="assets/stablehall/sh_06.jpg" alt="The front row from the pit, faces lit green and red, hands and phones in the air" loading="lazy"></a>
+    <a class="bluep" href="assets/stablehall/sh_07.jpg"><img src="assets/stablehall/sh_07.jpg" alt="The Stable Hall room from the floor, beams cutting the haze, him small on the far stage" loading="lazy"></a>
+    <a class="bluep" href="assets/stablehall/sh_08.jpg"><img src="assets/stablehall/sh_08.jpg" alt="Stable Hall from the street before doors, the 1894 limestone facade against a blue sky" loading="lazy"></a>
+  </div>
+  <p class="client-credits">A Filipino rap legend on a US tour date, covered on a media pass. <b>196 frames in three looks</b> plus 33 vertical clips and a set of frame grabs, in the promoter's hands the next day. The stage is lit hard in red from one side and blue from the other at the same time, which is the case a single house look cannot solve, so every frame is solved for its own exposure and white balance off the skin in it. The LED wall behind him stays readable instead of blooming out into the faces in front of it. Promoter: REM Entertainment &amp; Productions.</p>
+
+  <div class="clip-label" style="margin-top:40px"><span><b>ANDREW E.</b> &middot; SARI-SARI &middot; THE SIT DOWN, NEXT DAY</span><span class="r">30 FRAMES &middot; 2 CAMERAS &middot; 12:46 ON TAPE</span></div>
+  <div class="blue-grid">
+    <a class="bluep bwide" href="assets/andrewe/ae_01.jpg"><img src="assets/andrewe/ae_01.jpg" alt="Andrew E. crowded in with five guests at the restaurant, everyone throwing shakas and finger hearts" loading="lazy"></a>
+    <a class="bluep bhero" href="assets/andrewe/ae_02.jpg"><img src="assets/andrewe/ae_02.jpg" alt="Andrew E. in profile in a black track jacket, the restaurant's framed Philippine prints on the wall behind him" loading="lazy"></a>
+    <a class="bluep" href="assets/andrewe/ae_03.jpg"><img src="assets/andrewe/ae_03.jpg" alt="The lechon laid out on a wooden platter with the cleaver across it and a small Philippine flag behind" loading="lazy"></a>
+    <a class="bluep" href="assets/andrewe/ae_04.jpg"><img src="assets/andrewe/ae_04.jpg" alt="Andrew E. shaking hands with one of the Sari-Sari crew in a red shirt" loading="lazy"></a>
+    <a class="bluep" href="assets/andrewe/ae_05.jpg"><img src="assets/andrewe/ae_05.jpg" alt="Andrew E. making a finger heart beside a guest posing with him at her table" loading="lazy"></a>
+    <a class="bluep" href="assets/andrewe/ae_06.jpg"><img src="assets/andrewe/ae_06.jpg" alt="A guest laughing mid-greeting as Andrew E. reaches across to her" loading="lazy"></a>
+    <a class="bluep" href="assets/andrewe/ae_07.jpg"><img src="assets/andrewe/ae_07.jpg" alt="The Sari-Sari dining room under its rattan pendants, the tables full through the middle of the lunch" loading="lazy"></a>
+    <a class="bluep" href="assets/andrewe/ae_08.jpg"><img src="assets/andrewe/ae_08.jpg" alt="A chafing tray of chicken adobo open on the buffet line" loading="lazy"></a>
+  </div>
+
+  <div class="clip-label" style="margin-top:26px"><span><b>THE TAPE</b> &middot; ONE QUESTION EACH &middot; SOUND ON</span><span class="r">TAP TO PLAY</span></div>
+  <div class="tapes watch">
+    <div class="tape play vf">
+      <video controls preload="none" playsinline poster="assets/andrewe/cuts/loudest_poster.jpg" src="assets/andrewe/cuts/loudest_web.mp4" aria-label="Andrew E. on what San Antonio sounded like the night before, 39 seconds with sound" title="Andrew E. on what San Antonio sounded like the night before"></video>
+      <div class="t-label"><span><span class="r">&#9679;</span> CUT 01</span><span>LOUDEST</span></div>
+      <div class="t-foot">SAN ANTONIO</div>
+      <div class="t-dur">0:39</div>
+    </div>
+    <div class="tape play vf">
+      <video controls preload="none" playsinline poster="assets/andrewe/cuts/lunatic_poster.jpg" src="assets/andrewe/cuts/lunatic_web.mp4" aria-label="Andrew E. on rapping in Tagalog in 1990, 24 seconds with sound" title="Andrew E. on rapping in Tagalog in 1990"></video>
+      <div class="t-label"><span><span class="r">&#9679;</span> CUT 02</span><span>LUNATIC</span></div>
+      <div class="t-foot">TAGALOG, 1990</div>
+      <div class="t-dur">0:24</div>
+    </div>
+    <div class="tape play vf">
+      <video controls preload="none" playsinline poster="assets/andrewe/cuts/believe_poster.jpg" src="assets/andrewe/cuts/believe_web.mp4" aria-label="Andrew E. on what he tells kids who want to do what he does, 27 seconds with sound" title="Andrew E. on what he tells kids who want to do what he does"></video>
+      <div class="t-label"><span><span class="r">&#9679;</span> CUT 03</span><span>BELIEVE</span></div>
+      <div class="t-foot">ADVICE TO KIDS</div>
+      <div class="t-dur">0:27</div>
+    </div>
+  </div>
+  <p class="client-credits">The morning after the show he sat down for a sit down at Sari-Sari, and the two jobs are one weekend of the same subject. <b>30 stills in three looks and 12:46 of interview</b>, cut long for the client and into short single-question pieces like the three above. Two bodies rolling: one for picture, one parked for sound, because the better audio was not on the better camera. They landed on opposite sides of his eyeline, so cutting between them would have crossed the line, and the whole cut is built instead from one 4K angle reframed into three sizes with no upscaling. The cameras also disagreed about what time it was, so the sync was solved by measuring the two audio tracks against each other rather than trusting the file clocks. The question you see burned into each frame was asked off camera and stays on screen, so nobody has to be told what he is answering. Full set of six at <a href="https://0fftheprint.com/word/they-will-think-you-are-a-lunatic/" style="color:var(--ink);text-decoration:underline">0FF THE PRINT</a>.</p>
+
+  <div class="clip-label" style="margin-top:26px"><span><b>48 HOURS</b> &middot; THE SHOW, THEN THE NEXT DAY</span><span class="r">0:43 &middot; SOUND ON</span></div>
+  <div class="tapes solo watch">
+    <div class="tape play vf">
+      <video controls preload="none" playsinline poster="assets/andrewe/cuts/48hours_poster.jpg" src="assets/andrewe/cuts/48hours_web.mp4" aria-label="48 Hours: the Stable Hall show cut against the Sari-Sari lunch the next day, 43 seconds with sound" title="48 Hours: Andrew E. at Stable Hall on Saturday cut against the Sari-Sari lunch on Sunday"></video>
+      <div class="t-label"><span><span class="r">&#9679;</span> THE WEEKEND</span><span>48 HOURS</span></div>
+      <div class="t-foot">STABLE HALL INTO SARI-SARI</div>
+      <div class="t-dur">0:43</div>
+    </div>
+  </div>
+  <p class="client-credits">Both days as one arc, with his own answer about San Antonio running underneath it. Saturday's stage and Sunday's dining room are two completely different lighting problems, so the point of the cut is that they sit next to each other without one of them looking wrong.</p>
+
+  <div class="clip-label" style="margin-top:40px"><span><b>CLOWN CHURCH</b> &middot; RAH RAH ROOM &middot; MARKET, STAGE SHOW, LIVE BAND</span><span class="r">154 FRAMES &middot; 3 LOOKS &middot; 20 CLIPS</span></div>
+  <div class="blue-grid">
+    <a class="bluep bwide" href="assets/clownchurch/cc_01.jpg"><img src="assets/clownchurch/cc_01.jpg" alt="Clown Church: the whole cast lined up across the stage at the end of the show, one of them in full paint, the rest in shorts and t-shirts" loading="lazy"></a>
+    <a class="bluep bhero" href="assets/clownchurch/cc_02.jpg"><img src="assets/clownchurch/cc_02.jpg" alt="Clown Church: portrait in white greasepaint with red triangles over the eyes, both hands up beside her face" loading="lazy"></a>
+    <a class="bluep" href="assets/clownchurch/cc_03.jpg"><img src="assets/clownchurch/cc_03.jpg" alt="Clown Church: a comic on the mic in front of the hand-painted GO CLOWNS GO banner" loading="lazy"></a>
+    <a class="bluep" href="assets/clownchurch/cc_04.jpg"><img src="assets/clownchurch/cc_04.jpg" alt="Clown Church: guest in full harlequin paint and a black and white striped coat, holding a folding fan" loading="lazy"></a>
+    <a class="bluep" href="assets/clownchurch/cc_05.jpg"><img src="assets/clownchurch/cc_05.jpg" alt="Clown Church: green-haired guest with her tongue out and a peace sign against the red wall" loading="lazy"></a>
+    <a class="bluep" href="assets/clownchurch/cc_06.jpg"><img src="assets/clownchurch/cc_06.jpg" alt="Clown Church: two guests in mime paint, one in a cheer uniform holding a GO CLOWNS megaphone cone" loading="lazy"></a>
+    <a class="bluep" href="assets/clownchurch/cc_07.jpg"><img src="assets/clownchurch/cc_07.jpg" alt="Clown Church: a vendor behind his table of hand-painted boards, throwing a peace sign" loading="lazy"></a>
+    <a class="bluep" href="assets/clownchurch/cc_08.jpg"><img src="assets/clownchurch/cc_08.jpg" alt="Clown Church: guest in a blonde wig and black lipstick leaning on a vendor table, mid-laugh" loading="lazy"></a>
+  </div>
+  <p class="client-credits">A DIY clown-themed vendor market that turned into a stage show and then a live band, in a room walled and lit almost entirely in red. Red is the strongest channel in 146 of the 154 frames, so warm tells you nothing here and the scenes are keyed on how much green and blue survive instead. The harder problem is that half the faces are white greasepaint, which a skin key built for warm skin will not find, so the target became a readability floor per face rather than a colour. <b>154 frames in three looks, 20 clips, and 510 frame grabs pulled at full resolution</b>, plus 40 selects. The public gallery is up at <a href="https://0fftheprint.com/events/2026-08-30-clown-church/" style="color:var(--ink);text-decoration:underline">0FF THE PRINT</a>.</p>
+</div></section>
+
+<section id="archive" style="border-top:0"><img class="sec-mascot flip curtain" src="assets/kawaii/f2u/heartcurtain.png" loading="lazy" alt="" aria-hidden="true"><div class="wrap rv">
+  <div class="kicker">Archive · Client Tapes</div>
+  <h2>On assignment: SA Current</h2>
+  <p style="color:var(--dim);max-width:680px">I was the alt-weekly's on-the-ground event unit. Sent solo into Riverwalk cocktail nights, beer festivals, emo night, the DoSeum. Shot photo and video, cut it the same night, handed back organized 1080p and 4K packages ready to post. Ran posting too: five-plus a week across IG and TikTok, a <b style="color:var(--ink)">15% engagement lift</b> in three months.</p>
+  <div class="tapes">
+    <div class="tape vf">
+      <video muted loop playsinline preload="none" poster="assets/kawaii/tape1_topshelf_web_poster.jpg" src="assets/kawaii/tape1_topshelf_web.mp4"></video>
+      <div class="t-label"><span><span class="r">●</span> TAPE 01</span><span>TOP SHELF</span></div>
+      <div class="t-foot">SA CURRENT · FOOD FEST</div>
+    </div>
+    <div class="tape vf">
+      <video muted loop playsinline preload="none" poster="assets/kawaii/tape2_service_web_poster.jpg" src="assets/kawaii/tape2_service_web.mp4"></video>
+      <div class="t-label"><span><span class="r">●</span> TAPE 02</span><span>SERVICE</span></div>
+      <div class="t-foot">SA CURRENT · ON THE LINE</div>
+    </div>
+    <div class="tape vf">
+      <video muted loop playsinline preload="none" poster="assets/kawaii/tape3_beerfest_web_poster.jpg" src="assets/kawaii/tape3_beerfest_web.mp4"></video>
+      <div class="t-label"><span><span class="r">●</span> TAPE 03</span><span>BEER FEST</span></div>
+      <div class="t-foot">SA CURRENT · FIELD DAY</div>
+    </div>
+    <div class="tape vf">
+      <video muted loop playsinline preload="none" poster="assets/kawaii/tape4_lucha_web_poster.jpg" src="assets/kawaii/tape4_lucha_web.mp4"></video>
+      <div class="t-label"><span><span class="r">●</span> TAPE 04</span><span>LUCHA</span></div>
+      <div class="t-foot">BEER FEST · RINGSIDE</div>
+    </div>
+  </div>
+  <div class="clip-label" style="margin-top:34px"><span><b>STILLS PULL</b> · TOP SHELF, RIVERWALK · SHOT + EDITED SAME NIGHT</span><span class="r">19:00 → 01:00</span></div>
+  <div class="sac-photos">
+    <a href="assets/sacurrent/photo_01.jpg" class="sacp"><img src="assets/sacurrent/thumb_01.jpg" alt="Top Shelf night: bronze statue uplit against limestone, holding a real glass of beer" loading="lazy"></a>
+    <a href="assets/sacurrent/photo_02.jpg" class="sacp"><img src="assets/sacurrent/thumb_02.jpg" alt="Top Shelf night: guests around a linen table at blue hour, vendor tents behind" loading="lazy"></a>
+    <a href="assets/sacurrent/photo_03.jpg" class="sacp"><img src="assets/sacurrent/thumb_03.jpg" alt="Top Shelf night: two guests with cocktails at a Riverwalk table under the trees" loading="lazy"></a>
+    <a href="assets/sacurrent/photo_04.jpg" class="sacp"><img src="assets/sacurrent/thumb_04.jpg" alt="Top Shelf night: couple posing together in front of a lit vendor booth" loading="lazy"></a>
+    <a href="assets/sacurrent/photo_05.jpg" class="sacp"><img src="assets/sacurrent/thumb_05.jpg" alt="Top Shelf night: guest in a cream suit with a drink under the string lights" loading="lazy"></a>
+    <a href="assets/sacurrent/photo_06.jpg" class="sacp"><img src="assets/sacurrent/thumb_06.jpg" alt="Top Shelf night: guest in a crown and feather garland at the gold sequin backdrop" loading="lazy"></a>
+    <a href="assets/sacurrent/photo_07.jpg" class="sacp"><img src="assets/sacurrent/thumb_07.jpg" alt="Top Shelf night: guest at blue hour under the string lights, hotel behind" loading="lazy"></a>
+    <a href="assets/sacurrent/photo_08.jpg" class="sacp"><img src="assets/sacurrent/thumb_08.jpg" alt="Top Shelf night: blackberry martinis lined up on the lace-covered bar" loading="lazy"></a>
+    <a href="assets/sacurrent/photo_09.jpg" class="sacp"><img src="assets/sacurrent/thumb_09.jpg" alt="Top Shelf night: costumed guests at their table" loading="lazy"></a>
+  </div>
+  <p class="client-credits">FULL ASSIGNMENT LOG: <b>Top Shelf · Beer Festival · Doseum · Revolutionary Wings</b> · photo + video coverage, same-night edit turnaround, organized delivery, posting and captions.</p>
+
+  <div class="clip-label" style="margin-top:38px"><span><b>LIT SESSIONS</b> · PORTRAIT + EVENT CLIENT WORK · FX6 PACKAGE</span><span class="r">RELIT · GRADED</span></div>
+  <div class="sac-photos">
+    <a href="assets/kawaii/projects/lit_biker_front.jpg" class="sacp"><img src="assets/kawaii/projects/lit_biker_front.jpg" alt="Lit portrait session: rider with his motorcycles, garage key light" loading="lazy"></a>
+    <a href="assets/kawaii/projects/lit_biker_bike.jpg" class="sacp"><img src="assets/kawaii/projects/lit_biker_bike.jpg" alt="Lit portrait session: rider seated with his bike" loading="lazy"></a>
+    <a href="assets/kawaii/projects/lit_tambourine.jpg" class="sacp"><img src="assets/kawaii/projects/lit_tambourine.jpg" alt="Lit portrait session: musician with tambourine mid-motion" loading="lazy"></a>
+    <a href="assets/kawaii/projects/lit_keys.jpg" class="sacp"><img src="assets/kawaii/projects/lit_keys.jpg" alt="Lit portrait session: musician at the keys" loading="lazy"></a>
+    <a href="assets/kawaii/projects/lit_portrait.jpg" class="sacp"><img src="assets/kawaii/projects/lit_portrait.jpg" alt="Lit portrait session: seated portrait, soft key" loading="lazy"></a>
+    <a href="assets/kawaii/projects/lit_event.jpg" class="sacp"><img src="assets/kawaii/projects/lit_event.jpg" alt="Event coverage: guest mid-pose under club lighting" loading="lazy"></a>
+  </div>
+  <p class="client-credits">TWO SESSIONS + ONE NIGHT OUT · my own FX6 lighting package · subjects lit, relit, and graded in-house.</p>
+
+  <div class="clip-label" style="margin-top:40px"><span><b>EDITORIAL PORTRAIT WORK</b> · TWO SUBJECTS · SHOT ACROSS SAN ANTONIO</span><span class="r">STYLED · LIT · GRADED</span></div>
+  <div class="blue-grid">
+    <a class="bluep bwide" href="assets/kawaii/blue/blue_scenegirl.jpg"><img src="assets/kawaii/blue/blue_scenegirl.jpg" alt="Night portrait: green-haired subject on a downtown rooftop against the skyline, flash look, graded in-house" loading="lazy"></a>
+    <a class="bluep bhero" href="assets/kawaii/blue/blue_hero_alameda.jpg"><img src="assets/kawaii/blue/blue_hero_alameda.jpg" alt="Blue session hero: model with blue-streaked hair and tattoos in front of the Alameda Theater marquee" loading="lazy"></a>
+    <a class="bluep" href="assets/kawaii/blue/blue_swirl.jpg"><img src="assets/kawaii/blue/blue_swirl.jpg" alt="Blue session: lit studio portrait against a blue swirl backdrop" loading="lazy"></a>
+    <a class="bluep" href="assets/kawaii/blue/blue_marquee.jpg"><img src="assets/kawaii/blue/blue_marquee.jpg" alt="Blue session: the Alameda marquee over her shoulder" loading="lazy"></a>
+    <a class="bluep" href="assets/kawaii/blue/blue_night.jpg"><img src="assets/kawaii/blue/blue_night.jpg" alt="Blue session: night exterior in a blue wash" loading="lazy"></a>
+    <a class="bluep" href="assets/kawaii/blue/blue_roses.jpg"><img src="assets/kawaii/blue/blue_roses.jpg" alt="Blue session: blue hair against a rose bush" loading="lazy"></a>
+    <a class="bluep" href="assets/kawaii/blue/blue_moody.jpg"><img src="assets/kawaii/blue/blue_moody.jpg" alt="Blue session: night exterior, fishnet glove to face in a violet wash" loading="lazy"></a>
+    <a class="bluep" href="assets/kawaii/blue/blue_handpose.jpg"><img src="assets/kawaii/blue/blue_handpose.jpg" alt="Blue session: daylight editorial pose, rings and fishnet sleeve" loading="lazy"></a>
+  </div>
+  <p class="client-credits">TWO SUBJECTS, EIGHT FRAMES · Alameda Theater to the downtown rooftops · styled, lit, and graded in-house.</p>
+
+  <div class="clip-label" style="margin-top:40px"><span><b>ARCADE · REDEMPTION</b> · PERSONAL EDITORIAL · INSTA360 LUNA ULTRA</span><span class="r">SHOT · MASKED · GRADED</span></div>
+  <div class="blue-grid">
+    <a class="bluep bwide" href="assets/arcade/arc_06.jpg"><img src="assets/arcade/arc_06.jpg" alt="Arcade editorial: full-length walk down a rainbow prize corridor" loading="lazy"></a>
+    <a class="bluep bhero" href="assets/arcade/arc_01.jpg"><img src="assets/arcade/arc_01.jpg" alt="Arcade editorial: full-length pose against an electric blue neon rhythm-game cabinet" loading="lazy"></a>
+    <a class="bluep" href="assets/arcade/arc_02.jpg"><img src="assets/arcade/arc_02.jpg" alt="Arcade editorial: portrait beneath a towering Godzilla statue in blue light" loading="lazy"></a>
+    <a class="bluep" href="assets/arcade/arc_03.jpg"><img src="assets/arcade/arc_03.jpg" alt="Arcade editorial: full-length against a pink and orange coin-pusher cabinet" loading="lazy"></a>
+    <a class="bluep" href="assets/arcade/arc_04.jpg"><img src="assets/arcade/arc_04.jpg" alt="Arcade editorial: portrait against a pink gacha prize wall in soft bokeh" loading="lazy"></a>
+    <a class="bluep" href="assets/arcade/arc_05.jpg"><img src="assets/arcade/arc_05.jpg" alt="Arcade editorial: looking up at a glowing red pinball cabinet" loading="lazy"></a>
+    <a class="bluep" href="assets/arcade/arc_07.jpg"><img src="assets/arcade/arc_07.jpg" alt="Arcade editorial: profile at the glass of a plush claw machine" loading="lazy"></a>
+    <a class="bluep" href="assets/arcade/arc_08.jpg"><img src="assets/arcade/arc_08.jpg" alt="Arcade editorial: portrait framed by lit arcade cabinets" loading="lazy"></a>
+  </div>
+  <p class="client-credits">ONE AFTERNOON, 53 FRAMES · Insta360 Luna Ultra · subject masked and graded in-house on a custom look, <b>REDEMPTION</b>, that lights wardrobe, skin, and arcade as three separate keys.</p>
+
+  <div class="clip-label" style="margin-top:40px"><span><b>SMILEY ONERR</b> &middot; LEGION INK &middot; N NEW BRAUNFELS</span><span class="r">DAY ONE &middot; 27 STILLS &middot; 51 MIN ON TWO CAMERAS</span></div>
+  <div class="blue-grid">
+    <a class="bluep bwide" href="assets/theink/ti_01.jpg"><img src="assets/theink/ti_01.jpg" alt="Legion Ink: the shop front on North New Braunfels, the hand-painted TATTOO sign over the door and the street number 719" loading="lazy"></a>
+    <a class="bluep bhero" href="assets/theink/ti_02.jpg"><img src="assets/theink/ti_02.jpg" alt="Smiley at the station mirror between lines, shop light only" loading="lazy"></a>
+    <a class="bluep" href="assets/theink/ti_03.jpg"><img src="assets/theink/ti_03.jpg" alt="Drawing the stencil freehand, gloves on, head down over the work" loading="lazy"></a>
+    <a class="bluep" href="assets/theink/ti_04.jpg"><img src="assets/theink/ti_04.jpg" alt="At the machine in front of the painted eye on the shop wall" loading="lazy"></a>
+    <a class="bluep" href="assets/theink/ti_05.jpg"><img src="assets/theink/ti_05.jpg" alt="Leaning into a line, his own arm work catching the light" loading="lazy"></a>
+    <a class="bluep" href="assets/theink/ti_06.jpg"><img src="assets/theink/ti_06.jpg" alt="The ink station shot as a still life, bottles and the machine on the counter" loading="lazy"></a>
+    <a class="bluep" href="assets/theink/ti_07.jpg"><img src="assets/theink/ti_07.jpg" alt="A Santa Muerte figure and a shelf of santos on the shop wall" loading="lazy"></a>
+    <a class="bluep" href="assets/theink/ti_08.jpg"><img src="assets/theink/ti_08.jpg" alt="The red room under a ring light, arms crossed against the wall of flash" loading="lazy"></a>
+  </div>
+  <p class="client-credits">A black and grey shop on N New Braunfels with burglar bars across the front, an Aztec calendar plate on one wall and a shelf of santos on another, so the room was always going to carry half of this. It is also a dark room with black walls, and black and grey ink goes green the second the white balance drifts, which is why nothing here got a batch preset. Day one was the room first and then the man working in it: <b>51 minutes on two cameras</b>, the FX6 on the shop and the street and a compact rig for the vertical work, <b>36 clips</b> and <b>27 stills</b>, each frame graded on its own and delivered in three versions. The sit-down is its own day and it has not happened yet.</p>
+
+  <div class="clip-label" style="margin-top:38px"><span><b>THE SHOP MOVING</b> &middot; FOUR LOOPS &middot; SHOT VERTICAL</span><span class="r">COMPACT RIG &middot; NO CREW</span></div>
+  <div class="tapes">
+    <div class="tape vf">
+      <video muted loop playsinline preload="none" poster="assets/theink/tape_shopfront_poster.jpg" src="assets/theink/tape_shopfront.mp4"></video>
+      <div class="t-label"><span><span class="r">&#9679;</span> TAPE 01</span><span>THE DOOR</span></div>
+      <div class="t-foot">LEGION INK &middot; EXTERIOR</div>
+    </div>
+    <div class="tape vf">
+      <video muted loop playsinline preload="none" poster="assets/theink/tape_santos_poster.jpg" src="assets/theink/tape_santos.mp4"></video>
+      <div class="t-label"><span><span class="r">&#9679;</span> TAPE 02</span><span>THE STATUE</span></div>
+      <div class="t-foot">LEGION INK &middot; SANTA MUERTE</div>
+    </div>
+    <div class="tape vf">
+      <video muted loop playsinline preload="none" poster="assets/theink/tape_approach_poster.jpg" src="assets/theink/tape_approach.mp4"></video>
+      <div class="t-label"><span><span class="r">&#9679;</span> TAPE 03</span><span>THE FRONT</span></div>
+      <div class="t-foot">LEGION INK &middot; PAST THE BLACK CAR</div>
+    </div>
+    <div class="tape vf">
+      <video muted loop playsinline preload="none" poster="assets/theink/tape_street_poster.jpg" src="assets/theink/tape_street.mp4"></video>
+      <div class="t-label"><span><span class="r">&#9679;</span> TAPE 04</span><span>THE BLOCK</span></div>
+      <div class="t-foot">N NEW BRAUNFELS &middot; THE OLD HOUSES</div>
+    </div>
+  </div>
+  <p class="client-credits">Four of the <b>26 vertical clips</b>, six seconds each and muted for the page. The shop was shot empty before anybody had to stand anywhere, which is the part that makes the rest of the day easy.</p>
+</div></section>
+
+<section id="design"><img class="sec-mascot" src="assets/kawaii/ribbon_bow.png" alt="" aria-hidden="true"><div class="wrap rv">
+  <div class="kicker">Design · Print, Collage, Sites</div>
+  <h2>I build the whole graphic</h2>
+  <p style="color:var(--dim);max-width:680px">Not just the footage. Posters, collage layouts, and whole sites for real San Antonio nights, drawn end to end: type, cutouts, halftone, code, and the grade, all mine.</p>
+
+  <div class="clip-label" style="margin-top:26px"><span><b>THE MIX</b> · CITY MEETS THE UNDERGROUND · ST MARY'S STRIP</span><span class="r">EVENT POSTER + 3 COLLAGE EDITS</span></div>
+  <div class="sac-photos">
+    <a href="assets/design/themix.jpg" class="sacp"><img src="assets/design/themix.jpg" alt="Event poster for The City Meets the Underground at The Mix on North St Mary's Street: torn-paper collage with gold chains, a vinyl record, and halftone portraits" loading="lazy"></a>
+    <a href="assets/design/candyclaw.jpg" class="sacp"><img src="assets/design/candyclaw.jpg" alt="Candy decora collage: arcade portrait with an arcade coin token, chrome hearts, bows, and a plush bear on pink checkerboard" loading="lazy"></a>
+    <a href="assets/design/chrome.jpg" class="sacp"><img src="assets/design/chrome.jpg" alt="Y2K chrome collage: arcade portrait with liquid-chrome hearts, a cassette, and a palm PDA over a blue chevron wash" loading="lazy"></a>
+    <a href="assets/design/xerox.jpg" class="sacp"><img src="assets/design/xerox.jpg" alt="Black and white xerox zine collage: high-contrast portrait with spot red, bats, a cross, and torn sheet music" loading="lazy"></a>
+  </div>
+  <p class="client-credits">ONE EVENT POSTER, THREE COLLAGE TREATMENTS of a single shoot: <b>candy decora, y2k chrome, goth xerox</b>. Type, cutouts, halftone, and grade built end to end.</p>
+
+  <div class="clip-label" style="margin-top:40px"><span><b>0FF THE PRINT</b> &middot; MEDIA HOUSE &middot; DESIGNED, BUILT, AND RUNNING</span><span class="r">SITE + IDENTITY + THE FEED</span></div>
+  <div class="sac-photos">
+    <a href="assets/design/otp_01.jpg" class="sacp"><img src="assets/design/otp_01.jpg" alt="0FF THE PRINT homepage: pink and chrome masthead over a near-black page, with the media house member cards" loading="lazy"></a>
+    <a href="assets/design/otp_02.jpg" class="sacp"><img src="assets/design/otp_02.jpg" alt="0FF THE PRINT: THE WORK, a masonry grid of night photography from the outlet's own shoots" loading="lazy"></a>
+    <a href="assets/design/otp_03.jpg" class="sacp"><img src="assets/design/otp_03.jpg" alt="0FF THE PRINT: the music rotation strip and THE CATALOG numbered drops" loading="lazy"></a>
+    <a href="assets/design/otp_04.jpg" class="sacp"><img src="assets/design/otp_04.jpg" alt="0FF THE PRINT: THE ROSTER, trading-card style member cards for the artists on the house" loading="lazy"></a>
+  </div>
+  <p class="client-credits">A San Antonio media house I design, build, and run: <b>identity, the site, the photo dumps, and the member timeline</b>. Live at <a href="https://0fftheprint.com/" target="_blank" rel="noopener" style="color:var(--rose-deep)">0fftheprint</a>.</p>
+</div></section>
+
+<section id="playback"><img class="sec-mascot" src="steel/assets/charm.png" alt="" aria-hidden="true"><div class="wrap rv">
+  <div class="kicker">Playback</div>
+  <h2>The work, rolled from the top</h2>
+  <p style="color:var(--dim);max-width:640px;margin-bottom:26px">Three clips. The short film I wrote, directed, and edited, plus the two-part behind-the-scenes of how it got made.</p>
+
+  <div class="clip-label"><span><b>CLIP 001</b> · VOLUME (2026) · NARRATIVE SHORT · <span class="award">★ COURSE DIRECTOR'S AWARD</span></span><span class="r">TC 00:03:10</span></div>
+  <div class="reel-frame vf">
+    <i class="bk tl"></i><i class="bk tr"></i><i class="bk bl"></i><i class="bk br"></i>
+    <div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/pQ0W-conqwE" title="VOLUME · the new kid" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+  </div>
+  <div class="reel-note">WRITER / DIRECTOR / EDITOR: G. ORTIZ · FOUR-ACTOR SHORT · SCRIPTED PER-CLIP COLOR PIPELINE IN RESOLVE · FULL SAIL 2026</div>
+
+  <div style="height:36px"></div>
+
+  <div class="clip-label"><span><b>CLIP 002</b> · VOLUME BTS EP01 · REHEARSAL VLOG</span><span class="r">TC 00:09:01</span></div>
+  <div class="reel-frame vf">
+    <i class="bk tl"></i><i class="bk tr"></i><i class="bk bl"></i><i class="bk br"></i>
+    <div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/KuMfghV9hmA" title="VOLUME BTS EP01 Rehearsal Vlog" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+  </div>
+  <div class="reel-note">HOW I RUN A SET: REHEARSAL, DIRECTION, COVERAGE</div>
+
+  <div style="height:36px"></div>
+
+  <div class="clip-label"><span><b>CLIP 003</b> · VOLUME BTS EP02 · THE PROCESS</span><span class="r">TC 00:08:49</span></div>
+  <div class="reel-frame vf">
+    <i class="bk tl"></i><i class="bk tr"></i><i class="bk bl"></i><i class="bk br"></i>
+    <div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/psxQ4pLF4fw" title="VOLUME BTS EP02: THE PROCESS" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+  </div>
+  <div class="reel-note">THE EDIT, THE GRADE, THE FINISH: HOW THE FILM CAME TOGETHER</div>
+</div></section>
+
+<section id="feed"><div class="wrap rv">
+  <div class="kicker">Monitor Out · Live Feed</div>
+  <h2>On the grid right now</h2>
+  <p style="color:var(--dim);max-width:640px">Reels straight off my Instagram, plus the account they live on. Previews loop on their own; tap any monitor to open it on IG.</p>
+  <div class="monitors">
+    <a class="mon vf" href="https://www.instagram.com/reel/C9L7m9pgucJ/" target="_blank" rel="noopener">
+      <div class="m-head"><span><span class="r">●</span> <b>MON 1</b> · IG REEL</span><span>SHOW</span></div>
+      <div class="m-view"><video class="mon-vid" muted loop playsinline preload="none" poster="assets/kawaii/reels/reel1_poster.jpg" src="assets/kawaii/reels/reel1_web.mp4" aria-label="Instagram reel preview, live show coverage"></video></div>
+      <div class="m-foot"><span>VAMPPSYCH · LIVE</span><span class="go">OPEN REEL →</span></div>
+    </a>
+    <a class="mon vf" href="https://www.instagram.com/reel/CzahL4sOR0l/" target="_blank" rel="noopener">
+      <div class="m-head"><span><span class="r">●</span> <b>MON 2</b> · IG REEL</span><span>SET</span></div>
+      <div class="m-view"><video class="mon-vid" muted loop playsinline preload="none" poster="assets/kawaii/reels/reel2_poster.jpg" src="assets/kawaii/reels/reel2_web.mp4" aria-label="Instagram reel preview, live set coverage"></video></div>
+      <div class="m-foot"><span>VAMPPSYCH · LIVE</span><span class="go">OPEN REEL →</span></div>
+    </a>
+    <a class="mon tt" href="https://www.tiktok.com/@vamp.psych" target="_blank" rel="noopener">
+      <div class="m-head"><span><span class="r">●</span> <b>MON 3</b> · TIKTOK</span><span>LIVE</span></div>
+      <div class="m-view">
+        <img class="av" src="assets/feed/tt_avatar.jpg" alt="@vamp.psych avatar">
+        <div class="h">@vamp<span>.</span>psych</div>
+        <div class="stats"><span><b>7.6K</b>followers</span><span><b>31.6K</b>likes</span></div>
+        <div class="cta">WATCH ON TIKTOK</div>
+      </div>
+      <div class="m-foot"><span>SHORT-FORM · ESSAYS</span><span class="go">OPEN →</span></div>
+    </a>
+  </div>
+  <div class="social-row">
+    <a class="social-card" href="https://www.tiktok.com/@vamp.psych" target="_blank" rel="noopener">
+      <div class="h">TikTok <span>@vamp.psych</span></div>
+      <div class="s">7.6K+ followers · short-form, video essays, underground music culture</div>
+    </a>
+    <a class="social-card" href="https://www.instagram.com/vamppsych" target="_blank" rel="noopener">
+      <div class="h">Instagram <span>@vamppsych</span></div>
+      <div class="s">Visual systems, posters, graded stills</div>
+    </a>
+    <a class="social-card" href="https://www.youtube.com/@Vamppsych" target="_blank" rel="noopener">
+      <div class="h">YouTube <span>@Vamppsych</span></div>
+      <div class="s">VOLUME, the BTS series, long-form edits</div>
+    </a>
+  </div>
+</div></section>
+
+
+
+<section id="rates"><div class="wrap rv">
+  <div class="kicker">Rate Card · San Antonio 2026</div>
+  <h2>Market rates, pro pipeline</h2>
+  <p style="color:var(--dim);max-width:680px">FX6 coverage, a custom Resolve grade, delivered on deadline. Every price sits next to the San Antonio market range so you can see where it lands.</p>
+  <div class="rate-grid">
+    <div class="rate vf">
+      <span class="start">START HERE</span>
+      <div class="tag">Events · Flagship</div>
+      <div class="nm">Event Recap</div>
+      <div class="pr">$600</div>
+      <div class="mk">SA MARKET: $500&ndash;700 FOR 2 HRS</div>
+      <ul>
+        <li>Up to 2 hours on site</li>
+        <li>60&ndash;90s recap delivered <b style="color:var(--ink)">within 24 hours</b></li>
+        <li>3 vertical cutdowns for TikTok + IG</li>
+        <li>Graded in a custom look</li>
+      </ul>
+    </div>
+    <div class="rate">
+      <div class="tag">Events</div>
+      <div class="nm">Event Full</div>
+      <div class="pr">$900</div>
+      <div class="mk">SA MARKET: $700&ndash;1,000</div>
+      <ul>
+        <li>Up to 4 hours on site</li>
+        <li>Everything in Recap</li>
+        <li>5 vertical cutdowns</li>
+        <li>4K stills set pulled from the footage</li>
+        <li>Delivered <b style="color:var(--ink)">within 48 hours</b></li>
+      </ul>
+    </div>
+    <div class="rate">
+      <div class="tag">Personal · Photo</div>
+      <div class="nm">Follow Day</div>
+      <div class="pr">$1,400</div>
+      <div class="mk">SA MARKET: $800&ndash;2,000 FOR DAY COVERAGE</div>
+      <ul>
+        <li>Up to 6 hours shadowing your day</li>
+        <li>Quince, birthday, proposal, family day</li>
+        <li>Candid photos, composed and graded like film frames, color set + a moody B&amp;W set</li>
+        <li>Full gallery delivered <b style="color:var(--ink)">within 48 hours</b></li>
+      </ul>
+    </div>
+    <div class="rate">
+      <div class="tag">Social</div>
+      <div class="nm">Content Day</div>
+      <div class="pr">$850</div>
+      <div class="mk">AGENCY RETAINERS: $1,500&ndash;3,500/MO BY POST FREQUENCY</div>
+      <ul>
+        <li>One shoot visit at your spot</li>
+        <li>4 reels shot + cut</li>
+        <li>Hooks, captions, platform formatting</li>
+        <li>Ready-to-post files, <b style="color:var(--ink)">within 48 hours</b></li>
+      </ul>
+    </div>
+    <div class="rate">
+      <div class="tag">Social · Retainer</div>
+      <div class="nm">Monthly 8</div>
+      <div class="pr">$2,200<span>/mo</span></div>
+      <div class="mk">AGENCY RETAINERS: $1,500&ndash;3,500/MO BY POST FREQUENCY</div>
+      <ul>
+        <li>Two shoot visits a month</li>
+        <li>8 reels shot + cut</li>
+        <li>Posting calendar included</li>
+        <li>Priority turnaround</li>
+      </ul>
+    </div>
+    <div class="rate">
+      <div class="tag">Brand</div>
+      <div class="nm">Brand Film</div>
+      <div class="pr">$2,500</div>
+      <div class="mk">SA MARKET: $1,500&ndash;3,500</div>
+      <ul>
+        <li>Half-day shoot</li>
+        <li>60&ndash;90s brand film</li>
+        <li>Custom DCTL color grade</li>
+        <li>2 vertical cutdowns</li>
+      </ul>
+    </div>
+    <div class="rate">
+      <div class="tag">Artists · Music</div>
+      <div class="nm">Music Video</div>
+      <div class="pr">$1,750</div>
+      <div class="mk">INDIE MARKET: $1,500+</div>
+      <ul>
+        <li>Half-day shoot, performance + b-roll</li>
+        <li>Graded in custom in-house looks</li>
+        <li>Vertical teaser for the drop</li>
+        <li>I know the scene. Bring the track.</li>
+      </ul>
+    </div>
+  </div>
+
+  <span class="pxchain" aria-hidden="true"></span>
+  <details class="more">
+  <summary><span><b>COMMERCIAL WORK</b> · SCRIPT TO SCREEN <span class="n">3 tiers, $800 to $7,500 · 2 revision rounds on every one</span></span></summary>
+  <div class="more-body">
+  <div class="rate-grid">
+    <div class="rate">
+      <div class="tag">Commercial · Entry</div>
+      <div class="nm">Ad Reel</div>
+      <div class="pr">$800</div>
+      <div class="mk">SOCIAL AD PRODUCTION: $1,500+</div>
+      <ul>
+        <li>One 15&ndash;30s vertical ad for TikTok / IG / Shorts</li>
+        <li>Hook scripted, shot, cut, graded</li>
+        <li>Built to sell, not just to post</li>
+        <li>2 revision rounds included</li>
+      </ul>
+    </div>
+    <div class="rate">
+      <div class="tag">Commercial</div>
+      <div class="nm">Spot 30</div>
+      <div class="pr">$2,500</div>
+      <div class="mk">SA MARKET: $1,500&ndash;3,500 FOR A 30S SPOT</div>
+      <ul>
+        <li>30 second commercial, half-day shoot</li>
+        <li>Directed: shot list, blocking, talent direction</li>
+        <li>Horizontal + vertical + a 15s cutdown</li>
+        <li>2 revision rounds included</li>
+      </ul>
+    </div>
+    <div class="rate">
+      <div class="tag">Commercial · Flagship</div>
+      <div class="nm">Full Production</div>
+      <div class="pr">$7,500</div>
+      <div class="mk">SA MARKET: $3,500&ndash;25,000</div>
+      <ul>
+        <li>Script to screen: concept, script, storyboards</li>
+        <li>Full-day directed shoot</li>
+        <li>60s hero spot + 30s + 15s + 3 verticals</li>
+        <li>Graded, mixed, delivered in every format</li>
+        <li>2 revision rounds included</li>
+      </ul>
+    </div>
+  </div>
+  </div>
+  </details>
+
+  <details class="more">
+  <summary><span><b>BRAND MARKS</b> &middot; LOGO + IDENTITY <span class="n">$650 to $1,200 for a set you own, plus print and stitch</span></span></summary>
+  <div class="more-body">
+  <div class="rate-grid">
+    <div class="rate">
+      <div class="tag">Identity · Entry</div>
+      <div class="nm">Single Mark</div>
+      <div class="pr">$650</div>
+      <div class="mk">SA MARKET: $1,200&ndash;3,000 FOR AN IDENTITY</div>
+      <ul>
+        <li>One finished mark, drawn not templated</li>
+        <li>Profile version cut for a small circle</li>
+        <li>Files ready for screen and flat print</li>
+      </ul>
+    </div>
+    <div class="rate">
+      <div class="tag">Identity</div>
+      <div class="nm">Mark + Alternates</div>
+      <div class="pr">$900</div>
+      <div class="mk">SA MARKET: $1,200&ndash;3,000 FOR AN IDENTITY</div>
+      <ul>
+        <li>Hero mark plus 3 alternates</li>
+        <li>Profile version</li>
+        <li>One identity that still works stacked, wide, and tiny</li>
+      </ul>
+    </div>
+    <div class="rate">
+      <div class="tag">Identity · Flagship</div>
+      <div class="nm">Full Set</div>
+      <div class="pr">$1,200</div>
+      <div class="mk">SA MARKET: $1,200&ndash;3,000 FOR AN IDENTITY</div>
+      <ul>
+        <li>7 marks: hero, stacked, wide, stamp, profile, and two swings</li>
+        <li>Comparison sheet so you can see them side by side</li>
+        <li>Handoff pack with the rules for using them</li>
+      </ul>
+    </div>
+  </div>
+  <div class="rate-grid" style="margin-top:14px">
+    <div class="rate">
+      <div class="tag">Merch</div>
+      <div class="nm">Print + Stitch Pack</div>
+      <div class="pr">$600</div>
+      <div class="mk">ADD ON TO ANY SET</div>
+      <ul>
+        <li>Marks redrawn for embroidery, screen print, and vinyl</li>
+        <li>Comes with the grant to sell physical goods</li>
+      </ul>
+    </div>
+    <div class="rate">
+      <div class="tag">Artists · Music</div>
+      <div class="nm">Cover Art</div>
+      <div class="pr">$300<span>/release</span></div>
+      <div class="mk">PER SINGLE OR EP</div>
+      <ul>
+        <li>Built at 3000px square, DSP ready</li>
+        <li>Shot or composited, your call</li>
+      </ul>
+    </div>
+    <div class="rate">
+      <div class="tag">Motion</div>
+      <div class="nm">Logo Sting</div>
+      <div class="pr">$400</div>
+      <div class="mk">ANIMATED, FOR VIDEO + SOCIAL</div>
+      <ul>
+        <li>Your mark animated, 2 to 4 seconds</li>
+        <li>Horizontal, vertical, and a transparent version</li>
+      </ul>
+    </div>
+  </div>
+  <p class="client-credits" style="margin-top:16px">The unit is the <b>set</b>, never one logo at a time. Base license covers screen use and print you run yourself; selling merch adds the stitch pack. Layered working files stay with me.</p>
+  </div>
+  </details>
+
+  <details class="more">
+  <summary><span><b>ADD-ONS + HOURLY</b> <span class="n">single reel, tours, edit or color by the hour, rush</span></span></summary>
+  <div class="more-body">
+  <div class="alacarte">
+    <span>SINGLE REEL <b>$300</b></span>
+    <span>LISTING / SPACE TOUR <b>$500</b></span>
+    <span>EDIT ONLY <b>$65/HR</b></span>
+    <span>COLOR GRADE <b>$75/HR</b></span>
+    <span>EXTRA VERTICAL <b>$100</b></span>
+    <span>EXTRA ON-SITE HOUR <b>$125</b></span>
+    <span>RAW FOOTAGE HANDOFF <b>+$150</b></span>
+    <span>NEXT-DAY RUSH <b>+$150</b></span>
+    <span>EXTRA REVISION ROUND <b>$125</b></span>
+  </div>
+  </div>
+  </details>
+
+  <div class="rate-fine"><b>RECAP IN 24 HOURS · FULL EVENT, CONTENT DAY + FOLLOW DAY IN 48 · BRAND, MUSIC + COMMERCIAL GET A DATE AT BOOKING</b><br>50% DEPOSIT BOOKS THE DATE · NET 15 · FREE TRAVEL INSIDE LOOP 410, $0.50/MI BEYOND · W-9 ON REQUEST</div>
+</div></section>
+
+<footer id="contact"><img class="sec-mascot" src="assets/kawaii/ribbon_bow.png" alt="" aria-hidden="true"><div class="wrap rv">
+  <div class="standby"><i></i>STANDBY</div>
+  <h2>Let's cut something</h2>
+  <div class="clip-label" style="max-width:600px;margin:30px auto 0"><span><b>THE CONTACT CARD</b> · TAP A SIDE TO OPEN</span><span class="r">FRONT + BACK</span></div>
+  <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;max-width:600px;margin:18px auto 4px">
+    <div class="polaroid" style="flex:0 1 262px"><img class="washi" src="steel/assets/washi_lilac.png" alt="" aria-hidden="true"><a class="kitzoom" href="assets/kawaii/card/card_front_full.png"><img class="cam" width="1488" height="2076" src="assets/kawaii/card/card_front_web.jpg" loading="lazy" alt="Vamppsych contact card, front: a big-eye pastel doll muse holding a Super 8 cine camera, with the moves Final Cut and Last Light"></a><div class="cap"><b>FRONT</b> · the muse · tap to open</div></div>
+    <div class="polaroid" style="flex:0 1 262px"><img class="washi" src="steel/assets/washi_pink.png" alt="" aria-hidden="true"><a class="kitzoom" href="assets/kawaii/card/card_back_full.png"><img class="cam" width="1488" height="2076" src="assets/kawaii/card/card_back_web.jpg" loading="lazy" alt="Vamppsych contact card, back: a scannable QR to this site, with roles and social handles"></a><div class="cap"><b>BACK</b> · scan to reach me</div></div>
+  </div>
+  <div class="reach">
+    <span class="email-wrap"><img class="email-stk s1" src="assets/kawaii/f2u/bow_pink.png" alt="" aria-hidden="true"><img class="email-stk s2" src="assets/kawaii/f2u/bow_blue.png" alt="" aria-hidden="true"><a class="email" id="magnetMail" href="mailto:carlo72400@gmail.com">carlo72400@gmail.com</a></span>
+    <div class="reach-or">or</div>
+    <a class="dm" href="https://ig.me/m/vamppsych" target="_blank" rel="noopener" aria-label="Send a direct message on Instagram to @vamppsych"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.6" cy="6.4" r="1.25" fill="currentColor" stroke="none"/></svg>DM me on Instagram <b>@vamppsych</b></a>
+  </div>
+  <div class="book">
+    <div class="book-line">BOOKING: EVENT COVERAGE · COMMERCIALS · SHORT-FORM PACKAGES · EDIT + COLOR · 24-HOUR TURNAROUND ON EVENT WORK</div>
+    <a class="btn solid" href="mailto:carlo72400@gmail.com?subject=Booking%20request%20-%20%5Bproject%20name%5D&body=Project%3A%0ADate(s)%3A%0ALocation%3A%0AWhat%20you%20need%20(shoot%20%2F%20edit%20%2F%20both)%3A%0ADeliverables%20(runtime%2C%20formats%2C%20platforms)%3A%0ABudget%20range%3A%0ADeadline%3A">Request work</a>
+    <div class="book-fine">Written estimate within 24 hours. Full <a href="#rates" style="color:var(--amber)">rate card</a> above; invoices and W-9 on request.</div>
+  </div>
+  <div class="foot-meta">
+    <a href="https://www.tiktok.com/@vamp.psych" target="_blank" rel="noopener">TikTok</a> ·
+    <a href="https://www.instagram.com/vamppsych" target="_blank" rel="noopener">Instagram</a> ·
+    <a href="https://www.youtube.com/@Vamppsych" target="_blank" rel="noopener">YouTube</a> ·
+    <a href="assets/docs/GiancarloOrtiz-Resume-VideoEditor.pdf">Editor resume</a> ·
+    <a href="assets/docs/GiancarloOrtiz-Resume-Content.pdf">Content resume</a> ·
+    <a href="assets/docs/GiancarloOrtiz-RateCard.pdf">Rate card (PDF)</a>
+  </div>
+  <div class="fine">GIANCARLO ORTIZ · SAN ANTONIO TX · EST. VAMPPSYCH 2023 · FUTURE FILM DIRECTOR, McCONAUGHEY ARC IN PROGRESS · <b>end of tape. rewind, or hit record with me.</b><br>pixel dividers via the Pixel Safari f2u archive ♡ recolored in-house</div>
+</div></footer>
+
+<dialog id="lightbox"><img id="lightbox-img" src="" alt=""></dialog>
+
+<script src="assets/js/main.js?v=20260902"></script>
+<script src="assets/js/a11y.js?v=20260902"></script>
+<div class="fab-stack">
+  <button class="fab-top" id="toTop" aria-label="Back to top" title="Back to top">↑</button>
+  <a class="fab fab-rates" href="#rates" aria-label="Jump to rates">RATES</a>
+  <button class="fab fab-share" id="shareBtn" aria-haspopup="dialog" aria-label="Share this page">SHARE</button>
+</div>
+<dialog id="share" aria-label="Share and follow Giancarlo Ortiz">
+  <button class="sheet-x" id="shareX" aria-label="Close">×</button>
+  <div class="sheet-kick">SCAN · FOLLOW · BOOK</div>
+  <div class="sheet-cards">
+    <a class="sheet-card" href="assets/kawaii/card/card_front_full.png" aria-label="Enlarge the contact card, front">
+      <img src="assets/kawaii/card/card_front_web.jpg" width="860" height="1200" alt="Vamppsych contact card, front: a big-eye pastel doll muse holding a Super 8 cine camera, with the moves Final Cut and Last Light" loading="lazy">
+      <span class="sheet-card-cap"><b>FRONT</b> · the muse</span>
+    </a>
+    <a class="sheet-card" href="assets/kawaii/card/card_back_full.png" aria-label="Enlarge the contact card back to scan its QR code">
+      <img src="assets/kawaii/card/card_back_web.jpg" width="860" height="1200" alt="Vamppsych contact card, back: a stained glass filmmaking window behind a scannable QR code to this site" loading="lazy">
+      <span class="sheet-card-cap"><b>BACK</b> · scan me</span>
+    </a>
+  </div>
+  <div class="sheet-cards-tap">tap a card to enlarge, then scan the back</div>
+  <div class="sheet-label">FOLLOW</div>
+  <div class="sheet-socials">
+    <a href="https://www.tiktok.com/@vamp.psych" target="_blank" rel="noopener"><span><b>TikTok</b> @vamp.psych</span></a>
+    <a href="https://www.instagram.com/vamppsych" target="_blank" rel="noopener"><span><b>Instagram</b> @vamppsych</span></a>
+    <a href="https://www.youtube.com/@Vamppsych" target="_blank" rel="noopener"><span><b>YouTube</b> @Vamppsych</span></a>
+  </div>
+  <div class="sheet-label">RATES</div>
+  <a class="sheet-rates" href="#rates" id="shareRates">Rates from <b>$300</b> <span>→</span></a>
+  <button class="sheet-copy" id="shareCopy">Copy site link</button>
+</dialog>
+<script src="assets/js/share.js?v=20260730"></script>
+<script src="assets/js/bands.js?v=20260820"></script>
+</body>
+</html>
