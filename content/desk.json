@@ -1,6 +1,19 @@
 {
   "items": [
     {
+      "title": "San Antonio Goes First",
+      "kicker": "THE ARENA",
+      "dek": "J. Cole opens the Texas leg of The Fall-Off World Tour at the Frost Bank Center on September 13. Austin gets him the next night, then Houston twice and Dallas twice.",
+      "date": "09.02.26",
+      "lanes": [
+        "story"
+      ],
+      "platform": "SITE",
+      "thumb": "word/san-antonio-goes-first/thumb.jpg",
+      "link": "word/san-antonio-goes-first/",
+      "num": "0TP-017"
+    },
+    {
       "title": "Get There Early",
       "kicker": "THE RUN",
       "dek": "Ken Carson takes the Xperimenting Tour to Austin and Irving in September, skips San Antonio entirely, and puts xaviersobased on first.",

@@ -10,6 +10,7 @@ All of these are cropped, so all of them say "Cropped."
 
 | № | Story | Image | Source | Licence |
 |---|---|---|---|---|
+| 0TP-017 | San Antonio Goes First | J. Cole at the Air Canada Centre, Toronto, 4 Your Eyez Only Tour, Jul 2017 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Cole_2017.jpg) · The Come Up Show | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/) |
 | 0TP-016 | Get There Early | xaviersobased at Baby's All Right, Brooklyn, Feb 2023 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Xaviersobased_(2-2-23).jpg) · Ninecalling | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
 | 0TP-015 | The Blood Countess Is Playing Austin | Robert Eggers at Fantastic Fest 2015 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Robert_Eggers_-_The_Witch,Fantastic_Fest_2015-1667_(28894993650).jpg) · anna Hanks | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/) |
 | 0TP-014 | They Will Think You Are A Lunatic | Andrew E. at Sari-Sari | **Ours.** Shot by the house | House |
