@@ -210,6 +210,10 @@ def main():
     ap.add_argument("--kicker", default="STORY")
     ap.add_argument("--dek", required=True)
     ap.add_argument("--cover", required=True)
+    ap.add_argument("--tile", help="separate source for the 4:5 grid tile "
+                                   "(default: crop the cover, which is 16:9)")
+    ap.add_argument("--tile-y", type=float, default=0.5, dest="tile_y",
+                    help="vertical anchor for the tile crop, 0 keeps the top (default 0.5)")
     ap.add_argument("--link", help="outside article: card only, no page built")
     ap.add_argument("--num", help="override the auto 0TP number")
     ap.add_argument("--date", default=date.today().isoformat())
@@ -229,8 +233,19 @@ def main():
     os.makedirs(story_dir, exist_ok=True)
     img = ImageOps.exif_transpose(Image.open(a.cover)).convert("RGB")
     img.save(os.path.join(story_dir, "cover.jpg"), quality=90)
-    t = img.copy(); t.thumbnail((640, 640 * 3))
-    t.save(os.path.join(story_dir, "thumb.jpg"), quality=78)
+    # ⛔ THE TILE IS 4:5, THE HERO IS 16:9, AND THEY ARE NOT THE SAME PICTURE.
+    #    .desk-thumb is background-size:cover in a 4:5 box, so a 16:9 thumb gets
+    #    centre cropped AND upscaled. This used to emit 640x360 and every tile on
+    #    the grid was a blurry middle third. Cut a real 900x1125 from --tile when
+    #    given (a fuller frame crops better) or from the cover otherwise.
+    tile_src = ImageOps.exif_transpose(Image.open(a.tile)).convert("RGB") if a.tile else img
+    TW, TH = 900, 1125
+    sw, sh = tile_src.size
+    scale = max(TW / sw, TH / sh)
+    r = tile_src.resize((max(TW, round(sw * scale)), max(TH, round(sh * scale))), Image.LANCZOS)
+    left, top = (r.width - TW) // 2, int((r.height - TH) * a.tile_y)
+    r.crop((left, top, left + TW, top + TH)).save(
+        os.path.join(story_dir, "thumb.jpg"), quality=82, optimize=True)
 
     if a.link:
         link = a.link
