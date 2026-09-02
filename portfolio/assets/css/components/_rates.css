@@ -3,9 +3,9 @@
 .rate{border:2px solid #fff;border-radius:18px;background:var(--panel);padding:22px;position:relative;box-shadow:var(--shadow-sm);transition:transform .35s var(--spring)}
 .rate:hover{transform:translateY(-6px)}
 .rate::after{content:'';position:absolute;top:-9px;left:18px;width:46px;height:18px;
-  background:url('/assets/kawaii/f2u/bow_pink.png') no-repeat center / contain;image-rendering:pixelated;transform:rotate(-6deg)}
-.rate:nth-child(2n)::after{background-image:url('/assets/kawaii/f2u/bow_blue.png');transform:rotate(5deg);width:34px;height:20px}
-.rate:nth-child(3n)::after{background-image:url('/assets/kawaii/f2u/bow_lilac.png');transform:rotate(-4deg)}
+  background:url('../../../assets/kawaii/f2u/bow_pink.png') no-repeat center / contain;image-rendering:pixelated;transform:rotate(-6deg)}
+.rate:nth-child(2n)::after{background-image:url('../../../assets/kawaii/f2u/bow_blue.png');transform:rotate(5deg);width:34px;height:20px}
+.rate:nth-child(3n)::after{background-image:url('../../../assets/kawaii/f2u/bow_lilac.png');transform:rotate(-4deg)}
 .rate::before{content:'✦';position:absolute;top:10px;right:14px;color:var(--pink);font-size:15px;opacity:0;transition:opacity .25s,transform .4s var(--spring)}
 .rate:hover::before{opacity:1;transform:rotate(40deg) scale(1.25)}
 .rate .tag{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:#7e6da1;margin-bottom:8px;text-transform:uppercase;font-weight:600}

@@ -6,9 +6,9 @@
 .monitors .mon:nth-child(3){transform:rotate(-1.2deg)}
 .mon:hover{transform:translateY(-6px) rotate(0deg)}
 .mon::before{content:'';position:absolute;top:-26px;left:50%;transform:translateX(-50%) rotate(-3deg);width:110px;height:34px;z-index:4;
-  background:url('/steel/assets/washi_mint.png') no-repeat center / contain;opacity:.92;pointer-events:none}
-.monitors .mon:nth-child(2)::before{background-image:url('/steel/assets/washi_pink.png');transform:translateX(-50%) rotate(2deg)}
-.monitors .mon:nth-child(3)::before{background-image:url('/steel/assets/washi_lilac.png');transform:translateX(-50%) rotate(-2deg)}
+  background:url('../../../steel/assets/washi_mint.png') no-repeat center / contain;opacity:.92;pointer-events:none}
+.monitors .mon:nth-child(2)::before{background-image:url('../../../steel/assets/washi_pink.png');transform:translateX(-50%) rotate(2deg)}
+.monitors .mon:nth-child(3)::before{background-image:url('../../../steel/assets/washi_lilac.png');transform:translateX(-50%) rotate(-2deg)}
 .mon .m-foot{position:absolute;left:0;right:0;bottom:-48px;border-top:0;background:transparent}
 .mon .m-head{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--dim);padding:0 0 8px;background:#fff}
 .mon .m-head b{color:var(--ink);font-weight:600}

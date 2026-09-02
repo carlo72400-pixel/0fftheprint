@@ -5,14 +5,14 @@ h2{font-family:var(--disp);font-size:clamp(30px,4.4vw,46px);font-weight:640;font
 .kicker::after{content:' ❀'}
 section{padding:74px 0 68px;position:relative}
 section::before{content:'';position:absolute;top:-4px;left:0;right:0;height:58px;
-  background:url('/assets/kawaii/lace_trim_web.png') repeat-x center top / auto 58px;pointer-events:none;
+  background:url('../../../assets/kawaii/lace_trim_web.png') repeat-x center top / auto 58px;pointer-events:none;
   filter:drop-shadow(0 6px 8px rgba(214,120,155,.18))}
 #about::before{display:none}
 section .wrap>h2::after{content:'';display:block;width:210px;height:15px;margin-top:10px;
-  background:url('/assets/kawaii/f2u/pearlhearts2.png') repeat-x left center / auto 15px;image-rendering:pixelated}
+  background:url('../../../assets/kawaii/f2u/pearlhearts2.png') repeat-x left center / auto 15px;image-rendering:pixelated}
 footer h2::after{margin:10px auto 0}
 .pxchain{display:block;width:100%;height:20px;margin:34px 0 6px;
-  background:url('/assets/kawaii/f2u/whitebowhearts.png') repeat-x center / auto 18px;image-rendering:pixelated}
+  background:url('../../../assets/kawaii/f2u/whitebowhearts.png') repeat-x center / auto 18px;image-rendering:pixelated}
 /* .doily removed Jul 16 (his call, "remove stray asset"): it was a half-doily rotated
    180deg and bled off the right edge, so it cropped into a grey scalloped blob that read
    as a mistake rather than decor. lace_doily_web.png stays on disk, now unreferenced. */

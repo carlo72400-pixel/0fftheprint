@@ -13,11 +13,11 @@
 .sacp:hover{transform:translateY(-5px)}
 .sacp{position:relative;overflow:visible}
 .sacp::before{content:'';position:absolute;top:-12px;left:-14px;width:84px;height:34px;z-index:3;
-  background:url('/steel/assets/washi_pink.png') no-repeat center / contain;transform:rotate(-38deg);opacity:.92;pointer-events:none}
-.sacp:nth-child(2)::before{background-image:url('/steel/assets/washi_mint.png');transform:rotate(-42deg)}
-.sacp:nth-child(3)::before{background-image:url('/steel/assets/washi_lilac.png');transform:rotate(-35deg)}
-.sacp:nth-child(5)::before{background-image:url('/steel/assets/washi_mint.png');transform:rotate(-40deg)}
-.sacp:nth-child(6)::before{background-image:url('/steel/assets/washi_lilac.png');transform:rotate(-36deg)}
+  background:url('../../../steel/assets/washi_pink.png') no-repeat center / contain;transform:rotate(-38deg);opacity:.92;pointer-events:none}
+.sacp:nth-child(2)::before{background-image:url('../../../steel/assets/washi_mint.png');transform:rotate(-42deg)}
+.sacp:nth-child(3)::before{background-image:url('../../../steel/assets/washi_lilac.png');transform:rotate(-35deg)}
+.sacp:nth-child(5)::before{background-image:url('../../../steel/assets/washi_mint.png');transform:rotate(-40deg)}
+.sacp:nth-child(6)::before{background-image:url('../../../steel/assets/washi_lilac.png');transform:rotate(-36deg)}
 .sacp img{border-radius:12px}
 /* dense backfills the col-3 gap the leading span-2 rooftop frame would otherwise leave open */
 .blue-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px;max-width:1000px;grid-auto-flow:dense}

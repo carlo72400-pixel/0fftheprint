@@ -1,6 +1,6 @@
 /* ------- hero ------- */
 header{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:flex-end;overflow:hidden}
-.hero-bg{position:absolute;inset:0;background:url('/assets/hero.jpg') center 32%/cover no-repeat;transition:filter .55s ease}
+.hero-bg{position:absolute;inset:0;background:url('../../../assets/hero.jpg') center 32%/cover no-repeat;transition:filter .55s ease}
 .hero-vin{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .55s ease;background:radial-gradient(ellipse at center,transparent 52%,rgba(0,0,0,.65) 100%)}
 .hero-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,10,16,.5) 0%,rgba(20,10,16,.18) 45%,rgba(24,12,19,.9) 100%)}
 body[data-look="night-city"] .hero-bg{filter:saturate(1.4) contrast(1.08) hue-rotate(-8deg)}

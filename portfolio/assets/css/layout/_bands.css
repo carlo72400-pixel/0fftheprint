@@ -8,5 +8,5 @@ section::before{display:none}
 .pagebreak .pb-name{font-family:var(--disp);font-size:clamp(46px,14vw,90px);font-weight:640;font-variation-settings:'SOFT' 100,'WONK' 0,'opsz' 144;line-height:.92;
   background:linear-gradient(96deg,#e87ea0,#c9a7e6,#9fc6ee,#a9e0c8,#f0c48f);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;background-size:200% auto;animation:chrome 11s linear infinite}
 .pagebreak .pb-desc{font-family:var(--mono);font-size:12px;letter-spacing:3px;color:#c6b6c4;text-transform:uppercase}
-.pagebreak::after{content:'';position:absolute;left:0;right:0;bottom:-2px;height:30px;background:url('/assets/kawaii/lace_trim_web.png') repeat-x bottom center/auto 30px;pointer-events:none}
+.pagebreak::after{content:'';position:absolute;left:0;right:0;bottom:-2px;height:30px;background:url('../../../assets/kawaii/lace_trim_web.png') repeat-x bottom center/auto 30px;pointer-events:none}
 @media (prefers-reduced-motion: reduce){.pagebreak .pb-name{animation:none}}

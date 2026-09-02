@@ -7,8 +7,8 @@
    ribbon into the source's white margin and drew it as a white box round the player.
    background-clip:padding-box keeps the white backing from painting under the
    transparent border, which was the second half of that same white box. */
-.reel-frame{position:relative;border:36px solid transparent;border-image:url('/assets/kawaii/ribbon_frame_clean.png') 108 113 110 107 round;background:#fff;background-clip:padding-box;box-shadow:var(--shadow);transition:transform .4s var(--spring),box-shadow .4s}
-.reel-frame::before{content:'';position:absolute;top:-52px;left:50%;transform:translateX(-50%);width:138px;height:78px;z-index:7;background:url('/assets/kawaii/ribbon_bow.png') no-repeat center / contain;pointer-events:none}
+.reel-frame{position:relative;border:36px solid transparent;border-image:url('../../../assets/kawaii/ribbon_frame_clean.png') 108 113 110 107 round;background:#fff;background-clip:padding-box;box-shadow:var(--shadow);transition:transform .4s var(--spring),box-shadow .4s}
+.reel-frame::before{content:'';position:absolute;top:-52px;left:50%;transform:translateX(-50%);width:138px;height:78px;z-index:7;background:url('../../../assets/kawaii/ribbon_bow.png') no-repeat center / contain;pointer-events:none}
 .reel-frame:hover{transform:translateY(-6px)}
 
 .reel-frame .yt{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden}
