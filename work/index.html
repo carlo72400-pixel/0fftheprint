@@ -130,6 +130,17 @@ color:var(--ink);width:44px;height:44px;border-radius:50%;font-size:20px;cursor:
   const show = i => { cur = i; lbi.src = '../' + items[i].src; lbi.alt = items[i].alt || ''; lbc.textContent = items[i].label || ''; lb.classList.add('open'); };
   const step = d => { const v = visible(); const p = v.indexOf(cur); show(v[(p + d + v.length) % v.length]); };
   grid.addEventListener('click', e => { const t = e.target.closest('.tile'); if (t) show(Number(t.dataset.i)); });
+  // work/#N opens that frame straight away, which is what makes the homepage
+  // rail worth tapping: you land on the picture you clicked, not on the grid.
+  const fromHash = () => {
+    const n = Number(String(location.hash).replace('#', ''));
+    if (Number.isInteger(n) && n >= 0 && n < items.length) {
+      show(n);
+      document.querySelector(`.tile[data-i="${n}"]`)?.scrollIntoView({block:'center'});
+    }
+  };
+  fromHash();
+  window.addEventListener('hashchange', fromHash);
   document.getElementById('lbx').onclick = () => lb.classList.remove('open');
   document.getElementById('lbp').onclick = () => step(-1);
   document.getElementById('lbn').onclick = () => step(1);

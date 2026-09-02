@@ -2812,9 +2812,28 @@
   aside.sidebar{min-width:0;}
 
   /* ===== THE WORK ===== */
-  .work-grid{columns:3 250px;column-gap:14px;}
-  .work-item{break-inside:avoid;margin:0 0 14px;position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:var(--panel);}
-  .work-item img{width:100%;display:block;}
+  /* A rail, like every other section. 33 of the 37 frames are landscape, so the
+     tile is 16:9 native and the 4 portraits letterbox rather than get cropped,
+     same rule as the tape. */
+  .work-grid{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(260px,1fr);
+    gap:14px;overflow-x:auto;scroll-snap-type:x proximity;
+    padding-bottom:10px;-webkit-overflow-scrolling:touch;
+    scrollbar-width:thin;scrollbar-color:var(--pink-deep) transparent;}
+  .work-grid::-webkit-scrollbar{height:6px;}
+  .work-grid::-webkit-scrollbar-thumb{background:var(--pink-deep);border-radius:999px;}
+  @media (max-width:640px){.work-grid{grid-auto-columns:minmax(230px,78vw);}}
+  .work-item{scroll-snap-align:start;margin:0;position:relative;border-radius:10px;overflow:hidden;
+    border:1px solid var(--line);background:var(--panel);display:block;
+    text-decoration:none;color:inherit;aspect-ratio:16/9;
+    transition:transform .18s,border-color .18s,box-shadow .18s;}
+  a.work-item:hover{transform:translateY(-3px);border-color:var(--pink-glow);
+    box-shadow:0 6px 22px rgba(255,121,198,.18);}
+  .work-item img{width:100%;height:100%;display:block;object-fit:cover;position:relative;z-index:1;}
+  /* A portrait frame inside a 16:9 tile fills 81/256 of it. Blurred, darkened
+     copy of the same file behind it so the tile is a window, not a hole. */
+  .work-item.tall img.main{object-fit:contain;}
+  .work-item.tall .bed{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+    filter:blur(22px) saturate(1.15) brightness(.42);transform:scale(1.15);z-index:0;}
   .work-item figcaption{position:absolute;left:0;right:0;bottom:0;padding:22px 10px 8px;font-family:var(--f-mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--pink);background:linear-gradient(180deg,transparent,rgba(10,10,13,.88));}
 
   /* ===== PULSE BANNER ===== */
@@ -5392,16 +5411,23 @@
     // then one tile that carries the count and opens the full grid at /work/.
     // The slice is the top of work.json, so curating the feature = reordering
     // the JSON, same as always.
-    const FEATURED = 6;
-    wMount.innerHTML = work.slice(0, FEATURED).map(it => {
+    // A rail scrolls, so it can carry more than a grid could without eating the
+    // page. Each frame is a LINK now: it was a bare <figure>, so the one section
+    // made of photographs was the one thing on this page you could not tap.
+    // work/#N opens that exact frame in the archive's lightbox.
+    const FEATURED = 12;
+    wMount.innerHTML = work.slice(0, FEATURED).map((it, i) => {
       const w = Number(it.w) || 0, h = Number(it.h) || 0;
       const u = safeUrl(it.src);
       if (!u) return '';
+      const tall = h > w;
+      const img = esc(sized(u, 'grid'));
       return `
-      <figure class="work-item"${w && h ? ` style="aspect-ratio:${w}/${h}"` : ''}>
-        <img src="${esc(sized(u, 'grid'))}" alt="${esc(it.alt || it.label || '')}"${w && h ? ` width="${w}" height="${h}"` : ''} loading="lazy" decoding="async">
+      <a class="work-item${tall ? ' tall' : ''}" href="work/#${i}">
+        ${tall ? `<img class="bed" src="${img}" alt="" aria-hidden="true" loading="lazy" decoding="async">` : ''}
+        <img class="main" src="${img}" alt="${esc(it.alt || it.label || '')}"${w && h ? ` width="${w}" height="${h}"` : ''} loading="lazy" decoding="async">
         <figcaption>${esc(it.label || '')}</figcaption>
-      </figure>`;
+      </a>`;
     }).join('') + (work.length > FEATURED ? `
       <a class="work-item work-more" href="work/">
         <span class="wm-num">${work.length}</span>
