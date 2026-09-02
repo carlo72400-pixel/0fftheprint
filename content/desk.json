@@ -1,6 +1,32 @@
 {
   "items": [
     {
+      "title": "Get There Early",
+      "kicker": "THE RUN",
+      "dek": "Ken Carson takes the Xperimenting Tour to Austin and Irving in September, skips San Antonio entirely, and puts xaviersobased on first.",
+      "date": "09.02.26",
+      "lanes": [
+        "story"
+      ],
+      "platform": "SITE",
+      "thumb": "word/get-there-early/thumb.jpg",
+      "link": "word/get-there-early/",
+      "num": "0TP-016"
+    },
+    {
+      "title": "The Blood Countess Is Playing Austin",
+      "kicker": "THE FESTIVAL",
+      "dek": "Fantastic Fest runs September 17 to 24 on South Lamar. Isabelle Huppert plays Elizabeth Bathory, a vampire Santa gets a world premiere, and GWAR closes the whole thing.",
+      "date": "09.02.26",
+      "lanes": [
+        "story"
+      ],
+      "platform": "SITE",
+      "thumb": "word/the-blood-countess-is-playing-austin/thumb.jpg",
+      "link": "word/the-blood-countess-is-playing-austin/",
+      "num": "0TP-015"
+    },
+    {
       "title": "They Will Think You Are A Lunatic",
       "kicker": "THE INTERVIEW",
       "dek": "Andrew E. put rap on Philippine radio in 1990. He played San Antonio for the first time, then ate lunch on the South Side and told us how it started.",

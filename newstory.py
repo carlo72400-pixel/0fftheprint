@@ -53,7 +53,11 @@ def no_dash(s):
 
 def inline(s):
     s = html.escape(no_dash(s), quote=False)
-    s = re.sub(r"\[([^\]]+)\]\((https?://[^)\s]+)\)",
+    # ⛔ [^)\s]+ STOPS AT THE FIRST ")", AND WIKIMEDIA FILENAMES CONTAIN PARENTHESES.
+    #    File:Xaviersobased_(2-2-23).jpg truncated to ..._(2-2-23 and leaked ".jpg)"
+    #    as literal text next to a dead link. On a cover credit that is a broken
+    #    attribution, which is a licence problem. Allow one level of balanced parens.
+    s = re.sub(r"\[([^\]]+)\]\((https?://(?:[^()\s]|\([^()\s]*\))+)\)",
                r'<a href="\2" target="_blank" rel="noopener">\1</a>', s)
     s = re.sub(r"\*\*([^*]+)\*\*", r"<b>\1</b>", s)
     s = re.sub(r"\*([^*]+)\*", r"<i>\1</i>", s)
@@ -139,8 +143,11 @@ PAGE = """<!DOCTYPE html>
     text-transform:uppercase;color:var(--muted);margin:18px 0 26px;
     padding-bottom:18px;border-bottom:1px solid var(--line)}}
   .byline b{{color:var(--ink)}}
-  .cover{{margin:0 0 30px;border-radius:14px;overflow:hidden;border:1px solid var(--line)}}
+  .cover{{margin:0 0 8px;border-radius:14px;overflow:hidden;border:1px solid var(--line)}}
   .cover img{{width:100%;display:block}}
+  .cover-credit{{font-family:'JetBrains Mono',monospace;font-size:10px;
+    letter-spacing:.06em;color:var(--muted);margin:8px 0 30px;line-height:1.5}}
+  .cover-credit a{{color:var(--muted);text-decoration:underline}}
   article{{font-size:17.5px;line-height:1.85}}
   article p{{margin:0 0 22px}}
   article h2{{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
@@ -185,6 +192,7 @@ PAGE = """<!DOCTYPE html>
   <div class="dek">{dek}</div>
   <div class="byline">{num} &nbsp;·&nbsp; <b>{author}</b> &nbsp;·&nbsp; San Antonio &nbsp;·&nbsp; {datestr}</div>
   <div class="cover"><img src="cover.jpg" alt=""></div>
+{credit}
   <article data-stamp="{stamp}">
 {body}
   </article>
@@ -210,6 +218,9 @@ def main():
     ap.add_argument("--kicker", default="STORY")
     ap.add_argument("--dek", required=True)
     ap.add_argument("--cover", required=True)
+    ap.add_argument("--credit", help="cover credit line, REQUIRED for any photo we "
+                    "did not shoot: photographer, source, licence with a markdown "
+                    "link, and the word Cropped")
     ap.add_argument("--tile", help="separate source for the 4:5 grid tile "
                                    "(default: crop the cover, which is 16:9)")
     ap.add_argument("--tile-y", type=float, default=0.5, dest="tile_y",
@@ -259,7 +270,19 @@ def main():
         # "Clear override" after a bake cannot shadow newer committed content.
         md_clean = no_dash(md)
         stamp = format(zlib.crc32(md_clean.encode()) & 0xFFFFFFFF, "08x")
-        page = PAGE.format(title=html.escape(no_dash(a.title)), dek=html.escape(no_dash(a.dek)),
+        # ⛔ ATTRIBUTION IS A LICENCE CONDITION, NOT A NICETY. CC BY and CC BY-SA
+        #    both require the credit AND a note that the image was changed, and
+        #    every cover here is cropped. The six credit lines from 8/27 were added
+        #    BY HAND and this tool never learned them, so the next story would have
+        #    shipped a licensed photograph with no attribution on it.
+        credit = ""
+        if a.credit:
+            credit = ('  <p class="cover-credit">' + inline(a.credit) + "</p>")
+        elif not a.link:
+            print("  ⚠️  no --credit given. If this cover is not ours, that is a "
+                  "licence problem, not a style one.")
+        page = PAGE.format(credit=credit,
+                           title=html.escape(no_dash(a.title)), dek=html.escape(no_dash(a.dek)),
                            kicker=html.escape(no_dash(a.kicker).upper()), num=num,
                            datestr=datestr, body=body, slug=slug, stamp=stamp,
                            author=html.escape(no_dash(a.author)))
