@@ -300,6 +300,7 @@ def main():
         "dek": no_dash(a.dek),
         "date": date.fromisoformat(a.date).strftime("%m.%d.%y"),
         "lanes": ["story"],
+        "dept": "story",
         "platform": "SITE" if not a.link else "READ",
         "thumb": f"word/{slug}/thumb.jpg",
         "link": link,

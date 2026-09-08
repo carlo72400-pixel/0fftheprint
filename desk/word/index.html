@@ -125,7 +125,10 @@
     }
     const desk = await fetch('../../content/desk.json', { cache: 'no-cache' }).then(r => r.json());
     stories = (desk.items || [])
-      .filter(it => (it.link || '').startsWith('word/'))
+      // ⛔ Department pages (SEEN, THE HOUR AFTER) have NO <article> for
+      //    word.js to write into, so they would list here as empty boxes and
+      //    invite an override that can never render. Prose stories only.
+      .filter(it => (it.link || '').startsWith('word/') && (it.dept || 'story') === 'story')
       .map(it => ({ slug: it.link.replace(/^word\//, '').replace(/\/$/, ''), title: it.title }));
     showList();
 

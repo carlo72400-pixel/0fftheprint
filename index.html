@@ -3821,6 +3821,7 @@
   <a href="dates/">The Run</a>
   <a href="#take">The Take</a>
   <a href="#desk">The Word</a>
+  <a href="word/">The Issue</a>
   <a href="#music">Music</a>
   <a href="#roster">Roster</a>
   <a href="#work">The Work</a>
@@ -4107,16 +4108,16 @@
         <h2>The Word <span class="accent">stories from the house</span></h2>
         <div class="sub">serious pieces only &nbsp;·&nbsp; every one gets a number &nbsp;·&nbsp; links worth your time</div>
       </div>
-      <!-- Pills are generated from the lanes actually present in the catalog.
-           Hardcoded ones drifted: Hair and Fashion matched zero items and
-           filtered the grid to empty. -->
+      <!-- Pills are generated from the departments actually present in the
+           catalog. Hardcoded ones drifted: Hair and Fashion matched zero items
+           and filtered the grid to empty. -->
       <!-- composer.js fills this: a card holder gets a Write a story button
            here, so starting one is a tap from the page they are already on
            instead of a trip through the desk. -->
       <div id="word-cta"></div>
       <div class="desk-filters" id="desk-filters"></div>
       <div class="desk-grid" id="desk-grid"><!-- JS populates --></div>
-      <a class="drops-more" href="#catalog">every drop gets a number &rarr;</a>
+      <a class="drops-more" href="word/">the issue &rarr;</a>
     </section>
 
 
@@ -4706,7 +4707,7 @@
       .filter(s => numOf(s.num) >= 0)
       .map(s => ({
         num: s.num, kicker: s.kicker || 'THE WORD', title: s.title, line: s.dek || '',
-        kind: 'STORY', link: s.link,
+        kind: s.kind || 'STORY', link: s.link,
       }));
     const all = releases.concat(stories)
       .filter(x => x.num && x.title)
@@ -5341,6 +5342,10 @@
             dek: s.dek,
             date: '',
             lanes: ['story'],
+            // ⛔ index.html is itself a WRITER of desk items. Move the pill axis
+            //    to dept without stamping it here and every unbaked member story
+            //    goes invisible under every pill except All.
+            dept: 'story',
             platform: 'SITE',
             thumb: safeUrl(s.cover_url) || 'assets/take-01-manifesto.jpg',
             link: 'word/live/?s=' + encodeURIComponent(s.slug),
@@ -5350,12 +5355,24 @@
       }
     } catch (e) { console.warn('member stories overlay skipped:', e.message); }
     const platformLabel = { youtube:'YouTube', tiktok:'TikTok', instagram:'Instagram', spotify:'Spotify' };
+    // Departments are the filter axis now. `dept` is the stable slug and
+    // `dept_name` the label. The || 'story' fallback is what lets the legacy
+    // items stay untouched: with no dept they all land on Story and the bar
+    // reads exactly what it read before departments existed.
+    // ⛔ cap() and deptLabel are declared OUT here on purpose. cap used to live
+    //    inside the if (dFilters) block and the card loop below now needs it,
+    //    so leaving it scoped there is a ReferenceError on any item whose
+    //    dept has no label.
+    const deptOf = x => x.dept || 'story';
+    const cap = w => w.charAt(0).toUpperCase() + w.slice(1);
+    const deptLabel = new Map();
+    desk.forEach(x => { const d = deptOf(x);
+      if (!deptLabel.has(d)) deptLabel.set(d, x.dept_name || cap(d)); });
     // Build the filter bar from what is really in the catalog, never a fixed list.
     if (dFilters) {
-      const lanes = [...new Set(desk.flatMap(x => x.lanes || []))].sort();
-      const cap = w => w.charAt(0).toUpperCase() + w.slice(1);
       dFilters.innerHTML = `<button class="filter-pill active" data-lane="all" type="button">All</button>`
-        + lanes.map(l => `<button class="filter-pill" data-lane="${esc(l)}" type="button">${esc(cap(l))}</button>`).join('');
+        + [...deptLabel.entries()].sort((a, b) => a[1].localeCompare(b[1]))
+          .map(([d, l]) => `<button class="filter-pill" data-lane="${esc(d)}" type="button">${esc(l)}</button>`).join('');
     }
     desk.forEach((it, i) => {
       const el = document.createElement('a');
@@ -5369,8 +5386,10 @@
         el.classList.add('has-vid');
         el.addEventListener('click', ev => { ev.preventDefault(); openYt(ytId); });
       }
-      el.dataset.lanes = (it.lanes || []).join(',');
-      const lanesHtml = (it.lanes || []).map(l => `<span class="desk-lane">${esc(l)}</span>`).join('')
+      // One department per card, so the click handler's split(',').includes()
+      // at the bottom of this section keeps working on a single value.
+      el.dataset.lanes = deptOf(it);
+      const lanesHtml = `<span class="desk-lane">${esc(deptLabel.get(deptOf(it)) || cap(deptOf(it)))}</span>`
         + (ytId ? `<span class="desk-lane desk-play">&#9654; watch</span>` : '');
       el.innerHTML = `
         <div class="desk-bed"></div>

@@ -44,6 +44,15 @@ if not rows:
 baked = 0
 for row in rows:
     slug = row["slug"]
+    # ⛔ BELT AND BRACES BEHIND THE /desk/word/ FILTER. bake.py never reads
+    #    desk.json (it only imports two functions from newstory), so a slug
+    #    prefix is the ONLY signal it has that a page is a department page.
+    #    The staleness guard below does not save them either: it fires on a
+    #    <article data-stamp="..."> that a department page does not have.
+    #    That is why the slug convention is load bearing, not cosmetic.
+    if slug.startswith(("seen-", "hour-after-", "all-night-")):
+        print(f"  SKIP {slug}: department page, not a prose story")
+        continue
     story_dir = os.path.join(WORD, slug)
     page_path = os.path.join(story_dir, "index.html")
     if not os.path.exists(page_path):
