@@ -3,7 +3,7 @@
 """
 0FF THE PRINT — ALL NIGHT builder. The cover story.
 
-One subject, seven chapters, getting ready through to the end of the night.
+One subject, three acts, getting ready through to the end of the night.
 Each piece is "ALL NIGHT WITH ___".
 
     /usr/bin/python3 newallnight.py FRAMES_DIR --subject "Marisol" \
@@ -28,7 +28,7 @@ The sheet (allnight.txt in FRAMES_DIR) is chapters, then frame blocks:
     others: yes
     consent: all four asked at the door, verbal yes, 20:15
 
-⛔ THE THESIS IS CHAPTER 6 AGAINST CHAPTER 1. He photographed the version being CONSTRUCTED at
+⛔ THE THESIS IS ACT 3 AGAINST ACT 1. He photographed the version being CONSTRUCTED at
    7pm, so the piece has a control to compare the 3am face against. A build missing either one
    warns loudly, because without both it is a slideshow.
 
@@ -75,10 +75,14 @@ LONG_EDGE = 1500
 THUMB_W, THUMB_H = 900, 1125
 BUDGET_MB = 22.0                 # a cover story is longer than a department
 
-# The agreed seven. Any chapter name is allowed, but these two carry the thesis.
-CANON = ["GETTING READY", "THE PREGAME", "THE RIDE", "THE DOOR",
-         "THE ROOM", "THE BATHROOM MIRROR", "THE HOUR AFTER"]
-THESIS = ("GETTING READY", "THE BATHROOM MIRROR")
+# The agreed three. Any act name is allowed, but these two carry the thesis.
+# ⛔ THE SEVEN-CHAPTER MODEL IS SUPERSEDED (2026-09-08, his call). The piece is
+#    three acts and the subject picks the theme. THESIS must stay a PAIR: the
+#    whole argument is the face she built at 8 read against the one at 3am, so a
+#    run of frames with no control at either end is a slideshow, not a story.
+#    verifyword.py carries the matching pair and HARD-FAILS without it.
+CANON = ["GETTING READY", "GOING OUT", "3AM"]
+THESIS = ("GETTING READY", "3AM")
 
 HARD_NO = [
     "incapacitated, or being carried",
@@ -148,6 +152,10 @@ def parse_sheet(txt, frames_dir):
             "file": fn, "caption": no_dash(cap),
             "quote": no_dash(meta.get("quote", "")),
             "others": others, "consent": no_dash(meta.get("consent", "")),
+            # Who held the camera. Anything not his is theirs to pull on their
+            # word alone, and the build says so out loud. See the credit check
+            # in main(): this is what the restroom protection hangs off now.
+            "by": no_dash(meta.get("by", "")),
         })
     return [c for c in chapters if c["frames"]]
 
@@ -239,7 +247,7 @@ PAGE = """<!DOCTYPE html>
 </html>
 """
 
-CHAPTER = """  <div class="ch"><div class="ch-n">Chapter {n}{hours}</div>
+CHAPTER = """  <div class="ch"><div class="ch-n">Act {n}{hours}</div>
     <div class="ch-name">{name}</div></div>
 {frames}"""
 
@@ -293,8 +301,11 @@ def main():
                          "'appearance agreement signed 2026-09-24, 19:10, before the first frame'")
     ap.add_argument("--venue", required=True,
                     help="the real room, RECORDED in data.json for his own ledger, NEVER printed")
-    ap.add_argument("--place", default="San Antonio",
-                    help="what the page actually prints as the location (default: San Antonio). "
+    # ⛔ NO DEFAULT. `place` is the ONLY location string the page prints, so a
+    #    silent "San Antonio" publishes a false city under a named subject the
+    #    first time this is run on an out-of-town night.
+    ap.add_argument("--place", required=True,
+                    help="what the page actually prints as the location, e.g. 'Austin'. "
                          "Naming the real venue alongside her name and the date publishes the "
                          "whole location record, which is the thing the two-of-three rule exists "
                          "to stop.")
@@ -329,19 +340,30 @@ def main():
     total_frames = sum(len(c["frames"]) for c in chapters)
     missing_thesis = [t for t in THESIS if t not in names]
     if missing_thesis:
-        print(f"  ⚠️  MISSING {' and '.join(missing_thesis)}. The piece is chapter 6 read against "
-              f"chapter 1. Without both it is a slideshow, not a story. Building anyway.")
+        print(f"  ⚠️  MISSING {' and '.join(missing_thesis)}. The piece is 3AM read against "
+              f"GETTING READY. Without both it is a slideshow, not a story. Building anyway.")
+        print( "      ⛔ verifyword.py FAILS on this. A clean build is not a passing build.")
     # ⛔ CHAPTER 6 IS HERS. The agreement she signs says she shoots the mirror on
     #    the GO Ultra, reviews it first, and decides what he ever sees. He does
     #    not enter a restroom, and the rejected alternative (a closed car in a lot
     #    at 1am) is worse by every measure. If the spec and the paper ever
     #    disagree about who holds the camera, the paper wins.
-    if "THE BATHROOM MIRROR" in names:
-        print("  ⛔ THE BATHROOM MIRROR is HER footage, shot by her, reviewed by her first. "
-              "If any frame in that chapter came off his camera, pull it before you push.")
+    # ⛔ THIS USED TO FIRE ONLY ON A CHAPTER LITERALLY NAMED "THE BATHROOM
+    #    MIRROR", so renaming to three acts would have deleted a safety rule in
+    #    SILENCE. It hangs off the FRAME now: anything carrying `by:` is somebody
+    #    else's footage and gets said out loud no matter what the act is called.
+    credited = [f for c in chapters for f in c["frames"] if f.get("by")]
+    if credited:
+        who = ", ".join(sorted({f["by"] for f in credited}))
+        print(f"  ⛔ {len(credited)} frame(s) credited to {who}, not to him. That footage is "
+              f"theirs: shot by them, reviewed by them first, pulled on their word alone. "
+              f"If any of it actually came off his camera, fix the credit before you push.")
+    if any("MIRROR" in n for n in names):
+        print("  ⛔ A mirror act is HER footage. He does not enter a restroom. Every frame "
+              "in it should carry a `by:` line naming who held the camera.")
     for n in names:
         if n not in CANON:
-            print(f"  ⚠️  chapter {n!r} is not one of the seven. Fine if deliberate.")
+            print(f"  ⚠️  act {n!r} is not one of the three. Fine if deliberate.")
     if total_frames < 18:
         print(f"  ⚠️  {total_frames} frames across {len(chapters)} chapters. A cover story that "
               f"spans a whole night wants roughly 24 to 40. Building anyway.")

@@ -143,9 +143,11 @@ def check_local(slug):
         if not d.get("subject"):
             fails.append(f"{slug}: no subject recorded")
         names = [c.get("name") for c in d.get("chapters", [])]
-        for t in ("GETTING READY", "THE BATHROOM MIRROR"):
+        # ⛔ MUST MATCH newallnight.THESIS. This is a fails.append, so it exits 1:
+        #    a three-act page under the old pair BUILDS and then cannot be pushed.
+        for t in ("GETTING READY", "3AM"):
             if t not in names:
-                fails.append(f"{slug}: missing chapter {t}, which is half the thesis")
+                fails.append(f"{slug}: missing act {t}, which is half the thesis")
     return fails
 
 
