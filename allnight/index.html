@@ -126,20 +126,40 @@ p + p{margin-top:15px}
 .reg-v em{color:var(--muted);font-style:normal;display:block;margin-top:5px;font-size:14px}
 
 /* ── shelf ── */
-.shelf{display:grid;gap:14px;margin-top:10px}
+/* Every .ref is a LINK now. The whole card is the hit area, because on a phone a
+   19px title is not a target. Cards are equal-height in a row via align-items,
+   and the "Open" chevron pins to the bottom so the rows stay level. */
+.shelf{display:grid;gap:14px;margin-top:10px;align-items:stretch}
 @media(min-width:820px){.shelf{grid-template-columns:1fr 1fr}}
-.ref{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:17px 19px}
+.ref{display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);
+  border-radius:10px;padding:17px 19px;text-decoration:none;color:inherit;
+  transition:border-color .15s,background .15s}
+.ref:hover{border-color:var(--pink-glow);background:var(--panel-2)}
+.ref:hover .ref-t{color:var(--pink-glow)}
+.ref:hover .ref-go{color:var(--pink-glow)}
 .ref.load{border-color:var(--pink-deep);background:var(--panel-2)}
+.ref.load::before{content:"Load bearing";font-family:var(--f-mono);font-size:9px;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--pink-glow);
+  display:block;margin-bottom:9px}
 .ref-t{font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;
-  font-size:19px;line-height:1.05;color:var(--ink)}
+  font-size:20px;line-height:1.05;color:var(--ink);transition:color .15s}
 .ref-a{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;color:var(--pink-glow);margin-top:5px}
-.ref-look{font-size:14.5px;color:var(--ink);margin-top:10px;line-height:1.55}
-.ref-do{font-size:13.5px;color:var(--muted);margin-top:9px;line-height:1.5;
-  padding-top:9px;border-top:1px solid var(--line-soft)}
+.ref-look{font-size:14.5px;color:var(--ink);margin-top:11px;line-height:1.55}
+.ref-look i{color:var(--pink-soft,var(--pink));font-style:italic}
+.ref-warn{font-size:13px;line-height:1.5;color:#ffb0bb;background:rgba(255,77,94,.07);
+  border-left:2px solid #ff4d5e;padding:9px 12px;margin-top:11px;border-radius:0 6px 6px 0}
+.ref-do{font-size:13.5px;color:var(--muted);margin-top:11px;line-height:1.5;
+  padding-top:10px;border-top:1px solid var(--line-soft)}
 .ref-do b{color:var(--pink);font-weight:600;font-family:var(--f-mono);font-size:10px;
-  letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:3px}
-.shelf-h{font-family:var(--f-mono);font-size:11px;letter-spacing:.19em;text-transform:uppercase;
-  color:var(--muted);margin:34px 0 4px;padding-bottom:8px;border-bottom:1px solid var(--line-soft)}
+  letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:4px}
+.ref-do i{color:var(--ink);font-style:italic}
+.ref-go{margin-top:auto;padding-top:13px;font-family:var(--f-mono);font-size:10px;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--dim);transition:color .15s}
+.shelf-h{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);margin:42px 0 6px;padding-bottom:9px;border-bottom:1px solid var(--line-soft);
+  display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+.shelf-h span{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:22px;
+  letter-spacing:0;color:var(--pink-glow);text-transform:uppercase}
 
 /* ── questions ── */
 .qs{counter-reset:q;margin-top:22px}
@@ -348,103 +368,281 @@ p + p{margin-top:15px}
 
   <!-- 05 THE SHELF -->
   <section id="shelf">
-    <div class="sec-head"><span class="sec-num">05</span><h2>The Shelf</h2><span class="sec-tag">What we studied, and what to take</span></div>
+    <div class="sec-head"><span class="sec-num">05</span><h2>The Shelf</h2><span class="sec-tag">36 works &nbsp;·&nbsp; every link opened and checked</span></div>
     <p class="lede">
-      Named so they can be looked up rather than reproduced here. The two marked
-      <b style="color:var(--pink-glow)">load bearing</b> are the ones that actually change how this
-      gets shot. The rest are corrections to it.
+      Real outside work, named so it can be opened rather than reproduced here. Everything on
+      this shelf was fetched and read before it went on, and anything that came back dead, or
+      paywalled, or landing on the wrong page, got cut. Nine are marked
+      <b style="color:var(--pink-glow)">load bearing</b>, meaning they change how the night is
+      actually shot. The rest are corrections, warnings, and things to steal one move from.
     </p>
 
-    <div class="shelf-h">The spine · words as the picture</div>
+    <div class="shelf-h"><span>The spine</span> Her words are the picture, and somebody already solved this</div>
     <div class="shelf">
-      <div class="ref load">
-        <div class="ref-t">Signs that say what you want them to say and not signs that say what someone else wants you to say</div>
+      <a class="ref load" href="https://www.magnumphotos.com/newsroom/society/jim-goldberg-rich-and-poor/" target="_blank" rel="noopener">
+        <div class="ref-t">Rich and Poor</div>
+        <div class="ref-a">Jim Goldberg · 1977-85 · Magnum</div>
+        <div class="ref-look">Goldberg photographed people in their own homes, then took the print back to them and had them write on it, by hand. The captions argue with the photographs instead of describing them. <i>I am doomed to be in this place, I have no future.</i> <i>Poverty sucks but it brings us closer together.</i></div>
+        <div class="ref-do"><b>What to take</b>This is the mechanism, and it is a procedure rather than a look. One anchor frame per act, printed or on a screen, handed to her, and she writes the line ON it in her own hand. Then shoot the handwriting and set that as the display type instead of a font. Two rules copied straight off him: she writes only after seeing the picture, and not one word gets edited.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
+      <a class="ref load" href="https://www.tate.org.uk/tate-etc/issue-59-autumn-2023/signs-of-the-times-gillian-wearing" target="_blank" rel="noopener">
+        <div class="ref-t">Signs that say what you want them to say</div>
         <div class="ref-a">Gillian Wearing · 1992-93 · Tate</div>
-        <div class="ref-look">Strangers on the street photographed holding a card with their own sentence on it, in their own handwriting. The sentence is never the one you would have guessed from the face.</div>
-        <div class="ref-do"><b>What to take</b>The consent structure is the picture. They wrote it, they are holding it, the photograph cannot argue with it. That is exactly what three lines per act are doing here.</div>
-      </div>
-      <div class="ref">
-        <div class="ref-t">Truisms</div>
-        <div class="ref-a">Jenny Holzer · from 1977</div>
-        <div class="ref-look">Flat declarative sentences set enormous, in public, with no author attached and no image to explain them.</div>
-        <div class="ref-do"><b>What to take</b>A sentence set big enough stops being a caption and becomes the object. Set the line larger than feels reasonable and give it nothing to lean on.</div>
-      </div>
+        <div class="ref-look">Strangers in Regent's Park holding a card with their own sentence on it. One 35mm body, one or two frames each, no posing. About 80 percent said yes.</div>
+        <div class="ref-do"><b>What to take</b>The authorship split: he owns the frame, she owns the words, and the words sit physically inside the photograph. And her failure note is the whole warning. She tried it first on people she knew and it did not work, because they wrote what they thought she wanted to hear. Do not tell her what the piece is about before she writes the line.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
+      <a class="ref load" href="https://www.magnumphotos.com/arts-culture/as-it-may-be-bieke-depoorter/" target="_blank" rel="noopener">
+        <div class="ref-t">As it may be</div>
+        <div class="ref-a">Bieke Depoorter · 2011-17 · Magnum</div>
+        <div class="ref-look">She went back years later with a draft of the book and let people write across their own photographs in pen and pencil. The refusals stayed in. <i>I don't want this book to be published.</i> <i>You have lived through one snapshot, an hour or two, maybe a night. Just a picture.</i></div>
+        <div class="ref-do"><b>What to take</b>Run the selects past her before publication, hand her a pen, and print what she says including where she disagrees with you. That last line is the exact charge a one-night cover story has to answer, so answer it inside the piece.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
+      <a class="ref" href="https://www.clevelandart.org/art/2008.116" target="_blank" rel="noopener">
+        <div class="ref-t">The Kitchen Table Series</div>
+        <div class="ref-a">Carrie Mae Weems · 1990 · Cleveland Museum of Art</div>
+        <div class="ref-look">Twenty prints and fourteen letterpress text sheets hung as one grid. Every photograph made at the same table under the same hanging lamp.</div>
+        <div class="ref-do"><b>What to take</b>Lock one camera position for the whole of act 1 and shoot the entire act from it, with the practical bulb itself inside the top of the frame. And hang the text as its own object at the weight of a photograph, never as a caption under one.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
+      <a class="ref" href="https://www.thebroad.org/art/barbara-kruger/untitled-your-body-battleground" target="_blank" rel="noopener">
+        <div class="ref-t">Your body is a battleground</div>
+        <div class="ref-a">Barbara Kruger · 1989 · The Broad</div>
+        <div class="ref-look">Nine feet square. The type sits in solid filled blocks laid straight across the face and covers it rather than dodging around it.</div>
+        <div class="ref-do"><b>What to take</b>The band is the technique. Type does not float on the photograph, it sits in a filled rectangle laid on top, and it is allowed to damage the picture. Build it as real layers, band as a shape, type knocked out, so the edges stay hard at size.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
+      <a class="ref" href="https://whitney.org/collection/works/62454" target="_blank" rel="noopener">
+        <div class="ref-t">I want a president</div>
+        <div class="ref-a">Zoe Leonard · 1992/2018 · Whitney</div>
+        <div class="ref-look">One typed page on onion skin, letter sized. No photograph anywhere in it. It is held in a museum collection as a work on that basis alone.</div>
+        <div class="ref-do"><b>What to take</b>Proof that a page of someone's own words is already a picture, and that the effect is the scale jump. Shoot her sentences at their real small handwritten size, then blow one up full bleed so the reader gets the pen pressure and the crossings out at a size she never intended.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
+      <a class="ref" href="https://www.luvera.com/project/photographs-and-assisted-self-portraits/" target="_blank" rel="noopener">
+        <div class="ref-t">Assisted Self-Portraits</div>
+        <div class="ref-a">Anthony Luvera · Source, 2006</div>
+        <div class="ref-look">The consent architecture written out as a working method. The participant operates the shutter on a cable release while Luvera holds the flash. Every image was shown credited to a named individual author. Permission was not always given, and that was respected.</div>
+        <div class="ref-do"><b>What to take</b>Decide the credit rules before the night, not in post. Every frame carries the name of whoever pressed the shutter, printed at the frame. She holds a veto on any single frame after seeing the selects, no reason required. And the release names this use, not a blanket licence.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
+      <a class="ref" href="https://www.luvera.com/project/tools-for-sharing/" target="_blank" rel="noopener">
+        <div class="ref-t">Tools For Sharing</div>
+        <div class="ref-a">Wendy Ewald with Anthony Luvera · Photoworks, 2013</div>
+        <div class="ref-look">Two photographers who both hand the camera and the caption to their subjects, arguing it out. Ewald: <i>when a child makes a photograph, their name and the title they have chosen will accompany the image. The projects are authored by me.</i></div>
+        <div class="ref-do"><b>What to take</b>The two line credit, which is exactly what the passed camera needs. Every frame carries the shooter's name and the title that shooter chose, while the masthead still says who authored the issue. That credits her and her friends honestly without pretending the magazine is a collective.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
+      <a class="ref" href="https://www.bfi.org.uk/sight-and-sound/features/cine-wanderer-news-from-home" target="_blank" rel="noopener">
+        <div class="ref-t">News from Home</div>
+        <div class="ref-a">Chantal Akerman · 1976 · Sight and Sound</div>
+        <div class="ref-look">Long static takes of New York with her mother's letters read over them. No talking head anywhere. Her voice is at times drowned out by the traffic.</div>
+        <div class="ref-do"><b>What to take</b>The model for the video cut. Record her reading her three lines clean in a quiet room, then lay it over locked shots of places she is not in. Do not duck the room under the voice. Let the street bury a phrase, because the overrun is the argument.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
+      <a class="ref" href="https://www.dcmooregallery.com/artists/duane-michals/series/photographs-with-text" target="_blank" rel="noopener">
+        <div class="ref-t">Photographs with Text</div>
+        <div class="ref-a">Duane Michals · 1968-86 · DC Moore Gallery</div>
+        <div class="ref-look">Gelatin silver prints with text applied by hand directly onto the print, and mostly small. Five by seven inches. An intimate hand scale object, not a poster.</div>
+        <div class="ref-warn">⚠ The hand in these is Michals' own, not the subject's. Typography reference only. Borrow the look without her actually writing it and the piece becomes the ventriloquism Goldberg exists to prevent.</div><div class="ref-do"><b>What to take</b>Use this only for the small marginal material. Her aside about one frame, a shot credit, a timestamp. Run it low, let it break the edge, never centre it. The three spine lines go up at Kruger scale instead.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
+      <a class="ref" href="https://hyperallergic.com/the-problem-with-tumblr-and-photography/" target="_blank" rel="noopener">
+        <div class="ref-t">The Problem with Tumblr and Photography</div>
+        <div class="ref-a">Jörg Colberg · Hyperallergic, 2013</div>
+        <div class="ref-look">Written from inside the period. His argument is that the dashboard fragments intentional sequences, reblogging pulls single frames out of their relationships, and attribution is too thin to trace anyone back to their real body of work.</div>
+        <div class="ref-do"><b>What to take</b>Take his workaround as a layout rule. Build composite panels, two or three photographs plus one of her lines as one indivisible block, so a screenshot carries the words with the pictures and the argument cannot be stripped off. That is the comic panel logic arrived at from the opposite direction.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
+      <a class="ref" href="https://www.dazeddigital.com/art-photography/article/68667/1/9-must-see-zines-to-check-out-tokyo-paris-tattoo-punk" target="_blank" rel="noopener">
+        <div class="ref-t">Nine zines worth seeing</div>
+        <div class="ref-a">Tiarna Meehan · Dazed, 2025</div>
+        <div class="ref-look">Nine current independent zines, each with a named maker and a stated conceit. The closest peer is Chayanee Choedsuk's <i>Get It Together</i>, portraits of friends in the spaces that shaped them.</div>
+        <div class="ref-do"><b>What to take</b>Look at how each one states its conceit in a single sentence before showing a picture. Portraits of friends in the spaces that shaped them is a whole editorial position in nine words. Write the masthead line to that standard. Note how many are risograph, which is the drift to stay out of.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
     </div>
-
-    <div class="shelf-h">Act 1 · one room, before</div>
+    <div class="shelf-h"><span>Act 1</span> One room, before</div>
     <div class="shelf">
-      <div class="ref">
-        <div class="ref-t">The Ballad of Sexual Dependency</div>
-        <div class="ref-a">Nan Goldin · 1986 · MoMA</div>
-        <div class="ref-look">Bedrooms, bathrooms and mirrors shot from inside the friendship rather than from the door. Snapshot flash, no distance, nobody tidied up first.</div>
-        <div class="ref-do"><b>What to take</b>Do not tidy the room. The clutter dates it, places it, and tells you what the person actually lives in. Take the frame where the mess is.</div>
-      </div>
-      <div class="ref">
-        <div class="ref-t">Nighthawks</div>
-        <div class="ref-a">Edward Hopper · 1942 · Art Institute of Chicago</div>
-        <div class="ref-look">A lit interior at night seen as a box of light, with the darkness around it doing all the composing.</div>
-        <div class="ref-do"><b>What to take</b>Frame a lit room from the dark and let the window edges crop it. Works for a doorway at 8pm exactly as well as it works at 3am.</div>
-      </div>
+      <a class="ref" href="https://www.dazeddigital.com/beauty/article/62630/1/girlhood-rituals-of-getting-ready-for-the-disco-girls-night-eimear-lynch" target="_blank" rel="noopener">
+        <div class="ref-t">Girls' Night</div>
+        <div class="ref-a">Eimear Lynch, written by Tiarna Meehan · Dazed, 2024</div>
+        <div class="ref-look">Irish teenagers photographed getting ready as they normally would. Sharing clothes, doing each other's faces. Shot on one camera and one handheld flash specifically to stay inconspicuous, and laid out like a diary with handwritten entries running through it.</div>
+        <div class="ref-do"><b>What to take</b>The kit is the point. One small body and nothing else is what keeps you a fly on the wall instead of a production. And put the mirror in the frame: at f/1.8 you get her, her reflection and the room in one exposure. Cite the ritual and the kit here, never the demographic, because the subjects are minors.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
+      <a class="ref load" href="https://www.are.na/eugenia-bakanova/too-close-flash-body-intimacy" target="_blank" rel="noopener">
+        <div class="ref-t">Too Close</div>
+        <div class="ref-a">eugenia bakanova · Are.na channel</div>
+        <div class="ref-look">A working photographer's actual reference file for a direct flash experiment, with her own notes attached to each name. On Corinne Day: <i>wait for the pose to collapse.</i> On Mark Cohen: <i>get too close, cut away the context.</i> And the line that is the whole channel: <i>I don't need to create a scene. I need to notice when one already exists.</i></div>
+        <div class="ref-do"><b>What to take</b>Steal her seven step sequence as the literal shot order for act 1: ordinary life, intimacy, too close, direct flash, imperfect exposure, fragment, ambiguity. Start on the room and the objects before you frame her at all. The fragment is the operative one for a person with no crew, and it is also the structural escape from shooting her as something to look at.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
+      <a class="ref load" href="https://fourthreefilm.com/2015/03/girlhood/" target="_blank" rel="noopener">
+        <div class="ref-t">Girlhood, the Diamonds scene</div>
+        <div class="ref-a">Céline Sciamma, reviewed by Catherine Knight · 4:3</div>
+        <div class="ref-look">Four girls in a blue lit hotel room lip syncing to each other, dressed up for nobody but themselves. The whole song plays out rather than getting cut into a montage, which is why it reads as sustained instead of as a flicker of silliness.</div>
+        <div class="ref-do"><b>What to take</b>Let one track run to its end in one unbroken take while they perform to each other and not to the lens. Set the camera down at chest height, lock exposure and white balance manually before you roll so it cannot hunt, shoot into one colour the room already has. Run the take long enough that she stops noticing it. Break before forty minutes or the Luna screen dies and takes the recording with it.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
+      <a class="ref" href="https://hcponline.org/exhibit/farah-al-qasimi/" target="_blank" rel="noopener">
+        <div class="ref-t">Open Arm Sea</div>
+        <div class="ref-a">Farah Al Qasimi · Houston Center for Photography</div>
+        <div class="ref-look">Everyday Gulf interiors where colour arrives as saturated pattern and surface, fabric and plastic and shine, rather than as a mood. Faces are repeatedly covered, turned or absent.</div>
+        <div class="ref-do"><b>What to take</b>Make the room's surfaces as loud as the person. Put her against the most patterned thing in the flat and expose for the pattern, not for her face. Frame from behind or over the shoulder so her face is partly gone. Commit to the room's own dominant source and leave any clash in.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
+      <a class="ref" href="https://rhizome.org/editorial/2023/feb/02/announcing-some-tumblrs/" target="_blank" rel="noopener">
+        <div class="ref-t">Some Tumblrs</div>
+        <div class="ref-a">Celine Wong Katzman · Rhizome, 2023</div>
+        <div class="ref-look">The surviving objects with the artists' statements beside them, not a nostalgia listicle. Vivian Fu's eight year photo diary treats the self portrait and the picture of someone else as the same class of picture. Three of the twenty two were censored or de-listed by the platform.</div>
+        <div class="ref-do"><b>What to take</b>Fu is the working model for the passed camera: the author visible inside her own archive, her frames at the same size and credit weight as his. Hand her the camera during act 1 and let the first published frames of the piece be hers. The deletion thread is the second lesson and it is the argument for the piece living on his own domain.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
+      <a class="ref" href="https://www.anothermag.com/art-photography/16516/teenagers-in-their-bedrooms-adrienne-salinger-photo-book-interview" target="_blank" rel="noopener">
+        <div class="ref-t">In My Room</div>
+        <div class="ref-a">Adrienne Salinger · 1995 · AnOther</div>
+        <div class="ref-look">Sixty American teenagers in their own bedrooms. Her instruction, in her words: <i>I told them not to clean up, not to prepare in any way, and no parents allowed.</i> She spent whole days in the houses listening before photographing.</div>
+        <div class="ref-do"><b>What to take</b>One wide frame of her in her own room before she touches her face, framed so the room is the co-subject and you can read the objects on the shelf. Do not style it and do not move anything, including the mess. Take the method too, and get her talking about the rule before the camera comes up.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
+      <a class="ref" href="https://www.magnumphotos.com/theory-and-practice/behind-the-image-bruce-davidsons-brooklyn-gang/" target="_blank" rel="noopener">
+        <div class="ref-t">Brooklyn Gang</div>
+        <div class="ref-a">Bruce Davidson · 1959 · Magnum</div>
+        <div class="ref-look">A summer with a Brooklyn teenage gang. Davidson: <i>I found myself involved with a group of unpredictable youths who were mostly indifferent to me.</i></div>
+        <div class="ref-warn">⚠ The same page carries him calling a teenage girl the Brigitte Bardot of Brooklyn streets. That is the source photographing a girl through desire and it is the one thing here not to carry over.</div><div class="ref-do"><b>What to take</b>Steal the access model, not the pin up. Indifference is the target state, not rapport. Turn up early and shoot the boring hour before anything happens so the camera has become furniture by midnight.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
     </div>
-
-    <div class="shelf-h">Act 2 · the room, the street, the crowd</div>
+    <div class="shelf-h"><span>Act 2</span> The room, the street, the crowd</div>
     <div class="shelf">
-      <div class="ref load">
-        <div class="ref-t">Girlhood <span style="color:var(--muted);font-size:14px">(Bande de filles)</span></div>
-        <div class="ref-a">Céline Sciamma · 2014</div>
-        <div class="ref-look">Young women together, held long, inside one saturated colour, performing for each other and not for the lens. No escalation structure, no consequence waiting at the end.</div>
-        <div class="ref-do"><b>What to take</b>Find the one place on the block that is already a single strong colour and hold there far longer than feels comfortable. Let them stop noticing the camera.</div>
-      </div>
-      <div class="ref">
-        <div class="ref-t">Café Lehmitz</div>
-        <div class="ref-a">Anders Petersen · 1967-70</div>
-        <div class="ref-look">One bar, three years, everybody at eye level and nobody made small.</div>
-        <div class="ref-do"><b>What to take</b>The access is the technique, and on a single night you do not have it. So shoot the group as the unit and yourself as the edge, honestly, instead of faking intimacy you have not earned.</div>
-      </div>
-      <div class="ref">
-        <div class="ref-t">Chelsea Reach / Looking for Love</div>
-        <div class="ref-a">Tom Wood · 1980s</div>
-        <div class="ref-look">Years inside one venue, and not one person in it is ever the joke of the frame.</div>
-        <div class="ref-do"><b>What to take</b>One rule only, and it is absolute: nobody is the joke. If a frame is funny at somebody's expense it does not run.</div>
-      </div>
-      <div class="ref">
-        <div class="ref-t">Les Glaneurs et la Glaneuse</div>
-        <div class="ref-a">Agnès Varda · 1999</div>
-        <div class="ref-look">The person holding the camera is audibly a character in the film. Her hand is in frame, her voice is in it, she is not pretending to be furniture.</div>
-        <div class="ref-do"><b>What to take</b>Stop hiding the operator. A hand on the rig, a reflection in a shop window, a voice asking the question. It is more honest and it is more interesting.</div>
-      </div>
+      <a class="ref load" href="https://www.macba.cat/en/obra/r1658-the-buzz-club-liverpool-england--mysteryworld-zaandam-nl-1996-97/" target="_blank" rel="noopener">
+        <div class="ref-t">The Buzz Club</div>
+        <div class="ref-a">Rineke Dijkstra · 1996-97 · MACBA</div>
+        <div class="ref-look">She built an improvised studio inside two working nightclubs, a plain backdrop and one light, and taped clubbers standing in front of it one at a time while the room's music kept going. Some look straight down the lens. Some carry on dancing alone.</div>
+        <div class="ref-do"><b>What to take</b>The removal, and it is the single most useful idea for act 2. Find one blank wall next to the room, a corridor, a stairwell, the back of the bar, and shoot everything there instead of on the floor, one person at a time, with the music still on their faces. It also solves the light: a plain wall a foot behind her means one door light does the whole exposure.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
+      <a class="ref" href="https://aperture.org/editorial/reynaldo-rivera-glamorous-world-of-la-vanished-queer-underground/" target="_blank" rel="noopener">
+        <div class="ref-t">Provisional Notes for a Disappeared City</div>
+        <div class="ref-a">Reynaldo Rivera, written by Jesse Dorris · Aperture</div>
+        <div class="ref-look">Trans women, drag performers and scenesters in LA bars in the late eighties and nineties. Subjects straight on and centre framed, the photographer visible in mirror reflections inside the shot. The book ends with a conversation between Rivera and one of his subjects.</div>
+        <div class="ref-do"><b>What to take</b>Shoot from inside the frame rather than across it. Let the mirror carry the room, which is the only way a small sensor gets depth out of a tight space, and it puts you in the picture as a participant. Centre her, frontal, the framing you use for someone presenting something she made. Let the shadow stay black.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
+      <a class="ref load" href="https://www.bfi.org.uk/sight-and-sound/interviews/refuseniks-agnes-varda-gleaners-i" target="_blank" rel="noopener">
+        <div class="ref-t">The Gleaners and I</div>
+        <div class="ref-a">Agnès Varda with Chris Darke · Sight and Sound, 2001</div>
+        <div class="ref-look">Varda on shooting alone with a small camera, and on the shot of her own ageing hand: <i>One hand filmed and the other hand was the subject.</i> Her working definition: <i>a film is a slice of life, it's not a production.</i></div>
+        <div class="ref-do"><b>What to take</b>Put the operator inside the piece on purpose. Keep rolling while you talk so your questions are on the track and she is answering a person. Film your own hand, your reflection, and the physical hand off when the camera goes to a friend. Those frames <i>are</i> the shot-by credit. An audible operator forecloses the anonymous observer register, because there is no anonymous observer left in it.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
+      <a class="ref" href="https://www.promonews.tv/videos/2026/04/09/music-video-preservation-society-massive-attack-unfinished-sympathy-baillie-walsh/94580" target="_blank" rel="noopener">
+        <div class="ref-t">Unfinished Sympathy</div>
+        <div class="ref-a">Baillie Walsh · 1991 · Promonews</div>
+        <div class="ref-look">One rule executed once: a single unbroken take travelling ahead of Shara Nelson down one stretch of LA street. Three complete takes existed and the director hated all of them, and still resents that she outpaces the camera and drifts out of frame.</div>
+        <div class="ref-do"><b>What to take</b>One rule, one take, one street. Walk backwards ahead of her for a whole track at chest height and do not stop for anything entering frame. Lock exposure first or a backward walk under streetlight pumps the whole way. Then take his own complaint as permission: the take where she outpaces you is the keeper.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
+      <a class="ref" href="https://www.itsnicethat.com/articles/feng-li-white-night-photography-080218" target="_blank" rel="noopener">
+        <div class="ref-t">White Night</div>
+        <div class="ref-a">Feng Li · from 2005 · It's Nice That</div>
+        <div class="ref-look">Chengdu, shot for twenty years by a civil servant in his spare time with no planning. Flash punches each subject out of a dark surround so it reads as one continuous night whatever hour it was. Absurd and theatrical rather than sad.</div>
+        <div class="ref-do"><b>What to take</b>Subtraction, not fill. Find the one place a hard source already exists, a doorway light, a phone torch a friend is holding, the beam over the DJ, stand her in it and expose for that alone, letting the room fall to black. That keeps you at a usable ISO instead of pushing into mud. When two frames of a moment exist, keep the awkward one.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
+      <a class="ref" href="https://www.tate.org.uk/art/artists/bruce-davidson-13353/bruce-davidson-subway" target="_blank" rel="noopener">
+        <div class="ref-t">Subway</div>
+        <div class="ref-a">Bruce Davidson · 1979-80 · Tate</div>
+        <div class="ref-look">New York carriages on a deliberately slow colour film, lit by the carriage's own overhead tubes. His method changed frame to frame, flash or none, filters or none.</div>
+        <div class="ref-do"><b>What to take</b>Keep the room's colour instead of correcting it away. Set white balance by hand to the dominant fixture and let every other source go the wrong colour on purpose. That clash is the picture and it is the answer to gels you cannot control. Take the confinement discipline too: one room worked for an hour beats a tour of five venues.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
+      <a class="ref" href="https://bluelotus-gallery.com/greg-girard" target="_blank" rel="noopener">
+        <div class="ref-t">HK:PM</div>
+        <div class="ref-a">Greg Girard · 1974-89 · Blue Lotus Gallery</div>
+        <div class="ref-look">Hong Kong after dark on nothing but neon, shopfront fluorescents and the city's own glow. He says he never thought of them as night pictures.</div>
+        <div class="ref-do"><b>What to take</b>For the street between rooms, no flash at all. Pick one dominant source, a sign or a lit shopfront, expose for it, correct nothing else. Put her small and the sign large. It is also the easiest setup to hand off, since there is nothing to think about but pointing it, so this is where the friend-credited frames come from.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
     </div>
-
-    <div class="shelf-h">Act 3 · after</div>
+    <div class="shelf-h"><span>Act 3</span> After</div>
     <div class="shelf">
-      <div class="ref">
-        <div class="ref-t">Grim Street</div>
-        <div class="ref-a">Mark Cohen · from the 1970s</div>
-        <div class="ref-look">Flash fired close, from the hip, into gestures and fragments. Hands, legs, the back of a coat. Faces often not in it at all.</div>
-        <div class="ref-do"><b>What to take</b>The fragment is a whole picture. Heels being carried, hands on a table, a to-go bag. Half of act 3 is shot below the shoulders.</div>
-      </div>
-      <div class="ref">
-        <div class="ref-t">News From Home</div>
-        <div class="ref-a">Chantal Akerman · 1977</div>
-        <div class="ref-look">A voice reads over long static shots of a city, and the voice never appears on screen.</div>
-        <div class="ref-do"><b>What to take</b>The last line does not need a talking head. Her voice over an empty street is stronger than her face saying it.</div>
-      </div>
+      <a class="ref load" href="https://huxleyparlour.com/exhibitions/a1/" target="_blank" rel="noopener">
+        <div class="ref-t">A1: The Great North Road</div>
+        <div class="ref-a">Paul Graham · 1981-83 · Huxley-Parlour</div>
+        <div class="ref-look">Roadside cafes and service stations in colour when British documentary was still black and white. The works list is the reference: <i>Ashtray on Table, Morley's Cafe.</i> <i>Bible, Drivers' Rest Room, Blyth Services.</i> <i>Little Chef in Rain, St. Neots.</i></div>
+        <div class="ref-do"><b>What to take</b>Treat the 3am counter as a warm room. Overhead fluorescent off formica is orange and yellow green once you balance to it, so never let that grade go blue. Alternate two frames for the whole act: the person at the counter at seated eye height, and a full frame still life of the table itself. The still lifes cost her nothing at hour seven and they carry the act once she has stopped performing.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
+      <a class="ref" href="https://davidcampany.com/cameras-need-not-sleep-dhruv-malhotras-sleepers-and-after-party/" target="_blank" rel="noopener">
+        <div class="ref-t">Sleepers / After Party</div>
+        <div class="ref-a">Dhruv Malhotra, essay by David Campany</div>
+        <div class="ref-look">Long exposures of people asleep outdoors, and then the venues photographed after the celebration ended. Campany's description of the second: <i>dining chairs swagged in fabric and ribbon, empty platforms for speeches, floors strewn with trash, all bathed in an acrid, eye-watering, artificial light.</i></div>
+        <div class="ref-do"><b>What to take</b>The room the night happened in, shot after it emptied, trash still down. Brace on a table or a curb, drop to base ISO, run one to eight seconds. Do not try for minutes, the LED sources will clip. She sits still inside it or walks through and smears. If a venue lets you back in after close, that is one frame and it ends the act.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
+      <a class="ref" href="https://www.npr.org/2026/07/18/nx-s1-5896117/retro-digital-camera-analog-reboot" target="_blank" rel="noopener">
+        <div class="ref-t">The digicam is back</div>
+        <div class="ref-a">Alina Selyukh · NPR, 2026</div>
+        <div class="ref-look">Reported with real figures instead of trend assertion. The look named precisely: grainy, overexposed in the centre, blinding flash, often date stamped. One source on why she carries one: <i>you put it in your bag, you don't think about it, and then at the end of the night, you go through all the photos and kind of relive that moment.</i></div>
+        <div class="ref-do"><b>What to take</b>That line is the rule for the whole night. Nobody reviews on the back screen. Nothing gets shown to anyone until after 3am. It stops the shoot becoming a performance, it makes the camera passing genuinely casual because whoever is holding it cannot check, and it means the first time she sees any of it is when you show her the edit. Do not fake a date stamp. Burn the act times into the black furniture instead.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
+      <a class="ref" href="https://www.bfi.org.uk/sight-and-sound/reviews/bloody-nose-empty-pockets-bill-turner-ross-roaring-20s-bar-las-vegas-last-night" target="_blank" rel="noopener">
+        <div class="ref-t">Bloody Nose, Empty Pockets</div>
+        <div class="ref-a">Bill and Turner Ross, reviewed by Sophie Brown · Sight and Sound</div>
+        <div class="ref-look">One continuous shift in a dive bar on its closing night. The colour is named twice in the review: cosy, woozy, rose dipped.</div>
+        <div class="ref-warn">⚠ The film took real criticism for not disclosing that its beats were arranged. If any moment in your night gets asked for twice or re-staged, the caption says so.</div><div class="ref-do"><b>What to take</b>Build the night as a shift, not a story. Hang the acts on clock events that actually happened, doors, first drink, the peak, last call, the walk out, so the piece ends because the night ends and not because somebody learned something. Shoot straight into the bar's own tungsten and do not neutralise the cast.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
+      <a class="ref" href="https://nickturpin.com/portfolio/on-the-night-bus/" target="_blank" rel="noopener">
+        <div class="ref-t">On the Night Bus</div>
+        <div class="ref-a">Nick Turpin · 2017</div>
+        <div class="ref-look">Commuters shot through bus glass across three winters. Condensation from warm bodies against cold air coats it, so faces half dissolve into colour. He first called it Through a Glass Darkly.</div>
+        <div class="ref-do"><b>What to take</b>Shoot the last leg through something. A rideshare window, a rain covered door, the fogged front glass of the diner. It solves two things at once: a small sensor's noise disappears into the diffusion instead of fighting it, and you get an intimate 3am frame with no face to consume. Invert his setup, get close, and let the glass supply the distance.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
     </div>
-
-    <div class="shelf-h">Anti references · what every phone on the street will make that night</div>
+    <div class="shelf-h"><span>Read before you write a caption</span> The failures, documented by the people who committed them</div>
     <div class="shelf">
-      <div class="ref no" style="border-color:#4a2630">
-        <div class="ref-t" style="color:#ff8fa0">The escalation party film</div>
-        <div class="ref-a" style="color:#ff8fa0">The reference everybody reaches for first</div>
-        <div class="ref-look">Its engine is a written ending: things get worse, then there is a consequence. That is fiction, and it needs a script to pay off. A real night has no third act unless somebody agreed to one.</div>
-        <div class="ref-do"><b>What to take instead</b>Keep the wide lens and the operator as a character. Leave the escalation, the colour and the way that camera treats the women in it.</div>
-      </div>
-      <div class="ref no" style="border-color:#4a2630">
-        <div class="ref-t" style="color:#ff8fa0">The tired girl under bad light</div>
-        <div class="ref-a" style="color:#ff8fa0">The default 3am photograph</div>
-        <div class="ref-look">Smeared liner, a slow song, a grade pushed cold and a caption about the comedown. It is the most produced image on the internet and it is somebody being looked at rather than heard.</div>
-        <div class="ref-do"><b>What to take instead</b>Undergrade it, put the words in her mouth, and end on what she says rather than on how she looks.</div>
-      </div>
+      <a class="ref" href="https://www.vice.com/en/article/big-night-out-retrospective-729/" target="_blank" rel="noopener">
+        <div class="ref-t">Three Years of Big Nights Out</div>
+        <div class="ref-a">Clive Martin · VICE, 2016</div>
+        <div class="ref-look">The writer's own post mortem on the series he built. Looking back, he says a lot of what was said about the people in the pictures was probably unwarranted, played into stereotypes, and was largely a bit mean.</div>
+        <div class="ref-do"><b>What to take</b>Read this before writing a single caption. It is the escalating party register with the receipt attached, admitted by the man who made it, and his tell is the thing to steal: the damage was done in the WORDS attached to the pictures, not in the pictures. If a caption passes a verdict on what she is wearing or how her night went, you have written a Big Night Out. Every line of text here is either hers or a plain credit.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
+      <a class="ref" href="https://www.vice.com/en/article/stop-filming-people-in-clubs-without-consent/" target="_blank" rel="noopener">
+        <div class="ref-t">Stop Filming People in Clubs</div>
+        <div class="ref-a">Chiara Wilkinson · VICE, 2023</div>
+        <div class="ref-look">Reporting on non-consensual filming with the actual policies named. fabric puts a sticker over your lenses at the door. FOLD has run a strict no-photo policy since 2018 that extends to professional photographers. The sources are the people it happened to, and what they got called in the comments.</div>
+        <div class="ref-do"><b>What to take</b>Bake the inverse into the shoot rules. She names the venues. Everyone in a published frame is someone she personally introduced you to. And call every room before the night to ask its actual camera policy, because a no-cameras door kills the act before it starts, and those policies exist precisely because photographers behaved like this.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
+      <a class="ref load" href="https://cphmag.com/power-consent-obligations/" target="_blank" rel="noopener">
+        <div class="ref-t">Power, Consent, and Obligations</div>
+        <div class="ref-a">Jörg Colberg · Conscientious, 2020</div>
+        <div class="ref-look">His argument is that consent is the floor and not the ethics. Getting permission settles nothing and only moves the question to what obligations come with telling someone else's story. He works it through Migrant Mother, whose subject consented and spent the rest of her life resenting it.</div>
+        <div class="ref-do"><b>What to take</b>Write the obligation into the process and then publish the process. Sit with her and go through the full edit frame by frame before it goes live, with a veto on any single frame and no reason required, and say on the page that the edit was joint. The Migrant Mother case is the direct warning: a 21 year old with no face online is exactly the person who can be turned into a symbol of something she never agreed to stand for.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
+      <a class="ref" href="https://aperture.org/editorial/visions-of-nightlife-from-johannesburg-to-ibiza/" target="_blank" rel="noopener">
+        <div class="ref-t">Visions of Nightlife</div>
+        <div class="ref-a">Lou Stoppard · Aperture, 2021</div>
+        <div class="ref-look">She sets two nightlife books against each other. One argues clubs are shaped by transport links, alcohol taxes and elections. The other she calls fawning: clubbing as hedonism, the gaze on a thong clad bottom, close crops on beautiful youths, burnout alluded to and never let into the picture.</div>
+        <div class="ref-do"><b>What to take</b>The diagnostic. A night piece either has an argument or it runs on nostalgia and a gaze. Write the argument down before you shoot. Her Ibiza read is also the sharpest description available of the anti-register, and it names the exact failure to check every frame against.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
+      <a class="ref" href="https://yale-herald.com/2026/04/12/the-man-who-taught-the-internet-how-to-party/" target="_blank" rel="noopener">
+        <div class="ref-t">The party photographer profile</div>
+        <div class="ref-a">Cody Skinner on Mark Hunter · Yale Herald, 2026</div>
+        <div class="ref-look">A full length admiring profile that never once describes what is happening inside a frame, because it cannot. The three photographs it mentions are described only by who is in them.</div>
+        <div class="ref-do"><b>What to take</b>The negative template, and it is useful precisely because of what the writing cannot do. These pictures are proof of attendance, not content. Use it as a culling rule: throw out every frame whose entire claim is that it proves someone was in the room. Nobody here is famous and she has no face online, so a frame running on recognition has nothing left to run on.</div>
+        <div class="ref-go">Open &rarr;</div>
+      </a>
     </div>
   </section>
 
