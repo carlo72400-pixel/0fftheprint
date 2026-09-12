@@ -40,6 +40,31 @@ in `_reset.css` means `scrollTo` never lands under `--virtual-time-budget` -> se
 `performance.getEntriesByType('resource')`**, so an mp4 count of 0 there proves nothing; hook
 `HTMLMediaElement.prototype.play` or read `video.paused` instead.
 
+## NIGHTS grew a ninth block: BRAINROT (Sep 12 2026)
+
+`#nights` went 8 blocks to 9, and it is the first night outside San Antonio: **BRAINROT** at New Guild
+Co-op in Austin, Sept 11 (`assets/brainrot/bn_01..08.jpg`). The section intro gained "house shows".
+
+- **Frames come off the PROJECT X render** (his "Project X vibes" brief for that night), and ONLY from the
+  124 frames that cleared a four-reviewer public-safety pass on the whole party. 16 were held back:
+  8 for drug use or a bong in frame, 1 person blocking the camera, 4 bent-over rear-to-camera shots,
+  3 more on the conservative side (a hand across a face, a stranger's rear, a sagging waistband).
+  ⛔ **Never pick a NIGHTS or gallery frame from an uncleared set.** The cleared list is
+  `2026-09-11_Austin-HouseShow/_web/brainrot_px_manifest.json`.
+- ⛔ **Three frames (118/122/127) are SIDEWAYS in the camera JPG with EXIF Orientation=1**, so nothing
+  corrects them. Upright copies live in the shoot's `_web/rotated/`. The first build of bn_02 read the
+  graded original and put a sideways hero into the proof; caught there, before push. A rotated frame
+  crops from CENTRE, because faces.json was measured on the sideways pixels.
+- Built by `2026-09-11_Austin-HouseShow/_scripts/nights_block.py <config.json>`: face-centred crops at
+  the recipe sizes (bwide 1600x842, bhero 1400x1400, squares 1200x1200, q86 progressive), inserted
+  between `<!-- BRAINROT -->` markers in BOTH `index.html` and `index-kawaii.html`. Re-running it
+  replaces the block in place. The twins stay byte-identical (`cmp`).
+- Verified in a scratchpad mirror at 1280: all 8 images load, hero 662x669 against a 666px two-square
+  stack (3px, the same as the existing blocks), credits link to `/events/2026-09-11-brainrot/`,
+  `scrollWidth` 1280.
+- Mobile at 375: `scrollWidth` 375 == `clientWidth`, zero elements past the edge, all 8 load, the block
+  stacks full width (bwide 327x172, bhero 327x334).
+
 ## NIGHTS grew three blocks and learned to play video (Sep 2 2026)
 
 `#nights` went 5 blocks to 8, and gained the first self-hosted video with SOUND on the homepage.

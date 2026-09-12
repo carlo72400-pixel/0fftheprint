@@ -1,6 +1,15 @@
 {
   "items": [
     {
+      "slug": "2026-09-11-brainrot",
+      "title": "Brainrot",
+      "venue": "New Guild Co-op",
+      "date": "2026-09-11",
+      "date_short": "09.11.26",
+      "count": 62,
+      "cover": "2026-09-11-brainrot/media/027_t.jpg"
+    },
+    {
       "slug": "2026-08-30-clown-church",
       "title": "Clown Church",
       "venue": "Rah Rah Room",

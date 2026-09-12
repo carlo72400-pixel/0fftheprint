@@ -1,0 +1,506 @@
+{
+  "slug": "2026-09-11-brainrot",
+  "title": "Brainrot",
+  "venue": "New Guild Co-op",
+  "date": "2026-09-11",
+  "date_short": "09.11.26",
+  "count": 62,
+  "media": [
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/001.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/001_full.jpg",
+      "thumb": "media/001_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/002.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/002_full.jpg",
+      "thumb": "media/002_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/003.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/003_full.jpg",
+      "thumb": "media/003_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/004.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/004_full.jpg",
+      "thumb": "media/004_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/005.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/005_full.jpg",
+      "thumb": "media/005_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/006.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/006_full.jpg",
+      "thumb": "media/006_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/007.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/007_full.jpg",
+      "thumb": "media/007_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/008.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/008_full.jpg",
+      "thumb": "media/008_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/009.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/009_full.jpg",
+      "thumb": "media/009_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/010.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/010_full.jpg",
+      "thumb": "media/010_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/011.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/011_full.jpg",
+      "thumb": "media/011_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/012.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/012_full.jpg",
+      "thumb": "media/012_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/013.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/013_full.jpg",
+      "thumb": "media/013_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/014.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/014_full.jpg",
+      "thumb": "media/014_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/015.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/015_full.jpg",
+      "thumb": "media/015_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/016.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/016_full.jpg",
+      "thumb": "media/016_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/017.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/017_full.jpg",
+      "thumb": "media/017_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/018.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/018_full.jpg",
+      "thumb": "media/018_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/019.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/019_full.jpg",
+      "thumb": "media/019_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/020.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/020_full.jpg",
+      "thumb": "media/020_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/021.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/021_full.jpg",
+      "thumb": "media/021_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/022.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/022_full.jpg",
+      "thumb": "media/022_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/023.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/023_full.jpg",
+      "thumb": "media/023_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/024.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/024_full.jpg",
+      "thumb": "media/024_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/025.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/025_full.jpg",
+      "thumb": "media/025_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/026.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/026_full.jpg",
+      "thumb": "media/026_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/027.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/027_full.jpg",
+      "thumb": "media/027_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/028.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/028_full.jpg",
+      "thumb": "media/028_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/029.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/029_full.jpg",
+      "thumb": "media/029_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/030.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/030_full.jpg",
+      "thumb": "media/030_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/031.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/031_full.jpg",
+      "thumb": "media/031_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/032.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/032_full.jpg",
+      "thumb": "media/032_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/033.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/033_full.jpg",
+      "thumb": "media/033_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/034.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/034_full.jpg",
+      "thumb": "media/034_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/035.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/035_full.jpg",
+      "thumb": "media/035_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/036.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/036_full.jpg",
+      "thumb": "media/036_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/037.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/037_full.jpg",
+      "thumb": "media/037_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/038.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/038_full.jpg",
+      "thumb": "media/038_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/039.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/039_full.jpg",
+      "thumb": "media/039_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/040.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/040_full.jpg",
+      "thumb": "media/040_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/041.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/041_full.jpg",
+      "thumb": "media/041_t.jpg",
+      "w": 1923,
+      "h": 2560
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/042.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/042_full.jpg",
+      "thumb": "media/042_t.jpg",
+      "w": 1923,
+      "h": 2560
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/043.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/043_full.jpg",
+      "thumb": "media/043_t.jpg",
+      "w": 1923,
+      "h": 2560
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/044.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/044_full.jpg",
+      "thumb": "media/044_t.jpg",
+      "w": 1923,
+      "h": 2560
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/045.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/045_full.jpg",
+      "thumb": "media/045_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/046.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/046_full.jpg",
+      "thumb": "media/046_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/047.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/047_full.jpg",
+      "thumb": "media/047_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/048.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/048_full.jpg",
+      "thumb": "media/048_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/049.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/049_full.jpg",
+      "thumb": "media/049_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/050.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/050_full.jpg",
+      "thumb": "media/050_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/051.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/051_full.jpg",
+      "thumb": "media/051_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/052.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/052_full.jpg",
+      "thumb": "media/052_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/053.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/053_full.jpg",
+      "thumb": "media/053_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/054.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/054_full.jpg",
+      "thumb": "media/054_t.jpg",
+      "w": 2560,
+      "h": 1923
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/055.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/055_full.jpg",
+      "thumb": "media/055_t.jpg",
+      "w": 1923,
+      "h": 2560
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/056.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/056_full.jpg",
+      "thumb": "media/056_t.jpg",
+      "w": 1923,
+      "h": 2560
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/057.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/057_full.jpg",
+      "thumb": "media/057_t.jpg",
+      "w": 1923,
+      "h": 2560
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/058.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/058_full.jpg",
+      "thumb": "media/058_t.jpg",
+      "w": 1923,
+      "h": 2560
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/059.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/059_full.jpg",
+      "thumb": "media/059_t.jpg",
+      "w": 1923,
+      "h": 2560
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/060.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/060_full.jpg",
+      "thumb": "media/060_t.jpg",
+      "w": 1923,
+      "h": 2560
+    },
+    {
+      "type": "video",
+      "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-09-11-brainrot/v01.mp4",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/v01_full.mp4",
+      "thumb": "media/v01_t.jpg",
+      "w": 520,
+      "h": 292
+    },
+    {
+      "type": "video",
+      "src": "https://carlo72400-pixel.github.io/0tp-media/video/2026-09-11-brainrot/v02.mp4",
+      "full": "https://github.com/carlo72400-pixel/0tp-media/releases/download/2026-09-11-brainrot/v02_full.mp4",
+      "thumb": "media/v02_t.jpg",
+      "w": 520,
+      "h": 292
+    }
+  ]
+}
