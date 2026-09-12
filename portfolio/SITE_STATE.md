@@ -40,6 +40,29 @@ in `_reset.css` means `scrollTo` never lands under `--virtual-time-budget` -> se
 `performance.getEntriesByType('resource')`**, so an mp4 count of 0 there proves nothing; hook
 `HTMLMediaElement.prototype.play` or read `video.paused` instead.
 
+## BRAINROT gallery went to two looks and lost its clips (Sep 12 2026)
+
+His call the same night: add the BRAINROT grade to the gallery and take that night's videos off.
+
+- `/events/2026-09-11-brainrot/` is now **120 photos, 0 clips**: the same 60 cleared frames, each
+  PROJECT X frame followed by its BRAINROT twin, so anyone who finds themselves gets both versions one
+  arrow-tap apart. Order lives in `2026-09-11_Austin-HouseShow/_web/brainrot_2looks_order.json`; the
+  staging folder `_web/brainrot_2looks/` names PROJECT X `<stem>.jpg` and BRAINROT `<stem>b.jpg`
+  ("." sorts before "b", which is what keeps the pairs adjacent).
+- The sideways three (118/122/127) are upright in BOTH looks: `_web/rotated/` and `_web/rotated_br/`.
+- Cover moved from 027 to 053, still the PROJECT X corset portrait. Share card unchanged.
+- ⛔ **Rebuilt WITHOUT recreating the release.** `newevent.py --no-upload`, then
+  `gh release upload --clobber` into the existing tag, new file names first. The script's own path
+  deletes the release before uploading, which would have 404ed every lightbox image on the live page
+  for the whole 805 MiB upload.
+- Clips 134 and 137 are gone everywhere: the event page, `video/2026-09-11-brainrot/` in 0tp-media
+  (one API commit, no clone, made after the site push), and the `v01_full.mp4`/`v02_full.mp4` release
+  assets. The graded clips still exist in the shoot folder and on Drive.
+- The portfolio BRAINROT block still reads "202 FRAMES · 4 LOOKS · 8 CLIPS". That describes the
+  delivered job, not what the gallery shows.
+- Local mirror: 120/120 thumbs load, lightbox 53 PROJECT X steps to 54 BRAINROT, download link is
+  `054_full.jpg`, no `.mp4` anywhere in the page, 375px has zero overflow.
+
 ## NIGHTS grew a ninth block: BRAINROT (Sep 12 2026)
 
 `#nights` went 8 blocks to 9, and it is the first night outside San Antonio: **BRAINROT** at New Guild
