@@ -60,7 +60,16 @@ EVENTS = os.path.join(ROOT, "events")
 PHOTO_EXT = {".jpg", ".jpeg", ".png", ".heic", ".HEIC", ".webp"}
 VIDEO_EXT = {".mp4", ".mov", ".m4v", ".MP4", ".MOV"}
 
-MEDIA_REPO = "carlo72400-pixel/0tp-media"   # release assets live here
+# ⛔ ONE PAGES SITE IS CAPPED AT 1 GB, and 0tp-media's video/ tree sat at 721 MiB
+#    after Brainrot. So the media repo is a SHARD, picked per dump:
+#      OTP_MEDIA_REPO=carlo72400-pixel/0tp-media-2 /usr/bin/python3 newevent.py ...
+#    Each shard has Pages on (typed video/mp4) and its own 1 GB. Releases have no
+#    size limit, so photos could go anywhere, but keeping a dump's photos and
+#    clips on the same shard is the only way to reason about where a night is.
+#    Shards so far: 0tp-media (Aug 14 to Sep 11), 0tp-media-2 (Sep 1, Sep 12),
+#    0tp-media-3 (Sep 13). data.json carries the absolute URLs, so an old
+#    gallery never notices a new shard.
+MEDIA_REPO = os.environ.get("OTP_MEDIA_REPO", "carlo72400-pixel/0tp-media")
 REL_BASE   = f"https://github.com/{MEDIA_REPO}/releases/download"
 # ⛔ VIDEO CANNOT PLAY FROM A RELEASE ASSET. GitHub serves every one of them as
 #    content-type: application/octet-stream + content-disposition: attachment,
@@ -70,7 +79,7 @@ REL_BASE   = f"https://github.com/{MEDIA_REPO}/releases/download"
 #    content-type control, so the PLAYABLE clip is committed to the media repo
 #    and served by its Pages site, which types by extension. The full quality
 #    original still rides on the release, where "attachment" is what you want.
-VID_BASE   = f"https://carlo72400-pixel.github.io/0tp-media/video"
+VID_BASE   = f"https://carlo72400-pixel.github.io/{MEDIA_REPO.split('/')[-1]}/video"
 
 THUMB_W, THUMB_Q = 520, 72          # grid tile, the ONLY thing committed
 LIGHT_W, LIGHT_Q = 2560, 90         # lightbox view, on the release
@@ -235,21 +244,7 @@ def build_videos(src, out_dir, stage_dir, tag, limit, vid_dir=None, want_full=Tr
         #    landscape clip and wrong for a vertical one: a 1728x3072 phone clip
         #    comes out 404x720, a third of the pixels it should have. The Ink cuts
         #    established 720x1280 as the vertical web size and this matches it.
-        vw, vh = probe_dims(os.path.join(src, fn))
-        if vw and vh and vh > vw:
-            scale = f"scale={VIDEO_H}:-2"          # vertical: width 720
-        else:
-            scale = f"scale=-2:{VIDEO_H}"          # landscape: height 720
-        subprocess.run([
-            "ffmpeg", "-y", "-i", os.path.join(src, fn),
-            "-vf", scale, "-c:v", "libx264", "-crf", str(VIDEO_CRF),
-            "-maxrate", VIDEO_MAXRATE, "-bufsize", "3200k", "-pix_fmt", "yuv420p",
-            "-preset", "slow", "-c:a", "aac", "-b:a", "128k",
-            # faststart puts the index at the front so it plays before it finishes
-            # downloading. On a release asset that is the difference between
-            # "instant" and "stares at a black box".
-            "-movflags", "+faststart", outv,
-        ], capture_output=True)
+        encode_web(os.path.join(src, fn), outv)
         if not os.path.exists(outv):
             print(f"  video failed: {fn}")
             continue
@@ -298,6 +293,173 @@ def build_videos(src, out_dir, stage_dir, tag, limit, vid_dir=None, want_full=Tr
                       "thumb": f"media/{stem}_t.jpg",
                       "w": pw, "h": ph})
         print(f"  [{i}/{len(chosen)}] {fn} -> {human(size)}")
+    return items
+
+
+def encode_web(src, outv):
+    """The one web encode: 720 on the SHORT edge, x264 crf 26 capped at 1.6 Mbps.
+
+    ⛔ SCALE THE SHORT EDGE, NOT THE HEIGHT. "scale=-2:720" is correct for a
+       landscape clip and wrong for a vertical one: a 1728x3072 phone clip comes
+       out 404x720, a third of the pixels it should have. The Ink cuts
+       established 720x1280 as the vertical web size and this matches it.
+    ★ Hardware decode (videotoolbox) first: a 4K HEVC master decodes in software
+      at about real time, with the GPU it runs ~3.5x. Falls back to software
+      if the box refuses, so a rebuild on another Mac still works."""
+    vw, vh = probe_dims(src)
+    scale = f"scale={VIDEO_H}:-2" if (vw and vh and vh > vw) else f"scale=-2:{VIDEO_H}"
+    tail = ["-vf", scale, "-c:v", "libx264", "-crf", str(VIDEO_CRF),
+            "-maxrate", VIDEO_MAXRATE, "-bufsize", "3200k", "-pix_fmt", "yuv420p",
+            "-preset", "slow", "-c:a", "aac", "-b:a", "128k",
+            # faststart puts the index at the front so it plays before it finishes
+            # downloading. On a release asset that is the difference between
+            # "instant" and "stares at a black box".
+            "-movflags", "+faststart", outv]
+    for pre in (["-hwaccel", "videotoolbox"], []):
+        r = subprocess.run(["ffmpeg", "-y"] + pre + ["-i", src] + tail, capture_output=True)
+        if r.returncode == 0 and os.path.exists(outv) and os.path.getsize(outv) > 0:
+            return True
+        if os.path.exists(outv):
+            os.remove(outv)
+    return False
+
+
+def file_index(folder, exts):
+    """stem -> path for every file under a look folder, HORIZONTAL/VERTICAL and all."""
+    idx = {}
+    for dp, _, fs in os.walk(folder):
+        for f in fs:
+            if f.startswith(".") or os.path.splitext(f)[1] not in exts:
+                continue
+            idx[os.path.splitext(f)[0]] = os.path.join(dp, f)
+    return idx
+
+
+def parse_looks(specs):
+    """'NAME=/path' list -> [(NAME, path)], primary first. Order is the chip order."""
+    out = []
+    for s in specs or []:
+        if "=" not in s:
+            sys.exit(f"--look wants NAME=/path, got {s!r}")
+        name, path = s.split("=", 1)
+        if not os.path.isdir(path):
+            sys.exit(f"look folder not found: {path}")
+        out.append((name.strip(), path))
+    return out
+
+
+def build_photos_looks(looks, order, out_dir, stage_dir, tag, rotate=True):
+    """The multi-look dump (Sept 2026 on). Same frames, several grades.
+
+    looks:  [(name, folder)], the first is the primary. Every look's version of
+            every frame goes on the release; the LIGHTBOX carries a chip per look.
+    order:  the stems in gallery order, from curate.py, so the burst/hero problem
+            never reaches this script.
+    rotate: tile i LEADS with look i mod n, so the grid itself shows every grade
+            instead of hiding four of five behind a tap. Off = every tile leads
+            with the primary.
+
+    Release names: primary keeps `NNN.jpg` / `NNN_full.jpg` (og_source and every
+    older verify script look for that), the others are `NNN_<look-slug>.jpg`."""
+    idx = [(name, file_index(folder, PHOTO_EXT)) for name, folder in looks]
+    missing = [s for s in order if s not in idx[0][1]]
+    if missing:
+        sys.exit(f"{len(missing)} ordered stems missing from the primary look: {missing[:5]}")
+    os.makedirs(out_dir, exist_ok=True)
+    os.makedirs(stage_dir, exist_ok=True)
+    items = []
+    for i, stem in enumerate(order, 1):
+        n = f"{i:03d}"
+        lead_name = idx[(i - 1) % len(idx) if rotate else 0][0]
+        variants, paths = [], {}
+        for k, (name, ix) in enumerate(idx):
+            p = ix.get(stem)
+            if not p:
+                print(f"  {stem}: no {name} version, that chip is skipped")
+                continue
+            im = load_image(p)
+            light = im.copy()
+            light.thumbnail((LIGHT_W, LIGHT_W), Image.LANCZOS)
+            suffix = "" if k == 0 else "_" + slugify(name)
+            light.save(os.path.join(stage_dir, f"{n}{suffix}.jpg"), quality=LIGHT_Q, optimize=True)
+            ext = os.path.splitext(p)[1].lower() or ".jpg"
+            fullname = f"{n}{suffix}_full{ext}"
+            shutil.copy2(p, os.path.join(stage_dir, fullname))
+            variants.append({"name": name, "src": f"{REL_BASE}/{tag}/{n}{suffix}.jpg",
+                             "full": f"{REL_BASE}/{tag}/{fullname}"})
+            paths[name] = (p, light.width, light.height)
+        lead = next((v for v in variants if v["name"] == lead_name), variants[0])
+        p, w, h = paths[lead["name"]]
+        th = load_image(p)
+        th.thumbnail((THUMB_W, THUMB_W), Image.LANCZOS)
+        th.save(os.path.join(out_dir, f"{n}_t.jpg"), quality=THUMB_Q, optimize=True)
+        item = {"type": "photo", "src": lead["src"], "full": lead["full"],
+                "thumb": f"media/{n}_t.jpg", "w": w, "h": h}
+        if len(idx) > 1:
+            item["look"] = lead["name"]
+            item["looks"] = variants
+        items.append(item)
+        print(f"  [{i}/{len(order)}] {stem} x{len(variants)}", end="\r")
+    print(f"  {len(items)} photos in {len(idx)} look(s)" + " " * 30)
+    return items
+
+
+def build_videos_looks(vlooks, order, out_dir, stage_dir, tag, vid_dir, rotate=True):
+    """Clips in several grades. Web clip per look -> vid_dir (committed to the
+    shard, served by its Pages); poster off the lead look -> out_dir (site repo).
+    Originals are NOT staged here: a 4K HEVC master is a gigabyte a clip and
+    the photos keep theirs, which is what the download button is for."""
+    if not shutil.which("ffmpeg"):
+        print("  ffmpeg not found, skipping videos")
+        return []
+    idx = [(name, file_index(folder, VIDEO_EXT)) for name, folder in vlooks]
+    os.makedirs(vid_dir, exist_ok=True)
+    os.makedirs(out_dir, exist_ok=True)
+    items = []
+    for i, stem in enumerate(order, 1):
+        vs = f"v{i:02d}"
+        lead_name = idx[(i - 1) % len(idx) if rotate else 0][0]
+        variants = []
+        for k, (name, ix) in enumerate(idx):
+            p = ix.get(stem)
+            if not p:
+                print(f"  {stem}: no {name} version, that chip is skipped")
+                continue
+            suffix = "" if k == 0 else "_" + slugify(name)
+            outv = os.path.join(vid_dir, f"{vs}{suffix}.mp4")
+            if not (os.path.exists(outv) and os.path.getsize(outv) > 0):   # resumable
+                if not encode_web(p, outv):
+                    print(f"  video failed: {p}")
+                    continue
+            size = os.path.getsize(outv)
+            if size > 95 * 1024 * 1024:
+                print(f"  {stem} {name} web clip is {human(size)}, over the 95MB repo limit, left out")
+                os.remove(outv)
+                continue
+            variants.append({"name": name, "src": f"{VID_BASE}/{tag}/{vs}{suffix}.mp4",
+                             "_file": outv})
+            print(f"  [{i}/{len(order)}] {stem} {name} -> {human(size)}")
+        if not variants:
+            continue
+        lead = next((v for v in variants if v["name"] == lead_name), variants[0])
+        poster = os.path.join(out_dir, f"{vs}_t.jpg")
+        subprocess.run(["ffmpeg", "-y", "-i", lead["_file"], "-vf",
+                        f"thumbnail,scale={THUMB_W}:-2", "-frames:v", "1", poster],
+                       capture_output=True)
+        pw = ph = None
+        try:
+            with Image.open(poster) as pim:
+                pw, ph = pim.size
+        except Exception:
+            pass
+        for v in variants:
+            v.pop("_file", None)
+        item = {"type": "video", "src": lead["src"], "thumb": f"media/{vs}_t.jpg",
+                "w": pw, "h": ph}
+        if len(idx) > 1:
+            item["look"] = lead["name"]
+            item["looks"] = variants
+        items.append(item)
     return items
 
 
@@ -426,6 +588,20 @@ transition:transform .35s ease,filter .35s ease}
 .tile.vid::after{content:'▶';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
 width:52px;height:52px;border-radius:50%;background:rgba(10,10,13,.72);border:1px solid var(--pink-deep);
 color:var(--pink-glow);display:flex;align-items:center;justify-content:center;font-size:17px;padding-left:3px}
+/* multi-look dumps: the tile says which grade it leads with, the lightbox switches */
+.tile .lk{position:absolute;left:8px;bottom:8px;font-family:var(--f-mono);font-size:9px;
+letter-spacing:.18em;text-transform:uppercase;color:var(--pink);background:rgba(10,10,13,.74);
+border:1px solid rgba(255,121,198,.35);border-radius:999px;padding:4px 7px;pointer-events:none}
+.looks{font-family:var(--f-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+color:var(--muted);margin-top:8px;line-height:1.9}
+.looks b{color:var(--pink);font-weight:500}
+.looks span{color:var(--ink)}
+.lb-looks{position:absolute;left:50%;bottom:44px;transform:translateX(-50%);display:flex;gap:6px;
+flex-wrap:wrap;justify-content:center;max-width:92vw;z-index:11}
+.lb-looks button{font-family:var(--f-mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+color:var(--pink);background:rgba(10,10,13,.8);border:1px solid rgba(255,121,198,.45);border-radius:999px;
+padding:7px 11px;cursor:pointer}
+.lb-looks button.on{background:var(--pink);color:#0a0a0d;border-color:var(--pink)}
 .foot{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);
 font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
 .foot a{color:var(--pink-glow);text-decoration:none}
@@ -456,6 +632,7 @@ font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;color:var(--muted)}
   <a class="back" href="../">&larr; All events</a>
   <h1>__TITLE__</h1>
   <div class="meta"><b>__VENUE__</b> &nbsp;·&nbsp; __DATELONG__ &nbsp;·&nbsp; __COUNT__ frames</div>
+__LOOKSLINE__
   <div class="grid" id="grid"></div>
   <div class="foot">Shot by 0FF THE PRINT &nbsp;·&nbsp;
     <a href="https://instagram.com/vamppsych" target="_blank" rel="noopener">@vamppsych</a>
@@ -467,33 +644,46 @@ font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;color:var(--muted)}
   <button class="lb-p" id="lbp" aria-label="Previous">&#8249;</button>
   <button class="lb-n" id="lbn" aria-label="Next">&#8250;</button>
   <div id="lbstage"></div>
+  <div class="lb-looks" id="lblooks" hidden></div>
   <div class="lb-count" id="lbc"></div>
   <a class="lb-dl" id="lbdl" href="#" target="_blank" rel="noopener">full res &darr;</a>
 </div>
 <script>
 const MEDIA = __MEDIA__;
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const grid = document.getElementById('grid');
 grid.innerHTML = MEDIA.map((m,i) =>
   `<a class="tile${m.type==='video'?' vid':''}" data-i="${i}" href="${m.src}">
      <img src="${m.thumb}" alt="Frame ${i+1}" loading="lazy" decoding="async"
-          width="${m.w||16}" height="${m.h||9}">
+          width="${m.w||16}" height="${m.h||9}">${m.look?`<span class="lk">${esc(m.look)}</span>`:''}
    </a>`).join('');
 const lb=document.getElementById('lb'), stage=document.getElementById('lbstage'), count=document.getElementById('lbc');
-let cur=0;
+const chips=document.getElementById('lblooks');
+let cur=0, pref=null;   // pref = the grade the viewer last tapped; it sticks across frames
+function variant(m){
+  if(!m.looks||!m.looks.length) return {name:m.look||'',src:m.src,full:m.full};
+  return (pref && m.looks.find(v=>v.name===pref)) || m.looks.find(v=>v.name===m.look) || m.looks[0];
+}
 function show(i){
   cur=(i+MEDIA.length)%MEDIA.length;
-  const m=MEDIA[cur];
+  const m=MEDIA[cur], v=variant(m);
   stage.innerHTML = m.type==='video'
-    ? `<video src="${m.src}" controls autoplay playsinline></video>`
-    : `<img src="${m.src}" alt="Frame ${cur+1}">`;
+    ? `<video src="${v.src}" controls autoplay playsinline></video>`
+    : `<img src="${v.src}" alt="Frame ${cur+1}">`;
   // The native export sits on the same release. download attr is ignored
   // cross-origin, but GitHub already sends content-disposition: attachment,
   // so it saves rather than navigating anyway.
   const dl=document.getElementById('lbdl');
-  if(m.full){dl.href=m.full;dl.style.display='';}else{dl.style.display='none';}
-  count.textContent=`${cur+1} / ${MEDIA.length}`;
+  if(v.full){dl.href=v.full;dl.style.display='';}else{dl.style.display='none';}
+  const multi = m.looks && m.looks.length>1;
+  if(multi){
+    chips.innerHTML = m.looks.map(x=>`<button type="button"${x.name===v.name?' class="on"':''} data-look="${esc(x.name)}">${esc(x.name)}</button>`).join('');
+    chips.hidden=false;
+  } else { chips.hidden=true; chips.innerHTML=''; }
+  count.textContent=`${cur+1} / ${MEDIA.length}` + (multi ? ` · ${v.name}` : '');
   lb.classList.add('open'); document.body.style.overflow='hidden';
 }
+chips.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;pref=b.dataset.look;show(cur);});
 function close(){lb.classList.remove('open');stage.innerHTML='';document.body.style.overflow='';}
 grid.addEventListener('click',e=>{const t=e.target.closest('.tile');if(!t)return;e.preventDefault();show(+t.dataset.i);});
 document.getElementById('lbx').onclick=close;
@@ -513,6 +703,17 @@ window.OTPNight = Object.assign({media:MEDIA, show:show}, __NIGHT__);
 </body>
 </html>
 """
+
+
+def looks_line(names):
+    """The line under the meta on a multi-look dump. Empty string otherwise, so a
+    single-look page renders byte-for-byte as before."""
+    if not names or len(names) < 2:
+        return ""
+    import html as _h
+    inner = " &nbsp;·&nbsp; ".join(f"<span>{_h.escape(n)}</span>" for n in names)
+    return (f'  <div class="looks"><b>{len(names)} looks</b> &nbsp;·&nbsp; {inner}'
+            f' &nbsp;·&nbsp; open a frame and switch</div>')
 
 
 def og_source(stage, override=None):
@@ -564,7 +765,17 @@ def ImageFontTruetype(path, size):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("source", help="folder of photos")
+    ap.add_argument("source", nargs="?", help="folder of photos (omit when using --look)")
+    ap.add_argument("--look", action="append", default=[],
+                    help="NAME=/folder, repeatable; first is the primary grade. "
+                         "Every frame in --order is staged in every look")
+    ap.add_argument("--order", help="json {\"order\":[stems]} in gallery order (curate.py)")
+    ap.add_argument("--video-look", action="append", default=[], dest="video_look",
+                    help="NAME=/folder of graded clips, repeatable, same rules as --look")
+    ap.add_argument("--video-order", dest="video_order",
+                    help="json {\"order\":[clip stems]} or a comma list of stems")
+    ap.add_argument("--no-rotate", action="store_true", dest="no_rotate",
+                    help="every tile leads with the primary look (default rotates)")
     ap.add_argument("--venue", required=True)
     ap.add_argument("--title", help="event name (defaults to the venue)")
     ap.add_argument("--date", required=True, help="YYYY-MM-DD")
@@ -597,9 +808,30 @@ def main():
     shutil.rmtree(stage, ignore_errors=True)
     os.makedirs(stage, exist_ok=True)
 
-    print(f"\nBuilding {slug}")
-    items = build_photos(a.source, media_dir, stage, slug, a.limit, a.pick)
-    if a.videos:
+    print(f"\nBuilding {slug}  (media shard {MEDIA_REPO})")
+    looks = parse_looks(a.look)
+    look_names = [n for n, _ in looks]
+    if looks:
+        if not a.order:
+            sys.exit("--look needs --order (run curate.py first; the scorer keeps bursts)")
+        order = json.load(open(a.order))["order"]
+        items = build_photos_looks(looks, order, media_dir, stage, slug, rotate=not a.no_rotate)
+    elif a.source:
+        items = build_photos(a.source, media_dir, stage, slug, a.limit, a.pick)
+    else:
+        sys.exit("give a photo folder, or --look NAME=/folder with --order")
+    vidstage = None
+    vlooks = parse_looks(a.video_look)
+    if vlooks:
+        if not a.video_order:
+            sys.exit("--video-look needs --video-order")
+        vo = a.video_order
+        vorder = json.load(open(vo))["order"] if vo.endswith(".json") else \
+            [s.strip() for s in vo.split(",") if s.strip()]
+        vidstage = os.path.join(os.path.dirname(stage), "_video_" + slug)
+        items += build_videos_looks(vlooks, vorder, media_dir, stage, slug, vidstage,
+                                    rotate=not a.no_rotate)
+    elif a.videos:
         vidstage = os.path.join(os.path.dirname(stage), "_video_" + slug)
         items += build_videos(a.videos, media_dir, stage, slug, a.video_limit,
                               vid_dir=vidstage, want_full=not a.no_video_full)
@@ -622,10 +854,15 @@ def main():
 
     # ⛔ json.dumps, not raw substitution: a venue with an apostrophe in it
     # ("Papa's") would otherwise close the JS string and break the whole page.
+    all_looks = look_names or []
+    for n in [n for n, _ in vlooks]:
+        if n not in all_looks:
+            all_looks.append(n)
     night = json.dumps({"slug": slug, "title": title,
-                        "venue": a.venue, "dateShort": dateshort})
+                        "venue": a.venue, "dateShort": dateshort, "looks": all_looks})
     page = (PAGE.replace("__NIGHT__", night)
                 .replace("__MEDIA__", json.dumps(items))
+                .replace("__LOOKSLINE__", looks_line(all_looks))
                 .replace("__TITLE__", title)
                 .replace("__VENUE__", a.venue)
                 .replace("__DATELONG__", datelong)
@@ -633,7 +870,8 @@ def main():
                 .replace("__SLUG__", slug))
     open(os.path.join(out, "index.html"), "w", encoding="utf-8").write(page)
     json.dump({"slug": slug, "title": title, "venue": a.venue, "date": a.date,
-               "date_short": dateshort, "count": len(items), "media": items},
+               "date_short": dateshort, "count": len(items), "looks": all_looks,
+               "media": items},
               open(os.path.join(out, "data.json"), "w"), indent=2)
 
     # update the index

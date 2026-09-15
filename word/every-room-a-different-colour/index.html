@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Every Room a Different Colour · 0FF THE PRINT</title>
+<meta name="description" content="A fundraiser house show in Austin, the first night this desk has shot outside San Antonio, graded twice: once as a party, once off the flyer.">
+<meta property="og:title" content="Every Room a Different Colour">
+<meta property="og:description" content="A fundraiser house show in Austin, the first night this desk has shot outside San Antonio, graded twice: once as a party, once off the flyer.">
+<meta property="og:image" content="https://0fftheprint.com/word/every-room-a-different-colour/cover.jpg">
+<meta property="og:type" content="article">
+<meta name="theme-color" content="#0a0a0d">
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#f2eef5;--muted:#8d8798;--line:rgba(255,255,255,.1);--pink:#ff79c6;--bg:#0a0a0d}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif}
+  .leopard-bar{height:7px;background:linear-gradient(90deg,#ff79c6,#caa9ff,#2f6bff,#ff79c6);background-size:300% 100%}
+  .wrap{max-width:720px;margin:0 auto;padding:34px 20px 90px}
+  a.back{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--muted);text-decoration:none}
+  a.back:hover{color:var(--pink)}
+  .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.3em;
+    text-transform:uppercase;color:var(--pink);margin:34px 0 10px}
+  h1{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
+    text-transform:uppercase;font-size:clamp(34px,7vw,56px);line-height:.98}
+  .dek{font-size:17px;line-height:1.6;color:var(--muted);margin-top:14px}
+  .byline{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted);margin:18px 0 26px;
+    padding-bottom:18px;border-bottom:1px solid var(--line)}
+  .byline b{color:var(--ink)}
+  .cover{margin:0 0 8px;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+  .cover img{width:100%;display:block}
+  .cover-credit{font-family:'JetBrains Mono',monospace;font-size:10px;
+    letter-spacing:.06em;color:var(--muted);margin:8px 0 30px;line-height:1.5}
+  .cover-credit a{color:var(--muted);text-decoration:underline}
+  article{font-size:17.5px;line-height:1.85}
+  article p{margin:0 0 22px}
+  article h2{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
+    text-transform:uppercase;font-size:27px;margin:38px 0 14px}
+  article a{color:var(--pink);text-decoration:none}
+  article a:hover{text-decoration:underline}
+  article blockquote{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
+    font-size:26px;line-height:1.2;text-transform:uppercase;color:var(--pink);
+    border-left:3px solid var(--pink);padding-left:18px;margin:32px 0}
+  article figure{margin:30px -20px}
+  article figure img,article figure video{width:100%;display:block;border-radius:0;background:#000}
+  article figure.clip video{width:auto;max-width:100%;max-height:82vh;aspect-ratio:9/16;margin:0 auto}
+  article figcaption{font-family:'JetBrains Mono',monospace;font-size:10.5px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+    padding:10px 20px 0;text-align:center}
+  @media(min-width:760px){article figure{margin:30px 0}
+    article figure img,article figure video{border-radius:12px}
+    article figcaption{padding:10px 0 0}}
+  .foot{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);
+    font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted)}
+  .foot a{color:var(--pink);text-decoration:none}
+  .wall{max-width:680px;margin:34px auto 0;padding-top:26px;border-top:1px solid var(--line)}
+  .wall h2{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;font-size:22px;text-transform:uppercase;margin-bottom:14px}
+  .wall-entry{border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-bottom:10px}
+  .we-by{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--pink);margin-bottom:6px}
+  .we-text{font-size:15px;line-height:1.65;color:var(--ink);overflow-wrap:anywhere}
+  .we-none,.we-pending,.we-msg{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);line-height:1.7}
+  .we-msg{color:#ff6a7e;min-height:16px;margin-top:6px}
+  #wall-compose textarea{width:100%;background:#111016;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:12px;font-size:16px;font-family:Inter,sans-serif;margin-top:8px}
+  .we-row{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+  .we-count{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+  .we-row button,.we-pending button{background:transparent;color:var(--pink);border:1px solid var(--pink);border-radius:7px;padding:9px 16px;font-size:13px;cursor:pointer;min-height:40px}
+</style>
+</head>
+<body>
+<div class="leopard-bar"></div>
+<div class="wrap">
+  <a class="back" href="../../#desk">&larr; The Word · 0FF THE PRINT</a>
+  <div class="kicker">THE NIGHT</div>
+  <h1>Every Room a Different Colour</h1>
+  <div class="dek">A fundraiser house show in Austin, the first night this desk has shot outside San Antonio, graded twice: once as a party, once off the flyer.</div>
+  <div class="byline">0TP-020 &nbsp;·&nbsp; <b>0FF THE PRINT</b> &nbsp;·&nbsp; San Antonio &nbsp;·&nbsp; SEP 12, 2026</div>
+  <div class="cover"><img src="cover.jpg" alt=""></div>
+
+  <article data-stamp="5086771d">
+<p>New Guild Co-op is a housing co-op in Austin, which means the venue was somebody's house. Not a house with a stage in it. A house. The living rooms were lit by whatever lamps live there, the porch was magenta because somebody put a magenta bulb in it, the back room had a green wash and a DJ table, and the alley out back was graffiti and flash and nothing else.</p>
+<p>The night was called BRAINROT and it was a fundraiser before it was a party. The money went to a friend's cancer treatment. The flyer was a thermal false-colour image with chrome WordArt on top, the kind of thing that looks like a joke until you realise it is doing exactly what a flyer is supposed to do.</p>
+<h2>The day before the night</h2>
+<p>The camera went out at two in the afternoon, first to the HOPE Outdoor Gallery, the graffiti park, where a handful of people in Clown Underground shirts stood against the walls in clown masks and let the paint do the talking. Then dusk at the venue, the string lights coming on one by one, the porch going pink.</p>
+<h2>Every room a different problem</h2>
+<p>This is the thing about a house show that a club never gives you. A club has one lighting rig and one colour, and once you have solved it you have solved the night. A house has six rooms and six answers. Tungsten in the living room. Blue LED in the front room. Green on the dance floor. Magenta on the porch. Flash in the alley. The people move between them all night, so the same face is orange, then blue, then green, then pink, in the space of an hour.</p>
+<p>We graded it twice. Once as a party, warm and loud, the room allowed to be as pink as it was. Once as BRAINROT, a false-colour ramp lifted straight off the night's own flyer, so the photographs match the poster that got people in the door.</p>
+<h2>Where it lives</h2>
+<p><a href="https://0fftheprint.com/events/2026-09-11-brainrot/" target="_blank" rel="noopener">Sixty moments from the night</a>, each one in both grades, are up at full quality and free to download. Open any frame and tap the grade you want. If you were there you are probably in one of them.</p>
+<p>New Guild Co-op, Austin, Thursday 11 September 2026. The first night this desk has shot outside San Antonio. It will not be the last.</p>
+  </article>
+  <section class="wall" id="wall" data-story="every-room-a-different-colour" hidden>
+    <h2>From the floor</h2>
+    <div id="wall-entries"></div>
+    <div id="wall-compose"></div>
+  </section>
+  <div class="foot">Every drop gets a number. This one is 0TP-020. <a href="../../#desk">Back to The Word &rarr;</a></div>
+</div>
+<script src="../../supabase-config.js?v=f1348482"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="../../assets/js/desk.js?v=32f116ac" defer></script>
+<script src="../../assets/js/word.js?v=faaae268" defer></script>
+</body>
+</html>

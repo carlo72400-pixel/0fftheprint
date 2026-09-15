@@ -1,0 +1,753 @@
+{
+  "slug": "2026-09-12-lucha-night",
+  "title": "Lucha Night",
+  "venue": "El Luchador Bar",
+  "date": "2026-09-12",
+  "date_short": "09.12.26",
+  "count": 29,
+  "looks": [
+    "LUCHA NIGHT",
+    "RESERVOIR DOGS",
+    "DEATH PROOF"
+  ],
+  "media": [
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/001.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/001_full.jpg",
+      "thumb": "media/001_t.jpg",
+      "w": 1440,
+      "h": 2560,
+      "look": "LUCHA NIGHT",
+      "looks": [
+        {
+          "name": "LUCHA NIGHT",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/001.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/001_full.jpg"
+        },
+        {
+          "name": "RESERVOIR DOGS",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/001_reservoir-dogs.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/001_reservoir-dogs_full.jpg"
+        },
+        {
+          "name": "DEATH PROOF",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/001_death-proof.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/001_death-proof_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/002_reservoir-dogs.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/002_reservoir-dogs_full.jpg",
+      "thumb": "media/002_t.jpg",
+      "w": 2560,
+      "h": 1440,
+      "look": "RESERVOIR DOGS",
+      "looks": [
+        {
+          "name": "LUCHA NIGHT",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/002.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/002_full.jpg"
+        },
+        {
+          "name": "RESERVOIR DOGS",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/002_reservoir-dogs.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/002_reservoir-dogs_full.jpg"
+        },
+        {
+          "name": "DEATH PROOF",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/002_death-proof.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/002_death-proof_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/003_death-proof.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/003_death-proof_full.jpg",
+      "thumb": "media/003_t.jpg",
+      "w": 2560,
+      "h": 1440,
+      "look": "DEATH PROOF",
+      "looks": [
+        {
+          "name": "LUCHA NIGHT",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/003.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/003_full.jpg"
+        },
+        {
+          "name": "RESERVOIR DOGS",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/003_reservoir-dogs.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/003_reservoir-dogs_full.jpg"
+        },
+        {
+          "name": "DEATH PROOF",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/003_death-proof.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/003_death-proof_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/004.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/004_full.jpg",
+      "thumb": "media/004_t.jpg",
+      "w": 2560,
+      "h": 1440,
+      "look": "LUCHA NIGHT",
+      "looks": [
+        {
+          "name": "LUCHA NIGHT",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/004.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/004_full.jpg"
+        },
+        {
+          "name": "RESERVOIR DOGS",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/004_reservoir-dogs.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/004_reservoir-dogs_full.jpg"
+        },
+        {
+          "name": "DEATH PROOF",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/004_death-proof.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/004_death-proof_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/005_reservoir-dogs.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/005_reservoir-dogs_full.jpg",
+      "thumb": "media/005_t.jpg",
+      "w": 2560,
+      "h": 1440,
+      "look": "RESERVOIR DOGS",
+      "looks": [
+        {
+          "name": "LUCHA NIGHT",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/005.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/005_full.jpg"
+        },
+        {
+          "name": "RESERVOIR DOGS",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/005_reservoir-dogs.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/005_reservoir-dogs_full.jpg"
+        },
+        {
+          "name": "DEATH PROOF",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/005_death-proof.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/005_death-proof_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/006_death-proof.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/006_death-proof_full.jpg",
+      "thumb": "media/006_t.jpg",
+      "w": 2560,
+      "h": 1440,
+      "look": "DEATH PROOF",
+      "looks": [
+        {
+          "name": "LUCHA NIGHT",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/006.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/006_full.jpg"
+        },
+        {
+          "name": "RESERVOIR DOGS",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/006_reservoir-dogs.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/006_reservoir-dogs_full.jpg"
+        },
+        {
+          "name": "DEATH PROOF",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/006_death-proof.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/006_death-proof_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/007.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/007_full.jpg",
+      "thumb": "media/007_t.jpg",
+      "w": 2560,
+      "h": 1440,
+      "look": "LUCHA NIGHT",
+      "looks": [
+        {
+          "name": "LUCHA NIGHT",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/007.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/007_full.jpg"
+        },
+        {
+          "name": "RESERVOIR DOGS",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/007_reservoir-dogs.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/007_reservoir-dogs_full.jpg"
+        },
+        {
+          "name": "DEATH PROOF",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/007_death-proof.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/007_death-proof_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/008_reservoir-dogs.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/008_reservoir-dogs_full.jpg",
+      "thumb": "media/008_t.jpg",
+      "w": 2560,
+      "h": 1440,
+      "look": "RESERVOIR DOGS",
+      "looks": [
+        {
+          "name": "LUCHA NIGHT",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/008.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/008_full.jpg"
+        },
+        {
+          "name": "RESERVOIR DOGS",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/008_reservoir-dogs.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/008_reservoir-dogs_full.jpg"
+        },
+        {
+          "name": "DEATH PROOF",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/008_death-proof.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/008_death-proof_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/009_death-proof.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/009_death-proof_full.jpg",
+      "thumb": "media/009_t.jpg",
+      "w": 2560,
+      "h": 1440,
+      "look": "DEATH PROOF",
+      "looks": [
+        {
+          "name": "LUCHA NIGHT",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/009.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/009_full.jpg"
+        },
+        {
+          "name": "RESERVOIR DOGS",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/009_reservoir-dogs.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/009_reservoir-dogs_full.jpg"
+        },
+        {
+          "name": "DEATH PROOF",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/009_death-proof.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/009_death-proof_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/010.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/010_full.jpg",
+      "thumb": "media/010_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "LUCHA NIGHT",
+      "looks": [
+        {
+          "name": "LUCHA NIGHT",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/010.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/010_full.jpg"
+        },
+        {
+          "name": "RESERVOIR DOGS",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/010_reservoir-dogs.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/010_reservoir-dogs_full.jpg"
+        },
+        {
+          "name": "DEATH PROOF",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/010_death-proof.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/010_death-proof_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/011_reservoir-dogs.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/011_reservoir-dogs_full.jpg",
+      "thumb": "media/011_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "RESERVOIR DOGS",
+      "looks": [
+        {
+          "name": "LUCHA NIGHT",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/011.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/011_full.jpg"
+        },
+        {
+          "name": "RESERVOIR DOGS",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/011_reservoir-dogs.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/011_reservoir-dogs_full.jpg"
+        },
+        {
+          "name": "DEATH PROOF",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/011_death-proof.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/011_death-proof_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/012_death-proof.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/012_death-proof_full.jpg",
+      "thumb": "media/012_t.jpg",
+      "w": 2560,
+      "h": 1440,
+      "look": "DEATH PROOF",
+      "looks": [
+        {
+          "name": "LUCHA NIGHT",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/012.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/012_full.jpg"
+        },
+        {
+          "name": "RESERVOIR DOGS",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/012_reservoir-dogs.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/012_reservoir-dogs_full.jpg"
+        },
+        {
+          "name": "DEATH PROOF",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/012_death-proof.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/012_death-proof_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/013.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/013_full.jpg",
+      "thumb": "media/013_t.jpg",
+      "w": 2560,
+      "h": 1440,
+      "look": "LUCHA NIGHT",
+      "looks": [
+        {
+          "name": "LUCHA NIGHT",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/013.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/013_full.jpg"
+        },
+        {
+          "name": "RESERVOIR DOGS",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/013_reservoir-dogs.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/013_reservoir-dogs_full.jpg"
+        },
+        {
+          "name": "DEATH PROOF",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/013_death-proof.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/013_death-proof_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/014_reservoir-dogs.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/014_reservoir-dogs_full.jpg",
+      "thumb": "media/014_t.jpg",
+      "w": 2560,
+      "h": 1440,
+      "look": "RESERVOIR DOGS",
+      "looks": [
+        {
+          "name": "LUCHA NIGHT",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/014.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/014_full.jpg"
+        },
+        {
+          "name": "RESERVOIR DOGS",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/014_reservoir-dogs.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/014_reservoir-dogs_full.jpg"
+        },
+        {
+          "name": "DEATH PROOF",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/014_death-proof.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/014_death-proof_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/015_death-proof.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/015_death-proof_full.jpg",
+      "thumb": "media/015_t.jpg",
+      "w": 2560,
+      "h": 1440,
+      "look": "DEATH PROOF",
+      "looks": [
+        {
+          "name": "LUCHA NIGHT",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/015.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/015_full.jpg"
+        },
+        {
+          "name": "RESERVOIR DOGS",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/015_reservoir-dogs.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/015_reservoir-dogs_full.jpg"
+        },
+        {
+          "name": "DEATH PROOF",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/015_death-proof.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/015_death-proof_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/016.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/016_full.jpg",
+      "thumb": "media/016_t.jpg",
+      "w": 2560,
+      "h": 1440,
+      "look": "LUCHA NIGHT",
+      "looks": [
+        {
+          "name": "LUCHA NIGHT",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/016.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/016_full.jpg"
+        },
+        {
+          "name": "RESERVOIR DOGS",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/016_reservoir-dogs.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/016_reservoir-dogs_full.jpg"
+        },
+        {
+          "name": "DEATH PROOF",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/016_death-proof.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/016_death-proof_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/017_reservoir-dogs.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/017_reservoir-dogs_full.jpg",
+      "thumb": "media/017_t.jpg",
+      "w": 2560,
+      "h": 1440,
+      "look": "RESERVOIR DOGS",
+      "looks": [
+        {
+          "name": "LUCHA NIGHT",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/017.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/017_full.jpg"
+        },
+        {
+          "name": "RESERVOIR DOGS",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/017_reservoir-dogs.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/017_reservoir-dogs_full.jpg"
+        },
+        {
+          "name": "DEATH PROOF",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/017_death-proof.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/017_death-proof_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/018_death-proof.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/018_death-proof_full.jpg",
+      "thumb": "media/018_t.jpg",
+      "w": 2560,
+      "h": 1440,
+      "look": "DEATH PROOF",
+      "looks": [
+        {
+          "name": "LUCHA NIGHT",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/018.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/018_full.jpg"
+        },
+        {
+          "name": "RESERVOIR DOGS",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/018_reservoir-dogs.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/018_reservoir-dogs_full.jpg"
+        },
+        {
+          "name": "DEATH PROOF",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/018_death-proof.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/018_death-proof_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/019.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/019_full.jpg",
+      "thumb": "media/019_t.jpg",
+      "w": 2560,
+      "h": 1440,
+      "look": "LUCHA NIGHT",
+      "looks": [
+        {
+          "name": "LUCHA NIGHT",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/019.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/019_full.jpg"
+        },
+        {
+          "name": "RESERVOIR DOGS",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/019_reservoir-dogs.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/019_reservoir-dogs_full.jpg"
+        },
+        {
+          "name": "DEATH PROOF",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/019_death-proof.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/019_death-proof_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/020_reservoir-dogs.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/020_reservoir-dogs_full.jpg",
+      "thumb": "media/020_t.jpg",
+      "w": 2560,
+      "h": 1440,
+      "look": "RESERVOIR DOGS",
+      "looks": [
+        {
+          "name": "LUCHA NIGHT",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/020.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/020_full.jpg"
+        },
+        {
+          "name": "RESERVOIR DOGS",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/020_reservoir-dogs.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/020_reservoir-dogs_full.jpg"
+        },
+        {
+          "name": "DEATH PROOF",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/020_death-proof.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/020_death-proof_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/021_death-proof.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/021_death-proof_full.jpg",
+      "thumb": "media/021_t.jpg",
+      "w": 2560,
+      "h": 1440,
+      "look": "DEATH PROOF",
+      "looks": [
+        {
+          "name": "LUCHA NIGHT",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/021.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/021_full.jpg"
+        },
+        {
+          "name": "RESERVOIR DOGS",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/021_reservoir-dogs.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/021_reservoir-dogs_full.jpg"
+        },
+        {
+          "name": "DEATH PROOF",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/021_death-proof.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/021_death-proof_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/022.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/022_full.jpg",
+      "thumb": "media/022_t.jpg",
+      "w": 2560,
+      "h": 1440,
+      "look": "LUCHA NIGHT",
+      "looks": [
+        {
+          "name": "LUCHA NIGHT",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/022.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/022_full.jpg"
+        },
+        {
+          "name": "RESERVOIR DOGS",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/022_reservoir-dogs.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/022_reservoir-dogs_full.jpg"
+        },
+        {
+          "name": "DEATH PROOF",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/022_death-proof.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/022_death-proof_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/023_reservoir-dogs.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/023_reservoir-dogs_full.jpg",
+      "thumb": "media/023_t.jpg",
+      "w": 2560,
+      "h": 1440,
+      "look": "RESERVOIR DOGS",
+      "looks": [
+        {
+          "name": "LUCHA NIGHT",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/023.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/023_full.jpg"
+        },
+        {
+          "name": "RESERVOIR DOGS",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/023_reservoir-dogs.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/023_reservoir-dogs_full.jpg"
+        },
+        {
+          "name": "DEATH PROOF",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/023_death-proof.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/023_death-proof_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/024_death-proof.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/024_death-proof_full.jpg",
+      "thumb": "media/024_t.jpg",
+      "w": 2560,
+      "h": 1440,
+      "look": "DEATH PROOF",
+      "looks": [
+        {
+          "name": "LUCHA NIGHT",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/024.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/024_full.jpg"
+        },
+        {
+          "name": "RESERVOIR DOGS",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/024_reservoir-dogs.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/024_reservoir-dogs_full.jpg"
+        },
+        {
+          "name": "DEATH PROOF",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/024_death-proof.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/024_death-proof_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/025.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/025_full.jpg",
+      "thumb": "media/025_t.jpg",
+      "w": 2560,
+      "h": 1440,
+      "look": "LUCHA NIGHT",
+      "looks": [
+        {
+          "name": "LUCHA NIGHT",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/025.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/025_full.jpg"
+        },
+        {
+          "name": "RESERVOIR DOGS",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/025_reservoir-dogs.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/025_reservoir-dogs_full.jpg"
+        },
+        {
+          "name": "DEATH PROOF",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/025_death-proof.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/025_death-proof_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "video",
+      "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-09-12-lucha-night/v01.mp4",
+      "thumb": "media/v01_t.jpg",
+      "w": 520,
+      "h": 292,
+      "look": "LUCHA NIGHT",
+      "looks": [
+        {
+          "name": "LUCHA NIGHT",
+          "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-09-12-lucha-night/v01.mp4"
+        },
+        {
+          "name": "RESERVOIR DOGS",
+          "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-09-12-lucha-night/v01_reservoir-dogs.mp4"
+        },
+        {
+          "name": "DEATH PROOF",
+          "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-09-12-lucha-night/v01_death-proof.mp4"
+        }
+      ]
+    },
+    {
+      "type": "video",
+      "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-09-12-lucha-night/v02_reservoir-dogs.mp4",
+      "thumb": "media/v02_t.jpg",
+      "w": 520,
+      "h": 292,
+      "look": "RESERVOIR DOGS",
+      "looks": [
+        {
+          "name": "LUCHA NIGHT",
+          "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-09-12-lucha-night/v02.mp4"
+        },
+        {
+          "name": "RESERVOIR DOGS",
+          "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-09-12-lucha-night/v02_reservoir-dogs.mp4"
+        },
+        {
+          "name": "DEATH PROOF",
+          "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-09-12-lucha-night/v02_death-proof.mp4"
+        }
+      ]
+    },
+    {
+      "type": "video",
+      "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-09-12-lucha-night/v03_death-proof.mp4",
+      "thumb": "media/v03_t.jpg",
+      "w": 520,
+      "h": 924,
+      "look": "DEATH PROOF",
+      "looks": [
+        {
+          "name": "LUCHA NIGHT",
+          "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-09-12-lucha-night/v03.mp4"
+        },
+        {
+          "name": "RESERVOIR DOGS",
+          "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-09-12-lucha-night/v03_reservoir-dogs.mp4"
+        },
+        {
+          "name": "DEATH PROOF",
+          "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-09-12-lucha-night/v03_death-proof.mp4"
+        }
+      ]
+    },
+    {
+      "type": "video",
+      "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-09-12-lucha-night/v04.mp4",
+      "thumb": "media/v04_t.jpg",
+      "w": 520,
+      "h": 924,
+      "look": "LUCHA NIGHT",
+      "looks": [
+        {
+          "name": "LUCHA NIGHT",
+          "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-09-12-lucha-night/v04.mp4"
+        },
+        {
+          "name": "RESERVOIR DOGS",
+          "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-09-12-lucha-night/v04_reservoir-dogs.mp4"
+        },
+        {
+          "name": "DEATH PROOF",
+          "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-09-12-lucha-night/v04_death-proof.mp4"
+        }
+      ]
+    }
+  ]
+}

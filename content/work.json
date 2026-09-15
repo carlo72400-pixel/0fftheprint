@@ -1,6 +1,34 @@
 {
   "items": [
     {
+      "src": "assets/work/w4-md-337.jpg",
+      "label": "SLACKERS · b.i.l.l.y release party · 09.01",
+      "alt": "Mike Dimes throwing hand signs above the crowd in the Bangerz tee, gold medallion swinging",
+      "w": 1052,
+      "h": 1400
+    },
+    {
+      "src": "assets/work/w4-lucha-018.jpg",
+      "label": "EL LUCHADOR · lucha night · 09.12",
+      "alt": "A red-masked luchador, the referee and Bull Madrid squared up under the string lights",
+      "w": 1400,
+      "h": 1052
+    },
+    {
+      "src": "assets/work/w4-migx-121.jpg",
+      "label": "MI VAQUITA · migx · 09.12",
+      "alt": "The DJ under the MIGX LED wall",
+      "w": 1052,
+      "h": 1400
+    },
+    {
+      "src": "assets/work/w4-bq-063.jpg",
+      "label": "RAH RAH ROOM · burlesque night · 09.13",
+      "alt": "A performer in a sequinned corset with feather fans on the red velvet stage",
+      "w": 787,
+      "h": 1400
+    },
+    {
       "src": "assets/work/w3-zen-025.jpg",
       "label": "ZEN HAUS · night market · 08.21",
       "alt": "Night market courtyard from above, string lights over the vendor tables",

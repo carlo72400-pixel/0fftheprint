@@ -1,0 +1,1340 @@
+{
+  "slug": "2026-09-01-billy-release-party",
+  "title": "B.I.L.L.Y Release Party",
+  "venue": "Slackers",
+  "date": "2026-09-01",
+  "date_short": "09.01.26",
+  "count": 64,
+  "looks": [
+    "HERO",
+    "CHARACTER"
+  ],
+  "media": [
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/001.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/001_full.jpg",
+      "thumb": "media/001_t.jpg",
+      "w": 1923,
+      "h": 2560,
+      "look": "HERO",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/001.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/001_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/001_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/001_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/002_character.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/002_character_full.jpg",
+      "thumb": "media/002_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "CHARACTER",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/002.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/002_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/002_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/002_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/003.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/003_full.jpg",
+      "thumb": "media/003_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "HERO",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/003.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/003_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/003_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/003_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/004_character.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/004_character_full.jpg",
+      "thumb": "media/004_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "CHARACTER",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/004.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/004_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/004_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/004_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/005.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/005_full.jpg",
+      "thumb": "media/005_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "HERO",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/005.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/005_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/005_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/005_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/006_character.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/006_character_full.jpg",
+      "thumb": "media/006_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "CHARACTER",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/006.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/006_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/006_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/006_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/007.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/007_full.jpg",
+      "thumb": "media/007_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "HERO",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/007.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/007_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/007_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/007_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/008_character.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/008_character_full.jpg",
+      "thumb": "media/008_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "CHARACTER",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/008.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/008_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/008_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/008_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/009.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/009_full.jpg",
+      "thumb": "media/009_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "HERO",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/009.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/009_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/009_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/009_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/010_character.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/010_character_full.jpg",
+      "thumb": "media/010_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "CHARACTER",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/010.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/010_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/010_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/010_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/011.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/011_full.jpg",
+      "thumb": "media/011_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "HERO",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/011.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/011_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/011_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/011_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/012_character.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/012_character_full.jpg",
+      "thumb": "media/012_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "CHARACTER",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/012.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/012_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/012_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/012_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/013.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/013_full.jpg",
+      "thumb": "media/013_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "HERO",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/013.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/013_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/013_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/013_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/014_character.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/014_character_full.jpg",
+      "thumb": "media/014_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "CHARACTER",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/014.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/014_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/014_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/014_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/015.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/015_full.jpg",
+      "thumb": "media/015_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "HERO",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/015.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/015_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/015_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/015_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/016_character.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/016_character_full.jpg",
+      "thumb": "media/016_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "CHARACTER",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/016.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/016_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/016_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/016_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/017.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/017_full.jpg",
+      "thumb": "media/017_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "HERO",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/017.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/017_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/017_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/017_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/018_character.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/018_character_full.jpg",
+      "thumb": "media/018_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "CHARACTER",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/018.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/018_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/018_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/018_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/019.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/019_full.jpg",
+      "thumb": "media/019_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "HERO",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/019.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/019_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/019_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/019_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/020_character.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/020_character_full.jpg",
+      "thumb": "media/020_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "CHARACTER",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/020.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/020_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/020_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/020_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/021.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/021_full.jpg",
+      "thumb": "media/021_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "HERO",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/021.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/021_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/021_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/021_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/022_character.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/022_character_full.jpg",
+      "thumb": "media/022_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "CHARACTER",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/022.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/022_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/022_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/022_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/023.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/023_full.jpg",
+      "thumb": "media/023_t.jpg",
+      "w": 1923,
+      "h": 2560,
+      "look": "HERO",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/023.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/023_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/023_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/023_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/024_character.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/024_character_full.jpg",
+      "thumb": "media/024_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "CHARACTER",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/024.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/024_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/024_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/024_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/025.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/025_full.jpg",
+      "thumb": "media/025_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "HERO",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/025.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/025_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/025_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/025_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/026_character.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/026_character_full.jpg",
+      "thumb": "media/026_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "CHARACTER",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/026.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/026_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/026_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/026_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/027.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/027_full.jpg",
+      "thumb": "media/027_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "HERO",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/027.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/027_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/027_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/027_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/028_character.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/028_character_full.jpg",
+      "thumb": "media/028_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "CHARACTER",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/028.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/028_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/028_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/028_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/029.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/029_full.jpg",
+      "thumb": "media/029_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "HERO",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/029.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/029_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/029_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/029_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/030_character.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/030_character_full.jpg",
+      "thumb": "media/030_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "CHARACTER",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/030.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/030_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/030_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/030_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/031.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/031_full.jpg",
+      "thumb": "media/031_t.jpg",
+      "w": 1923,
+      "h": 2560,
+      "look": "HERO",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/031.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/031_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/031_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/031_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/032_character.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/032_character_full.jpg",
+      "thumb": "media/032_t.jpg",
+      "w": 1923,
+      "h": 2560,
+      "look": "CHARACTER",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/032.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/032_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/032_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/032_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/033.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/033_full.jpg",
+      "thumb": "media/033_t.jpg",
+      "w": 1923,
+      "h": 2560,
+      "look": "HERO",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/033.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/033_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/033_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/033_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/034_character.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/034_character_full.jpg",
+      "thumb": "media/034_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "CHARACTER",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/034.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/034_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/034_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/034_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/035.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/035_full.jpg",
+      "thumb": "media/035_t.jpg",
+      "w": 1923,
+      "h": 2560,
+      "look": "HERO",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/035.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/035_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/035_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/035_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/036_character.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/036_character_full.jpg",
+      "thumb": "media/036_t.jpg",
+      "w": 1923,
+      "h": 2560,
+      "look": "CHARACTER",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/036.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/036_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/036_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/036_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/037.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/037_full.jpg",
+      "thumb": "media/037_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "HERO",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/037.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/037_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/037_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/037_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/038_character.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/038_character_full.jpg",
+      "thumb": "media/038_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "CHARACTER",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/038.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/038_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/038_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/038_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/039.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/039_full.jpg",
+      "thumb": "media/039_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "HERO",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/039.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/039_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/039_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/039_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/040_character.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/040_character_full.jpg",
+      "thumb": "media/040_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "CHARACTER",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/040.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/040_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/040_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/040_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/041.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/041_full.jpg",
+      "thumb": "media/041_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "HERO",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/041.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/041_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/041_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/041_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/042_character.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/042_character_full.jpg",
+      "thumb": "media/042_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "CHARACTER",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/042.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/042_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/042_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/042_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/043.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/043_full.jpg",
+      "thumb": "media/043_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "HERO",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/043.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/043_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/043_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/043_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/044_character.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/044_character_full.jpg",
+      "thumb": "media/044_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "CHARACTER",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/044.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/044_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/044_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/044_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/045.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/045_full.jpg",
+      "thumb": "media/045_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "HERO",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/045.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/045_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/045_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/045_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/046_character.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/046_character_full.jpg",
+      "thumb": "media/046_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "CHARACTER",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/046.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/046_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/046_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/046_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/047.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/047_full.jpg",
+      "thumb": "media/047_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "HERO",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/047.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/047_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/047_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/047_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/048_character.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/048_character_full.jpg",
+      "thumb": "media/048_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "CHARACTER",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/048.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/048_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/048_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/048_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/049.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/049_full.jpg",
+      "thumb": "media/049_t.jpg",
+      "w": 1923,
+      "h": 2560,
+      "look": "HERO",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/049.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/049_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/049_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/049_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/050_character.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/050_character_full.jpg",
+      "thumb": "media/050_t.jpg",
+      "w": 1923,
+      "h": 2560,
+      "look": "CHARACTER",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/050.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/050_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/050_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/050_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/051.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/051_full.jpg",
+      "thumb": "media/051_t.jpg",
+      "w": 1923,
+      "h": 2560,
+      "look": "HERO",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/051.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/051_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/051_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/051_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/052_character.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/052_character_full.jpg",
+      "thumb": "media/052_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "CHARACTER",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/052.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/052_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/052_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/052_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/053.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/053_full.jpg",
+      "thumb": "media/053_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "HERO",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/053.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/053_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/053_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/053_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/054_character.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/054_character_full.jpg",
+      "thumb": "media/054_t.jpg",
+      "w": 1923,
+      "h": 2560,
+      "look": "CHARACTER",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/054.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/054_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/054_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/054_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/055.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/055_full.jpg",
+      "thumb": "media/055_t.jpg",
+      "w": 1923,
+      "h": 2560,
+      "look": "HERO",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/055.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/055_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/055_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/055_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/056_character.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/056_character_full.jpg",
+      "thumb": "media/056_t.jpg",
+      "w": 1923,
+      "h": 2560,
+      "look": "CHARACTER",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/056.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/056_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/056_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/056_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/057.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/057_full.jpg",
+      "thumb": "media/057_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "HERO",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/057.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/057_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/057_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/057_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/058_character.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/058_character_full.jpg",
+      "thumb": "media/058_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "CHARACTER",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/058.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/058_full.jpg"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/058_character.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/058_character_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "video",
+      "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-09-01-billy-release-party/v01.mp4",
+      "thumb": "media/v01_t.jpg",
+      "w": 520,
+      "h": 292,
+      "look": "HERO",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-09-01-billy-release-party/v01.mp4"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-09-01-billy-release-party/v01_character.mp4"
+        }
+      ]
+    },
+    {
+      "type": "video",
+      "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-09-01-billy-release-party/v02_character.mp4",
+      "thumb": "media/v02_t.jpg",
+      "w": 520,
+      "h": 924,
+      "look": "CHARACTER",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-09-01-billy-release-party/v02.mp4"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-09-01-billy-release-party/v02_character.mp4"
+        }
+      ]
+    },
+    {
+      "type": "video",
+      "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-09-01-billy-release-party/v03.mp4",
+      "thumb": "media/v03_t.jpg",
+      "w": 520,
+      "h": 924,
+      "look": "HERO",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-09-01-billy-release-party/v03.mp4"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-09-01-billy-release-party/v03_character.mp4"
+        }
+      ]
+    },
+    {
+      "type": "video",
+      "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-09-01-billy-release-party/v04_character.mp4",
+      "thumb": "media/v04_t.jpg",
+      "w": 520,
+      "h": 924,
+      "look": "CHARACTER",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-09-01-billy-release-party/v04.mp4"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-09-01-billy-release-party/v04_character.mp4"
+        }
+      ]
+    },
+    {
+      "type": "video",
+      "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-09-01-billy-release-party/v05.mp4",
+      "thumb": "media/v05_t.jpg",
+      "w": 520,
+      "h": 924,
+      "look": "HERO",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-09-01-billy-release-party/v05.mp4"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-09-01-billy-release-party/v05_character.mp4"
+        }
+      ]
+    },
+    {
+      "type": "video",
+      "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-09-01-billy-release-party/v06_character.mp4",
+      "thumb": "media/v06_t.jpg",
+      "w": 520,
+      "h": 292,
+      "look": "CHARACTER",
+      "looks": [
+        {
+          "name": "HERO",
+          "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-09-01-billy-release-party/v06.mp4"
+        },
+        {
+          "name": "CHARACTER",
+          "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-09-01-billy-release-party/v06_character.mp4"
+        }
+      ]
+    }
+  ]
+}

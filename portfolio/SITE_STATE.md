@@ -40,6 +40,22 @@ in `_reset.css` means `scrollTo` never lands under `--virtual-time-budget` -> se
 `performance.getEntriesByType('resource')`**, so an mp4 count of 0 there proves nothing; hook
 `HTMLMediaElement.prototype.play` or read `video.paused` instead.
 
+## NIGHTS grew four blocks: MIKE DIMES, LUCHA, MIGX, BURLESQUE (Sep 14 2026)
+
+`#nights` went 9 blocks to 13, all inserted after BRAINROT in shoot order: **MIKE DIMES** at Slackers
+(Sep 1, `assets/mikedimes/md_01..08.jpg`), **LUCHA NIGHT** at El Luchador Bar (Sep 12, `assets/lucha/lu_*`),
+**MIGX** at Mi Vaquita (Sep 12, `assets/migx/mx_*`), **BURLESQUE NIGHT** at Rah Rah Room (Sep 13,
+`assets/burlesque/bq_*`). The intro gained "a wrestling ring, an arcade bar".
+
+- Built by the repo-root **`nightsblock.py <config.json>`**, the generalised version of the Austin
+  shoot's `nights_block.py`: same recipe sizes and face-centred crops, `after` picks the block it
+  follows, re-running replaces in place, twins stay byte-identical (`cmp` verified).
+- Every frame came from the CLEARED set of that night's gallery (four-reviewer cull, `cull.json` in
+  each shoot's `_web/curate_*/`). The burlesque block deliberately uses the corset-and-gloves
+  performer, not the sheer-robe portrait, because this page is the hiring page.
+- Credits paragraphs link to the four public galleries on 0fftheprint.com.
+- THE WORK on the outlet gained one frame per night (`assets/work/w4-*.jpg`, derived).
+
 ## BRAINROT gallery went to two looks and lost its clips (Sep 12 2026)
 
 His call the same night: add the BRAINROT grade to the gallery and take that night's videos off.

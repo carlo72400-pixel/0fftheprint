@@ -75,11 +75,13 @@ def repage(ne, slug):
     #    window.OTPNight was never set, and the sealed pack silently vanished. The
     #    grid still rendered, which is exactly why it was easy to miss.
     # ⛔ json.dumps, not raw: a venue with an apostrophe would close the JS string.
+    looks = data.get("looks") or []
     night = json.dumps({"slug": slug, "title": data["title"],
                         "venue": data["venue"],
-                        "dateShort": data.get("date_short", "")})
+                        "dateShort": data.get("date_short", ""), "looks": looks})
     page = (ne.PAGE.replace("__NIGHT__", night)
                    .replace("__MEDIA__", json.dumps(items))
+                   .replace("__LOOKSLINE__", ne.looks_line(looks))
                    .replace("__TITLE__", data["title"])
                    .replace("__VENUE__", data["venue"])
                    .replace("__DATELONG__", datelong)

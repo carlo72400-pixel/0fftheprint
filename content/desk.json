@@ -1,6 +1,76 @@
 {
   "items": [
     {
+      "title": "Red on Red on Red",
+      "kicker": "THE NIGHT",
+      "dek": "A vendor market at five and a burlesque show at seven at the Rah Rah Room, shot in the hardest light in the city and printed four ways.",
+      "date": "09.14.26",
+      "lanes": [
+        "story"
+      ],
+      "dept": "story",
+      "platform": "SITE",
+      "thumb": "word/red-on-red-on-red/thumb.jpg",
+      "link": "word/red-on-red-on-red/",
+      "num": "0TP-022"
+    },
+    {
+      "title": "Bull Madrid, Then Everyone in Black",
+      "kicker": "THE NIGHT",
+      "dek": "An outdoor lucha ring at El Luchador at 8:48, then MIGX at Mi Vaquita under the biggest LED wall in the city. Three grades for the ring, five for the club.",
+      "date": "09.14.26",
+      "lanes": [
+        "story"
+      ],
+      "dept": "story",
+      "platform": "SITE",
+      "thumb": "word/bull-madrid-then-everyone-in-black/thumb.jpg",
+      "link": "word/bull-madrid-then-everyone-in-black/",
+      "num": "0TP-021"
+    },
+    {
+      "title": "Every Room a Different Colour",
+      "kicker": "THE NIGHT",
+      "dek": "A fundraiser house show in Austin, the first night this desk has shot outside San Antonio, graded twice: once as a party, once off the flyer.",
+      "date": "09.12.26",
+      "lanes": [
+        "story"
+      ],
+      "dept": "story",
+      "platform": "SITE",
+      "thumb": "word/every-room-a-different-colour/thumb.jpg",
+      "link": "word/every-room-a-different-colour/",
+      "num": "0TP-020"
+    },
+    {
+      "title": "The Night Before B.I.L.L.Y",
+      "kicker": "THE NIGHT",
+      "dek": "Mike Dimes threw the B.I.L.L.Y release party in an arcade bar the night before the album dropped. Fifty eight moments, two grades, all free to download.",
+      "date": "09.14.26",
+      "lanes": [
+        "story"
+      ],
+      "dept": "story",
+      "platform": "SITE",
+      "thumb": "word/the-night-before-b-i-l-l-y/thumb.jpg",
+      "link": "word/the-night-before-b-i-l-l-y/",
+      "num": "0TP-019"
+    },
+    {
+      "title": "The Afterparty Is the San Antonio Date",
+      "kicker": "THE RUN",
+      "dek": "Young Thug plays Austin on September 30 and skips San Antonio, so 3|OAK is throwing the official after party with Thug on the bill.",
+      "date": "09.14.26",
+      "lanes": [
+        "story"
+      ],
+      "dept": "story",
+      "platform": "SITE",
+      "thumb": "word/the-afterparty-is-the-san-antonio-date/thumb.jpg",
+      "link": "word/the-afterparty-is-the-san-antonio-date/",
+      "num": "0TP-018"
+    },
+    {
       "title": "San Antonio Goes First",
       "kicker": "THE ARENA",
       "dek": "J. Cole opens the Texas leg of The Fall-Off World Tour at the Frost Bank Center on September 13. Austin gets him the next night, then Houston twice and Dallas twice.",

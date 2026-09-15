@@ -1,7 +1,7 @@
 # Image credits — THE WORD
 
 Every story cover, where it came from, and what the licence actually lets us do.
-Sourced and licence-verified 2026-08-27, extended 2026-09-02. The credit line also appears on each
+Sourced and licence-verified 2026-08-27, extended 2026-09-02 and 2026-09-14. The credit line also appears on each
 story page itself, under the cover, which is where attribution legally belongs.
 
 ⛔ **Do not swap a cover without updating this file and the page's credit line.**
@@ -10,6 +10,11 @@ All of these are cropped, so all of them say "Cropped."
 
 | № | Story | Image | Source | Licence |
 |---|---|---|---|---|
+| 0TP-022 | Red on Red on Red | A performer in a corset and gloves on the Rah Rah Room stage | **Ours.** Shot by the house | House |
+| 0TP-021 | Bull Madrid, Then Everyone in Black | The face-off at El Luchador; tile is the DJ under the MIGX wall at Mi Vaquita | **Ours.** Shot by the house | House |
+| 0TP-020 | Every Room a Different Colour | The dance floor at New Guild Co-op; tile is the corset portrait on the porch | **Ours.** Shot by the house | House |
+| 0TP-019 | The Night Before B.I.L.L.Y | Mike Dimes at the DJ booth at Slackers; tile is the hand-signs frame | **Ours.** Shot by the house | House |
+| 0TP-018 | The Afterparty Is the San Antonio Date | Young Thug at Openair Frauenfeld, Switzerland, July 2019 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Young_Thug_-_Openair_Frauenfeld_2019_20.jpg) · Frank Schwichtenberg | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
 | 0TP-017 | San Antonio Goes First | J. Cole at the Air Canada Centre, Toronto, 4 Your Eyez Only Tour, Jul 2017 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Cole_2017.jpg) · The Come Up Show | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/) |
 | 0TP-016 | Get There Early | xaviersobased at Baby's All Right, Brooklyn, Feb 2023 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Xaviersobased_(2-2-23).jpg) · Ninecalling | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
 | 0TP-015 | The Blood Countess Is Playing Austin | Robert Eggers at Fantastic Fest 2015 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Robert_Eggers_-_The_Witch,Fantastic_Fest_2015-1667_(28894993650).jpg) · anna Hanks | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/) |
@@ -29,12 +34,12 @@ in the 9/2 pass: a Ken Carson live shot tagged "License review needed" (an unrev
 frame), and an Elizabeth Bathory painting claiming CC BY-SA as "own work", which does not hold up
 for a historical portrait. Neither shipped.
 
-**SHARE-ALIKE.** 0TP-008 and 0TP-006 are CC BY-SA. Our cropped version of those two
-images carries the same licence, meaning somebody else may reuse those two covers
-under BY-SA. It stops at those two images. It does not touch the writing, the rest
+**SHARE-ALIKE.** 0TP-018, 0TP-008 and 0TP-006 are CC BY-SA. Our cropped version of those three
+images carries the same licence, meaning somebody else may reuse those three covers
+under BY-SA. It stops at those three images. It does not touch the writing, the rest
 of the site, or anything else in this repo.
 
-**PERSONALITY RIGHTS.** The Kane Parsons file carries a personality-rights notice on
+**PERSONALITY RIGHTS.** The Kane Parsons and Young Thug files carry a personality-rights notice on
 Commons. Editorial use in a story about him is fine. Do not move that photo into a
 roster tile, a partner badge, or anywhere next to a services pitch, because that
 would read as an endorsement he never gave.

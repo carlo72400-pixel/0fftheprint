@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Red on Red on Red · 0FF THE PRINT</title>
+<meta name="description" content="A vendor market at five and a burlesque show at seven at the Rah Rah Room, shot in the hardest light in the city and printed four ways.">
+<meta property="og:title" content="Red on Red on Red">
+<meta property="og:description" content="A vendor market at five and a burlesque show at seven at the Rah Rah Room, shot in the hardest light in the city and printed four ways.">
+<meta property="og:image" content="https://0fftheprint.com/word/red-on-red-on-red/cover.jpg">
+<meta property="og:type" content="article">
+<meta name="theme-color" content="#0a0a0d">
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#f2eef5;--muted:#8d8798;--line:rgba(255,255,255,.1);--pink:#ff79c6;--bg:#0a0a0d}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif}
+  .leopard-bar{height:7px;background:linear-gradient(90deg,#ff79c6,#caa9ff,#2f6bff,#ff79c6);background-size:300% 100%}
+  .wrap{max-width:720px;margin:0 auto;padding:34px 20px 90px}
+  a.back{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--muted);text-decoration:none}
+  a.back:hover{color:var(--pink)}
+  .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.3em;
+    text-transform:uppercase;color:var(--pink);margin:34px 0 10px}
+  h1{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
+    text-transform:uppercase;font-size:clamp(34px,7vw,56px);line-height:.98}
+  .dek{font-size:17px;line-height:1.6;color:var(--muted);margin-top:14px}
+  .byline{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted);margin:18px 0 26px;
+    padding-bottom:18px;border-bottom:1px solid var(--line)}
+  .byline b{color:var(--ink)}
+  .cover{margin:0 0 8px;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+  .cover img{width:100%;display:block}
+  .cover-credit{font-family:'JetBrains Mono',monospace;font-size:10px;
+    letter-spacing:.06em;color:var(--muted);margin:8px 0 30px;line-height:1.5}
+  .cover-credit a{color:var(--muted);text-decoration:underline}
+  article{font-size:17.5px;line-height:1.85}
+  article p{margin:0 0 22px}
+  article h2{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
+    text-transform:uppercase;font-size:27px;margin:38px 0 14px}
+  article a{color:var(--pink);text-decoration:none}
+  article a:hover{text-decoration:underline}
+  article blockquote{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
+    font-size:26px;line-height:1.2;text-transform:uppercase;color:var(--pink);
+    border-left:3px solid var(--pink);padding-left:18px;margin:32px 0}
+  article figure{margin:30px -20px}
+  article figure img,article figure video{width:100%;display:block;border-radius:0;background:#000}
+  article figure.clip video{width:auto;max-width:100%;max-height:82vh;aspect-ratio:9/16;margin:0 auto}
+  article figcaption{font-family:'JetBrains Mono',monospace;font-size:10.5px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+    padding:10px 20px 0;text-align:center}
+  @media(min-width:760px){article figure{margin:30px 0}
+    article figure img,article figure video{border-radius:12px}
+    article figcaption{padding:10px 0 0}}
+  .foot{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);
+    font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted)}
+  .foot a{color:var(--pink);text-decoration:none}
+  .wall{max-width:680px;margin:34px auto 0;padding-top:26px;border-top:1px solid var(--line)}
+  .wall h2{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;font-size:22px;text-transform:uppercase;margin-bottom:14px}
+  .wall-entry{border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-bottom:10px}
+  .we-by{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--pink);margin-bottom:6px}
+  .we-text{font-size:15px;line-height:1.65;color:var(--ink);overflow-wrap:anywhere}
+  .we-none,.we-pending,.we-msg{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);line-height:1.7}
+  .we-msg{color:#ff6a7e;min-height:16px;margin-top:6px}
+  #wall-compose textarea{width:100%;background:#111016;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:12px;font-size:16px;font-family:Inter,sans-serif;margin-top:8px}
+  .we-row{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+  .we-count{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+  .we-row button,.we-pending button{background:transparent;color:var(--pink);border:1px solid var(--pink);border-radius:7px;padding:9px 16px;font-size:13px;cursor:pointer;min-height:40px}
+</style>
+</head>
+<body>
+<div class="leopard-bar"></div>
+<div class="wrap">
+  <a class="back" href="../../#desk">&larr; The Word · 0FF THE PRINT</a>
+  <div class="kicker">THE NIGHT</div>
+  <h1>Red on Red on Red</h1>
+  <div class="dek">A vendor market at five and a burlesque show at seven at the Rah Rah Room, shot in the hardest light in the city and printed four ways.</div>
+  <div class="byline">0TP-022 &nbsp;·&nbsp; <b>0FF THE PRINT</b> &nbsp;·&nbsp; San Antonio &nbsp;·&nbsp; SEP 14, 2026</div>
+  <div class="cover"><img src="cover.jpg" alt=""></div>
+
+  <article data-stamp="98d0e348">
+<p>The Rah Rah Room does this thing where the afternoon and the night are two different businesses in the same building. At five it is a vendor market under the skylights: tarot pulls and spell candles for ten dollars, hand painted skate decks, oddities, a diorama with a sign reading POPULATION: WUN that turned out to be WUN MOR's table, which is to say one of this house's own roster was selling out of a booth before the show. By seven the tables are gone and the red velvet curtain is lit red and it is a burlesque night.</p>
+<h2>Six acts</h2>
+<p>Feather fans. A green corset and long gloves. A cape that came off to black lingerie. Red on red on red. A headdress showgirl. A corset with garters. An MC in between who kept the room exactly as loud as it needed to be. Every act got its own clip and its own stack of frames pulled from the video, chosen for the pose, not for the pixels.</p>
+<p>The room is the hardest lighting problem in the city and it is not close. A red wash on red velvet is close to monochrome: on five of the eight stage clips the green and blue channels sit at one to five percent of the red. A face detector finds nothing because there is no colour to find. So the readability of every frame was judged on its red channel alone, the only one carrying information, and the grades were built to keep the red rich and pull it from orange toward crimson instead of letting it go flat.</p>
+<h2>Four prints</h2>
+<p>RED VELVET is the room's own grade: red kept rich, magenta and violet louder for the LED tables, gold in the sequins and the spotlight, halation on the lights. INSOMNIA is the movie grade, the one look of fifteen tried that goes cool on this room without clipping a single frame. Then two dark ones, made on purpose the morning after: OXBLOOD, the red leaned into, wine and gold and a black floor; and OXWULF, which crosses OXBLOOD with the look of Robert Eggers' Werwulf, colour film graded to read like orthochromatic stock, partly blind to red, muted, cold in the shadows, with black-and-white grain over the colour. The reds survive as dusty wine instead of dying to grey.</p>
+<p>Every portrait got a retouch pass in Photoshop on real layers, before the grain, so the flash portraits in front of the curtain read soft and dramatic instead of hot. The stage frames were left exactly as lit, because that lighting is the performer's and it was already right.</p>
+<h2>Where it lives</h2>
+<p><a href="https://0fftheprint.com/events/2026-09-13-burlesque-night/" target="_blank" rel="noopener">Forty four moments from the afternoon and the show</a>, each in all four grades, full quality, free to download, plus the act clips. If you were on that stage or at one of those tables you are probably in one of them.</p>
+<p>Rah Rah Room, San Antonio, Sunday 13 September 2026, twenty past five until nine.</p>
+  </article>
+  <section class="wall" id="wall" data-story="red-on-red-on-red" hidden>
+    <h2>From the floor</h2>
+    <div id="wall-entries"></div>
+    <div id="wall-compose"></div>
+  </section>
+  <div class="foot">Every drop gets a number. This one is 0TP-022. <a href="../../#desk">Back to The Word &rarr;</a></div>
+</div>
+<script src="../../supabase-config.js?v=f1348482"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="../../assets/js/desk.js?v=32f116ac" defer></script>
+<script src="../../assets/js/word.js?v=faaae268" defer></script>
+</body>
+</html>
