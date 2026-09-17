@@ -1,6 +1,15 @@
 {
   "items": [
     {
+      "slug": "2026-09-16-sadboyz-club",
+      "title": "Sadboyz Club",
+      "venue": "Wav Room",
+      "date": "2026-09-16",
+      "date_short": "09.16.26",
+      "count": 59,
+      "cover": "2026-09-16-sadboyz-club/media/021_t.jpg"
+    },
+    {
       "slug": "2026-09-13-burlesque-night",
       "title": "Burlesque Night",
       "venue": "Rah Rah Room",
