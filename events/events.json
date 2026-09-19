@@ -1,112 +1,139 @@
 {
-  "items": [
-    {
-      "slug": "2026-09-16-sadboyz-club",
-      "title": "Sadboyz Club",
-      "venue": "Wav Room",
-      "date": "2026-09-16",
-      "date_short": "09.16.26",
-      "count": 59,
-      "cover": "2026-09-16-sadboyz-club/media/021_t.jpg"
-    },
-    {
-      "slug": "2026-09-13-burlesque-night",
-      "title": "Burlesque Night",
-      "venue": "Rah Rah Room",
-      "date": "2026-09-13",
-      "date_short": "09.13.26",
-      "count": 50,
-      "cover": "2026-09-13-burlesque-night/media/034_t.jpg"
-    },
-    {
-      "slug": "2026-09-12-lucha-night",
-      "title": "Lucha Night",
-      "venue": "El Luchador Bar",
-      "date": "2026-09-12",
-      "date_short": "09.12.26",
-      "count": 29,
-      "cover": "2026-09-12-lucha-night/media/011_t.jpg"
-    },
-    {
-      "slug": "2026-09-12-migx",
-      "title": "MIGX",
-      "venue": "Mi Vaquita",
-      "date": "2026-09-12",
-      "date_short": "09.12.26",
-      "count": 42,
-      "cover": "2026-09-12-migx/media/003_t.jpg"
-    },
-    {
-      "slug": "2026-09-11-brainrot",
-      "title": "Brainrot",
-      "venue": "New Guild Co-op",
-      "date": "2026-09-11",
-      "date_short": "09.11.26",
-      "count": 120,
-      "cover": "2026-09-11-brainrot/media/053_t.jpg"
-    },
-    {
-      "slug": "2026-09-01-billy-release-party",
-      "title": "B.I.L.L.Y Release Party",
-      "venue": "Slackers",
-      "date": "2026-09-01",
-      "date_short": "09.01.26",
-      "count": 64,
-      "cover": "2026-09-01-billy-release-party/media/056_t.jpg"
-    },
-    {
-      "slug": "2026-08-30-clown-church",
-      "title": "Clown Church",
-      "venue": "Rah Rah Room",
-      "date": "2026-08-30",
-      "date_short": "08.30.26",
-      "count": 48,
-      "cover": "2026-08-30-clown-church/media/001_t.jpg"
-    },
-    {
-      "slug": "2026-08-25-the-mix",
-      "title": "Resident Evil vs Silent Hill",
-      "venue": "The Mix",
-      "date": "2026-08-25",
-      "date_short": "08.25.26",
-      "count": 38,
-      "cover": "2026-08-25-the-mix/media/001_t.jpg"
-    },
-    {
-      "slug": "2026-08-23-the-showcase",
-      "title": "The Showcase",
-      "venue": "The Mix",
-      "date": "2026-08-23",
-      "date_short": "08.23.26",
-      "count": 60,
-      "cover": "2026-08-23-the-showcase/media/001_t.jpg"
-    },
-    {
-      "slug": "2026-08-21-zen-haus",
-      "title": "Third Friday Night Market",
-      "venue": "Zen Haus",
-      "date": "2026-08-21",
-      "date_short": "08.21.26",
-      "count": 40,
-      "cover": "2026-08-21-zen-haus/media/001_t.jpg"
-    },
-    {
-      "slug": "2026-08-16-the-mix",
-      "title": "The Mix",
-      "venue": "The Mix",
-      "date": "2026-08-16",
-      "date_short": "08.16.26",
-      "count": 47,
-      "cover": "2026-08-16-the-mix/media/001_t.jpg"
-    },
-    {
-      "slug": "2026-08-14-blade-rave",
-      "title": "Blade Rave",
-      "venue": "Paper Tiger",
-      "date": "2026-08-14",
-      "date_short": "08.14.26",
-      "count": 48,
-      "cover": "2026-08-14-blade-rave/media/001_t.jpg"
-    }
-  ]
+ "items": [
+  {
+   "slug": "2026-09-18-zen-haus",
+   "title": "Third Friday Night Market",
+   "venue": "Zen Haus",
+   "date": "2026-09-18",
+   "date_short": "09.18.26",
+   "count": 50,
+   "cover": "2026-09-18-zen-haus/media/009_t.jpg"
+  },
+  {
+   "slug": "2026-09-18-baptism",
+   "title": "BAPTISM",
+   "venue": "The Deco",
+   "date": "2026-09-18",
+   "date_short": "09.18.26",
+   "count": 60,
+   "cover": "2026-09-18-baptism/media/044_t.jpg"
+  },
+  {
+   "slug": "2026-09-17-bar-hop",
+   "title": "Bar Hop",
+   "venue": "Club 212 \u00b7 Bar House",
+   "date": "2026-09-17",
+   "date_short": "09.17.26",
+   "count": 39,
+   "cover": "2026-09-17-bar-hop/media/030_t.jpg"
+  },
+  {
+   "slug": "2026-09-16-sadboyz-club",
+   "title": "Sadboyz Club",
+   "venue": "Wav Room",
+   "date": "2026-09-16",
+   "date_short": "09.16.26",
+   "count": 59,
+   "cover": "2026-09-16-sadboyz-club/media/021_t.jpg"
+  },
+  {
+   "slug": "2026-09-13-burlesque-night",
+   "title": "Burlesque Night",
+   "venue": "Rah Rah Room",
+   "date": "2026-09-13",
+   "date_short": "09.13.26",
+   "count": 50,
+   "cover": "2026-09-13-burlesque-night/media/034_t.jpg"
+  },
+  {
+   "slug": "2026-09-12-lucha-night",
+   "title": "Lucha Night",
+   "venue": "El Luchador Bar",
+   "date": "2026-09-12",
+   "date_short": "09.12.26",
+   "count": 29,
+   "cover": "2026-09-12-lucha-night/media/011_t.jpg"
+  },
+  {
+   "slug": "2026-09-12-migx",
+   "title": "MIGX",
+   "venue": "Mi Vaquita",
+   "date": "2026-09-12",
+   "date_short": "09.12.26",
+   "count": 42,
+   "cover": "2026-09-12-migx/media/003_t.jpg"
+  },
+  {
+   "slug": "2026-09-11-brainrot",
+   "title": "Brainrot",
+   "venue": "New Guild Co-op",
+   "date": "2026-09-11",
+   "date_short": "09.11.26",
+   "count": 120,
+   "cover": "2026-09-11-brainrot/media/053_t.jpg"
+  },
+  {
+   "slug": "2026-09-01-billy-release-party",
+   "title": "B.I.L.L.Y Release Party",
+   "venue": "Slackers",
+   "date": "2026-09-01",
+   "date_short": "09.01.26",
+   "count": 64,
+   "cover": "2026-09-01-billy-release-party/media/056_t.jpg"
+  },
+  {
+   "slug": "2026-08-30-clown-church",
+   "title": "Clown Church",
+   "venue": "Rah Rah Room",
+   "date": "2026-08-30",
+   "date_short": "08.30.26",
+   "count": 48,
+   "cover": "2026-08-30-clown-church/media/001_t.jpg"
+  },
+  {
+   "slug": "2026-08-25-the-mix",
+   "title": "Resident Evil vs Silent Hill",
+   "venue": "The Mix",
+   "date": "2026-08-25",
+   "date_short": "08.25.26",
+   "count": 38,
+   "cover": "2026-08-25-the-mix/media/001_t.jpg"
+  },
+  {
+   "slug": "2026-08-23-the-showcase",
+   "title": "The Showcase",
+   "venue": "The Mix",
+   "date": "2026-08-23",
+   "date_short": "08.23.26",
+   "count": 60,
+   "cover": "2026-08-23-the-showcase/media/001_t.jpg"
+  },
+  {
+   "slug": "2026-08-21-zen-haus",
+   "title": "Third Friday Night Market",
+   "venue": "Zen Haus",
+   "date": "2026-08-21",
+   "date_short": "08.21.26",
+   "count": 40,
+   "cover": "2026-08-21-zen-haus/media/001_t.jpg"
+  },
+  {
+   "slug": "2026-08-16-the-mix",
+   "title": "The Mix",
+   "venue": "The Mix",
+   "date": "2026-08-16",
+   "date_short": "08.16.26",
+   "count": 47,
+   "cover": "2026-08-16-the-mix/media/001_t.jpg"
+  },
+  {
+   "slug": "2026-08-14-blade-rave",
+   "title": "Blade Rave",
+   "venue": "Paper Tiger",
+   "date": "2026-08-14",
+   "date_short": "08.14.26",
+   "count": 48,
+   "cover": "2026-08-14-blade-rave/media/001_t.jpg"
+  }
+ ]
 }

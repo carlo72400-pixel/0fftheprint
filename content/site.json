@@ -1,74 +1,74 @@
 {
-  "site_name": "0FF THE PRINT",
-  "handle": "@vamppsych",
-  "city": "San Antonio",
-  "kicker": "MEDIA HOUSE · SAN ANTONIO TX · SINCE WE FELT LIKE IT",
-  "pulse_line_1": "THE CITY GOES DARK.",
-  "pulse_line_2": "WE CLOCK IN.",
-  "pulse_route": "ZEN HAUS FRI · THE MIX · RAH RAH ROOM · PAPER TIGER · EL LUCHADOR · MI VAQUITA · SLACKERS · NEW GUILD ATX · HOME BY 3",
-  "one_liner": "Underground media house in San Antonio. Interviews, night photos, shows, music visuals, all of it shot while the work is happening.",
-  "social": {
-    "instagram": "https://instagram.com/vamppsych",
-    "tiktok": "https://www.tiktok.com/@vamp.psych",
-    "youtube": "https://www.youtube.com/@Vamppsych"
-  },
-  "ticker_headlines": [
-    "NO COMMENTS. NO ALGORITHM. IF YOU HOLD A CARD, YOU HOLD A LOGIN.",
-    "TEN CARDS OUT. THE DOOR IS STILL OPEN.",
-    "OFF THE RECORD STAYS OFF THE RECORD",
-    "THE SUBJECT SEES THE CUT BEFORE ANYBODY ELSE",
-    "NOBODY SITS AGAINST A WALL",
-    "EVERY DROP GETS A NUMBER",
-    "KAV-MAN · VIRGOSGATEWAY · WRATHFOL",
-    "KURLYTOP · HAZE DT · WUN MOR",
-    "SINIK · JOSH FUEGO · THE INK · VAMPPSYCH",
-    "ON ROTATION: VIRGOSGATEWAY · 2 HI / YOU TRIED IT",
-    "ZENHOUSE FRIDAYS. WE PEAK AROUND 2 AM.",
-    "STILL IN SAN ANTONIO. STILL NOT LEAVING."
-  ],
-  "house_quote": "The soul becomes dyed with the color of its thoughts.",
-  "house_quote_attribution": "Marcus Aurelius",
-  "house_quote_highlight": "dyed",
-  "mic_check": {
-    "studio": "San Antonio, TX",
-    "founded": "2026 · vol. 1",
-    "what_it_is": "Underground media house",
-    "pillars": "Music · Scene · Interviews · The Take",
-    "the_roster": "KAV-MAN · VIRGOSGATEWAY · WRATHFOL · KURLYTOP · HAZE DT · WUN MOR · SINIK · JOSH FUEGO · THE INK · VAMPPSYCH",
-    "territory": "San Antonio, and wherever the work takes us",
-    "the_rooms": "Zenhouse · The Mix · Rah Rah Room · Paper Tiger · New Guild Co-op · El Luchador · Mi Vaquita · Slackers · Wav Room",
-    "vibe": "Pretty-first, with teeth.",
-    "the_lens": "VampPsych · FX6 / Insta360",
-    "palette": "Pastel pink + chrome + feral black, dye-blue accent",
-    "signature": "The pink leopard. One bold hit per asset.",
-    "voice": "Insider · opinionated · provocative",
-    "not_interested_in": "Corporate. Algorithms. Permission."
-  },
-  "pitch": {
-    "title": "Pitch Us",
-    "accent": "get on the desk",
-    "sub": "slide it under the door. we answer it ourselves.",
-    "lead": "The desk answers its own messages. DMs for the pitch, email for the paperwork.",
-    "btn_label": "DM The Lens",
-    "btn_sub": "@vamppsych · interviews · scene tips · footage",
-    "btn_href": "https://instagram.com/vamppsych",
-    "btn2_label": "Email The Desk",
-    "btn2_sub": "offtheprintcollective@gmail.com · bookings · quotes · paperwork",
-    "btn2_href": "mailto:offtheprintcollective@gmail.com",
-    "fine": "Give us the energy in one paragraph. Say what's on the record and what's off. Off the record stays off the record."
-  },
-  "why": {
-    "title": "Why",
-    "accent": "we're the experts",
-    "sub": "credentials · craft · receipts",
-    "name": "VampPsych",
-    "role": "The Lens",
-    "bullets": [
-      "Cinematographer · Full Sail Digital Cinematography · Sony FX6 + Insta360 fleet",
-      "Directed VOLUME · music videos + campaign visuals for SA artists",
-      "In the rooms weekly: Zenhouse, The Mix, Paper Tiger, the raves, the Strip",
-      "Concert documentation: Carti, Ken Carson, Snow Strippers, BKtheRula",
-      "Brand systems + Illustrator label work · gothic essays as Vamppsych"
-    ]
-  }
+ "site_name": "0FF THE PRINT",
+ "handle": "@vamppsych",
+ "city": "San Antonio",
+ "kicker": "MEDIA HOUSE · SAN ANTONIO TX · SINCE WE FELT LIKE IT",
+ "pulse_line_1": "THE CITY GOES DARK.",
+ "pulse_line_2": "WE CLOCK IN.",
+ "pulse_route": "ZEN HAUS FRI · THE MIX · RAH RAH ROOM · PAPER TIGER · EL LUCHADOR · MI VAQUITA · SLACKERS · NEW GUILD ATX · HOME BY 3",
+ "one_liner": "Underground media house in San Antonio. Interviews, night photos, shows, music visuals, all of it shot while the work is happening.",
+ "social": {
+  "instagram": "https://instagram.com/vamppsych",
+  "tiktok": "https://www.tiktok.com/@vamp.psych",
+  "youtube": "https://www.youtube.com/@Vamppsych"
+ },
+ "ticker_headlines": [
+  "NO COMMENTS. NO ALGORITHM. IF YOU HOLD A CARD, YOU HOLD A LOGIN.",
+  "TEN CARDS OUT. THE DOOR IS STILL OPEN.",
+  "OFF THE RECORD STAYS OFF THE RECORD",
+  "THE SUBJECT SEES THE CUT BEFORE ANYBODY ELSE",
+  "NOBODY SITS AGAINST A WALL",
+  "EVERY DROP GETS A NUMBER",
+  "KAV-MAN · VIRGOSGATEWAY · WRATHFOL",
+  "KURLYTOP · HAZE DT · WUN MOR",
+  "SINIK · JOSH FUEGO · THE INK · VAMPPSYCH",
+  "ON ROTATION: VIRGOSGATEWAY · 2 HI / YOU TRIED IT",
+  "ZENHOUSE FRIDAYS. WE PEAK AROUND 2 AM.",
+  "STILL IN SAN ANTONIO. STILL NOT LEAVING."
+ ],
+ "house_quote": "The soul becomes dyed with the color of its thoughts.",
+ "house_quote_attribution": "Marcus Aurelius",
+ "house_quote_highlight": "dyed",
+ "mic_check": {
+  "studio": "San Antonio, TX",
+  "founded": "2026 · vol. 1",
+  "what_it_is": "Underground media house",
+  "pillars": "Music · Scene · Interviews · The Take",
+  "the_roster": "KAV-MAN · VIRGOSGATEWAY · WRATHFOL · KURLYTOP · HAZE DT · WUN MOR · SINIK · JOSH FUEGO · THE INK · VAMPPSYCH",
+  "territory": "San Antonio, and wherever the work takes us",
+  "the_rooms": "Zenhouse · The Mix · Rah Rah Room · Paper Tiger · New Guild Co-op · El Luchador · Mi Vaquita · Slackers · Wav Room · The Deco · Bar House · Club 212",
+  "vibe": "Pretty-first, with teeth.",
+  "the_lens": "VampPsych · FX6 / Insta360",
+  "palette": "Pastel pink + chrome + feral black, dye-blue accent",
+  "signature": "The pink leopard. One bold hit per asset.",
+  "voice": "Insider · opinionated · provocative",
+  "not_interested_in": "Corporate. Algorithms. Permission."
+ },
+ "pitch": {
+  "title": "Pitch Us",
+  "accent": "get on the desk",
+  "sub": "slide it under the door. we answer it ourselves.",
+  "lead": "The desk answers its own messages. DMs for the pitch, email for the paperwork.",
+  "btn_label": "DM The Lens",
+  "btn_sub": "@vamppsych · interviews · scene tips · footage",
+  "btn_href": "https://instagram.com/vamppsych",
+  "btn2_label": "Email The Desk",
+  "btn2_sub": "offtheprintcollective@gmail.com · bookings · quotes · paperwork",
+  "btn2_href": "mailto:offtheprintcollective@gmail.com",
+  "fine": "Give us the energy in one paragraph. Say what's on the record and what's off. Off the record stays off the record."
+ },
+ "why": {
+  "title": "Why",
+  "accent": "we're the experts",
+  "sub": "credentials · craft · receipts",
+  "name": "VampPsych",
+  "role": "The Lens",
+  "bullets": [
+   "Cinematographer · Full Sail Digital Cinematography · Sony FX6 + Insta360 fleet",
+   "Directed VOLUME · music videos + campaign visuals for SA artists",
+   "In the rooms weekly: Zenhouse, The Mix, Paper Tiger, the raves, the Strip",
+   "Concert documentation: Carti, Ken Carson, Snow Strippers, BKtheRula",
+   "Brand systems + Illustrator label work · gothic essays as Vamppsych"
+  ]
+ }
 }

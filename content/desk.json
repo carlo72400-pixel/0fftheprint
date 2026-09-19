@@ -1,6 +1,48 @@
 {
   "items": [
     {
+      "title": "Silver, Blood and Lapis",
+      "kicker": "THE NIGHT",
+      "dek": "A goth rave at The Deco in a room lit almost entirely red, printed as a silver plate with three inks laid back over it by hand.",
+      "date": "09.19.26",
+      "lanes": [
+        "story"
+      ],
+      "dept": "story",
+      "platform": "SITE",
+      "thumb": "word/silver-blood-and-lapis/thumb.jpg",
+      "link": "word/silver-blood-and-lapis/",
+      "num": "0TP-025"
+    },
+    {
+      "title": "The Trees Came Out Crimson",
+      "kicker": "THE NIGHT",
+      "dek": "Third Friday at St. Paul Square, printed twice: once as it looked, once on colour infrared where every tree in the square goes red.",
+      "date": "09.19.26",
+      "lanes": [
+        "story"
+      ],
+      "dept": "story",
+      "platform": "SITE",
+      "thumb": "word/the-trees-came-out-crimson/thumb.jpg",
+      "link": "word/the-trees-came-out-crimson/",
+      "num": "0TP-024"
+    },
+    {
+      "title": "The Room Was Dead So We Left",
+      "kicker": "THE NIGHT",
+      "dek": "Club 212 emptied out, so Thursday moved to a rooftop, a chevron bar on North Alamo and one last blue room at ten to three.",
+      "date": "09.19.26",
+      "lanes": [
+        "story"
+      ],
+      "dept": "story",
+      "platform": "SITE",
+      "thumb": "word/the-room-was-dead-so-we-left/thumb.jpg",
+      "link": "word/the-room-was-dead-so-we-left/",
+      "num": "0TP-023"
+    },
+    {
       "title": "Red on Red on Red",
       "kicker": "THE NIGHT",
       "dek": "A vendor market at five and a burlesque show at seven at the Rah Rah Room, shot in the hardest light in the city and printed four ways.",
