@@ -102,10 +102,15 @@
 
   // Paging the grid back before today needs the archive, which is not loaded
   // until something asks for it.
+  // ⛔ THE CURRENT MONTH NEEDS IT TOO. OTP.calendar() starts at today, so on
+  //    the 20th the grid painted an empty first three weeks while nine shot
+  //    nights sat in the table, and they only appeared if you paged to the
+  //    month before and back. A month is "past enough" the moment it contains
+  //    any day before today, which the current month always does after the 1st.
   async function ensurePastFor(y, mo) {
     if (loadedPast) return;
     var n = new Date();
-    if (y > n.getFullYear() || (y === n.getFullYear() && mo >= n.getMonth())) return;
+    if (y > n.getFullYear() || (y === n.getFullYear() && mo > n.getMonth())) return;
     loadedPast = true;
     try { pastRows = await OTP.calendarPast(200); } catch (e) { pastRows = []; }
   }
@@ -147,6 +152,14 @@
       onPick: jumpTo,
       onMonth: async function (y, mo) { await ensurePastFor(y, mo); paint(); }
     });
+    // First paint of the month the viewer lands on: pull the archive once so the
+    // days before today in THIS month are not blank. Repaint only if it added rows.
+    if (!loadedPast) {
+      var nw = new Date();
+      ensurePastFor(nw.getFullYear(), nw.getMonth()).then(function () {
+        if ((pastRows || []).length) paint();
+      });
+    }
 
     if (!rows.length) {
       var e = d.createElement('div');
