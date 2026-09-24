@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hill Country Getaway Picks</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Scenic glamping, cabins, lodges and houses near San Antonio, Austin, San Marcos and Marble Falls where Grandma doesn't have to walk far.">
+<meta property="og:title" content="Hill Country Getaway Picks">
+<meta property="og:description" content="Scenic stays where you step out to the view and Grandma doesn't have to walk far. Sorted by price and scenery.">
+<meta property="og:image" content="https://0fftheprint.com/portfolio/getaway/preview.jpg">
+<meta property="og:url" content="https://0fftheprint.com/portfolio/getaway/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="color-scheme" content="light">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=Fraunces:opsz,wght@9..144,600;9..144,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f1e7; --card:#fffdf8; --ink:#2a2622; --muted:#6b6259; --line:#e4dccd;
+  --sage:#5f7a5b; --sage-soft:#e3ebdf; --sun:#c8692e; --sun-soft:#f8e3d3;
+  --sky:#3f6f8f; --sky-soft:#dde9f1; --gold:#b58a1b; --gold-soft:#f4ead0;
+  --red:#a8412f; --red-soft:#f5dcd6;
+  --r:14px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:18.5px/1.55 "Source Sans 3",system-ui,sans-serif}
+a{color:var(--sky)}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;line-height:1.15;margin:0}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+header.hero{background:linear-gradient(180deg,#e9dcc3 0%,var(--bg) 100%);padding:40px 0 26px;border-bottom:1px solid var(--line)}
+.hero h1{font-size:clamp(34px,7vw,56px);font-weight:800;letter-spacing:-.5px}
+.hero p.lede{font-size:20px;max-width:720px;margin:14px 0 0;color:#3d3731}
+.hero .meta{margin-top:14px;font-size:15px;color:var(--muted)}
+nav.jump{position:sticky;top:0;z-index:5;background:rgba(246,241,231,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+nav.jump .wrap{display:flex;gap:8px;overflow-x:auto;padding-top:10px;padding-bottom:10px;scrollbar-width:none}
+nav.jump a{flex:0 0 auto;text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:99px;padding:7px 14px;font-size:15px;font-weight:700}
+section{padding:34px 0 8px}
+section h2{font-size:clamp(26px,5vw,34px);margin-bottom:8px}
+section .sub{color:var(--muted);margin:0 0 18px;max-width:760px}
+.key{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-bottom:8px}
+.key div{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;font-size:16px}
+.key b{display:block;font-size:17px;margin-bottom:4px}
+.badge{display:inline-flex;align-items:center;gap:4px;border-radius:8px;padding:2px 9px;font-size:14px;font-weight:700;white-space:nowrap;border:1px solid transparent}
+.b-price{background:var(--gold-soft);color:#7a5c0e;border-color:#e6d6a8}
+.b-S{background:#2f4a2c;color:#fff}.b-A{background:var(--sage);color:#fff}.b-B{background:var(--sage-soft);color:#35502f}.b-C{background:#eee9df;color:#5c554c}
+.b-Easy{background:var(--sky);color:#fff}.b-OK{background:var(--sky-soft);color:#24506d}.b-Tough{background:var(--red-soft);color:var(--red)}
+.b-kind{background:#efe8da;color:#4d463e}
+.picks{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.pick{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:8px;box-shadow:0 1px 0 rgba(0,0,0,.03)}
+.pick .lab{font-size:13px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--sun)}
+.pick h3{font-size:23px}
+.pick .town{color:var(--muted);font-size:15px}
+.pick p{margin:0;font-size:17px}
+.pick .row{display:flex;flex-wrap:wrap;gap:6px}
+.pick a.go{margin-top:auto;font-weight:700;font-size:16px}
+.swipe{display:none;font-size:14.5px;color:var(--muted);margin:10px 0 6px}
+.matrix{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--card)}
+.matrix table{border-collapse:collapse;width:100%;min-width:720px}
+.matrix th,.matrix td{border-bottom:1px solid var(--line);border-right:1px solid var(--line);padding:10px;vertical-align:top;font-size:15px;text-align:left}
+.matrix th{background:#f1eadb;font-size:15px}
+.matrix td a{display:block;text-decoration:none;color:var(--ink);padding:3px 0;line-height:1.3}
+.matrix td a:hover{color:var(--sky)}
+.matrix td a small{color:var(--muted)}
+.matrix td.empty{color:#b3aa9c;font-style:italic}
+.controls{display:flex;flex-direction:column;gap:10px;margin-bottom:16px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px}
+.ctl{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.ctl > span{font-weight:700;font-size:15px;min-width:92px}
+.chip{font:inherit;font-size:15px;border:1px solid var(--line);background:#fff;border-radius:99px;padding:6px 12px;cursor:pointer;color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+select{font:inherit;font-size:15px;padding:6px 10px;border-radius:10px;border:1px solid var(--line);background:#fff}
+.count{font-size:15px;color:var(--muted)}
+.list{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:9px;scroll-margin-top:70px}
+.card:target{outline:3px solid var(--sun)}
+.card h3{font-size:21px}
+.card .town{color:var(--muted);font-size:15px;margin-top:-4px}
+.card .row{display:flex;flex-wrap:wrap;gap:6px}
+.card .view{font-size:16.5px;margin:0}
+.card .price{font-weight:700;font-size:17px}
+.card .price small{font-weight:400;color:var(--muted);display:block;font-size:14.5px}
+.facts{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:15.5px;background:#f8f4ec;border-radius:10px;padding:10px 12px;margin:0}
+.facts dt{font-weight:700;color:#4c453d}
+.facts dd{margin:0}
+details.more{font-size:15.5px}
+details.more summary{cursor:pointer;font-weight:700;color:var(--sky)}
+details.more p{margin:8px 0 0}
+.warn{background:var(--red-soft);color:#6f2a1e;border-radius:10px;padding:8px 11px;font-size:15px}
+.flag{font-size:14px;color:var(--muted)}
+.card a.go{font-weight:700;font-size:16px;margin-top:auto}
+.acts{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.acts .area{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.acts h3{font-size:20px;margin-bottom:8px}
+.acts ul{margin:0;padding-left:0;list-style:none}
+.acts li{padding:8px 0;border-top:1px dashed var(--line);font-size:16px}
+.acts li:first-child{border-top:0}
+.acts li b a{color:var(--ink)}
+.walk{display:inline-block;font-size:13px;font-weight:700;border-radius:6px;padding:1px 7px;margin-left:4px;background:var(--sky-soft);color:#24506d}
+.skips{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.skip{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--red);border-radius:var(--r);padding:14px 16px;font-size:16px}
+.skip b{font-size:17px}
+.skip .town{color:var(--muted);font-size:14.5px}
+.skip p{margin:6px 0 0}
+.tips{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
+.tip{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.tip h3{font-size:20px;margin-bottom:8px}
+.tip ul,.tip ol{margin:0;padding-left:20px;font-size:16px}
+.tip li{margin:5px 0}
+footer{padding:36px 0 50px;color:var(--muted);font-size:15px}
+@media (max-width:520px){
+  body{font-size:17px}
+  .list,.picks,.acts,.tips,.skips{grid-template-columns:1fr}
+  .ctl > span{min-width:100%}
+  .swipe{display:block}
+}
+@media print{nav.jump,.controls{display:none}.card,.pick{break-inside:avoid}}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <h1>Hill Country Getaway Picks</h1>
+    <p class="lede">Glamping, cabins, lodges and houses around San Antonio, San Marcos, Austin and Marble Falls where you step out the door and it's just pretty, and Grandma doesn't have to walk far to get there.</p>
+    <p class="meta" id="meta"></p>
+  </div>
+</header>
+<nav class="jump"><div class="wrap">
+  <a href="#picks">Top picks</a><a href="#grid">Price x scenery</a><a href="#all">All places</a><a href="#skip">Skip these</a><a href="#todo">Easy things to do</a><a href="#before">Before you book</a>
+</div></nav>
+
+<main class="wrap">
+  <section id="picks">
+    <h2>Top picks</h2>
+    <p class="sub">If you only look at a few, look at these. Every one was checked for car-to-door access, not just pretty photos.</p>
+    <div class="picks" id="pickList"></div>
+  </section>
+
+  <section id="grid">
+    <h2>Price x scenery</h2>
+    <p class="sub">Every place that made the cut, sorted by how pretty it is (rows) and what one unit or room costs per night before taxes and fees (columns). Tap a name to jump to it.</p>
+    <div class="key" id="key"></div>
+    <p class="swipe">Swipe the table sideways to see every price.</p>
+    <div class="matrix"><table id="matrix"></table></div>
+  </section>
+
+  <section id="all">
+    <h2>All places</h2>
+    <p class="sub">Filter by what matters. Prices are the typical nightly range for one unit or room and move around with weekends and holidays, so always check the live price.</p>
+    <div class="controls">
+      <div class="ctl" id="fArea"><span>Area</span></div>
+      <div class="ctl" id="fKind"><span>Type</span></div>
+      <div class="ctl" id="fPrice"><span>Price</span></div>
+      <div class="ctl" id="fScen"><span>Scenery</span></div>
+      <div class="ctl" id="fGma"><span>Grandma</span></div>
+      <div class="ctl"><span>Sort</span>
+        <select id="sort">
+          <option value="best">Best match</option>
+          <option value="price">Cheapest first</option>
+          <option value="drive">Closest to San Antonio</option>
+          <option value="scenery">Best scenery</option>
+          <option value="grandma">Easiest for Grandma</option>
+        </select>
+        <span class="count" id="count"></span>
+      </div>
+    </div>
+    <div class="list" id="list"></div>
+  </section>
+
+  <section id="skip">
+    <h2>Pretty, but skip these with Grandma</h2>
+    <p class="sub">You might see these on Instagram. They look amazing, and here's why they didn't make the list.</p>
+    <div class="skips" id="skips"></div>
+  </section>
+
+  <section id="todo">
+    <h2>Easy things to do nearby</h2>
+    <p class="sub">Stuff Grandma can actually enjoy without a hike. Walk level is marked on each one.</p>
+    <div class="acts" id="acts"></div>
+  </section>
+
+  <section id="before">
+    <h2>Before you book</h2>
+    <p class="sub">The stuff that makes or breaks a trip with an older family member.</p>
+    <div class="tips" id="tips"></div>
+  </section>
+</main>
+<footer><div class="wrap" id="foot"></div></footer>
+
+<script id="data" type="application/json">__DATA__</script>
+<script>
+(function(){
+const D = JSON.parse(document.getElementById('data').textContent);
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const byId = Object.fromEntries(D.places.map(p => [p.id, p]));
+const money = n => n == null ? '?' : '$' + Math.round(n).toLocaleString();
+const priceText = p => p.priceLow == null ? 'Price: check site' : (p.priceHigh && p.priceHigh !== p.priceLow ? money(p.priceLow) + ' to ' + money(p.priceHigh) : money(p.priceLow)) + ' / night';
+const drive = p => p.driveSA ? (p.driveSA >= 60 ? Math.floor(p.driveSA/60) + ' hr' + (p.driveSA%60 ? ' ' + (p.driveSA%60) + ' min' : '') : p.driveSA + ' min') + ' from SA' : '';
+const SCEN = D.tiers.scenery, PRICE = D.tiers.price, GMA = D.tiers.grandma;
+const badges = p => `<span class="badge b-price">${esc(p.priceTier)}</span><span class="badge b-${esc(p.scenery)}">Scenery ${esc(p.scenery)}</span><span class="badge b-${esc(p.grandma)}">Grandma: ${esc(p.grandma)}</span><span class="badge b-kind">${esc(p.kindLabel)}</span>`;
+
+$('#meta').textContent = D.meta;
+
+$('#pickList').innerHTML = D.picks.map(k => { const p = byId[k.id]; if (!p) return ''; return `
+  <article class="pick"><div class="lab">${esc(k.label)}</div><h3>${esc(p.name)}</h3><div class="town">${esc(p.town)} · ${esc(drive(p))}</div>
+  <div class="row">${badges(p)}</div><p>${esc(k.why)}</p><div class="price">${esc(priceText(p))}</div>
+  <a class="go" href="#${esc(p.id)}">Details ↓</a></article>`; }).join('');
+
+$('#key').innerHTML = `
+  <div><b>Price (per unit, per night)</b>${PRICE.map(t => `<span class="badge b-price">${esc(t.k)}</span> ${esc(t.d)}`).join('<br>')}</div>
+  <div><b>Scenery</b>${SCEN.map(t => `<span class="badge b-${t.k}">${t.k}</span> ${esc(t.d)}`).join('<br>')}</div>
+  <div><b>Grandma access</b>${GMA.map(t => `<span class="badge b-${t.k}">${t.k}</span> ${esc(t.d)}`).join('<br>')}</div>`;
+
+(function matrix(){
+  let h = '<tr><th>Scenery \\ Price</th>' + PRICE.map(t => `<th>${esc(t.k)}<br><small>${esc(t.d)}</small></th>`).join('') + '</tr>';
+  for (const s of SCEN) {
+    h += `<tr><th><span class="badge b-${s.k}">${s.k}</span></th>`;
+    for (const pr of PRICE) {
+      const cell = D.places.filter(p => p.scenery === s.k && p.priceTier === pr.k).sort((a,b) => b.grandmaScore - a.grandmaScore);
+      h += cell.length ? `<td>${cell.map(p => `<a href="#${esc(p.id)}">${esc(p.name)} <small>${esc(p.grandma === 'Easy' ? '♿ easy' : p.grandma === 'OK' ? 'ok walk' : 'harder')}</small></a>`).join('')}</td>` : '<td class="empty">nothing solid here</td>';
+    }
+    h += '</tr>';
+  }
+  $('#matrix').innerHTML = h;
+})();
+
+const F = { area: 'All', kind: 'All', price: 'All', scen: 'All', gma: 'All' };
+function chips(el, key, opts){
+  const box = $(el);
+  ['All', ...opts].forEach(o => { const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = o; b.setAttribute('aria-pressed', o === 'All'); b.onclick = () => { F[key] = o; box.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', c === b)); render(); }; box.appendChild(b); });
+}
+chips('#fArea', 'area', D.areas);
+chips('#fKind', 'kind', [...new Set(D.places.map(p => p.kindLabel))]);
+chips('#fPrice', 'price', PRICE.map(t => t.k));
+chips('#fScen', 'scen', SCEN.map(t => t.k));
+chips('#fGma', 'gma', ['Easy only', 'Easy + OK']);
+$('#sort').onchange = render;
+
+function card(p){
+  const facts = [['Parking', p.park], ['Steps in', p.steps], ['Bathroom', p.bath], ['AC', p.climate], ['Sleeps', p.sleeps], ['Drive', [p.driveSA ? p.driveSA + ' min from SA' : '', p.driveATX ? p.driveATX + ' min from Austin' : ''].filter(Boolean).join(', ')]].filter(f => f[1]);
+  return `<article class="card" id="${esc(p.id)}">
+    <h3>${esc(p.name)}</h3><div class="town">${esc(p.town)} · ${esc(p.area)}</div>
+    <div class="row">${badges(p)}</div>
+    <p class="view"><b>Step outside:</b> ${esc(p.sceneryWhat)}</p>
+    <div class="price">${esc(priceText(p))}${p.priceNote ? `<small>${esc(p.priceNote)}</small>` : ''}</div>
+    <dl class="facts">${facts.map(f => `<dt>${esc(f[0])}</dt><dd>${esc(f[1])}</dd>`).join('')}</dl>
+    ${p.warn ? `<div class="warn">${esc(p.warn)}</div>` : ''}
+    <details class="more"><summary>More detail</summary>
+      ${p.accessDetail ? `<p><b>Getting around:</b> ${esc(p.accessDetail)}</p>` : ''}
+      ${p.groupNote ? `<p><b>For a group:</b> ${esc(p.groupNote)}</p>` : ''}
+      ${p.highlights && p.highlights.length ? `<p><b>Has:</b> ${esc(p.highlights.join(', '))}</p>` : ''}
+      ${p.floodNote ? `<p><b>Flood check:</b> ${esc(p.floodNote)}</p>` : ''}
+      ${p.reviews ? `<p><b>Reviews:</b> ${esc(p.reviews)}</p>` : ''}
+    </details>
+    <div class="flag">${p.checked ? '✓ Double-checked against reviews' : ''}${p.confidence === 'low' ? (p.checked ? ' · ' : '') + 'Some details unconfirmed, ask the host' : ''}</div>
+    <a class="go" href="${esc(p.url)}" target="_blank" rel="noopener">See it / book →</a>
+  </article>`;
+}
+const pOrder = Object.fromEntries(PRICE.map((t,i) => [t.k, i])), sOrder = Object.fromEntries(SCEN.map((t,i) => [t.k, i]));
+function render(){
+  let L = D.places.filter(p => (F.area === 'All' || p.area === F.area) && (F.kind === 'All' || p.kindLabel === F.kind) && (F.price === 'All' || p.priceTier === F.price) && (F.scen === 'All' || p.scenery === F.scen) && (F.gma === 'All' || (F.gma === 'Easy only' ? p.grandma === 'Easy' : p.grandma !== 'Tough')));
+  const s = $('#sort').value;
+  const k = { best: (a,b) => b.match - a.match, price: (a,b) => (a.priceLow ?? 1e9) - (b.priceLow ?? 1e9), drive: (a,b) => (a.driveSA ?? 1e9) - (b.driveSA ?? 1e9), scenery: (a,b) => b.sceneryScore - a.sceneryScore || b.grandmaScore - a.grandmaScore, grandma: (a,b) => b.grandmaScore - a.grandmaScore || b.sceneryScore - a.sceneryScore }[s];
+  L.sort(k);
+  $('#count').textContent = L.length + ' of ' + D.places.length + ' places';
+  $('#list').innerHTML = L.length ? L.map(card).join('') : '<p>Nothing matches all of those. Loosen a filter.</p>';
+}
+render();
+if (location.hash) { const t = document.getElementById(location.hash.slice(1)); if (t) setTimeout(() => t.scrollIntoView(), 50); }
+
+$('#acts').innerHTML = D.areas.map(a => { const A = D.activities.filter(x => x.area === a); if (!A.length) return ''; return `<div class="area"><h3>${esc(a)}</h3><ul>${A.map(x => `<li><b>${x.url ? `<a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.title)}</a>` : esc(x.title)}</b><span class="walk">${esc(x.walk)}</span><br>${esc(x.what)}${x.access ? ` <i>${esc(x.access)}</i>` : ''}${x.when ? `<br><small>${esc(x.when)}</small>` : ''}</li>`).join('')}</ul></div>`; }).join('');
+
+$('#tips').innerHTML = D.tips.map(t => `<div class="tip"><h3>${esc(t.heading)}</h3>${t.ordered ? '<ol>' : '<ul>'}${t.points.map(x => `<li>${x.html ? x.html : esc(x)}</li>`).join('')}${t.ordered ? '</ol>' : '</ul>'}</div>`).join('');
+
+$('#skips').innerHTML = D.skip.map(s => `<div class="skip"><b>${s.url ? `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.name)}</a>` : esc(s.name)}</b> <span class="town">${esc(s.town)}</span><p>${esc(s.why)}</p></div>`).join('');
+
+$('#foot').innerHTML = esc(D.footer);
+})();
+</script>
+</body>
+</html>
