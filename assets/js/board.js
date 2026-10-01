@@ -1568,7 +1568,6 @@
         ['Clear photos with no post left', 'here', drainNow]
       ]],
       ['THE REST OF THE HOUSE', [
-        ['The hit list', 'away', '../desk/targets/'],
         ['The goals board', 'away', '../desk/goals/'],
         ['The old desk, moderation queue', 'away', '../desk/'],
         ['Your own page', 'away', '../my/'],
@@ -1742,8 +1741,7 @@
       ['✍', 'STORY', 'the word', '../word/new/'],
       ['🎴', 'CARD', 'member card', '../card/'],
       ['📻', 'TICKER', 'the crawl', function () { jump('voice'); }],
-      ['🌙', 'NIGHT', 'laptop only', 'cold'],
-      ['🎯', 'HIT LIST', 'who to chase', '../desk/targets/']
+      ['🌙', 'NIGHT', 'laptop only', 'cold']
     ].forEach(function (m) {
       var el;
       if (typeof m[3] === 'string' && m[3] !== 'cold') {

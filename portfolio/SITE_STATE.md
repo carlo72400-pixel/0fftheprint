@@ -2,6 +2,16 @@
 
 > NEW SESSION START HERE: read this file + the job-hunt-2026 memory. Site is LIVE and current. As of Jul 30 2026 the homepage is SPLIT-FILE (see Architecture below): CSS lives in `assets/css/`, JS in `assets/js/`, `index.html` is markup only. Edit the file that owns the thing, bump its `?v=` stamp in BOTH `index.html` and `index-kawaii.html` (or `cp index.html index-kawaii.html` after HTML edits), commit, push. Verify visual changes with HEADLESS Chrome (see Gotchas), not just the preview pane.
 
+
+## 🗑 DELETED 2026-10-01 (his call, cleanup pass)
+Removed: `portfolio/photoshoots/ theplan/ sarisari/ bethel/ brujas/ rise/ gateway/ dream/ steel/`, plus the hit
+list (`/hitlist/` + `/desk/targets/`) and its links on the board, the desk and the goals page. All recoverable
+from git history. The Supabase `hitlist` + `hitlist_meta` tables were NOT touched: `/desk/goals/` still reads them.
+⛔ **The homepage borrowed four images from `steel/assets/`** (`charm.png` + the three `washi_*.png`). They now
+live at `portfolio/assets/deco/`; `index.html`, `index-kawaii.html`, `_monitors.css` and `_tapes.css` point there
+(`?v=20261001a` on the two CSS links). The notes below that mention `/steel/`, `/dream/`, `/bethel/` or
+`/photoshoots/` are history. `portfolio/hub/` is now written by `99_SYSTEM/build_launcher.py`.
+
 ## ⛔ THE ARCHIVE STALL, AND THE BUG THE NEW VIDEO INTRODUCED (Sep 2 2026)
 
 His report: "the archives had a lot of struggle loading." Two separate causes, both fixed.
