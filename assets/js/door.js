@@ -28,9 +28,12 @@
   const key  = document.getElementById('nav-key');
   const foot = document.getElementById('footer-key');
   const cta  = document.getElementById('take-cta');
+  // The Wall (the weekly flyer page) is a members link: approved card holders and the desk only.
+  const wall = document.getElementById('nav-wall');
 
   function paint(s){
     if (!s) return;
+    if (wall) wall.hidden = !s.on;
     if (key){
       key.href = s.href;
       key.title = s.title;
