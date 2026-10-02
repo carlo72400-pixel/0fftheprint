@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Emerald, Cream and Takeout Red · 0FF THE PRINT</title>
+<meta name="description" content="A Sunday at a lounge on Perrin Beitel dressed as a Chinese takeout, graded straight off its own flyer.">
+<meta property="og:title" content="Emerald, Cream and Takeout Red">
+<meta property="og:description" content="A Sunday at a lounge on Perrin Beitel dressed as a Chinese takeout, graded straight off its own flyer.">
+<meta property="og:image" content="https://0fftheprint.com/word/emerald-cream-and-takeout-red/cover.jpg">
+<meta property="og:type" content="article">
+<meta name="theme-color" content="#0a0a0d">
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#f2eef5;--muted:#8d8798;--line:rgba(255,255,255,.1);--pink:#ff79c6;--bg:#0a0a0d}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif}
+  .leopard-bar{height:7px;background:linear-gradient(90deg,#ff79c6,#caa9ff,#2f6bff,#ff79c6);background-size:300% 100%}
+  .wrap{max-width:720px;margin:0 auto;padding:34px 20px 90px}
+  a.back{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--muted);text-decoration:none}
+  a.back:hover{color:var(--pink)}
+  .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.3em;
+    text-transform:uppercase;color:var(--pink);margin:34px 0 10px}
+  h1{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
+    text-transform:uppercase;font-size:clamp(34px,7vw,56px);line-height:.98}
+  .dek{font-size:17px;line-height:1.6;color:var(--muted);margin-top:14px}
+  .byline{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted);margin:18px 0 26px;
+    padding-bottom:18px;border-bottom:1px solid var(--line)}
+  .byline b{color:var(--ink)}
+  .cover{margin:0 0 8px;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+  .cover img{width:100%;display:block}
+  .cover-credit{font-family:'JetBrains Mono',monospace;font-size:10px;
+    letter-spacing:.06em;color:var(--muted);margin:8px 0 30px;line-height:1.5}
+  .cover-credit a{color:var(--muted);text-decoration:underline}
+  article{font-size:17.5px;line-height:1.85}
+  article p{margin:0 0 22px}
+  article h2{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
+    text-transform:uppercase;font-size:27px;margin:38px 0 14px}
+  article a{color:var(--pink);text-decoration:none}
+  article a:hover{text-decoration:underline}
+  article blockquote{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
+    font-size:26px;line-height:1.2;text-transform:uppercase;color:var(--pink);
+    border-left:3px solid var(--pink);padding-left:18px;margin:32px 0}
+  article figure{margin:30px -20px}
+  article figure img,article figure video{width:100%;display:block;border-radius:0;background:#000}
+  article figure.clip video{width:auto;max-width:100%;max-height:82vh;aspect-ratio:9/16;margin:0 auto}
+  article figcaption{font-family:'JetBrains Mono',monospace;font-size:10.5px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+    padding:10px 20px 0;text-align:center}
+  @media(min-width:760px){article figure{margin:30px 0}
+    article figure img,article figure video{border-radius:12px}
+    article figcaption{padding:10px 0 0}}
+  .foot{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);
+    font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted)}
+  .foot a{color:var(--pink);text-decoration:none}
+  .wall{max-width:680px;margin:34px auto 0;padding-top:26px;border-top:1px solid var(--line)}
+  .wall h2{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;font-size:22px;text-transform:uppercase;margin-bottom:14px}
+  .wall-entry{border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-bottom:10px}
+  .we-by{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--pink);margin-bottom:6px}
+  .we-text{font-size:15px;line-height:1.65;color:var(--ink);overflow-wrap:anywhere}
+  .we-none,.we-pending,.we-msg{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);line-height:1.7}
+  .we-msg{color:#ff6a7e;min-height:16px;margin-top:6px}
+  #wall-compose textarea{width:100%;background:#111016;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:12px;font-size:16px;font-family:Inter,sans-serif;margin-top:8px}
+  .we-row{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+  .we-count{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+  .we-row button,.we-pending button{background:transparent;color:var(--pink);border:1px solid var(--pink);border-radius:7px;padding:9px 16px;font-size:13px;cursor:pointer;min-height:40px}
+</style>
+</head>
+<body>
+<div class="leopard-bar"></div>
+<div class="wrap">
+  <a class="back" href="../../#desk">&larr; The Word · 0FF THE PRINT</a>
+  <div class="kicker">THE NIGHT</div>
+  <h1>Emerald, Cream and Takeout Red</h1>
+  <div class="dek">A Sunday at a lounge on Perrin Beitel dressed as a Chinese takeout, graded straight off its own flyer.</div>
+  <div class="byline">0TP-026 &nbsp;·&nbsp; <b>0FF THE PRINT</b> &nbsp;·&nbsp; San Antonio &nbsp;·&nbsp; OCT 02, 2026</div>
+  <div class="cover"><img src="cover.jpg" alt=""></div>
+
+  <article data-stamp="e4ec923f">
+<p>The flyer was emerald paper with cream lettering, warm black ink, a takeout red and a little gold, and the shop looked exactly like it. Exotic Takeout on Perrin Beitel Road dresses itself as a Chinese takeout: a lucky cat on the sign, red takeout boxes on the shelf, the name painted big across the front wall. CHILL &amp; SMOKE ran from five to nine on a Sunday with a DJ on the decks, and the camera got there early, at a quarter to four, while the room was still a shop.</p>
+<p>So the first frames are the details. The lucky cat on the sign. A red takeout box that says Enjoy. A pair of OutKast action figures still in the package. A rug by the counter that says SORRY NO FRONTS. Then the couches filled up, the decks started, and by dusk the whole crew was lined up out front under the mural for the group photo.</p>
+<h2>A room that is already graded</h2>
+<p>Most nights the grade has to invent a look. This one was printed on the flyer. 02 CHILL &amp; SMOKE is built off those five colours: the plants in the room are keyed to the flyer's emerald, the whites are given a ceiling so they print like cream paper instead of blowing out, and the blacks sit on a warm ink floor. That last part was a correction. The first version tinted the shadows green to match the paper, and every black merch tee in the room went teal. Black stays the flyer's ink. Reds and gold get richer, blues lean teal but stay off the dark pixels, and skin gets its colour handed back at the very end, never more than four percent. In Photoshop there is a cream halation at thirteen percent, the smoke the night was named for, laid through a mask that keeps it off faces.</p>
+<p>01 NATURAL is the same frames as they were: lens, white balance, exposure, colour, tone.</p>
+<h2>What the raw files asked for</h2>
+<p>Every frame was developed from its RAW file. On this camera that comes with a cost: the RAW render carries about four times the shadow colour noise of the camera's own JPEG, at every ISO on the card from 128 up to 1025, not only the high ones. So every frame got a colour denoise, not just the dark ones.</p>
+<p>White balance was read off the walls, which are neutral in this room, and it moved on 77 of 79 frames, by 2.9 percent on the median. Exposure did not need a single global move once each frame was anchored on its own. Seven frames the camera had tagged sideways were turned upright, and twelve zooms that landed between the lens steps were cropped back to the framing that was meant. Grain on both looks is colour negative film, a touch lighter on the natural set.</p>
+<h2>Where it lives</h2>
+<p><a href="https://0fftheprint.com/events/2026-09-20-chill-and-smoke/" target="_blank" rel="noopener">The cleared frames from CHILL &amp; SMOKE</a>, both versions of each, full quality, free to download. Four independent reviewers read every candidate first, same as every night here, and on a night at a smoke shop that read was not a formality.</p>
+<p>Exotic Takeout, 10315 Perrin Beitel Road, San Antonio. Sunday 20 September 2026, five to nine.</p>
+  </article>
+  <section class="wall" id="wall" data-story="emerald-cream-and-takeout-red" hidden>
+    <h2>From the floor</h2>
+    <div id="wall-entries"></div>
+    <div id="wall-compose"></div>
+  </section>
+  <div class="foot">Every drop gets a number. This one is 0TP-026. <a href="../../#desk">Back to The Word &rarr;</a></div>
+</div>
+<script src="../../supabase-config.js?v=f1348482"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="../../assets/js/desk.js?v=32f116ac" defer></script>
+<script src="../../assets/js/word.js?v=faaae268" defer></script>
+</body>
+</html>

@@ -12,6 +12,15 @@ live at `portfolio/assets/deco/`; `index.html`, `index-kawaii.html`, `_monitors.
 (`?v=20261001a` on the two CSS links). The notes below that mention `/steel/`, `/dream/`, `/bethel/` or
 `/photoshoots/` are history. `portfolio/hub/` is now written by `99_SYSTEM/build_launcher.py`.
 
+## NIGHTS grew three blocks: CHILL & SMOKE, HARAMBE, WAP (Oct 2 2026)
+
+`#nights` went 16 blocks to 19, inserted after BAPTISM in shoot order: **CHILL & SMOKE** at Exotic Takeout
+(Sep 20, `assets/chillsmoke/cs_*`), **HARAMBE 4 EVER** at Paper Tiger (Sep 24, `assets/harambe/har_*`),
+**WAP** at Private Park, San Marcos (Sep 25, `assets/wap/wap_*`). The intro gained "a backyard party in San
+Marcos". WAP's eight tiles deliberately mix its four looks (a symlink folder, `_web/nights_mix/` in the shoot),
+and its singer tile is the copy with a licence plate blurred out (`_web/redacted/`), never the delivered file.
+Configs: the session scratchpad `otp/nights/*.json`; the frames all come from each night's cleared `cull.json`.
+
 ## ⛔ THE ARCHIVE STALL, AND THE BUG THE NEW VIDEO INTRODUCED (Sep 2 2026)
 
 His report: "the archives had a lot of struggle loading." Two separate causes, both fixed.

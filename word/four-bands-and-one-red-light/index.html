@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Four Bands and One Red Light · 0FF THE PRINT</title>
+<meta name="description" content="HARAMBE 4 EVER on the Paper Tiger side stage: three cameras, one red wash, and the skin brought back on the faces only.">
+<meta property="og:title" content="Four Bands and One Red Light">
+<meta property="og:description" content="HARAMBE 4 EVER on the Paper Tiger side stage: three cameras, one red wash, and the skin brought back on the faces only.">
+<meta property="og:image" content="https://0fftheprint.com/word/four-bands-and-one-red-light/cover.jpg">
+<meta property="og:type" content="article">
+<meta name="theme-color" content="#0a0a0d">
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#f2eef5;--muted:#8d8798;--line:rgba(255,255,255,.1);--pink:#ff79c6;--bg:#0a0a0d}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif}
+  .leopard-bar{height:7px;background:linear-gradient(90deg,#ff79c6,#caa9ff,#2f6bff,#ff79c6);background-size:300% 100%}
+  .wrap{max-width:720px;margin:0 auto;padding:34px 20px 90px}
+  a.back{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--muted);text-decoration:none}
+  a.back:hover{color:var(--pink)}
+  .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.3em;
+    text-transform:uppercase;color:var(--pink);margin:34px 0 10px}
+  h1{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
+    text-transform:uppercase;font-size:clamp(34px,7vw,56px);line-height:.98}
+  .dek{font-size:17px;line-height:1.6;color:var(--muted);margin-top:14px}
+  .byline{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted);margin:18px 0 26px;
+    padding-bottom:18px;border-bottom:1px solid var(--line)}
+  .byline b{color:var(--ink)}
+  .cover{margin:0 0 8px;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+  .cover img{width:100%;display:block}
+  .cover-credit{font-family:'JetBrains Mono',monospace;font-size:10px;
+    letter-spacing:.06em;color:var(--muted);margin:8px 0 30px;line-height:1.5}
+  .cover-credit a{color:var(--muted);text-decoration:underline}
+  article{font-size:17.5px;line-height:1.85}
+  article p{margin:0 0 22px}
+  article h2{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
+    text-transform:uppercase;font-size:27px;margin:38px 0 14px}
+  article a{color:var(--pink);text-decoration:none}
+  article a:hover{text-decoration:underline}
+  article blockquote{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
+    font-size:26px;line-height:1.2;text-transform:uppercase;color:var(--pink);
+    border-left:3px solid var(--pink);padding-left:18px;margin:32px 0}
+  article figure{margin:30px -20px}
+  article figure img,article figure video{width:100%;display:block;border-radius:0;background:#000}
+  article figure.clip video{width:auto;max-width:100%;max-height:82vh;aspect-ratio:9/16;margin:0 auto}
+  article figcaption{font-family:'JetBrains Mono',monospace;font-size:10.5px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+    padding:10px 20px 0;text-align:center}
+  @media(min-width:760px){article figure{margin:30px 0}
+    article figure img,article figure video{border-radius:12px}
+    article figcaption{padding:10px 0 0}}
+  .foot{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);
+    font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted)}
+  .foot a{color:var(--pink);text-decoration:none}
+  .wall{max-width:680px;margin:34px auto 0;padding-top:26px;border-top:1px solid var(--line)}
+  .wall h2{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;font-size:22px;text-transform:uppercase;margin-bottom:14px}
+  .wall-entry{border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-bottom:10px}
+  .we-by{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--pink);margin-bottom:6px}
+  .we-text{font-size:15px;line-height:1.65;color:var(--ink);overflow-wrap:anywhere}
+  .we-none,.we-pending,.we-msg{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);line-height:1.7}
+  .we-msg{color:#ff6a7e;min-height:16px;margin-top:6px}
+  #wall-compose textarea{width:100%;background:#111016;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:12px;font-size:16px;font-family:Inter,sans-serif;margin-top:8px}
+  .we-row{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+  .we-count{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+  .we-row button,.we-pending button{background:transparent;color:var(--pink);border:1px solid var(--pink);border-radius:7px;padding:9px 16px;font-size:13px;cursor:pointer;min-height:40px}
+</style>
+</head>
+<body>
+<div class="leopard-bar"></div>
+<div class="wrap">
+  <a class="back" href="../../#desk">&larr; The Word · 0FF THE PRINT</a>
+  <div class="kicker">THE NIGHT</div>
+  <h1>Four Bands and One Red Light</h1>
+  <div class="dek">HARAMBE 4 EVER on the Paper Tiger side stage: three cameras, one red wash, and the skin brought back on the faces only.</div>
+  <div class="byline">0TP-027 &nbsp;·&nbsp; <b>0FF THE PRINT</b> &nbsp;·&nbsp; San Antonio &nbsp;·&nbsp; OCT 02, 2026</div>
+  <div class="cover"><img src="cover.jpg" alt=""></div>
+
+  <article data-stamp="46a4ef9f">
+<p>HARAMBE 4 EVER was a Wednesday on the side stage at Paper Tiger, four bands on a flyer of sunset clouds and heaven light. Streetlamp at eight, Midnight Dawn at nine, Black Nail Polish at ten, and GABO at eleven, the last show from GABO's live band before a break. Between sets the patio did what a Paper Tiger patio does, which is pose for anybody holding a camera, and after midnight the back room turned into a DJ set in a fog of haze.</p>
+<p>The side stage is lit by one colour. A near monochrome red wash, all night, for every band. On the action camera it does not even read as red: that sensor renders it hot pink.</p>
+<h2>Three cameras, three problems</h2>
+<p>A Luna Ultra on the edge of the stage, shooting RAW and live photos. An Ace Pro 2 in the pit, also RAW. An X6 planted for 360 video, from which stills were pulled.</p>
+<p>Each one broke something different. The Ace saves two kinds of JPEG, a full fisheye and a straightened crop of the middle, and writes no orientation at all, so 67 frames had to be turned by hand and every one of them was rendered from the RAW through the lens model the factory stores inside the file, back to the framing that was actually shot. The X6 records the whole sphere at 3840 by 1920, which leaves a normal view of the stage about 960 pixels wide: those stills are honest about their resolution and were picked for the moment, not the sharpness. And the video stills came out milky at first. The camera's video is limited range and it had been decoded as full range, which lifts every black to grey. Quality control caught it, the floor was fixed and every still pulled from video was rendered again.</p>
+<h2>Skin back, room stays red</h2>
+<p>The rule here is that stage light is final. A red room is supposed to look like a red room. This night came with one exception, asked for out loud: bring the skin back on the faces. So the faces got colour from the night's own skin, measured off people standing outside the gel, on the patio and under the bar's white light, and transferred onto the faces of the people on stage before any look went on. Only the faces. The room, the haze, the amps and the crowd stay exactly as red as they were.</p>
+<h2>Two versions of every photograph</h2>
+<p>01 SIDE STAGE is a restrained concert grade built for this room. Every cube in the library was run on these frames first, 59 of them, and none of them beat the one made here.</p>
+<p>02 HEAVEN LIGHT takes the flyer at its word. The red wash is re-voiced as warm gold, sunset rather than siren, with a god-ray glow at a quarter strength on the lights. It runs copper on the reddest frames, which is why SIDE STAGE leads the gallery.</p>
+<p>Both were finished in Photoshop with a grain pass solved to a measured target per camera, because a phone sensor, an action camera and a 360 rig do not carry the same noise and should not end up wearing the same grain.</p>
+<h2>Where it lives</h2>
+<p><a href="https://0fftheprint.com/events/2026-09-24-harambe-4-ever/" target="_blank" rel="noopener">The cleared frames from HARAMBE 4 EVER</a>, both versions of each, full quality, free to download. Four independent reviewers read every candidate first, same as every night here.</p>
+<p>Paper Tiger, side stage, North St. Mary's Street, San Antonio. Wednesday 24 September 2026 into Thursday morning.</p>
+  </article>
+  <section class="wall" id="wall" data-story="four-bands-and-one-red-light" hidden>
+    <h2>From the floor</h2>
+    <div id="wall-entries"></div>
+    <div id="wall-compose"></div>
+  </section>
+  <div class="foot">Every drop gets a number. This one is 0TP-027. <a href="../../#desk">Back to The Word &rarr;</a></div>
+</div>
+<script src="../../supabase-config.js?v=f1348482"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="../../assets/js/desk.js?v=32f116ac" defer></script>
+<script src="../../assets/js/word.js?v=faaae268" defer></script>
+</body>
+</html>

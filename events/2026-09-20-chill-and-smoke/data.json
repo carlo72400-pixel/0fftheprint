@@ -1,0 +1,413 @@
+{
+  "slug": "2026-09-20-chill-and-smoke",
+  "title": "Chill & Smoke",
+  "venue": "Exotic Takeout",
+  "date": "2026-09-20",
+  "date_short": "09.20.26",
+  "count": 19,
+  "looks": [
+    "CHILL & SMOKE",
+    "NATURAL"
+  ],
+  "media": [
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/001.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/001_full.jpg",
+      "thumb": "media/001_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "CHILL & SMOKE",
+      "looks": [
+        {
+          "name": "CHILL & SMOKE",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/001.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/001_full.jpg"
+        },
+        {
+          "name": "NATURAL",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/001_natural.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/001_natural_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/002_natural.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/002_natural_full.jpg",
+      "thumb": "media/002_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "NATURAL",
+      "looks": [
+        {
+          "name": "CHILL & SMOKE",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/002.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/002_full.jpg"
+        },
+        {
+          "name": "NATURAL",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/002_natural.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/002_natural_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/003.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/003_full.jpg",
+      "thumb": "media/003_t.jpg",
+      "w": 1923,
+      "h": 2560,
+      "look": "CHILL & SMOKE",
+      "looks": [
+        {
+          "name": "CHILL & SMOKE",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/003.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/003_full.jpg"
+        },
+        {
+          "name": "NATURAL",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/003_natural.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/003_natural_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/004_natural.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/004_natural_full.jpg",
+      "thumb": "media/004_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "NATURAL",
+      "looks": [
+        {
+          "name": "CHILL & SMOKE",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/004.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/004_full.jpg"
+        },
+        {
+          "name": "NATURAL",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/004_natural.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/004_natural_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/005.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/005_full.jpg",
+      "thumb": "media/005_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "CHILL & SMOKE",
+      "looks": [
+        {
+          "name": "CHILL & SMOKE",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/005.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/005_full.jpg"
+        },
+        {
+          "name": "NATURAL",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/005_natural.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/005_natural_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/006_natural.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/006_natural_full.jpg",
+      "thumb": "media/006_t.jpg",
+      "w": 1923,
+      "h": 2560,
+      "look": "NATURAL",
+      "looks": [
+        {
+          "name": "CHILL & SMOKE",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/006.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/006_full.jpg"
+        },
+        {
+          "name": "NATURAL",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/006_natural.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/006_natural_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/007.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/007_full.jpg",
+      "thumb": "media/007_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "CHILL & SMOKE",
+      "looks": [
+        {
+          "name": "CHILL & SMOKE",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/007.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/007_full.jpg"
+        },
+        {
+          "name": "NATURAL",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/007_natural.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/007_natural_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/008_natural.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/008_natural_full.jpg",
+      "thumb": "media/008_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "NATURAL",
+      "looks": [
+        {
+          "name": "CHILL & SMOKE",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/008.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/008_full.jpg"
+        },
+        {
+          "name": "NATURAL",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/008_natural.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/008_natural_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/009.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/009_full.jpg",
+      "thumb": "media/009_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "CHILL & SMOKE",
+      "looks": [
+        {
+          "name": "CHILL & SMOKE",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/009.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/009_full.jpg"
+        },
+        {
+          "name": "NATURAL",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/009_natural.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/009_natural_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/010_natural.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/010_natural_full.jpg",
+      "thumb": "media/010_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "NATURAL",
+      "looks": [
+        {
+          "name": "CHILL & SMOKE",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/010.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/010_full.jpg"
+        },
+        {
+          "name": "NATURAL",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/010_natural.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/010_natural_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/011.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/011_full.jpg",
+      "thumb": "media/011_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "CHILL & SMOKE",
+      "looks": [
+        {
+          "name": "CHILL & SMOKE",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/011.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/011_full.jpg"
+        },
+        {
+          "name": "NATURAL",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/011_natural.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/011_natural_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/012_natural.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/012_natural_full.jpg",
+      "thumb": "media/012_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "NATURAL",
+      "looks": [
+        {
+          "name": "CHILL & SMOKE",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/012.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/012_full.jpg"
+        },
+        {
+          "name": "NATURAL",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/012_natural.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/012_natural_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/013.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/013_full.jpg",
+      "thumb": "media/013_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "CHILL & SMOKE",
+      "looks": [
+        {
+          "name": "CHILL & SMOKE",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/013.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/013_full.jpg"
+        },
+        {
+          "name": "NATURAL",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/013_natural.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/013_natural_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/014_natural.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/014_natural_full.jpg",
+      "thumb": "media/014_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "NATURAL",
+      "looks": [
+        {
+          "name": "CHILL & SMOKE",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/014.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/014_full.jpg"
+        },
+        {
+          "name": "NATURAL",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/014_natural.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/014_natural_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/015.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/015_full.jpg",
+      "thumb": "media/015_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "CHILL & SMOKE",
+      "looks": [
+        {
+          "name": "CHILL & SMOKE",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/015.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/015_full.jpg"
+        },
+        {
+          "name": "NATURAL",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/015_natural.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/015_natural_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/016_natural.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/016_natural_full.jpg",
+      "thumb": "media/016_t.jpg",
+      "w": 1923,
+      "h": 2560,
+      "look": "NATURAL",
+      "looks": [
+        {
+          "name": "CHILL & SMOKE",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/016.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/016_full.jpg"
+        },
+        {
+          "name": "NATURAL",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/016_natural.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/016_natural_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/017.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/017_full.jpg",
+      "thumb": "media/017_t.jpg",
+      "w": 1923,
+      "h": 2560,
+      "look": "CHILL & SMOKE",
+      "looks": [
+        {
+          "name": "CHILL & SMOKE",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/017.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/017_full.jpg"
+        },
+        {
+          "name": "NATURAL",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/017_natural.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/017_natural_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/018_natural.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/018_natural_full.jpg",
+      "thumb": "media/018_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "NATURAL",
+      "looks": [
+        {
+          "name": "CHILL & SMOKE",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/018.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/018_full.jpg"
+        },
+        {
+          "name": "NATURAL",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/018_natural.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/018_natural_full.jpg"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/019.jpg",
+      "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/019_full.jpg",
+      "thumb": "media/019_t.jpg",
+      "w": 2560,
+      "h": 1923,
+      "look": "CHILL & SMOKE",
+      "looks": [
+        {
+          "name": "CHILL & SMOKE",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/019.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/019_full.jpg"
+        },
+        {
+          "name": "NATURAL",
+          "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/019_natural.jpg",
+          "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/019_natural_full.jpg"
+        }
+      ]
+    }
+  ]
+}

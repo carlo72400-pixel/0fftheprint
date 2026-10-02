@@ -1,6 +1,33 @@
 {
  "items": [
   {
+   "slug": "2026-09-25-wap",
+   "title": "WAP",
+   "venue": "Private Park",
+   "date": "2026-09-25",
+   "date_short": "09.25.26",
+   "count": 45,
+   "cover": "2026-09-25-wap/media/017_t.jpg"
+  },
+  {
+   "slug": "2026-09-24-harambe-4-ever",
+   "title": "HARAMBE 4 EVER",
+   "venue": "Paper Tiger",
+   "date": "2026-09-24",
+   "date_short": "09.24.26",
+   "count": 62,
+   "cover": "2026-09-24-harambe-4-ever/media/018_t.jpg"
+  },
+  {
+   "slug": "2026-09-20-chill-and-smoke",
+   "title": "Chill & Smoke",
+   "venue": "Exotic Takeout",
+   "date": "2026-09-20",
+   "date_short": "09.20.26",
+   "count": 19,
+   "cover": "2026-09-20-chill-and-smoke/media/018_t.jpg"
+  },
+  {
    "slug": "2026-09-18-zen-haus",
    "title": "Third Friday Night Market",
    "venue": "Zen Haus",
