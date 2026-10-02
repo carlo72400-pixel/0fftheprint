@@ -32,6 +32,8 @@ json.dump({'order':stems},open(out,'w')); print(f'  order: {len(stems)} frames -
 EOF
 }
 
+# ⛔ The Sept 20 shoot is DRIVE-ONLY. _web/graded was a copy pulled off the Drive mount for this build and
+#    trashed after; before a rebuild: rsync -a --exclude '._*' "<Drive>/04_PRODUCTION/Shoots/2026-09-20_ExoticTakeout-ChillSmoke/03_Graded/" "$EXT/_web/graded/"
 build_ext() {
   echo "== CHILL & SMOKE $(date +%H:%M)"
   for lk in "01 NATURAL" "02 CHILL & SMOKE"; do stage "$EXT/_web/plooks/$lk" "$EXT/_web/graded/$lk"; done
