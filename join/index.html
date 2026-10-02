@@ -79,9 +79,14 @@
     return;
   }
 
+  // ?next= sends a card holder back to the page that sent them here. Allowlist only,
+  // so the login page can never be used to bounce someone to another site.
+  const NEXT = { wall: '../wall/' }[new URLSearchParams(location.search).get('next')] || null;
+
   // already signed in? send them where they belong
   const me = await OTP.me();
   if (me) {
+    if (NEXT && (me.profile?.is_admin || me.profile?.approved)) { location.href = NEXT; return; }
     if (me.profile?.is_admin) { location.href = '../desk/'; return; }
     if (me.profile?.approved)  { location.href = '../compose/'; return; }
     $('panel').innerHTML = `<b style="font-family:var(--f-display);font-style:italic;font-size:26px;text-transform:uppercase">You're in the queue.</b>
