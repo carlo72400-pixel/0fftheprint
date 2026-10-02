@@ -19,7 +19,7 @@ live at `portfolio/assets/deco/`; `index.html`, `index-kawaii.html`, `_monitors.
 **WAP** at Private Park, San Marcos (Sep 25, `assets/wap/wap_*`). The intro gained "a backyard party in San
 Marcos". WAP's eight tiles deliberately mix its four looks (a symlink folder, `_web/nights_mix/` in the shoot),
 and its singer tile is the copy with a licence plate blurred out (`_web/redacted/`), never the delivered file.
-Configs: the session scratchpad `otp/nights/*.json`; the frames all come from each night's cleared `cull.json`.
+Configs: each shoot's `_web/nights_<marker>.json`; the frames all come from each night's cleared `cull.json`.
 
 ## ⛔ THE ARCHIVE STALL, AND THE BUG THE NEW VIDEO INTRODUCED (Sep 2 2026)
 
