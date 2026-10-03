@@ -44,6 +44,8 @@
 <script src="assets/js/composer.js?v=9e82b159" defer></script>
 <script src="assets/js/calendar.js?v=b7cd53c5" defer></script>
 <script src="assets/js/edit.js?v=f019eef7" defer></script>
+<script>/* tabs: pick the page before first paint, off the #hash. Old links like /#desk still land right. */
+(function(){var M={do:'home',take:'home',drops:'photos',tape:'photos',videos:'photos',work:'photos',slate:'stories',desk:'stories',catalog:'stories',music:'music',open:'people',roster:'people',dates:'more',pitch:'more',experts:'more'},T=['home','photos','stories','music','people','more'],h=(location.hash||'').slice(1),d=document.documentElement;d.className+=' tabs';d.setAttribute('data-tab',T.indexOf(h)>=0?h:(M[h]||'home'));})();</script>
 <style>
   :root{
     --bg:#0a0a0d;
@@ -3750,6 +3752,94 @@
     .post-body{font-size:14.5px;}
   }
 </style>
+<style id="tabs-css">
+  /* ============ TABS (10/3: "make the timeline the first thing and then the others are like tabs") ============
+     One page at a time. The timeline is Home; everything else sits behind a tab. Without JS nothing is hidden. */
+  html.tabs[data-tab="home"] main.feed > section:not([data-tab="home"]),
+  html.tabs[data-tab="photos"] main.feed > section:not([data-tab="photos"]),
+  html.tabs[data-tab="stories"] main.feed > section:not([data-tab="stories"]),
+  html.tabs[data-tab="music"] main.feed > section:not([data-tab="music"]),
+  html.tabs[data-tab="people"] main.feed > section:not([data-tab="people"]),
+  html.tabs[data-tab="more"] main.feed > section:not([data-tab="more"]){display:none !important;}
+  main.feed > section{scroll-margin-top:74px;}
+  nav.site a.tablink[aria-current="page"]{color:var(--pink-glow);}
+  nav.site a.tablink[aria-current="page"]::after{transform:scaleX(1);}
+  .tabbar{display:none;}
+  @media (min-width:821px){
+    /* the tabs live in the nav on a wide screen, so the nav follows you down the page */
+    html.tabs nav.site{position:sticky;top:0;z-index:60;background:rgba(13,12,17,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);}
+  }
+  @media (min-width:821px) and (max-width:1120px){
+    /* tablets and small laptops: one row, or the sticky nav doubles in height */
+    html.tabs nav.site{gap:18px;padding:12px 22px;flex-wrap:nowrap;}
+    html.tabs nav.site a{letter-spacing:.16em;white-space:nowrap;}
+    html.tabs nav.site .nav-long{display:none;}
+  }
+  @media (max-width:820px){
+    /* on a phone the tabs are a bar under your thumb, so the top nav stops following */
+    html.tabs nav.site{position:relative;top:auto;}
+    html.tabs nav.site a.tablink{display:none;}
+    html.tabs body{padding-bottom:calc(62px + env(safe-area-inset-bottom,0px));}
+    html.tabs .scroll-top{bottom:calc(80px + env(safe-area-inset-bottom,0px));}
+    html.tabs #edm-toggle{bottom:calc(148px + env(safe-area-inset-bottom,0px));}
+    html.tabs #edm-board{bottom:calc(192px + env(safe-area-inset-bottom,0px));}
+    html.tabs:not([data-tab="more"]) aside.sidebar{display:none;}
+    html.tabs:not([data-tab="home"]) .pulse-banner{display:none;}
+    html.tabs .pulse-banner{margin-top:16px;}
+    main.feed > section{scroll-margin-top:10px;}
+    .tabbar{
+      position:fixed;left:0;right:0;bottom:0;z-index:130;
+      display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);
+      background:rgba(13,12,17,.94);backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2);
+      border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);
+    }
+    .tabbar a{
+      position:relative;min-height:58px;padding:8px 2px 7px;
+      display:grid;justify-items:center;align-content:center;gap:4px;
+      color:var(--muted);text-decoration:none;
+      font-family:var(--f-mono);font-weight:700;font-size:9.5px;line-height:1;letter-spacing:.08em;text-transform:uppercase;
+      transition:color .18s;
+    }
+    .tabbar a svg{width:22px;height:22px;}
+    .tabbar a[aria-current="page"]{color:var(--ink);}
+    .tabbar a[aria-current="page"]::before{
+      content:'';position:absolute;top:0;left:28%;right:28%;height:3px;border-radius:0 0 3px 3px;
+      background:var(--pink-glow);box-shadow:0 0 10px rgba(255,121,198,.6);
+    }
+  }
+  /* ---- Home: who is here (members), then what you can do, then the timeline ---- */
+  #do{margin-bottom:26px;}
+  .hh[hidden],.do[hidden]{display:none !important;}
+  .hh{margin-bottom:16px;}
+  .hh-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:10px;
+    font-family:var(--f-mono);font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);}
+  .hh-h b{color:var(--ink);font-weight:700;}
+  .hh-h a{color:var(--pink-glow);text-decoration:none;letter-spacing:.18em;white-space:nowrap;}
+  .hh-row{display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;padding:2px 0 4px;}
+  .hh-row::-webkit-scrollbar{display:none;}
+  .hh-f{flex:0 0 auto;width:62px;display:grid;justify-items:center;gap:6px;text-decoration:none;color:var(--ink);font-size:11.5px;font-weight:600;line-height:1.2;}
+  .hh-p{position:relative;width:56px;height:56px;border-radius:50%;padding:2px;background:linear-gradient(135deg,var(--pink-glow),var(--dye-blue));}
+  .hh-p img,.hh-p i{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;object-fit:cover;
+    background:var(--panel);border:2px solid var(--bg);font-style:normal;font-weight:800;font-size:15px;color:var(--ink);}
+  .hh-p em{position:absolute;right:-5px;bottom:-4px;font-style:normal;font-size:16px;line-height:1;}
+  .hh-n{max-width:62px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .do-rail{display:grid;grid-auto-flow:column;grid-auto-columns:max-content;gap:10px;overflow-x:auto;scrollbar-width:none;padding:2px 0 4px;}
+  .do-rail::-webkit-scrollbar{display:none;}
+  .do{display:grid;grid-template-columns:auto minmax(0,1fr);gap:3px 11px;align-items:center;
+    padding:12px 14px;min-height:60px;border:1px solid var(--line);border-radius:14px;background:var(--panel);
+    color:var(--ink);text-decoration:none;transition:border-color .18s,transform .18s;}
+  .do:hover{border-color:var(--pink-deep);transform:translateY(-2px);}
+  .do svg{grid-row:span 2;width:24px;height:24px;color:var(--pink-glow);}
+  .do b{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:19px;line-height:1;text-transform:uppercase;letter-spacing:.01em;white-space:nowrap;}
+  .do span{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
+  .do.wall{border-color:rgba(255,121,198,.55);box-shadow:0 0 18px rgba(255,121,198,.16);}
+  @media (max-width:820px){
+    /* a little tighter on a phone so the timeline starts sooner */
+    #do{margin-bottom:18px;}
+    .hh{margin-bottom:12px;}
+    .do{min-height:54px;padding:10px 13px;}
+  }
+</style>
 </head>
 <body>
 
@@ -3819,22 +3909,27 @@
 <!-- ========== NAV ========== -->
 <nav class="site">
   <a href="join/" id="nav-key" class="key" title="Card holders log in here.">Log in</a>
-  <a href="#open">Open A Pack</a>
-  <a href="dates/">The Run</a>
+  <a href="#home" class="tablink" data-tab-link="home">Home</a>
   <a href="wall/" id="nav-wall" title="Every flyer in SA, San Marcos and Austin this week." hidden>The Wall</a>
-  <a href="#take">The Take</a>
-  <a href="#desk">The Word</a>
-  <a href="word/">The Issue</a>
-  <a href="#music">Music</a>
-  <a href="#roster">Roster</a>
-  <a href="#work">The Work</a>
-  <a href="video/">The Tape</a>
-  <a href="events/"><span class="nav-short">Events</span><span class="nav-long">Event Photos</span></a>
-  <a href="#pitch">DM</a>
-  
+  <a href="#photos" class="tablink" data-tab-link="photos">Photos</a>
+  <a href="#stories" class="tablink" data-tab-link="stories">Stories</a>
+  <a href="#music" class="tablink" data-tab-link="music">Music</a>
+  <a href="#people" class="tablink" data-tab-link="people">People</a>
+  <a href="#more" class="tablink" data-tab-link="more">More</a>
+
   <span class="spacer"></span>
   <a href="#" target="_blank" rel="noopener" class="cta" id="nav-follow">Follow</a>
   <span class="nav-more" aria-hidden="true">&rsaquo;</span>
+</nav>
+
+<!-- ========== TAB BAR (phones): the same tabs, under the thumb ========== -->
+<nav class="tabbar" id="tabbar" aria-label="Sections">
+  <a href="#home" data-tab-link="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10v9.5h4.2v-5.6h3.6v5.6H18V10"/></svg><span>Home</span></a>
+  <a href="#photos" data-tab-link="photos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8h3.6l1.5-2.4h6.8L16.9 8h3.6v11h-17z"/><circle cx="12" cy="13.2" r="3.4"/></svg><span>Photos</span></a>
+  <a href="#stories" data-tab-link="stories"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h8.5L18 7v13.5H6z"/><path d="M9 11h6M9 14h6M9 17h3.5"/></svg><span>Stories</span></a>
+  <a href="#music" data-tab-link="music"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 17.5V6l9.5-2v11.5"/><circle cx="7" cy="17.5" r="2.5"/><circle cx="16.5" cy="15.5" r="2.5"/></svg><span>Music</span></a>
+  <a href="#people" data-tab-link="people"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8.5" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 5.2a3.3 3.3 0 0 1 0 6.6M18.2 14.8c1.7.8 2.9 2.5 3.3 5.2"/></svg><span>People</span></a>
+  <a href="#more" data-tab-link="more"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg><span>More</span></a>
 </nav>
 
 <!-- ========== PULSE BANNER ========== -->
@@ -4012,87 +4107,23 @@
 
   <!-- ============ MAIN ============ -->
   <main class="feed">
-    <!-- ===== OPEN A PACK — leads the page now. The booster card used to sit
-         at the end of the curators grid, four screens down, which is a long walk
-         for the one thing on this page that is a toy. ===== -->
-    <section id="open">
-      <div class="section-head">
-        <h2>Open A Pack <span class="accent">one random card</span></h2>
-        <div class="sub">tap it &nbsp;·&nbsp; you get who you get</div>
+    <!-- ===== HOME (10/3). The front page is for the people now: who is here, what you can do,
+         then the timeline. Members get the faces off The Wall and the Wall tile; door.js decides
+         who is a member, this only mirrors the nav link it already manages. ===== -->
+    <section id="do" data-tab="home">
+      <div class="hh" id="home-here" hidden></div>
+      <div class="do-rail" id="do-rail">
+        <a class="do wall" id="do-wall" href="wall/" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4" width="7" height="9" rx="1"/><rect x="13.5" y="4" width="7" height="6" rx="1"/><rect x="13.5" y="13" width="7" height="7" rx="1"/><rect x="3.5" y="16" width="7" height="4" rx="1"/></svg><b>The Wall</b><span>tonight&rsquo;s flyers</span></a>
+        <a class="do" href="#drops"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8h3.6l1.5-2.4h6.8L16.9 8h3.6v11h-17z"/><circle cx="12" cy="13.2" r="3.4"/></svg><b>Find your photos</b><span>every night we shot</span></a>
+        <a class="do" href="#open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="3.5" width="12" height="17" rx="2"/><path d="M12 8.2l1.2 2.5 2.7.3-2 1.9.6 2.7-2.5-1.4-2.5 1.4.6-2.7-2-1.9 2.7-.3z"/></svg><b>Open a pack</b><span>one random card</span></a>
+        <a class="do" href="#music"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 17.5V6l9.5-2v11.5"/><circle cx="7" cy="17.5" r="2.5"/><circle cx="16.5" cy="15.5" r="2.5"/></svg><b>Play something</b><span>on rotation</span></a>
+        <a class="do" href="#dates"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><b>What&rsquo;s coming</b><span>shows &middot; drops</span></a>
+        <a class="do" href="#desk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h8.5L18 7v13.5H6z"/><path d="M9 11h6M9 14h6M9 17h3.5"/></svg><b>Read a story</b><span>from the house</span></a>
       </div>
-      <div class="booster-mount" id="booster-mount"></div>
-    </section>
-
-    <!-- ===== THE DROPS — leads the page. Most arrivals want THEIR photos. ===== -->
-    <section id="drops">
-      <div class="section-head">
-        <h2>The Drops <span class="accent">find yours</span></h2>
-        <div class="sub">every night we shot &nbsp;·&nbsp; sealed &nbsp;·&nbsp; full quality</div>
-      </div>
-      <div class="drops-rail" id="drops-rail"></div>
-      <a class="drops-more" href="events/">every drop &rarr;</a>
-    </section>
-
-    <!-- ===== THE SLATE — the house's own work, below the drops ===== -->
-    <section id="slate">
-      <a class="slate-marquee" id="slate-marquee" href="#roster"></a>
-    </section>
-
-    <!-- ===== THE RUN — the calendar's next few, full list at /dates/ ===== -->
-    <section id="dates">
-      <div class="section-head">
-        <h2>The Run <span class="accent">what&rsquo;s coming</span></h2>
-        <div class="sub">shows &nbsp;·&nbsp; drops &nbsp;·&nbsp; releases</div>
-      </div>
-      <div id="run-add"></div>
-      <div class="cal-wrap" id="run-grid"></div>
-      <div class="run-rail" id="run-rail"></div>
-      <a class="drops-more" href="dates/">the whole calendar &rarr;</a>
-    </section>
-
-    <!-- ===== FEATURED VIDEOS — members paste links, one tab each ===== -->
-    <section id="videos" hidden>
-      <div class="section-head">
-        <h2>The Reel <span class="accent">featured</span></h2>
-        <div class="sub">what the roster is putting out</div>
-      </div>
-      <div class="vid-tabs" id="vid-tabs"></div>
-      <div class="vid-rail" id="vid-rail"></div>
-    </section>
-
-    <!-- ===== THE TAPE — the house's own video. THE REEL below is different on
-         purpose: that one is the roster's links out, this one is our footage. ===== -->
-    <section id="tape" hidden>
-      <div class="section-head">
-        <h2>The Tape <span class="accent">on video</span></h2>
-        <div class="sub">cuts &nbsp;·&nbsp; interviews &nbsp;·&nbsp; straight off the nights</div>
-      </div>
-      <div class="drops-rail" id="tape-rail"></div>
-      <a class="drops-more" href="video/">the whole tape &rarr;</a>
-    </section>
-
-    <!-- ===== THE CATALOG — every drop gets a number, finally shown ===== -->
-    <section id="catalog">
-      <div class="section-head">
-        <h2>The Catalog <span class="accent">the house</span></h2>
-        <div class="sub">every drop gets a number</div>
-      </div>
-      <div class="cat-list" id="cat-list"></div>
-    </section>
-
-    <!-- ===== ROSTER — above the timeline as of 8/27. The people come before
-         what they said today: a stranger scrolling wants to know WHO this is
-         before they read a feed of one-liners from names they do not have yet. ===== -->
-    <section id="roster">
-      <div class="section-head">
-        <h2>The Roster <span class="accent">voices we&rsquo;ve tapped</span></h2>
-        <div class="sub">each one goes crazy at one thing</div>
-      </div>
-      <div class="roster" id="roster-mount"></div>
     </section>
 
     <!-- ===== THE TAKE — the timeline. Card holders post here. ===== -->
-    <section id="take">
+    <section id="take" data-tab="home">
       <div class="section-head">
         <h2>The Take <span class="accent">the timeline</span></h2>
         <div class="sub">card holders only &nbsp;·&nbsp; art, thoughts, whatever</div>
@@ -4105,12 +4136,57 @@
       </a>
     </section>
 
+    <!-- ===== THE DROPS — leads the page. Most arrivals want THEIR photos. ===== -->
+    <section id="drops" data-tab="photos">
+      <div class="section-head">
+        <h2>The Drops <span class="accent">find yours</span></h2>
+        <div class="sub">every night we shot &nbsp;·&nbsp; sealed &nbsp;·&nbsp; full quality</div>
+      </div>
+      <div class="drops-rail" id="drops-rail"></div>
+      <a class="drops-more" href="events/">every drop &rarr;</a>
+    </section>
+
+    <!-- ===== THE TAPE — the house's own video. THE REEL below is different on
+         purpose: that one is the roster's links out, this one is our footage. ===== -->
+    <section id="tape" data-tab="photos" hidden>
+      <div class="section-head">
+        <h2>The Tape <span class="accent">on video</span></h2>
+        <div class="sub">cuts &nbsp;·&nbsp; interviews &nbsp;·&nbsp; straight off the nights</div>
+      </div>
+      <div class="drops-rail" id="tape-rail"></div>
+      <a class="drops-more" href="video/">the whole tape &rarr;</a>
+    </section>
+
+    <!-- ===== FEATURED VIDEOS — members paste links, one tab each ===== -->
+    <section id="videos" data-tab="photos" hidden>
+      <div class="section-head">
+        <h2>The Reel <span class="accent">featured</span></h2>
+        <div class="sub">what the roster is putting out</div>
+      </div>
+      <div class="vid-tabs" id="vid-tabs"></div>
+      <div class="vid-rail" id="vid-rail"></div>
+    </section>
+
+    <!-- ===== THE WORK (real frames) ===== -->
+    <section id="work" data-tab="photos">
+      <div class="section-head">
+        <h2>The Work <span class="accent">shot by the house</span></h2>
+        <div class="sub">nights, shops, stages, back rooms</div>
+      </div>
+      <div class="work-grid" id="work-grid"><!-- JS populates --></div>
+    </section>
+
+    <!-- ===== THE SLATE — the house's own work, below the drops ===== -->
+    <section id="slate" data-tab="stories">
+      <a class="slate-marquee" id="slate-marquee" href="#roster"></a>
+    </section>
+
     <!-- ===== THE WORD · filterable culture feed =====
          Sits directly under the timeline on purpose. The Take is what the
          house says in a sentence and The Word is what it says at length, so
          reading one straight into the other is the order that makes sense.
          It used to sit below the curators, four sections further down. -->
-    <section id="desk">
+    <section id="desk" data-tab="stories">
       <div class="section-head">
         <h2>The Word <span class="accent">stories from the house</span></h2>
         <div class="sub">serious pieces only &nbsp;·&nbsp; every one gets a number &nbsp;·&nbsp; links worth your time</div>
@@ -4127,9 +4203,18 @@
       <a class="drops-more" href="word/">the issue &rarr;</a>
     </section>
 
+    <!-- ===== THE CATALOG — every drop gets a number, finally shown ===== -->
+    <section id="catalog" data-tab="stories">
+      <div class="section-head">
+        <h2>The Catalog <span class="accent">the house</span></h2>
+        <div class="sub">every drop gets a number</div>
+      </div>
+      <div class="cat-list" id="cat-list"></div>
+    </section>
+
 
     <!-- ===== MUSIC · SPOTIFY ROTATION ===== -->
-    <section id="music">
+    <section id="music" data-tab="music">
       <div class="section-head">
         <h2>Music <span class="accent">on rotation</span></h2>
         <div class="sub">cued up &nbsp;·&nbsp; loud &nbsp;·&nbsp; looping</div>
@@ -4137,17 +4222,42 @@
       <div class="rotation-grid" id="rotation-mount"></div>
     </section>
 
-    <!-- ===== THE WORK (real frames) ===== -->
-    <section id="work">
+    <!-- ===== OPEN A PACK — leads the page now. The booster card used to sit
+         at the end of the curators grid, four screens down, which is a long walk
+         for the one thing on this page that is a toy. ===== -->
+    <section id="open" data-tab="people">
       <div class="section-head">
-        <h2>The Work <span class="accent">shot by the house</span></h2>
-        <div class="sub">nights, shops, stages, back rooms</div>
+        <h2>Open A Pack <span class="accent">one random card</span></h2>
+        <div class="sub">tap it &nbsp;·&nbsp; you get who you get</div>
       </div>
-      <div class="work-grid" id="work-grid"><!-- JS populates --></div>
+      <div class="booster-mount" id="booster-mount"></div>
+    </section>
+
+    <!-- ===== ROSTER — above the timeline as of 8/27. The people come before
+         what they said today: a stranger scrolling wants to know WHO this is
+         before they read a feed of one-liners from names they do not have yet. ===== -->
+    <section id="roster" data-tab="people">
+      <div class="section-head">
+        <h2>The Roster <span class="accent">voices we&rsquo;ve tapped</span></h2>
+        <div class="sub">each one goes crazy at one thing</div>
+      </div>
+      <div class="roster" id="roster-mount"></div>
+    </section>
+
+    <!-- ===== THE RUN — the calendar's next few, full list at /dates/ ===== -->
+    <section id="dates" data-tab="more">
+      <div class="section-head">
+        <h2>The Run <span class="accent">what&rsquo;s coming</span></h2>
+        <div class="sub">shows &nbsp;·&nbsp; drops &nbsp;·&nbsp; releases</div>
+      </div>
+      <div id="run-add"></div>
+      <div class="cal-wrap" id="run-grid"></div>
+      <div class="run-rail" id="run-rail"></div>
+      <a class="drops-more" href="dates/">the whole calendar &rarr;</a>
     </section>
 
     <!-- ===== PITCH US ===== -->
-    <section id="pitch">
+    <section id="pitch" data-tab="more">
       <div class="section-head">
         <h2>Pitch Us <span class="accent">get on the desk</span></h2>
         <div class="sub">slide it under the door. we answer it ourselves.</div>
@@ -4163,7 +4273,7 @@
     </section>
 
     <!-- ===== WHY WE'RE THE EXPERTS ===== -->
-    <section id="experts">
+    <section id="experts" data-tab="more">
       <div class="section-head">
         <h2>Why <span class="accent">we&rsquo;re the experts</span></h2>
         <div class="sub">credentials &nbsp;·&nbsp; craft &nbsp;·&nbsp; receipts</div>
@@ -4214,6 +4324,103 @@
 <!-- ============================================================
      CONTENT LOADER — pulls everything from /content/*.json
      ============================================================ -->
+<script>
+/* ---------- tabs (10/3) ----------
+   Home is the timeline. A tab link (#photos) or any old section link (#desk, #roster, ../#catalog from a story page)
+   opens the right tab and lands on the section. Back and forward walk the tabs. */
+(function(){
+  var TABS = ['home','photos','stories','music','people','more'];
+  var root = document.documentElement, main = document.querySelector('main.feed');
+  if (!main) return;
+  var SEC = {};
+  Array.prototype.forEach.call(main.children, function(el){ if (el.tagName === 'SECTION' && el.id && el.dataset.tab) SEC[el.id] = el.dataset.tab; });
+  var cur = root.getAttribute('data-tab') || 'home', touched = false;
+  function paint(){
+    document.querySelectorAll('[data-tab-link]').forEach(function(a){
+      if (a.getAttribute('data-tab-link') === cur) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+    });
+  }
+  function jump(y){ try { window.scrollTo({top: y, left: 0, behavior: 'instant'}); } catch(e){ window.scrollTo(0, y); } }
+  function contentTop(){
+    var nav = document.querySelector('nav.site'), wrap = document.querySelector('.wrap');
+    if (!wrap) return 0;
+    var stick = nav && getComputedStyle(nav).position === 'sticky' ? nav.offsetHeight : 0;
+    return Math.max(0, Math.round(wrap.getBoundingClientRect().top + window.scrollY - stick - 6));
+  }
+  function show(tab, o){
+    o = o || {};
+    if (TABS.indexOf(tab) < 0) tab = 'home';
+    var changed = tab !== cur;
+    cur = tab; root.setAttribute('data-tab', tab); paint();
+    if (changed) { try { window.dispatchEvent(new Event('resize')); } catch(e){} }     // rails that measured while hidden
+    var el = o.section && document.getElementById(o.section);
+    if (el) {
+      var go = function(){ try { el.scrollIntoView({block: 'start', behavior: 'instant'}); } catch(e){ el.scrollIntoView(true); } };
+      go();
+      if (o.settle) [500, 1400, 2600].forEach(function(ms){ setTimeout(function(){ if (!touched) go(); }, ms); });   // content lands late
+    } else if (o.scroll) jump(tab === 'home' ? 0 : contentTop());
+  }
+  function route(hash, o){
+    var h = String(hash || '').replace(/^#/, '');
+    if (TABS.indexOf(h) >= 0) { show(h, o); return true; }
+    if (SEC[h]) { o = o || {}; o.section = h === 'do' ? null : h; show(SEC[h], o); return true; }
+    return false;
+  }
+  document.addEventListener('click', function(e){
+    var a = e.target.closest && e.target.closest('a[href]'); if (!a) return;
+    var href = a.getAttribute('href') || '';
+    if (href.charAt(0) !== '#' || href.length < 2) return;
+    var h = href.slice(1);
+    if (TABS.indexOf(h) < 0 && !SEC[h]) return;
+    e.preventDefault();
+    if (location.hash !== href) { try { history.pushState(null, '', href); } catch(err){} }
+    route(h, {scroll: true});
+  });
+  window.addEventListener('popstate', function(){ if (!route(location.hash, {scroll: true})) show('home', {scroll: true}); });
+  ['wheel', 'touchmove', 'keydown'].forEach(function(ev){ window.addEventListener(ev, function(){ touched = true; }, {passive: true, once: true}); });
+  paint();
+  var h0 = (location.hash || '').slice(1);
+  if (SEC[h0] && h0 !== 'do') show(SEC[h0], {section: h0, settle: true});
+
+  /* Members: the Wall tile and the faces. door.js shows #nav-wall for anyone who is in; mirror that, never decide it here. */
+  var navWall = document.getElementById('nav-wall'), tile = document.getElementById('do-wall'), box = document.getElementById('home-here');
+  var asked = false;
+  function initials(n){ return String(n || '?').trim().split(/\s+/).slice(0, 2).map(function(w){ return Array.from(w)[0] || ''; }).join('').toUpperCase() || '?'; }
+  function faces(){
+    if (asked || !box || !window.OTP || !OTP.configured || !OTP.sb) return;
+    var c = OTP.sb(); if (!c) return;
+    asked = true;
+    c.rpc('wall_here').then(function(r){
+      if (!r || r.error || !Array.isArray(r.data) || !r.data.length) return;
+      var head = document.createElement('div'); head.className = 'hh-h';
+      var lab = document.createElement('span'); lab.textContent = "Who's here "; var n = document.createElement('b'); n.textContent = r.data.length; lab.appendChild(n);
+      var all = document.createElement('a'); all.href = 'wall/'; all.textContent = 'The Wall →';
+      head.appendChild(lab); head.appendChild(all);
+      var row = document.createElement('div'); row.className = 'hh-row';
+      r.data.slice(0, 40).forEach(function(p){
+        if (!/^[0-9a-f]{10}$/.test(p.sid || '')) return;
+        var a = document.createElement('a'); a.className = 'hh-f'; a.href = 'wall/#s-' + p.sid; a.setAttribute('aria-label', (p.name || 'Member') + "'s page");
+        var ring = document.createElement('span'); ring.className = 'hh-p';
+        if (p.pic && /^https:\/\//.test(p.pic)) { var im = document.createElement('img'); im.src = p.pic; im.alt = ''; im.loading = 'lazy'; im.decoding = 'async'; ring.appendChild(im); }
+        else { var i = document.createElement('i'); i.textContent = initials(p.name); ring.appendChild(i); }
+        if (p.mood_e) { var em = document.createElement('em'); em.textContent = p.mood_e; em.setAttribute('aria-hidden', 'true'); ring.appendChild(em); }
+        var nm = document.createElement('span'); nm.className = 'hh-n'; nm.textContent = String(p.name || 'Member').trim().split(/\s+/)[0];
+        a.appendChild(ring); a.appendChild(nm); row.appendChild(a);
+      });
+      if (!row.children.length) return;
+      n.textContent = row.children.length;
+      box.textContent = ''; box.appendChild(head); box.appendChild(row); box.hidden = false;
+    }, function(){});
+  }
+  function syncWall(){
+    if (!navWall) return;
+    if (tile) tile.hidden = navWall.hidden;
+    if (!navWall.hidden) { if (window.OTP && OTP.sb) faces(); else window.addEventListener('DOMContentLoaded', faces, {once: true}); }
+    else if (box) box.hidden = true;
+  }
+  if (navWall) { try { new MutationObserver(syncWall).observe(navWall, {attributes: true, attributeFilter: ['hidden']}); } catch(e){} syncWall(); }
+})();
+</script>
 <script>
 (async function init() {
   const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -6197,7 +6404,8 @@
     }, { threshold: 0, rootMargin: '0px 0px -50px 0px' });
     revealTargets.forEach(el => {
       const rect = el.getBoundingClientRect();
-      if (rect.top < vh) setTimeout(() => el.classList.add('in'), (visIdx++) * 90);
+      if (el.offsetParent === null) el.classList.add('in');   // on another tab: nothing to stagger
+      else if (rect.top < vh) setTimeout(() => el.classList.add('in'), (visIdx++) * 90);
       else io.observe(el);
     });
   } else {
