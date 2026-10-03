@@ -13,6 +13,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/pack.css?v=4ea0ebad">
 <style>
 :root{--bg:#0a0a0d;--panel:#121218;--line:#23222b;--ink:#f4eef2;--muted:#9a93a3;
 --pink:#f7b9dd;--pink-deep:#f48fc8;--pink-glow:#ff79c6;--dye-blue:#2f6bff;
@@ -28,27 +29,27 @@ font-size:clamp(38px,8vw,88px);line-height:.92;letter-spacing:-.01em;
 background:linear-gradient(180deg,#fff 10%,var(--pink) 45%,#8f8a97 60%,var(--pink-deep) 96%);
 -webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 4px 24px rgba(255,121,198,.22))}
 .sub{font-family:var(--f-mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-top:12px}
-.list{margin-top:34px;border-top:1px solid var(--line)}
-.ev{display:grid;grid-template-columns:96px 1fr auto;gap:16px;align-items:center;
-padding:14px 8px;border-bottom:1px solid var(--line);text-decoration:none;color:inherit;transition:background .18s ease}
-.ev:hover{background:rgba(244,143,200,.07)}
-.ev-cover{width:96px;height:64px;object-fit:cover;border-radius:5px;border:1px solid var(--line);display:block;background:var(--panel)}
-.ev-name{font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;
-font-size:26px;line-height:1;letter-spacing:.01em;color:var(--ink)}
-.ev:hover .ev-name{color:var(--pink-glow)}
-.ev-venue{font-family:var(--f-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:5px}
-.ev-date{font-family:var(--f-mono);font-size:13px;letter-spacing:.14em;color:var(--pink-deep);white-space:nowrap}
-.ev-count{font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;color:var(--muted);text-align:right;margin-top:4px}
+/* THE SHELF (10/3). Every night is a sealed party pack in its own wrapper, the
+   same tile the homepage rail uses (assets/css/pack.css). It was a list of rows.
+   ⛔ Still one plain link per night: the pack is the picture, the tear happens on
+      the night's own page. */
+.shelf{margin-top:30px;padding-top:26px;border-top:1px solid var(--line);
+display:grid;grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:34px 22px;align-items:start}
+.pk{display:block;text-decoration:none;color:inherit;text-align:center;min-width:0}
+.pk .cap{display:block;padding:11px 2px 0}
+.pk .cap b{display:block;font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;
+font-size:17px;line-height:1.05;letter-spacing:.01em;color:var(--ink);overflow-wrap:anywhere}
+.pk:hover .cap b{color:var(--pink-glow)}
+.pk .cap i{display:block;font-style:normal;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.16em;
+text-transform:uppercase;color:var(--pink-deep);margin-top:5px}
+.shelf .empty{grid-column:1/-1}
 .empty{padding:40px 0;color:var(--muted);font-family:var(--f-mono);font-size:12px;letter-spacing:.14em}
 .foot{margin-top:40px;padding-top:20px;border-top:1px solid var(--line);
 font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);line-height:2}
 .foot a{color:var(--pink-glow);text-decoration:none}
 @media (max-width:600px){
-  .ev{grid-template-columns:64px 1fr;gap:12px}
-  .ev-cover{width:64px;height:48px}
-  .ev-name{font-size:20px}
-  .ev-date{grid-column:2;font-size:11px}
-  .ev-count{display:none}
+  .shelf{grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 14px;padding-top:22px}
+  .pk .cap b{font-size:15px}
 }
 </style>
 </head>
@@ -58,7 +59,7 @@ font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;text-transform:upp
   <a class="back" href="../">&larr; 0FF THE PRINT</a>
   <h1>Event Photos</h1>
   <div class="sub">every night we shot &nbsp;·&nbsp; san antonio &nbsp;·&nbsp; find yours</div>
-  <div class="list" id="list"><div class="empty">loading…</div></div>
+  <div class="shelf" id="list"><div class="empty">loading…</div></div>
   <div class="foot">
     Shot by 0FF THE PRINT &nbsp;·&nbsp; <a href="https://instagram.com/vamppsych" target="_blank" rel="noopener">@vamppsych</a><br>
     Want your night shot? DM the desk, or <a href="mailto:offtheprintcollective@gmail.com">offtheprintcollective@gmail.com</a>.<br>
@@ -68,24 +69,43 @@ font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;text-transform:upp
 <script>
 (async () => {
   const el = document.getElementById('list');
+  // ⛔ Nothing out of events.json goes in as HTML. Text is textContent, and a slug
+  //    or a cover only becomes a URL after it matches the shape newevent.py writes.
+  const SLUG = /^[a-z0-9][a-z0-9-]{0,80}$/;
+  const COVER = /^[a-z0-9][a-z0-9-]{0,80}\/media\/[A-Za-z0-9_.-]{1,60}$/;
+  const mk = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };
+  const say = (t) => { el.textContent = ''; el.appendChild(mk('div', 'empty', t)); };
   try {
     const d = await (await fetch('events.json', {cache:'no-cache'})).json();
-    const items = d.items || [];
-    if (!items.length) { el.innerHTML = '<div class="empty">No events posted yet.</div>'; return; }
-    el.innerHTML = items.map(e => `
-      <a class="ev" href="${e.slug}/">
-        <img class="ev-cover" src="${e.cover}" alt="" loading="lazy" decoding="async">
-        <div>
-          <div class="ev-name">${e.title}</div>
-          <div class="ev-venue">${e.venue}</div>
-        </div>
-        <div>
-          <div class="ev-date">${e.date_short}</div>
-          <div class="ev-count">${e.count} frames</div>
-        </div>
-      </a>`).join('');
+    const items = (d.items || []).filter(e => e && SLUG.test(e.slug || ''));
+    if (!items.length) { say('No events posted yet.'); return; }
+    el.textContent = '';
+    items.forEach(e => {
+      const title = String(e.title || '');
+      const a = mk('a', 'pk'); a.href = e.slug + '/';
+      const pp = mk('span', 'pp');
+      // the night's own wrapper, or the house pack if it has none yet
+      const w = mk('img', 'pp-w'); w.alt = ''; w.width = 520; w.height = 878; w.loading = 'lazy'; w.decoding = 'async';
+      w.addEventListener('error', () => { w.src = '../assets/cathedral/pack-house.webp'; }, { once: true });
+      w.src = e.slug + '/pack.webp';
+      pp.appendChild(w);
+      if (COVER.test(e.cover || '')) {
+        const ph = mk('span', 'pp-ph'), im = mk('img');
+        im.alt = ''; im.loading = 'lazy'; im.decoding = 'async';
+        im.addEventListener('error', () => ph.remove(), { once: true });
+        im.src = e.cover; ph.appendChild(im); pp.appendChild(ph);
+      }
+      pp.appendChild(mk('span', 'pp-t' + (title.length > 16 ? ' long' : ''), title));
+      pp.appendChild(mk('span', 'pp-d', e.date_short || ''));
+      a.appendChild(pp);
+      const cap = mk('span', 'cap');
+      cap.appendChild(mk('b', '', e.venue || title));
+      cap.appendChild(mk('i', '', (e.count | 0) + ' frames \u00b7 sealed'));
+      a.appendChild(cap);
+      el.appendChild(a);
+    });
   } catch (err) {
-    el.innerHTML = '<div class="empty">Could not load events.</div>';
+    say('Could not load events.');
   }
 })();
 </script>

@@ -56,6 +56,48 @@
   text-transform:uppercase;color:rgba(255,255,255,.86);text-shadow:0 1px 8px rgba(0,0,0,.8)}
 .sl-pack .bot b{display:block;color:#fff;font-weight:500;font-size:11px;margin-bottom:4px}
 
+/* ---------------- the party pack (10/3) ----------------
+   The same button, a different body: the night's own foil wrapper (pack.webp)
+   instead of the drawn pack. Everything above still styles the plain .sl-pack;
+   these rules undo the box and lay the wrapper, the printed frames and the
+   title plate in.
+   ⛔ The frames are MASKED into the foil on all four sides. A hard-edged photo
+   reads as a sticker; this has to read as printed. */
+.sl-pack.party{width:min(280px,74vw);aspect-ratio:520/878;border:0;border-radius:0;overflow:visible;
+  background:none;box-shadow:none;filter:drop-shadow(0 18px 26px rgba(0,0,0,.65));
+  transition:transform .18s ease, filter .18s ease}
+.sl-pack.party:hover{transform:translateY(-4px) rotate(-1.5deg);box-shadow:none;
+  filter:drop-shadow(0 0 22px rgba(255,121,198,.6))}
+.sl-pack.party .pk-b,.sl-pack.party .pk-top{position:absolute;inset:0;display:block}
+.sl-pack.party .pk-w{position:absolute;inset:0;width:100%;height:100%;display:block}
+.sl-pack.party .pk-top{z-index:3;
+  clip-path:polygon(0 0,100% 0,100% 7.2%,92% 8.4%,84% 7%,76% 8.4%,68% 7%,60% 8.4%,52% 7%,44% 8.4%,36% 7%,28% 8.4%,20% 7%,12% 8.4%,4% 7%,0 7.8%)}
+.sl-pack.party .pk-b{z-index:1;
+  clip-path:polygon(0 7.8%,4% 7%,12% 8.4%,20% 7%,28% 8.4%,36% 7%,44% 8.4%,52% 7%,60% 8.4%,68% 7%,76% 8.4%,84% 7%,92% 8.4%,100% 7.2%,100% 100%,0 100%)}
+.sl-pack.party .pk-ph{position:absolute;left:9.5%;right:9.5%;top:25.5%;bottom:27.5%;
+  display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1.55fr 1fr;gap:0;overflow:hidden;
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 8%,#000 91%,transparent 100%),linear-gradient(to right,transparent 0,#000 7%,#000 93%,transparent 100%);
+  -webkit-mask-composite:source-in;
+  mask-image:linear-gradient(to bottom,transparent 0,#000 8%,#000 91%,transparent 100%),linear-gradient(to right,transparent 0,#000 7%,#000 93%,transparent 100%);
+  mask-composite:intersect}
+.sl-pack.party .pk-ph img{width:100%;height:100%;min-height:0;object-fit:cover;object-position:50% 26%;display:block;filter:saturate(.9) contrast(1.05)}
+.sl-pack.party .pk-ph img:first-child{grid-column:1/3}
+.sl-pack.party .pk-ph img:only-child{grid-row:1/3}
+.sl-pack.party .pk-b::after{content:'';position:absolute;inset:6% 4%;pointer-events:none;mix-blend-mode:screen;
+  background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.16) 44%,transparent 56%);
+  background-size:260% 100%;background-position:120% 0;transition:background-position .6s ease}
+.sl-pack.party:hover .pk-b::after{background-position:-20% 0}
+.sl-pack.party .face{z-index:2;display:block;padding:0}
+.sl-pack.party .mk{position:absolute;left:10%;right:10%;top:75%;height:10.5%;display:grid;place-items:center;overflow:hidden;
+  font-size:21px;line-height:.95;text-shadow:0 1px 6px #000,0 0 2px #000,0 0 12px rgba(0,0,0,.8)}
+.sl-pack.party .mk.long{font-size:15.5px;line-height:1}
+/* two short lines, never one long one: "CLUB 212 · BAR HOUSE 09.17.26 · 59 FRAMES · SEALED" ran off the foil */
+.sl-pack.party .bot{position:absolute;left:8%;right:8%;top:86%;font-size:7.5px;letter-spacing:.14em;line-height:1.55}
+.sl-pack.party .bot b,.sl-pack.party .bot i{display:block;font-style:normal;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sl-pack.party .bot b{font-size:8px;margin:0;color:#fff}
+.sl-pack.party.rip .pk-top{animation:sl-tear .52s .08s cubic-bezier(.3,.7,.3,1) forwards}
+@keyframes sl-tear{to{transform:translate(58%,-220%) rotate(34deg);opacity:0}}
+
 /* tearing */
 .sl-pack.rip{pointer-events:none;animation:sl-shake .42s ease}
 .sl-pack.rip .lip{animation:sl-peel .5s .1s ease-in forwards}
@@ -163,6 +205,7 @@
 
 @media (prefers-reduced-motion:reduce){
   .sl-pack,.sl-pack .glare,.sl-pack.rip,.sl-pack.rip .lip,.sl-pack.gone,
+  .sl-pack.party .pk-top,.sl-pack.party .pk-b::after,
   .sl-card,.sl-card.hit::after{animation:none!important;transition:none!important}
   .sl-card{opacity:1;transform:none}
 }

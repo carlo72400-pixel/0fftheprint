@@ -101,17 +101,23 @@
   var seal = d.createElement('div');
   seal.className = 'seal';
 
-  var cover = (media[0] && media[0].thumb) || '';
   var pct = Math.round((PACK / n) * 100);
 
+  /* THE PARTY PACK (10/3). Every night wears its own wrapper: pack.webp, sitting
+     next to this page. A night that has none yet wears the house pack.
+     .pk-b is the pouch and .pk-top is the same picture clipped to the top crimp,
+     so the tear is the real seal coming off and not a white strip.
+     The night is printed INTO the foil (.pk-ph): three of its own frames,
+     feathered, under the wrapper's ornaments. The title sits on the plate. */
+  var tl = String(N.title || 'Last Night');
   seal.innerHTML =
-    '<button class="sl-pack" id="sl-pack" type="button" aria-label="Tear the pack open">' +
-      '<span class="art"></span><span class="foil"></span><span class="glare"></span>' +
-      '<span class="lip"></span>' +
+    '<button class="sl-pack party" id="sl-pack" type="button" aria-label="Tear the pack open">' +
+      '<span class="pk-b"><img class="pk-w" alt="" width="520" height="878"><span class="pk-ph"></span></span>' +
+      '<span class="pk-top"><img class="pk-w" alt="" width="520" height="878"></span>' +
       '<span class="face">' +
-        '<span class="mk">Last Night<i>sealed</i></span>' +
+        '<span class="mk' + (tl.length > 16 ? ' long' : '') + '">' + esc(tl) + '</span>' +
         '<span class="bot"><b>' + esc(N.venue || '') + '</b>' +
-          esc(N.dateShort || '') + ' &middot; ' + n + ' frames &middot; sealed</span>' +
+          '<i>' + esc(N.dateShort || '') + ' &middot; ' + n + ' frames &middot; sealed</i></span>' +
       '</span>' +
     '</button>' +
     '<div class="sl-say">' +
@@ -128,8 +134,24 @@
   if (grid && grid.parentNode) grid.parentNode.insertBefore(seal, grid);
   else return;
 
-  var art = seal.querySelector('.art');
-  if (cover) art.style.backgroundImage = 'url("' + String(cover).replace(/"/g, '%22') + '")';
+  // the wrapper: this night's own, or the house pack if it has none yet
+  var HOUSE = '../../assets/cathedral/pack-house.webp';
+  var wraps = seal.querySelectorAll('.pk-w');
+  var fell = false;
+  function fallBack() { if (fell) return; fell = true; for (var q = 0; q < wraps.length; q++) wraps[q].src = HOUSE; }
+  for (var q = 0; q < wraps.length; q++) { wraps[q].addEventListener('error', fallBack); wraps[q].src = 'pack.webp'; }
+  // the night, printed in: the cover wide, two more under it.
+  // ⛔ NEVER THE HIT. It is the one frame the pack is hiding; printing it on the
+  //    front would hand over the chase before the tear.
+  var ph = seal.querySelector('.pk-ph');
+  var picks = n >= 3 ? [0, Math.floor(n / 3), Math.floor((2 * n) / 3)] : [0];
+  picks = picks.map(function (pi) { return (pi === hitIdx && n > 3) ? (pi + 1) % n : pi; });
+  picks.forEach(function (pi) {
+    var t = media[pi] && media[pi].thumb; if (!t) return;
+    var im = d.createElement('img'); im.alt = ''; im.decoding = 'async';
+    im.addEventListener('error', function () { im.remove(); });
+    im.src = t; ph.appendChild(im);
+  });
 
   var packEl = d.getElementById('sl-pack');
   var handEl = d.getElementById('sl-hand');

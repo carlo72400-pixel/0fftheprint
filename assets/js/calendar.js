@@ -59,6 +59,12 @@
     var v = String(u || '').trim();
     return /^https:\/\/[A-Za-z0-9.-]+\.[A-Za-z]{2,}/.test(v) ? v : '';
   }
+  /* THE KIND ICONS (10/3). Six small renders in assets/cathedral/k/, one per
+     kind. ⛔ A kind is a value out of the table, so it never reaches a URL as
+     typed: it is looked up here and anything unknown gets the hourglass. */
+  var KIND_ICON = { show: 'show', drop: 'drop', release: 'release', booth: 'booth', festival: 'festival', other: 'other' };
+  function kindIcon(k) { return KIND_ICON[String(k || 'show')] || 'other'; }
+  function iconURL(k) { return BASE + 'assets/cathedral/k/' + kindIcon(k) + '.webp'; }
 
   /* ------------------------------ the sheet ------------------------------
      opts: { admin } — the desk's half of the exchange only renders for the desk.
@@ -275,6 +281,7 @@
       var shown = out ? (n < 1 ? prevDays + n : n - days) : n;
       cell.className = 'cal-cell' + (out ? ' out' : '');
       if (!out && ymd(y, mo, n) === today) cell.className += ' today';
+      else if (!out && ymd(y, mo, n) < today) cell.className += ' past';   // already happened, drawn quieter
       var list = (!out && byDay[n]) || [];
       if (list.length) cell.className += ' has';
       cell.innerHTML = '<span class="cal-num">' + shown + '</span>';
@@ -337,6 +344,7 @@
     houseLabel: houseLabel,
     MON: MON, MONTH: MONTH, DOW: DOW,
     esc: esc, parts: parts, todayYMD: todayYMD, ymd: ymd, clock: clock, safeLink: safeLink,
+    kindIcon: kindIcon, iconURL: iconURL,
     sheet: sheet, grid: grid
   };
 })(window, document);

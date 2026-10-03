@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="cath">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -30,20 +30,24 @@
 
 <!-- Favicons + app icons -->
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-<link rel="alternate icon" href="assets/icon-180.png">
+<link rel="alternate icon" type="image/png" sizes="32x32" href="assets/cathedral/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="assets/css/calendar.css">
+<link rel="stylesheet" href="assets/css/calendar.css?v=1646f26d">
+<link rel="preload" as="image" href="assets/cathedral/hero.webp" media="(min-width:561px)">
+<link rel="preload" as="image" href="assets/cathedral/hero-m.webp" media="(max-width:560px)">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700..900&family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Pirata+One&family=Luckiest+Guy&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" defer></script>
 <script src="supabase-config.js?v=f1348482" defer></script>
 <script src="assets/js/desk.js?v=15d61348" defer></script>
 <script src="assets/js/door.js?v=678b352e" defer></script>
 <script src="assets/js/composer.js?v=c23c5d02" defer></script>
-<script src="assets/js/calendar.js?v=b7cd53c5" defer></script>
+<script src="assets/js/calendar.js?v=52b31f44" defer></script>
 <script src="assets/js/edit.js?v=f019eef7" defer></script>
+<script src="assets/js/cathedral.js?v=17355b0c" defer></script>
 <script>/* tabs: pick the page before first paint, off the #hash. Old links like /#desk still land right. */
 (function(){var M={do:'home',take:'home',drops:'photos',tape:'photos',videos:'photos',work:'photos',slate:'stories',desk:'stories',catalog:'stories',music:'music',open:'people',roster:'people',dates:'more',pitch:'more',experts:'more'},T=['home','photos','stories','music','people','more'],h=(location.hash||'').slice(1),d=document.documentElement;d.className+=' tabs';d.setAttribute('data-tab',T.indexOf(h)>=0?h:(M[h]||'home'));})();</script>
 <style>
@@ -3872,6 +3876,9 @@
     .do{min-height:54px;padding:10px 13px;}
   }
 </style>
+<!-- THE CATHEDRAL (10/3): the homepage skin. Scoped under html.cath, loaded last on purpose. -->
+<link rel="stylesheet" href="assets/css/pack.css?v=4ea0ebad">
+<link rel="stylesheet" href="assets/css/cathedral.css?v=a82448e6">
 </head>
 <body>
 
@@ -3940,6 +3947,7 @@
 
 <!-- ========== NAV ========== -->
 <nav class="site">
+  <a href="#home" class="wm" aria-label="0FF THE PRINT, home"><img src="assets/cathedral/mark.webp" alt="" width="240" height="228"><span>FF THE PRINT</span></a>
   <a href="join/?next=home" id="nav-key" class="key" title="Members and card holders log in here.">Log in</a>
   <a href="#home" class="tablink" data-tab-link="home">Home</a>
   <a href="wall/" id="nav-wall" title="Every flyer in SA, San Marcos and Austin this week." hidden>The Wall</a>
@@ -3956,42 +3964,66 @@
 
 <!-- ========== TAB BAR (phones): the same tabs, under the thumb ========== -->
 <nav class="tabbar" id="tabbar" aria-label="Sections">
-  <a href="#home" data-tab-link="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10v9.5h4.2v-5.6h3.6v5.6H18V10"/></svg><span>Home</span></a>
-  <a href="#photos" data-tab-link="photos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8h3.6l1.5-2.4h6.8L16.9 8h3.6v11h-17z"/><circle cx="12" cy="13.2" r="3.4"/></svg><span>Photos</span></a>
-  <a href="#stories" data-tab-link="stories"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h8.5L18 7v13.5H6z"/><path d="M9 11h6M9 14h6M9 17h3.5"/></svg><span>Stories</span></a>
-  <a href="#music" data-tab-link="music"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 17.5V6l9.5-2v11.5"/><circle cx="7" cy="17.5" r="2.5"/><circle cx="16.5" cy="15.5" r="2.5"/></svg><span>Music</span></a>
-  <a href="#people" data-tab-link="people"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8.5" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 5.2a3.3 3.3 0 0 1 0 6.6M18.2 14.8c1.7.8 2.9 2.5 3.3 5.2"/></svg><span>People</span></a>
-  <a href="#more" data-tab-link="more"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg><span>More</span></a>
+  <a href="#home" data-tab-link="home"><img src="assets/cathedral/i-home.webp" alt="" width="30" height="30"><span>Home</span></a>
+  <a href="#photos" data-tab-link="photos"><img src="assets/cathedral/i-photos.webp" alt="" width="30" height="30"><span>Photos</span></a>
+  <a href="#stories" data-tab-link="stories"><img src="assets/cathedral/i-stories.webp" alt="" width="30" height="30"><span>Stories</span></a>
+  <a href="#music" data-tab-link="music"><img src="assets/cathedral/i-music.webp" alt="" width="30" height="30"><span>Music</span></a>
+  <a href="#people" data-tab-link="people"><img src="assets/cathedral/i-people.webp" alt="" width="30" height="30"><span>People</span></a>
+  <a href="#more" data-tab-link="more"><img src="assets/cathedral/i-more.webp" alt="" width="30" height="30"><span>More</span></a>
 </nav>
 
-<!-- ========== PULSE BANNER ========== -->
-<header class="pulse-banner">
-  <div class="pulse-kick">MEDIA HOUSE · SAN ANTONIO TX · SINCE WE FELT LIKE IT</div>
-  <h1 class="pulse-line">THE CITY GOES DARK.<br><span class="blue">WE CLOCK IN.</span></h1>
-  <div class="pulse-mark" role="img" aria-label="0FF THE PRINT">
-    <span class="pm-lock"><img class="pm-mk" src="assets/mark-inline.svg" alt="" width="64" height="64">
-      <span class="pm-txt">FF THE PRINT</span></span>
+<!-- ========== THE HERO: THE LOUNGE (10/3) ==========
+     The cathedral, the window, the house on the couches. .pulse-kick and
+     .pulse-line are the SAME two elements the site.json loader has always
+     filled, so the house line is still editable from the phone.
+     The six arch cards are plain tab links: the inline tab router owns them
+     (data-tab-link), cathedral.js only adds the turning icons on a wide screen. -->
+<header class="pulse-banner hero" id="hero">
+  <div class="hero-rose" aria-hidden="true"></div>
+  <div class="hero-bats" aria-hidden="true"><i></i><i></i><i></i></div>
+  <a class="hero-beacon" id="hero-beacon" href="events/" hidden><i></i><span><b>The window lights for the last night</b><strong id="hb-title"></strong><small id="hb-meta"></small></span></a>
+  <div class="hero-say">
+    <div class="pulse-kick">MEDIA HOUSE · SAN ANTONIO TX · SINCE WE FELT LIKE IT</div>
+    <h1 class="pulse-line">THE CITY GOES DARK.<br><span class="blue">WE CLOCK IN.</span></h1>
   </div>
+  <nav class="hero-hand" id="hero-hand" aria-label="Sections, as cards">
+    <a class="hcard" href="#home" data-tab-link="home"><img src="assets/cathedral/i-home.webp" alt="" width="360" height="236"><u>Home</u></a>
+    <a class="hcard" href="#photos" data-tab-link="photos"><img src="assets/cathedral/i-photos.webp" alt="" width="360" height="233"><u>Photos</u></a>
+    <a class="hcard" href="#stories" data-tab-link="stories"><img src="assets/cathedral/i-stories.webp" alt="" width="360" height="326"><u>Stories</u></a>
+    <a class="hcard" href="#music" data-tab-link="music"><img src="assets/cathedral/i-music.webp" alt="" width="360" height="228"><u>Music</u></a>
+    <a class="hcard" href="#people" data-tab-link="people"><img src="assets/cathedral/i-people.webp" alt="" width="360" height="281"><u>People</u></a>
+    <a class="hcard" href="#more" data-tab-link="more"><img src="assets/cathedral/i-more.webp" alt="" width="325" height="360"><u>More</u></a>
+  </nav>
 </header>
-
 <!-- ========== MAIN GRID ========== -->
 <div class="wrap">
+
+  <!-- Every other tab opens on its own room of the same building. They live INSIDE .wrap on
+       purpose: the tab router scrolls a tab to the top of .wrap, so anything above it would be
+       scrolled straight past. Short, so the content still starts high. -->
+  <div class="tabroom" data-room="photos" aria-hidden="true"><div><b>Photos</b><span>every night we shot</span></div></div>
+  <div class="tabroom" data-room="stories" aria-hidden="true"><div><b>Stories</b><span>from the house</span></div></div>
+  <div class="tabroom" data-room="music" aria-hidden="true"><div><b>Music</b><span>on rotation</span></div></div>
+  <div class="tabroom" data-room="people" aria-hidden="true"><div><b>People</b><span>voices we&rsquo;ve tapped</span></div></div>
+  <div class="tabroom" data-room="more" aria-hidden="true"><div><b>More</b><span>what&rsquo;s coming &middot; the desk</span></div></div>
 
   <!-- ============ SIDEBAR ============ -->
   <aside class="sidebar">
 
     <section class="card brand-card">
-      <!-- The real lockup, not a picture of one. This card used to carry a 720px
-           WebP of the xerox wordmark, which was a fourth mark competing with the
-           footer, the banner and the pack. Same mark as the favicon now. -->
+      <!-- The house's own profile box (10/3). Same words the card always carried:
+           the name, "Underground media house", SATX, NO. 0TP, pretty-first with
+           teeth. "Last seen" is filled by cathedral.js from events.json. -->
+      <h3>0FF THE PRINT</h3>
       <div class="bc-lock">
-        <img class="bc-mk" src="assets/mark.svg" alt="" width="88" height="88" decoding="async">
-        <div class="bc-name">0FF THE PRINT</div>
-        <div class="bc-sub">Underground media house &middot; SATX</div>
-        <div class="bc-rule"><span>NO. 0TP</span> Pretty-first &middot; with teeth</div>
+        <img class="bc-mk" src="assets/cathedral/mark.webp" alt="" width="240" height="228" decoding="async">
+        <div class="bc-txt"><b>Underground media house</b><br>San Antonio &middot; TX<br><span class="bc-on">&#9679; online now</span></div>
       </div>
-      <div class="handle" style="text-align:center;">SAN ANTONIO &middot; TX</div>
-      <div class="strip"></div>
+      <dl>
+        <dt>No.</dt><dd>0TP &middot; pretty-first, with teeth</dd>
+        <dt>Last seen</dt><dd id="bc-seen">in the rooms</dd>
+      </dl>
+      <div class="bc-acts"><a href="#drops">Find your photos</a><a href="#open">Open a pack</a><a href="#dates">What&rsquo;s coming</a><a href="#pitch">Pitch the desk</a></div>
     </section>
 
     <section class="card">
@@ -4037,9 +4069,9 @@
          page is ours and it is the better destination. Cam is the one
          outside name on the list, so Cam is the one link that leaves.
          Add a name: copy a row, set the handle, the tag and the href. -->
-    <section class="card">
+    <section class="card friends">
       <h3>Creator Spotlight</h3>
-      <p style="color:var(--muted);font-size:12px;margin:-6px 0 10px;font-family:var(--f-mono);letter-spacing:.12em;text-transform:uppercase;">people we&rsquo;re watching</p>
+      <p class="fr-count">people we&rsquo;re watching</p>
       <div class="creator-list">
         <a class="creator" href="https://instagram.com/cam_dyed" target="_blank" rel="noopener">
           <div class="creator-pic" style="background:linear-gradient(135deg, var(--pink-glow), var(--dye-blue));">C</div>
@@ -4124,6 +4156,16 @@
       </div>
     </section>
 
+    <!-- THE TIP BOX (10/3). It opens the visitor's own mail app with what they typed
+         (cathedral.js). No form, no backend, nothing stored here. The line under it is
+         the footer's own promise, not a new one. -->
+    <section class="card tipbox">
+      <h3>Spotted something?</h3>
+      <textarea id="tip-text" rows="3" maxlength="1800" placeholder="Who was where. Who showed up with who." aria-label="Your tip for the desk"></textarea>
+      <div class="tip-row"><small>Off the record<br>stays off the record.</small><button type="button" class="tip-send" id="tip-send">Send tip</button></div>
+      <span class="tip-alt">Opens your mail to the desk. Or <a href="https://instagram.com/vamppsych" target="_blank" rel="noopener">DM The Lens</a>.</span>
+    </section>
+
     <section class="card">
       <h3>Mic Check</h3>
       <dl class="details" id="mic-check-mount"></dl>
@@ -4162,6 +4204,8 @@
         <div class="sub">everybody posts &nbsp;·&nbsp; art, thoughts, whatever</div>
       </div>
       <div id="composer"></div>
+      <!-- the newest night, one tap from the timeline. cathedral.js fills it from events.json. -->
+      <a class="nblast" id="night-blast" href="events/" hidden></a>
       <div class="feed" id="take-mount"></div>
       <a class="feed-cta" id="take-cta" href="join/?next=home">
         <b>Log in to post.</b>
@@ -4339,7 +4383,7 @@
 <footer class="site">
   <div class="row">
     <div>
-      <div class="mark"><img class="fmk" src="assets/mark-inline.svg" alt="" width="26" height="26">FF THE PRINT</div>
+      <div class="mark"><img class="fmk" src="assets/cathedral/mark.webp" alt="" width="240" height="228">FF THE PRINT</div>
       <div style="margin-top:6px;" id="footer-meta">© 2026 · Underground-culture media · Curated by the desk</div>
     </div>
     <div style="text-align:right;" id="footer-social">
@@ -4780,7 +4824,9 @@
           const ext = /^https:/.test(href);
           const hx = Cal && Cal.houseLabel ? Cal.houseLabel(r) : null;
           const mark = hx && hx.k === 'onlist' ? `<span class="rh">${esc(hx.t)}</span>` : '';
-          return `<a class="run" href="${esc(href)}"${ext ? ' target="_blank" rel="noopener nofollow"' : ''}>
+          // the kind icon: Cal.iconURL only ever returns one of six known files
+          const ic = Cal && Cal.iconURL ? `<img class="rk" src="${esc(Cal.iconURL(r.kind))}" alt="" width="44" height="44" loading="lazy" decoding="async">` : '';
+          return `<a class="run" href="${esc(href)}"${ext ? ' target="_blank" rel="noopener nofollow"' : ''}>${ic}
             <span class="rw">${esc(when)}</span>
             <span class="rt">${esc(r.title || '')}</span>
             <span class="rm">${bits}</span>${mark}</a>`;
@@ -4830,22 +4876,30 @@
     } else {
       drops.forEach(e => {
         const a = document.createElement('a');
-        a.className = 'drop';
+        a.className = 'drop party';
         a.href = 'events/' + e.slug + '/';
         // cover is stored relative to events/, e.g. "<slug>/media/001_t.jpg"
         const cover = e.cover ? 'events/' + e.cover : '';
         const when = e.date_short || String(e.date || '');
+        // THE PARTY PACK (10/3). Every night is a sealed pack in its own wrapper,
+        // events/<slug>/pack.webp; a night that has none yet wears the house pack.
+        // The cover is printed into the foil and the title sits on the plate.
+        // ⛔ Still a LINK. The tear happens on the night's own page (sealed.js), so
+        // somebody hunting their photo is one tap from it, same as before.
+        const title = String(e.title || '');
         a.innerHTML =
-          '<span class="shot">' +
-            (cover ? '<img src="' + esc(cover) + '" alt="" width="520" height="390">' : '') +
-            '<span class="sealed">sealed</span>' +
-            '<span class="n">' + (e.count | 0) + ' frames</span>' +
+          '<span class="pp">' +
+            '<img class="pp-w" src="events/' + esc(e.slug) + '/pack.webp" alt="" width="520" height="878" loading="lazy">' +
+            (cover ? '<span class="pp-ph"><img src="' + esc(cover) + '" alt="" loading="lazy"></span>' : '') +
+            '<span class="pp-t' + (title.length > 16 ? ' long' : '') + '">' + esc(title) + '</span>' +
+            '<span class="pp-d">' + esc(when) + '</span>' +
           '</span>' +
           '<span class="cap">' +
             '<span class="v">' + esc(e.venue || e.title || '') + '</span>' +
-            '<span class="t">' + esc(e.title || '') + '</span>' +
-            '<span class="d">' + esc(when) + '</span>' +
+            '<span class="d">' + (e.count | 0) + ' frames &middot; sealed</span>' +
           '</span>';
+        const wr = a.querySelector('.pp-w');
+        if (wr) wr.addEventListener('error', () => { wr.src = 'assets/cathedral/pack-house.webp'; }, { once: true });
         dropsRail.appendChild(a);
       });
     }

@@ -56,7 +56,9 @@
         '<div class="d-meta"><span class="kind ' + esc(r.kind || 'show') + '">' +
           esc(r.kind || 'show') + '</span>' + meta.join('') + '</div>' +
         (r.note ? '<div class="d-note">' + esc(r.note) + '</div>' : '') +
-      '</div>';
+      '</div>' +
+      // the kind icon. iconURL() only ever returns one of six known files.
+      (C.iconURL ? '<img class="d-ic" src="' + esc(C.iconURL(r.kind)) + '" alt="" width="52" height="52" loading="lazy" decoding="async">' : '');
 
     var acts = [];
     if (admin) {

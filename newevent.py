@@ -912,6 +912,14 @@ def main():
                 print(f"  pushed {human(pushed)} of video to {MEDIA_REPO}")
             shutil.rmtree(vidstage, ignore_errors=True)
 
+    # THE PARTY PACK (10/3). Every night is shown as a sealed foil pack: on the
+    # homepage rail, on /events/ and on its own page. The wrapper is one picture,
+    # events/<slug>/pack.webp (520x878). Without it the night wears the house pack,
+    # which is fine, so this is a reminder and never an error.
+    if not os.path.exists(os.path.join(out, "pack.webp")):
+        print(f"\n  no pack.webp for this night yet: it wears the house pack until")
+        print(f"  one is drawn (events/{slug}/pack.webp, 520x878).")
+
     print(f"\n  live at /0fftheprint/events/{slug}/ once pushed")
     print("  git add -A && git commit -m 'event: " + slug + "' && git push\n")
 

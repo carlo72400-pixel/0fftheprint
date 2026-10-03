@@ -1,0 +1,305 @@
+/* 0FF THE PRINT — THE CATHEDRAL (10/3).
+   The homepage skin: the lounge up top, the tab cards, the party packs, the
+   boxes down the side. Loaded AFTER the inline sheet so it wins on order.
+
+   ⛔ EVERYTHING IS SCOPED UNDER html.cath. One class on <html> is the switch:
+      take it off and the page is the one that shipped before this file.
+   ⛔ NOTHING HERE TOUCHES BEHAVIOUR. Ids, mounts and the tab router are the
+      inline page's. This file only decides what things look like.
+   ⛔ Section heads STAY ON SAIRA. See "THE LOGO SYSTEM" in index.html: the
+      display face was tuned once and swapping it is never one line. The only
+      type this adds is Cinzel (already the logo face) on the hero line. */
+
+html.cath{
+  --silver:#cfd2da; --silver-d:#8f93a0; --box:#131217; --box-line:rgba(255,121,198,.5);
+  --hero-h:min(78vh,42vw);
+}
+html.cath body::before{display:none;}                       /* the old gyaru deco strip */
+html.cath .leopard-bar{height:3px;background:linear-gradient(90deg,transparent,var(--silver-d) 12%,#fff 50%,var(--silver-d) 88%,transparent);opacity:.55;}
+
+/* ---------------- nav: the wordmark comes home ---------------- */
+html.cath nav.site a.wm{display:inline-flex;align-items:center;gap:5px;font-family:var(--f-logo);font-weight:800;
+  font-size:15px;letter-spacing:.26em;white-space:nowrap;color:var(--ink);}
+html.cath nav.site a.wm::after{display:none;}
+html.cath nav.site a.wm img{display:block;height:30px;width:auto;margin:-6px 0;filter:drop-shadow(0 0 7px rgba(255,121,198,.5));}
+html.cath nav.site .cta{border-radius:3px;position:relative;}
+@media (min-width:821px) and (max-width:1180px){ html.cath nav.site a.wm span{display:none;} }
+@media (max-width:820px){
+  html.cath nav.site{gap:12px;padding:10px 16px;flex-wrap:nowrap;}
+  html.cath nav.site a.wm{font-size:12.5px;letter-spacing:.12em;order:-1;}
+  html.cath nav.site .cta{padding:8px 11px;}
+  html.cath nav.site a.wm img{height:26px;}
+}
+@media (max-width:359px){ html.cath nav.site a.wm span{display:none;} }
+
+/* ---------------- the hero: the lounge ---------------- */
+html.cath .pulse-banner.hero{
+  position:relative;z-index:1;max-width:none;margin:0;padding:0;text-align:center;overflow:hidden;
+  height:var(--hero-h);min-height:420px;
+  background:#0a0a0d url('../cathedral/hero.webp') 50% 92%/cover no-repeat;
+  border-bottom:1px solid var(--line);
+}
+html.cath .hero::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:1;background:
+  linear-gradient(to bottom,rgba(10,10,13,.6) 0,rgba(10,10,13,0) 20%,rgba(10,10,13,0) 78%,rgba(10,10,13,.55) 95%,var(--bg) 100%);}
+html.cath .hero::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:1;
+  background:repeating-linear-gradient(to bottom,rgba(255,255,255,.028) 0 1px,transparent 1px 3px);mix-blend-mode:screen;}
+
+html.cath .hero-rose{position:absolute;z-index:1;left:50%;top:18.5%;width:30vw;height:30vw;max-width:520px;max-height:520px;
+  transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;mix-blend-mode:screen;
+  background:radial-gradient(circle,rgba(255,121,198,.32),rgba(255,121,198,.09) 45%,transparent 70%);
+  animation:cath-breathe 5.5s ease-in-out infinite;}
+@keyframes cath-breathe{0%,100%{opacity:.45;transform:translate(-50%,-50%) scale(.94)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.06)}}
+
+html.cath .hero-bats{position:absolute;inset:0;z-index:2;overflow:hidden;pointer-events:none;}
+html.cath .hero-bats i{position:absolute;left:-40px;width:26px;height:14px;background:#060506;
+  clip-path:polygon(50% 38%,58% 20%,64% 38%,78% 8%,100% 30%,90% 34%,84% 58%,72% 48%,62% 78%,50% 60%,38% 78%,28% 48%,16% 58%,10% 34%,0 30%,22% 8%,36% 38%,42% 20%);
+  animation:cath-fly linear infinite,cath-flap .28s ease-in-out infinite alternate;}
+html.cath .hero-bats i:nth-child(1){top:12%;animation-duration:21s,.26s;animation-delay:-3s,0s;}
+html.cath .hero-bats i:nth-child(2){top:22%;animation-duration:28s,.3s;animation-delay:-15s,0s;scale:.7;}
+html.cath .hero-bats i:nth-child(3){top:7%;animation-duration:33s,.24s;animation-delay:-23s,0s;scale:.55;}
+@keyframes cath-fly{0%{translate:0 0}25%{translate:27vw -4vh}50%{translate:54vw 3vh}75%{translate:80vw -5vh}100%{translate:calc(100vw + 80px) 0}}
+@keyframes cath-flap{from{transform:scaleY(1)}to{transform:scaleY(.35)}}
+
+/* the line the house says. Same two elements the loader has always filled. */
+html.cath .hero .hero-say{position:absolute;z-index:3;left:0;right:0;top:44%;padding:0 20px;}
+html.cath .hero .pulse-kick{font-size:10px;letter-spacing:.3em;color:#b9b2c2;text-shadow:0 0 12px #0a0a0d,0 0 4px #0a0a0d;}
+html.cath .hero .pulse-line{font-family:var(--f-logo);font-style:normal;font-weight:700;text-transform:uppercase;
+  font-size:clamp(17px,2.05vw,30px);line-height:1.25;letter-spacing:.16em;margin:8px 0 0;
+  background:none;-webkit-background-clip:border-box;background-clip:border-box;color:var(--ink);-webkit-text-fill-color:currentColor;
+  text-shadow:0 0 18px #0a0a0d,0 0 6px #0a0a0d,0 1px 0 rgba(0,0,0,.6);}
+html.cath .hero .pulse-line br{display:none;}
+html.cath .hero .pulse-line .blue{background:none;-webkit-background-clip:border-box;background-clip:border-box;color:var(--pink);-webkit-text-fill-color:currentColor;margin-left:.5em;}
+
+/* the window marks the last night */
+html.cath .hero-beacon{position:absolute;z-index:3;left:calc(50% + min(11vw,170px));top:11%;display:flex;align-items:flex-start;gap:12px;
+  text-align:left;text-decoration:none;color:var(--ink);}
+html.cath .hero-beacon[hidden]{display:none;}
+html.cath .hero-beacon i{display:block;width:48px;height:1px;background:var(--pink-glow);margin-top:8px;box-shadow:0 0 8px var(--pink-glow);flex:none;}
+html.cath .hero-beacon b{display:block;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--pink-glow);font-weight:500;}
+html.cath .hero-beacon strong{display:block;font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;font-size:26px;line-height:1;margin-top:5px;
+  text-shadow:0 0 14px #0a0a0d;}
+html.cath .hero-beacon small{display:block;font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#b9b2c2;margin-top:6px;}
+html.cath .hero-beacon:hover strong{color:var(--pink-glow);}
+/* under 1240 the beacon runs into the right-hand cards; the NEW NIGHT strip over the timeline says the same thing */
+@media (max-width:1239px){ html.cath .hero-beacon{display:none;} }
+
+/* the hand: six tabs as arch cards, three down each side so the lounge stays in view */
+html.cath .hero-hand{position:absolute;z-index:4;left:clamp(14px,2.6vw,52px);right:clamp(14px,2.6vw,52px);top:5%;bottom:8%;
+  display:grid;grid-template-columns:auto 1fr auto;grid-template-rows:repeat(3,minmax(0,1fr));gap:30px 0;justify-items:center;pointer-events:none;}
+html.cath .hcard{pointer-events:auto;position:relative;display:block;height:100%;min-height:0;aspect-ratio:480/759;text-decoration:none;
+  transition:transform .35s cubic-bezier(.2,.8,.2,1);}
+html.cath .hcard:nth-child(-n+3){grid-column:1;}
+html.cath .hcard:nth-child(n+4){grid-column:3;}
+html.cath .hcard:nth-child(1),html.cath .hcard:nth-child(4){grid-row:1;}
+html.cath .hcard:nth-child(2),html.cath .hcard:nth-child(5){grid-row:2;}
+html.cath .hcard:nth-child(3),html.cath .hcard:nth-child(6){grid-row:3;}
+html.cath .hcard:nth-child(odd){transform:rotate(-2.5deg);}
+html.cath .hcard:nth-child(even){transform:rotate(2.5deg);}
+html.cath .hcard::before{content:'';position:absolute;inset:1.5% 2.5% .5%;
+  background:linear-gradient(170deg,rgba(244,238,242,.11),rgba(244,238,242,.02) 50%,rgba(255,121,198,.07));
+  -webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);
+  clip-path:polygon(50% 0,70% 7%,86% 17%,96% 27%,100% 36%,100% 100%,0 100%,0 36%,4% 27%,14% 17%,30% 7%);}
+html.cath .hcard::after{content:'';position:absolute;inset:0;background:url('../cathedral/frame-card.webp') 0 0/100% 100% no-repeat;pointer-events:none;
+  transition:filter .35s;filter:saturate(.5) brightness(.82) drop-shadow(0 8px 10px rgba(0,0,0,.55));}
+html.cath .hcard img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:44% 9% 8%;
+  filter:saturate(.55) brightness(.9) drop-shadow(0 10px 10px rgba(0,0,0,.55));transition:filter .35s,opacity .5s;animation:cath-bob 5s ease-in-out infinite;}
+html.cath .hcard:nth-child(2n) img{animation-delay:-1.6s;}
+html.cath .hcard:nth-child(3n) img{animation-delay:-3.1s;}
+html.cath .hcard model-viewer{position:absolute;inset:36% 5% 4% 5%;width:auto;height:auto;pointer-events:none;background:transparent;--poster-color:transparent;
+  opacity:0;transition:opacity .5s,filter .35s;filter:saturate(.6) brightness(.92);}
+html.cath .hcard.m3 model-viewer{opacity:1;}
+html.cath .hcard.m3 img{opacity:0;}
+html.cath .hcard u{position:absolute;left:-10px;right:-10px;bottom:-20px;text-align:center;text-decoration:none;font-family:var(--f-mono);font-size:10px;
+  letter-spacing:.26em;text-transform:uppercase;color:#b9b2c2;transition:color .3s;text-shadow:0 0 8px #0a0a0d;}
+html.cath .hcard:hover,html.cath .hcard[aria-current="page"]{transform:translateY(-5px) rotate(0) scale(1.07);z-index:2;}
+html.cath .hcard:hover::after,html.cath .hcard[aria-current="page"]::after{
+  filter:saturate(1.15) brightness(1.1) drop-shadow(0 0 10px rgba(255,121,198,.85)) drop-shadow(0 0 22px rgba(255,121,198,.45));}
+html.cath .hcard[aria-current="page"]::before{background:linear-gradient(170deg,rgba(255,121,198,.16),rgba(255,121,198,.04) 50%,rgba(255,121,198,.18));}
+html.cath .hcard:hover img,html.cath .hcard[aria-current="page"] img{filter:saturate(1.1) brightness(1.08) drop-shadow(0 0 14px rgba(255,121,198,.55));}
+html.cath .hcard:hover model-viewer,html.cath .hcard[aria-current="page"] model-viewer{filter:saturate(1.15) brightness(1.1) drop-shadow(0 0 12px rgba(255,121,198,.5));}
+html.cath .hcard:hover u,html.cath .hcard[aria-current="page"] u{color:var(--pink-glow);}
+html.cath .hcard:focus-visible{outline:2px solid var(--pink-glow);outline-offset:6px;}
+@keyframes cath-bob{0%,100%{transform:translateY(-3%)}50%{transform:translateY(3%)}}
+
+/* The lounge is Home. Every other tab gets its own room of the building, short. */
+html.cath .tabroom{display:none;grid-column:1/-1;order:-2;position:relative;z-index:1;height:clamp(150px,19vw,250px);overflow:hidden;
+  border:1px solid rgba(244,238,242,.2);background:#0a0a0d center/cover no-repeat;}
+html.cath .tabroom::before{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(10,10,13,.35) 0,rgba(10,10,13,0) 30%,rgba(10,10,13,.2) 62%,rgba(10,10,13,.78) 100%);}
+html.cath .tabroom::after{content:'';position:absolute;inset:0;pointer-events:none;border:13px solid transparent;border-image:url('../cathedral/frame-panel.webp') 112 / 46px / 0 stretch;}
+html.cath .tabroom div{position:absolute;left:0;right:0;bottom:16%;text-align:center;z-index:1;}
+html.cath .tabroom b{display:block;font-family:var(--f-logo);font-weight:800;font-size:clamp(22px,3.2vw,42px);letter-spacing:.28em;text-transform:uppercase;color:var(--ink);
+  text-shadow:0 0 20px #0a0a0d,0 0 6px #0a0a0d;padding-left:.28em;}
+html.cath .tabroom span{display:block;margin-top:8px;font-family:var(--f-mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--pink);
+  text-shadow:0 0 10px #0a0a0d;}
+html.cath .tabroom[data-room="photos"]{background-image:url('../cathedral/room-photos.webp');background-position:50% 64%;}
+html.cath .tabroom[data-room="stories"]{background-image:url('../cathedral/room-stories.webp');background-position:50% 80%;}
+html.cath .tabroom[data-room="music"]{background-image:url('../cathedral/room-music.webp');background-position:50% 82%;}
+html.cath .tabroom[data-room="people"]{background-image:url('../cathedral/room-people.webp');background-position:50% 46%;}
+html.cath .tabroom[data-room="more"]{background-image:url('../cathedral/room-more.webp');background-position:50% 50%;}
+html.cath.tabs:not([data-tab="home"]) .pulse-banner.hero{display:none;}
+html.cath.tabs[data-tab="photos"] .tabroom[data-room="photos"],
+html.cath.tabs[data-tab="stories"] .tabroom[data-room="stories"],
+html.cath.tabs[data-tab="music"] .tabroom[data-room="music"],
+html.cath.tabs[data-tab="people"] .tabroom[data-room="people"],
+html.cath.tabs[data-tab="more"] .tabroom[data-room="more"]{display:block;}
+
+@media (max-width:820px){
+  /* a phone has the tab bar under the thumb already, so the hand stays off the picture
+     and the timeline starts sooner */
+  html.cath .hero-hand{display:none;}
+  html.cath .hero-beacon{display:none;}
+  html.cath .pulse-banner.hero{height:56.25vw;min-height:0;margin-top:0;background-position:50% 50%;background-size:cover;}
+  html.cath .hero .hero-say{top:38%;}
+  html.cath .hero-rose{top:37%;width:38vw;height:38vw;}
+  html.cath.tabs .pulse-banner{margin-top:0;}
+  html.cath .tabroom{height:34vw;min-height:116px;}
+  html.cath .tabroom div{bottom:16%;}
+  html.cath .tabroom::after{border-width:10px;border-image-width:34px;}
+  html.cath.tabs .wrap{padding-top:14px;}
+  html.cath .tabroom span{font-size:8.5px;letter-spacing:.2em;margin-top:5px;}
+}
+@media (max-width:560px){
+  /* the tall plate: window, light and the whole lounge in one crop */
+  html.cath .pulse-banner.hero{height:90vw;background-image:url('../cathedral/hero-m.webp');background-size:100% auto;background-position:50% 68.3%;}
+  html.cath .hero .hero-say{top:30.5%;}
+  html.cath .hero .pulse-kick{display:none;}
+  html.cath .hero .pulse-line{font-size:15px;letter-spacing:.12em;}
+  html.cath .hero .pulse-line .blue{display:block;margin-left:0;}
+  html.cath .hero-rose{top:15%;width:46vw;height:46vw;}
+}
+
+/* ---------------- the tab bar wears the same six icons ---------------- */
+@media (max-width:820px){
+  html.cath .tabbar a img{width:30px;height:30px;object-fit:contain;filter:saturate(.35) brightness(.8);transition:filter .2s,transform .2s;}
+  html.cath .tabbar a[aria-current="page"] img{filter:saturate(1.1) brightness(1.1) drop-shadow(0 0 6px rgba(255,121,198,.6));transform:translateY(-1px) scale(1.08);}
+  html.cath .tabbar a{gap:2px;padding-top:6px;}
+}
+
+/* ---------------- section heads: same Saira, plus the crest rule ---------------- */
+html.cath .section-head{position:relative;border-bottom:0;padding-bottom:22px;}
+/* the sub line could not shrink, so in a narrow main column (an iPad held upright, 821 to 860 wide) it pushed the page sideways */
+html.cath .section-head .sub{flex-shrink:1;min-width:0;}
+html.cath .section-head::after{content:'';position:absolute;left:0;right:0;bottom:0;height:20px;pointer-events:none;background:
+  url('../cathedral/mark.webp') 50% 50%/auto 20px no-repeat,
+  linear-gradient(90deg,transparent,rgba(244,238,242,.34) 10%,rgba(244,238,242,.34) calc(50% - 26px),transparent calc(50% - 26px),transparent calc(50% + 26px),rgba(244,238,242,.34) calc(50% + 26px),rgba(244,238,242,.34) 90%,transparent) 0 50%/100% 1px no-repeat;}
+
+/* ---------------- the side column: profile boxes ---------------- */
+html.cath aside.sidebar .card{background:var(--box);border:1px solid var(--box-line);border-radius:0;padding:0 13px 14px;}
+html.cath aside.sidebar .card h3{margin:0 -13px 12px;padding:6px 10px;background:var(--pink-glow);color:#3a0f27;
+  font:700 11px/1.2 Verdana,Geneva,Tahoma,sans-serif;letter-spacing:.03em;text-transform:none;}
+html.cath aside.sidebar .card .strip{display:none;}
+html.cath .brand-card{background:var(--box);}
+html.cath .brand-card .bc-lock{flex-direction:row;text-align:left;gap:12px;align-items:center;padding:0;}
+html.cath .brand-card .bc-mk{width:66px;height:66px;object-fit:contain;padding:6px;border:1px solid rgba(244,238,242,.25);background:rgba(244,238,242,.04);filter:none;flex:none;}
+html.cath .brand-card .bc-txt{min-width:0;font:12.5px/1.55 Verdana,Geneva,Tahoma,sans-serif;color:#ded7e2;}
+html.cath .brand-card .bc-txt b{color:var(--ink);}
+html.cath .brand-card .bc-on{display:block;color:var(--pink-glow);font-weight:700;font-size:11px;animation:cath-blink 1.4s steps(2) infinite;}
+@keyframes cath-blink{50%{opacity:.4}}
+html.cath .brand-card dl{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;margin:11px 0 0;font:12px/1.5 Verdana,Geneva,Tahoma,sans-serif;color:#ded7e2;}
+html.cath .brand-card dt{color:var(--muted);font-weight:700;}
+html.cath .brand-card dd{margin:0;min-width:0;overflow-wrap:anywhere;}
+html.cath .brand-card dd a{color:var(--pink-glow);}
+html.cath .brand-card .bc-acts{display:grid;grid-template-columns:1fr 1fr;gap:5px 10px;margin-top:10px;padding-top:9px;border-top:1px dotted rgba(244,238,242,.28);
+  font:11.5px/1.5 Verdana,Geneva,Tahoma,sans-serif;}
+html.cath .brand-card .bc-acts a{color:var(--pink-glow);text-decoration:underline;text-underline-offset:2px;}
+
+/* the friend space: faces, four across */
+html.cath .friends .creator-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px 7px;}
+html.cath .friends .creator{display:block;padding:0;border:0;border-radius:0;background:none;text-align:center;}
+html.cath .friends .creator:hover{transform:none;background:none;}
+html.cath .friends .creator-pic{width:100%;height:auto;aspect-ratio:1;border-radius:0;border:1px solid rgba(244,238,242,.3);box-shadow:none;font-size:22px;
+  background-size:cover;background-position:50% 20%;transition:transform .2s,border-color .2s;}
+html.cath .friends .creator-pic.has{color:transparent;text-shadow:none;}
+html.cath .friends .creator:hover .creator-pic{transform:scale(1.06) rotate(-2deg);border-color:var(--pink-glow);}
+html.cath .friends .creator-meta{margin-top:4px;}
+html.cath .friends .creator-name{font:400 9.5px/1.3 Verdana,Geneva,Tahoma,sans-serif;letter-spacing:0;color:var(--pink);}
+html.cath .friends .creator-tag,html.cath .friends .creator-platform{display:none;}
+html.cath .friends .fr-count{font:11px/1.4 Verdana,Geneva,Tahoma,sans-serif;color:#ded7e2;margin:0 0 10px;}
+html.cath .friends .fr-count b{color:var(--pink-glow);}
+
+/* the tip box. It opens the visitor's own mail app: no form, no backend. */
+html.cath .tipbox textarea{width:100%;min-height:74px;resize:vertical;background:rgba(244,238,242,.05);border:1px solid rgba(244,238,242,.28);border-radius:0;color:var(--ink);
+  font:16px/1.4 Verdana,Geneva,Tahoma,sans-serif;padding:8px 9px;outline:none;}
+html.cath .tipbox textarea:focus{border-color:var(--pink-deep);}
+html.cath .tipbox textarea::placeholder{color:var(--muted);font-size:13px;}
+html.cath .tipbox .tip-row{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;margin-top:9px;}
+html.cath .tipbox .tip-row small{font-family:var(--f-logo);font-weight:700;font-size:10.5px;letter-spacing:.1em;line-height:1.5;color:var(--muted);text-transform:uppercase;}
+html.cath .tipbox .tip-send{font:700 11px/1 Verdana,Geneva,Tahoma,sans-serif;background:var(--pink-glow);color:#3a0f27;border:1px solid #3a0f27;border-radius:0;
+  padding:8px 13px;cursor:pointer;box-shadow:2px 2px 0 rgba(244,238,242,.35);white-space:nowrap;}
+html.cath .tipbox .tip-send:hover{transform:translate(1px,1px);box-shadow:1px 1px 0 rgba(244,238,242,.35);}
+html.cath .tipbox .tip-alt{display:block;margin-top:9px;font:11px/1.4 Verdana,Geneva,Tahoma,sans-serif;color:var(--muted);}
+html.cath .tipbox .tip-alt a{color:var(--pink-glow);}
+
+/* ---------------- Home: the tiles and the new-night strip ---------------- */
+html.cath .do{border-radius:3px;border-color:rgba(244,238,242,.16);}
+html.cath .do.wall{border-color:var(--box-line);}
+html.cath .nblast{display:grid;grid-template-columns:auto minmax(0,1fr);gap:0;margin:0 0 16px;border:1px solid var(--box-line);background:var(--box);text-decoration:none;color:var(--ink);}
+html.cath .nblast[hidden]{display:none;}
+html.cath .nblast .nb-h{grid-column:1/-1;display:flex;justify-content:space-between;gap:10px;padding:5px 10px;background:var(--pink-glow);color:#3a0f27;
+  font:700 11px/1.2 Verdana,Geneva,Tahoma,sans-serif;}
+html.cath .nblast .nb-ph{display:grid;grid-template-columns:repeat(3,74px);gap:3px;padding:10px 0 10px 10px;}
+html.cath .nblast .nb-ph img{width:74px;height:74px;object-fit:cover;display:block;}
+html.cath .nblast .nb-tx{padding:10px 12px;min-width:0;align-self:center;}
+html.cath .nblast .nb-tx b{display:block;font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;font-size:21px;line-height:1;}
+html.cath .nblast .nb-tx span{display:block;font:12px/1.5 Verdana,Geneva,Tahoma,sans-serif;color:#ded7e2;margin-top:5px;}
+html.cath .nblast .nb-tx em{display:inline-block;font-style:normal;margin-top:6px;font:700 11px/1 Verdana,Geneva,Tahoma,sans-serif;color:var(--pink-glow);text-decoration:underline;text-underline-offset:2px;}
+html.cath .nblast:hover{border-color:var(--pink-glow);}
+@media (max-width:560px){
+  html.cath .nblast .nb-ph{grid-template-columns:repeat(3,56px);}
+  html.cath .nblast .nb-ph img{width:56px;height:56px;}
+  html.cath .nblast .nb-tx b{font-size:18px;}
+  html.cath .nblast .nb-tx span{font-size:11.5px;}
+}
+
+/* the timeline: the same posts, the gossip-page dress */
+html.cath #take .feed{border-top:1px dotted rgba(244,238,242,.3);}
+html.cath .post-t{border-bottom:1px dotted rgba(244,238,242,.26);}
+html.cath .post-t.pinned{background:rgba(255,121,198,.06);border:1px dashed rgba(255,121,198,.55);padding:14px 12px;margin:10px 0 4px;}
+html.cath .pin{color:var(--pink-glow);border-color:rgba(255,121,198,.5);}
+html.cath .cbox{border-radius:0;border-color:var(--box-line);background:var(--box);}
+html.cath .post-img{border-radius:3px;}
+html.cath .feed-cta{border-radius:0;}
+
+/* ---------------- Photos: every night is a party pack ---------------- */
+html.cath .drops-rail{grid-auto-columns:minmax(178px,196px);gap:18px;padding:8px 4px 14px;align-items:start;}
+html.cath .drop.party{border:0;border-radius:0;background:none;overflow:visible;}
+html.cath .drop.party:hover{transform:none;box-shadow:none;}
+/* the pack tile itself (.pp, the printed photo, the plate) is assets/css/pack.css, shared with /events/ */
+html.cath .drop.party .cap{padding:9px 2px 0;text-align:center;}
+html.cath .drop.party .cap .v,html.cath .drop.party .cap .d{display:block;}
+html.cath .drop.party .cap .v{font-size:15px;}
+html.cath .drop.party .cap .d{margin-top:4px;font-size:9px;}
+@media (max-width:640px){ html.cath .drops-rail{grid-auto-columns:minmax(150px,44vw);gap:12px;} }
+
+/* ---------------- People: the house pack ---------------- */
+html.cath .poke.booster-pack{aspect-ratio:520/878;background:none;padding:0;border-radius:0;max-width:230px;}
+html.cath .poke.booster-pack::before{display:none;}
+html.cath .booster-inner{border-radius:0;background:url('../cathedral/pack-house.webp') 50% 50%/contain no-repeat;box-shadow:none;
+  filter:drop-shadow(0 14px 16px rgba(0,0,0,.6));transition:filter .3s,transform .3s;justify-content:flex-end;}
+html.cath .booster-inner::after{display:none;}
+html.cath .poke.booster-pack:hover .booster-inner{box-shadow:none;filter:drop-shadow(0 0 18px rgba(255,121,198,.75));transform:translateY(-6px) rotate(-2deg);}
+html.cath .poke.booster-pack{margin-bottom:30px;}
+html.cath .booster-inner{overflow:visible;}
+html.cath .booster-foot{position:absolute;left:-20px;right:-20px;bottom:-26px;padding:0;font-size:9.5px;letter-spacing:.18em;color:var(--muted);text-shadow:none;}
+html.cath .booster-stage .pack .booster-foot{color:#e9e3ee;bottom:-30px;}
+html.cath .booster-stage .pack .booster-inner{filter:drop-shadow(0 20px 30px rgba(0,0,0,.7));}
+
+/* ---------------- More: the run ----------------
+   The month grid's own look lives in calendar.css (shared with /dates/). These
+   are the phone cards: squared like every other box, the kind icon in the corner. */
+html.cath .run{border-radius:0;border-color:rgba(244,238,242,.18);background:var(--box);}
+html.cath .run:hover{border-color:var(--pink-deep);}
+/* the icon heads the card with the date, so the title keeps the whole width */
+html.cath .run .rk{float:left;width:32px;height:32px;margin:-5px 9px 0 -3px;filter:drop-shadow(0 3px 6px rgba(0,0,0,.55));}
+html.cath .run .rw{display:block;line-height:24px;min-height:27px;}
+html.cath .run .rt{clear:both;margin-top:6px;}
+html.cath .run .rh{border-radius:0;}
+html.cath .run-add-btn{border-radius:0;}
+
+/* ---------------- footer ---------------- */
+html.cath footer.site .mark .fmk{width:auto;height:1.5em;vertical-align:-.36em;margin-right:.1em;filter:drop-shadow(0 0 6px rgba(255,121,198,.45));}
+
+@media (prefers-reduced-motion:reduce){
+  html.cath .hero-rose,html.cath .hero-bats i,html.cath .hcard img,html.cath .brand-card .bc-on{animation:none!important;}
+  html.cath .hcard,html.cath .booster-inner{transition:none!important;}
+}

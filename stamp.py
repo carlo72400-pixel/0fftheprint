@@ -11,6 +11,11 @@ desk.js was rewritten. Same URL, different content, so every browser that had
 already loaded the page kept serving the stale file out of cache and the new
 methods simply did not exist. A date you have to remember to bump is a date you
 forget to bump. The hash cannot drift from the file it names.
+
+10/3: the shared STYLESHEETS are stamped too (TRACKED_CSS, href="...css?v=").
+sealed.js and calendar.js now build markup that only the new sealed.css /
+calendar.css know how to lay out, so a fresh script next to a cached sheet is a
+broken pack for as long as the cache lives. Same cure, same hash.
 """
 import hashlib
 import pathlib
@@ -23,11 +28,15 @@ ROOT = pathlib.Path(__file__).resolve().parent
 TRACKED = ["assets/js/desk.js", "assets/js/door.js", "assets/js/composer.js",
            "assets/js/edit.js", "assets/js/board.js", "assets/js/cardback.js",
            "assets/js/dates.js", "assets/js/calendar.js", "assets/js/sealed.js",
-           "assets/js/word.js", "supabase-config.js"]
+           "assets/js/word.js", "assets/js/cathedral.js", "supabase-config.js"]
+
+# stylesheet path (relative to ROOT)  ->  how it appears in href="..."
+TRACKED_CSS = ["assets/css/cathedral.css", "assets/css/pack.css",
+               "assets/css/sealed.css", "assets/css/calendar.css"]
 
 # every document that loads them
 DOCS = ["index.html", "join/index.html", "compose/index.html", "desk/index.html",
-        "board/index.html", "c/index.html", "dates/index.html",
+        "board/index.html", "c/index.html", "dates/index.html", "events/index.html",
         "desk/goals/index.html",
         # Any page that loads desk.js belongs here. A page left off this list
         # silently serves whatever desk.js the browser cached, which is exactly
@@ -59,6 +68,14 @@ def main() -> int:
             continue
         stamps[pathlib.PurePosixPath(rel).name] = short_hash(f)
 
+    css = {}
+    for rel in TRACKED_CSS:
+        f = ROOT / rel
+        if not f.exists():
+            print(f"  skip (missing): {rel}")
+            continue
+        css[pathlib.PurePosixPath(rel).name] = short_hash(f)
+
     if not stamps:
         print("nothing to stamp")
         return 1
@@ -76,12 +93,19 @@ def main() -> int:
                 r'\1?v=%s"' % h,
                 text,
             )
+        for name, h in css.items():
+            # href="../../assets/css/sealed.css"  or  href="assets/css/sealed.css?v=old"
+            text = re.sub(
+                r'(href="(?:\.\./)*assets/css/%s)(?:\?v=[^"]*)?"' % re.escape(name),
+                r'\1?v=%s"' % h,
+                text,
+            )
         if text != original:
             d.write_text(text, encoding="utf-8")
             changed += 1
             print(f"  stamped: {doc}")
 
-    for name, h in stamps.items():
+    for name, h in {**stamps, **css}.items():
         print(f"  {name} -> ?v={h}")
     print(f"{changed} document(s) updated")
     return 0
