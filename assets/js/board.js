@@ -795,7 +795,7 @@
     /* ---- THE TAKE. The timeline. Live rows plus the two committed seeds. --- */
     R.push({
       key: 'take', nm: 'THE TAKE', src: 'posts + take.json seeds',
-      note: 'card holders only · art, thoughts, whatever',
+      note: 'everybody posts · art, thoughts, whatever',
       tiles: function () {
         var out = (DB.posts || []).map(function (p) {
           var who = p.display_name || p.author || 'someone';

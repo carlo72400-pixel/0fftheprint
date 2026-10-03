@@ -32,6 +32,12 @@
     const bits = String(url || "").split("/storage/v1/object/public/posts/");
     return bits.length < 2 ? null : (bits[1].split(/[?#]/)[0] || null);
   };
+  // 033: a casual member's photo lives in the small `take` bucket, a card
+  // holder's media in `posts`. Same key shape in both, so say which bucket.
+  const objectRef = url => {
+    const m = /\/storage\/v1\/object\/public\/(posts|take)\/([^?#]+)/.exec(String(url || ""));
+    return m ? { bucket: m[1], name: m[2] } : null;
+  };
 
   // ---- THE EXCHANGE (022) ---------------------------------------------------
   // want_house / house_status / event_slug are what turn the calendar from a
@@ -198,10 +204,61 @@
 
     async deleteImage(url) {
       const c = sb(); if (!c) return;
-      const name = objectName(url);
-      if (!name) return;
-      const { error } = await c.storage.from("posts").remove([name]);
+      const ref = objectRef(url);
+      if (!ref) return;
+      const { error } = await c.storage.from(ref.bucket).remove([ref.name]);
       if (error) throw error;
+    },
+
+    // 033: "everyone can post on the timeline". A casual member's photo is shrunk
+    // on the phone (1600px JPEG) and goes to the `take` bucket: 4MB a file, photos
+    // only, twelve a day, all enforced by the bucket and its policy, not by this.
+    // Card holders keep uploadImage() above (GIFs, video, 50MB).
+    async uploadTakePhoto(file) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { data: { user } } = await c.auth.getUser();
+      if (!user) throw new Error("Log in first.");
+      if (/^video\//.test(file.type || "") || /\.(mp4|mov|webm|m4v)$/i.test(file.name || "")) {
+        throw new Error("Photos only here. Video is a card holder thing.");
+      }
+      let src;
+      try { src = await createImageBitmap(file); }
+      catch (e) {
+        src = await new Promise((ok, no) => {
+          const im = new Image();
+          im.onload = () => ok(im);
+          im.onerror = () => no(new Error("That photo would not open. Try a JPG or a PNG."));
+          im.src = URL.createObjectURL(file);
+        });
+      }
+      const w0 = src.width || src.naturalWidth, h0 = src.height || src.naturalHeight;
+      if (!w0 || !h0) throw new Error("That photo would not open. Try a JPG or a PNG.");
+      const k = Math.min(1, 1600 / Math.max(w0, h0));
+      const cv = document.createElement("canvas");
+      cv.width = Math.max(1, Math.round(w0 * k)); cv.height = Math.max(1, Math.round(h0 * k));
+      const g = cv.getContext("2d");
+      g.fillStyle = "#000"; g.fillRect(0, 0, cv.width, cv.height);
+      g.drawImage(src, 0, 0, cv.width, cv.height);
+      const blob = await new Promise((ok, no) => cv.toBlob(
+        b => b ? ok(b) : no(new Error("That photo would not open. Try a JPG or a PNG.")), "image/jpeg", 0.86));
+      const name = `${user.id}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`;
+      const { error } = await c.storage.from("take").upload(name, blob, {
+        cacheControl: "31536000", upsert: false, contentType: "image/jpeg",
+      });
+      if (error) {
+        throw new Error(/row-level security|policy|unauthorized/i.test(error.message || "")
+          ? "That is twelve photos today. Try again tomorrow."
+          : (error.message || "That photo did not upload."));
+      }
+      return c.storage.from("take").getPublicUrl(name).data.publicUrl;
+    },
+
+    // May this session post to the timeline? Card holders, the desk, and anyone on
+    // The Wall who is not banned (033). False on a database that has not run 033.
+    async canTake() {
+      const c = sb(); if (!c) return false;
+      try { const r = await c.rpc("take_can_post"); return !r.error && r.data === true; }
+      catch (e) { return false; }
     },
 
     /* ---- posting: your own stuff, no approval needed ---- */
@@ -1437,12 +1494,24 @@
       // The ORDER BY is restated here on purpose. A view's own ORDER BY is not
       // guaranteed to survive a LIMIT, and with 8 slots "which 8" has to be
       // decided rather than hoped for.
-      const { data, error } = await c.from("feed").select("*")
-        .order("pinned", { ascending: false })
-        .order("created_at", { ascending: false })
-        .limit(limit);
-      if (error) { console.warn("feed unavailable:", error.message); return []; }
-      return (data || []).map(r => ({
+      // 033: take_feed() is the timeline now, because casual Wall members post
+      // too and the `feed` view only ever saw card holders. It returns its rows
+      // already ordered and capped. On a database without 033 the RPC is missing
+      // and this drops back to the view, which is exactly the old behaviour.
+      let rows = null;
+      try {
+        const rpc = await c.rpc("take_feed", { p_limit: limit });
+        if (!rpc.error && Array.isArray(rpc.data)) rows = rpc.data;
+      } catch (e) { /* fall through to the view */ }
+      if (!rows) {
+        const { data, error } = await c.from("feed").select("*")
+          .order("pinned", { ascending: false })
+          .order("created_at", { ascending: false })
+          .limit(limit);
+        if (error) { console.warn("feed unavailable:", error.message); return []; }
+        rows = data || [];
+      }
+      return rows.map(r => ({
         id: r.id,                       // carried so reactions key on the post, not its slot
         author: r.card_slug || "",
         author_name: r.display_name,
@@ -1454,6 +1523,12 @@
         edited: r.edited_at || null,
         accent: r.accent || null,
         live: true,
+        // 033. kind: 'desk' | 'card' | 'member' (a casual Wall member, no card).
+        // sid opens their space on The Wall; avatar is their space picture.
+        kind: r.kind || "card",
+        sid: r.sid || "",
+        avatar: r.pic || "",
+        mine: !!r.mine,
       }));
     },
 
@@ -1604,6 +1679,9 @@
         try {
           const { error } = await c.storage.from("posts").remove([r.object_name]);
           if (error) throw error;
+          // 033: the same key may be a casual member's photo in `take`. Removing
+          // a key that is not there is not an error, so this is safe to try.
+          try { await c.storage.from("take").remove([r.object_name]); } catch (e2) {}
           await c.from("orphan_images").update({ cleared: true, reason: "removed by the desk" })
             .eq("object_name", r.object_name);
           cleared++;

@@ -39,9 +39,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700..900&family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Pirata+One&family=Luckiest+Guy&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" defer></script>
 <script src="supabase-config.js?v=f1348482" defer></script>
-<script src="assets/js/desk.js?v=071ca8af" defer></script>
-<script src="assets/js/door.js?v=b9a6e73d" defer></script>
-<script src="assets/js/composer.js?v=9e82b159" defer></script>
+<script src="assets/js/desk.js?v=a2343ff3" defer></script>
+<script src="assets/js/door.js?v=869883d0" defer></script>
+<script src="assets/js/composer.js?v=d87d2264" defer></script>
 <script src="assets/js/calendar.js?v=b7cd53c5" defer></script>
 <script src="assets/js/edit.js?v=f019eef7" defer></script>
 <script>/* tabs: pick the page before first paint, off the #hash. Old links like /#desk still land right. */
@@ -3833,6 +3833,33 @@
   .do b{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:19px;line-height:1;text-transform:uppercase;letter-spacing:.01em;white-space:nowrap;}
   .do span{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
   .do.wall{border-color:rgba(255,121,198,.55);box-shadow:0 0 18px rgba(255,121,198,.16);}
+  /* ---- take-social (033): real reactions, comments, a member's own delete ---- */
+  .react-btn.cmt{margin-left:auto;}
+  .react-btn[disabled]{opacity:.6;cursor:default;}
+  .post-del{margin-left:6px;border:0;background:none;padding:0;color:var(--muted);font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;text-decoration:underline;text-underline-offset:3px;}
+  .post-del:hover{color:var(--pink-glow);}
+  .tk-nudge{margin-top:10px;padding:10px 12px;border:1px dashed var(--line);border-radius:12px;font-family:var(--f-mono);font-size:11.5px;line-height:1.6;color:var(--muted);}
+  .tk-nudge a{color:var(--pink-glow);}
+  .tk-box{margin-top:10px;padding:12px;border:1px solid var(--line);border-radius:14px;background:rgba(10,10,13,.5);display:grid;gap:10px;}
+  .tk-box[hidden],.tk-nudge[hidden]{display:none !important;}
+  .tk-form{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:end;}
+  .tk-form textarea{width:100%;min-height:44px;max-height:140px;resize:vertical;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:400 15px/1.4 var(--f-body);}
+  .tk-form textarea::placeholder{color:var(--muted);}
+  .tk-form button{min-height:44px;padding:0 16px;border:0;border-radius:999px;background:linear-gradient(180deg,var(--pink),var(--pink-deep));color:#0a0a0d;font-family:var(--f-body);font-weight:800;font-size:12px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;}
+  .tk-form button:disabled{opacity:.5;cursor:default;}
+  .tk-list{list-style:none;margin:0;padding:0;display:grid;gap:10px;}
+  .tk-list li{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;}
+  .tk-list li.hid{opacity:.5;}
+  .tk-av{width:34px;height:34px;border-radius:50%;object-fit:cover;background:var(--panel);border:1px solid var(--line);display:grid;place-items:center;font-weight:800;font-size:12px;color:var(--pink-glow);}
+  .tk-top{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:baseline;font-size:13px;}
+  .tk-top b{font-weight:700;}
+  .tk-top a{color:inherit;text-decoration:none;border-bottom:1px solid var(--line);}
+  .tk-top time,.tk-top .tk-k{font-family:var(--f-mono);font-size:10.5px;color:var(--muted);letter-spacing:.06em;}
+  .tk-list p{margin:2px 0 0;font-size:14.5px;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere;color:var(--ink);}
+  .tk-acts{display:flex;gap:12px;margin-top:3px;}
+  .tk-acts button{border:0;background:none;padding:2px 0;color:var(--muted);font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;}
+  .tk-acts button:hover{color:var(--pink-glow);}
+  .tk-empty{font-family:var(--f-mono);font-size:11.5px;color:var(--muted);}
   @media (max-width:820px){
     /* a little tighter on a phone so the timeline starts sooner */
     #do{margin-bottom:18px;}
@@ -4114,6 +4141,7 @@
       <div class="hh" id="home-here" hidden></div>
       <div class="do-rail" id="do-rail">
         <a class="do wall" id="do-wall" href="wall/" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4" width="7" height="9" rx="1"/><rect x="13.5" y="4" width="7" height="6" rx="1"/><rect x="13.5" y="13" width="7" height="7" rx="1"/><rect x="3.5" y="16" width="7" height="4" rx="1"/></svg><b>The Wall</b><span>tonight&rsquo;s flyers</span></a>
+        <a class="do wall" id="do-join" href="wall/" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="12" r="4"/><path d="M12 12h9M18 12v3.5M21 12v2.5"/></svg><b>Join The Wall</b><span>got the code?</span></a>
         <a class="do" href="#drops"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8h3.6l1.5-2.4h6.8L16.9 8h3.6v11h-17z"/><circle cx="12" cy="13.2" r="3.4"/></svg><b>Find your photos</b><span>every night we shot</span></a>
         <a class="do" href="#open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="3.5" width="12" height="17" rx="2"/><path d="M12 8.2l1.2 2.5 2.7.3-2 1.9.6 2.7-2.5-1.4-2.5 1.4.6-2.7-2-1.9 2.7-.3z"/></svg><b>Open a pack</b><span>one random card</span></a>
         <a class="do" href="#music"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 17.5V6l9.5-2v11.5"/><circle cx="7" cy="17.5" r="2.5"/><circle cx="16.5" cy="15.5" r="2.5"/></svg><b>Play something</b><span>on rotation</span></a>
@@ -4126,7 +4154,7 @@
     <section id="take" data-tab="home">
       <div class="section-head">
         <h2>The Take <span class="accent">the timeline</span></h2>
-        <div class="sub">card holders only &nbsp;·&nbsp; art, thoughts, whatever</div>
+        <div class="sub">everybody posts &nbsp;·&nbsp; art, thoughts, whatever</div>
       </div>
       <div id="composer"></div>
       <div class="feed" id="take-mount"></div>
@@ -4315,7 +4343,7 @@
       / <a href="#" target="_blank" rel="noopener" data-social="tiktok">TikTok</a>
       / <a href="#" target="_blank" rel="noopener" data-social="youtube">YouTube</a><br>
       <a href="press/" style="font-size:12px;">Press &amp; masthead &rarr;</a><br><a href="portfolio/" style="font-size:12px;">Giancarlo Ortiz &middot; portfolio &rarr;</a><br><a href="join/" id="footer-key" style="font-size:12px;">Card holders: log in &rarr;</a><br>
-      <span style="color:#5a5560;">No comments. Off the record stays off the record.</span>
+      <span style="color:#5a5560;">Off the record stays off the record.</span>
     </div>
   </div>
 </footer>
@@ -4384,6 +4412,7 @@
 
   /* Members: the Wall tile and the faces. door.js shows #nav-wall for anyone who is in; mirror that, never decide it here. */
   var navWall = document.getElementById('nav-wall'), tile = document.getElementById('do-wall'), box = document.getElementById('home-here');
+  var join = document.getElementById('do-join');
   var asked = false;
   function initials(n){ return String(n || '?').trim().split(/\s+/).slice(0, 2).map(function(w){ return Array.from(w)[0] || ''; }).join('').toUpperCase() || '?'; }
   function faces(){
@@ -4415,6 +4444,7 @@
   function syncWall(){
     if (!navWall) return;
     if (tile) tile.hidden = navWall.hidden;
+    if (join) join.hidden = !navWall.hidden;          // logged out, or not on The Wall yet: the way in
     if (!navWall.hidden) { if (window.OTP && OTP.sb) faces(); else window.addEventListener('DOMContentLoaded', faces, {once: true}); }
     else if (box) box.hidden = true;
   }
@@ -4443,7 +4473,7 @@
     // SAME-TAB link with no rel=noopener labelled "Jump to roster". Harmless while
     // nothing member-written reaches a URL field; the card builder changes that.
     if (/^\/\//.test(v)) return '';
-    if (/^https?:\/\//i.test(v) || /^\/(?!\/)/.test(v) || /^[\w./-]+$/.test(v)) {
+    if (/^https?:\/\//i.test(v) || /^\/(?!\/)/.test(v) || /^[\w./-]+(#[\w-]*)?$/.test(v)) {
       return /^\s*(javascript|data|vbscript):/i.test(v) ? '' : v.replace(/["']/g, '');
     }
     return '';
@@ -5185,6 +5215,14 @@
       return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
     }
 
+    // 033: a seeded post has no row, so its reactions and comments key on a hash
+    // of what it says (the same key 011's overrides use). Taken BEFORE an override
+    // can swap the text, so the key never moves under the people who reacted.
+    if (window.OTP && OTP.seedKey && window.crypto && crypto.subtle) {
+      try { await Promise.all(take.map(async p => { p.skey = await OTP.seedKey(p.author, p.text); })); }
+      catch (e) { /* no key, the bar stays local for that post */ }
+    }
+
     // The desk's hand on the SEEDS (migration 011): hidden ones drop, edited
     // ones swap their text. Keyed by content hash, so a seed already fixed in
     // git simply stops matching and the override goes inert.
@@ -5296,9 +5334,14 @@
     const accClass = v => ACCENTS.indexOf(String(v || '')) !== -1 ? ' acc-' + v : '';
 
     tMount.innerHTML = visible.map((p, i) => {
-      const who = cardPeople[slugify(p.author || '')] || {
+      // 033: kind 'member' is a casual Wall member. No card, so the name links to
+      // their space on The Wall and wears a MEMBER tag. It is never resolved
+      // against the roster by NAME: a stranger called KAV-MAN must not get his card.
+      const isMember = p.kind === 'member';
+      const who = (!isMember && cardPeople[slugify(p.author || '')]) || {
         name: p.author_name || p.author || 'THE DESK',
-        photo: p.avatar || '', link: '#', handle: p.handle || '', seat: ''
+        photo: p.avatar || '', link: p.sid ? 'wall/#s-' + p.sid : '#', handle: p.handle || '',
+        seat: isMember ? 'Member' : ''
       };
       // NOT an inline style attribute: the HTML parser decodes entities before the
       // CSS parser sees them, so an escaped quote still breaks out of url(). Painted
@@ -5331,22 +5374,25 @@
         <a class="post-av" href="${esc(safeUrl(who.link) || '#')}" ${isExt ? 'target="_blank" rel="noopener"' : ''}>${av}</a>
         <div class="post-main">
           <div class="post-who">
-            ${(() => { const pg = pageFor(p.author || who.name);
+            ${(() => { const pg = isMember ? (p.sid ? 'wall/#s-' + p.sid : '') : pageFor(p.author || who.name);
               return pg ? `<a class="who-page" href="${esc(pg)}"><b>${esc(who.name)}</b></a>`
                         : `<b>${esc(who.name)}</b>`; })()}
             ${who.handle ? `<span class="hnd">${esc(who.handle)}</span>` : ''}
             ${who.seat ? `<span class="seat">${esc(who.seat)}</span>` : ''}
             <span class="dot">·</span><span class="when">${esc(timeAgo(p.date))}</span>
-            ${pin}
+            ${pin}${p.mine && isMember && p.id != null ? `<button type="button" class="post-del" data-del="${esc(String(p.id))}">Delete</button>` : ''}
           </div>
           <div class="post-body">${body}</div>
           ${img}
-          <div class="react-bar" data-post="${esc(String(p.id != null ? 'p' + p.id : 's' + i))}" data-base-likes="${parseInt(p.likes)||0}">
+          <div class="react-bar" data-post="${esc(String(p.id != null ? 'p' + p.id : (p.skey ? 's' + p.skey : 'x' + i)))}" data-base-likes="${parseInt(p.likes)||0}">
             <button class="react-btn" data-emoji="heart" type="button" aria-label="Heart"><span class="em">♥</span><span class="ct">0</span></button>
             <button class="react-btn" data-emoji="fire" type="button" aria-label="Fire"><span class="em">🔥</span><span class="ct">0</span></button>
             <button class="react-btn" data-emoji="skull" type="button" aria-label="Skull"><span class="em">💀</span><span class="ct">0</span></button>
             <button class="react-btn" data-emoji="eye" type="button" aria-label="Eye"><span class="em">👁️</span><span class="ct">0</span></button>
+            <button class="react-btn cmt" data-cmt type="button" aria-label="Comments" aria-expanded="false" hidden><span class="em">💬</span><span class="ct">0</span></button>
           </div>
+          <div class="tk-nudge" hidden></div>
+          <div class="tk-box" hidden></div>
         </div>
       </article>`;
     }).join('');
@@ -5961,41 +6007,153 @@
     });
   }
 
-  // ============== Emoji reactions on Take posts (localStorage-backed) ==============
+  // ============== take-social (033): reactions and comments on Take posts ==============
+  // Counts are public (take_tally). Reacting, reading and writing comments is for members
+  // of The Wall. On a database without 033 the RPC is missing and the bar falls back to
+  // what it was before: a local, per-browser toy.
   function wireReactions(mount){
-    mount.querySelectorAll('.react-bar').forEach(bar => {
-      const post = bar.dataset.post;
-      const baseLikes = parseInt(bar.dataset.baseLikes) || 0;
-      bar.querySelectorAll('.react-btn').forEach(btn => {
+    const bars = [...mount.querySelectorAll('.react-bar')];
+    const KINDS = ['heart', 'fire', 'skull', 'eye'];
+    const realKey = k => /^(p\d{1,12}|s[0-9a-f]{16})$/.test(k || '');
+    const client = () => (window.OTP && OTP.configured && OTP.sb) ? OTP.sb() : null;
+    const T = {};                       // key -> {r: {kind: n}, c: n, mine: Set}
+    let live = false, member = null;    // member: null = not asked yet
+    const state = k => (T[k] = T[k] || {r: {}, c: 0, mine: new Set()});
+
+    function paintLocal(bar){
+      const post = bar.dataset.post, base = parseInt(bar.dataset.baseLikes) || 0;
+      bar.querySelectorAll('.react-btn[data-emoji]').forEach(btn => {
         const em = btn.dataset.emoji;
-        const ctEl = btn.querySelector('.ct');
-        const key = `otp-react:${post}:${em}`;
-        const voteKey = `otp-voted:${post}:${em}`;
-        const refresh = () => {
-          let count = parseInt(localStorage.getItem(key)) || 0;
-          if (em === 'heart') count += baseLikes;
-          ctEl.textContent = count;
-          btn.classList.toggle('voted', !!localStorage.getItem(voteKey));
-        };
-        refresh();
-        btn.addEventListener('click', () => {
-          const isVoted = !!localStorage.getItem(voteKey);
-          let stored = parseInt(localStorage.getItem(key)) || 0;
-          if (isVoted){
-            stored = Math.max(0, stored - 1);
-            localStorage.removeItem(voteKey);
-          } else {
-            stored += 1;
-            localStorage.setItem(voteKey, '1');
-            // Tiny pop animation
-            btn.classList.add('pop');
-            setTimeout(()=>btn.classList.remove('pop'), 350);
+        let n = parseInt(localStorage.getItem(`otp-react:${post}:${em}`)) || 0;
+        if (em === 'heart') n += base;
+        btn.querySelector('.ct').textContent = n;
+        btn.classList.toggle('voted', !!localStorage.getItem(`otp-voted:${post}:${em}`));
+      });
+    }
+    function paintLive(bar){
+      const k = bar.dataset.post, st = state(k), base = parseInt(bar.dataset.baseLikes) || 0;
+      bar.querySelectorAll('.react-btn[data-emoji]').forEach(btn => {
+        const em = btn.dataset.emoji;
+        btn.querySelector('.ct').textContent = (st.r[em] || 0) + (em === 'heart' ? base : 0);
+        btn.classList.toggle('voted', st.mine.has(em));
+        btn.setAttribute('aria-pressed', String(st.mine.has(em)));
+      });
+      const cb = bar.querySelector('[data-cmt]');
+      if (cb) { cb.hidden = false; cb.querySelector('.ct').textContent = st.c || 0; }
+    }
+    const paint = bar => { try { (live && realKey(bar.dataset.post) ? paintLive : paintLocal)(bar); } catch (e) {} };
+    bars.forEach(paint);
+
+    async function isMember(){
+      if (member !== null) return member;
+      const c = client(); if (!c) return (member = false);
+      try {
+        const s = await c.auth.getSession();
+        if (!s || !s.data || !s.data.session) return (member = false);
+        const r = await c.rpc('is_wall_member');
+        member = !r.error && r.data === true;
+      } catch (e) { member = false; }
+      return member;
+    }
+    function nudge(bar, what){
+      const n = bar.parentElement.querySelector('.tk-nudge'); if (!n) return;
+      n.innerHTML = `${esc(what)} is for members. <a href="join/">Log in</a>, or <a href="wall/">join The Wall</a> with the member code.`;
+      n.hidden = false;
+    }
+    const ago = iso => { const m = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 60000)); return m < 1 ? 'now' : m < 60 ? m + 'm' : m < 1440 ? Math.round(m / 60) + 'h' : Math.round(m / 1440) + 'd'; };
+    const ini = n => String(n || '?').trim().split(/\s+/).slice(0, 2).map(w => Array.from(w)[0] || '').join('').toUpperCase() || '?';
+
+    async function loadThread(bar){
+      const k = bar.dataset.post, box = bar.parentElement.querySelector('.tk-box'), c = client(); if (!box || !c) return;
+      const old = box.querySelector('textarea'), draft = old ? old.value : '';
+      let rows = [];
+      try { const r = await c.rpc('take_thread', {p_key: k}); if (!r.error && Array.isArray(r.data)) rows = r.data; } catch (e) {}
+      state(k).c = rows.filter(x => !x.hidden).length; paint(bar);
+      box.innerHTML = `<form class="tk-form"><textarea maxlength="280" rows="2" placeholder="Say something" aria-label="Your comment"></textarea><button type="submit">Post</button></form>
+        ${rows.length ? `<ol class="tk-list">${rows.map(x => `<li class="${x.hidden ? 'hid' : ''}">
+          ${x.pic && /^https:\/\//.test(x.pic) ? `<img class="tk-av" src="${esc(x.pic)}" alt="" loading="lazy" decoding="async">` : `<span class="tk-av" aria-hidden="true">${esc(ini(x.name))}</span>`}
+          <div><div class="tk-top">${x.sid ? `<a href="wall/#s-${esc(x.sid)}"><b>${esc(x.name)}</b></a>` : `<b>${esc(x.name)}</b>`}
+            ${x.kind === 'desk' ? '<span class="tk-k">the desk</span>' : x.kind === 'card' ? '<span class="tk-k">card holder</span>' : ''}
+            <time>${esc(ago(x.created_at))}</time>${x.hidden ? '<span class="tk-k">hidden</span>' : ''}</div>
+            <p>${esc(x.body)}</p>
+            ${x.can_delete ? `<div class="tk-acts"><button type="button" data-cdel="${esc(String(x.id))}">Delete</button>${x.mine ? '' : `<button type="button" data-chide="${esc(String(x.id))}" data-h="${x.hidden ? 0 : 1}">${x.hidden ? 'Unhide' : 'Hide'}</button>`}</div>` : ''}
+          </div></li>`).join('')}</ol>` : '<p class="tk-empty">No comments yet. Say something.</p>'}`;
+      const ta = box.querySelector('textarea'); if (ta && draft) ta.value = draft;
+    }
+
+    bars.forEach(bar => {
+      const k = bar.dataset.post;
+      bar.querySelectorAll('.react-btn[data-emoji]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const em = btn.dataset.emoji;
+          if (!(live && realKey(k))) {                      // the old local toy
+            const key = `otp-react:${k}:${em}`, vk = `otp-voted:${k}:${em}`;
+            let n = parseInt(localStorage.getItem(key)) || 0;
+            if (localStorage.getItem(vk)) { n = Math.max(0, n - 1); localStorage.removeItem(vk); }
+            else { n += 1; localStorage.setItem(vk, '1'); btn.classList.add('pop'); setTimeout(() => btn.classList.remove('pop'), 350); }
+            localStorage.setItem(key, n); paint(bar); return;
           }
-          localStorage.setItem(key, stored);
-          refresh();
+          if (!(await isMember())) { nudge(bar, 'Reacting'); return; }
+          const st = state(k), on = !st.mine.has(em);
+          if (on) { st.mine.add(em); st.r[em] = (st.r[em] || 0) + 1; btn.classList.add('pop'); setTimeout(() => btn.classList.remove('pop'), 350); }
+          else { st.mine.delete(em); st.r[em] = Math.max(0, (st.r[em] || 1) - 1); }
+          paint(bar);
+          let r; try { r = await client().rpc('take_react', {p_key: k, p_kind: em, p_on: on}); } catch (e) { r = {error: e}; }
+          if (r.error) {                                    // put it back the way it was
+            if (on) { st.mine.delete(em); st.r[em] = Math.max(0, (st.r[em] || 1) - 1); } else { st.mine.add(em); st.r[em] = (st.r[em] || 0) + 1; }
+            paint(bar);
+          }
         });
       });
+      const cb = bar.querySelector('[data-cmt]'), box = bar.parentElement.querySelector('.tk-box');
+      if (cb && box) cb.addEventListener('click', async () => {
+        if (!box.hidden) { box.hidden = true; cb.setAttribute('aria-expanded', 'false'); return; }
+        if (!(await isMember())) { nudge(bar, 'Reading and writing comments'); return; }
+        box.hidden = false; cb.setAttribute('aria-expanded', 'true');
+        box.innerHTML = '<p class="tk-empty">Loading…</p>';
+        loadThread(bar);
+      });
+      if (box) {
+        box.addEventListener('submit', async e => {
+          e.preventDefault();
+          const ta = box.querySelector('textarea'), btn = box.querySelector('.tk-form button'), body = (ta.value || '').trim(); if (!body) return;
+          btn.disabled = true;
+          let r; try { r = await client().rpc('take_comment', {p_key: k, p_body: body}); } catch (err) { r = {error: err}; }
+          btn.disabled = false;
+          if (r.error) { ta.setCustomValidity(/slow down/i.test(r.error.message || '') ? 'Slow down, try again in a bit.' : 'That did not post. Try again.'); ta.reportValidity(); setTimeout(() => ta.setCustomValidity(''), 2500); return; }
+          ta.value = ''; loadThread(bar);
+        });
+        box.addEventListener('click', async e => {
+          const t = e.target.closest('button'); if (!t) return;
+          if (t.dataset.cdel) {
+            if (t.dataset.sure !== '1') { t.dataset.sure = '1'; t.textContent = 'Tap again'; return; }
+            try { await client().rpc('take_uncomment', {p_id: +t.dataset.cdel}); } catch (err) {}
+            loadThread(bar);
+          }
+          if (t.dataset.chide) { try { await client().rpc('take_hide', {p_id: +t.dataset.chide, p_hidden: t.dataset.h === '1'}); } catch (err) {} loadThread(bar); }
+        });
+      }
     });
+
+    // a casual member takes their own post down (card holders have edit mode for this)
+    mount.querySelectorAll('.post-del[data-del]').forEach(b => b.addEventListener('click', async () => {
+      if (b.dataset.sure !== '1') { b.dataset.sure = '1'; b.textContent = 'Tap again to delete'; return; }
+      b.disabled = true;
+      try { await OTP.deletePost(+b.dataset.del); const art = b.closest('.post-t'); if (art) art.remove(); }
+      catch (e) { b.disabled = false; b.dataset.sure = ''; b.textContent = 'Could not delete'; }
+    }));
+
+    // the real counts, when the backend has them
+    const keys = bars.map(x => x.dataset.post).filter(realKey);
+    const c = client();
+    if (c && keys.length) {
+      c.rpc('take_tally', {p_keys: keys}).then(r => {
+        if (!r || r.error || !Array.isArray(r.data)) return;          // no 033 yet: stay local
+        live = true;
+        r.data.forEach(x => { T[x.post_key] = {r: x.reactions || {}, c: x.comments || 0, mine: new Set(x.mine || [])}; });
+        bars.forEach(paint);
+      }, () => {});
+    }
   }
 
   // ============== CARD DETAIL MODAL ==============

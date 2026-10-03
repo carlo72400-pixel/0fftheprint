@@ -3,11 +3,12 @@
    file never runs the page is still correct. */
 (async () => {
   const S = {
+    // 033: everybody on The Wall posts to the timeline now, not only card holders.
     out:  {label:'Log in',  href:'join/',    on:false,
-           title:'Card holders log in here.',
-           b:'Got a card? Log in.',
-           s:'Card holders post straight to the timeline. The desk hands out the cards in person, and the DMs are always open.',
-           foot:'Card holders: log in →'},
+           title:'Members and card holders log in here.',
+           b:'Log in to post.',
+           s:'Everybody on The Wall posts to this timeline, reacts and comments. No login yet? Join The Wall with the member code.',
+           foot:'Log in →'},
     wait: {label:'Pending', href:'join/',    on:false,
            title:"You're in the queue. The desk approves by hand.",
            b:"You're in the queue.",
@@ -21,7 +22,7 @@
     wall: {label:'Member', href:'wall/', on:true,
            title:'Every flyer this week, one night at a time.',
            b:'Open The Wall.',
-           s:'Every flyer in SA, San Marcos and Austin, one night at a time. See who is going and vote the vibe.',
+           s:'Every flyer in SA, San Marcos and Austin, one night at a time. See who is going and vote the vibe. You can post up top, too.',
            foot:'Open The Wall →'},
     admin:{label:'Desk',    href:'desk/',    on:true,
            title:'Approvals and pulls.',

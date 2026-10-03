@@ -2,8 +2,10 @@
    Posting should be one tap from the homepage, not a trip to another page.
 
    Four states, same as the door: signed out, in the queue, card holder, desk.
-   Only a card holder gets the actual box. Everyone else gets one line and a
-   link, because this is a members door and not a signup funnel.
+   Since 033 ("everyone can post on the timeline") anyone on The Wall gets the
+   box too: a casual member posts words and photos, a card holder keeps GIFs and
+   video. Signed out, or signed in but not on The Wall yet, gets one line and a
+   link. The database decides who may post; this only decides what to draw.
 
    Its own file, loaded deferred AFTER desk.js, so if any of it throws the
    timeline underneath still renders. The homepage is not allowed to depend on
@@ -64,23 +66,30 @@
   // ---------- signed out ----------
   if (!me) {
     line(`<span class="cav plain"></span>
-      <div class="cgrow"><a class="clink" href="join/">Got a card? Log in.</a>
-        <div class="cnote">Card holders post straight to this timeline.</div></div>`);
+      <div class="cgrow"><a class="clink" href="join/">Log in to post.</a>
+        <div class="cnote">Everybody on The Wall posts here. No login yet? <a href="wall/">Join The Wall</a> with the member code.</div></div>`);
     return;
   }
 
-  // ---------- signed in, still in the queue ----------
-  if (!me.profile || !me.profile.approved) {
+  // ---------- signed in: a card holder, or anyone on The Wall (033) ----------
+  const approved = !!(me.profile && me.profile.approved);
+  let canPost = approved;
+  if (!canPost && OTP.canTake) { try { canPost = await OTP.canTake(); } catch (e) {} }
+
+  // ---------- signed in, not on The Wall, still in the queue ----------
+  if (!canPost) {
     line(`<span class="cav plain"></span>
       <div class="cgrow"><b class="clink">You're in the queue.</b>
-        <div class="cnote">The desk approves by hand. It moves when it moves.</div></div>`);
+        <div class="cnote">The desk approves by hand. Got the member code? <a href="wall/">Join The Wall</a> and you can post now.</div></div>`);
     return;
   }
+  // A casual member: words and photos. GIFs and video stay with the card.
+  const casual = !approved;
 
-  // ---------- card holder: the real box ----------
+  // ---------- the real box ----------
   // Their card art, so the box looks like them. Falls back to a plain ring.
   let avatar = '';
-  try {
+  if (!casual) try {
     const [r, c] = await Promise.all([
       fetch('content/roster.json', { cache: 'no-cache' }).then(x => x.json()).catch(() => ({ items: [] })),
       fetch('content/creators.json', { cache: 'no-cache' }).then(x => x.json()).catch(() => ({ items: [] })),
@@ -101,7 +110,7 @@
             placeholder="What's up, ${esc((me.profile.display_name || '').split(' ')[0])}?"></textarea>
           <div class="cprev" id="c-prev"><button id="c-rm" type="button" aria-label="Remove">&times;</button></div>
           <div class="cbar">
-            <button class="cattach" id="c-attach" type="button">Photo / GIF / video</button>
+            <button class="cattach" id="c-attach" type="button">${casual ? 'Photo' : 'Photo / GIF / video'}</button>
             <span class="cspacer"></span>
             <span class="ccount" id="c-count"></span>
             <button class="cpost" id="c-go" type="button" disabled>Post</button>
@@ -109,7 +118,7 @@
           <div class="cmsg" id="c-msg"></div>
         </div>
       </div>
-      <input type="file" id="c-file" accept="image/*,video/*" hidden>
+      <input type="file" id="c-file" accept="${casual ? 'image/*' : 'image/*,video/*'}" hidden>
     </div>`;
 
   if (avatar) document.getElementById('c-av').style.backgroundImage = 'url("' + avatar + '")';
@@ -146,8 +155,9 @@
 
   function setFile(f) {
     const isVid = /^video\//.test(f.type || '') || /\.(mp4|mov|webm|m4v)$/i.test(f.name || '');
+    if (casual && isVid) { msg('Photos only here. Video is a card holder thing.', 'err'); return; }
     if (!isVid && !/^image\//.test(f.type || '') && !/\.(jpe?g|png|gif|webp|heic|heif|avif)$/i.test(f.name || '')) {
-      msg('Photos, GIFs and video clips only.', 'err'); return;
+      msg(casual ? 'Photos only.' : 'Photos, GIFs and video clips only.', 'err'); return;
     }
     if (f.size > 50 * 1024 * 1024) {
       msg(isVid ? 'That clip is over 50MB. Trim it or drop the quality a notch.'
@@ -175,7 +185,7 @@
     const label = go.textContent;
     try {
       let url = null;
-      if (file) { go.textContent = 'Uploading…'; url = await OTP.uploadImage(file); }
+      if (file) { go.textContent = 'Uploading…'; url = casual ? await OTP.uploadTakePhoto(file) : await OTP.uploadImage(file); }
       go.textContent = 'Posting…';
       await OTP.post({ text, imageUrl: url });
       ta.value = ''; grow(); $('c-rm').click();
@@ -186,7 +196,7 @@
       setTimeout(() => location.reload(), 500);
     } catch (e) {
       const m = e.message || '';
-      msg(/^(Slow down|That is twenty|The desk pulled|Log in first|That clip|That photo|Photos, GIFs)/.test(m)
+      msg(/^(Slow down|That is twenty|That is twelve|The desk pulled|Log in first|That clip|That photo|Photos, GIFs|Photos only)/.test(m)
         ? m : (m || 'That did not go through.'), 'err');
       go.disabled = false; go.textContent = label;
     }
