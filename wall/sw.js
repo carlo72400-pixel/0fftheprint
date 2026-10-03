@@ -1,14 +1,14 @@
 /* THE WALL, offline worker (0fftheprint.com/wall/sw.js). Written by flyer-sweep/wall_build.py; never hand-edit.
-   Build 20261003091855.
+   Build 20261003121451.
    - The page itself: network first (a fresh week whenever there is signal), the saved copy when there is none.
      The data inside it stays sealed; a member's phone already holds the key, so it opens offline too.
    - Scripts, styles and fonts: served from the phone, refreshed in the background.
    - Flyers: kept after the first view (and the next few nights are warmed while the phone is idle), capped.
    - Supabase (logins, the key): never cached, always live. */
-const BUILD = '20261003091855';
+const BUILD = '20261003121451';
 const SHELL = 'wall-shell-' + BUILD;
 const IMGS = 'wall-img-v1';
-const PRECACHE = ["./", "manifest.webmanifest", "icon-192.png", "apple-touch-icon.png", "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js", "../supabase-config.js?v=f1348482", "../assets/js/desk.js?v=071ca8af"];
+const PRECACHE = ["./", "manifest.webmanifest", "icon-192.png", "apple-touch-icon.png", "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js", "../supabase-config.js?v=f1348482", "../assets/js/desk.js?v=cd1f4fab"];
 const IMG_CAP = 450;
 
 self.addEventListener('install', e => {
@@ -30,34 +30,47 @@ async function trim(){
   for (let i = 0; i < keys.length - IMG_CAP; i++) await c.delete(keys[i]);   // oldest first
 }
 
-async function pageFirst(req){
+/* Only a real page goes in the page slot (anything else under /wall/ used to be able to land there),
+   and a slow network no longer throws the fresh copy away: after six seconds the saved page opens,
+   and the fresh one still finishes downloading into the slot for next time. */
+const hold = (e, p) => { try { e.waitUntil(Promise.resolve(p).catch(() => {})); } catch (err) {} };
+async function pageFirst(e){
   const c = await caches.open(SHELL);
-  try {
-    const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 6000);
-    const r = await fetch(req, {signal: ctl.signal}); clearTimeout(t);
-    if (r.ok) c.put('./', r.clone());
+  const net = fetch(e.request).then(r => {
+    if (r.ok && /text\/html/i.test(r.headers.get('content-type') || '')) hold(e, c.put('./', r.clone()));
     return r;
+  });
+  const slow = new Promise(ok => setTimeout(ok, 6000, null));
+  try {
+    const r = await Promise.race([net, slow]);
+    if (r) return r;
+    const saved = await c.match('./');
+    if (saved) { hold(e, net); return saved; }
+    return await net;
   } catch (err) {
-    return (await c.match('./')) || (await c.match(req)) || Response.error();
+    return (await c.match('./')) || Response.error();
   }
 }
 
-async function imageFirst(req){
+async function imageFirst(e){
+  const req = e.request;
   const c = await caches.open(IMGS);
   const hit = await c.match(req.url);
   if (hit) return hit;
   try {
     const r = await fetch(req.url, {mode: 'cors'});
-    if (r.ok) { c.put(req.url, r.clone()); if (Math.random() < .05) trim(); }
+    if (r.ok) hold(e, c.put(req.url, r.clone()).then(() => Math.random() < .05 ? trim() : null));   // held open so the phone does not kill it mid-write
     return r;
   } catch (err) { return Response.error(); }
 }
 
-async function staleWhileRevalidate(req){
+async function staleWhileRevalidate(e){
+  const req = e.request;
   const c = await caches.open(SHELL);
   const hit = await c.match(req);
-  const net = fetch(req).then(r => { if (r.ok || r.type === 'opaque') c.put(req, r.clone()); return r; }).catch(() => null);
-  return hit || (await net) || Response.error();
+  const net = fetch(req).then(r => { if (r.ok || r.type === 'opaque') hold(e, c.put(req, r.clone())); return r; }).catch(() => null);
+  if (hit) { hold(e, net); return hit; }
+  return (await net) || Response.error();
 }
 
 self.addEventListener('fetch', e => {
@@ -66,10 +79,10 @@ self.addEventListener('fetch', e => {
   const url = new URL(req.url);
   if (/supabase\.co$/.test(url.hostname)) return;                                  // logins and the key: always live
   if (url.origin === location.origin && url.pathname === '/wall/cal.ics') { e.respondWith(calendar(url)); return; }
-  if (req.mode === 'navigate' && url.origin === location.origin && url.pathname.startsWith('/wall/')) { e.respondWith(pageFirst(req)); return; }
-  if (url.hostname === 'carlo72400-pixel.github.io' && url.pathname.startsWith('/0tp-wall/')) { e.respondWith(imageFirst(req)); return; }
+  if (req.mode === 'navigate' && url.origin === location.origin && (url.pathname === '/wall/' || url.pathname === '/wall/index.html')) { e.respondWith(pageFirst(e)); return; }
+  if (url.hostname === 'carlo72400-pixel.github.io' && url.pathname.startsWith('/0tp-wall/')) { e.respondWith(imageFirst(e)); return; }
   if (url.hostname === 'cdn.jsdelivr.net' || url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com'
-      || (url.origin === location.origin && /\.(js|css|png|svg|webmanifest)$/.test(url.pathname))) { e.respondWith(staleWhileRevalidate(req)); return; }
+      || (url.origin === location.origin && /\.(js|css|png|svg|webmanifest)$/.test(url.pathname))) { e.respondWith(staleWhileRevalidate(e)); return; }
 });
 
 /* "Add to calendar": the page puts the event text in the URL and this answers it on the phone, nothing goes out.
@@ -96,6 +109,6 @@ self.addEventListener('message', e => {
       if (await c.match(u)) continue;
       try { const r = await fetch(u, {mode: 'cors'}); if (r.ok) await c.put(u, r); } catch (err) {}
     }
-    trim();
+    await trim();
   })());
 });
