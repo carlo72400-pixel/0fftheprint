@@ -48,7 +48,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="../supabase-config.js?v=f1348482"></script>
-<script src="../assets/js/desk.js?v=a2343ff3"></script>
+<script src="../assets/js/desk.js?v=cd1f4fab"></script>
 <script>
 (async () => {
   const $ = id => document.getElementById(id);
@@ -57,7 +57,7 @@
   const when = iso => { const d = new Date(iso); return isNaN(d) ? '' : d.toLocaleDateString(undefined,{month:'short',day:'numeric'}); };
 
   // Survives a re-render so the undo strip does not vanish under him.
-  let lastBatch = null, lastBatchN = 0, lastBatchWho = '', lastRetired = null;
+  let lastBatch = null, lastBatchN = 0, lastBatchWho = '', lastRetired = null, lastRetiredWasBanned = false;
 
   if (!OTP.configured) {
     panel.innerHTML = `<div class="setup"><b>Backend not switched on yet</b>
@@ -384,9 +384,12 @@
           Every post</b>
         ${posts.length ? posts.map(p => {
           const pulled = !p.published;
-          // published=true but the author got revoked means visitors cannot see it
-          // even though the row says live. Without this he moderates blind.
-          const hidden = p.published && p.author_approved === false;
+          // published=true but the author got revoked (or a Wall member got banned)
+          // means visitors cannot see it even though the row says live. Without this
+          // he moderates blind. Since 033 a code member's post is LIVE with
+          // author_approved false, so the view's own verdict decides, not that column.
+          const hidden = p.published && (p.publicly_visible === undefined ? p.author_approved === false : p.publicly_visible === false);
+          const member = p.author_approved === false && !hidden;
           const full = p.text || '';
           const clipped = full.length > 400;
           return `<div class="post-row ${p.image_url ? '' : 'no-img'} ${pulled || hidden ? 'gone' : ''}" data-id="${p.id}">
@@ -404,7 +407,8 @@
                 ${p.pinned ? '<span class="pill pin">PINNED</span>' : ''}
                 ${p.edited_at ? '<span class="pill edited">EDITED</span>' : ''}
                 ${pulled ? '<span class="pill" style="color:var(--bad);border-color:rgba(255,93,126,.45)">PULLED</span>' : ''}
-                ${hidden ? '<span class="pill hidden">HIDDEN, author revoked</span>' : ''}
+                ${hidden ? '<span class="pill hidden">HIDDEN, author revoked or banned</span>' : ''}
+                ${member ? '<span class="pill">WALL MEMBER</span>' : ''}
               </div>
               <div class="acts">
                 <button class="btn ghost" data-edit="${p.id}" type="button">Edit</button>
@@ -443,9 +447,12 @@
       // while their author was still unapproved, and the public feed hides an
       // unapproved author's posts. Nothing actually returned to the site, and the
       // confirm dialog had promised it would. Re-approve FIRST, then republish.
+      // 034: the revoke also closed The Wall for them. Lift that first (unless they were
+      // already banned before the revoke: that ban was its own decision and stays).
+      if (lastRetired && !lastRetiredWasBanned) await OTP.wallBan(lastRetired, false);
       if (lastRetired) await OTP.setApproved(lastRetired, true);
       await OTP.restoreBatch(lastBatch);
-      lastBatch = null; lastRetired = null;
+      lastBatch = null; lastRetired = null; lastRetiredWasBanned = false;
     });
 
     panel.querySelectorAll('[data-seed-hide]').forEach(b => b.onclick = rerun(async b => {
@@ -557,9 +564,11 @@
     });
     panel.querySelectorAll('[data-retire]').forEach(b => b.onclick = async () => {
       const name = b.dataset.name;
-      if (!confirm('Revoke ' + name + ' and pull everything they posted? You can put it back.')) return;
+      if (!confirm('Revoke ' + name + ', pull everything they posted, and close The Wall to them? You can put it back.')) return;
       b.disabled = true;
       try {
+        const was = members.find(p => p.id === b.dataset.retire);
+        lastRetiredWasBanned = !!(was && was.wall_banned);
         const batch = await OTP.retireMember(b.dataset.retire);
         const n = (await OTP.allPosts(200)).filter(p => p.pull_batch === batch).length;
         lastBatch = batch; lastBatchN = n; lastBatchWho = name;
@@ -569,7 +578,9 @@
     });
 
     panel.querySelectorAll('[data-orphan]').forEach(b => b.onclick = rerun(async b => {
+      // the queue holds a bare key; since 033 it may sit in either bucket
       await OTP.deleteImage('/storage/v1/object/public/posts/' + b.dataset.orphan);
+      await OTP.deleteImage('/storage/v1/object/public/take/' + b.dataset.orphan);
     }));
 
     panel.querySelectorAll('[data-more]').forEach(b => b.onclick = () => {

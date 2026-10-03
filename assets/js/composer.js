@@ -66,7 +66,7 @@
   // ---------- signed out ----------
   if (!me) {
     line(`<span class="cav plain"></span>
-      <div class="cgrow"><a class="clink" href="join/">Log in to post.</a>
+      <div class="cgrow"><a class="clink" href="join/?next=home">Log in to post.</a>
         <div class="cnote">Everybody on The Wall posts here. No login yet? <a href="wall/">Join The Wall</a> with the member code.</div></div>`);
     return;
   }
@@ -100,7 +100,8 @@
     avatar = safeUrl(mine && mine.photo);
   } catch (e) { /* a missing avatar is not worth a broken box */ }
 
-  const first = (me.profile.display_name || '0').trim()[0] || '0';
+  // Array.from, not [0]: a name that opens with an emoji is two code units and [0] is half of it
+  const first = Array.from((me.profile.display_name || '0').trim())[0] || '0';
   mount.innerHTML = `
     <div class="cbox">
       <div class="crow">
@@ -126,6 +127,14 @@
   const $ = id => document.getElementById(id);
   const ta = $('c-text'), prev = $('c-prev'), go = $('c-go'), msgEl = $('c-msg'), countEl = $('c-count');
   let file = null, objUrl = null;
+  // The upload outlives a failed post. Without this every retry (rate limit, lost signal,
+  // "the desk pulled this one") uploaded the same photo again: a casual member burned
+  // their twelve a day and left files nothing would ever clean up.
+  let upFile = null, upUrl = null;
+  const dropUpload = () => {
+    if (upUrl && OTP.deleteImage) { const gone = upUrl; OTP.deleteImage(gone).catch(() => {}); }
+    upFile = null; upUrl = null;
+  };
 
   const msg = (t, k) => { msgEl.textContent = t; msgEl.className = 'cmsg show ' + (k || ''); };
   const clearMsg = () => { msgEl.className = 'cmsg'; };
@@ -145,6 +154,7 @@
   $('c-file').onchange = e => { if (e.target.files[0]) setFile(e.target.files[0]); };
 
   $('c-rm').onclick = () => {
+    dropUpload();
     file = null;
     if (objUrl) { URL.revokeObjectURL(objUrl); objUrl = null; }
     prev.style.display = 'none';
@@ -164,6 +174,7 @@
                 : 'That photo is over 50MB. Shrink it first.', 'err');
       return;
     }
+    if (f !== upFile) dropUpload();
     file = f;
     clearMsg();
     if (objUrl) URL.revokeObjectURL(objUrl);
@@ -185,9 +196,17 @@
     const label = go.textContent;
     try {
       let url = null;
-      if (file) { go.textContent = 'Uploading…'; url = casual ? await OTP.uploadTakePhoto(file) : await OTP.uploadImage(file); }
+      if (file) {
+        if (upFile !== file || !upUrl) {
+          go.textContent = 'Uploading…';
+          upUrl = casual ? await OTP.uploadTakePhoto(file) : await OTP.uploadImage(file);
+          upFile = file;
+        }
+        url = upUrl;
+      }
       go.textContent = 'Posting…';
       await OTP.post({ text, imageUrl: url });
+      upFile = null; upUrl = null;          // the post owns the photo now; removing it below must not delete it
       ta.value = ''; grow(); $('c-rm').click();
       msg('Up.', 'good');
       // Reload so the new post lands in the timeline through the same render

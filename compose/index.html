@@ -62,7 +62,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="../supabase-config.js?v=f1348482"></script>
-<script src="../assets/js/desk.js?v=a2343ff3"></script>
+<script src="../assets/js/desk.js?v=cd1f4fab"></script>
 <script>
 (async () => {
   const $ = id => document.getElementById(id);
@@ -78,6 +78,9 @@
   const me = await OTP.me();
   if (!me) { location.href = '../join/'; return; }
   if (!me.profile?.approved) {
+    // 033: a Wall member posts from the timeline, not from this page (this box is the
+    // card holder's: GIFs, video). Send them where their post box is.
+    try { if (OTP.canTake && await OTP.canTake()) { location.href = '../#take'; return; } } catch (e) {}
     panel.innerHTML = `<b style="font-family:var(--f-display);font-style:italic;font-size:26px;text-transform:uppercase">Not approved yet.</b>
       <div class="note">Signed in as ${esc(me.user.email)}. The desk approves by hand. Once you're in, this becomes your post box.</div>
       <button class="btn ghost" id="out" type="button">Sign out</button>`;

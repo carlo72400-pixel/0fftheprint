@@ -15,10 +15,11 @@
 <div class="wrap">
   <a class="back" href="../">&larr; 0FF THE PRINT</a>
   <h1 id="ttl">Join the Desk</h1>
-  <div class="sub">card holders only &nbsp;·&nbsp; the desk approves by hand</div>
-  <p class="door-note">Card holders post here. If you don't have a card yet, knock:
+  <div class="sub">log in &nbsp;·&nbsp; cards are approved by hand</div>
+  <p class="door-note">On The Wall or holding a card? Log in. Want a card? Knock:
     sign up with your Instagram so the desk knows who's asking.</p>
-  <p class="door-note">The desk approves people by hand, usually after it wakes up.</p>
+  <p class="door-note">Just want in? <a href="../wall/" style="color:var(--pink-glow)">Join The Wall</a>
+    with the member code and you can post today. Cards the desk approves by hand, usually after it wakes up.</p>
 
   <div class="setup" id="setup" style="display:none">
     <b>Backend not switched on yet</b>
@@ -58,15 +59,15 @@
 
     <div class="msg" id="msg"></div>
     <div class="note" id="note">
-      Signing up does not put you on the site. The desk approves people by hand,
-      then you can post. You will not get email from us for anything else.
+      Signing up here asks for a card. The desk approves those by hand. To post today,
+      join The Wall with the member code. You will not get email from us for anything else.
     </div>
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="../supabase-config.js?v=f1348482"></script>
-<script src="../assets/js/desk.js?v=a2343ff3"></script>
+<script src="../assets/js/desk.js?v=cd1f4fab"></script>
 <script>
 (async () => {
   const $ = id => document.getElementById(id);
@@ -79,9 +80,9 @@
     return;
   }
 
-  // ?next= sends a card holder back to the page that sent them here. Allowlist only,
+  // ?next= sends someone back to the page that sent them here. Allowlist only,
   // so the login page can never be used to bounce someone to another site.
-  const NEXT = { wall: '../wall/' }[new URLSearchParams(location.search).get('next')] || null;
+  const NEXT = { wall: '../wall/', home: '../#take' }[new URLSearchParams(location.search).get('next')] || null;
 
   // already signed in? send them where they belong
   const me = await OTP.me();
@@ -90,9 +91,16 @@
     if (NEXT) { location.href = NEXT; return; }
     if (me.profile?.is_admin) { location.href = '../desk/'; return; }
     if (me.profile?.approved)  { location.href = '../compose/'; return; }
+    // 033: a member of The Wall is not waiting on anything. They post from the timeline,
+    // so a login with nowhere to go sends them there instead of telling them to queue.
+    let onWall = false;
+    try { onWall = !!(OTP.canTake && await OTP.canTake()); } catch (e) {}
+    if (onWall) { location.href = '../#take'; return; }
+    const esc = t => String(t ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     $('panel').innerHTML = `<b style="font-family:var(--f-display);font-style:italic;font-size:26px;text-transform:uppercase">You're in the queue.</b>
-      <div class="note">Signed in as ${me.user.email}. You're in the queue. The desk approves by hand,
-      usually after it wakes up.</div>
+      <div class="note">Signed in as ${esc(me.user.email)}. You're in the queue. The desk approves by hand,
+      usually after it wakes up. Got the member code?
+      <a href="../wall/" style="color:var(--pink-glow)">Join The Wall</a> and you can post today.</div>
       <button class="btn ghost" id="out" type="button">Sign out</button>`;
     $('out').onclick = async () => { await OTP.signOut(); location.reload(); };
     return;

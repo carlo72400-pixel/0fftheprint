@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Not here · 0FF THE PRINT</title>
+<script>
+/* A card the desk just handed out has no folder at /c/<slug>/ until the next bake, and every link on the
+   site points at the folder. /c/?s=<slug> always answers, so a miss on a card address goes there. */
+(function () {
+  var m = /^\/c\/([a-z0-9][a-z0-9-]{0,58}[a-z0-9])\/?$/.exec(location.pathname);
+  if (m) location.replace('/c/?s=' + encodeURIComponent(m[1]));
+})();
+</script>
+<style>
+  html,body{height:100%;margin:0}
+  body{display:grid;place-items:center;background:#0a0a0d;color:#f4eef2;font:500 16px/1.5 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;text-align:center;padding:0 24px}
+  b{display:block;font:900 italic 44px/1 "Saira Condensed","Arial Narrow",Impact,sans-serif;text-transform:uppercase;letter-spacing:.01em;margin-bottom:10px}
+  a{color:#ff79c6;text-decoration:none;font-weight:700}
+  a:hover{text-decoration:underline}
+  p{margin:0 0 18px;color:#b9b1c2}
+</style>
+</head>
+<body>
+<main>
+  <b>Not here</b>
+  <p>Nothing at this address.</p>
+  <a href="/">&#8592; 0FF THE PRINT</a>
+</main>
+</body>
+</html>

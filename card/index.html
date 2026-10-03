@@ -145,7 +145,7 @@ input:focus,select:focus{outline:2px solid var(--pink-deep);outline-offset:1px}
 
 <script src="../supabase-config.js?v=f1348482"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="../assets/js/desk.js?v=a2343ff3" defer></script>
+<script src="../assets/js/desk.js?v=cd1f4fab" defer></script>
 <script defer>
 (() => {
   const $ = id => document.getElementById(id);
@@ -229,7 +229,7 @@ input:focus,select:focus{outline:2px solid var(--pink-deep);outline-offset:1px}
     }
     if (!me.profile.approved) {
       $('gate').style.display = 'block';
-      $('gate').innerHTML = '<p class="door-note">' + esc(OTP.doorNote(me.profile).line) + '</p>';
+      $('gate').innerHTML = '<p class="door-note">' + esc(await OTP.doorLine(me.profile)) + '</p>';
       return;
     }
 

@@ -140,7 +140,7 @@
       var l = d.createElement('div');
       l.className = 'wholine';
       l.innerHTML = me
-        ? 'You are in the queue. Card holders add their own dates here.'
+        ? 'Card holders add their own dates here.'
         : 'Card holders add their own dates. <a href="../join/">Got a card? Log in.</a>';
       panel.appendChild(l);
     }

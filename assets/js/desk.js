@@ -116,17 +116,22 @@
       return { user, profile: profile || null };
     },
 
-    async signUp(email, password, displayName, cardSlug, instagram) {
+    // `via` is "wall" when the signup comes from The Wall's join form (a code member,
+    // not a card applicant). wall_redeem() reads it: anyone who signed up at /join/
+    // and LATER redeems the code keeps their place in the desk's card queue (034).
+    async signUp(email, password, displayName, cardSlug, instagram, via) {
       const c = sb(); if (!c) throw new Error("Backend not configured yet.");
       const ig = String(instagram || "").trim().replace(/^@/, "").toLowerCase();
+      const data = {
+        display_name: displayName,
+        card_slug: cardSlug,
+        // handle only; the trigger sanitizes again server side
+        instagram: /^[a-z0-9._]{1,30}$/.test(ig) ? ig : "",
+      };
+      if (via === "wall") data.via = "wall";
       const { error } = await c.auth.signUp({
         email, password,
-        options: { data: {
-          display_name: displayName,
-          card_slug: cardSlug,
-          // handle only; the trigger sanitizes again server side
-          instagram: /^[a-z0-9._]{1,30}$/.test(ig) ? ig : "",
-        } },
+        options: { data },
       });
       if (error) throw error;
     },
@@ -222,7 +227,10 @@
         throw new Error("Photos only here. Video is a card holder thing.");
       }
       let src;
-      try { src = await createImageBitmap(file); }
+      // from-image: Safari 15 ignored EXIF here without it and a portrait phone
+      // photo went up sideways. A browser that rejects the option lands in the
+      // <img> path below, which has always honoured orientation.
+      try { src = await createImageBitmap(file, { imageOrientation: "from-image" }); }
       catch (e) {
         src = await new Promise((ok, no) => {
           const im = new Image();
@@ -246,9 +254,15 @@
         cacheControl: "31536000", upsert: false, contentType: "image/jpeg",
       });
       if (error) {
-        throw new Error(/row-level security|policy|unauthorized/i.test(error.message || "")
+        // The policy refuses for more than one reason (the daily twelve, a ban, a
+        // session that lapsed). Only say "twelve" when the count says so.
+        let n = null;
+        if (/row-level security|policy|unauthorized/i.test(error.message || "")) {
+          try { const r = await c.rpc("uploads_today", { p_bucket: "take" }); if (!r.error) n = r.data; } catch (e) {}
+        }
+        throw new Error(n != null && n >= 12
           ? "That is twelve photos today. Try again tomorrow."
-          : (error.message || "That photo did not upload."));
+          : "That photo did not upload. Try again, and if it keeps happening tell the desk.");
       }
       return c.storage.from("take").getPublicUrl(name).data.publicUrl;
     },
@@ -1553,7 +1567,12 @@
     // sat here looking like card applicants (Approve made them card holders). A Wall
     // member only waits on the desk if they asked for a card. Before 032 runs,
     // wall_casual is undefined and this is exactly the old filter.
-    async pending() { return (await OTP.deskProfiles()).filter(p => !p.approved && !p.denied && !(p.wall_casual && p.card_ask !== 'asked')); },
+    // A Wall member with NO card ask on file is not waiting. One with any ask on
+    // file is. (034: somebody who applied on /join/ and then took the member code gets
+    // an open ask stamped at the door, and taking a "no" back re-opens theirs.)
+    // 034: somebody banned on The Wall is not waiting either (Approve would be refused until the
+    // ban comes off). wall_banned is undefined before 034, which leaves the filter as it was.
+    async pending() { return (await OTP.deskProfiles()).filter(p => !p.approved && !p.denied && !p.wall_banned && !(p.wall_casual && !p.card_ask)); },
     async members() { return (await OTP.deskProfiles()).filter(p => p.approved); },
     async refused() { return (await OTP.deskProfiles()).filter(p => !!p.denied); },
 
@@ -1595,6 +1614,20 @@
                             : { state: "wait",    line: wait.line };
     },
 
+    // The line to print on a card-holder page for somebody who is not one. Same as
+    // doorNote, except for a Wall member who never asked for a card: they are not in
+    // any queue, and "give it a day" had them waiting on an approval nobody owed them.
+    async doorLine(profile) {
+      const d = OTP.doorNote(profile);
+      if (d.state !== "wait") return d.line;
+      try {
+        const c = sb(); const r = c ? await c.rpc("wall_me") : null;
+        const m = r && !r.error && r.data && r.data[0];
+        if (m && m.member && !m.card_ask) return "This part is for card holders. You can ask for a card on The Wall, under People.";
+      } catch (e) {}
+      return d.line;
+    },
+
     async setCard(id, slug) {
       const c = sb(); if (!c) throw new Error("Backend not configured yet.");
       const { data, error } = await c.rpc("admin_set_card", { p_id: id, p_slug: slug || null });
@@ -1624,6 +1657,15 @@
       const { data, error } = await c.rpc("admin_retire_member", { p_author: id });
       if (error) throw error;
       return data;               // pull_batch uuid, hand it to restoreBatch to undo
+    },
+
+    // 034: Revoke + pull posts also closes The Wall for that person, so "Put them back"
+    // has to lift it BEFORE re-approving (the database refuses to approve a banned person).
+    // Before 034 this lifts a ban that was never set, which changes nothing.
+    async wallBan(id, on) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { error } = await c.rpc("wall_ban", { p_user: id, p_ban: !!on });
+      if (error && error.code !== "PGRST202" && error.code !== "42883") throw error;   // no Wall yet = nothing to lift
     },
 
     async restoreBatch(batch) {
@@ -1680,8 +1722,11 @@
           const { error } = await c.storage.from("posts").remove([r.object_name]);
           if (error) throw error;
           // 033: the same key may be a casual member's photo in `take`. Removing
-          // a key that is not there is not an error, so this is safe to try.
-          try { await c.storage.from("take").remove([r.object_name]); } catch (e2) {}
+          // a key that is not there is not an error, so this is safe to try, but a
+          // REAL failure has to stop the row being marked cleared: supabase-js
+          // returns {error}, it does not throw.
+          const t = await c.storage.from("take").remove([r.object_name]);
+          if (t && t.error) throw t.error;
           await c.from("orphan_images").update({ cleared: true, reason: "removed by the desk" })
             .eq("object_name", r.object_name);
           cleared++;

@@ -39,9 +39,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700..900&family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Pirata+One&family=Luckiest+Guy&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" defer></script>
 <script src="supabase-config.js?v=f1348482" defer></script>
-<script src="assets/js/desk.js?v=a2343ff3" defer></script>
-<script src="assets/js/door.js?v=869883d0" defer></script>
-<script src="assets/js/composer.js?v=d87d2264" defer></script>
+<script src="assets/js/desk.js?v=cd1f4fab" defer></script>
+<script src="assets/js/door.js?v=678b352e" defer></script>
+<script src="assets/js/composer.js?v=c23c5d02" defer></script>
 <script src="assets/js/calendar.js?v=b7cd53c5" defer></script>
 <script src="assets/js/edit.js?v=f019eef7" defer></script>
 <script>/* tabs: pick the page before first paint, off the #hash. Old links like /#desk still land right. */
@@ -3835,6 +3835,10 @@
   .do.wall{border-color:rgba(255,121,198,.55);box-shadow:0 0 18px rgba(255,121,198,.16);}
   /* ---- take-social (033): real reactions, comments, a member's own delete ---- */
   .react-btn.cmt{margin-left:auto;}
+  .take-more{display:block;width:100%;margin-top:16px;min-height:48px;border:1px dashed var(--line);border-radius:12px;background:none;
+    color:var(--pink-glow);font-family:var(--f-mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;}
+  .take-more:hover{border-color:var(--pink-deep);}
+  .take-more:disabled{opacity:.6;cursor:default;}
   .react-btn[hidden]{display:none !important;}   /* the comment button waits for the backend */
   .react-btn[disabled]{opacity:.6;cursor:default;}
   .post-del{margin-left:6px;border:0;background:none;padding:0;color:var(--muted);font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;text-decoration:underline;text-underline-offset:3px;}
@@ -3936,7 +3940,7 @@
 
 <!-- ========== NAV ========== -->
 <nav class="site">
-  <a href="join/" id="nav-key" class="key" title="Card holders log in here.">Log in</a>
+  <a href="join/?next=home" id="nav-key" class="key" title="Members and card holders log in here.">Log in</a>
   <a href="#home" class="tablink" data-tab-link="home">Home</a>
   <a href="wall/" id="nav-wall" title="Every flyer in SA, San Marcos and Austin this week." hidden>The Wall</a>
   <a href="#photos" class="tablink" data-tab-link="photos">Photos</a>
@@ -4159,9 +4163,9 @@
       </div>
       <div id="composer"></div>
       <div class="feed" id="take-mount"></div>
-      <a class="feed-cta" id="take-cta" href="join/">
-        <b>Got a card? Log in.</b>
-        <span>Card holders post straight to the timeline. The desk hands out the cards in person, and the DMs are always open.</span>
+      <a class="feed-cta" id="take-cta" href="join/?next=home">
+        <b>Log in to post.</b>
+        <span>Everybody on The Wall posts to this timeline, reacts and comments. No login yet? Join The Wall with the member code.</span>
       </a>
     </section>
 
@@ -4343,7 +4347,7 @@
       &nbsp;·&nbsp; <a href="#" target="_blank" rel="noopener" data-social="instagram">IG</a>
       / <a href="#" target="_blank" rel="noopener" data-social="tiktok">TikTok</a>
       / <a href="#" target="_blank" rel="noopener" data-social="youtube">YouTube</a><br>
-      <a href="press/" style="font-size:12px;">Press &amp; masthead &rarr;</a><br><a href="portfolio/" style="font-size:12px;">Giancarlo Ortiz &middot; portfolio &rarr;</a><br><a href="join/" id="footer-key" style="font-size:12px;">Card holders: log in &rarr;</a><br>
+      <a href="press/" style="font-size:12px;">Press &amp; masthead &rarr;</a><br><a href="portfolio/" style="font-size:12px;">Giancarlo Ortiz &middot; portfolio &rarr;</a><br><a href="join/?next=home" id="footer-key" style="font-size:12px;">Log in &rarr;</a><br>
       <span style="color:#5a5560;">Off the record stays off the record.</span>
     </div>
   </div>
@@ -4396,8 +4400,10 @@
     return false;
   }
   document.addEventListener('click', function(e){
+    if (e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;   // new-tab clicks are the browser's
     var a = e.target.closest && e.target.closest('a[href]'); if (!a) return;
     var href = a.getAttribute('href') || '';
+    if (href === '#') { e.preventDefault(); return; }             // a placeholder link goes nowhere, it does not jump Home
     if (href.charAt(0) !== '#' || href.length < 2) return;
     var h = href.slice(1);
     if (TABS.indexOf(h) < 0 && !SEC[h]) return;
@@ -4405,8 +4411,11 @@
     if (location.hash !== href) { try { history.pushState(null, '', href); } catch(err){} }
     route(h, {scroll: true});
   });
-  window.addEventListener('popstate', function(){ if (!route(location.hash, {scroll: true})) show('home', {scroll: true}); });
-  ['wheel', 'touchmove', 'keydown'].forEach(function(ev){ window.addEventListener(ev, function(){ touched = true; }, {passive: true, once: true}); });
+  window.addEventListener('popstate', function(){
+    if (route(location.hash, {scroll: true})) return;
+    if (!location.hash || location.hash === '#') show('home', {scroll: true});     // back to the bare address is Home; a hash we do not own is left alone
+  });
+  ['wheel', 'touchmove', 'keydown', 'pointerdown'].forEach(function(ev){ window.addEventListener(ev, function(){ touched = true; }, {passive: true, once: true}); });
   paint();
   var h0 = (location.hash || '').slice(1);
   if (SEC[h0] && h0 !== 'do') show(SEC[h0], {section: h0, settle: true});
@@ -4431,7 +4440,7 @@
         if (!/^[0-9a-f]{10}$/.test(p.sid || '')) return;
         var a = document.createElement('a'); a.className = 'hh-f'; a.href = 'wall/#s-' + p.sid; a.setAttribute('aria-label', (p.name || 'Member') + "'s page");
         var ring = document.createElement('span'); ring.className = 'hh-p';
-        if (p.pic && /^https:\/\//.test(p.pic)) { var im = document.createElement('img'); im.src = p.pic; im.alt = ''; im.loading = 'lazy'; im.decoding = 'async'; ring.appendChild(im); }
+        if (p.pic && /^https:\/\//.test(p.pic)) { var im = document.createElement('img'); im.src = /\/public\/cards\/.+-full\.jpg$/i.test(p.pic) ? p.pic.replace(/-full\.jpg$/i, '-card.jpg') : p.pic; im.alt = ''; im.loading = 'lazy'; im.decoding = 'async'; ring.appendChild(im); }
         else { var i = document.createElement('i'); i.textContent = initials(p.name); ring.appendChild(i); }
         if (p.mood_e) { var em = document.createElement('em'); em.textContent = p.mood_e; em.setAttribute('aria-hidden', 'true'); ring.appendChild(em); }
         var nm = document.createElement('span'); nm.className = 'hh-n'; nm.textContent = String(p.name || 'Member').trim().split(/\s+/)[0];
@@ -4754,7 +4763,11 @@
     try { if (window.OTP && OTP.configured) me = await OTP.me(); } catch (e) {}
     const canAdd = !!(me && me.profile && me.profile.approved);
 
-    if (!run.length && !canAdd) { if (sec) sec.remove(); return; }
+    if (!run.length && !canAdd) {
+      if (sec) sec.remove();
+      const tile = document.querySelector('.do[href="#dates"]'); if (tile) tile.remove();   // or it lands on Pitch Us
+      return;
+    }
 
     const draw = () => {
       // the phone cut
@@ -5189,9 +5202,14 @@
     window.__OTP_PAGE_FOR = pageFor;
 
     const cardPeople = {};
+    // ⛔ TWO KEYS. A card's slug is not always slugify(name): The Ink holds `theink`,
+    // WUN MOR holds `wunmor`. Keyed by slugify alone their live posts lost the card
+    // art, the handle and the seat. cardTight is the same people, keyed the way
+    // pageFor() already matches them.
+    const cardTight = {};
     [...(creators || []), ...(roster || [])].forEach(c => {
       const key = slugify(c.name);
-      cardPeople[key] = {
+      cardTight[tightKey(c.name)] = cardPeople[key] = {
         name: c.name,
         photo: c.photo || '',
         link: c.link || '#',
@@ -5247,6 +5265,7 @@
       } catch (e) { console.warn('seed overrides skipped:', e.message); }
     }
 
+    let liveFull = false;
     // Live posts from approved card holders sit on top of the JSON seeds.
     // If the backend is not configured, this is a no-op and the seeds show alone.
     if (window.OTP && OTP.configured) {
@@ -5261,6 +5280,7 @@
           OTP.feed(FEED_CAP),
           new Promise(r => setTimeout(() => r([]), LIVE_TIMEOUT_MS)),
         ]);
+        liveFull = live.length >= FEED_CAP;      // a full page back: there may be older ones
         if (live.length) {
           const seeds = take.filter(p => !p.pinned);
           const pinned = [...live, ...take].filter(p => p.pinned);
@@ -5334,12 +5354,12 @@
     const ACCENTS = ['acid','gold','ember','pink','violet','ice'];
     const accClass = v => ACCENTS.indexOf(String(v || '')) !== -1 ? ' acc-' + v : '';
 
-    tMount.innerHTML = visible.map((p, i) => {
+    const postHTML = (p, i) => {
       // 033: kind 'member' is a casual Wall member. No card, so the name links to
       // their space on The Wall and wears a MEMBER tag. It is never resolved
       // against the roster by NAME: a stranger called KAV-MAN must not get his card.
       const isMember = p.kind === 'member';
-      const who = (!isMember && cardPeople[slugify(p.author || '')]) || {
+      const who = (!isMember && (cardPeople[slugify(p.author || '')] || cardTight[tightKey(p.author || '')])) || {
         name: p.author_name || p.author || 'THE DESK',
         photo: p.avatar || '', link: p.sid ? 'wall/#s-' + p.sid : '#', handle: p.handle || '',
         seat: isMember ? 'Member' : ''
@@ -5350,7 +5370,7 @@
       const avUrl = sized(safeUrl(who.photo), 'av');
       const av = avUrl
         ? `<span class="av" data-bg="${esc(avUrl)}"></span>`
-        : `<span class="av av-fallback">${esc((who.name || '0')[0])}</span>`;
+        : `<span class="av av-fallback">${esc(Array.from(String(who.name || '0').trim())[0] || '0')}</span>`;
       const isExt = /^https?:\/\//.test(who.link || '');
       const body = md(p.text || p.body || '');
       const imgUrl = safeUrl(p.image);
@@ -5396,9 +5416,33 @@
           <div class="tk-box" hidden></div>
         </div>
       </article>`;
-    }).join('');
+    };
+    tMount.innerHTML = visible.map(postHTML).join('');
     paintBg(tMount);   // avatars, same one path as every other background
     wireReactions(tMount);
+
+    // Everybody posts now, so eight slots turn over fast. One button brings the older
+    // ones back (up to 60), which is also how a member reaches their own post to delete it.
+    if (liveFull && window.OTP && OTP.feed) {
+      const more = document.createElement('button');
+      more.type = 'button'; more.className = 'take-more'; more.textContent = 'Show older posts';
+      tMount.insertAdjacentElement('afterend', more);
+      more.addEventListener('click', async () => {
+        more.disabled = true; more.textContent = 'Loading…';
+        let rows = null;
+        try { rows = await OTP.feed(60); } catch (e) {}
+        if (!rows) { more.disabled = false; more.textContent = 'Could not load. Tap to try again.'; return; }
+        const have = new Set([...tMount.querySelectorAll('.post-t[data-pid]')].map(a => a.dataset.pid));
+        const older = rows.filter(r => r.id != null && !have.has(String(r.id)));
+        const at = tMount.querySelectorAll('.post-t').length;
+        if (older.length) {
+          tMount.insertAdjacentHTML('beforeend', older.map((r, i) => postHTML(r, at + i)).join(''));
+          paintBg(tMount);
+          wireReactions(tMount);          // only wires the bars it has not seen
+        }
+        more.remove();
+      });
+    }
   }
 
   // ============ Music Rotation (hover-volume) ============
@@ -6013,22 +6057,29 @@
   // of The Wall. On a database without 033 the RPC is missing and the bar falls back to
   // what it was before: a local, per-browser toy.
   function wireReactions(mount){
-    const bars = [...mount.querySelectorAll('.react-bar')];
+    // called again for older posts: only bars it has not wired yet
+    const bars = [...mount.querySelectorAll('.react-bar')].filter(b => !b.dataset.wired);
+    bars.forEach(b => { b.dataset.wired = '1'; });
     const KINDS = ['heart', 'fire', 'skull', 'eye'];
     const realKey = k => /^(p\d{1,12}|s[0-9a-f]{16})$/.test(k || '');
     const client = () => (window.OTP && OTP.configured && OTP.sb) ? OTP.sb() : null;
     const T = {};                       // key -> {r: {kind: n}, c: n, mine: Set}
-    let live = false, member = null;    // member: null = not asked yet
+    // live = the backend has reactions (033). It does, so this starts true: a tally that
+    // fails once must not quietly turn a member's tap into a local toy that saves nothing.
+    // Only a MISSING function (a database without 033) drops to the old local bar.
+    let live = true, member = null;     // member: null = not asked yet
     const state = k => (T[k] = T[k] || {r: {}, c: 0, mine: new Set()});
 
+    const lsGet = k => { try { return localStorage.getItem(k); } catch (e) { return null; } };
+    const lsSet = (k, v) => { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch (e) {} };
     function paintLocal(bar){
       const post = bar.dataset.post, base = parseInt(bar.dataset.baseLikes) || 0;
       bar.querySelectorAll('.react-btn[data-emoji]').forEach(btn => {
         const em = btn.dataset.emoji;
-        let n = parseInt(localStorage.getItem(`otp-react:${post}:${em}`)) || 0;
+        let n = parseInt(lsGet(`otp-react:${post}:${em}`)) || 0;
         if (em === 'heart') n += base;
         btn.querySelector('.ct').textContent = n;
-        btn.classList.toggle('voted', !!localStorage.getItem(`otp-voted:${post}:${em}`));
+        btn.classList.toggle('voted', !!lsGet(`otp-voted:${post}:${em}`));
       });
     }
     function paintLive(bar){
@@ -6052,13 +6103,14 @@
         const s = await c.auth.getSession();
         if (!s || !s.data || !s.data.session) return (member = false);
         const r = await c.rpc('is_wall_member');
-        member = !r.error && r.data === true;
-      } catch (e) { member = false; }
+        if (r.error) return false;                 // not cached: one bad request must not lock a member out until reload
+        member = r.data === true;
+      } catch (e) { return false; }
       return member;
     }
     function nudge(bar, what){
       const n = bar.parentElement.querySelector('.tk-nudge'); if (!n) return;
-      n.innerHTML = `${esc(what)} is for members. <a href="join/">Log in</a>, or <a href="wall/">join The Wall</a> with the member code.`;
+      n.innerHTML = `${esc(what)} is for members. <a href="join/?next=home">Log in</a>, or <a href="wall/">join The Wall</a> with the member code.`;
       n.hidden = false;
     }
     const ago = iso => { const m = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 60000)); return m < 1 ? 'now' : m < 60 ? m + 'm' : m < 1440 ? Math.round(m / 60) + 'h' : Math.round(m / 1440) + 'd'; };
@@ -6066,13 +6118,17 @@
 
     async function loadThread(bar){
       const k = bar.dataset.post, box = bar.parentElement.querySelector('.tk-box'), c = client(); if (!box || !c) return;
-      const old = box.querySelector('textarea'), draft = old ? old.value : '';
-      let rows = [];
+      let rows = null;
       try { const r = await c.rpc('take_thread', {p_key: k}); if (!r.error && Array.isArray(r.data)) rows = r.data; } catch (e) {}
+      const old = box.querySelector('textarea'), draft = old ? old.value : '';      // read AFTER the wait: they may have typed
+      if (!rows) {                                                                    // a failed load is not an empty thread
+        if (!box.querySelector('.tk-form')) box.innerHTML = '<p class="tk-empty">Could not load the comments. <button type="button" class="post-del" data-retry>Try again</button></p>';
+        return;
+      }
       state(k).c = rows.filter(x => !x.hidden).length; paint(bar);
       box.innerHTML = `<form class="tk-form"><textarea maxlength="280" rows="2" placeholder="Say something" aria-label="Your comment"></textarea><button type="submit">Post</button></form>
         ${rows.length ? `<ol class="tk-list">${rows.map(x => `<li class="${x.hidden ? 'hid' : ''}">
-          ${x.pic && /^https:\/\//.test(x.pic) ? `<img class="tk-av" src="${esc(x.pic)}" alt="" loading="lazy" decoding="async">` : `<span class="tk-av" aria-hidden="true">${esc(ini(x.name))}</span>`}
+          ${x.pic && /^https:\/\//.test(x.pic) ? `<img class="tk-av" src="${esc(sized(x.pic, 'av'))}" alt="" loading="lazy" decoding="async">` : `<span class="tk-av" aria-hidden="true">${esc(ini(x.name))}</span>`}
           <div><div class="tk-top">${x.sid ? `<a href="wall/#s-${esc(x.sid)}"><b>${esc(x.name)}</b></a>` : `<b>${esc(x.name)}</b>`}
             ${x.kind === 'desk' ? '<span class="tk-k">the desk</span>' : x.kind === 'card' ? '<span class="tk-k">card holder</span>' : ''}
             <time>${esc(ago(x.created_at))}</time>${x.hidden ? '<span class="tk-k">hidden</span>' : ''}</div>
@@ -6087,19 +6143,22 @@
       bar.querySelectorAll('.react-btn[data-emoji]').forEach(btn => {
         btn.addEventListener('click', async () => {
           const em = btn.dataset.emoji;
-          if (!(live && realKey(k))) {                      // the old local toy
+          if (!(live && realKey(k))) {                      // the old local toy (no backend for this bar)
             const key = `otp-react:${k}:${em}`, vk = `otp-voted:${k}:${em}`;
-            let n = parseInt(localStorage.getItem(key)) || 0;
-            if (localStorage.getItem(vk)) { n = Math.max(0, n - 1); localStorage.removeItem(vk); }
-            else { n += 1; localStorage.setItem(vk, '1'); btn.classList.add('pop'); setTimeout(() => btn.classList.remove('pop'), 350); }
-            localStorage.setItem(key, n); paint(bar); return;
+            let n = parseInt(lsGet(key)) || 0;
+            if (lsGet(vk)) { n = Math.max(0, n - 1); lsSet(vk, null); }
+            else { n += 1; lsSet(vk, '1'); btn.classList.add('pop'); setTimeout(() => btn.classList.remove('pop'), 350); }
+            lsSet(key, String(n)); paint(bar); return;
           }
-          if (!(await isMember())) { nudge(bar, 'Reacting'); return; }
+          if (btn.dataset.busy === '1') return;             // one request at a time per button
+          btn.dataset.busy = '1';
+          if (!(await isMember())) { btn.dataset.busy = ''; nudge(bar, 'Reacting'); return; }
           const st = state(k), on = !st.mine.has(em);
           if (on) { st.mine.add(em); st.r[em] = (st.r[em] || 0) + 1; btn.classList.add('pop'); setTimeout(() => btn.classList.remove('pop'), 350); }
           else { st.mine.delete(em); st.r[em] = Math.max(0, (st.r[em] || 1) - 1); }
           paint(bar);
           let r; try { r = await client().rpc('take_react', {p_key: k, p_kind: em, p_on: on}); } catch (e) { r = {error: e}; }
+          btn.dataset.busy = '';
           if (r.error) {                                    // put it back the way it was
             if (on) { st.mine.delete(em); st.r[em] = Math.max(0, (st.r[em] || 1) - 1); } else { st.mine.add(em); st.r[em] = (st.r[em] || 0) + 1; }
             paint(bar);
@@ -6111,7 +6170,7 @@
         if (!box.hidden) { box.hidden = true; cb.setAttribute('aria-expanded', 'false'); return; }
         if (!(await isMember())) { nudge(bar, 'Reading and writing comments'); return; }
         box.hidden = false; cb.setAttribute('aria-expanded', 'true');
-        box.innerHTML = '<p class="tk-empty">Loading…</p>';
+        if (!box.querySelector('.tk-form')) box.innerHTML = '<p class="tk-empty">Loading…</p>';   // a reopen keeps the draft
         loadThread(bar);
       });
       if (box) {
@@ -6126,6 +6185,7 @@
         });
         box.addEventListener('click', async e => {
           const t = e.target.closest('button'); if (!t) return;
+          if (t.dataset.retry != null) { box.innerHTML = '<p class="tk-empty">Loading…</p>'; loadThread(bar); return; }
           if (t.dataset.cdel) {
             if (t.dataset.sure !== '1') { t.dataset.sure = '1'; t.textContent = 'Tap again'; return; }
             try { await client().rpc('take_uncomment', {p_id: +t.dataset.cdel}); } catch (err) {}
@@ -6137,24 +6197,34 @@
     });
 
     // a casual member takes their own post down (card holders have edit mode for this)
-    mount.querySelectorAll('.post-del[data-del]').forEach(b => b.addEventListener('click', async () => {
+    mount.querySelectorAll('.post-del[data-del]:not([data-wired])').forEach(b => { b.dataset.wired = '1'; b.addEventListener('click', async () => {
       if (b.dataset.sure !== '1') { b.dataset.sure = '1'; b.textContent = 'Tap again to delete'; return; }
       b.disabled = true;
-      try { await OTP.deletePost(+b.dataset.del); const art = b.closest('.post-t'); if (art) art.remove(); }
+      const art = b.closest('.post-t'), im = art && art.querySelector('.post-img img');
+      const photo = im ? im.getAttribute('src') : '';
+      try {
+        await OTP.deletePost(+b.dataset.del);
+        if (art) art.remove();
+        // their photo goes with it now, instead of waiting in the desk's takedown queue
+        if (photo && OTP.deleteImage) { try { await OTP.deleteImage(photo); } catch (e2) {} }
+      }
       catch (e) { b.disabled = false; b.dataset.sure = ''; b.textContent = 'Could not delete'; }
-    }));
+    }); });
 
     // the real counts, when the backend has them
     const keys = bars.map(x => x.dataset.post).filter(realKey);
     const c = client();
     if (c && keys.length) {
-      c.rpc('take_tally', {p_keys: keys}).then(r => {
-        if (!r || r.error || !Array.isArray(r.data)) return;          // no 033 yet: stay local
-        live = true;
-        r.data.forEach(x => { T[x.post_key] = {r: x.reactions || {}, c: x.comments || 0, mine: new Set(x.mine || [])}; });
+      const tally = tries => c.rpc('take_tally', {p_keys: keys}).then(r => {
+        if (r && r.error && (r.error.code === 'PGRST202' || /could not find the function/i.test(r.error.message || ''))) {
+          live = false; bars.forEach(b => { const cb = b.querySelector('[data-cmt]'); if (cb) cb.hidden = true; paint(b); }); return;   // a database without 033
+        }
+        if (!r || r.error || !Array.isArray(r.data)) { if (tries > 0) setTimeout(() => tally(tries - 1), 2500); return; }
+        r.data.forEach(x => { const st = state(x.post_key); st.r = x.reactions || {}; st.c = x.comments || 0; st.mine = new Set(x.mine || []); });
         bars.forEach(paint);
-      }, () => {});
-    }
+      }, () => { if (tries > 0) setTimeout(() => tally(tries - 1), 2500); });
+      tally(2);
+    } else if (!c) { live = false; bars.forEach(paint); }
   }
 
   // ============== CARD DETAIL MODAL ==============

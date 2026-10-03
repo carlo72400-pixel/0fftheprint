@@ -1,10 +1,12 @@
 /* 0FF THE PRINT, the door. One OTP.me() call paints the nav key, the footer link,
    and the TAKE cta. Static markup already ships the signed-out state, so if this
-   file never runs the page is still correct. */
+   file never runs the page is still correct. ⛔ Keep index.html's static copy and
+   S.out below saying the same thing: the static one is the first frame and what a
+   link preview reads. */
 (async () => {
   const S = {
     // 033: everybody on The Wall posts to the timeline now, not only card holders.
-    out:  {label:'Log in',  href:'join/',    on:false,
+    out:  {label:'Log in',  href:'join/?next=home', on:false,
            title:'Members and card holders log in here.',
            b:'Log in to post.',
            s:'Everybody on The Wall posts to this timeline, reacts and comments. No login yet? Join The Wall with the member code.',
