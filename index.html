@@ -39,7 +39,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700..900&family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Pirata+One&family=Luckiest+Guy&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" defer></script>
 <script src="supabase-config.js?v=f1348482" defer></script>
-<script src="assets/js/desk.js?v=cd1f4fab" defer></script>
+<script src="assets/js/desk.js?v=15d61348" defer></script>
 <script src="assets/js/door.js?v=678b352e" defer></script>
 <script src="assets/js/composer.js?v=c23c5d02" defer></script>
 <script src="assets/js/calendar.js?v=b7cd53c5" defer></script>
@@ -5300,8 +5300,9 @@
           new Promise(r => setTimeout(() => r([]), LIVE_TIMEOUT_MS)),
         ]);
         if (rows && rows.length) {
-          const by = {};
-          rows.forEach(rw => { if (rw && rw.card_slug) by[rw.card_slug] = rw; });
+          const by = {}, byTight = {};
+          const tightOf = v => String(v || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+          rows.forEach(rw => { if (rw && rw.card_slug) { by[rw.card_slug] = rw; byTight[tightOf(rw.card_slug)] = rw; } });
           window.__OTP_SLUGS = window.__OTP_SLUGS || {};
           rows.forEach(rw => {
             if (!rw || !rw.card_slug) return;
@@ -5321,7 +5322,9 @@
             bandcamp:   h => 'https://' + h + '.bandcamp.com/',
           };
           [roster, creators].forEach(list => (list || []).forEach(v => {
-            const rw = by[slugify(v.name)];
+            // ⛔ a card's slug is not always slugify(name): The Ink holds `theink`, WUN MOR holds `wunmor`.
+            // Keyed by slugify alone, whatever those two saved in the card builder never reached this page.
+            const rw = by[slugify(v.name)] || byTight[tightOf(v.name)];
             if (!rw) return;
             if (rw.card_frame) v.rarity = rw.card_frame;
             if (rw.card_photo) v.photo = rw.card_photo;

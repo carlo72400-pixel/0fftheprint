@@ -1600,7 +1600,7 @@
     // refused person read a promise that was never going to land, on every one
     // of them.
     doorNote(profile) {
-      if (!profile) return { state: "out", line: "Card holders log in here." };
+      if (!profile) return { state: "out", line: "Members and card holders log in here." };
       if (profile.is_admin)  return { state: "admin", line: "Approvals and pulls." };
       if (profile.approved)  return { state: "in", line: "You are in." };
       // ⛔ REFUSED READS EXACTLY LIKE WAITING, HIS CALL. The no is a DESK tool:
