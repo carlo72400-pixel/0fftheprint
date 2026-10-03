@@ -18,6 +18,11 @@
            b:'Your desk.',
            s:'Your card, your posts, your songs, what the desk still owes you an answer on. Posting is one tap from there.',
            foot:'Your side of the desk →'},
+    wall: {label:'Member', href:'wall/', on:true,
+           title:'Every flyer this week, one night at a time.',
+           b:'Open The Wall.',
+           s:'Every flyer in SA, San Marcos and Austin, one night at a time. See who is going and vote the vibe.',
+           foot:'Open The Wall →'},
     admin:{label:'Desk',    href:'desk/',    on:true,
            title:'Approvals and pulls.',
            b:'Open the desk.',
@@ -74,6 +79,11 @@
       // the desk's filter, not a notice. Same nav, same copy, same everything
       // they saw yesterday.
       s = S.wait;
+      // 029: a casual member (joined The Wall with the code) gets The Wall, not the queue
+      try {
+        const r = await OTP.sb().rpc('is_wall_member');
+        if (r && r.data === true) s = S.wall;
+      } catch(e){}
     }
   } catch(e) { s = S.out; }
 
