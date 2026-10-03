@@ -1,33 +1,30 @@
-/* 0FF THE PRINT — THE PARTY PACK, the sealed tile (10/3).
-   One night = one foil pack in its own wrapper, events/<slug>/pack.webp (520x878).
-   A night that has none yet wears the house pack, assets/cathedral/pack-house.webp.
-   This file is the small sealed pack you TAP: the Drops rail on the homepage and
-   the shelf on /events/. The one you TEAR lives on the night's own page (sealed.css).
+/* 0FF THE PRINT — THE PARTY PACK, the sealed tile.
+   FULL ART (10/3, his note on the first ones: "too metallic, I want it to be like full art pokemon
+   packs"). One night = one booster. events/<slug>/pack.webp (520x878) is the whole picture: the
+   night's own photo printed edge to edge on the pouch, crimps and gloss already in it, drawn by
+   makepack.py. A night with no pack yet wears the house pack, assets/cathedral/pack-house.webp.
+   This file is the small pack you TAP: the Drops rail on the homepage and the shelf on /events/.
+   The one you TEAR lives on the night's own page (sealed.css).
 
-   ⛔ THE NUMBERS ARE THE WRAPPER'S GEOMETRY. Every wrapper is drawn on the same
-      pouch: photo panel x 9.5 to 90.5%, y 25.5 to 72.5%, title plate y 75 to 85.5%.
-      Move one here and it has to move in sealed.css (.pk-ph / .mk) too.
-   ⛔ THE PHOTO IS MASKED ON ALL FOUR SIDES. A hard edge reads as a sticker on the
-      foil; it has to read as printed into it.
-   Type is sized off the pack (cqw), so the title fits the plate at any width;
-   the px line before it is for a browser with no container units. */
+   ⛔ THE WORDS ARE NOT IN THE PICTURE. The title and the date are printed over it here, so a title
+      can change without redrawing a pack and it stays sharp at any size.
+   ⛔ THE NUMBERS ARE THE POUCH'S GEOMETRY. The crimped seals are the top and bottom 6.2%, and
+      makepack.py darkens the bottom third of the art for the title. Move a number here and it has
+      to move in sealed.css (.mk / .bot) and makepack.py too.
+   Type is sized off the pack (cqw), so the title fits at any width; the px line before it is for
+   a browser with no container units. */
 .pp{position:relative;display:block;aspect-ratio:520/878;container-type:inline-size;
   filter:drop-shadow(0 12px 14px rgba(0,0,0,.6));transition:transform .3s,filter .3s}
 a:hover > .pp,a:focus-visible > .pp{transform:translateY(-8px) rotate(-2deg);filter:drop-shadow(0 0 16px rgba(255,121,198,.7))}
 .pp-w{position:absolute;inset:0;width:100%;height:100%;display:block}
-.pp-ph{position:absolute;left:9.5%;right:9.5%;top:25.5%;bottom:27.5%;overflow:hidden;
-  -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 9%,#000 90%,transparent 100%),linear-gradient(to right,transparent 0,#000 8%,#000 92%,transparent 100%);
-  -webkit-mask-composite:source-in;
-  mask-image:linear-gradient(to bottom,transparent 0,#000 9%,#000 90%,transparent 100%),linear-gradient(to right,transparent 0,#000 8%,#000 92%,transparent 100%);
-  mask-composite:intersect}
-.pp-ph img{width:100%;height:100%;object-fit:cover;object-position:50% 26%;display:block;filter:saturate(.9) contrast(1.05)}
-.pp::after{content:'';position:absolute;inset:6% 4% 6%;pointer-events:none;
-  background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.15) 44%,transparent 56%);mix-blend-mode:screen}
-.pp-t{position:absolute;left:10%;right:10%;top:75%;height:10.5%;display:grid;place-items:center;text-align:center;
+/* the title is the pack's logo: big, slanted, outlined, a pink edge under it */
+.pp-t{position:absolute;left:6%;right:6%;bottom:13.4%;display:block;text-align:center;text-wrap:balance;
   font-family:var(--f-display,'Saira Condensed',sans-serif);font-style:italic;font-weight:900;text-transform:uppercase;
-  font-size:14.5px;font-size:7.7cqw;line-height:.95;letter-spacing:.01em;color:#fff;
-  text-shadow:0 1px 5px #000,0 0 2px #000,0 0 10px rgba(0,0,0,.8);overflow:hidden}
-.pp-t.long{font-size:11.5px;font-size:5.9cqw;line-height:1}
-.pp-d{position:absolute;left:0;right:0;top:86.3%;text-align:center;font-family:var(--f-mono,monospace);
-  font-size:8px;font-size:4.2cqw;letter-spacing:.2em;color:#e9e3ee;text-shadow:0 1px 4px #000}
+  font-size:21px;font-size:11.4cqw;line-height:.88;letter-spacing:.005em;color:#fff;
+  -webkit-text-stroke:3px #16060f;-webkit-text-stroke:1.5cqw #16060f;paint-order:stroke fill;
+  text-shadow:0 2px 0 #ff79c6,0 .9cqw 0 #ff79c6,0 0 3cqw rgba(0,0,0,.7);transform:rotate(-3deg)}
+.pp-t.short{font-size:32px;font-size:17.5cqw;line-height:.86}
+.pp-t.long{font-size:16px;font-size:8.6cqw;line-height:.92}
+.pp-d{position:absolute;left:4%;right:4%;bottom:7.6%;text-align:center;font-family:var(--f-mono,monospace);font-weight:500;
+  font-size:8px;font-size:4.1cqw;line-height:1;letter-spacing:.2em;color:#f3ecf4;text-shadow:0 1px 3px #000,0 0 6px rgba(0,0,0,.8)}
 @media (prefers-reduced-motion:reduce){ .pp{transition:none} a:hover > .pp,a:focus-visible > .pp{transform:none} }

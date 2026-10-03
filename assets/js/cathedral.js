@@ -1,7 +1,8 @@
 /* 0FF THE PRINT — THE CATHEDRAL, the moving parts (10/3).
  *
- * The lounge up top, the last night it points at, the friend space, the tip box
- * and the six tab icons turning in 3D on a wide screen.
+ * The lounge up top, the last night it points at, the friend space, the tip box,
+ * which house pack is on the shelf today, and the six tab icons turning in 3D on
+ * a wide screen.
  *
  * ⛔ ADDITIVE, AND IT FAILS QUIET. Nothing on the page waits on this file. If it
  *    404s or throws, the hero is still a picture, the tab cards are still links
@@ -114,6 +115,17 @@
     });
   }
 
+  /* ---------- the house pack: five full-art packs, one per girl in the lounge, a different one each visit ----------
+     The file name comes off a fixed count, never off data. With this script off, the CSS falls back to pack-house.webp. */
+  var HOUSE_PACKS = 5;
+  function housePack() {
+    var n = 1 + Math.floor(Math.random() * HOUSE_PACKS);
+    // ⛔ ABSOLUTE. A relative url() inside a custom property is resolved against the STYLESHEET that uses it
+    //    (assets/css/), not this page, so "assets/cathedral/..." became assets/css/assets/cathedral/... and 404ed.
+    var u; try { u = new URL('assets/cathedral/pack-house-' + n + '.webp', d.baseURI).href; } catch (e) { return; }
+    root.style.setProperty('--house-pack', 'url("' + u + '")');
+  }
+
   /* ---------- the six icons, turning. Wide screens only, and only once the page is settled. ---------- */
   var SLOW = '28deg', FAST = '95deg';
   var UPRIGHT = { home: '0deg 90deg 0deg', stories: '0deg 90deg 0deg' };   // these two meshes came out lying on their backs
@@ -148,7 +160,7 @@
   }
 
   function boot() {
-    lastNight(); friends(); tipbox();
+    housePack(); lastNight(); friends(); tipbox();
     if (d.readyState === 'complete') idle(threeD); else w.addEventListener('load', function () { idle(threeD); }, { once: true });
   }
   if (d.readyState === 'loading') d.addEventListener('DOMContentLoaded', boot, { once: true }); else boot();

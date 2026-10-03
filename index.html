@@ -47,7 +47,7 @@
 <script src="assets/js/composer.js?v=c23c5d02" defer></script>
 <script src="assets/js/calendar.js?v=52b31f44" defer></script>
 <script src="assets/js/edit.js?v=f019eef7" defer></script>
-<script src="assets/js/cathedral.js?v=17355b0c" defer></script>
+<script src="assets/js/cathedral.js?v=16ba9cc4" defer></script>
 <script>/* tabs: pick the page before first paint, off the #hash. Old links like /#desk still land right. */
 (function(){var M={do:'home',take:'home',drops:'photos',tape:'photos',videos:'photos',work:'photos',slate:'stories',desk:'stories',catalog:'stories',music:'music',open:'people',roster:'people',dates:'more',pitch:'more',experts:'more'},T=['home','photos','stories','music','people','more'],h=(location.hash||'').slice(1),d=document.documentElement;d.className+=' tabs';d.setAttribute('data-tab',T.indexOf(h)>=0?h:(M[h]||'home'));})();</script>
 <style>
@@ -3877,8 +3877,8 @@
   }
 </style>
 <!-- THE CATHEDRAL (10/3): the homepage skin. Scoped under html.cath, loaded last on purpose. -->
-<link rel="stylesheet" href="assets/css/pack.css?v=4ea0ebad">
-<link rel="stylesheet" href="assets/css/cathedral.css?v=a82448e6">
+<link rel="stylesheet" href="assets/css/pack.css?v=3c0b0f68">
+<link rel="stylesheet" href="assets/css/cathedral.css?v=61f11f77">
 </head>
 <body>
 
@@ -4187,13 +4187,13 @@
     <section id="do" data-tab="home">
       <div class="hh" id="home-here" hidden></div>
       <div class="do-rail" id="do-rail">
-        <a class="do wall" id="do-wall" href="wall/" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4" width="7" height="9" rx="1"/><rect x="13.5" y="4" width="7" height="6" rx="1"/><rect x="13.5" y="13" width="7" height="7" rx="1"/><rect x="3.5" y="16" width="7" height="4" rx="1"/></svg><b>The Wall</b><span>tonight&rsquo;s flyers</span></a>
-        <a class="do wall" id="do-join" href="wall/" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="12" r="4"/><path d="M12 12h9M18 12v3.5M21 12v2.5"/></svg><b>Join The Wall</b><span>got the code?</span></a>
-        <a class="do" href="#drops"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8h3.6l1.5-2.4h6.8L16.9 8h3.6v11h-17z"/><circle cx="12" cy="13.2" r="3.4"/></svg><b>Find your photos</b><span>every night we shot</span></a>
-        <a class="do" href="#open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="3.5" width="12" height="17" rx="2"/><path d="M12 8.2l1.2 2.5 2.7.3-2 1.9.6 2.7-2.5-1.4-2.5 1.4.6-2.7-2-1.9 2.7-.3z"/></svg><b>Open a pack</b><span>one random card</span></a>
-        <a class="do" href="#music"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 17.5V6l9.5-2v11.5"/><circle cx="7" cy="17.5" r="2.5"/><circle cx="16.5" cy="15.5" r="2.5"/></svg><b>Play something</b><span>on rotation</span></a>
-        <a class="do" href="#dates"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><b>What&rsquo;s coming</b><span>shows &middot; drops</span></a>
-        <a class="do" href="#desk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h8.5L18 7v13.5H6z"/><path d="M9 11h6M9 14h6M9 17h3.5"/></svg><b>Read a story</b><span>from the house</span></a>
+        <a class="do wall" id="do-wall" href="wall/" hidden><img class="di" src="assets/cathedral/a/wall.webp" alt="" width="44" height="44" decoding="async"><b>The Wall</b><span>tonight&rsquo;s flyers</span></a>
+        <a class="do wall" id="do-join" href="wall/" hidden><img class="di" src="assets/cathedral/a/join.webp" alt="" width="44" height="44" decoding="async"><b>Join The Wall</b><span>got the code?</span></a>
+        <a class="do" href="#drops"><img class="di" src="assets/cathedral/a/photos.webp" alt="" width="44" height="44" decoding="async"><b>Find your photos</b><span>every night we shot</span></a>
+        <a class="do" href="#open"><img class="di" src="assets/cathedral/a/pack.webp" alt="" width="44" height="44" decoding="async"><b>Open a pack</b><span>one random card</span></a>
+        <a class="do" href="#music"><img class="di" src="assets/cathedral/a/music.webp" alt="" width="44" height="44" decoding="async"><b>Play something</b><span>on rotation</span></a>
+        <a class="do" href="#dates"><img class="di" src="assets/cathedral/a/coming.webp" alt="" width="44" height="44" decoding="async"><b>What&rsquo;s coming</b><span>shows &middot; drops</span></a>
+        <a class="do" href="#desk"><img class="di" src="assets/cathedral/a/story.webp" alt="" width="44" height="44" decoding="async"><b>Read a story</b><span>from the house</span></a>
       </div>
     </section>
 
@@ -4878,20 +4878,18 @@
         const a = document.createElement('a');
         a.className = 'drop party';
         a.href = 'events/' + e.slug + '/';
-        // cover is stored relative to events/, e.g. "<slug>/media/001_t.jpg"
-        const cover = e.cover ? 'events/' + e.cover : '';
         const when = e.date_short || String(e.date || '');
-        // THE PARTY PACK (10/3). Every night is a sealed pack in its own wrapper,
-        // events/<slug>/pack.webp; a night that has none yet wears the house pack.
-        // The cover is printed into the foil and the title sits on the plate.
+        // THE PARTY PACK (10/3). Every night is a full-art booster: events/<slug>/pack.webp
+        // is the night's own photo printed edge to edge on the pouch (makepack.py draws it,
+        // newevent.py calls that for every new night). A night with none wears the house pack.
+        // The title is printed over it here, as the pack's logo.
         // ⛔ Still a LINK. The tear happens on the night's own page (sealed.js), so
         // somebody hunting their photo is one tap from it, same as before.
         const title = String(e.title || '');
         a.innerHTML =
           '<span class="pp">' +
             '<img class="pp-w" src="events/' + esc(e.slug) + '/pack.webp" alt="" width="520" height="878" loading="lazy">' +
-            (cover ? '<span class="pp-ph"><img src="' + esc(cover) + '" alt="" loading="lazy"></span>' : '') +
-            '<span class="pp-t' + (title.length > 16 ? ' long' : '') + '">' + esc(title) + '</span>' +
+            '<span class="pp-t' + (title.length <= 7 ? ' short' : title.length > 16 ? ' long' : '') + '">' + esc(title) + '</span>' +
             '<span class="pp-d">' + esc(when) + '</span>' +
           '</span>' +
           '<span class="cap">' +
@@ -5441,7 +5439,7 @@
                preload="metadata" ${p.image_alt ? `aria-label="${esc(p.image_alt)}"` : ''}></video></div>`
           : `<a class="post-img" href="${esc(imgUrl)}" target="_blank" rel="noopener">
                <img src="${esc(imgUrl)}" alt="${esc(p.image_alt || '')}" loading="lazy" decoding="async"></a>`;
-      const pin = p.pinned ? `<span class="pin">PINNED</span>` : '';
+      const pin = p.pinned ? `<span class="pin"><img src="assets/cathedral/r/pin.webp" alt="" width="14" height="14" decoding="async">PINNED</span>` : '';
       // live post's own accent, else the accent sitting on their card, else house
       // EDIT MODE reads both of these. A seeded post from take.json has no id,
       // so it gets no data-pid and edit.js leaves it alone: there is no DB row
@@ -5463,11 +5461,11 @@
           <div class="post-body">${body}</div>
           ${img}
           <div class="react-bar" data-post="${esc(String(p.id != null ? 'p' + p.id : (p.skey ? 's' + p.skey : 'x' + i)))}" data-base-likes="${parseInt(p.likes)||0}">
-            <button class="react-btn" data-emoji="heart" type="button" aria-label="Heart"><span class="em">♥</span><span class="ct">0</span></button>
-            <button class="react-btn" data-emoji="fire" type="button" aria-label="Fire"><span class="em">🔥</span><span class="ct">0</span></button>
-            <button class="react-btn" data-emoji="skull" type="button" aria-label="Skull"><span class="em">💀</span><span class="ct">0</span></button>
-            <button class="react-btn" data-emoji="eye" type="button" aria-label="Eye"><span class="em">👁️</span><span class="ct">0</span></button>
-            <button class="react-btn cmt" data-cmt type="button" aria-label="Comments" aria-expanded="false" hidden><span class="em">💬</span><span class="ct">0</span></button>
+            <button class="react-btn" data-emoji="heart" type="button" aria-label="Heart"><img class="em" src="assets/cathedral/r/heart.webp" alt="" width="20" height="20" decoding="async"><span class="ct">0</span></button>
+            <button class="react-btn" data-emoji="fire" type="button" aria-label="Fire"><img class="em" src="assets/cathedral/r/fire.webp" alt="" width="20" height="20" decoding="async"><span class="ct">0</span></button>
+            <button class="react-btn" data-emoji="skull" type="button" aria-label="Skull"><img class="em" src="assets/cathedral/r/skull.webp" alt="" width="20" height="20" decoding="async"><span class="ct">0</span></button>
+            <button class="react-btn" data-emoji="eye" type="button" aria-label="Eye"><img class="em" src="assets/cathedral/r/eye.webp" alt="" width="20" height="20" decoding="async"><span class="ct">0</span></button>
+            <button class="react-btn cmt" data-cmt type="button" aria-label="Comments" aria-expanded="false" hidden><img class="em" src="assets/cathedral/r/talk.webp" alt="" width="20" height="20" decoding="async"><span class="ct">0</span></button>
           </div>
           <div class="tk-nudge" hidden></div>
           <div class="tk-box" hidden></div>

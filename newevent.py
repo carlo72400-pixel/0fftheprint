@@ -884,6 +884,17 @@ def main():
     idx["items"].sort(key=lambda e: e["date"], reverse=True)
     json.dump(idx, open(idx_path, "w"), indent=2, ensure_ascii=False)
 
+    # THE PARTY PACK (10/3). Every night ships as a full-art booster: its own cover printed edge to
+    # edge on the pouch, shown on the homepage rail, on /events/ and torn open on its own page.
+    # Drawn here, off the web-size frames still sitting in staging, so nobody has to remember it.
+    # ⛔ It is decoration: a pack that fails to draw never fails the night. The page falls back to
+    #    the house pack, and `makepack.py <slug> --frames N[,M]` redraws it with the frames you pick.
+    try:
+        import makepack
+        makepack.build(slug, src_dir=stage)
+    except BaseException as e:      # SystemExit included: makepack exits when a picked frame is the hit
+        print(f"  pack not drawn ({e})")
+
     size = dir_size(out)
     print(f"\n  {out}")
     print(f"  {len(items)} items, {human(size)} committed (thumbs + page only)")
@@ -912,13 +923,11 @@ def main():
                 print(f"  pushed {human(pushed)} of video to {MEDIA_REPO}")
             shutil.rmtree(vidstage, ignore_errors=True)
 
-    # THE PARTY PACK (10/3). Every night is shown as a sealed foil pack: on the
-    # homepage rail, on /events/ and on its own page. The wrapper is one picture,
-    # events/<slug>/pack.webp (520x878). Without it the night wears the house pack,
-    # which is fine, so this is a reminder and never an error.
     if not os.path.exists(os.path.join(out, "pack.webp")):
-        print(f"\n  no pack.webp for this night yet: it wears the house pack until")
-        print(f"  one is drawn (events/{slug}/pack.webp, 520x878).")
+        print(f"\n  no pack.webp for this night: it wears the house pack until")
+        print(f"  `/usr/bin/python3 makepack.py {slug}` draws one.")
+    else:
+        print(f"\n  pack drawn. Want a different photo on the front? /usr/bin/python3 makepack.py {slug} --frames N[,M]")
 
     print(f"\n  live at /0fftheprint/events/{slug}/ once pushed")
     print("  git add -A && git commit -m 'event: " + slug + "' && git push\n")

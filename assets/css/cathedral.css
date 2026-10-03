@@ -233,6 +233,15 @@ html.cath .tipbox .tip-alt a{color:var(--pink-glow);}
 /* ---------------- Home: the tiles and the new-night strip ---------------- */
 html.cath .do{border-radius:3px;border-color:rgba(244,238,242,.16);}
 html.cath .do.wall{border-color:var(--box-line);}
+/* every icon is the house's own now (10/3): the seven doors in, the four reactions, the comment and the pin */
+html.cath .do{gap:2px 12px;padding:9px 16px 9px 11px;}
+html.cath .do .di{grid-row:span 2;width:44px;height:44px;display:block;filter:drop-shadow(0 3px 6px rgba(0,0,0,.55));transition:transform .2s;}
+html.cath .do:hover .di{transform:translateY(-2px) rotate(-6deg) scale(1.08);}
+html.cath .react-btn img.em{width:19px;height:19px;display:block;margin:-3px 0;}
+html.cath .react-btn.voted img.em{filter:drop-shadow(0 0 5px rgba(255,255,255,.55));}
+html.cath .post-t .pin img{width:14px;height:14px;vertical-align:-3px;margin-right:4px;}
+@media (max-width:820px){ html.cath .do .di{width:38px;height:38px;} html.cath .do{padding:8px 13px 8px 9px;} }
+@media (prefers-reduced-motion:reduce){ html.cath .do .di{transition:none;} html.cath .do:hover .di{transform:none;} }
 html.cath .nblast{display:grid;grid-template-columns:auto minmax(0,1fr);gap:0;margin:0 0 16px;border:1px solid var(--box-line);background:var(--box);text-decoration:none;color:var(--ink);}
 html.cath .nblast[hidden]{display:none;}
 html.cath .nblast .nb-h{grid-column:1/-1;display:flex;justify-content:space-between;gap:10px;padding:5px 10px;background:var(--pink-glow);color:#3a0f27;
@@ -271,18 +280,33 @@ html.cath .drop.party .cap .v{font-size:15px;}
 html.cath .drop.party .cap .d{margin-top:4px;font-size:9px;}
 @media (max-width:640px){ html.cath .drops-rail{grid-auto-columns:minmax(150px,44vw);gap:12px;} }
 
-/* ---------------- People: the house pack ---------------- */
+/* ---------------- People: the house pack ----------------
+   FULL ART (10/3). Five packs, one per girl in the lounge, each her own illustration printed edge to
+   edge on the pouch (makepack.py --art). cathedral.js picks one per visit and hands it over as
+   --house-pack; with no script the pack is pack-house.webp. Same pouch, same words-over-picture
+   rule as the night packs (assets/css/pack.css). */
 html.cath .poke.booster-pack{aspect-ratio:520/878;background:none;padding:0;border-radius:0;max-width:230px;}
 html.cath .poke.booster-pack::before{display:none;}
-html.cath .booster-inner{border-radius:0;background:url('../cathedral/pack-house.webp') 50% 50%/contain no-repeat;box-shadow:none;
-  filter:drop-shadow(0 14px 16px rgba(0,0,0,.6));transition:filter .3s,transform .3s;justify-content:flex-end;}
+html.cath .booster-inner{border-radius:0;background:var(--house-pack,url('../cathedral/pack-house.webp')) 50% 50%/contain no-repeat;box-shadow:none;
+  container-type:inline-size;filter:drop-shadow(0 14px 16px rgba(0,0,0,.6));transition:filter .3s,transform .3s;justify-content:flex-end;}
 html.cath .booster-inner::after{display:none;}
 html.cath .poke.booster-pack:hover .booster-inner{box-shadow:none;filter:drop-shadow(0 0 18px rgba(255,121,198,.75));transform:translateY(-6px) rotate(-2deg);}
 html.cath .poke.booster-pack{margin-bottom:30px;}
 html.cath .booster-inner{overflow:visible;}
+html.cath .booster-mark{display:block;position:absolute;left:5%;right:5%;bottom:13.4%;margin:0;padding:0;text-align:center;white-space:nowrap;
+  font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;font-size:24px;font-size:12.4cqw;line-height:.9;letter-spacing:.005em;
+  color:#fff;background:none;-webkit-text-fill-color:#fff;-webkit-text-stroke:3px #16060f;-webkit-text-stroke:1.5cqw #16060f;paint-order:stroke fill;
+  text-shadow:0 2px 0 #ff79c6,0 .9cqw 0 #ff79c6,0 0 3cqw rgba(0,0,0,.7);transform:rotate(-3deg);}
+html.cath .booster-mark .zero{color:#ffb8e1;-webkit-text-fill-color:#ffb8e1;background:none;}
+html.cath .booster-stamp{display:block;position:absolute;left:4%;right:4%;bottom:7.6%;margin:0;padding:0;border:0;background:none;text-align:center;
+  font-family:var(--f-mono);font-weight:500;font-size:8px;font-size:4.1cqw;line-height:1;letter-spacing:.2em;text-transform:uppercase;color:#f3ecf4;
+  text-shadow:0 1px 3px #000,0 0 6px rgba(0,0,0,.8);transform:none;}
 html.cath .booster-foot{position:absolute;left:-20px;right:-20px;bottom:-26px;padding:0;font-size:9.5px;letter-spacing:.18em;color:var(--muted);text-shadow:none;}
 html.cath .booster-stage .pack .booster-foot{color:#e9e3ee;bottom:-30px;}
 html.cath .booster-stage .pack .booster-inner{filter:drop-shadow(0 20px 30px rgba(0,0,0,.7));}
+/* back to top wears the house mark, not the old sigil */
+html.cath .scroll-top svg{display:none;}
+html.cath .scroll-top{background-image:url('../cathedral/mark.webp');background-repeat:no-repeat;background-position:50% 50%;background-size:62% auto;}
 
 /* ---------------- More: the run ----------------
    The month grid's own look lives in calendar.css (shared with /dates/). These

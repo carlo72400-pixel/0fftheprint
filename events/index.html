@@ -13,7 +13,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/pack.css?v=4ea0ebad">
+<link rel="stylesheet" href="../assets/css/pack.css?v=3c0b0f68">
 <style>
 :root{--bg:#0a0a0d;--panel:#121218;--line:#23222b;--ink:#f4eef2;--muted:#9a93a3;
 --pink:#f7b9dd;--pink-deep:#f48fc8;--pink-glow:#ff79c6;--dye-blue:#2f6bff;
@@ -29,8 +29,8 @@ font-size:clamp(38px,8vw,88px);line-height:.92;letter-spacing:-.01em;
 background:linear-gradient(180deg,#fff 10%,var(--pink) 45%,#8f8a97 60%,var(--pink-deep) 96%);
 -webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 4px 24px rgba(255,121,198,.22))}
 .sub{font-family:var(--f-mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-top:12px}
-/* THE SHELF (10/3). Every night is a sealed party pack in its own wrapper, the
-   same tile the homepage rail uses (assets/css/pack.css). It was a list of rows.
+/* THE SHELF (10/3). Every night is a full-art party pack (its own photo printed on
+   the pouch), the same tile the homepage rail uses (assets/css/pack.css). It was a list of rows.
    ⛔ Still one plain link per night: the pack is the picture, the tear happens on
       the night's own page. */
 .shelf{margin-top:30px;padding-top:26px;border-top:1px solid var(--line);
@@ -70,9 +70,8 @@ font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;text-transform:upp
 (async () => {
   const el = document.getElementById('list');
   // ⛔ Nothing out of events.json goes in as HTML. Text is textContent, and a slug
-  //    or a cover only becomes a URL after it matches the shape newevent.py writes.
+  //    only becomes a URL after it matches the shape newevent.py writes.
   const SLUG = /^[a-z0-9][a-z0-9-]{0,80}$/;
-  const COVER = /^[a-z0-9][a-z0-9-]{0,80}\/media\/[A-Za-z0-9_.-]{1,60}$/;
   const mk = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };
   const say = (t) => { el.textContent = ''; el.appendChild(mk('div', 'empty', t)); };
   try {
@@ -89,13 +88,7 @@ font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;text-transform:upp
       w.addEventListener('error', () => { w.src = '../assets/cathedral/pack-house.webp'; }, { once: true });
       w.src = e.slug + '/pack.webp';
       pp.appendChild(w);
-      if (COVER.test(e.cover || '')) {
-        const ph = mk('span', 'pp-ph'), im = mk('img');
-        im.alt = ''; im.loading = 'lazy'; im.decoding = 'async';
-        im.addEventListener('error', () => ph.remove(), { once: true });
-        im.src = e.cover; ph.appendChild(im); pp.appendChild(ph);
-      }
-      pp.appendChild(mk('span', 'pp-t' + (title.length > 16 ? ' long' : ''), title));
+      pp.appendChild(mk('span', 'pp-t' + (title.length <= 7 ? ' short' : title.length > 16 ? ' long' : ''), title));
       pp.appendChild(mk('span', 'pp-d', e.date_short || ''));
       a.appendChild(pp);
       const cap = mk('span', 'cap');
