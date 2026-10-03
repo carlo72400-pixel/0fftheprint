@@ -137,8 +137,8 @@ set search_path = pg_temp as $fn$
            translate(lower(normalize(coalesce(t, ''), NFKC)),
                      'аАвВеЕёЁкКмМнНоОрРсСтТуУхХѕЅіІјЈѵѴԛԚԝԜһҺԁԀαΑβΒεΕζΖιΙκΚοΟρΡτΤχΧᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀᴛᴜᴠᴡʏᴢ',
                      'aabbeeeekkmmhhooppccttyyxxssiijjvvqqwwhhddaabbeezziikkooppttxxabcdefghijklmnopqrtuvwyz'),
-           '[­͏؜ᅟᅠ឴឵᠋-᠏​-‏ -‮⁠-⁯⠀ㅤ︀-️﻿ﾠ]', '', 'g'),
-           '[\u0001-/:-`{-\u007f]', '', 'g'),
+           '[\u00ad\u034f\u061c\u115f\u1160\u17b4\u17b5\u180b-\u180f\u200b-\u200f\u2028-\u202e\u2060-\u206f\u2800\u3164\ufe00-\ufe0f\ufeff\uffa0]', '', 'g'),
+           '[\u0001-\u002f\u003a-\u0060\u007b-\u007f]', '', 'g'),
            '[^a-z0-9]', '_', 'g');
 $fn$;
 
@@ -168,7 +168,7 @@ create or replace function public.guard_profile_name()
 returns trigger language plpgsql security definer
 set search_path = public, pg_temp as $fn$
 declare
-  invisible constant text := '[­͏؜ᅟᅠ឴឵᠋-᠏​-‏ -‮⁠-⁯⠀ㅤ︀-️﻿ﾠ]';
+  invisible constant text := '[\u00ad\u034f\u061c\u115f\u1160\u17b4\u17b5\u180b-\u180f\u200b-\u200f\u2028-\u202e\u2060-\u206f\u2800\u3164\ufe00-\ufe0f\ufeff\uffa0]';
   clean text;
 begin
   if tg_op = 'UPDATE' and public.privileged_caller() then return new; end if;
