@@ -1,14 +1,14 @@
 /* THE WALL, offline worker (0fftheprint.com/wall/sw.js). Written by flyer-sweep/wall_build.py; never hand-edit.
-   Build 20261003121451.
+   Build 20261003145302.
    - The page itself: network first (a fresh week whenever there is signal), the saved copy when there is none.
      The data inside it stays sealed; a member's phone already holds the key, so it opens offline too.
    - Scripts, styles and fonts: served from the phone, refreshed in the background.
    - Flyers: kept after the first view (and the next few nights are warmed while the phone is idle), capped.
    - Supabase (logins, the key): never cached, always live. */
-const BUILD = '20261003121451';
+const BUILD = '20261003145302';
 const SHELL = 'wall-shell-' + BUILD;
 const IMGS = 'wall-img-v1';
-const PRECACHE = ["./", "manifest.webmanifest", "icon-192.png", "apple-touch-icon.png", "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js", "../supabase-config.js?v=f1348482", "../assets/js/desk.js?v=cd1f4fab"];
+const PRECACHE = ["./", "manifest.webmanifest", "icon-192.png", "apple-touch-icon.png", "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js", "../supabase-config.js?v=f1348482", "../assets/js/desk.js?v=15d61348"];
 const IMG_CAP = 450;
 
 self.addEventListener('install', e => {
@@ -82,7 +82,7 @@ self.addEventListener('fetch', e => {
   if (req.mode === 'navigate' && url.origin === location.origin && (url.pathname === '/wall/' || url.pathname === '/wall/index.html')) { e.respondWith(pageFirst(e)); return; }
   if (url.hostname === 'carlo72400-pixel.github.io' && url.pathname.startsWith('/0tp-wall/')) { e.respondWith(imageFirst(e)); return; }
   if (url.hostname === 'cdn.jsdelivr.net' || url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com'
-      || (url.origin === location.origin && /\.(js|css|png|svg|webmanifest)$/.test(url.pathname))) { e.respondWith(staleWhileRevalidate(e)); return; }
+      || (url.origin === location.origin && /\.(js|css|png|svg|webp|webmanifest)$/.test(url.pathname))) { e.respondWith(staleWhileRevalidate(e)); return; }   // webp = the cathedral art (frames, icons, banner), so the page keeps its face offline
 });
 
 /* "Add to calendar": the page puts the event text in the URL and this answers it on the phone, nothing goes out.
