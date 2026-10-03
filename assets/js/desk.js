@@ -1474,7 +1474,11 @@
     // being re-read every time the board opens, which is the entire reason the
     // no exists. On a database without 023 p.denied is undefined, !undefined is
     // true, and pending() behaves exactly as it did before.
-    async pending() { return (await OTP.deskProfiles()).filter(p => !p.approved && !p.denied); },
+    // ⛔ 032: everyone who joins The Wall gets a profile too, and before this they all
+    // sat here looking like card applicants (Approve made them card holders). A Wall
+    // member only waits on the desk if they asked for a card. Before 032 runs,
+    // wall_casual is undefined and this is exactly the old filter.
+    async pending() { return (await OTP.deskProfiles()).filter(p => !p.approved && !p.denied && !(p.wall_casual && p.card_ask !== 'asked')); },
     async members() { return (await OTP.deskProfiles()).filter(p => p.approved); },
     async refused() { return (await OTP.deskProfiles()).filter(p => !!p.denied); },
 
