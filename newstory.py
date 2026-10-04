@@ -182,6 +182,8 @@ PAGE = """<!DOCTYPE html>
   .we-count{{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}}
   .we-row button,.we-pending button{{background:transparent;color:var(--pink);border:1px solid var(--pink);border-radius:7px;padding:9px 16px;font-size:13px;cursor:pointer;min-height:40px}}
 </style>
+<link rel="stylesheet" href="../../assets/css/binder.css">
+<script src="../../assets/js/binder.js" defer></script>
 </head>
 <body>
 <div class="leopard-bar"></div>

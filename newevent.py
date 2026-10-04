@@ -558,6 +558,8 @@ PAGE = """<!DOCTYPE html>
 <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/css/sealed.css">
+<link rel="stylesheet" href="../../assets/css/pack.css">
+<link rel="stylesheet" href="../../assets/css/binder.css">
 <style>
 :root{--bg:#0a0a0d;--panel:#121218;--line:#23222b;--ink:#f4eef2;--muted:#9a93a3;
 --pink:#f7b9dd;--pink-deep:#f48fc8;--pink-glow:#ff79c6;--dye-blue:#2f6bff;
@@ -699,6 +701,7 @@ document.addEventListener('keydown',e=>{
    looks. If it never loads, the grid above is the page and always was. */
 window.OTPNight = Object.assign({media:MEDIA, show:show}, __NIGHT__);
 </script>
+<script src="../../assets/js/binder.js" defer></script>
 <script src="../../assets/js/sealed.js" defer></script>
 </body>
 </html>

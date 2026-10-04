@@ -226,6 +226,8 @@ PAGE = """<!DOCTYPE html>
     text-transform:uppercase;color:var(--muted);line-height:2}
   .foot a{color:var(--pink);text-decoration:none}
 </style>
+<link rel="stylesheet" href="../assets/css/binder.css">
+<script src="../assets/js/binder.js" defer></script>
 </head>
 <body>
 <div class="leopard-bar"></div>

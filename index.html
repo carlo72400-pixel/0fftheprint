@@ -47,7 +47,8 @@
 <script src="assets/js/composer.js?v=c23c5d02" defer></script>
 <script src="assets/js/calendar.js?v=52b31f44" defer></script>
 <script src="assets/js/edit.js?v=f019eef7" defer></script>
-<script src="assets/js/cathedral.js?v=16ba9cc4" defer></script>
+<script src="assets/js/binder.js?v=b5792041" defer></script>
+<script src="assets/js/cathedral.js?v=49bdf8e3" defer></script>
 <script>/* tabs: pick the page before first paint, off the #hash. Old links like /#desk still land right. */
 (function(){var M={do:'home',take:'home',drops:'photos',tape:'photos',videos:'photos',work:'photos',slate:'stories',desk:'stories',catalog:'stories',music:'music',open:'people',roster:'people',dates:'more',pitch:'more',experts:'more'},T=['home','photos','stories','music','people','more'],h=(location.hash||'').slice(1),d=document.documentElement;d.className+=' tabs';d.setAttribute('data-tab',T.indexOf(h)>=0?h:(M[h]||'home'));})();</script>
 <style>
@@ -2851,7 +2852,7 @@
   .work-item.tall img.main{object-fit:contain;}
   .work-item.tall .bed{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
     filter:blur(22px) saturate(1.15) brightness(.42);transform:scale(1.15);z-index:0;}
-  .work-item figcaption{position:absolute;left:0;right:0;bottom:0;padding:22px 10px 8px;font-family:var(--f-mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--pink);background:linear-gradient(180deg,transparent,rgba(10,10,13,.88));}
+  .work-item figcaption{position:absolute;left:0;right:0;bottom:0;padding:22px 10px 8px;font-family:var(--f-mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--pink);background:linear-gradient(180deg,transparent,rgba(10,10,13,.88));z-index:2;}   /* over the picture: the img sits at z 1, and the caption was under it */
 
   /* ===== PULSE BANNER ===== */
   .pulse-banner{position:relative;z-index:1;max-width:1240px;margin:30px auto 4px;padding:0 18px;text-align:center;}
@@ -3878,7 +3879,8 @@
 </style>
 <!-- THE CATHEDRAL (10/3): the homepage skin. Scoped under html.cath, loaded last on purpose. -->
 <link rel="stylesheet" href="assets/css/pack.css?v=3c0b0f68">
-<link rel="stylesheet" href="assets/css/cathedral.css?v=61f11f77">
+<link rel="stylesheet" href="assets/css/binder.css?v=487bb4e0">
+<link rel="stylesheet" href="assets/css/cathedral.css?v=7ef53c5c">
 </head>
 <body>
 
@@ -3958,6 +3960,8 @@
   <a href="#more" class="tablink" data-tab-link="more">More</a>
 
   <span class="spacer"></span>
+  <!-- the binder chip (10/4): binder.js swaps this for the button. Without it, nothing shows. -->
+  <span id="nav-binder"></span>
   <a href="#" target="_blank" rel="noopener" class="cta" id="nav-follow">Follow</a>
   <span class="nav-more" aria-hidden="true">&rsaquo;</span>
 </nav>
@@ -3981,7 +3985,7 @@
 <header class="pulse-banner hero" id="hero">
   <div class="hero-rose" aria-hidden="true"></div>
   <div class="hero-bats" aria-hidden="true"><i></i><i></i><i></i></div>
-  <a class="hero-beacon" id="hero-beacon" href="events/" hidden><i></i><span><b>The window lights for the last night</b><strong id="hb-title"></strong><small id="hb-meta"></small></span></a>
+  <a class="hero-beacon" id="hero-beacon" href="events/" hidden><i></i><span><b>The window lights for the last night</b><strong id="hb-title"></strong><small id="hb-meta"></small><em id="hb-go">tear it open &rarr;</em></span></a>
   <div class="hero-say">
     <div class="pulse-kick">MEDIA HOUSE · SAN ANTONIO TX · SINCE WE FELT LIKE IT</div>
     <h1 class="pulse-line">THE CITY GOES DARK.<br><span class="blue">WE CLOCK IN.</span></h1>
@@ -4017,7 +4021,7 @@
       <h3>0FF THE PRINT</h3>
       <div class="bc-lock">
         <img class="bc-mk" src="assets/cathedral/mark.webp" alt="" width="240" height="228" decoding="async">
-        <div class="bc-txt"><b>Underground media house</b><br>San Antonio &middot; TX<br><span class="bc-on">&#9679; online now</span></div>
+        <div class="bc-txt"><b>Underground media house</b><br>San Antonio &middot; TX<br><span class="bc-on" id="bc-count">&#9679; in the rooms</span></div>
       </div>
       <dl>
         <dt>No.</dt><dd>0TP &middot; pretty-first, with teeth</dd>
@@ -4186,14 +4190,30 @@
          who is a member, this only mirrors the nav link it already manages. ===== -->
     <section id="do" data-tab="home">
       <div class="hh" id="home-here" hidden></div>
+      <!-- THE DOCK (10/4). The newest night, as a pack you tear from the front door.
+           The first thing under the lounge used to be a locked door ("Join The Wall, got the code?").
+           Now it is the one thing a stranger can do with no login: open the night they were at.
+           cathedral.js fills it from events.json and the binder says how far in this phone is.
+           ⛔ Still a LINK to the night's own page (#rip tears on arrival): one implementation of the tear. -->
+      <a class="dock" id="night-dock" href="events/" hidden>
+        <span class="dk-pack"><span class="pp"><img class="pp-w" id="dk-w" alt="" width="520" height="878" decoding="async"><span class="pp-t" id="dk-t"></span><span class="pp-d" id="dk-d"></span></span></span>
+        <span class="dk-tx">
+          <i id="dk-k">New night is up</i>
+          <b id="dk-title"></b>
+          <span id="dk-line"></span>
+          <em id="dk-go">Tear it open</em>
+        </span>
+      </a>
+      <!-- The tiles (10/4 order). What a stranger can do comes first; the door with a code on it comes last.
+           The What's coming tile reads the next date off the calendar once it loads (cathedral.js). -->
       <div class="do-rail" id="do-rail">
         <a class="do wall" id="do-wall" href="wall/" hidden><img class="di" src="assets/cathedral/a/wall.webp" alt="" width="44" height="44" decoding="async"><b>The Wall</b><span>tonight&rsquo;s flyers</span></a>
-        <a class="do wall" id="do-join" href="wall/" hidden><img class="di" src="assets/cathedral/a/join.webp" alt="" width="44" height="44" decoding="async"><b>Join The Wall</b><span>got the code?</span></a>
         <a class="do" href="#drops"><img class="di" src="assets/cathedral/a/photos.webp" alt="" width="44" height="44" decoding="async"><b>Find your photos</b><span>every night we shot</span></a>
+        <a class="do" href="#dates" id="do-next"><img class="di" src="assets/cathedral/a/coming.webp" alt="" width="44" height="44" decoding="async"><b>What&rsquo;s coming</b><span>shows &middot; drops</span></a>
         <a class="do" href="#open"><img class="di" src="assets/cathedral/a/pack.webp" alt="" width="44" height="44" decoding="async"><b>Open a pack</b><span>one random card</span></a>
         <a class="do" href="#music"><img class="di" src="assets/cathedral/a/music.webp" alt="" width="44" height="44" decoding="async"><b>Play something</b><span>on rotation</span></a>
-        <a class="do" href="#dates"><img class="di" src="assets/cathedral/a/coming.webp" alt="" width="44" height="44" decoding="async"><b>What&rsquo;s coming</b><span>shows &middot; drops</span></a>
         <a class="do" href="#desk"><img class="di" src="assets/cathedral/a/story.webp" alt="" width="44" height="44" decoding="async"><b>Read a story</b><span>from the house</span></a>
+        <a class="do wall" id="do-join" href="wall/" hidden><img class="di" src="assets/cathedral/a/join.webp" alt="" width="44" height="44" decoding="async"><b>Join The Wall</b><span>got the code?</span></a>
       </div>
     </section>
 
@@ -4203,9 +4223,16 @@
         <h2>The Take <span class="accent">the timeline</span></h2>
         <div class="sub">everybody posts &nbsp;·&nbsp; art, thoughts, whatever</div>
       </div>
+      <!-- THE TIP LINE (10/4). Signed out, the first box on the timeline was a lock ("Log in to post").
+           A stranger cannot post, but a stranger can talk: this is the sidebar's tip box, moved to
+           where the thumb already is. Same mailto, nothing stored here. Hidden until cathedral.js
+           knows nobody is signed in; members get the real composer below instead. -->
+      <div class="tipline" id="take-tip">
+        <b>Spotted something?</b>
+        <div class="tl-row"><textarea id="tip2-text" rows="1" maxlength="1800" placeholder="Who was where, with who." aria-label="Your tip for the desk"></textarea><button type="button" class="tip-send" id="tip2-send">Send tip</button></div>
+        <span class="tl-alt">Off the record stays off the record. Opens your mail to the desk, or <a href="https://instagram.com/vamppsych" target="_blank" rel="noopener">DM The Lens</a>. Members post right here: <a href="join/?next=home">log in</a> or <a href="wall/">join The Wall</a>.</span>
+      </div>
       <div id="composer"></div>
-      <!-- the newest night, one tap from the timeline. cathedral.js fills it from events.json. -->
-      <a class="nblast" id="night-blast" href="events/" hidden></a>
       <div class="feed" id="take-mount"></div>
       <a class="feed-cta" id="take-cta" href="join/?next=home">
         <b>Log in to post.</b>
@@ -4814,6 +4841,11 @@
     }
 
     const draw = () => {
+      // Home's "What's coming" tile reads the next date off this (cathedral.js). Plain fields only.
+      try {
+        window.__OTP_RUN = run.slice(0, 3).map(r => ({on_date: r.on_date, title: r.title, venue: r.venue, city: r.city}));
+        window.dispatchEvent(new Event('otp:run'));
+      } catch (e) {}
       // the phone cut
       if (rail) {
         rail.innerHTML = run.slice(0, 10).map(r => {
@@ -5446,7 +5478,7 @@
       // behind it to write to. Author is slugified the same way the cardPeople
       // lookup above slugifies it, so the two can never disagree.
       const pid = p.id != null ? ` data-pid="${esc(String(p.id))}"` : '';
-      return `<article class="post-t${p.pinned ? ' pinned' : ''}${accClass(p.accent || who.accent)}"${pid} data-author="${esc(slugify(p.author || ''))}">
+      return `<article class="post-t${p.pinned ? ' pinned' : ''}${accClass(p.accent || who.accent)}"${pid} data-author="${esc(slugify(p.author || ''))}" data-ts="${esc(String(p.date || p.ts || ''))}">
         <a class="post-av" href="${esc(safeUrl(who.link) || '#')}" ${isExt ? 'target="_blank" rel="noopener"' : ''}>${av}</a>
         <div class="post-main">
           <div class="post-who">
@@ -6134,6 +6166,7 @@
         let n = parseInt(lsGet(`otp-react:${post}:${em}`)) || 0;
         if (em === 'heart') n += base;
         btn.querySelector('.ct').textContent = n;
+        btn.classList.toggle('zero', !n);
         btn.classList.toggle('voted', !!lsGet(`otp-voted:${post}:${em}`));
       });
     }
@@ -6141,12 +6174,14 @@
       const k = bar.dataset.post, st = state(k), base = parseInt(bar.dataset.baseLikes) || 0;
       bar.querySelectorAll('.react-btn[data-emoji]').forEach(btn => {
         const em = btn.dataset.emoji;
-        btn.querySelector('.ct').textContent = (st.r[em] || 0) + (em === 'heart' ? base : 0);
+        const n = (st.r[em] || 0) + (em === 'heart' ? base : 0);
+        btn.querySelector('.ct').textContent = n;
+        btn.classList.toggle('zero', !n);
         btn.classList.toggle('voted', st.mine.has(em));
         btn.setAttribute('aria-pressed', String(st.mine.has(em)));
       });
       const cb = bar.querySelector('[data-cmt]');
-      if (cb) { cb.hidden = false; cb.querySelector('.ct').textContent = st.c || 0; }
+      if (cb) { cb.hidden = false; cb.querySelector('.ct').textContent = st.c || 0; cb.classList.toggle('zero', !st.c); }
     }
     const paint = bar => { try { (live && realKey(bar.dataset.post) ? paintLive : paintLocal)(bar); } catch (e) {} };
     bars.forEach(paint);
@@ -6653,6 +6688,8 @@
       const pull = weightedPull();
       if (pull) {
         boosterReveal.innerHTML = renderPokeCard(pull.card, pull.type, 0) + spotifyEmbed(pull.card.theme_song, true, pull.card.theme_start);
+        // the binder keeps who you pulled (binder.js, optional)
+        try { if (window.OTPBinder && pull.type === 'roster') OTPBinder.card(pull.card.name); } catch (e) {}
         paintBg(boosterReveal);
         wireSpotifyEmbeds(boosterReveal);
         playChime(pull.card.rarity);

@@ -24,6 +24,12 @@
  * CONTRACT: the page publishes window.OTPNight = { media, show, slug, title,
  * venue, dateShort } from its own inline script, which runs first because this
  * one is deferred.
+ *
+ * THE BINDER (10/4). What a pack deals is kept: assets/js/binder.js, loaded just
+ * before this file, remembers every frame this phone has pulled. So a pack deals
+ * what you have NOT pulled first, the page says where you stand, and pulling the
+ * hit is a moment. ⛔ Optional: with no binder.js every line of it is skipped and
+ * this is the pack that shipped before.
  */
 (function (w, d) {
   'use strict';
@@ -76,16 +82,26 @@
   /* ---------- the deck ----------
      A pack never deals a frame twice until the night is exhausted, so ripping
      repeatedly walks the whole set instead of teasing the same six photos. */
+  var B = w.OTPBinder || null;          // the binder, when binder.js is on the page
+  var slugOk = /^[a-z0-9][a-z0-9-]{0,80}$/.test(seed);
+  function kept(i) { try { return !!(B && slugOk && B.has(seed, i)); } catch (e) { return false; } }
+  function mine() { try { return (B && slugOk) ? B.night(seed) : null; } catch (e) { return null; } }
+
   var deck = [];
-  function reshuffle() {
-    deck = [];
-    for (var i = 0; i < n; i++) deck.push(i);
+  function shuffled(a) {
     // Fisher-Yates. This one IS random: the ORDER you meet the night in can
     // differ, the rarity of a given frame cannot.
-    for (var j = deck.length - 1; j > 0; j--) {
+    for (var j = a.length - 1; j > 0; j--) {
       var k = Math.floor(Math.random() * (j + 1));
-      var t = deck[j]; deck[j] = deck[k]; deck[k] = t;
+      var t = a[j]; a[j] = a[k]; a[k] = t;
     }
+    return a;
+  }
+  function reshuffle() {
+    // frames this phone has never pulled come off the top, so every rip moves the binder
+    var fresh = [], seen = [];
+    for (var i = 0; i < n; i++) (kept(i) ? seen : fresh).push(i);
+    deck = shuffled(fresh).concat(shuffled(seen));
   }
   reshuffle();
   var pulled = 0;
@@ -126,6 +142,7 @@
       '<div class="odds">In this pack: <b>1</b> hit &middot; <b>' + counts.holo + '</b> holo &middot; ' +
         '<b>' + counts.shine + '</b> shine &middot; <b>' + counts.common + '</b> common' +
         '<br>Chance of the hit in one rip: <b>' + PACK + ' in ' + n + '</b>, about ' + pct + '%.</div>' +
+      '<div class="sl-mine" id="sl-mine" hidden></div>' +
     '</div>' +
     '<div class="sl-acts" id="sl-acts"></div>' +
     '<div class="sl-hand" id="sl-hand"></div>' +
@@ -160,15 +177,16 @@
     this.remove();
   };
 
-  function cardEl(idx, delay) {
+  function cardEl(idx, delay, isNew) {
     var m = media[idx];
     var r = rarityOf(idx);
     var b = d.createElement('button');
     b.type = 'button';
-    b.className = 'sl-card ' + r;
+    b.className = 'sl-card ' + r + (isNew ? ' fresh' : '');
     b.style.animationDelay = delay + 'ms';
     b.innerHTML =
       '<img src="' + esc(m.thumb) + '" alt="Frame ' + (idx + 1) + '" loading="lazy" decoding="async">' +
+      (isNew ? '<span class="nw">new</span>' : '') +
       '<span class="tag"><span class="no">' + (idx + 1) + ' / ' + n + '</span>' +
       '<span class="rar">' + LABEL[r] + '</span></span>';
     // hand the frame straight to the page's own lightbox: full res link, arrows
@@ -178,14 +196,39 @@
     return b;
   }
 
+  /* where this phone stands on this night. Says nothing until there is a binder with something in it. */
+  var mineEl = d.getElementById('sl-mine');
+  function paintMine(gotHit) {
+    var st = mine();
+    if (!mineEl || !st || !st.opened) return;
+    mineEl.textContent = '';
+    var a = d.createElement('button'); a.type = 'button'; a.className = 'sl-bind';
+    a.textContent = 'In your binder: ' + st.have + ' of ' + n;
+    a.onclick = function () { try { B.open(); } catch (e) {} };
+    var t = d.createElement('span');
+    t.className = st.hit ? 'got' : '';
+    t.textContent = st.have >= n ? 'The whole night is yours.'
+      : st.hit ? (gotHit ? 'You pulled the hit.' : 'You found the hit.')
+      : 'The hit is still in there.';
+    mineEl.appendChild(a); mineEl.appendChild(t);
+    mineEl.hidden = false;
+    if (gotHit) { mineEl.classList.remove('pop'); void mineEl.offsetWidth; mineEl.classList.add('pop'); }
+  }
+
   function deal() {
     if (!deck.length) return;
-    var take = Math.min(PACK, deck.length);
+    var take = Math.min(PACK, deck.length), gotHit = false;
     for (var i = 0; i < take; i++) {
-      var idx = deck.shift();
+      var idx = deck.shift(), isNew = false;
       pulled++;
-      handEl.appendChild(cardEl(idx, i * 110));
+      if (B && slugOk) {
+        try { isNew = B.add(seed, idx, { total: n, hit: idx === hitIdx, thumb: media[idx] && media[idx].thumb }); } catch (e) {}
+        if (isNew && idx === hitIdx) gotHit = true;
+      }
+      handEl.appendChild(cardEl(idx, i * 110, isNew));
     }
+    if (B && slugOk) { try { B.rip(); } catch (e) {} }
+    paintMine(gotHit);
     paintActs();
   }
 
@@ -211,7 +254,21 @@
     actsEl.appendChild(all);
   }
 
-  packEl.addEventListener('click', function () {
+  // somebody who has been here before sees where they left off, before they tear
+  (function () {
+    var st = mine(); if (!st || !st.opened) return;
+    var big = seal.querySelector('.sl-say .big'), sub = seal.querySelector('.sl-say .sub');
+    if (st.have >= n) {
+      if (big) big.textContent = 'You have the whole night';
+      if (sub) sub.textContent = 'All ' + n + ' frames are in your binder. Tear it anyway, or open the night below.';
+    } else {
+      if (big) big.textContent = 'Rip another';
+      if (sub) sub.textContent = (n - st.have) + ' frames you have not pulled yet. They come out first.';
+    }
+    paintMine(false);
+  })();
+
+  function tear() {
     if (packEl.classList.contains('rip')) return;
     packEl.classList.add('rip');
     setTimeout(function () {
@@ -228,5 +285,11 @@
         deal();
       }, 300);
     }, 480);
-  });
+  }
+  packEl.addEventListener('click', tear);
+  // a link that says "tear it open" (the homepage, the binder) lands here already tearing
+  if (w.location.hash === '#rip') {
+    try { w.history.replaceState(null, '', w.location.pathname + w.location.search); } catch (e) {}
+    setTimeout(tear, 650);
+  }
 })(window, document);

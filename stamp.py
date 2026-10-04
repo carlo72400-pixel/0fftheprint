@@ -12,6 +12,9 @@ already loaded the page kept serving the stale file out of cache and the new
 methods simply did not exist. A date you have to remember to bump is a date you
 forget to bump. The hash cannot drift from the file it names.
 
+10/4: binder.js + binder.css (the binder, the house bar) ride on the homepage, /events/
+and every night page, next to sealed.js. Same rule: stamp after touching either.
+
 10/3: the shared STYLESHEETS are stamped too (TRACKED_CSS, href="...css?v=").
 sealed.js and calendar.js now build markup that only the new sealed.css /
 calendar.css know how to lay out, so a fresh script next to a cached sheet is a
@@ -28,11 +31,13 @@ ROOT = pathlib.Path(__file__).resolve().parent
 TRACKED = ["assets/js/desk.js", "assets/js/door.js", "assets/js/composer.js",
            "assets/js/edit.js", "assets/js/board.js", "assets/js/cardback.js",
            "assets/js/dates.js", "assets/js/calendar.js", "assets/js/sealed.js",
-           "assets/js/word.js", "assets/js/cathedral.js", "supabase-config.js"]
+           "assets/js/word.js", "assets/js/cathedral.js", "assets/js/binder.js",
+           "supabase-config.js"]
 
 # stylesheet path (relative to ROOT)  ->  how it appears in href="..."
 TRACKED_CSS = ["assets/css/cathedral.css", "assets/css/pack.css",
-               "assets/css/sealed.css", "assets/css/calendar.css"]
+               "assets/css/sealed.css", "assets/css/calendar.css",
+               "assets/css/binder.css"]
 
 # every document that loads them
 DOCS = ["index.html", "join/index.html", "compose/index.html", "desk/index.html",
@@ -42,7 +47,9 @@ DOCS = ["index.html", "join/index.html", "compose/index.html", "desk/index.html"
         # silently serves whatever desk.js the browser cached, which is exactly
         # the bug this script exists to prevent.
         "card/index.html", "desk/word/index.html", "reset/index.html",
-        "word/new/index.html", "word/live/index.html", "my/index.html"] + [
+        "word/new/index.html", "word/live/index.html", "my/index.html",
+        # 10/4: these carry binder.js (the house bar and the binder chip)
+        "word/index.html", "video/index.html", "work/index.html"] + [
         # every story page carries desk.js + word.js
         str(p.relative_to(ROOT)) for p in sorted(ROOT.glob("word/*/index.html"))] + [
         # every baked card back carries desk.js + cardback.js. bake.py copies
