@@ -46,7 +46,7 @@
 <script src="assets/js/door.js?v=a477c9aa" defer></script>
 <script src="assets/js/composer.js?v=d96dc31e" defer></script>
 <script src="assets/js/calendar.js?v=52b31f44" defer></script>
-<script src="assets/js/edit.js?v=f019eef7" defer></script>
+<script src="assets/js/edit.js?v=85b56ab2" defer></script>
 <script src="assets/js/binder.js?v=b5792041" defer></script>
 <script src="assets/js/cathedral.js?v=da9b3c25" defer></script>
 <script>/* tabs: pick the page before first paint, off the #hash. Old links like /#desk still land right. */
@@ -3880,7 +3880,7 @@
 <!-- THE CATHEDRAL (10/3): the homepage skin. Scoped under html.cath, loaded last on purpose. -->
 <link rel="stylesheet" href="assets/css/pack.css?v=3c0b0f68">
 <link rel="stylesheet" href="assets/css/binder.css?v=487bb4e0">
-<link rel="stylesheet" href="assets/css/cathedral.css?v=7ef53c5c">
+<link rel="stylesheet" href="assets/css/cathedral.css?v=724b1761">
 </head>
 <body>
 
@@ -4940,7 +4940,22 @@
   // preloading would put ~70MB on the wire before anyone taps anything.
   const tapeRail = document.getElementById('tape-rail');
   if (tapeRail) {
-    const cuts = (tape || []).filter(v => v && v.src && v.poster).slice(0, 8);
+    // ⛔ DEALT IN TURN, ONE SOURCE AT A TIME (10/4). video.json lists a whole sitting's cuts in a
+    // row, so the first eight were six clips of one interview: same chair, same name on every
+    // card, and the rail read as one card six times. Round robin by where a cut is from; the
+    // order of the sources, and of the cuts inside each, is still video.json's.
+    const cuts = (() => {
+      const groups = [], at = {};
+      (tape || []).filter(v => v && v.src && v.poster).forEach(v => {
+        const k = String(v.from || '');
+        if (!(k in at)) { at[k] = groups.length; groups.push([]); }
+        groups[at[k]].push(v);
+      });
+      const out = [];
+      for (let i = 0; out.length < 8 && groups.some(g => g[i]); i++)
+        groups.forEach(g => { if (g[i] && out.length < 8) out.push(g[i]); });
+      return out;
+    })();
     if (!cuts.length) {
       tapeRail.closest('section').remove();
     } else {
@@ -4948,19 +4963,26 @@
       cuts.forEach(v => {
         const a = document.createElement('a');
         a.className = 'drop';
-        a.href = 'video/';
+        // straight to THIS cut: the tape opens a piece by its slug (video/#<slug>, 10/4)
+        a.href = /^[a-z0-9][a-z0-9-]{0,90}$/.test(v.slug || '') ? 'video/#' + v.slug : 'video/';
         // posters in video.json are written relative to video/, so ../ from there
         // is the site root and everything else is relative to video/ itself
         const cover = String(v.poster).startsWith('../')
           ? String(v.poster).slice(3) : 'video/' + v.poster;
         a.innerHTML =
-          '<span class="shot">' +
-            '<img src="' + esc(cover) + '" alt="" width="520" height="924" loading="lazy">' +
+          // THE WHOLE POSTER (10/4). These are upright cuts and the tile was 4:3, so every card showed
+          // the same middle slice of the same chair with the burned-in line cut in half. The tile is
+          // 9:16 now (cathedral.css); a cut shot wide is letterboxed into it, never cropped.
+          '<span class="shot' + ((v.w | 0) > (v.h | 0) ? ' wide' : '') + '">' +
+            '<img src="' + esc(cover) + '" alt="" width="' + ((v.w | 0) || 520) + '" height="' + ((v.h | 0) || 924) + '" loading="lazy">' +
             '<span class="n">' + esc(v.dur || 'clip') + '</span>' +
           '</span>' +
+          // THE CUT'S OWN NAME IS THE HEADLINE (10/4), and its own line of copy sits under it.
+          // The headline used to be where it is FROM, so six cuts of one interview all said
+          // "They Will Think You Are A Lunatic". The source is on the tape itself, under every piece.
           '<span class="cap">' +
-            '<span class="v">' + esc(v.from || '') + '</span>' +
-            '<span class="t">' + esc(v.title || '') + '</span>' +
+            '<span class="v">' + esc(v.title || v.from || '') + '</span>' +
+            '<span class="t">' + esc(v.line || (v.from !== v.title ? v.from : '') || '') + '</span>' +
             '<span class="d">watch &rarr;</span>' +
           '</span>';
         tapeRail.appendChild(a);
@@ -5615,16 +5637,19 @@
       // entry.track exists on live rows; seeds only carry a link
       const spId = entry.track || parseSpotifyId(entry.link);
       if (spId) tile.dataset.sp = spId;
+      // No name is better than a blank line or the word "unknown" (what a member track with no
+      // artist is stored as). The forms ask for it now; this is the floor for rows that predate that.
+      const artist = /^unknown$/i.test(String(entry.artist || '').trim()) ? '' : String(entry.artist || '').trim();
       tile.innerHTML = `
         <span class="track-shot">
-          <span class="track-art${tArt ? '' : ' no-art'}">${tArt ? '' : `<span class="track-mark">${esc((entry.artist||'').slice(0,3))}</span>`}</span>
+          <span class="track-art${tArt ? '' : ' no-art'}">${tArt ? '' : `<span class="track-mark">${esc((artist || entry.title || '').slice(0,3))}</span>`}</span>
           <span class="track-platform ${esc(entry.platform)}">${esc(labels[entry.platform] || entry.platform)}</span>
           <span class="track-hint">${spId ? 'play here' : 'opens in ' + esc(labels[entry.platform] || 'the app')}</span>
           ${(tPrev0 || spId) ? '<button class="track-play" type="button" aria-label="Play ' + esc(entry.title) + '">&#9654;</button>' : ''}
         </span>
         <span class="track-info">
           <span class="track-title">${esc(entry.title)}</span>
-          <span class="track-artist">${esc(entry.artist)}</span>
+          ${artist ? `<span class="track-artist">${esc(artist)}</span>` : ''}
           ${entry.by ? `<span class="track-by">put on by <b>${esc(entry.by)}</b></span>` : ''}
         </span>`;
       // Art through the CSSOM, never an inline style attribute. Same reason as the

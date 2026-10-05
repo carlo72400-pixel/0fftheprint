@@ -940,11 +940,17 @@
                   { key: 'link', label: 'New Spotify link', type: 'url', value: '',
                     hint: 'leave blank to keep this song and only fix the text' },
                   { key: 'title', label: 'Title', value: p.title != null ? p.title : (it.title || '') },
-                  { key: 'artist', label: 'Artist', value: p.artist != null ? p.artist : (it.artist || '') },
+                  { key: 'artist', label: 'Artist', value: p.artist != null ? p.artist : (it.artist || ''),
+                    hint: 'Spotify sends the title and the cover, never the artist. New song, type who it is by.' },
                   { key: 'hidden', label: 'Take it off the grid', type: 'check', value: !!(row && row.hidden) }
                 ],
                 save: async function (val, say) {
                   var patch = {};
+                  // ⛔ A SWAP WITH NO ARTIST IS REFUSED (10/4). Nothing can fill it in afterwards (Spotify's
+                  // open lookup has no artist in it), and three tiles sat on the homepage with no name under them.
+                  if (val.link && val.link.trim() && !String(val.artist || '').trim()) {
+                    throw new Error('Who is it by? Spotify sends the title and the cover, not the artist. Type it in.');
+                  }
                   if (val.link && val.link.trim()) {
                     say('Reading the track…');
                     var r = await OTP.resolveTrack(val.link);
@@ -996,11 +1002,13 @@
             title: 'ADD A TRACK', why: 'spotify link, the house reads the rest',
             fields: [
               { key: 'url', label: 'Spotify link', type: 'url' },
-              { key: 'artist', label: 'Artist (optional)', hint: 'blank uses what Spotify reports' }
+              { key: 'artist', label: 'Artist', hint: 'Spotify sends the title and the cover, never the artist. Type who it is by.' }
             ],
             saveLabel: 'Put it on',
             save: async function (v, say) {
               if (!v.url) throw new Error('Needs a Spotify link.');
+              // the hint here used to say "blank uses what Spotify reports". Spotify reports none, so blank went up as "unknown".
+              if (!String(v.artist || '').trim()) throw new Error('Who is it by? Spotify does not tell us. Type the artist.');
               say('Reading the track…');
               await OTP.submitTrack({ url: v.url, artist: v.artist || '' });
             },

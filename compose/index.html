@@ -260,6 +260,8 @@
       const msg = $('rt-msg');
       $('rt-send').disabled = true; msg.textContent = 'Reading the track…';
       try {
+        // Spotify sends the title and the cover, never the artist, so a blank box went up as "unknown"
+        if (!$('rt-artist').value.trim()) throw new Error('Who is it by? Type the artist, Spotify does not tell us.');
         const r = await OTP.submitTrack({ url: $('rt-url').value, artist: $('rt-artist').value });
         msg.textContent = '"' + r.title + '" is in the queue.';
         $('rt-url').value = ''; $('rt-artist').value = '';

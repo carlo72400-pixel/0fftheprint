@@ -415,3 +415,16 @@ html.cath .hx-st:hover b{color:var(--pink-glow);}
 }
 @media (prefers-reduced-motion:reduce){ html.cath .dk-pack,html.cath .hx-pk,html.cath .dk-tx em,html.cath .dock{transition:none;} }
 
+/* ---- the tape rail (10/4): a cut's own name is the headline now, and names run one line or three.
+        Cards stay one height, the name holds to two lines, and "watch" sits on the floor of the card. ---- */
+html.cath #tape-rail{align-items:stretch;}
+html.cath #tape-rail .drop{display:flex;flex-direction:column;}
+/* the whole upright poster, not a 4:3 slice of it. ⛔ flex:none + min-height:0: a flex child grows to its
+   picture's own height otherwise and the ratio is ignored. A wide cut is letterboxed, never cropped. */
+html.cath #tape-rail .drop .shot{aspect-ratio:9/16;flex:none;min-height:0;}
+html.cath #tape-rail .drop .shot.wide img{object-fit:contain;}
+html.cath #tape-rail .drop .cap{display:flex;flex-direction:column;flex:1;}
+html.cath #tape-rail .drop .cap .v{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+html.cath #tape-rail .drop .cap .t:empty{display:none;}
+html.cath #tape-rail .drop .cap .d{margin-top:auto;padding-top:7px;}
+

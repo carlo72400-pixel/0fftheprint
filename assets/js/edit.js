@@ -227,10 +227,14 @@
           panel('ROTATION · ' + (t ? t.textContent : ''), [
             { key: 'link', label: 'New Spotify link (leave blank to keep)', value: p.link || '' },
             { key: 'title', label: 'Title', value: p.title != null ? p.title : (t ? t.textContent : '') },
-            { key: 'artist', label: 'Artist', value: p.artist != null ? p.artist : (ar ? ar.textContent : '') },
+            { key: 'artist', label: 'Artist (Spotify never sends it: new song, type who it is by)', value: p.artist != null ? p.artist : (ar ? ar.textContent : '') },
             { key: 'hidden', label: 'Take it off the grid', type: 'check', value: !!(cur && cur.hidden) }
           ], async function (v, say) {
             var patch = {};
+            // ⛔ same rule as the board (10/4): a swap with no artist is refused, nothing can fill it in later
+            if (v.link && v.link.trim() && !String(v.artist || '').trim()) {
+              throw new Error('Who is it by? Spotify sends the title and the cover, not the artist. Type it in.');
+            }
             if (v.link && v.link.trim()) {
               say('Reading the track…');
               // same resolver submit uses, so a swapped seed cannot drift from

@@ -329,10 +329,15 @@ function show(i){
   lbf.style.display = m.link ? '' : 'none';
   if (m.full){ lbd.href = safeUrl(m.full); lbd.hidden = false; } else { lbd.hidden = true; }
   lb.classList.add('on');
+  /* the open piece is in the address, so it can be copied and sent (replaceState: no history pile, no hashchange) */
+  try { if (m.slug) history.replaceState(null, '', '#' + m.slug); } catch (e) {}
   lbv.play().catch(()=>{});          /* a blocked autoplay is fine, controls are there */
 }
 /* ⛔ clear src on close or the clip keeps downloading behind the closed lightbox */
-function hide(){ lb.classList.remove('on'); lbv.pause(); lbv.removeAttribute('src'); lbv.load(); }
+function hide(){
+  lb.classList.remove('on'); lbv.pause(); lbv.removeAttribute('src'); lbv.load();
+  try { if (location.hash) history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+}
 
 grid.addEventListener('click', e => {
   const b = e.target.closest('.card'); if (b) show(+b.dataset.i);
@@ -347,6 +352,22 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowLeft') show(at - 1);
   if (e.key === 'ArrowRight') show(at + 1);
 });
+
+/* ---- a link straight to one piece: video/#<slug> (10/4) ----
+   The homepage's tape rail sends every card here by its slug, so a tap on a cut opens THAT cut
+   instead of dropping somebody at the top of fifty six. Slugs are ours (video.json, or <night>-NN);
+   one that matches nothing is ignored and the page is just the tape. */
+function fromHash(){
+  let s = '';
+  try { s = decodeURIComponent((location.hash || '').slice(1)); } catch (e) { return; }
+  if (!s || s.length > 96) return;
+  const i = ITEMS.findIndex(m => m.slug === s);
+  if (i < 0) return;
+  if (view !== ITEMS) { [...tabs.children].forEach(c => c.classList.remove('on')); tAll.classList.add('on'); draw(null); }
+  show(i);
+}
+window.addEventListener('hashchange', fromHash);
+fromHash();
 </script>
 </body>
 </html>
