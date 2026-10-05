@@ -272,8 +272,8 @@
   }
 
   /* ---------- the friend space: the roster's own card art, cut small ---------- */
-  var FACES = { 'kav-man': 'kavman', 'virgosgateway': 'virgosgateway', 'sinik': 'sinik', 'wrathfol': 'wrathfol', 'theink': 'theink',
-                'wunmor': 'wunmor', 'haze-dt': 'hazedt', 'kurlytop': 'kurlytop', 'josh-fuego': 'joshfuego', 'vamppsych': 'vamppsych' };
+  var FACES = { 'kav-man': 'kavman', 'virgosgateway': 'virgosgateway', 'wrathfol': 'wrathfol', 'theink': 'theink',
+                'wunmor': 'wunmor', 'kurlytop': 'kurlytop', 'josh-fuego': 'joshfuego', 'vamppsych': 'vamppsych' };
   function friends() {
     var list = d.querySelectorAll('.friends .creator');
     Array.prototype.forEach.call(list, function (a) {
