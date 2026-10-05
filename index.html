@@ -36,7 +36,6 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="assets/css/calendar.css?v=1646f26d">
 <link rel="preload" as="image" href="assets/cathedral/hero.webp" media="(min-width:561px)">
 <link rel="preload" as="image" href="assets/cathedral/hero-m.webp" media="(max-width:560px)">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700..900&family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Pirata+One&family=Luckiest+Guy&display=swap" rel="stylesheet">
@@ -45,7 +44,6 @@
 <script src="assets/js/desk.js?v=15d61348" defer></script>
 <script src="assets/js/door.js?v=a477c9aa" defer></script>
 <script src="assets/js/composer.js?v=d96dc31e" defer></script>
-<script src="assets/js/calendar.js?v=52b31f44" defer></script>
 <script src="assets/js/edit.js?v=85b56ab2" defer></script>
 <script src="assets/js/binder.js?v=b5792041" defer></script>
 <script src="assets/js/cathedral.js?v=da9b3c25" defer></script>
@@ -728,38 +726,6 @@
   /* ---- THE DROPS: the reason most people are here, so it leads the page ----
      A rail, not a single "latest drop" line. Somebody hunting their photo from
      Saturday does not want the newest night, they want THEIR night. */
-  /* THE RUN. Same rail grammar as the drops, one row, horizontal scroll. */
-  .run-rail{display:none;grid-auto-flow:column;grid-auto-columns:minmax(210px,238px);gap:12px;
-    overflow-x:auto;padding-bottom:8px;scroll-snap-type:x proximity;}
-  .run-rail::-webkit-scrollbar{height:6px;}
-  .run-rail::-webkit-scrollbar-thumb{background:var(--pink-deep);border-radius:999px;}
-  @media (max-width:640px){ .run-rail{display:grid;grid-auto-columns:minmax(172px,74vw);} }
-  #run-add{margin-bottom:14px}
-  .run-add-btn{display:inline-flex;align-items:center;gap:9px;background:var(--panel);
-    border:1px solid var(--line);border-radius:999px;color:var(--ink);cursor:pointer;
-    font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
-    padding:10px 16px;transition:border-color .14s}
-  .run-add-btn:hover{border-color:var(--pink-deep);color:var(--pink-glow)}
-  .run-add-btn i{font-style:normal;color:var(--pink-glow);font-size:14px}
-  .run{scroll-snap-align:start;background:var(--panel);border:1px solid var(--line);
-    border-radius:13px;padding:13px 14px;text-decoration:none;color:var(--ink);display:block;
-    transition:border-color .14s,transform .14s;}
-  .run:hover{border-color:var(--pink-deep);transform:translateY(-2px);}
-  .run .rw{font-family:var(--f-mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;
-    color:var(--pink-glow);}
-  .run .rt{font-weight:700;font-size:15px;line-height:1.3;margin-top:8px;
-    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-  .run .rm{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
-    color:var(--muted);margin-top:9px;display:-webkit-box;-webkit-line-clamp:2;
-    -webkit-box-orient:vertical;overflow:hidden;}
-  /* THE EXCHANGE. Only 'the house is coming' earns a spot on the front page:
-     an unanswered ask is desk business and a shot night has already become a
-     DROP two rails up. */
-  .run .rh{font-family:var(--f-mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;
-    color:#ff9ed6;border:1px solid rgba(255,121,198,.5);border-radius:999px;
-    padding:3px 8px;margin-top:9px;display:inline-block;}
-  .run-empty{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
-    color:#5f5b6b;border:1px dashed var(--line);border-radius:12px;padding:20px;text-align:center;}
 
   .drops-rail{
     display:grid;grid-auto-flow:column;grid-auto-columns:minmax(230px,1fr);
@@ -3880,7 +3846,7 @@
 <!-- THE CATHEDRAL (10/3): the homepage skin. Scoped under html.cath, loaded last on purpose. -->
 <link rel="stylesheet" href="assets/css/pack.css?v=3c0b0f68">
 <link rel="stylesheet" href="assets/css/binder.css?v=487bb4e0">
-<link rel="stylesheet" href="assets/css/cathedral.css?v=724b1761">
+<link rel="stylesheet" href="assets/css/cathedral.css?v=20305e66">
 </head>
 <body>
 
@@ -4027,7 +3993,7 @@
         <dt>No.</dt><dd>0TP &middot; pretty-first, with teeth</dd>
         <dt>Last seen</dt><dd id="bc-seen">in the rooms</dd>
       </dl>
-      <div class="bc-acts"><a href="#drops">Find your photos</a><a href="#open">Open a pack</a><a href="#dates">What&rsquo;s coming</a><a href="#pitch">Pitch the desk</a></div>
+      <div class="bc-acts"><a href="#drops">Find your photos</a><a href="#open">Open a pack</a><a href="wall/#cal">What&rsquo;s coming</a><a href="#pitch">Pitch the desk</a></div>
     </section>
 
     <section class="card">
@@ -4205,11 +4171,12 @@
         </span>
       </a>
       <!-- The tiles (10/4 order). What a stranger can do comes first; the door with a code on it comes last.
-           The What's coming tile reads the next date off the calendar once it loads (cathedral.js). -->
+           The What's coming tile opens The Wall's calendar (10/4: one calendar, not two) and reads the house's next date
+           off the database once it answers (cathedral.js). -->
       <div class="do-rail" id="do-rail">
         <a class="do wall" id="do-wall" href="wall/" hidden><img class="di" src="assets/cathedral/a/wall.webp" alt="" width="44" height="44" decoding="async"><b>The Wall</b><span>tonight&rsquo;s flyers</span></a>
         <a class="do" href="#drops"><img class="di" src="assets/cathedral/a/photos.webp" alt="" width="44" height="44" decoding="async"><b>Find your photos</b><span>every night we shot</span></a>
-        <a class="do" href="#dates" id="do-next"><img class="di" src="assets/cathedral/a/coming.webp" alt="" width="44" height="44" decoding="async"><b>What&rsquo;s coming</b><span>shows &middot; drops</span></a>
+        <a class="do" href="wall/#cal" id="do-next"><img class="di" src="assets/cathedral/a/coming.webp" alt="" width="44" height="44" decoding="async"><b>What&rsquo;s coming</b><span>the calendar, on The Wall</span></a>
         <a class="do" href="#open"><img class="di" src="assets/cathedral/a/pack.webp" alt="" width="44" height="44" decoding="async"><b>Open a pack</b><span>one random card</span></a>
         <a class="do" href="#music"><img class="di" src="assets/cathedral/a/music.webp" alt="" width="44" height="44" decoding="async"><b>Play something</b><span>on rotation</span></a>
         <a class="do" href="#desk"><img class="di" src="assets/cathedral/a/story.webp" alt="" width="44" height="44" decoding="async"><b>Read a story</b><span>from the house</span></a>
@@ -4348,17 +4315,6 @@
       <div class="roster" id="roster-mount"></div>
     </section>
 
-    <!-- ===== THE RUN — the calendar's next few, full list at /dates/ ===== -->
-    <section id="dates" data-tab="more">
-      <div class="section-head">
-        <h2>The Run <span class="accent">what&rsquo;s coming</span></h2>
-        <div class="sub">shows &nbsp;·&nbsp; drops &nbsp;·&nbsp; releases</div>
-      </div>
-      <div id="run-add"></div>
-      <div class="cal-wrap" id="run-grid"></div>
-      <div class="run-rail" id="run-rail"></div>
-      <a class="drops-more" href="dates/">the whole calendar &rarr;</a>
-    </section>
 
     <!-- ===== PITCH US ===== -->
     <section id="pitch" data-tab="more">
@@ -4802,96 +4758,22 @@
   }
 
   // ============ Site bits ============
-  // ---- THE RUN: the month grid, the phone rail, and the add button ----
-  // Same component /dates/ draws, from assets/js/calendar.js, because two
-  // implementations of a calendar is two calendars that drift.
-  // ⛔ Y-M-D strings only. new Date('2026-09-15') is UTC MIDNIGHT, the evening
-  // BEFORE in San Antonio, and every date here would render a day early for the
-  // exact city this site is written for.
+  // ---- WHAT'S COMING: the next date, for the Home tile ----
+  // 10/4: the Run used to be drawn here too (a month grid and a rail on More), which made two calendars: this one
+  // and The Wall's. There is one now. The house's dates are read into The Wall when it opens; this page only asks
+  // for the next few so the tile can say "Next: Tue Oct 13" (cathedral.js paints it). The tile opens wall/#cal.
+  // ⛔ Y-M-D strings only. new Date('2026-09-15') is UTC MIDNIGHT, the evening BEFORE in San Antonio.
   (async () => {
-    const rail = document.getElementById('run-rail');
-    const gridMount = document.getElementById('run-grid');
-    const addMount = document.getElementById('run-add');
-    if (!rail && !gridMount) return;
-    const sec = (gridMount || rail).closest('section');
-
-    // calendar.js is deferred and this block is inline, so it can arrive first.
-    const Cal = await (async () => {
-      for (let i = 0; i < 40; i++) { if (window.OTPCal) return window.OTPCal; await new Promise(r => setTimeout(r, 50)); }
-      return null;
-    })();
-
-    let run = [];
+    if (!document.getElementById('do-next')) return;
     try {
-      if (window.OTP && OTP.configured) run = await OTP.calendar(200);
+      if (!(window.OTP && OTP.configured)) return;
+      const run = await OTP.calendar(3);
+      if (!Array.isArray(run) || !run.length) return;
+      window.__OTP_RUN = run.slice(0, 3).map(r => ({on_date: r.on_date, title: r.title, venue: r.venue, city: r.city}));   // plain fields only
+      window.dispatchEvent(new Event('otp:run'));
     } catch (e) {
-      // 020 not run, or the view is unreachable. An additive section does not
-      // get to take the homepage down with it.
-      console.warn('the run: ' + e.message);
-    }
-
-    let me = null;
-    try { if (window.OTP && OTP.configured) me = await OTP.me(); } catch (e) {}
-    const canAdd = !!(me && me.profile && me.profile.approved);
-
-    if (!run.length && !canAdd) {
-      if (sec) sec.remove();
-      const tile = document.querySelector('.do[href="#dates"]'); if (tile) tile.remove();   // or it lands on Pitch Us
-      return;
-    }
-
-    const draw = () => {
-      // Home's "What's coming" tile reads the next date off this (cathedral.js). Plain fields only.
-      try {
-        window.__OTP_RUN = run.slice(0, 3).map(r => ({on_date: r.on_date, title: r.title, venue: r.venue, city: r.city}));
-        window.dispatchEvent(new Event('otp:run'));
-      } catch (e) {}
-      // the phone cut
-      if (rail) {
-        rail.innerHTML = run.slice(0, 10).map(r => {
-          const p = Cal ? Cal.parts(r.on_date) : null;
-          const when = p ? `${Cal.DOW[p.dow]} ${Cal.MON[p.mo]} ${p.day}` : '';
-          const bits = [r.venue, r.city, r.by_name].filter(Boolean).map(esc).join(' · ');
-          const href = (Cal && Cal.safeLink(r.link)) || 'dates/';
-          const ext = /^https:/.test(href);
-          const hx = Cal && Cal.houseLabel ? Cal.houseLabel(r) : null;
-          const mark = hx && hx.k === 'onlist' ? `<span class="rh">${esc(hx.t)}</span>` : '';
-          // the kind icon: Cal.iconURL only ever returns one of six known files
-          const ic = Cal && Cal.iconURL ? `<img class="rk" src="${esc(Cal.iconURL(r.kind))}" alt="" width="44" height="44" loading="lazy" decoding="async">` : '';
-          return `<a class="run" href="${esc(href)}"${ext ? ' target="_blank" rel="noopener nofollow"' : ''}>${ic}
-            <span class="rw">${esc(when)}</span>
-            <span class="rt">${esc(r.title || '')}</span>
-            <span class="rm">${bits}</span>${mark}</a>`;
-        }).join('');
-      }
-      // the month
-      if (gridMount && Cal) {
-        Cal.grid(gridMount, run, gridState, {
-          onPick: (r) => {
-            const href = Cal.safeLink(r.link);
-            if (href) window.open(href, '_blank', 'noopener');
-            else location.href = 'dates/';
-          },
-          onMonth: () => draw(),
-        });
-      }
-    };
-    const now = new Date();
-    const gridState = Cal ? Cal.startMonth(run)
-      : { y: now.getFullYear(), mo: now.getMonth() };
-    draw();
-
-    if (canAdd && addMount && Cal) {
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'run-add-btn';
-      b.innerHTML = '<i>+</i> Add a date';
-      const isDesk = !!(me && me.profile && me.profile.is_admin);
-      b.onclick = () => Cal.sheet(null, async () => {
-        try { run = await OTP.calendar(200); } catch (e) {}
-        draw();
-      }, { admin: isDesk });
-      addMount.appendChild(b);
+      // 020 not run, or the view is unreachable: the tile keeps its plain label
+      console.warn('what is coming: ' + e.message);
     }
   })();
 

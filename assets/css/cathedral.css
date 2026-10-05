@@ -291,18 +291,6 @@ html.cath .booster-stage .pack .booster-inner{filter:drop-shadow(0 20px 30px rgb
 html.cath .scroll-top svg{display:none;}
 html.cath .scroll-top{background-image:url('../cathedral/mark.webp');background-repeat:no-repeat;background-position:50% 50%;background-size:62% auto;}
 
-/* ---------------- More: the run ----------------
-   The month grid's own look lives in calendar.css (shared with /dates/). These
-   are the phone cards: squared like every other box, the kind icon in the corner. */
-html.cath .run{border-radius:0;border-color:rgba(244,238,242,.18);background:var(--box);}
-html.cath .run:hover{border-color:var(--pink-deep);}
-/* the icon heads the card with the date, so the title keeps the whole width */
-html.cath .run .rk{float:left;width:32px;height:32px;margin:-5px 9px 0 -3px;filter:drop-shadow(0 3px 6px rgba(0,0,0,.55));}
-html.cath .run .rw{display:block;line-height:24px;min-height:27px;}
-html.cath .run .rt{clear:both;margin-top:6px;}
-html.cath .run .rh{border-radius:0;}
-html.cath .run-add-btn{border-radius:0;}
-
 /* ---------------- footer ---------------- */
 html.cath footer.site .mark .fmk{width:auto;height:1.5em;vertical-align:-.36em;margin-right:.1em;filter:drop-shadow(0 0 6px rgba(255,121,198,.45));}
 
