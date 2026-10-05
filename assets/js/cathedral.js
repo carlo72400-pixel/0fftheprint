@@ -141,7 +141,12 @@
     var key = d.getElementById('nav-key'); if (!key) return;
     var has = false;
     try { for (var i = 0; i < w.localStorage.length; i++) { if (/^sb-.*-auth-token/.test(w.localStorage.key(i) || '')) { has = true; break; } } } catch (e) {}
-    function read() { return key.classList.contains('on') ? 'in' : /pending/i.test(key.textContent || '') ? 'wait' : 'out'; }
+    // door.js names the state (data-st, 035). The old reading stays for a cached door.js that does not.
+    function read() {
+      var st = key.getAttribute('data-st');
+      if (st === 'in' || st === 'wait' || st === 'out') return st;
+      return key.classList.contains('on') ? 'in' : /pending|almost/i.test(key.textContent || '') ? 'wait' : 'out';
+    }
     // ⛔ READ THE KEY FIRST. door.js can paint before this file runs, and a change that already
     //    happened never reaches the observer below: a member would be shown the stranger's tip line.
     // Key still says "Log in" and there is no saved session at all: nobody is signed in, say so now.
@@ -150,7 +155,7 @@
     if (now !== 'out' || !has) root.setAttribute('data-door', now);
     try {
       new MutationObserver(function () { root.setAttribute('data-door', read()); })
-        .observe(key, { attributes: true, attributeFilter: ['class', 'href'], childList: true, characterData: true, subtree: true });
+        .observe(key, { attributes: true, attributeFilter: ['class', 'href', 'data-st'], childList: true, characterData: true, subtree: true });
     } catch (e) {}
     // door.js may have painted before this file ran
     if (has) setTimeout(function () { if (!root.hasAttribute('data-door')) root.setAttribute('data-door', read()); }, 2500);

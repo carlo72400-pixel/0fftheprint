@@ -43,12 +43,12 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" defer></script>
 <script src="supabase-config.js?v=f1348482" defer></script>
 <script src="assets/js/desk.js?v=15d61348" defer></script>
-<script src="assets/js/door.js?v=678b352e" defer></script>
-<script src="assets/js/composer.js?v=c23c5d02" defer></script>
+<script src="assets/js/door.js?v=a477c9aa" defer></script>
+<script src="assets/js/composer.js?v=d96dc31e" defer></script>
 <script src="assets/js/calendar.js?v=52b31f44" defer></script>
 <script src="assets/js/edit.js?v=f019eef7" defer></script>
 <script src="assets/js/binder.js?v=b5792041" defer></script>
-<script src="assets/js/cathedral.js?v=49bdf8e3" defer></script>
+<script src="assets/js/cathedral.js?v=da9b3c25" defer></script>
 <script>/* tabs: pick the page before first paint, off the #hash. Old links like /#desk still land right. */
 (function(){var M={do:'home',take:'home',drops:'photos',tape:'photos',videos:'photos',work:'photos',slate:'stories',desk:'stories',catalog:'stories',music:'music',open:'people',roster:'people',dates:'more',pitch:'more',experts:'more'},T=['home','photos','stories','music','people','more'],h=(location.hash||'').slice(1),d=document.documentElement;d.className+=' tabs';d.setAttribute('data-tab',T.indexOf(h)>=0?h:(M[h]||'home'));})();</script>
 <style>
@@ -4191,7 +4191,7 @@
     <section id="do" data-tab="home">
       <div class="hh" id="home-here" hidden></div>
       <!-- THE DOCK (10/4). The newest night, as a pack you tear from the front door.
-           The first thing under the lounge used to be a locked door ("Join The Wall, got the code?").
+           The first thing under the lounge used to be a locked door ("Join The Wall, got the code?"; the code itself went 10/4, migration 035).
            Now it is the one thing a stranger can do with no login: open the night they were at.
            cathedral.js fills it from events.json and the binder says how far in this phone is.
            ⛔ Still a LINK to the night's own page (#rip tears on arrival): one implementation of the tear. -->
@@ -4213,7 +4213,7 @@
         <a class="do" href="#open"><img class="di" src="assets/cathedral/a/pack.webp" alt="" width="44" height="44" decoding="async"><b>Open a pack</b><span>one random card</span></a>
         <a class="do" href="#music"><img class="di" src="assets/cathedral/a/music.webp" alt="" width="44" height="44" decoding="async"><b>Play something</b><span>on rotation</span></a>
         <a class="do" href="#desk"><img class="di" src="assets/cathedral/a/story.webp" alt="" width="44" height="44" decoding="async"><b>Read a story</b><span>from the house</span></a>
-        <a class="do wall" id="do-join" href="wall/" hidden><img class="di" src="assets/cathedral/a/join.webp" alt="" width="44" height="44" decoding="async"><b>Join The Wall</b><span>got the code?</span></a>
+        <a class="do wall" id="do-join" href="wall/" hidden><img class="di" src="assets/cathedral/a/join.webp" alt="" width="44" height="44" decoding="async"><b>Join The Wall</b><span>all it takes is an @</span></a>
       </div>
     </section>
 
@@ -4236,7 +4236,7 @@
       <div class="feed" id="take-mount"></div>
       <a class="feed-cta" id="take-cta" href="join/?next=home">
         <b>Log in to post.</b>
-        <span>Everybody on The Wall posts to this timeline, reacts and comments. No login yet? Join The Wall with the member code.</span>
+        <span>Everybody on The Wall posts to this timeline, reacts and comments. No login yet? Join The Wall. All it takes is an Instagram.</span>
       </a>
     </section>
 
@@ -6200,7 +6200,7 @@
     }
     function nudge(bar, what){
       const n = bar.parentElement.querySelector('.tk-nudge'); if (!n) return;
-      n.innerHTML = `${esc(what)} is for members. <a href="join/?next=home">Log in</a>, or <a href="wall/">join The Wall</a> with the member code.`;
+      n.innerHTML = `${esc(what)} is for members. <a href="join/?next=home">Log in</a>, or <a href="wall/">join The Wall</a>. All it takes is an Instagram.`;
       n.hidden = false;
     }
     const ago = iso => { const m = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 60000)); return m < 1 ? 'now' : m < 60 ? m + 'm' : m < 1440 ? Math.round(m / 60) + 'h' : Math.round(m / 1440) + 'd'; };

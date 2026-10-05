@@ -18,8 +18,8 @@
   <div class="sub">log in &nbsp;·&nbsp; cards are approved by hand</div>
   <p class="door-note">On The Wall or holding a card? Log in. Want a card? Knock:
     sign up with your Instagram so the desk knows who's asking.</p>
-  <p class="door-note">Just want in? <a href="../wall/" style="color:var(--pink-glow)">Join The Wall</a>
-    with the member code and you can post today. Cards the desk approves by hand, usually after it wakes up.</p>
+  <p class="door-note">Just want in? <a href="../wall/" style="color:var(--pink-glow)">Join The Wall</a>.
+    All it takes is an Instagram, one account each, and you can post today. Cards the desk approves by hand, usually after it wakes up.</p>
 
   <div class="setup" id="setup" style="display:none">
     <b>Backend not switched on yet</b>
@@ -39,8 +39,8 @@
         <label for="name">Your name</label>
         <input id="name" type="text" placeholder="how it shows on your posts" autocomplete="name">
         <label for="ig">Your Instagram</label>
-        <input id="ig" type="text" maxlength="31" placeholder="@yourhandle" autocomplete="off"
-          autocapitalize="none" spellcheck="false">
+        <input id="ig" type="text" maxlength="80" placeholder="@yourhandle" autocomplete="off"
+          autocapitalize="none" autocorrect="off" spellcheck="false">
         <label for="card">Your card</label>
         <select id="card"><option value="">loading…</option></select>
       </div>
@@ -59,8 +59,8 @@
 
     <div class="msg" id="msg"></div>
     <div class="note" id="note">
-      Signing up here asks for a card. The desk approves those by hand. To post today,
-      join The Wall with the member code. You will not get email from us for anything else.
+      Signing up here asks for a card and puts you on The Wall, so you can post today. Cards the
+      desk approves by hand. One account per Instagram. You will not get email from us for anything else.
     </div>
   </div>
 </div>
@@ -87,7 +87,7 @@
   // already signed in? send them where they belong
   const me = await OTP.me();
   if (me) {
-    // The Wall decides who gets in (card holders, the desk, and casual members with the code)
+    // The Wall decides who gets in (card holders, the desk, and anybody whose login carries an Instagram: 035)
     if (NEXT) { location.href = NEXT; return; }
     if (me.profile?.is_admin) { location.href = '../desk/'; return; }
     if (me.profile?.approved)  { location.href = '../compose/'; return; }
@@ -95,12 +95,13 @@
     // so a login with nowhere to go sends them there instead of telling them to queue.
     let onWall = false;
     try { onWall = !!(OTP.canTake && await OTP.canTake()); } catch (e) {}
+    // 035: a login that carries an Instagram is let onto The Wall on the spot (no code any more)
+    if (!onWall) { try { const j = await OTP.sb().rpc('wall_join', { p_ig: null }); onWall = !!(j && !j.error && j.data === 'in'); } catch (e) {} }
     if (onWall) { location.href = '../#take'; return; }
     const esc = t => String(t ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-    $('panel').innerHTML = `<b style="font-family:var(--f-display);font-style:italic;font-size:26px;text-transform:uppercase">You're in the queue.</b>
-      <div class="note">Signed in as ${esc(me.user.email)}. You're in the queue. The desk approves by hand,
-      usually after it wakes up. Got the member code?
-      <a href="../wall/" style="color:var(--pink-glow)">Join The Wall</a> and you can post today.</div>
+    $('panel').innerHTML = `<b style="font-family:var(--f-display);font-style:italic;font-size:26px;text-transform:uppercase">One more step.</b>
+      <div class="note">Signed in as ${esc(me.user.email)}. This login has no Instagram on it yet, and that is the way in.
+      <a href="../wall/" style="color:var(--pink-glow)">Put yours in on The Wall</a> and you can post today. One account per Instagram.</div>
       <button class="btn ghost" id="out" type="button">Sign out</button>`;
     $('out').onclick = async () => { await OTP.signOut(); location.reload(); };
     return;
@@ -153,13 +154,31 @@
     try {
       if (mode === 'up') {
         if (!$('name').value.trim()) throw new Error('Need a name.');
-        if (!$('card').value && !$('ig').value.trim()) {
-          throw new Error('No card and no Instagram is just a mystery. Drop the handle.');
-        }
+        // 035: an Instagram is the way in, one account each. Read the way the database reads it:
+        // "@Ana.Reyes" and the pasted profile link are both ana.reyes.
+        const raw = $('ig').value.trim();
+        const x = raw.toLowerCase().replace(/^(https?:\/\/)?(www\.)?instagram\.com\//, '').replace(/[/?#].*$/, '').replace(/^@+/, '');
+        const ig = /^[a-z0-9._]{1,30}$/.test(x) ? x : '';
+        if (!ig) throw new Error(raw ? 'That does not look like an Instagram handle. Letters, numbers, dots and underscores.'
+                                     : 'Drop your Instagram. It is the way in, one account each.');
         await OTP.signUp($('email').value.trim(), $('pw').value,
-                         $('name').value.trim(), $('card').value, $('ig').value);
-        msg("Request sent. You're in the queue now, the desk approves by hand.", 'good');
-        $('form').reset();
+                         $('name').value.trim(), $('card').value, ig);
+        // the login exists now. The door: in at once, or told why not.
+        let got = null;
+        try { const j = await OTP.sb().rpc('wall_join', { p_ig: ig }); got = j && !j.error ? j.data : null; } catch (e2) {}
+        if (got === 'in') {
+          msg("You're on The Wall. Your card request is with the desk, which approves by hand.", 'good');
+          setTimeout(() => { location.href = NEXT || '../#take'; }, 1400);
+        } else if (got === 'taken') {
+          $('panel').innerHTML = `<b style="font-family:var(--f-display);font-style:italic;font-size:26px;text-transform:uppercase">One more step.</b>
+            <div class="note">You're signed up, but that Instagram already has an account. If it is yours, sign out and log in with that one.
+            If not, <a href="../wall/" style="color:var(--pink-glow)">put your own in on The Wall</a>.</div>
+            <button class="btn ghost" id="out" type="button">Sign out</button>`;
+          $('out').onclick = async () => { await OTP.signOut(); location.reload(); };
+        } else {
+          msg("Request sent. The desk approves cards by hand. To post today, finish on The Wall.", 'good');
+          $('form').reset();
+        }
       } else {
         await OTP.signIn($('email').value.trim(), $('pw').value);
         location.reload();

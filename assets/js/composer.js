@@ -67,7 +67,7 @@
   if (!me) {
     line(`<span class="cav plain"></span>
       <div class="cgrow"><a class="clink" href="join/?next=home">Log in to post.</a>
-        <div class="cnote">Everybody on The Wall posts here. No login yet? <a href="wall/">Join The Wall</a> with the member code.</div></div>`);
+        <div class="cnote">Everybody on The Wall posts here. No login yet? <a href="wall/">Join The Wall</a>. All it takes is an Instagram.</div></div>`);
     return;
   }
 
@@ -75,12 +75,17 @@
   const approved = !!(me.profile && me.profile.approved);
   let canPost = approved;
   if (!canPost && OTP.canTake) { try { canPost = await OTP.canTake(); } catch (e) {} }
+  // 035: the door is an Instagram. A login that carries one and is not on The Wall yet is let in here
+  // (same quiet ask door.js makes; whichever runs first wins, the other is told 'in').
+  if (!canPost && OTP.sb) {
+    try { const j = await OTP.sb().rpc('wall_join', { p_ig: null }); if (j && !j.error && j.data === 'in') canPost = true; } catch (e) {}
+  }
 
   // ---------- signed in, not on The Wall, still in the queue ----------
   if (!canPost) {
     line(`<span class="cav plain"></span>
-      <div class="cgrow"><b class="clink">You're in the queue.</b>
-        <div class="cnote">The desk approves by hand. Got the member code? <a href="wall/">Join The Wall</a> and you can post now.</div></div>`);
+      <div class="cgrow"><b class="clink">One more step.</b>
+        <div class="cnote">Put your Instagram in on <a href="wall/">The Wall</a> and you can post now. One account per Instagram.</div></div>`);
     return;
   }
   // A casual member: words and photos. GIFs and video stay with the card.
