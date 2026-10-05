@@ -14,7 +14,7 @@ It is the closest this tour gets to San Antonio. Dallas was 1 September and it i
 
 Seventeen days after Austin the tape is due. 00Twinz, him and Ken Carson. Here is the entire announcement, from Ken's real account on the night of 4 July: cartunez 7.10, 00Twinz 10.30.
 
-At the end of July Complex put that date to Ken in a cover story. He said the tape was half done. On Saturday he headlined ComplexCon in Los Angeles and brought out Playboi Carti. Complex's recap has plenty on the set and nothing on the tape. Destroy Lonely plays the same stage on Sunday night. If the tape comes up, you will read it here.
+At the end of July Complex put that date to Ken in a cover story. He said the tape was half done. On Saturday he headlined ComplexCon in Los Angeles and brought out Playboi Carti. Complex's recap has plenty on the set and nothing on the tape. Destroy Lonely gets the same stage on Sunday night. If you are in that room and he says a word about the tape, tell us.
 
 Now read the first half of that July post again. Cartunez did not come out on 7.10. It came out on 27 August.
 
