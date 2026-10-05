@@ -1,6 +1,15 @@
 {
  "items": [
   {
+   "slug": "2026-10-03-pulse-angels-3",
+   "title": "PULSE ANGELS 3",
+   "venue": "21st Street Co-op",
+   "date": "2026-10-03",
+   "date_short": "10.03.26",
+   "count": 48,
+   "cover": "2026-10-03-pulse-angels-3/media/030_t.jpg"
+  },
+  {
    "slug": "2026-09-25-wap",
    "title": "WAP",
    "venue": "Private Park",

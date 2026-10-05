@@ -1,6 +1,34 @@
 {
  "items": [
   {
+   "src": "assets/work/w7-pa-073.jpg",
+   "label": "PULSE ANGELS 3 \u00b7 21st st co-op \u00b7 10.03",
+   "alt": "Someone in black feathered angel wings seen from behind, facing a packed room under a ceiling of projected light",
+   "w": 1400,
+   "h": 1052
+  },
+  {
+   "src": "assets/work/w7-pa-story-1.jpg",
+   "label": "PULSE ANGELS 3 \u00b7 story collage \u00b7 10.03",
+   "alt": "Story collage in magenta and teal: a stone angel carrying a cross glows white over photos of a dancer in black wings, three friends and a peace sign, with Cabanel\u2019s Fallen Angel in the corner",
+   "w": 1080,
+   "h": 1920
+  },
+  {
+   "src": "assets/work/w7-pa-story-2.jpg",
+   "label": "PULSE ANGELS 3 \u00b7 story collage \u00b7 10.03",
+   "alt": "Story collage in violet and ice blue: a weeping stone angel beside photos of a dancer, three friends at a stone wall and hands up at the booth, with a curled marble angel below",
+   "w": 1080,
+   "h": 1920
+  },
+  {
+   "src": "assets/work/w7-pa-story-3.jpg",
+   "label": "PULSE ANGELS 3 \u00b7 story collage \u00b7 10.03",
+   "alt": "Story collage in oxblood and rose: a white statue with spread wings across photos of the red stage, a guest carried in someone\u2019s arms, a DJ and an embrace",
+   "w": 1080,
+   "h": 1920
+  },
+  {
    "src": "assets/work/w6-wap-094.jpg",
    "label": "WAP \u00b7 private park \u00b7 09.25",
    "alt": "A guest in a captain\u2019s hat saluting the camera in a San Marcos backyard, printed as a two-ink riso in pink and blue",
