@@ -1,7 +1,7 @@
 # Image credits — THE WORD
 
 Every story cover, where it came from, and what the licence actually lets us do.
-Sourced and licence-verified 2026-08-27, extended 2026-09-02 and 2026-09-14. The credit line also appears on each
+Sourced and licence-verified 2026-08-27, extended 2026-09-02, 2026-09-14 and 2026-10-04. The credit line also appears on each
 story page itself, under the cover, which is where attribution legally belongs.
 
 ⛔ **Do not swap a cover without updating this file and the page's credit line.**
@@ -10,6 +10,11 @@ All of these are cropped, so all of them say "Cropped."
 
 | № | Story | Image | Source | Licence |
 |---|---|---|---|---|
+| 0TP-032 | The Vampire Painter Drew 2hollis | Yoshitaka Amano on a panel at Toulouse Game Show 2012 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Yoshitaka_Amano_au_Toulouse_Game_Show_2012.JPG) · N'gobo | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) |
+| 0TP-031 | Last Look Before The Tape | Destroy Lonely at Clout Festival, Poland, Jul 2024 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Destroy_Lonely,_Clout_Festival_2024_03.jpg) · Wojciech Pędzich | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| 0TP-030 | The Haunted House Has A Waiver Now | Jeremy Saulnier at the Green Room Q&A, Fantastic Fest, Austin, Sep 2015 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Jeremy_Saulnier_,Fantastic_Fest_(29183077335)_(2).jpg) · anna Hanks | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/) |
+| 0TP-029 | The Wolf Keeps A Calendar | Aaron Taylor-Johnson at the 82nd Venice International Film Festival, Aug 2025 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Aaron_Taylor-Johnson_at_82nd_Venice_International_Film_Festival-1.jpg) · LucaFazPhoto | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
+| 0TP-023 to 0TP-028 | Six night stories, 9/19 to 10/2 | Night gallery frames | **Ours.** Shot by the house | House |
 | 0TP-022 | Red on Red on Red | A performer in a corset and gloves on the Rah Rah Room stage | **Ours.** Shot by the house | House |
 | 0TP-021 | Bull Madrid, Then Everyone in Black | The face-off at El Luchador; tile is the DJ under the MIGX wall at Mi Vaquita | **Ours.** Shot by the house | House |
 | 0TP-020 | Every Room a Different Colour | The dance floor at New Guild Co-op; tile is the corset portrait on the porch | **Ours.** Shot by the house | House |
@@ -29,17 +34,23 @@ All of these are cropped, so all of them say "Cropped."
 
 ## Two things worth knowing
 
+**THE 10/4 PASS.** Four covers for the first stories out of the weekly digest. Every licence was
+read off the Commons API the day of publishing. Rejected: the only 2hollis photo on Commons
+(deleted once as a copyright violation, then re-uploaded), two Kai Cenat frames and both Ken Carson
+concert stills (all tagged "License review needed"), and a studio title treatment uploaded as
+"own work". The Saulnier frame is cropped to him alone; the moderator in the original is out of it.
+
 **LICENCES WERE READ OFF THE COMMONS API, NOT OFF A SEARCH RESULT.** Two candidates were rejected
 in the 9/2 pass: a Ken Carson live shot tagged "License review needed" (an unreviewed YouTube
 frame), and an Elizabeth Bathory painting claiming CC BY-SA as "own work", which does not hold up
 for a historical portrait. Neither shipped.
 
-**SHARE-ALIKE.** 0TP-018, 0TP-008 and 0TP-006 are CC BY-SA. Our cropped version of those three
-images carries the same licence, meaning somebody else may reuse those three covers
-under BY-SA. It stops at those three images. It does not touch the writing, the rest
+**SHARE-ALIKE.** 0TP-032, 0TP-029, 0TP-018, 0TP-008 and 0TP-006 are CC BY-SA. Our cropped version of those five
+images carries the same licence, meaning somebody else may reuse those five covers
+under BY-SA. It stops at those five images. It does not touch the writing, the rest
 of the site, or anything else in this repo.
 
-**PERSONALITY RIGHTS.** The Kane Parsons and Young Thug files carry a personality-rights notice on
+**PERSONALITY RIGHTS.** The Kane Parsons, Young Thug and Aaron Taylor-Johnson files carry a personality-rights notice on
 Commons. Editorial use in a story about him is fine. Do not move that photo into a
 roster tile, a partner badge, or anywhere next to a services pitch, because that
 would read as an endorsement he never gave.

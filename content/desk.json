@@ -1,6 +1,62 @@
 {
   "items": [
     {
+      "title": "The Vampire Painter Drew 2hollis",
+      "kicker": "THE RECORD",
+      "dek": "Yoshitaka Amano has drawn Vampire Hunter D since 1983. Now he has drawn the cover of Pirouette, out November 11. His own paintings are hanging in Houston.",
+      "date": "10.04.26",
+      "lanes": [
+        "story"
+      ],
+      "dept": "story",
+      "platform": "SITE",
+      "thumb": "word/the-vampire-painter-drew-2hollis/thumb.jpg",
+      "link": "word/the-vampire-painter-drew-2hollis/",
+      "num": "0TP-032"
+    },
+    {
+      "title": "Last Look Before The Tape",
+      "kicker": "THE RUN",
+      "dek": "Destroy Lonely rejoins Grey Day in Austin on Tuesday October 13. Seventeen days later the tape with Ken Carson is due. One date is a ticket. The other is one post.",
+      "date": "10.04.26",
+      "lanes": [
+        "story"
+      ],
+      "dept": "story",
+      "platform": "SITE",
+      "thumb": "word/last-look-before-the-tape/thumb.jpg",
+      "link": "word/last-look-before-the-tape/",
+      "num": "0TP-031"
+    },
+    {
+      "title": "The Haunted House Has A Waiver Now",
+      "kicker": "THE COUNTDOWN",
+      "dek": "A24 is selling Jeremy Saulnier's Slayground as a haunt with no exit. The clock runs out Tuesday October 20 at 8 in the morning. And the site just grew a waiver.",
+      "date": "10.04.26",
+      "lanes": [
+        "story"
+      ],
+      "dept": "story",
+      "platform": "SITE",
+      "thumb": "word/the-haunted-house-has-a-waiver-now/thumb.jpg",
+      "link": "word/the-haunted-house-has-a-waiver-now/",
+      "num": "0TP-030"
+    },
+    {
+      "title": "The Wolf Keeps A Calendar",
+      "kicker": "THE FILM",
+      "dek": "Every drop for Robert Eggers' Werwulf has landed on a full moon. The next one rises Sunday October 25. It opens Christmas Day and he still has not shown the wolf.",
+      "date": "10.04.26",
+      "lanes": [
+        "story"
+      ],
+      "dept": "story",
+      "platform": "SITE",
+      "thumb": "word/the-wolf-keeps-a-calendar/thumb.jpg",
+      "link": "word/the-wolf-keeps-a-calendar/",
+      "num": "0TP-029"
+    },
+    {
       "title": "Four Prints of a Wet Night",
       "kicker": "THE NIGHT",
       "dek": "WAP in a San Marcos backyard, printed four ways: the corrected night, the flyer's palette, a two-ink riso and a disposable with a date stamp.",
