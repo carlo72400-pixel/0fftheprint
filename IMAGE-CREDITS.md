@@ -1,7 +1,7 @@
 # Image credits — THE WORD
 
 Every story cover, where it came from, and what the licence actually lets us do.
-Sourced and licence-verified 2026-08-27, extended 2026-09-02, 2026-09-14 and 2026-10-04. The credit line also appears on each
+Sourced and licence-verified 2026-08-27, extended 2026-09-02, 2026-09-14, 2026-10-04 and 2026-10-07. The credit line also appears on each
 story page itself, under the cover, which is where attribution legally belongs.
 
 ⛔ **Do not swap a cover without updating this file and the page's credit line.**
@@ -10,6 +10,11 @@ All of these are cropped, so all of them say "Cropped."
 
 | № | Story | Image | Source | Licence |
 |---|---|---|---|---|
+| 0TP-037 | And Then Nothing Happened | Trey Parker and Matt Stone at the South Park panel, San Diego Comic-Con, Jul 2016 (tile: Parker alone) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Trey_Parker_and_Matt_Stone_by_Gage_Skidmore.jpg) · Gage Skidmore | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) |
+| 0TP-036 | What The Director Whispered | Richard Linklater at the 2026 Sundance Film Festival | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Richard_Linklater_Sundance_Film_Festival_Everyone_Has_a_Story.jpg) · Colleen Sturtevant (WikiPortraits) | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| 0TP-035 | It Was Never One Take | Wes Anderson at the 2025 Cannes Film Festival | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Wes_Anderson-7541.jpg) · Harald Krichel | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
+| 0TP-034 | Every Light Needs An Alibi | Roger Deakins on stage at BFI Southbank, London, Sep 2021 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:RogDeakinsBFI120921_(10_of_17)_(51472616953).jpg) · Raph_PH | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/) |
+| 0TP-033 | The Lightsaber Was A Projector | Walter Murch at the 2024 Telluride Film Festival | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Walter_Murch_at_the_2024_Telluride_Film_Festival.jpg) · Kevin Payravi | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
 | 0TP-032 | The Vampire Painter Drew 2hollis | Yoshitaka Amano on a panel at Toulouse Game Show 2012 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Yoshitaka_Amano_au_Toulouse_Game_Show_2012.JPG) · N'gobo | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) |
 | 0TP-031 | Last Look Before The Tape | Destroy Lonely at Clout Festival, Poland, Jul 2024 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Destroy_Lonely,_Clout_Festival_2024_03.jpg) · Wojciech Pędzich | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
 | 0TP-030 | The Haunted House Has A Waiver Now | Jeremy Saulnier at the Green Room Q&A, Fantastic Fest, Austin, Sep 2015 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Jeremy_Saulnier_,Fantastic_Fest_(29183077335)_(2).jpg) · anna Hanks | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/) |
@@ -31,6 +36,23 @@ All of these are cropped, so all of them say "Cropped."
 | 0TP-008 | The Rage Kid Got Sober | Nettspend at The Masquerade, Atlanta | Wikimedia Commons | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
 | 0TP-007 | Goth With a Beauty Budget | Studio beauty portrait | Pexels · Antonio Friedemann | Pexels License |
 | 0TP-006 | The Fall Run | One Step Closer at Paper Tiger, San Antonio | Wikimedia Commons · Tyler Savitski | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
+
+## Pictures inside the stories (THE CRAFT, 0TP-033 to 0TP-037, 2026-10-07)
+
+The craft series carries pictures in the body, each with its credit as a caption right under it (newstory.py: lines under an
+image in the same block become its caption). Licences read off the Commons API on 2026-10-07.
+
+| № | Picture | Source | Licence |
+|---|---|---|---|
+| 0TP-037 | The exploding 13 ball, Sherlock Jr. (Buster Keaton, 1924), frame from the film file | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Sherlock_Jr._(1924).webm) | Public domain |
+| 0TP-037 | Chekhov reads The Seagull to the Moscow Art Theatre, 1899 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Chekhov_and_the_Moscow_Art_Theatre_1899.jpg) | Public domain |
+| 0TP-036 | Charlie Chaplin with his camera crew on The Gold Rush (1925) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Charlie_Chaplin_and_camera_crew_in_The_Gold_Rush.jpg) | Public domain |
+| 0TP-035 | A Steadicam operator and his cable assistant at a football match | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Steady_Sport.jpg) · Runner1616 | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), resized |
+| 0TP-035 | The machine set of Metropolis, Horst von Harbou, 1926 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Horst_von_Harbou_-_Metropolis_set_photograph_20.jpg) | Public domain |
+| 0TP-034 | The Calling of Saint Matthew, Caravaggio, 1599 to 1600 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:The_Calling_of_Saint_Matthew-Caravaggo_(1599-1600).jpg) | Public domain |
+| 0TP-034 | The Magdalen with the Smoking Flame, Georges de La Tour | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Georges_de_La_Tour_-_The_Magdalen_with_the_Smoking_Flame_-_Google_Art_Project.jpg) | Public domain |
+| 0TP-033 | A 1939 Super Simplex projector at Hearst Castle | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:1939_Super_Simplex_Projector,_Model_No._58980,_made_by_International_Projector_Corp.,_owned_by_William_Randolph_Hearst_-_Hearst_Castle_-_DSC07053.JPG) · Daderot | [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| 0TP-033 | A Moviola Model D editing machine (1927), Museum of the Moving Image | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Moviola_Model_D_(MOMI).jpg) · HaeB | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), resized |
 
 ## Two things worth knowing
 

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Every Light Needs An Alibi · 0FF THE PRINT</title>
+<meta name="description" content="Lubezki built a wall to hide the moon. Deakins faked a burning church with 2,000 bulbs. Every light on screen is lying about where it really comes from.">
+<meta property="og:title" content="Every Light Needs An Alibi">
+<meta property="og:description" content="Lubezki built a wall to hide the moon. Deakins faked a burning church with 2,000 bulbs. Every light on screen is lying about where it really comes from.">
+<meta property="og:image" content="https://0fftheprint.com/word/every-light-needs-an-alibi/cover.jpg">
+<meta property="og:type" content="article">
+<meta name="theme-color" content="#0a0a0d">
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#f2eef5;--muted:#8d8798;--line:rgba(255,255,255,.1);--pink:#ff79c6;--bg:#0a0a0d}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif}
+  .leopard-bar{height:7px;background:linear-gradient(90deg,#ff79c6,#caa9ff,#2f6bff,#ff79c6);background-size:300% 100%}
+  .wrap{max-width:720px;margin:0 auto;padding:34px 20px 90px}
+  a.back{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--muted);text-decoration:none}
+  a.back:hover{color:var(--pink)}
+  .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.3em;
+    text-transform:uppercase;color:var(--pink);margin:34px 0 10px}
+  h1{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
+    text-transform:uppercase;font-size:clamp(34px,7vw,56px);line-height:.98}
+  .dek{font-size:17px;line-height:1.6;color:var(--muted);margin-top:14px}
+  .byline{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted);margin:18px 0 26px;
+    padding-bottom:18px;border-bottom:1px solid var(--line)}
+  .byline b{color:var(--ink)}
+  .cover{margin:0 0 8px;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+  .cover img{width:100%;display:block}
+  .cover-credit{font-family:'JetBrains Mono',monospace;font-size:10px;
+    letter-spacing:.06em;color:var(--muted);margin:8px 0 30px;line-height:1.5}
+  .cover-credit a{color:var(--muted);text-decoration:underline}
+  article{font-size:17.5px;line-height:1.85}
+  article p{margin:0 0 22px}
+  article h2{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
+    text-transform:uppercase;font-size:27px;margin:38px 0 14px}
+  article a{color:var(--pink);text-decoration:none}
+  article a:hover{text-decoration:underline}
+  article blockquote{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
+    font-size:26px;line-height:1.2;text-transform:uppercase;color:var(--pink);
+    border-left:3px solid var(--pink);padding-left:18px;margin:32px 0}
+  article figure{margin:30px -20px}
+  article figure img,article figure video{width:100%;display:block;border-radius:0;background:#000}
+  article figure.clip video{width:auto;max-width:100%;max-height:82vh;aspect-ratio:9/16;margin:0 auto}
+  article figcaption{font-family:'JetBrains Mono',monospace;font-size:10.5px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+    padding:10px 20px 0;text-align:center}
+  @media(min-width:760px){article figure{margin:30px 0}
+    article figure img,article figure video{border-radius:12px}
+    article figcaption{padding:10px 0 0}}
+  .foot{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);
+    font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted)}
+  .foot a{color:var(--pink);text-decoration:none}
+  .wall{max-width:680px;margin:34px auto 0;padding-top:26px;border-top:1px solid var(--line)}
+  .wall h2{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;font-size:22px;text-transform:uppercase;margin-bottom:14px}
+  .wall-entry{border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-bottom:10px}
+  .we-by{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--pink);margin-bottom:6px}
+  .we-text{font-size:15px;line-height:1.65;color:var(--ink);overflow-wrap:anywhere}
+  .we-none,.we-pending,.we-msg{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);line-height:1.7}
+  .we-msg{color:#ff6a7e;min-height:16px;margin-top:6px}
+  #wall-compose textarea{width:100%;background:#111016;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:12px;font-size:16px;font-family:Inter,sans-serif;margin-top:8px}
+  .we-row{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+  .we-count{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+  .we-row button,.we-pending button{background:transparent;color:var(--pink);border:1px solid var(--pink);border-radius:7px;padding:9px 16px;font-size:13px;cursor:pointer;min-height:40px}
+</style>
+<link rel="stylesheet" href="../../assets/css/binder.css?v=487bb4e0">
+<script src="../../assets/js/binder.js?v=b5792041" defer></script>
+</head>
+<body>
+<div class="leopard-bar"></div>
+<div class="wrap">
+  <a class="back" href="../../#desk">&larr; The Word · 0FF THE PRINT</a>
+  <div class="kicker">THE CRAFT</div>
+  <h1>Every Light Needs An Alibi</h1>
+  <div class="dek">Lubezki built a wall to hide the moon. Deakins faked a burning church with 2,000 bulbs. Every light on screen is lying about where it really comes from.</div>
+  <div class="byline">0TP-034 &nbsp;·&nbsp; <b>0FF THE PRINT</b> &nbsp;·&nbsp; San Antonio &nbsp;·&nbsp; OCT 07, 2026</div>
+  <div class="cover"><img src="cover.jpg" alt=""></div>
+  <p class="cover-credit">Roger Deakins on stage at BFI Southbank, London, September 2021, by Raph_PH, via <a href="https://commons.wikimedia.org/wiki/File:RogDeakinsBFI120921_(10_of_17)_(51472616953).jpg" target="_blank" rel="noopener">Wikimedia Commons</a>, <a href="https://creativecommons.org/licenses/by/2.0/" target="_blank" rel="noopener">CC BY 2.0</a>. Cropped.</p>
+  <article data-stamp="fcdd4dd6">
+<blockquote>Spotted: Emmanuel Lubezki's crew building a wall to block out the moon.</blockquote>
+<p>Night shoot on The Revenant. A campfire. A strange light kept landing on the actors' faces and wrecking the shots. Lubezki asked over the radio for somebody to switch it off. It was the full moon. So the crew built a wall behind the camera, 40 feet by 30, to hide it. He told British Cinematographer in 2016.</p>
+<p>That is the whole game. Every light on screen is pretending to be something. Your job is to keep its story straight.</p>
+<h2>Give every light an alibi</h2>
+<p>Roger Deakins lit the night town in 1917 with two things. Flares on crane wires that burned 22 to 30 seconds each, and a fake burning church. The church was a rig 50 feet high with about 2,000 bulbs on dimmers. He told American Cinematographer the fire and a few flares were the only sources.</p>
+<p>His fire trick is cheap. A plain tungsten bulb run at 20 to 30 percent goes orange and reads as flame.</p>
+<p>Vittorio Storaro says his eye changed in a small church in Rome, in front of Caravaggio. One beam across the room. Everything else left dark.</p>
+<figure><img src="light_caravaggio.jpg" alt="A shaft of light from the upper right cuts across a dark room onto men counting money at a table" loading="lazy"><figcaption>The Calling of Saint Matthew, Caravaggio, 1599 to 1600, public domain, via <a href="https://commons.wikimedia.org/wiki/File:The_Calling_of_Saint_Matthew-Caravaggo_%281599-1600%29.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>.</figcaption></figure>
+<h2>But do not repeat what you heard</h2>
+<p>You heard Kubrick shot Barry Lyndon on a lens NASA built for the dark side of the moon. Zeiss made that lens, and Zeiss says "There is no evidence to support the myth". Ten were made. Six went to NASA. Kubrick ended up with three.</p>
+<p>The candles were real. Three wicks each, a key around 3 foot-candles, the whole film pushed a stop in the lab. But a lot of the famous daylight in those rooms was movie lamps outside the windows, shining through tracing paper.</p>
+<p>You heard The Revenant was natural light only. Lubezki says natural light for the vast majority. At one windy campfire he slipped in a steady light on a dimmer and let the real fire flicker over it.</p>
+<figure><img src="light_latour.jpg" alt="A young woman sits in near darkness, chin in her hand, gazing at a single candle burning on the table" loading="lazy"><figcaption>The Magdalen with the Smoking Flame, Georges de La Tour, circa 1635 to 1637, public domain, via <a href="https://commons.wikimedia.org/wiki/File:Georges_de_La_Tour_-_The_Magdalen_with_the_Smoking_Flame_-_Google_Art_Project.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>.</figcaption></figure>
+<h2>So be early</h2>
+<p>Days of Heaven is set in the Texas Panhandle in 1916 and was shot mostly at the end of the day. Its cinematographer, Néstor Almendros, wrote that sunset to full dark is only about twenty minutes. So they shot about twenty minutes a day.</p>
+<p>In San Antonio on Saturday October 17 the sun sets at 7:01 PM and civil twilight runs out at 7:25. Be framed by 6:30. That is your window.</p>
+<p>Saturday October 17, San Antonio. Sunset 7:01 PM. Bring one light and a reason for it.</p>
+<p>Next in THE CRAFT: The Lightsaber Was A Projector.</p>
+<p>Spotted something? <a href="https://0fftheprint.com/#take" target="_blank" rel="noopener">Tell the desk</a>. Off the record stays off the record.</p>
+  </article>
+  <section class="wall" id="wall" data-story="every-light-needs-an-alibi" hidden>
+    <h2>From the floor</h2>
+    <div id="wall-entries"></div>
+    <div id="wall-compose"></div>
+  </section>
+  <div class="foot">Every drop gets a number. This one is 0TP-034. <a href="../../#desk">Back to The Word &rarr;</a></div>
+</div>
+<script src="../../supabase-config.js?v=f1348482"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="../../assets/js/desk.js?v=15d61348" defer></script>
+<script src="../../assets/js/word.js?v=faaae268" defer></script>
+</body>
+</html>

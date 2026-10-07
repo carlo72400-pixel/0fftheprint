@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>And Then Nothing Happened · 0FF THE PRINT</title>
+<meta name="description" content="Trey Parker gave an NYU class one rule. Aristotle had it first. Chekhov never said act three. How the masters build a story, and which rules nobody wrote.">
+<meta property="og:title" content="And Then Nothing Happened">
+<meta property="og:description" content="Trey Parker gave an NYU class one rule. Aristotle had it first. Chekhov never said act three. How the masters build a story, and which rules nobody wrote.">
+<meta property="og:image" content="https://0fftheprint.com/word/and-then-nothing-happened/cover.jpg">
+<meta property="og:type" content="article">
+<meta name="theme-color" content="#0a0a0d">
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#f2eef5;--muted:#8d8798;--line:rgba(255,255,255,.1);--pink:#ff79c6;--bg:#0a0a0d}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif}
+  .leopard-bar{height:7px;background:linear-gradient(90deg,#ff79c6,#caa9ff,#2f6bff,#ff79c6);background-size:300% 100%}
+  .wrap{max-width:720px;margin:0 auto;padding:34px 20px 90px}
+  a.back{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--muted);text-decoration:none}
+  a.back:hover{color:var(--pink)}
+  .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.3em;
+    text-transform:uppercase;color:var(--pink);margin:34px 0 10px}
+  h1{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
+    text-transform:uppercase;font-size:clamp(34px,7vw,56px);line-height:.98}
+  .dek{font-size:17px;line-height:1.6;color:var(--muted);margin-top:14px}
+  .byline{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted);margin:18px 0 26px;
+    padding-bottom:18px;border-bottom:1px solid var(--line)}
+  .byline b{color:var(--ink)}
+  .cover{margin:0 0 8px;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+  .cover img{width:100%;display:block}
+  .cover-credit{font-family:'JetBrains Mono',monospace;font-size:10px;
+    letter-spacing:.06em;color:var(--muted);margin:8px 0 30px;line-height:1.5}
+  .cover-credit a{color:var(--muted);text-decoration:underline}
+  article{font-size:17.5px;line-height:1.85}
+  article p{margin:0 0 22px}
+  article h2{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
+    text-transform:uppercase;font-size:27px;margin:38px 0 14px}
+  article a{color:var(--pink);text-decoration:none}
+  article a:hover{text-decoration:underline}
+  article blockquote{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
+    font-size:26px;line-height:1.2;text-transform:uppercase;color:var(--pink);
+    border-left:3px solid var(--pink);padding-left:18px;margin:32px 0}
+  article figure{margin:30px -20px}
+  article figure img,article figure video{width:100%;display:block;border-radius:0;background:#000}
+  article figure.clip video{width:auto;max-width:100%;max-height:82vh;aspect-ratio:9/16;margin:0 auto}
+  article figcaption{font-family:'JetBrains Mono',monospace;font-size:10.5px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+    padding:10px 20px 0;text-align:center}
+  @media(min-width:760px){article figure{margin:30px 0}
+    article figure img,article figure video{border-radius:12px}
+    article figcaption{padding:10px 0 0}}
+  .foot{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);
+    font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted)}
+  .foot a{color:var(--pink);text-decoration:none}
+  .wall{max-width:680px;margin:34px auto 0;padding-top:26px;border-top:1px solid var(--line)}
+  .wall h2{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;font-size:22px;text-transform:uppercase;margin-bottom:14px}
+  .wall-entry{border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-bottom:10px}
+  .we-by{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--pink);margin-bottom:6px}
+  .we-text{font-size:15px;line-height:1.65;color:var(--ink);overflow-wrap:anywhere}
+  .we-none,.we-pending,.we-msg{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);line-height:1.7}
+  .we-msg{color:#ff6a7e;min-height:16px;margin-top:6px}
+  #wall-compose textarea{width:100%;background:#111016;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:12px;font-size:16px;font-family:Inter,sans-serif;margin-top:8px}
+  .we-row{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+  .we-count{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+  .we-row button,.we-pending button{background:transparent;color:var(--pink);border:1px solid var(--pink);border-radius:7px;padding:9px 16px;font-size:13px;cursor:pointer;min-height:40px}
+</style>
+<link rel="stylesheet" href="../../assets/css/binder.css?v=487bb4e0">
+<script src="../../assets/js/binder.js?v=b5792041" defer></script>
+</head>
+<body>
+<div class="leopard-bar"></div>
+<div class="wrap">
+  <a class="back" href="../../#desk">&larr; The Word · 0FF THE PRINT</a>
+  <div class="kicker">THE CRAFT</div>
+  <h1>And Then Nothing Happened</h1>
+  <div class="dek">Trey Parker gave an NYU class one rule. Aristotle had it first. Chekhov never said act three. How the masters build a story, and which rules nobody wrote.</div>
+  <div class="byline">0TP-037 &nbsp;·&nbsp; <b>0FF THE PRINT</b> &nbsp;·&nbsp; San Antonio &nbsp;·&nbsp; OCT 07, 2026</div>
+  <div class="cover"><img src="cover.jpg" alt=""></div>
+  <p class="cover-credit">Trey Parker and Matt Stone at the South Park panel, San Diego Comic-Con, July 2016, by Gage Skidmore, via <a href="https://commons.wikimedia.org/wiki/File:Trey_Parker_and_Matt_Stone_by_Gage_Skidmore.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>, <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener">CC BY-SA 3.0</a>. Cropped.</p>
+  <article data-stamp="7f4e4b2e">
+<blockquote>Spotted: Trey Parker and Matt Stone crashing a writing class at NYU.</blockquote>
+<p>September 6, 2011. NYU Tisch, a course called Storytelling Strategies, filmed for an MTV show. The South Park guys walked in and taught it.</p>
+<p>Parker gave the room one rule, and said they had maybe heard it before. Write your beats down. If AND THEN fits between two of them, you have something boring. Between every beat goes BUT or THEREFORE.</p>
+<p>He was right that it is old. Aristotle's Poetics already says it matters whether a thing happens because of the last thing, or just after it.</p>
+<h2>Show them the bomb</h2>
+<p>Hitchcock to Truffaut, August 1962. Two people talk at a table and a bomb goes off. That is fifteen seconds of surprise. Now show the audience the bomb first, and the clock. Same boring chat, fifteen minutes of suspense.</p>
+<p>Hitchcock said on the tapes that it was not new. David Bordwell traced it to Lessing's notes on drama from 1767. And Buster Keaton put a bomb on a pool table in 1924.</p>
+<figure><img src="story_sherlockjr.jpg" alt="Black and white close-up of billiard balls scattered on felt, the striped 13 ball at the center" loading="lazy"><figcaption>The exploding 13 ball in Sherlock Jr., Buster Keaton, 1924, public domain, via <a href="https://commons.wikimedia.org/wiki/File:Sherlock_Jr._%281924%29.webm" target="_blank" rel="noopener">Wikimedia Commons</a>.</figcaption></figure>
+<h2>Every scene wants something</h2>
+<p>David Mamet once sent a memo to the writers of The Unit, in all capitals. Ask every scene three things. Who wants what. What happens if they don't get it. Why now.</p>
+<p>Aaron Sorkin says the same thing shorter. "I worship at the altar of intention and obstacle." He told Interview in 2012 that he cannot write a scene until he knows what somebody wants and what is stopping them.</p>
+<h2>But do not repeat what you heard</h2>
+<p>You heard Chekhov said a gun on the wall in act one has to go off in act three. What he wrote, in a letter in 1889, is that you do not put a loaded rifle on stage if nobody means to fire it. The pistol on the wall is how a friend, Ilia Gurlyand, remembered a talk with him. It was printed in 1904. None of the versions say act three.</p>
+<figure><img src="story_chekhov.jpg" alt="Chekhov in pince-nez reads from a small book at a table while a dozen actors crowd around him, listening" loading="lazy"><figcaption>Anton Chekhov reads The Seagull to the Moscow Art Theatre company, unknown photographer, 1899, public domain, via <a href="https://commons.wikimedia.org/wiki/File:Chekhov_and_the_Moscow_Art_Theatre_1899.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>.</figcaption></figure>
+<p>You heard about Pixar's 22 rules. They are tweets from 2011 by Emma Coats, a Pixar story artist at the time. She never called them rules, or Pixar's.</p>
+<h2>So go write in Austin</h2>
+<p>Wes Anderson and Owen Wilson met in a playwriting class at UT Austin in 1989. Their Bottle Rocket short played Sundance in 1993, and festival staff took Anderson for a volunteer while he hung his own poster.</p>
+<p>The Austin Film Festival and Writers Conference opens October 29. One of this year's honorees is Brad Bird, the man behind The Incredibles.</p>
+<p>Thursday October 29. Austin Film Festival and Writers Conference, Austin.</p>
+<p>Next in THE CRAFT: What The Director Whispered.</p>
+<p>Spotted something? <a href="https://0fftheprint.com/#take" target="_blank" rel="noopener">Tell the desk</a>. Off the record stays off the record.</p>
+  </article>
+  <section class="wall" id="wall" data-story="and-then-nothing-happened" hidden>
+    <h2>From the floor</h2>
+    <div id="wall-entries"></div>
+    <div id="wall-compose"></div>
+  </section>
+  <div class="foot">Every drop gets a number. This one is 0TP-037. <a href="../../#desk">Back to The Word &rarr;</a></div>
+</div>
+<script src="../../supabase-config.js?v=f1348482"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="../../assets/js/desk.js?v=15d61348" defer></script>
+<script src="../../assets/js/word.js?v=faaae268" defer></script>
+</body>
+</html>

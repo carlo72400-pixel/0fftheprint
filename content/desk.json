@@ -1,6 +1,76 @@
 {
   "items": [
     {
+      "title": "And Then Nothing Happened",
+      "kicker": "THE CRAFT",
+      "dek": "Trey Parker gave an NYU class one rule. Aristotle had it first. Chekhov never said act three. How the masters build a story, and which rules nobody wrote.",
+      "date": "10.07.26",
+      "lanes": [
+        "story"
+      ],
+      "dept": "story",
+      "platform": "SITE",
+      "thumb": "word/and-then-nothing-happened/thumb.jpg",
+      "link": "word/and-then-nothing-happened/",
+      "num": "0TP-037"
+    },
+    {
+      "title": "What The Director Whispered",
+      "kicker": "THE CRAFT",
+      "dek": "Lumet would not call cut. Eastwood prints the first take. And the two most famous take counts in film history shrink the second somebody opens the logs.",
+      "date": "10.07.26",
+      "lanes": [
+        "story"
+      ],
+      "dept": "story",
+      "platform": "SITE",
+      "thumb": "word/what-the-director-whispered/thumb.jpg",
+      "link": "word/what-the-director-whispered/",
+      "num": "0TP-036"
+    },
+    {
+      "title": "It Was Never One Take",
+      "kicker": "THE CRAFT",
+      "dek": "Birdman hid about 100 stitches. Rope could not be one take. Karl Freund rode a bicycle. How the masters move a camera, and why they mostly leave it alone.",
+      "date": "10.07.26",
+      "lanes": [
+        "story"
+      ],
+      "dept": "story",
+      "platform": "SITE",
+      "thumb": "word/it-was-never-one-take/thumb.jpg",
+      "link": "word/it-was-never-one-take/",
+      "num": "0TP-035"
+    },
+    {
+      "title": "Every Light Needs An Alibi",
+      "kicker": "THE CRAFT",
+      "dek": "Lubezki built a wall to hide the moon. Deakins faked a burning church with 2,000 bulbs. Every light on screen is lying about where it really comes from.",
+      "date": "10.07.26",
+      "lanes": [
+        "story"
+      ],
+      "dept": "story",
+      "platform": "SITE",
+      "thumb": "word/every-light-needs-an-alibi/thumb.jpg",
+      "link": "word/every-light-needs-an-alibi/",
+      "num": "0TP-034"
+    },
+    {
+      "title": "The Lightsaber Was A Projector",
+      "kicker": "THE CRAFT",
+      "dek": "The lightsaber is a projector motor and a TV. Murch cuts for the feeling first. El Mariachi cost $7,225 and looked like more. How the masters cut picture and sound.",
+      "date": "10.07.26",
+      "lanes": [
+        "story"
+      ],
+      "dept": "story",
+      "platform": "SITE",
+      "thumb": "word/the-lightsaber-was-a-projector/thumb.jpg",
+      "link": "word/the-lightsaber-was-a-projector/",
+      "num": "0TP-033"
+    },
+    {
       "title": "The Vampire Painter Drew 2hollis",
       "kicker": "THE RECORD",
       "dek": "Yoshitaka Amano has drawn Vampire Hunter D since 1983. Now he has drawn the cover of Pirouette, out November 11. His own paintings are hanging in Houston.",

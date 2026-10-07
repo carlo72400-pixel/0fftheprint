@@ -20,7 +20,9 @@ Then: git add -A && git commit && git push.
 
 Markdown understood (deliberately small): blank-line paragraphs, "## " section
 heads, "> " pull quotes, "![alt](img.jpg)" figures (local images are copied in
-next to the page), **bold**, *italic*, [text](url). Nothing else, on purpose.
+next to the page; any lines right under the image, same block, become its
+caption, which is where a photo credit goes), **bold**, *italic*, [text](url).
+Nothing else, on purpose.
 The voice does the work, not the formatting.
 
 House rules baked in: no em dashes survive (they become commas), the byline is
@@ -74,8 +76,11 @@ def md_to_html(md, story_dir, src_dir):
         elif b.startswith("> "):
             quote = " ".join(ln.lstrip("> ").strip() for ln in b.splitlines())
             out.append(f'<blockquote>{inline(quote)}</blockquote>')
-        elif (m := re.match(r"^!\[([^\]]*)\]\(([^)\s]+)\)(?:\{poster=([^}\s]+)\})?$", b)):
+        elif (m := re.match(r"^!\[([^\]]*)\]\(([^)\s]+)\)(?:\{poster=([^}\s]+)\})?$", b.splitlines()[0].strip())):
             alt, src, poster = m.group(1), m.group(2), m.group(3)
+            # lines under the image in the same block are its caption: a CC photo inside a story
+            # needs its credit right there, same as the cover (10/7, the craft series)
+            cap = " ".join(ln.strip() for ln in b.splitlines()[1:] if ln.strip())
             # ⛔ A VIDEO SOURCE MUST NOT BE A GITHUB RELEASE ASSET. GitHub types every
             #    one application/octet-stream + content-disposition: attachment, and
             #    iOS Safari refuses to play that. Pass an http src from the media
@@ -96,7 +101,7 @@ def md_to_html(md, story_dir, src_dir):
                 out.append(
                     f'<figure class="clip"><video controls playsinline preload="none"'
                     f'{pa} src="{html.escape(src)}"></video>'
-                    + (f"<figcaption>{inline(alt)}</figcaption>" if alt else "")
+                    + (f"<figcaption>{inline(cap or alt)}</figcaption>" if (cap or alt) else "")
                     + "</figure>")
                 continue
             if not src.startswith("http"):
@@ -106,7 +111,8 @@ def md_to_html(md, story_dir, src_dir):
                 name = os.path.basename(src)
                 shutil.copy2(src_path, os.path.join(story_dir, name))
                 src = name
-            out.append(f'<figure><img src="{html.escape(src)}" alt="{html.escape(alt)}" loading="lazy"></figure>')
+            out.append(f'<figure><img src="{html.escape(src)}" alt="{html.escape(alt)}" loading="lazy">'
+                       + (f"<figcaption>{inline(cap)}</figcaption>" if cap else "") + "</figure>")
         else:
             out.append(f"<p>{inline(' '.join(ln.strip() for ln in b.splitlines()))}</p>")
     return "\n".join(out)
