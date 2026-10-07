@@ -992,23 +992,7 @@
   }
   .track:hover .track-hint{opacity:1;}
 
-  /* Roster — Pokémon TCG holographic cards */
-  /* The FIXED-count rules below use minmax(0,1fr), not 1fr: a 1fr track will
-     not shrink below its content, so three 252px cards overflowed a 391px
-     column on every phone in landscape. This auto-fill track keeps its 200px
-     minimum on purpose, because auto-fill needs a real minimum to work out how
-     many columns fit. */
-  .roster{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:18px;perspective:1000px;}
-  @media (max-width:980px){.roster{grid-template-columns:repeat(3,minmax(0,1fr));}}
-  /* Phone: the roster is a snap CAROUSEL, not a wall. Six full-art cards
-     stacked one per row was most of a mile of scroll; now one swipe-row of
-     smaller cards, next card peeking so nobody needs told it scrolls.
-     Tap still opens the same modal. */
   @media (max-width:720px){
-    .roster{display:flex;overflow-x:auto;gap:12px;padding:4px 2px 14px;
-      scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
-    .roster::-webkit-scrollbar{display:none;}
-    .roster > .poke{flex:0 0 236px;scroll-snap-align:center;}
     /* This Is Us: one card, so no carousel, just stop it being a billboard */
     .curators-grid .poke{max-width:280px;margin:0 auto;}
   }
@@ -1839,8 +1823,6 @@
     }
     .tile.two{aspect-ratio:1/1;}
 
-    /* Roster: 2 cols always on mobile, slightly bigger cards */
-    .roster{grid-template-columns:repeat(2,1fr);gap:10px;}
     .voice .name{font-size:15px;}
 
     /* Sidebar cards on mobile: more breathable */
@@ -1894,11 +1876,10 @@
     .post .meta{font-size:10px;letter-spacing:.18em;}
     .react-btn{padding:6px 10px;font-size:10px;min-height:30px;}
     .react-btn .em{font-size:13px;}
-    .rotation-grid, .tile-grid, .tile-grid.two, .roster{
+    .rotation-grid, .tile-grid, .tile-grid.two{
       gap:8px;
     }
-    /* Mobile: curators stays single column; the roster is a snap carousel now
-       (rule lives with the .roster block) so it must NOT be re-gridded here. */
+    /* Mobile: curators stays single column. */
     .curators-grid{grid-template-columns:1fr;}
     .wrap{padding:14px 12px 26px;}
     nav.site a{font-size:10px;letter-spacing:.16em;}
@@ -1934,7 +1915,6 @@
   nav.site a:focus-visible{outline-offset:6px;}
 
   /* Off-screen below-fold cards: defer paint + decode (modern browsers) */
-  .roster .poke{content-visibility:auto;contain-intrinsic-size:240px 340px;}
   .desk-item{content-visibility:auto;contain-intrinsic-size:220px 275px;}
 
   /* ============ ARCADE LAYER ============ */
@@ -4288,16 +4268,8 @@
       <div class="booster-mount" id="booster-mount"></div>
     </section>
 
-    <!-- ===== ROSTER — above the timeline as of 8/27. The people come before
-         what they said today: a stranger scrolling wants to know WHO this is
-         before they read a feed of one-liners from names they do not have yet. ===== -->
-    <section id="roster" data-tab="people">
-      <div class="section-head">
-        <h2>The Roster <span class="accent">voices we&rsquo;ve tapped</span></h2>
-        <div class="sub">each one goes crazy at one thing</div>
-      </div>
-      <div class="roster" id="roster-mount"></div>
-    </section>
+    <!-- THE ROSTER grid came out 10/7 (his call, "grid only"). roster.json still
+         feeds Open A Pack, the binder, ?card= links and the member pages. -->
 
 
     <!-- ===== PITCH US ===== -->
@@ -4378,6 +4350,7 @@
   if (!main) return;
   var SEC = {};
   Array.prototype.forEach.call(main.children, function(el){ if (el.tagName === 'SECTION' && el.id && el.dataset.tab) SEC[el.id] = el.dataset.tab; });
+  SEC.roster = 'people';   // the grid is gone (10/7); an old #roster link still opens People
   var cur = root.getAttribute('data-tab') || 'home', touched = false;
   function paint(){
     document.querySelectorAll('[data-tab-link]').forEach(function(a){
@@ -4971,7 +4944,7 @@
   const slt = document.getElementById('slate-latest');
   if (smq && slate.next) {
     const n = slate.next;
-    smq.href = safeUrl(n.link) || '#roster';
+    smq.href = safeUrl(n.link) || '#';
     smq.style.backgroundImage = 'url("' + sized(safeUrl(n.art), 'card') + '")';
     smq.innerHTML = `
       <div class="slate-kicker">${esc(n.kicker || 'NEXT OUT THE HOUSE')} &nbsp;·&nbsp; ${esc(n.num || '')}</div>
@@ -5768,12 +5741,6 @@
       </a>` : '');
   }
 
-  // ============ Roster ============
-  const rsMount = document.getElementById('roster-mount');
-  if (rsMount && roster) {
-    rsMount.innerHTML = roster.map((v, i) => renderPokeCard(v, 'roster', i)).join('');
-    wirePokeCards(rsMount);
-  }
   // Deep-link: open a card automatically when URL has ?card=name-slug
   if (typeof openCardFromUrl === 'function') openCardFromUrl();
 
@@ -6381,7 +6348,8 @@
     });
     }
     // Actions — primary OPEN IG (full width) + secondary row (FLIP / SHARE / CLOSE)
-    const link = safeUrl(data.link) || '#';
+    const raw = safeUrl(data.link);
+    const link = raw && raw.charAt(0) !== '#' ? raw : '#';   // '#roster' pointed at the grid, gone 10/7
     const isExt = /^https?:\/\//.test(link);
     const page = (window.__OTP_PAGE_FOR ? window.__OTP_PAGE_FOR(data.name) : '');
     // ⛔ NOT data.platform. That field is the card's FOOTER label and on this
@@ -6400,14 +6368,14 @@
       } catch (e) { return 'their link'; }
     };
     const outHtml = (link && link !== '#')
-      ? `<a class="btn-primary" href="${esc(link)}" ${isExt?'target="_blank" rel="noopener"':''}>${isExt?'Open '+outName(link):'Jump to roster'} →</a>`
+      ? `<a class="btn-primary" href="${esc(link)}" ${isExt?'target="_blank" rel="noopener"':''}>${isExt?'Open '+outName(link):'Open it'} →</a>`
       : '';
     // Their page leads when they have one. The card is the person; this is the
     // door to what that person actually has going on, and it is OURS, so it
     // outranks sending the visitor off to somebody else's platform.
     const primaryHtml = page
       ? `<a class="btn-primary" href="${esc(page)}">See their page →</a>` + (outHtml
-          ? `<a class="btn-secondary" href="${esc(link)}" ${isExt?'target="_blank" rel="noopener"':''}>${isExt?'Open '+outName(link):'Jump to roster'} →</a>`
+          ? `<a class="btn-secondary" href="${esc(link)}" ${isExt?'target="_blank" rel="noopener"':''}>${isExt?'Open '+outName(link):'Open it'} →</a>`
           : '')
       : outHtml;
     modalActions.innerHTML = primaryHtml + `
