@@ -3758,22 +3758,9 @@
       background:var(--pink-glow);box-shadow:0 0 10px rgba(255,121,198,.6);
     }
   }
-  /* ---- Home: who is here (members), then what you can do, then the timeline ---- */
+  /* ---- Home: what you can do, then the timeline ---- */
   #do{margin-bottom:26px;}
-  .hh[hidden],.do[hidden]{display:none !important;}
-  .hh{margin-bottom:16px;}
-  .hh-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:10px;
-    font-family:var(--f-mono);font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);}
-  .hh-h b{color:var(--ink);font-weight:700;}
-  .hh-h a{color:var(--pink-glow);text-decoration:none;letter-spacing:.18em;white-space:nowrap;}
-  .hh-row{display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;padding:2px 0 4px;}
-  .hh-row::-webkit-scrollbar{display:none;}
-  .hh-f{flex:0 0 auto;width:62px;display:grid;justify-items:center;gap:6px;text-decoration:none;color:var(--ink);font-size:11.5px;font-weight:600;line-height:1.2;}
-  .hh-p{position:relative;width:56px;height:56px;border-radius:50%;padding:2px;background:linear-gradient(135deg,var(--pink-glow),var(--dye-blue));}
-  .hh-p img,.hh-p i{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;object-fit:cover;
-    background:var(--panel);border:2px solid var(--bg);font-style:normal;font-weight:800;font-size:15px;color:var(--ink);}
-  .hh-p em{position:absolute;right:-5px;bottom:-4px;font-style:normal;font-size:16px;line-height:1;}
-  .hh-n{max-width:62px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .do[hidden]{display:none !important;}
   .do-rail{display:grid;grid-auto-flow:column;grid-auto-columns:max-content;gap:10px;overflow-x:auto;scrollbar-width:none;padding:2px 0 4px;}
   .do-rail::-webkit-scrollbar{display:none;}
   .do{display:grid;grid-template-columns:auto minmax(0,1fr);gap:3px 11px;align-items:center;
@@ -3826,7 +3813,7 @@
 <!-- THE CATHEDRAL (10/3): the homepage skin. Scoped under html.cath, loaded last on purpose. -->
 <link rel="stylesheet" href="assets/css/pack.css?v=3c0b0f68">
 <link rel="stylesheet" href="assets/css/binder.css?v=487bb4e0">
-<link rel="stylesheet" href="assets/css/cathedral.css?v=20305e66">
+<link rel="stylesheet" href="assets/css/cathedral.css?v=4465d22f">
 </head>
 <body>
 
@@ -4115,11 +4102,10 @@
 
   <!-- ============ MAIN ============ -->
   <main class="feed">
-    <!-- ===== HOME (10/3). The front page is for the people now: who is here, what you can do,
-         then the timeline. Members get the faces off The Wall and the Wall tile; door.js decides
-         who is a member, this only mirrors the nav link it already manages. ===== -->
+    <!-- ===== HOME (10/3). What you can do, then the timeline. Members get the Wall tile; door.js
+         decides who is a member, this only mirrors the nav link it already manages. The Who's here
+         faces came off 10/7 (his ask); The Wall's People tab still has its own. ===== -->
     <section id="do" data-tab="home">
-      <div class="hh" id="home-here" hidden></div>
       <!-- THE DOCK (10/4). The newest night, as a pack you tear from the front door.
            The first thing under the lounge used to be a locked door ("Join The Wall, got the code?"; the code itself went 10/4, migration 035).
            Now it is the one thing a stranger can do with no login: open the night they were at.
@@ -4404,43 +4390,13 @@
   var h0 = (location.hash || '').slice(1);
   if (SEC[h0] && h0 !== 'do') show(SEC[h0], {section: h0, settle: true});
 
-  /* Members: the Wall tile and the faces. door.js shows #nav-wall for anyone who is in; mirror that, never decide it here. */
-  var navWall = document.getElementById('nav-wall'), tile = document.getElementById('do-wall'), box = document.getElementById('home-here');
+  /* Members: the Wall tile. door.js shows #nav-wall for anyone who is in; mirror that, never decide it here. */
+  var navWall = document.getElementById('nav-wall'), tile = document.getElementById('do-wall');
   var join = document.getElementById('do-join');
-  var asked = false;
-  function initials(n){ return String(n || '?').trim().split(/\s+/).slice(0, 2).map(function(w){ return Array.from(w)[0] || ''; }).join('').toUpperCase() || '?'; }
-  function faces(){
-    if (asked || !box || !window.OTP || !OTP.configured || !OTP.sb) return;
-    var c = OTP.sb(); if (!c) return;
-    asked = true;
-    c.rpc('wall_here').then(function(r){
-      if (!r || r.error || !Array.isArray(r.data) || !r.data.length) return;
-      var head = document.createElement('div'); head.className = 'hh-h';
-      var lab = document.createElement('span'); lab.textContent = "Who's here "; var n = document.createElement('b'); n.textContent = r.data.length; lab.appendChild(n);
-      var all = document.createElement('a'); all.href = 'wall/'; all.textContent = 'The Wall →';
-      head.appendChild(lab); head.appendChild(all);
-      var row = document.createElement('div'); row.className = 'hh-row';
-      r.data.slice(0, 40).forEach(function(p){
-        if (!/^[0-9a-f]{10}$/.test(p.sid || '')) return;
-        var a = document.createElement('a'); a.className = 'hh-f'; a.href = 'wall/#s-' + p.sid; a.setAttribute('aria-label', (p.name || 'Member') + "'s page");
-        var ring = document.createElement('span'); ring.className = 'hh-p';
-        if (p.pic && /^https:\/\//.test(p.pic)) { var im = document.createElement('img'); im.src = /\/public\/cards\/.+-full\.jpg$/i.test(p.pic) ? p.pic.replace(/-full\.jpg$/i, '-card.jpg') : p.pic; im.alt = ''; im.loading = 'lazy'; im.decoding = 'async'; ring.appendChild(im); }
-        else { var i = document.createElement('i'); i.textContent = initials(p.name); ring.appendChild(i); }
-        if (p.mood_e) { var em = document.createElement('em'); em.textContent = p.mood_e; em.setAttribute('aria-hidden', 'true'); ring.appendChild(em); }
-        var nm = document.createElement('span'); nm.className = 'hh-n'; nm.textContent = String(p.name || 'Member').trim().split(/\s+/)[0];
-        a.appendChild(ring); a.appendChild(nm); row.appendChild(a);
-      });
-      if (!row.children.length) return;
-      n.textContent = row.children.length;
-      box.textContent = ''; box.appendChild(head); box.appendChild(row); box.hidden = false;
-    }, function(){});
-  }
   function syncWall(){
     if (!navWall) return;
     if (tile) tile.hidden = navWall.hidden;
     if (join) join.hidden = !navWall.hidden;          // logged out, or not on The Wall yet: the way in
-    if (!navWall.hidden) { if (window.OTP && OTP.sb) faces(); else window.addEventListener('DOMContentLoaded', faces, {once: true}); }
-    else if (box) box.hidden = true;
   }
   if (navWall) { try { new MutationObserver(syncWall).observe(navWall, {attributes: true, attributeFilter: ['hidden']}); } catch(e){} syncWall(); }
 })();

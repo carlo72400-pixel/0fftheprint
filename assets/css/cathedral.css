@@ -343,7 +343,6 @@ html.cath main.feed{border-top:0;}
   html.cath .dk-tx em{font-size:16px;padding:8px 14px 7px;margin-top:9px;}
 }
 /* members have the faces row above the dock; the pack must not climb onto it */
-html.cath .hh:not([hidden]) + .dock{margin-top:34px;}
 
 /* ---- the tip line: what a stranger gets where the lock used to be ---- */
 html.cath .tipline{display:none;margin:0 0 16px;border:1px solid var(--box-line);background:var(--box);padding:0 13px 12px;}
