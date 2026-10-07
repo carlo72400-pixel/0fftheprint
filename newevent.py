@@ -897,6 +897,12 @@ def main():
         makepack.build(slug, src_dir=stage)
     except BaseException as e:      # SystemExit included: makepack exits when a picked frame is the hit
         print(f"  pack not drawn ({e})")
+    # THE CONTACT SHEET (10/7): the homepage's frame index picks the new night up. Decoration too.
+    try:
+        import framewall
+        framewall.build()
+    except BaseException as e:
+        print(f"  contact sheet index not rebuilt ({e}); run framewall.py")
 
     size = dir_size(out)
     print(f"\n  {out}")

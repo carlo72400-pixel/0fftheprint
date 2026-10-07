@@ -47,6 +47,7 @@
 <script src="assets/js/edit.js?v=85b56ab2" defer></script>
 <script src="assets/js/binder.js?v=b5792041" defer></script>
 <script src="assets/js/cathedral.js?v=8668be8b" defer></script>
+<script src="assets/js/lounge.js?v=25a30e7c" defer></script>
 <script>/* tabs: pick the page before first paint, off the #hash. Old links like /#desk still land right. */
 (function(){var M={do:'home',take:'home',drops:'photos',tape:'photos',videos:'photos',work:'photos',slate:'stories',desk:'stories',catalog:'stories',music:'music',open:'people',roster:'people',dates:'more',pitch:'more',experts:'more'},T=['home','photos','stories','music','people','more'],h=(location.hash||'').slice(1),d=document.documentElement;d.className+=' tabs';d.setAttribute('data-tab',T.indexOf(h)>=0?h:(M[h]||'home'));})();</script>
 <style>
@@ -3814,6 +3815,7 @@
 <link rel="stylesheet" href="assets/css/pack.css?v=3c0b0f68">
 <link rel="stylesheet" href="assets/css/binder.css?v=487bb4e0">
 <link rel="stylesheet" href="assets/css/cathedral.css?v=4465d22f">
+<link rel="stylesheet" href="assets/css/lounge.css?v=2d07e1fc">
 </head>
 <body>
 
@@ -4132,6 +4134,18 @@
         <a class="do" href="#desk"><img class="di" src="assets/cathedral/a/story.webp" alt="" width="44" height="44" decoding="async"><b>Read a story</b><span>from the house</span></a>
         <a class="do wall" id="do-join" href="wall/" hidden><img class="di" src="assets/cathedral/a/join.webp" alt="" width="44" height="44" decoding="async"><b>Join The Wall</b><span>all it takes is an @</span></a>
       </div>
+    </section>
+
+    <!-- ===== THE CONTACT SHEET (10/7, his pick "Live photo wall"). Real frames from every night,
+         dealt at random by assets/js/lounge.js out of content/frames.json (framewall.py). Hidden until
+         the script fills it, so with no script or no data the Home tab is what it was. ===== -->
+    <section id="frames" data-tab="home" hidden>
+      <div class="section-head fr-head">
+        <h2>The Contact Sheet <span class="accent">every night we shot</span></h2>
+        <button type="button" class="fr-deal" id="fr-deal">Deal again</button>
+      </div>
+      <div class="fr-grid" id="fr-grid"></div>
+      <div class="fr-foot" id="fr-foot"></div>
     </section>
 
     <!-- ===== THE TAKE — the timeline. Card holders post here. ===== -->
@@ -5842,6 +5856,8 @@
     });
     return _spApiPromise;
   }
+  // lounge.js's jukebox borrows this one loader: two loaders would fight over onSpotifyIframeApiReady
+  window.OTPSpotifyApi = loadSpotifyApi;
 
   function spotifyEmbed(theme, autoplay, startSec){
     const id = parseSpotifyId(theme);

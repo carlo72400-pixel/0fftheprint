@@ -292,4 +292,13 @@
     try { w.history.replaceState(null, '', w.location.pathname + w.location.search); } catch (e) {}
     setTimeout(tear, 650);
   }
+  // a frame link from the homepage contact sheet (#f12, 10/7): the pack steps aside, the grid opens and
+  // that frame comes up big. The pack is still there to tear, the link just did not ask for it.
+  var fm = /^#f(\d{1,4})$/.exec(w.location.hash || '');
+  if (fm && +fm[1] >= 1 && +fm[1] <= n) {
+    try { w.history.replaceState(null, '', w.location.pathname + w.location.search); } catch (e) {}
+    openGrid(false);
+    var sk = d.getElementById('sl-skip'); if (sk) sk.remove();
+    setTimeout(function () { try { N.show(+fm[1] - 1); } catch (e) {} }, 250);
+  }
 })(window, document);
