@@ -44,10 +44,11 @@
 <script src="assets/js/desk.js?v=15d61348" defer></script>
 <script src="assets/js/door.js?v=f663129d" defer></script>
 <script src="assets/js/composer.js?v=f434af3f" defer></script>
-<script src="assets/js/edit.js?v=a853ef73" defer></script>
+<script src="assets/js/edit.js?v=052f00ae" defer></script>
 <script src="assets/js/binder.js?v=b5792041" defer></script>
 <script src="assets/js/cathedral.js?v=8668be8b" defer></script>
-<script src="assets/js/lounge.js?v=25a30e7c" defer></script>
+<script src="assets/js/lounge.js?v=72627a44" defer></script>
+<script src="assets/js/music.js?v=8ef301b1" defer></script>
 <script>/* tabs: pick the page before first paint, off the #hash. Old links like /#desk still land right. */
 (function(){var M={do:'home',take:'home',drops:'photos',tape:'photos',videos:'photos',work:'photos',slate:'stories',desk:'stories',catalog:'stories',music:'music',open:'people',roster:'people',dates:'more',pitch:'more',experts:'more'},T=['home','photos','stories','music','people','more'],h=(location.hash||'').slice(1),d=document.documentElement;d.className+=' tabs';d.setAttribute('data-tab',T.indexOf(h)>=0?h:(M[h]||'home'));})();</script>
 <style>
@@ -3897,6 +3898,7 @@
 <link rel="stylesheet" href="assets/css/binder.css?v=487bb4e0">
 <link rel="stylesheet" href="assets/css/cathedral.css?v=4465d22f">
 <link rel="stylesheet" href="assets/css/lounge.css?v=2d07e1fc">
+<link rel="stylesheet" href="assets/css/music.css?v=bb889008">
 </head>
 <body>
 
@@ -4332,13 +4334,34 @@
 
 
     <!-- ===== MUSIC · SPOTIFY ROTATION ===== -->
+    <!-- ===== MUSIC, rebuilt 10/11 (his call: all 14 ideas off the brainstorm). index.html draws On
+         Rotation (it owns the desk's overlay and the tile builder); assets/js/music.js draws the rest
+         from content/music.json and what this page hands it (window.__OTP_MUSIC, then otp:music).
+         Every section below has an id, so #battle, #lineup, #releases... open this tab at that spot.
+         ⛔ #drops is the PHOTOS tab's section: the music countdown is #releases, never reuse an id. ===== -->
     <section id="music" data-tab="music">
       <div class="section-head">
         <h2>Music <span class="accent">on rotation</span></h2>
         <div class="sub">cued up &nbsp;·&nbsp; loud &nbsp;·&nbsp; looping</div>
       </div>
-      <div class="rotation-grid" id="rotation-mount"></div>
+      <nav class="mx-jump" id="mx-jump" aria-label="Music sections"></nav>
+      <a class="mx-cover" id="mx-cover" href="#music"></a>
+      <div class="mx-radio" id="mx-radio"></div>
+      <div class="shelf mx-shelf" data-shelf="rotation">
+        <div class="shelf-head"><h3>On Rotation</h3><span class="n" id="rotation-n"></span><span class="s">what the desk has on</span></div>
+        <div class="shelf-rail" id="rotation-mount"></div>
+      </div>
+      <div id="mx-picks"></div>
     </section>
+    <section id="battle" data-tab="music"></section>
+    <section id="played" data-tab="music"></section>
+    <section id="holders" data-tab="music"></section>
+    <section id="texas" data-tab="music"></section>
+    <section id="lineage" data-tab="music"></section>
+    <section id="lineup" data-tab="music"></section>
+    <section id="releases" data-tab="music"></section>
+    <section id="rooms" data-tab="music"></section>
+    <section id="putuson" data-tab="music"></section>
 
     <!-- ===== OPEN A PACK — leads the page now. The booster card used to sit
          at the end of the curators grid, four screens down, which is a long walk
@@ -4587,6 +4610,7 @@
 
   // ============ Fetch all content ============
   let site, creators, take, rotation, desk, roster, work;  // `take` gets live posts merged in below
+  let music = {};   // 10/11: content/music.json, the Music tab's committed data (assets/js/music.js draws it)
   let tape = [];
   let slate = {};
   let slatePinAt = 0;   // 10/10: when the desk last saved slate.next over the cover (ms). 0 = never pinned.
@@ -4610,7 +4634,7 @@
         .then(r => { if (!r.ok) throw new Error('events HTTP ' + r.status); return r.json(); })
         .catch(err => { console.error('Content load failed: events.json', err); return EMPTY; });
 
-    const [s, c, t, m, d, r, w, sl, ev, vid] = await Promise.all([
+    const [s, c, t, m, d, r, w, sl, ev, vid, mu] = await Promise.all([
       grab('site.json', {}),
       grab('creators.json', EMPTY),
       grab('take.json', EMPTY),
@@ -4621,9 +4645,11 @@
       grab('slate.json', {}),
       grabEvents(),
       grab('video.json', EMPTY),
+      grab('music.json', {}),
     ]);
     events = (ev && ev.items) || [];
     tape = (vid && vid.items) || [];
+    music = (mu && typeof mu === 'object') ? mu : {};
 
     // ⛔ THESE MUST LAND BEFORE THE OVERLAY BLOCK BELOW. They used to sit
     // after it, which meant applyList() ran on an undefined `work`/`roster`
@@ -5606,110 +5632,131 @@
     });
   }
 
+  // ---- ONE TILE, every music row (10/11) ----
+  // The rotation's tile builder, pulled out so the new Music rows (assets/js/music.js) get the
+  // same tile, the same play button and the same hover preview. Extra lines, all optional:
+  // `sub` (where it is from), `by` (who put it on), `note` (the desk's line on why it is here),
+  // `shot` (the art is our own frame of them on stage), `card` (the art is their card).
+  const labels = { spotify:'Spotify', youtube:'YouTube', soundcloud:'SoundCloud' };
+  function trackTile(entry) {
+    const tile = document.createElement('a');
+    tile.className = 'track' + (entry.shot ? ' shot' : '') + (entry.card ? ' card' : '');
+    const tLink = safeUrl(entry.link);
+    const tArt  = safeUrl(entry.art);
+    tile.href = tLink || '#';
+    if (/^https?:\/\//.test(tLink)) { tile.target = '_blank'; tile.rel = 'noopener'; }
+    const tPrev0 = safeUrl(entry.preview);
+    // entry.track exists on live rows; seeds only carry a link
+    const spId = entry.track || parseSpotifyId(entry.link);
+    if (spId) tile.dataset.sp = spId;
+    // No name is better than a blank line or the word "unknown" (what a member track with no
+    // artist is stored as). The forms ask for it now; this is the floor for rows that predate that.
+    const artist = /^unknown$/i.test(String(entry.artist || '').trim()) ? '' : String(entry.artist || '').trim();
+    const platform = entry.platform || 'spotify';
+    tile.innerHTML = `
+      <span class="track-shot">
+        <span class="track-art${tArt ? '' : ' no-art'}">${tArt ? '' : `<span class="track-mark">${esc((artist || entry.title || '').slice(0,3))}</span>`}</span>
+        <span class="track-platform ${esc(platform)}">${esc(labels[platform] || platform)}</span>
+        <span class="track-hint">${spId ? 'play here' : 'opens in ' + esc(labels[platform] || 'the app')}</span>
+        ${entry.shot ? '<span class="track-shotby">shot by the house</span>' : ''}
+        ${(tPrev0 || spId) ? '<button class="track-play" type="button" aria-label="Play ' + esc(entry.title || artist) + '">&#9654;</button>' : ''}
+      </span>
+      <span class="track-info">
+        <span class="track-title">${esc(entry.title || '')}</span>
+        ${artist ? `<span class="track-artist">${esc(artist)}</span>` : ''}
+        ${entry.sub ? `<span class="track-sub">${esc(entry.sub)}</span>` : ''}
+        ${entry.by ? `<span class="track-by">put on by <b>${esc(entry.by)}</b></span>` : ''}
+        ${entry.note ? `<span class="track-note">${esc(entry.note)}</span>` : ''}
+      </span>`;
+    // Art through the CSSOM, never an inline style attribute. Same reason as the
+    // timeline avatars: entities decode before CSS parses, so an escaped quote
+    // still breaks out of url().
+    if (tArt) {
+      tile._artUrl = sized(tArt, 'thumb');
+      tile.querySelector('.track-art').style.backgroundImage = 'url("' + tile._artUrl + '")';
+    }
+
+    // THE PLAY BUTTON MEANS THE SAME THING ON EVERY TILE: play it here.
+    // Seeds used to play a local mp3 and member tracks played nothing, which
+    // made the same control mean two different things depending on a detail
+    // nobody can see. It opens the Spotify embed now, which is also the only
+    // way a member's track is audible at all.
+    const playBtn = tile.querySelector('.track-play');
+    if (playBtn && spId) {
+      playBtn.addEventListener('click', ev => {
+        ev.preventDefault(); ev.stopPropagation();   // it lives inside the <a>
+        openTrackEmbed(tile, spId);
+      });
+    }
+
+    // The hover-volume mp3 stays as a DESKTOP-ONLY flourish on the seeds that
+    // carry one. It is ambient, it never fights the embed, and touch has no
+    // hover so building the Audio there was always waste.
+    const tPrev = safeUrl(entry.preview);
+    if (!tPrev || TOUCH) return tile;
+    const audio = new Audio(tPrev);
+    audio.loop = true;
+    audio.preload = 'metadata';
+    audio.volume = 0;
+    audio._btn = null;
+    let fadeTimer = null;
+    const stopFade = () => { if (fadeTimer) { clearInterval(fadeTimer); fadeTimer = null; } };
+    const upd = (cx2, cy2) => {
+      const r = tile.getBoundingClientRect();
+      const x = cx2 - r.left, y = cy2 - r.top;
+      tile.style.setProperty('--mx', x + 'px');
+      tile.style.setProperty('--my', y + 'px');
+      const cx = r.width / 2, cy = r.height / 2;
+      const dx = (x - cx) / cx, dy = (y - cy) / cy;
+      const dist = Math.min(1, Math.hypot(dx, dy));
+      audio.volume = Math.pow(Math.max(0, 1 - dist), 1.6);
+    };
+    tile.addEventListener('mouseenter', e => {
+      if (openEmbedTile) return;                    // an embed is playing, stay quiet
+      stopFade();
+      if (activeAudio && activeAudio !== audio) { activeAudio.pause(); activeAudio.currentTime = 0; activeAudio.volume = 0; }
+      activeAudio = audio;
+      upd(e.clientX, e.clientY);
+      audio.play().catch(() => {});
+    });
+    tile.addEventListener('mousemove', e => { if (!openEmbedTile) upd(e.clientX, e.clientY); });
+    tile.addEventListener('mouseleave', () => {
+      stopFade();
+      fadeTimer = setInterval(() => {
+        audio.volume = Math.max(0, audio.volume - 0.12);
+        if (audio.volume <= 0.01) {
+          stopFade();
+          audio.pause();
+          audio.currentTime = 0;
+          if (activeAudio === audio) activeAudio = null;
+        }
+      }, 28);
+    });
+    return tile;
+  }
+
   const rMount = document.getElementById('rotation-mount');
   if (rMount && rotation) {
-    // Live tracks sit ABOVE the seeds, capped at 6 so approvals can never evict
-    // the whole hand-picked floor (previews only exist on seeds, and a paused
-    // backend must always leave a full grid). Dedupe by track id so promoting
-    // a live track into rotation.json never doubles it while both exist.
-    const liveTracks = await rotationLiveP;
-    if (liveTracks && liveTracks.length) {
-      const seeded = new Set(rotation.map(e => parseSpotifyId(e.link)).filter(Boolean));
-      rotation = [...liveTracks.filter(t => !seeded.has(t.track)).slice(0, 6), ...rotation].slice(0, 12);
-    }
-    const labels = { spotify:'Spotify', youtube:'YouTube', soundcloud:'SoundCloud' };
+    // 10/11: member picks (migration 009) used to sit ABOVE the seeds in this grid. They have their
+    // own row now, Card Holders' Picks (music.js), so On Rotation is the desk's hand again. A pick
+    // the desk already promoted into rotation.json is dropped from the picks so it never shows twice.
+    const liveTracks = (await rotationLiveP) || [];
+    const seeded = new Set(rotation.map(e => parseSpotifyId(e.link)).filter(Boolean));
+    const picks = liveTracks.filter(t => t && t.track && !seeded.has(t.track)).slice(0, 12);
+    const notes = (music && music.notes) || {};
     rotation.forEach(entry => {
-      const tile = document.createElement('a');
-      tile.className = 'track';
-      const tLink = safeUrl(entry.link);
-      const tArt  = safeUrl(entry.art);
-      tile.href = tLink || '#';
-      if (/^https?:\/\//.test(tLink)) { tile.target = '_blank'; tile.rel = 'noopener'; }
-      const tPrev0 = safeUrl(entry.preview);
-      // entry.track exists on live rows; seeds only carry a link
-      const spId = entry.track || parseSpotifyId(entry.link);
-      if (spId) tile.dataset.sp = spId;
-      // No name is better than a blank line or the word "unknown" (what a member track with no
-      // artist is stored as). The forms ask for it now; this is the floor for rows that predate that.
-      const artist = /^unknown$/i.test(String(entry.artist || '').trim()) ? '' : String(entry.artist || '').trim();
-      tile.innerHTML = `
-        <span class="track-shot">
-          <span class="track-art${tArt ? '' : ' no-art'}">${tArt ? '' : `<span class="track-mark">${esc((artist || entry.title || '').slice(0,3))}</span>`}</span>
-          <span class="track-platform ${esc(entry.platform)}">${esc(labels[entry.platform] || entry.platform)}</span>
-          <span class="track-hint">${spId ? 'play here' : 'opens in ' + esc(labels[entry.platform] || 'the app')}</span>
-          ${(tPrev0 || spId) ? '<button class="track-play" type="button" aria-label="Play ' + esc(entry.title) + '">&#9654;</button>' : ''}
-        </span>
-        <span class="track-info">
-          <span class="track-title">${esc(entry.title)}</span>
-          ${artist ? `<span class="track-artist">${esc(artist)}</span>` : ''}
-          ${entry.by ? `<span class="track-by">put on by <b>${esc(entry.by)}</b></span>` : ''}
-        </span>`;
-      // Art through the CSSOM, never an inline style attribute. Same reason as the
-      // timeline avatars: entities decode before CSS parses, so an escaped quote
-      // still breaks out of url().
-      if (tArt) {
-        tile._artUrl = sized(tArt, 'thumb');
-        tile.querySelector('.track-art').style.backgroundImage = 'url("' + tile._artUrl + '")';
-      }
-      rMount.appendChild(tile);
-
-      // THE PLAY BUTTON MEANS THE SAME THING ON EVERY TILE: play it here.
-      // Seeds used to play a local mp3 and member tracks played nothing, which
-      // made the same control mean two different things depending on a detail
-      // nobody can see. It opens the Spotify embed now, which is also the only
-      // way a member's track is audible at all.
-      const playBtn = tile.querySelector('.track-play');
-      if (playBtn && spId) {
-        playBtn.addEventListener('click', ev => {
-          ev.preventDefault(); ev.stopPropagation();   // it lives inside the <a>
-          openTrackEmbed(tile, spId);
-        });
-      }
-
-      // The hover-volume mp3 stays as a DESKTOP-ONLY flourish on the seeds that
-      // carry one. It is ambient, it never fights the embed, and touch has no
-      // hover so building the Audio there was always waste.
-      const tPrev = safeUrl(entry.preview);
-      if (!tPrev || TOUCH) return;
-      const audio = new Audio(tPrev);
-      audio.loop = true;
-      audio.preload = 'metadata';
-      audio.volume = 0;
-      audio._btn = null;
-      let fadeTimer = null;
-      const stopFade = () => { if (fadeTimer) { clearInterval(fadeTimer); fadeTimer = null; } };
-      const upd = (cx2, cy2) => {
-        const r = tile.getBoundingClientRect();
-        const x = cx2 - r.left, y = cy2 - r.top;
-        tile.style.setProperty('--mx', x + 'px');
-        tile.style.setProperty('--my', y + 'px');
-        const cx = r.width / 2, cy = r.height / 2;
-        const dx = (x - cx) / cx, dy = (y - cy) / cy;
-        const dist = Math.min(1, Math.hypot(dx, dy));
-        audio.volume = Math.pow(Math.max(0, 1 - dist), 1.6);
-      };
-      tile.addEventListener('mouseenter', e => {
-        if (openEmbedTile) return;                    // an embed is playing, stay quiet
-        stopFade();
-        if (activeAudio && activeAudio !== audio) { activeAudio.pause(); activeAudio.currentTime = 0; activeAudio.volume = 0; }
-        activeAudio = audio;
-        upd(e.clientX, e.clientY);
-        audio.play().catch(() => {});
-      });
-      tile.addEventListener('mousemove', e => { if (!openEmbedTile) upd(e.clientX, e.clientY); });
-      tile.addEventListener('mouseleave', () => {
-        stopFade();
-        fadeTimer = setInterval(() => {
-          audio.volume = Math.max(0, audio.volume - 0.12);
-          if (audio.volume <= 0.01) {
-            stopFade();
-            audio.pause();
-            audio.currentTime = 0;
-            if (activeAudio === audio) activeAudio = null;
-          }
-        }, 28);
-      });
+      const id = entry.track || parseSpotifyId(entry.link);
+      const t = trackTile(Object.assign({}, entry, { note: entry.note || (id && notes[id]) || '' }));
+      if (id) { t.dataset.t = entry.title || ''; t.dataset.a = entry.artist || ''; }
+      rMount.appendChild(t);
     });
+    const rn = document.getElementById('rotation-n');
+    if (rn) rn.textContent = rotation.length;
+    // Hand the Music tab everything it needs, computed once, here: the rotation after the desk's
+    // overlay, the live picks, the roster with the members' own songs, site.json after the overlay.
+    window.OTPTrackEmbed = openTrackEmbed;
+    window.__OTP_MUSIC = { music, rotation, live: picks, roster, site, esc, safeUrl, sized, tile: trackTile };
+    window.dispatchEvent(new Event('otp:music'));
   }
 
   // ============ The Desk (filterable feed) ============

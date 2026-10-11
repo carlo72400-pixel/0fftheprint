@@ -224,7 +224,9 @@
        'rotation' section in site_overrides. Paste a new Spotify link and the
        tile swaps; the committed file stays the floor until bake.py folds it. */
     if (admin) {
-      d.querySelectorAll('#music .track').forEach(function (el) {
+      // 10/11: only On Rotation's own tiles. The Music tab's other rows (picks, nights, cards, Texas,
+      // the battle) are not seeds, and a battle winner shown on the rail is not one either.
+      d.querySelectorAll('#rotation-mount .track:not(.won)').forEach(function (el) {
         var a = el.matches('a') ? el : el.querySelector('a[href*="open.spotify.com/track/"]');
         var href = a ? a.getAttribute('href') || '' : '';
         var m = /track\/([A-Za-z0-9]{22})/.exec(href);
@@ -238,6 +240,7 @@
             { key: 'link', label: 'New Spotify link (leave blank to keep)', value: p.link || '' },
             { key: 'title', label: 'Title', value: p.title != null ? p.title : (t ? t.textContent : '') },
             { key: 'artist', label: 'Artist (Spotify never sends it: new song, type who it is by)', value: p.artist != null ? p.artist : (ar ? ar.textContent : '') },
+            { key: 'note', label: 'Desk note (a line or two: why it is on, where it was spotted)', type: 'textarea', rows: 2, value: p.note != null ? p.note : (el.querySelector('.track-note') ? el.querySelector('.track-note').textContent : '') },
             { key: 'hidden', label: 'Take it off the grid', type: 'check', value: !!(cur && cur.hidden) }
           ], async function (v, say) {
             var patch = {};
@@ -260,8 +263,37 @@
             }
             if (v.title !== undefined && !patch.title) patch.title = v.title;
             if (v.artist !== undefined) patch.artist = v.artist;
+            if (v.note !== undefined) patch.note = String(v.note).replace(/\u2014/g, ',').trim().slice(0, 240);
             await OTP.setSiteOverride('rotation', key, patch, { hidden: !!v.hidden });
           });
+        });
+      });
+
+      /* THE MUSIC COVER, desk only (10/11). site.json keys music_cover.* through the site overlay,
+         one row each, so bake.py folds them into site.json like the house voice. A track that is not
+         on rotation needs its own words: Spotify sends the title and the cover, never the artist. */
+      var mc = d.getElementById('mx-cover');
+      if (mc) pencil(mc, 'Pin the music cover', function () {
+        var K = ['track', 'title', 'artist', 'art', 'note'];
+        var g = function (k) { var r = overrideFor('site', 'music_cover.' + k); return r && r.patch ? r.patch.value : ''; };
+        var pinned = !!g('track');
+        panel('THE MUSIC COVER' + (pinned ? ' · pinned' : ' · picks itself'), [
+          { key: 'link', label: 'Spotify link of the track to pin', value: g('track') || (mc.dataset.sp ? 'https://open.spotify.com/track/' + mc.dataset.sp : '') },
+          { key: 'artist', label: 'Artist (type it: Spotify never sends it)', value: g('artist') || mc.dataset.a || '' },
+          { key: 'note', label: 'Desk note (why it is the cover)', type: 'textarea', rows: 3, value: g('note') || ((mc.querySelector('.mx-cv-n') || {}).textContent || '') },
+          { key: 'hidden', label: 'Unpin, the cover goes back to the top of rotation', type: 'check', value: false }
+        ], async function (v, say) {
+          if (v.hidden) { for (var i = 0; i < K.length; i++) { try { await OTP.clearSiteOverride('site', 'music_cover.' + K[i]); } catch (e) {} } return; }
+          if (!String(v.link || '').trim()) throw new Error('Paste the Spotify link of the track.');
+          if (!String(v.artist || '').trim()) throw new Error('Who is it by? Spotify sends the title and the cover, not the artist.');
+          say('Reading the track…');
+          var r = await OTP.resolveTrack(v.link);
+          var vals = { track: 'https://open.spotify.com/track/' + r.id, title: r.title, artist: String(v.artist).trim().slice(0, 60),
+                       art: r.thumb || '', note: String(v.note || '').replace(/\u2014/g, ',').trim().slice(0, 280) };
+          for (var j = 0; j < K.length; j++) {
+            if (!vals[K[j]]) { try { await OTP.clearSiteOverride('site', 'music_cover.' + K[j]); } catch (e) {} continue; }
+            await OTP.setSiteOverride('site', 'music_cover.' + K[j], { value: vals[K[j]] });
+          }
         });
       });
     }

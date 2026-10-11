@@ -284,7 +284,7 @@
   }
 
   /* ================= 3. THE JUKEBOX ================= */
-  var JB = { tracks: null, i: 0, ctrl: null, bar: null, deck: null, playing: false, adv: false };
+  var JB = { tracks: null, i: 0, ctrl: null, bar: null, deck: null, playing: false, adv: false, name: 'Lounge radio' };
   function trackId(link) { var m = /track\/([A-Za-z0-9]{22})/.exec(link || ''); return m ? m[1] : null; }
   function spotify() {
     // the homepage's own loader when it is up (it owns window.onSpotifyIframeApiReady); our own when nobody loaded it yet
@@ -311,7 +311,7 @@
   }
   function label() {
     var t = JB.tracks[JB.i], b = JB.bar && JB.bar.querySelector('.lg-now b');
-    if (b) b.textContent = 'Lounge radio · ' + (JB.i + 1) + ' of ' + JB.tracks.length + (t && t.artist ? ' · ' + t.artist : '');
+    if (b) b.textContent = JB.name + ' · ' + (JB.i + 1) + ' of ' + JB.tracks.length + (t && t.artist ? ' · ' + t.artist : '');
   }
   function load(i, play) {
     JB.i = (i + JB.tracks.length) % JB.tracks.length; JB.adv = false; label();
@@ -333,33 +333,54 @@
     d.body.appendChild(b); JB.bar = b;
     return b;
   }
-  function radio() {
-    getJSON('content/rotation.json').then(function (r) {
-      var items = (r && (Array.isArray(r) ? r : r.items)) || [];
-      if (!JB.tracks) JB.tracks = items.map(function (t) { return { id: trackId(t.link), title: t.title, artist: t.artist }; }).filter(function (t) { return t.id; });
-      if (!JB.tracks.length) return;
-      var b = bar();
-      b.hidden = false; setTimeout(function () { b.classList.add('open'); }, 20);
-      if (JB.ctrl) { try { JB.ctrl.play(); } catch (e) {} return; }
-      if (b._booting) return; b._booting = true;
-      if (JB.i === 0) JB.i = Math.floor(Math.random() * JB.tracks.length);
-      label();
-      spotify().then(function (API) {
-        if (!API) { load(JB.i, false); return; }
-        var host = b.querySelector('.lg-embed > div');
-        API.createController(host, { uri: 'spotify:track:' + JB.tracks[JB.i].id, width: '100%', height: 80 }, function (ctrl) {
-          JB.ctrl = ctrl;
-          var played = false, go = function () { if (played) return; played = true; try { ctrl.play(); } catch (e) {} };
-          try { ctrl.addListener('ready', go); } catch (e) {}
-          setTimeout(go, 1200);
-          ctrl.addListener('playback_update', function (e) {
-            var x = e && e.data; if (!x) return;
-            spin(x.isPaused === false);
-            // the end of a record: the next one drops on its own
-            if (!x.isPaused && x.duration && x.position >= x.duration - 700 && !JB.adv) { JB.adv = true; setTimeout(function () { load(JB.i + 1, true); }, 400); }
-          });
+  function bootRadio(b) {
+    if (b._booting) return; b._booting = true;
+    label();
+    spotify().then(function (API) {
+      if (!API) { load(JB.i, false); return; }
+      var host = b.querySelector('.lg-embed > div');
+      API.createController(host, { uri: 'spotify:track:' + JB.tracks[JB.i].id, width: '100%', height: 80 }, function (ctrl) {
+        JB.ctrl = ctrl;
+        var played = false, go = function () { if (played) return; played = true; try { ctrl.play(); } catch (e) {} };
+        try { ctrl.addListener('ready', go); } catch (e) {}
+        setTimeout(go, 1200);
+        ctrl.addListener('playback_update', function (e) {
+          var x = e && e.data; if (!x) return;
+          spin(x.isPaused === false);
+          // the end of a record: the next one drops on its own
+          if (!x.isPaused && x.duration && x.position >= x.duration - 700 && !JB.adv) { JB.adv = true; setTimeout(function () { load(JB.i + 1, true); }, 400); }
         });
       });
+    });
+  }
+  // ⛔ not show(): the contact sheet above owns that name (show(i) opens frame i); a second one silently replaces it
+  function openBar(b) { b.hidden = false; setTimeout(function () { b.classList.add('open'); }, 20); }
+  // 10/11: radio({tracks, start, name}) plays a queue handed over by the Music tab (every track on the tab,
+  // or the night room after 7). radio() alone is the lounge deck: the Music tab's own queue when it has one,
+  // content/rotation.json when it does not, starting somewhere random.
+  function radio(opts) {
+    if (opts && opts.tracks && opts.tracks.length) {
+      var q = opts.tracks.filter(function (t) { return t && /^[A-Za-z0-9]{22}$/.test(String(t.id || '')); });
+      if (!q.length) return;
+      JB.tracks = q; JB.name = opts.name || 'Lounge radio';
+      var bq = bar(); openBar(bq);
+      var s0 = Math.max(0, Math.min(opts.start || 0, q.length - 1));
+      if (JB.ctrl) { load(s0, true); return; }
+      JB.i = s0; bootRadio(bq);
+      return;
+    }
+    var mq = !JB.tracks && w.OTPMusic && w.OTPMusic.queue ? w.OTPMusic.queue() : null;
+    var got = mq && mq.tracks && mq.tracks.length ? Promise.resolve(mq) : getJSON('content/rotation.json').then(function (r) {
+      var items = (r && (Array.isArray(r) ? r : r.items)) || [];
+      return { tracks: items.map(function (t) { return { id: trackId(t.link), title: t.title, artist: t.artist }; }).filter(function (t) { return t.id; }), name: 'Lounge radio' };
+    });
+    got.then(function (g) {
+      // the record in the lounge keeps its own name, whatever queue it plays (the night room after 7 included)
+      if (!JB.tracks) { JB.tracks = g.tracks; JB.name = /night/.test(g.name || '') ? 'Lounge radio · night shift' : 'Lounge radio'; JB.i = Math.floor(Math.random() * JB.tracks.length); }
+      if (!JB.tracks || !JB.tracks.length) return;
+      var b = bar(); openBar(b);
+      if (JB.ctrl) { try { JB.ctrl.play(); } catch (e) {} return; }
+      bootRadio(b);
     });
   }
 

@@ -1,0 +1,1376 @@
+{
+ "v": 1,
+ "built": "2026-10-11",
+ "notes": {
+  "2JLzVBFFRsqgmu20e3p2Rm": "Off EMOTIONS, out April 3. The album samples Purple Swag twice, and Purple Swag samples Houston.",
+  "2rSNj3zySzJ09yWUQar6Iz": "Single, out Aug 7 on Opium. It nods back to How U Feel?, the opener on If Looks Could Kill. He plays Austin Oct 13.",
+  "0xBFIv6bYgJVKcAJbS4TCK": "Single from August 2025. Complex calls it the song where the Toronto rapper found his sound.",
+  "4dPUnCKITMG4pKIezK47NK": "Off the three-song tour ep, out Sep 19. kimj has made beats for 2hollis and glaive.",
+  "3iQzTFuQHfCEb5m50ASIyx": "Out Aug 26 on YSL. Young Thug signed Tezzus and diamond* last October, after bada bing, bada bØØm took off.",
+  "6m96Qz0SKJHFgluQAsKhFu": "Off THE HØMECØMING*, out April 14. diamond* started the Atlanta crew ØWAY with Tezzus.",
+  "0KJIm3Ukd82n0d7VOCQWWI": "Off Fat Boi Fall, 2024. KAV-MAN holds a card here, and his card plays this from 2:03.",
+  "0sKUd3PxqITdWs8NqzpCBV": "Single, out June 29 on GateWayRecords. It plays when you open VIRGOSGATEWAY’s card.",
+  "1PkGP1pjnPXpi081HVv7zr": "Single, out March 28 on GateWayRecords."
+ },
+ "rooms": [
+  {
+   "id": "74nGTHB3twhhqG1aeDEMpK",
+   "name": "VAMPLYFE",
+   "label": "The house sound",
+   "line": "117 songs. The house in one room."
+  }
+ ],
+ "battle": {
+  "id": "2026-w42",
+  "a": {
+   "track": "1qVeiyPNX4KPALXyPpenBd",
+   "title": "whiplash",
+   "artist": "2hollis",
+   "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02edb4ce20d2432cad4ddfcaa2"
+  },
+  "b": {
+   "track": "5t6aol8L1zmOwEnf2HN430",
+   "title": "her friends",
+   "artist": "Nettspend",
+   "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02eaf3b733b899ac5d4fd587b5"
+  }
+ },
+ "nights": [
+  {
+   "slug": "2026-10-03-pulse-angels-3",
+   "title": "PULSE ANGELS 3",
+   "venue": "21st Street Co-op",
+   "date": "2026-10-03",
+   "date_short": "10.03.26",
+   "acts": [
+    {
+     "name": "Yowen",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": "https://www.instagram.com/yowenism/",
+     "frame": null
+    },
+    {
+     "name": "Feathervane",
+     "kind": "dj",
+     "spotify": {
+      "track": "3R4688V6wZhUXxH7DFLBoY",
+      "title": "Everywhere",
+      "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02e270714fd7ffe259cd6c464e"
+     },
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "Sixfoot5",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": "https://www.instagram.com/dj.sixfoot5/",
+     "frame": null
+    },
+    {
+     "name": "M4C",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "Heavnstar",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "Soul System",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "DJ Estrella",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "Firestation",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "Renvhar",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "Formatics",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "Nephalem",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "Dimebagsigil",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "Utensil",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    }
+   ]
+  },
+  {
+   "slug": "2026-09-25-wap",
+   "title": "WAP",
+   "venue": "Private Park",
+   "date": "2026-09-25",
+   "date_short": "09.25.26",
+   "acts": [
+    {
+     "name": "For My Angelite",
+     "kind": "band",
+     "spotify": {
+      "track": "70U39BTtK06FqZuXIRcUEM",
+      "title": "under your lashline",
+      "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e029c907010fc3e7c3e378880c9"
+     },
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "Blue Navy",
+     "kind": "band",
+     "spotify": {
+      "track": "0Dp8NZ0BhiwhpN1IcamiEu",
+      "title": "Talk",
+      "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02aaa2925b6c76ce18036612ad"
+     },
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "Henry J",
+     "kind": null,
+     "spotify": null,
+     "alt_link": "https://www.instagram.com/d1nny_boy0/",
+     "frame": null
+    },
+    {
+     "name": "Cybersonic Sense",
+     "kind": null,
+     "spotify": null,
+     "alt_link": "https://www.instagram.com/gabo_grod/",
+     "frame": null
+    },
+    {
+     "name": "CCM Stereo",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": "https://www.instagram.com/ccmstereo/",
+     "frame": null
+    }
+   ]
+  },
+  {
+   "slug": "2026-09-24-harambe-4-ever",
+   "title": "HARAMBE 4 EVER",
+   "venue": "Paper Tiger",
+   "date": "2026-09-24",
+   "date_short": "09.24.26",
+   "acts": [
+    {
+     "name": "Streetlamp",
+     "kind": "band",
+     "spotify": {
+      "track": "6OEAYL6JjgBA5Yg5PJBNqO",
+      "title": "Sailboat",
+      "art": "https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02fb7cc07c7ea9873f6aa730e7"
+     },
+     "alt_link": null,
+     "frame": {
+      "thumb": "events/2026-09-24-harambe-4-ever/media/004_t.jpg"
+     }
+    },
+    {
+     "name": "Midnight Dawn",
+     "kind": "band",
+     "spotify": {
+      "track": "1TK7n7ZQE2iDBbiTQvrHvr",
+      "title": "Pink (Get Away)",
+      "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02de910e0f0b2d99697b5f9907"
+     },
+     "alt_link": null,
+     "frame": {
+      "thumb": "events/2026-09-24-harambe-4-ever/media/024_t.jpg"
+     }
+    },
+    {
+     "name": "Black Nail Polish",
+     "kind": "band",
+     "spotify": {
+      "track": "2dMRW9t0csaozuPP7JebmQ",
+      "title": "only today",
+      "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e0234f242340c3fd5de49d4a9c9"
+     },
+     "alt_link": null,
+     "frame": {
+      "thumb": "events/2026-09-24-harambe-4-ever/media/041_t.jpg"
+     }
+    },
+    {
+     "name": "GABO",
+     "kind": "band",
+     "spotify": {
+      "track": "7bj1SvqfF46rvDgn9wfhWh",
+      "title": "Floating Away",
+      "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02cc4a4c4fa0608e990e56f59c"
+     },
+     "alt_link": "https://www.instagram.com/gabo_grod/",
+     "frame": {
+      "thumb": "events/2026-09-24-harambe-4-ever/media/051_t.jpg"
+     }
+    }
+   ]
+  },
+  {
+   "slug": "2026-09-16-sadboyz-club",
+   "title": "Sadboyz Club",
+   "venue": "Wav Room",
+   "date": "2026-09-16",
+   "date_short": "09.16.26",
+   "acts": [
+    {
+     "name": "WYBMF",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": "https://www.instagram.com/wybmf/",
+     "frame": {
+      "thumb": "events/2026-09-16-sadboyz-club/media/002_t.jpg"
+     }
+    }
+   ]
+  },
+  {
+   "slug": "2026-09-12-migx",
+   "title": "MIGX",
+   "venue": "Mi Vaquita",
+   "date": "2026-09-12",
+   "date_short": "09.12.26",
+   "acts": [
+    {
+     "name": "MIGX",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": "https://www.instagram.com/migxmusic/",
+     "frame": {
+      "thumb": "events/2026-09-12-migx/media/028_t.jpg"
+     }
+    }
+   ]
+  },
+  {
+   "slug": "2026-09-11-brainrot",
+   "title": "Brainrot",
+   "venue": "New Guild Co-op",
+   "date": "2026-09-11",
+   "date_short": "09.11.26",
+   "acts": [
+    {
+     "name": "DJ Two Bite Hotdog Challenge",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": null,
+     "frame": {
+      "thumb": "events/2026-09-11-brainrot/media/007_t.jpg"
+     }
+    },
+    {
+     "name": "Nathaniel B",
+     "kind": null,
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "Lysing",
+     "kind": null,
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "6 B2B 7",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": null,
+     "frame": {
+      "thumb": "events/2026-09-11-brainrot/media/065_t.jpg"
+     }
+    },
+    {
+     "name": "John Derp",
+     "kind": null,
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "Gucci Morty B2B Gay Little Monkey From The Apple Store",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "ONI",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "iHorse",
+     "kind": null,
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "Triple T",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "DJ Young Hoe",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    }
+   ]
+  },
+  {
+   "slug": "2026-09-01-billy-release-party",
+   "title": "B.I.L.L.Y Release Party",
+   "venue": "Slackers",
+   "date": "2026-09-01",
+   "date_short": "09.01.26",
+   "acts": [
+    {
+     "name": "Mike Dimes",
+     "kind": "rapper",
+     "spotify": {
+      "track": "099dR5vpsek2xnyxGKnJUK",
+      "title": "EYE LIED",
+      "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e0200a393bbf3e98c93fb138cf4"
+     },
+     "alt_link": null,
+     "frame": {
+      "thumb": "events/2026-09-01-billy-release-party/media/045_t.jpg"
+     }
+    }
+   ]
+  },
+  {
+   "slug": "2026-08-25-the-mix",
+   "title": "Resident Evil vs Silent Hill",
+   "venue": "The Mix",
+   "date": "2026-08-25",
+   "date_short": "08.25.26",
+   "acts": [
+    {
+     "name": "lil trucker hat (alecsoul)",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": "https://www.instagram.com/liltruckerhat/",
+     "frame": null
+    }
+   ]
+  },
+  {
+   "slug": "2026-08-23-the-showcase",
+   "title": "The Showcase",
+   "venue": "The Mix",
+   "date": "2026-08-23",
+   "date_short": "08.23.26",
+   "acts": [
+    {
+     "name": "$IPOR",
+     "kind": "rapper",
+     "spotify": null,
+     "alt_link": "https://www.instagram.com/fivecantell/",
+     "frame": null
+    }
+   ]
+  },
+  {
+   "slug": "2026-08-16-the-mix",
+   "title": "The Mix",
+   "venue": "The Mix",
+   "date": "2026-08-16",
+   "date_short": "08.16.26",
+   "acts": [
+    {
+     "name": "KAV-MAN",
+     "kind": "rapper",
+     "spotify": {
+      "track": "0KJIm3Ukd82n0d7VOCQWWI",
+      "title": "Stardust Breaker",
+      "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02824a32b56f258d90d1aeaa01"
+     },
+     "alt_link": null,
+     "frame": null
+    }
+   ]
+  }
+ ],
+ "texas": [
+  {
+   "id": "4sJZeavYykvwfhrXGv9Qy9",
+   "title": "June 27th - Feat. Z-Ro & Dj Screw",
+   "artist": "Yungstar",
+   "year": 2005,
+   "city": "Houston",
+   "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02ea0282453fece42590a5220a",
+   "fact": "DJ Screw cut the original as one 35-minute freestyle tape on June 27, 1996. Yungstar was on it.",
+   "source": "https://kutx.org/this-week-in-texas-music-history/dj-screw-lays-down-the-june-27th-freestyle/"
+  },
+  {
+   "id": "1diqY2tozk63skJIQrCkq1",
+   "title": "Southside",
+   "artist": "Lil' Keke",
+   "year": 1997,
+   "city": "Houston",
+   "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02bcb02bf1fd14cbed28a95db4",
+   "fact": "Screwed Up Click. This is the one that took Lil’ Keke national in 1997.",
+   "source": "https://en.wikipedia.org/wiki/Lil%27_Keke"
+  },
+  {
+   "id": "2yXxo8fiEWIoC69FWyogsO",
+   "title": "Ghetto Dreams",
+   "artist": "Fat Pat",
+   "year": 1998,
+   "city": "Houston",
+   "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e022eb35c6d663064a123479abb",
+   "fact": "Wreckshop put it out after Fat Pat was killed in Houston in 1998. He was 27.",
+   "source": "https://en.wikipedia.org/wiki/Fat_Pat"
+  },
+  {
+   "id": "2z8tZ7BZ1GzFIlaPt5qWKx",
+   "title": "Diamonds & Wood (feat. Smoke D)",
+   "artist": "UGK, Smoke D",
+   "year": 1996,
+   "city": "Port Arthur",
+   "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02e35c90c3ad9a37e1f002ab79",
+   "fact": "Ridin’ Dirty went gold with no videos and no official singles.",
+   "source": "https://en.wikipedia.org/wiki/Ridin%27_Dirty"
+  },
+  {
+   "id": "4ns1XFP3W5JPyzvnAjMdHD",
+   "title": "Int'l Players Anthem (I Choose You) (feat. Outkast)",
+   "artist": "UGK, Outkast",
+   "year": 2007,
+   "city": "Port Arthur",
+   "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e020ecd0dec7edf87dab40d19b7",
+   "fact": "UGK’s only Hot 100 hit. It peaked at 70.",
+   "source": "https://en.wikipedia.org/wiki/Int%27l_Players_Anthem_(I_Choose_You)"
+  },
+  {
+   "id": "338VhnERUjSnXmIFGuxonu",
+   "title": "Mo City Don",
+   "artist": "Z-Ro",
+   "year": 2005,
+   "city": "Missouri City",
+   "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02a63657338fa31dd289d822ff",
+   "fact": "Z-Ro made the beat himself, off the Coldcut remix of Paid in Full.",
+   "source": "https://www.whosampled.com/Z-Ro/Mo-City-Don-(Freestyle)/"
+  },
+  {
+   "id": "7yUX0uaQhXpl2jMfHK3AUg",
+   "title": "Call My Phone",
+   "artist": "Z-Ro",
+   "year": 2008,
+   "city": "Missouri City",
+   "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02c20c0e0f2a8ae470e53628d0",
+   "fact": "Off Crack, which made 48 on the Billboard 200.",
+   "source": "https://en.wikipedia.org/wiki/Crack_(Z-Ro_album)"
+  },
+  {
+   "id": "1S775nWRwKYQDKjUyIZZ8F",
+   "title": "Cleb Flow",
+   "artist": "Swishahouse, Michael Watts",
+   "year": 2008,
+   "city": "Houston",
+   "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02dd7febc6b558aee1873f47b3",
+   "fact": "Michael 5000 Watts started Swishahouse in 1997. The north side’s answer to Screw.",
+   "source": "https://en.wikipedia.org/wiki/Swishahouse"
+  },
+  {
+   "id": "3kZoay4ANo86ehb6s4RwS9",
+   "title": "Ridin'",
+   "artist": "Chamillionaire, Krayzie Bone",
+   "year": 2005,
+   "city": "Houston",
+   "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02abeffe927a62a584cf7c2708",
+   "fact": "Number one on the Hot 100, then a Grammy.",
+   "source": "https://en.wikipedia.org/wiki/Ridin%27_(Chamillionaire_song)"
+  },
+  {
+   "id": "3xhTCpyWpZJ6z5miHy8TRF",
+   "title": "Break Em' Off (feat. Lil' Keke)",
+   "artist": "Paul Wall, Lil' Keke",
+   "year": 2007,
+   "city": "Houston",
+   "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02ea751bc056d88d9665a96777",
+   "fact": "A Swishahouse release. The album opened at 8 on the Billboard 200.",
+   "source": "https://en.wikipedia.org/wiki/Get_Money,_Stay_True"
+  },
+  {
+   "id": "27Wwwbdh9pKL9n23FOJH9z",
+   "title": "Southside Royalty Freestyle (feat. Sauce Walka, Big Pokey, Lil Keke & Mike D)",
+   "artist": "Megan Thee Stallion, Sauce Walka, Lil' Keke, Big Pokey, Mike D",
+   "year": 2022,
+   "city": "Houston",
+   "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e028fea29a7c554de9232b32b99",
+   "fact": "Big Pokey was Screwed Up Click. He died in 2023 after collapsing on stage in Beaumont.",
+   "source": "https://en.wikipedia.org/wiki/Big_Pokey"
+  },
+  {
+   "id": "5VTEfwUs0LWtbT9vBoFlFB",
+   "title": "Kick Doe Click",
+   "artist": "That Mexican OT",
+   "year": 2022,
+   "city": "Bay City",
+   "art": "https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02fec53cb910be315da00a5c42",
+   "fact": "Bay City, Texas. He later hit the Hot 100 with Paul Wall on Johnny Dang.",
+   "source": "https://en.wikipedia.org/wiki/That_Mexican_OT"
+  }
+ ],
+ "lineage": [
+  {
+   "root": {
+    "id": "7cUoXJUcbba7lzQ937Mq7M",
+    "title": "Sailin' Da South - Screwed",
+    "artist": "DJ Screw, E.S.G.",
+    "year": 1996,
+    "art": "https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e029eb2a8269dc80e945f24dcea"
+   },
+   "new": {
+    "id": "4SZepBIPDRwPaHIjAKwRDb",
+    "title": "R.I.P. SCREW",
+    "artist": "Travis Scott",
+    "year": 2018,
+    "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02daec894c14c0ca42d76eeb32"
+   },
+   "link": "Travis put a 1998 Houston TV interview with Screw on his Astroworld tribute.",
+   "kind": "sample",
+   "source": "https://www.whosampled.com/Travis-Scott/R.I.P.-SCREW/"
+  },
+  {
+   "root": {
+    "id": "2dbhHrMBb86QhCq4MVKmIT",
+    "title": "Knockin Pictures Off the Wall (feat. Lil' Flex, Lil Pat, Jasmine & Jhiame)",
+    "artist": "Yungstar, Lil' Flex, Jhiame, Lil Pat, Jasmine",
+    "year": 1999,
+    "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02eb4958e6eb5e18878e040702"
+   },
+   "new": {
+    "id": "5V2p1V1ZaCJPjpcN2Nf5h2",
+    "title": "Beating Down Yo Block",
+    "artist": "Monaleo",
+    "year": 2021,
+    "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e021f4f03e7d0548c79f7353871"
+   },
+   "link": "Monaleo built it on Yungstar’s 1999 Houston classic.",
+   "kind": "sample",
+   "source": "https://www.whosampled.com/Monaleo/Beating-Down-Yo-Block/"
+  },
+  {
+   "root": {
+    "id": "59rtiYOPgMEDf3yPEfU2la",
+    "title": "Still Tippin' (feat. Slim Thug and Paul Wall)",
+    "artist": "Mike Jones, Paul Wall, Slim Thug",
+    "year": 2005,
+    "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02b52de499225c78279683a43e"
+   },
+   "new": {
+    "id": "2mv7mXr45Mq9aOczaGCAbG",
+    "title": "Purple Swag",
+    "artist": "A$AP Rocky",
+    "year": 2011,
+    "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02c8ced8a4d6b6b61eb592f3dd"
+   },
+   "link": "A$AP Rocky’s Purple Swag samples Still Tippin’, the Houston anthem.",
+   "kind": "sample",
+   "source": "https://www.whosampled.com/A$AP-Rocky/Purple-Swag/"
+  },
+  {
+   "root": {
+    "id": "1j6kDJttn6wbVyMaM42Nxm",
+    "title": "Lord Pretty Flacko Jodye 2 (LPFJ2)",
+    "artist": "A$AP Rocky",
+    "year": 2015,
+    "art": "https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e0249efdc44d0733042f8b99d57"
+   },
+   "new": {
+    "id": "1e1JKLEDKP7hEQzJfNAgPl",
+    "title": "Magnolia",
+    "artist": "Playboi Carti",
+    "year": 2017,
+    "art": "https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02e31a279d267f3b3d8912e6f1"
+   },
+   "link": "Carti signed to Rocky’s AWGE in 2016. Magnolia came off that first tape.",
+   "kind": "label",
+   "source": "https://en.wikipedia.org/wiki/Playboi_Carti"
+  },
+  {
+   "root": {
+    "id": "29TPjc8wxfz4XMn21O7VsZ",
+    "title": "Sky",
+    "artist": "Playboi Carti",
+    "year": 2020,
+    "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e0298ea0e689c91f8fea726d9bb"
+   },
+   "new": {
+    "id": "4gtoRhhIptcXoonb8OssM6",
+    "title": "Jennifer’s Body",
+    "artist": "Ken Carson",
+    "year": 2023,
+    "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e023b494c1b464d41ef641de442"
+   },
+   "link": "Carti started Opium in 2019 and signed Ken Carson. A Great Chaos came out on Opium.",
+   "kind": "label",
+   "source": "https://en.wikipedia.org/wiki/Playboi_Carti"
+  },
+  {
+   "root": {
+    "id": "5LTg537JAj70RdfMeo1VUw",
+    "title": "Now I'm High, Really High",
+    "artist": "Three 6 Mafia",
+    "year": 1999,
+    "art": "https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02d72171870635b39a60c966b8"
+   },
+   "new": {
+    "id": "03bUheIlnAmQ1WjSTtGLXs",
+    "title": "IM FROM DA MOUND",
+    "artist": "Sematary",
+    "year": 2025,
+    "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02982cdf80b7f82afa1a630719"
+   },
+   "link": "Sematary samples Three 6 Mafia here, and told PAPER it was for Memphis.",
+   "kind": "sample",
+   "source": "https://www.whosampled.com/Sematary/IM-FROM-DA-MOUND/"
+  }
+ ],
+ "lineup": [
+  {
+   "date": "2026-10-13",
+   "artist": "Destroy Lonely",
+   "bill": "Grey Day Tour, with $uicideboy$",
+   "venue": "Germania Insurance Amphitheater",
+   "city": "Austin",
+   "ticket": "https://www.ticketmaster.com/event/3A00647BC8B110BC",
+   "source": "https://www.germaniaamp.com/events/suicideboys",
+   "list": "anchor"
+  },
+  {
+   "date": "2026-10-17",
+   "artist": "Junkie",
+   "bill": "Final Texas show. Warphole, Cannon the Dealers, Pet Peeves. All ages.",
+   "venue": "Paper Tiger",
+   "city": "San Antonio",
+   "ticket": "https://wl.seetickets.us/event/junkie/691118?afflky=PaperTiger",
+   "source": "https://papertigersatx.com/?list1page=2",
+   "list": "local"
+  },
+  {
+   "date": "2026-10-17",
+   "artist": "Soft Kill",
+   "bill": "Only Texas date. Salt+ and VIDE. All ages.",
+   "venue": "Paper Tiger",
+   "city": "San Antonio",
+   "ticket": "https://wl.seetickets.us/event/soft-kill/686663?afflky=PaperTiger",
+   "source": "https://papertigersatx.com/?list1page=2",
+   "list": "local"
+  },
+  {
+   "date": "2026-10-17",
+   "artist": "Streetlamp",
+   "bill": "In-store show in West Campus",
+   "venue": "Friendly Rio Market",
+   "city": "Austin",
+   "ticket": "",
+   "source": "https://www.instagram.com/p/Dd9P1XsEft1/",
+   "list": "local"
+  },
+  {
+   "date": "2026-10-25",
+   "artist": "Streetlamp",
+   "bill": "The band posted it. The venue lists Max Diaz that night.",
+   "venue": "The Rock Box",
+   "city": "San Antonio",
+   "ticket": "https://eventim.us/maxdz26",
+   "source": "https://www.instagram.com/p/Dd9P1XsEft1/",
+   "list": "local"
+  },
+  {
+   "date": "2026-10-30",
+   "artist": "Blade Rave",
+   "bill": "Halloween vampire rave. We shot the last one here in August.",
+   "venue": "Paper Tiger",
+   "city": "San Antonio",
+   "ticket": "https://wl.seetickets.us/event/blade-rave/706873?afflky=PaperTiger",
+   "source": "https://papertigersatx.com/?list1page=4",
+   "list": "local"
+  },
+  {
+   "date": "2026-10-30",
+   "artist": "Blade Rave",
+   "bill": "Halloween vampire rave. 18+",
+   "venue": "Tulips FTW",
+   "city": "Fort Worth",
+   "ticket": "https://wl.seetickets.us/event/blade-rave/705509?afflky=TulipsFTW",
+   "source": "https://www.tulipsftw.com/",
+   "list": "local"
+  },
+  {
+   "date": "2026-10-30",
+   "artist": "Blade Rave",
+   "bill": "Halloween vampire rave",
+   "venue": "Warehouse Live Midtown",
+   "city": "Houston",
+   "ticket": "https://wl.eventim.us/event/BLADE-RAVE/702598?afflky=warehouselive",
+   "source": "https://www.bladerave.com/",
+   "list": "local"
+  },
+  {
+   "date": "2026-10-31",
+   "artist": "Blade Rave",
+   "bill": "Halloween night, outdoor stage. All ages.",
+   "venue": "Mohawk",
+   "city": "Austin",
+   "ticket": "https://www.prekindle.com/promo/id/-2852527948995184320",
+   "source": "https://www.prekindle.com/promo/id/-2852527948995184320",
+   "list": "local"
+  },
+  {
+   "date": "2026-10-31",
+   "artist": "Blade Rave",
+   "bill": "Third annual Dallas Halloween. 18+",
+   "venue": "Puzzles Deep Ellum",
+   "city": "Dallas",
+   "ticket": "https://www.eventim.us/profile/Puzzles-Deep-Ellum/16926615",
+   "source": "https://www.puzzlesdeepellum.com/",
+   "list": "local"
+  },
+  {
+   "date": "2026-11-13",
+   "artist": "Streetlamp",
+   "bill": "With Caroline Carr and The Black Velvets",
+   "venue": "AM/FM",
+   "city": "Dallas",
+   "ticket": "https://wl.seetickets.us/event/caroline-carr/706367?afflky=FerrisWheelers",
+   "source": "https://amfmdallas.com/live-music/",
+   "list": "local"
+  }
+ ],
+ "drops": [
+  {
+   "date": "2026-10-16",
+   "artist": "Taking Back Sunday",
+   "title": "Louder Now (20th Anniversary Edition)",
+   "type": "reissue",
+   "label": "Craft Recordings",
+   "spotify": null,
+   "source": "https://craftrecordings.com/blogs/news/twenty-years-later-still-louder",
+   "fact": "The LP and CD add two B-sides, Brooklyn and Sleep."
+  },
+  {
+   "date": "2026-10-23",
+   "artist": "My Chemical Romance",
+   "title": "The Black Parade (20th Anniversary Deluxe Edition)",
+   "type": "reissue",
+   "label": "Reprise",
+   "spotify": null,
+   "source": "https://music.apple.com/us/album/the-black-parade-20th-anniversary-deluxe-edition/6801672993",
+   "fact": "Three B-sides and three live cuts from a Hoboken show."
+  },
+  {
+   "date": "2026-10-30",
+   "artist": "Ken Carson & Destroy Lonely",
+   "title": "00TWINZ",
+   "type": "mixtape",
+   "label": "Opium/Interscope",
+   "spotify": null,
+   "source": "https://www.complex.com/music/a/dimassanfiorenzo/ken-carson-interview-cover-story-2026",
+   "fact": "Complex reported Oct 30 back in July. No pre-save or tracklist yet."
+  },
+  {
+   "date": "2026-11-06",
+   "artist": "Evanescence",
+   "title": "The Open Door (Deluxe Edition)",
+   "type": "reissue",
+   "label": "Craft Recordings",
+   "spotify": null,
+   "source": "https://music.apple.com/us/album/the-open-door-deluxe-edition/6805191987",
+   "fact": "Remastered at 20, with three rarities and an unreleased demo of Good Enough."
+  },
+  {
+   "date": "2026-11-11",
+   "artist": "2hollis",
+   "title": "Pirouette",
+   "type": "album",
+   "label": "Interscope",
+   "spotify": "https://open.spotify.com/prerelease/2MGfvsMt9RJJYkCsO2sis2",
+   "source": "https://music.apple.com/us/album/pirouette/6812861964",
+   "fact": "16 tracks. The cover is drawn by Yoshitaka Amano, the Vampire Hunter D artist."
+  },
+  {
+   "date": "2026-11-13",
+   "artist": "Danny Brown",
+   "title": "Atrocity Exhibition (10 Year Anniversary Edition)",
+   "type": "reissue",
+   "label": "Warp",
+   "spotify": null,
+   "source": "https://music.apple.com/us/album/atrocity-exhibition-10-year-anniversary-edition/6812308137",
+   "fact": "He plays it front to back at the Mohawk in Austin on Dec 3."
+  }
+ ],
+ "night": {
+  "name": "VAMPLYFE",
+  "tracks": [
+   {
+    "id": "1zXILiZxAoNW8hpF9HLp7Y",
+    "title": "JENNIFER'S BODY",
+    "artist": "Julia Wolf, 2DUMB"
+   },
+   {
+    "id": "4whDDBIZFwynFgkiNlPAqu",
+    "title": "IN MY ROOM",
+    "artist": "Julia Wolf, 2DUMB, cr1tter"
+   },
+   {
+    "id": "5bBNHXx42TKskc8xMBhssf",
+    "title": "KILL YOU OFF",
+    "artist": "Julia Wolf, 2DUMB, BBY GOYARD"
+   },
+   {
+    "id": "2IGMVunIBsBLtEQyoI1Mu7",
+    "title": "Paint The Town Red",
+    "artist": "Doja Cat"
+   },
+   {
+    "id": "6RM6SBmaiv1ouUxh9nmQLj",
+    "title": "Easter Pink",
+    "artist": "fakemink"
+   },
+   {
+    "id": "23c1TrkpPPYOcJT6DYRRPH",
+    "title": "Music and Me",
+    "artist": "fakemink"
+   },
+   {
+    "id": "554qQSs9lpRVq6TlaaiIKT",
+    "title": "4 Raws",
+    "artist": "EsDeeKid"
+   },
+   {
+    "id": "7hKUH1NXQXOt6bQjHhRZQg",
+    "title": "Princess",
+    "artist": "Feng"
+   },
+   {
+    "id": "4IBTU8b4bM3ycYYrvwcURk",
+    "title": "Fidelio",
+    "artist": "fakemink"
+   },
+   {
+    "id": "4XlNNRHfvBRj5YEz04NGUQ",
+    "title": "left to right",
+    "artist": "rommulas, 2hollis"
+   },
+   {
+    "id": "6gQiWTYr8RmHzMskzB9g6Z",
+    "title": "Sexual Fantasies",
+    "artist": "maxon, Percaso"
+   },
+   {
+    "id": "3ugTIgbsmvICbaGe4ZpYoc",
+    "title": "MO",
+    "artist": "762genta, Percaso"
+   },
+   {
+    "id": "4DqqqrFeVbMvhE54x7a3fh",
+    "title": "Tartan",
+    "artist": "EsDeeKid, Fimiguerrero"
+   },
+   {
+    "id": "3jrY4AAWTvZfmwGs3E7QcN",
+    "title": "style",
+    "artist": "2hollis"
+   },
+   {
+    "id": "2cBXDeiRLJfXDGrIbfxwot",
+    "title": "NEW TO ME",
+    "artist": "Slew"
+   },
+   {
+    "id": "2xTk9wtJ6mWf7YV6ppmdCK",
+    "title": "Impact (with xaviersobased)",
+    "artist": "Nettspend, xaviersobased"
+   },
+   {
+    "id": "1Cheunopig5ZrxuGe94MtX",
+    "title": "tell you straight",
+    "artist": "jigitz"
+   },
+   {
+    "id": "1qVeiyPNX4KPALXyPpenBd",
+    "title": "whiplash",
+    "artist": "2hollis"
+   },
+   {
+    "id": "5VIxdjYPJVHfSARcoRXHrl",
+    "title": "worth it",
+    "artist": "xaviersobased"
+   },
+   {
+    "id": "0hy7672B7uMDPl9ehmrlL7",
+    "title": "ion kno",
+    "artist": "xaviersobased"
+   },
+   {
+    "id": "3W3Y2kXSOkDidmXerJLLU2",
+    "title": "uncomfy (feat. OsamaSon)",
+    "artist": "xaviersobased, OsamaSon"
+   },
+   {
+    "id": "0OmWHmUFbHC2xHNNsSHHKN",
+    "title": "Special",
+    "artist": "xaviersobased"
+   },
+   {
+    "id": "6gXhztP9B1ZkgbTuSNQ520",
+    "title": "what zit tooya",
+    "artist": "xaviersobased"
+   },
+   {
+    "id": "4BOZwlrJLGTPmePx9mM9pu",
+    "title": "MANNEQUIN",
+    "artist": "Che, xaviersobased"
+   },
+   {
+    "id": "3y4apZjDG5AXXYFQRmRVrG",
+    "title": "Aw Shit",
+    "artist": "ian"
+   },
+   {
+    "id": "4XlYXBrYsMQg90vfwqGSlO",
+    "title": "Danielle's Interlude (feat. Bhad Bhabie)",
+    "artist": "ian, Bhad Bhabie"
+   },
+   {
+    "id": "7kQSYTf3fA2DYl4NbTzSzS",
+    "title": "DIOR LEOPARD",
+    "artist": "Che"
+   },
+   {
+    "id": "7LLIyWvrVCoOW35WqG9Jx7",
+    "title": "catastrophe",
+    "artist": "Ken Carson"
+   },
+   {
+    "id": "30S82dxldXsPbuj4ShyVBK",
+    "title": "Marble Floors",
+    "artist": "Summrs"
+   },
+   {
+    "id": "2mNGL7mZILSqZHxGboJaO9",
+    "title": "COMË N GO",
+    "artist": "Yeat"
+   },
+   {
+    "id": "6CgbSOe4GooCaxkyMJToze",
+    "title": "PUT IT ONG",
+    "artist": "Yeat"
+   },
+   {
+    "id": "7tuTUJmXroFsjZv4U3bmBf",
+    "title": "LOCO",
+    "artist": "Yeat"
+   },
+   {
+    "id": "0H77pplHNl1rGYcRi9X7RX",
+    "title": "M.F.U.",
+    "artist": "Yeat, SahBabii"
+   },
+   {
+    "id": "4yRGHaraXA2z6LFpQp6SCI",
+    "title": "jumanji",
+    "artist": "Destroy Lonely"
+   },
+   {
+    "id": "5t6aol8L1zmOwEnf2HN430",
+    "title": "her friends",
+    "artist": "Nettspend"
+   },
+   {
+    "id": "54lc9n5UySmSPw7Sa49jqL",
+    "title": "EEYORE",
+    "artist": "Sematary, xaviersobased"
+   },
+   {
+    "id": "2qjGXZaJ37YXQcEufnl4cN",
+    "title": "ROBIN JEANS",
+    "artist": "Sematary"
+   },
+   {
+    "id": "196oh04rH0o2sYFYG6HK0H",
+    "title": "4 IN A FAYGO",
+    "artist": "Sematary"
+   },
+   {
+    "id": "2gLj1ryvCqiDwWH2nJvf8Z",
+    "title": "ICED OUT TREE",
+    "artist": "Sematary"
+   },
+   {
+    "id": "3ni8v8YY5dKjKCdgwHyKnI",
+    "title": "WOODSMEN",
+    "artist": "Sematary"
+   },
+   {
+    "id": "1JIp2r3eg02kX1dh7LfBKE",
+    "title": "BORN 2 LOSE",
+    "artist": "Sematary"
+   },
+   {
+    "id": "77q9G0H5wnXlT9OWm1QXTc",
+    "title": "Blow Me",
+    "artist": "fakemink"
+   },
+   {
+    "id": "1vdBPUspGU8kRPqQh1ljuC",
+    "title": "down",
+    "artist": "nate sib"
+   },
+   {
+    "id": "00RnOBCurjoGkZK1uLANMw",
+    "title": "famous",
+    "artist": "nate sib"
+   },
+   {
+    "id": "2kWOfoDtiLM6ONlmOecg2O",
+    "title": "two bad",
+    "artist": "2hollis"
+   },
+   {
+    "id": "0Gz4Q1Bmyef5yA0G6LIIQZ",
+    "title": "poster boy",
+    "artist": "2hollis"
+   },
+   {
+    "id": "7iBRnYx1CRQ1H6drgplfjR",
+    "title": "sister",
+    "artist": "2hollis"
+   },
+   {
+    "id": "3vMMqHjTyukdNcIVvzka2c",
+    "title": "girl",
+    "artist": "2hollis"
+   },
+   {
+    "id": "6hxowqRsDm1fsm00y2eHJP",
+    "title": "sidekick",
+    "artist": "2hollis"
+   },
+   {
+    "id": "6C2nVSSeXNqfoY8t6tliZ4",
+    "title": "jeans",
+    "artist": "2hollis"
+   },
+   {
+    "id": "0LElIcqYsk9bkk8v5EHVbc",
+    "title": "Throw It In",
+    "artist": "Lil Wayne"
+   },
+   {
+    "id": "2ZCDXVmOLnKUHYVpycIq5F",
+    "title": "What You Is",
+    "artist": "YoungBoy Never Broke Again, Mellow Rackz"
+   },
+   {
+    "id": "534OFc7VpU8vB8xVgBO58d",
+    "title": "Coolin",
+    "artist": "Tay-K"
+   },
+   {
+    "id": "4W4hhnxvRE0rRUK1vaGlsk",
+    "title": "Sevan",
+    "artist": "PlaqueBoyMax"
+   },
+   {
+    "id": "5hv95Anv6MWYDjVbdJZB7U",
+    "title": "Victory Lap",
+    "artist": "Fred again.., Skepta, PlaqueBoyMax"
+   },
+   {
+    "id": "5ogwhGSfeA3c82k4P6zriQ",
+    "title": "TURN UP",
+    "artist": "PlaqueBoyMax, Rakai, BunnaB"
+   },
+   {
+    "id": "369I51M6XDujuwDlj3GW6R",
+    "title": "Head Shot / Gas In The Truck",
+    "artist": "IShowSpeed"
+   },
+   {
+    "id": "69TzPRfWMOoGywNFxNLCRJ",
+    "title": "GET NAKED",
+    "artist": "DC THE DON"
+   },
+   {
+    "id": "5o7QnDznQZOHvtPZ2he6wE",
+    "title": "Turbo",
+    "artist": "Glokk40Spaz"
+   },
+   {
+    "id": "5XXIxpBSlDq3r8VyZGyDUZ",
+    "title": "Nun 4 No Schmuck",
+    "artist": "Glokk40Spaz"
+   },
+   {
+    "id": "7iKZ4otNgJxqlM6Ljxg586",
+    "title": "Backdoor",
+    "artist": "Glokk40Spaz"
+   },
+   {
+    "id": "22Rbhv8ws7ZCxWaX9KPeW2",
+    "title": "Mind Blown",
+    "artist": "Glokk40Spaz"
+   },
+   {
+    "id": "0nViXgBAlIggGekvSgiDsX",
+    "title": "Thug's In My House",
+    "artist": "Glokk40Spaz"
+   },
+   {
+    "id": "0fgi9PDiNmJ4Mdz5myYsIy",
+    "title": "Who’s The Flyest",
+    "artist": "Lil Tony Official"
+   },
+   {
+    "id": "41zfQ7zCfewpZqAtcGlfEa",
+    "title": "2 Sides To Every Story",
+    "artist": "Lil Tony Official, Who’s Casper"
+   },
+   {
+    "id": "7IzutleLK1419FM8rUpYmq",
+    "title": "Blakk Rokkstar",
+    "artist": "Ken Carson"
+   },
+   {
+    "id": "6DJFJDAkJ08Xs0NSqSOeUw",
+    "title": "Aye Rage",
+    "artist": "Benji Blue Bills, BNYX®, YourRAGE"
+   },
+   {
+    "id": "32ioWMgkyA6mFcXJMggBoz",
+    "title": "GEEK TIMË",
+    "artist": "Yeat"
+   },
+   {
+    "id": "3VdooJLOy4tLxKpnn46SMP",
+    "title": "CRUSH (with Travis Scott)",
+    "artist": "Playboi Carti, Travis Scott"
+   },
+   {
+    "id": "4evMMKc2HD6fV9slMfgkMx",
+    "title": "TOXIC (with Skepta)",
+    "artist": "Playboi Carti, Skepta"
+   },
+   {
+    "id": "4XcZp2xqbiD8YsnPboNUDo",
+    "title": "WE NEED ALL DA VIBES (with Young Thug & Ty Dolla $ign)",
+    "artist": "Playboi Carti, Young Thug, Ty Dolla $ign"
+   },
+   {
+    "id": "4uoADk7q83CHvXHW3k1etM",
+    "title": "OLYMPIAN",
+    "artist": "Playboi Carti"
+   },
+   {
+    "id": "76yJsfb1CUy5Um8nFL7jKQ",
+    "title": "OPM BABI",
+    "artist": "Playboi Carti"
+   },
+   {
+    "id": "4tMhjP02FRQ0KIUUEJ2oGK",
+    "title": "DIS 1 GOT IT",
+    "artist": "Playboi Carti"
+   },
+   {
+    "id": "4zK082ykqJzJGzC64NXjp1",
+    "title": "LIKE WEEZY",
+    "artist": "Playboi Carti"
+   },
+   {
+    "id": "6q2PbvM9UEig4r8xku7VIb",
+    "title": "HBA",
+    "artist": "Playboi Carti"
+   },
+   {
+    "id": "7cHhlnawdN87aZbjO6LMRN",
+    "title": "SOUTH ATLANTA BABY",
+    "artist": "Playboi Carti"
+   },
+   {
+    "id": "6iycYUk3oB0NPMdaDUrN1w",
+    "title": "EVIL J0RDAN",
+    "artist": "Playboi Carti"
+   },
+   {
+    "id": "3lAEHk0eZzMKtCUFLXz8Ln",
+    "title": "RADAR",
+    "artist": "Playboi Carti"
+   },
+   {
+    "id": "68qeaZhtMZ6abrJCYt6nQn",
+    "title": "RATHER LIE (with The Weeknd)",
+    "artist": "Playboi Carti, The Weeknd"
+   },
+   {
+    "id": "0rNgWFQJtfttOYIHfDOHCg",
+    "title": "BACKD00R (feat. Kendrick Lamar & Jhené Aiko)",
+    "artist": "Playboi Carti, Kendrick Lamar, Jhené Aiko"
+   },
+   {
+    "id": "7xAvtuHf8nGi5OtXVPYgb3",
+    "title": "CRANK",
+    "artist": "Playboi Carti"
+   },
+   {
+    "id": "4rXxjHSAglOynjIF8Z34dx",
+    "title": "COCAINE NOSE",
+    "artist": "Playboi Carti"
+   },
+   {
+    "id": "0k2ek0bG7XmU07j3jUK4L2",
+    "title": "Slimretta",
+    "artist": "YoungBoy Never Broke Again"
+   },
+   {
+    "id": "7fvYtFKKso6WnPnj8rSXZ4",
+    "title": "Wine & Dine",
+    "artist": "YoungBoy Never Broke Again"
+   },
+   {
+    "id": "4n4tC4qO2LeWQRM9Gbbtop",
+    "title": "Shot Callin",
+    "artist": "YoungBoy Never Broke Again"
+   },
+   {
+    "id": "3nIPOhwkGAeWc35uDWHFpz",
+    "title": "CRANK UP",
+    "artist": "Baby Kia, BAK Jay"
+   },
+   {
+    "id": "0dzuaqx6JwgbSyZE93rLy8",
+    "title": "GLOVES & DRACS (BLACK AF1s)",
+    "artist": "Baby Kia"
+   },
+   {
+    "id": "69carayN8BzuWX1WszasXm",
+    "title": "Rino Hercules",
+    "artist": "Summrs, PlaqueBoyMax"
+   },
+   {
+    "id": "2Y98lEkMVALCXni7o2g28b",
+    "title": "Off The Meter (with Playboi Carti & Destroy Lonely)",
+    "artist": "Ken Carson, Playboi Carti, Destroy Lonely"
+   },
+   {
+    "id": "50iqDXGnORhaJlicOYW751",
+    "title": "Green Room",
+    "artist": "Ken Carson"
+   },
+   {
+    "id": "722NAIXkI6WRNvu9O7JkdH",
+    "title": "overseas",
+    "artist": "Ken Carson"
+   },
+   {
+    "id": "555oowE8kujtS6bR2GOOPD",
+    "title": "Oh Ok - xxl freestyle",
+    "artist": "ian"
+   },
+   {
+    "id": "4UFj2SLrRhYDPedJWO5bwk",
+    "title": "What they say",
+    "artist": "Nettspend"
+   },
+   {
+    "id": "4V9iVvsPL5cEQCxSYGBM88",
+    "title": "We not like you",
+    "artist": "Nettspend"
+   },
+   {
+    "id": "0825Ia6TYZl2BY13fyO6rJ",
+    "title": "shine n peace",
+    "artist": "Nettspend"
+   },
+   {
+    "id": "6Zvctcw0Yuw3GOg1ISUwv1",
+    "title": "U Fancy ?",
+    "artist": "Nine Vicious"
+   },
+   {
+    "id": "79IgD1wf3xltQdDK3l5Why",
+    "title": "In My Room",
+    "artist": "Julia Wolf"
+   },
+   {
+    "id": "7oK2oiwaLzB9IE9wdSRsoJ",
+    "title": "Sexual Fantasies",
+    "artist": "maxon, Percaso"
+   }
+  ]
+ },
+ "titles": {
+  "0KJIm3Ukd82n0d7VOCQWWI": {
+   "title": "Stardust Breaker",
+   "thumb": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02824a32b56f258d90d1aeaa01"
+  },
+  "0sKUd3PxqITdWs8NqzpCBV": {
+   "title": "2 HI",
+   "thumb": "https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e027a49561a1eb3f079d7e4f4f7"
+  },
+  "1X9fSsWevINdy5iYyN2IpQ": {
+   "title": "NO SIGNAL FOUND",
+   "thumb": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e028656c6367ecfd32ff9066447"
+  }
+ }
+}
