@@ -41,15 +41,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700..900&family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Pirata+One&family=Luckiest+Guy&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" defer></script>
 <script src="supabase-config.js?v=f1348482" defer></script>
-<script src="assets/js/desk.js?v=15d61348" defer></script>
+<script src="assets/js/desk.js?v=b1b40641" defer></script>
 <script src="assets/js/door.js?v=f663129d" defer></script>
 <script src="assets/js/composer.js?v=f434af3f" defer></script>
 <script src="assets/js/edit.js?v=052f00ae" defer></script>
-<script src="assets/js/binder.js?v=b5792041" defer></script>
+<script src="assets/js/binder.js?v=614975a8" defer></script>
 <script src="assets/js/cathedral.js?v=8668be8b" defer></script>
 <script src="assets/js/lounge.js?v=72627a44" defer></script>
 <script src="assets/js/music.js?v=8ef301b1" defer></script>
-<script src="assets/js/people.js?v=51afd0ef" defer></script>
+<script src="assets/js/people.js?v=efa7966f" defer></script>
+<script src="assets/js/photos.js?v=e0ff9e40" defer></script>
 <script>/* tabs: pick the page before first paint, off the #hash. Old links like /#desk still land right. */
 (function(){var M={do:'home',take:'home',drops:'photos',tape:'photos',videos:'photos',work:'photos',slate:'stories',desk:'stories',catalog:'stories',music:'music',open:'people',roster:'people',dates:'more',pitch:'more',experts:'more'},T=['home','photos','stories','music','people','more'],h=(location.hash||'').slice(1),d=document.documentElement;d.className+=' tabs';d.setAttribute('data-tab',T.indexOf(h)>=0?h:(M[h]||'home'));})();</script>
 <style>
@@ -3900,7 +3901,8 @@
 <link rel="stylesheet" href="assets/css/cathedral.css?v=4465d22f">
 <link rel="stylesheet" href="assets/css/lounge.css?v=2d07e1fc">
 <link rel="stylesheet" href="assets/css/music.css?v=bb889008">
-<link rel="stylesheet" href="assets/css/people.css?v=a2feba45">
+<link rel="stylesheet" href="assets/css/people.css?v=112fa352">
+<link rel="stylesheet" href="assets/css/photos.css?v=d4b8ccf7">
 </head>
 <body>
 
@@ -3976,7 +3978,7 @@
   <a href="#photos" class="tablink" data-tab-link="photos">Photos</a>
   <a href="#stories" class="tablink" data-tab-link="stories">Stories</a>
   <a href="#music" class="tablink" data-tab-link="music">Music</a>
-  <a href="#people" class="tablink" data-tab-link="people">People</a>
+  <a href="#people" class="tablink" data-tab-link="people">Coven</a>
   <a href="#more" class="tablink" data-tab-link="more">More</a>
 
   <span class="spacer"></span>
@@ -3992,7 +3994,7 @@
   <a href="#photos" data-tab-link="photos"><img src="assets/cathedral/i-photos.webp" alt="" width="30" height="30"><span>Photos</span></a>
   <a href="#stories" data-tab-link="stories"><img src="assets/cathedral/i-stories.webp" alt="" width="30" height="30"><span>Stories</span></a>
   <a href="#music" data-tab-link="music"><img src="assets/cathedral/i-music.webp" alt="" width="30" height="30"><span>Music</span></a>
-  <a href="#people" data-tab-link="people"><img src="assets/cathedral/i-people.webp" alt="" width="30" height="30"><span>People</span></a>
+  <a href="#people" data-tab-link="people"><img src="assets/cathedral/i-people.webp" alt="" width="30" height="30"><span>Coven</span></a>
   <a href="#more" data-tab-link="more"><img src="assets/cathedral/i-more.webp" alt="" width="30" height="30"><span>More</span></a>
 </nav>
 
@@ -4015,7 +4017,7 @@
     <a class="hcard" href="#photos" data-tab-link="photos"><img src="assets/cathedral/i-photos.webp" alt="" width="360" height="233"><u>Photos</u></a>
     <a class="hcard" href="#stories" data-tab-link="stories"><img src="assets/cathedral/i-stories.webp" alt="" width="360" height="326"><u>Stories</u></a>
     <a class="hcard" href="#music" data-tab-link="music"><img src="assets/cathedral/i-music.webp" alt="" width="360" height="228"><u>Music</u></a>
-    <a class="hcard" href="#people" data-tab-link="people"><img src="assets/cathedral/i-people.webp" alt="" width="360" height="281"><u>People</u></a>
+    <a class="hcard" href="#people" data-tab-link="people"><img src="assets/cathedral/i-people.webp" alt="" width="360" height="281"><u>Coven</u></a>
     <a class="hcard" href="#more" data-tab-link="more"><img src="assets/cathedral/i-more.webp" alt="" width="325" height="360"><u>More</u></a>
   </nav>
 </header>
@@ -4028,7 +4030,7 @@
   <div class="tabroom" data-room="photos" aria-hidden="true"><div><b>Photos</b><span>every night we shot</span></div></div>
   <div class="tabroom" data-room="stories" aria-hidden="true"><div><b>Stories</b><span>from the house</span></div></div>
   <div class="tabroom" data-room="music" aria-hidden="true"><div><b>Music</b><span>on rotation</span></div></div>
-  <div class="tabroom" data-room="people" aria-hidden="true"><div><b>People</b><span>voices we&rsquo;ve tapped</span></div></div>
+  <div class="tabroom" data-room="people" aria-hidden="true"><div><b>Coven</b><span>the people in the house</span></div></div>
   <div class="tabroom" data-room="more" aria-hidden="true"><div><b>More</b><span>what&rsquo;s coming &middot; the desk</span></div></div>
 
   <!-- ============ SIDEBAR ============ -->
@@ -4257,6 +4259,12 @@
     </section>
 
     <!-- ===== THE DROPS — leads the page. Most arrivals want THEIR photos. ===== -->
+    <!-- ===== THE PHOTOS TAB, rebuilt 10/11 (his picks: find yourself by room or date, the pack game, the craft,
+         housekeeping, the wildcards). assets/js/photos.js draws #find, #artpacks, #looks, the tape pills, #map and
+         #takedown from events.json, looks.json (looks.py), rooms.json, video.json and packs_list (migration 037).
+         The Reel came out: it had been hidden and empty since the roster stopped featuring videos. ===== -->
+    <section id="find" data-tab="photos"></section>
+
     <section id="drops" data-tab="photos">
       <div class="section-head">
         <h2>The Drops <span class="accent">find yours</span></h2>
@@ -4265,6 +4273,8 @@
       <div class="drops-rail" id="drops-rail"></div>
       <a class="drops-more" href="events/">every drop &rarr;</a>
     </section>
+
+    <section id="artpacks" data-tab="photos"></section>
 
     <!-- ===== THE TAPE — the house's own video. THE REEL below is different on
          purpose: that one is the roster's links out, this one is our footage. ===== -->
@@ -4277,15 +4287,7 @@
       <a class="drops-more" href="video/">the whole tape &rarr;</a>
     </section>
 
-    <!-- ===== FEATURED VIDEOS — members paste links, one tab each ===== -->
-    <section id="videos" data-tab="photos" hidden>
-      <div class="section-head">
-        <h2>The Reel <span class="accent">featured</span></h2>
-        <div class="sub">what the roster is putting out</div>
-      </div>
-      <div class="vid-tabs" id="vid-tabs"></div>
-      <div class="vid-rail" id="vid-rail"></div>
-    </section>
+    <section id="looks" data-tab="photos"></section>
 
     <!-- ===== THE WORK (real frames) ===== -->
     <section id="work" data-tab="photos">
@@ -4295,6 +4297,9 @@
       </div>
       <div class="work-grid" id="work-grid"><!-- JS populates --></div>
     </section>
+
+    <section id="map" data-tab="photos"></section>
+    <section id="takedown" data-tab="photos"></section>
 
     <!-- ===== THE COVER: the newest house story, picked by the page (10/10).
          The desk can pin slate.next over it; the pin holds until a newer story is out. ===== -->

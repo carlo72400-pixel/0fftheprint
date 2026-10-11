@@ -287,6 +287,77 @@
     }, 480);
   }
   packEl.addEventListener('click', tear);
+  /* ---------- I'M IN THIS ONE (10/11, migration 037) ----------
+     A member marks a frame as theirs from the lightbox. Their marks show as a dot on the grid tiles;
+     other members see who is in a frame under the counter. Strangers see none of it: the three calls
+     are members-only at the database, so this only draws when the door says in. */
+  (function tags() {
+    var lb = d.getElementById('lb'), lbc = d.getElementById('lbc'), lbdl = d.getElementById('lbdl');
+    if (!lb || !lbc || !slugOk) return;
+    // A night page carries no database scripts (strangers never need them). A saved session in localStorage
+    // (the same sign cathedral.js reads) is the cue to fetch them, in order: config, the library, desk.js.
+    if (!(w.OTP && OTP.configured && OTP.sb)) {
+      var has = false; try { for (var i = 0; i < w.localStorage.length; i++) { if (/^sb-.*-auth-token/.test(w.localStorage.key(i) || '')) { has = true; break; } } } catch (e) {}
+      if (!has || tags._loading) return;
+      tags._loading = true;
+      var load = function (src, cb) { var sc = d.createElement('script'); sc.src = src; sc.onload = cb; sc.onerror = function () {}; d.head.appendChild(sc); };
+      load('../../supabase-config.js', function () {
+        load('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js', function () {
+          load('../../assets/js/desk.js', function () { tags._loading = false; if (w.OTP && OTP.configured) tags(); });
+        });
+      });
+      return;
+    }
+    var MINE = {}, WHO = {}, cur = -1, on = false, ready = false;
+    function rpc(name, args) { return Promise.resolve(OTP.sb().rpc(name, args || {})).catch(function (e) { return { error: e }; }); }
+    var btn = d.createElement('button'); btn.type = 'button'; btn.className = 'lb-tag'; btn.hidden = true; btn.textContent = "I'm in this one";
+    var who = d.createElement('div'); who.className = 'lb-who'; who.hidden = true;
+    if (lbdl && lbdl.parentNode) { lbdl.parentNode.insertBefore(btn, lbdl); lbdl.parentNode.insertBefore(who, lbdl); } else { lb.appendChild(btn); lb.appendChild(who); }
+    function dots() {
+      var tiles = d.querySelectorAll('#grid .tile[data-i]');
+      for (var i = 0; i < tiles.length; i++) {
+        var k = +tiles[i].getAttribute('data-i'), has = !!MINE[k], dot = tiles[i].querySelector('.tag-dot');
+        if (has && !dot) { dot = d.createElement('span'); dot.className = 'tag-dot'; dot.textContent = 'you'; tiles[i].appendChild(dot); }
+        else if (!has && dot) dot.remove();
+      }
+    }
+    function paint() {
+      if (!ready || cur < 0) { btn.hidden = true; who.hidden = true; return; }
+      btn.hidden = false;
+      btn.classList.toggle('on', !!MINE[cur]);
+      btn.textContent = MINE[cur] ? "You're in this one" : "I'm in this one";
+      var names = (WHO[cur] || []).map(function (x) { return x.name; });
+      who.hidden = !names.length;
+      who.textContent = names.length ? 'In this frame: ' + names.join(', ') : '';
+    }
+    function read() {
+      var m = /(\d+)\s*\/\s*\d+/.exec(lbc.textContent || '');
+      cur = m ? (+m[1] - 1) : -1; paint();
+    }
+    btn.addEventListener('click', function () {
+      if (cur < 0 || on) return; on = true; btn.disabled = true;
+      var want = !MINE[cur];
+      rpc('frame_tag', { p_slug: seed, p_frame: cur, p_on: want }).then(function (r) {
+        on = false; btn.disabled = false;
+        if (r && r.error) { btn.textContent = String(r.error.message || 'That did not go through.').slice(0, 60); return; }
+        if (want) MINE[cur] = 1; else delete MINE[cur];
+        dots(); paint();
+      });
+    });
+    try { new MutationObserver(read).observe(lbc, { childList: true, characterData: true, subtree: true }); } catch (e) {}
+    // only a member: the first call tells us (anyone else is refused and we stay quiet)
+    rpc('my_frames').then(function (r) {
+      if (!r || r.error || !Array.isArray(r.data)) return;
+      r.data.forEach(function (x) { if (x.event_slug === seed) MINE[x.frame | 0] = 1; });
+      ready = true; dots(); read();
+      return rpc('frame_tags_of', { p_slug: seed });
+    }).then(function (r) {
+      if (!r || r.error || !Array.isArray(r.data)) return;
+      r.data.forEach(function (x) { (WHO[x.frame | 0] = WHO[x.frame | 0] || []).push({ name: x.name, sid: x.sid }); });
+      paint();
+    });
+  })();
+
   // a link that says "tear it open" (the homepage, the binder) lands here already tearing
   if (w.location.hash === '#rip') {
     try { w.history.replaceState(null, '', w.location.pathname + w.location.search); } catch (e) {}

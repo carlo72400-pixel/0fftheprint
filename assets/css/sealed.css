@@ -223,3 +223,12 @@
 .sl-card.hit .nw{background:#f7d046}
 @media (prefers-reduced-motion:reduce){ .sl-mine.pop{animation:none} }
 
+
+/* I'm in this one (10/11): the lightbox button, the names, the dot on a tile you marked */
+.lb-tag{position:absolute;right:16px;bottom:52px;z-index:5;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:#f4eef2;background:rgba(10,10,13,.82);border:1px dashed rgba(255,121,198,.7);border-radius:999px;padding:8px 12px;cursor:pointer;}
+.lb-tag.on{color:#0a0a0d;background:#ff79c6;border-style:solid;}
+.lb-tag[hidden],.lb-who[hidden]{display:none;}
+.lb-who{position:absolute;left:16px;bottom:52px;z-index:5;max-width:60%;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;letter-spacing:.1em;color:#f4eef2;background:rgba(10,10,13,.82);border-radius:6px;padding:6px 10px;}
+.tile .tag-dot{position:absolute;top:8px;left:8px;z-index:3;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:#0a0a0d;background:#ff79c6;border-radius:3px;padding:3px 6px;}
+.tile{position:relative;}

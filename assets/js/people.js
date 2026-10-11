@@ -254,7 +254,21 @@
       grid.appendChild(a);
     });
     if (!photos.length) grid.appendChild(el('p', 'rl-g-none', 'No photos yet.'));
-    pan.appendChild(grid); s.appendChild(pan); d.body.appendChild(s); SHEET = s;
+    pan.appendChild(grid);
+    // the frames they marked "I'm in this one" (037), members only, when they show themselves on The Wall
+    var sidM = /^wall\/#s-([a-z0-9]+)$/.exec(p.link || '');
+    if (sidM && w.OTP && OTP.configured && OTP.sb) {
+      var fr = el('div', 'rl-pan-frames'); pan.appendChild(fr);
+      Promise.resolve(OTP.sb().rpc('frames_of', { p_sid: sidM[1] })).then(function (r) {
+        if (!r || r.error || !Array.isArray(r.data) || !r.data.length) { fr.remove(); return; }
+        fr.innerHTML = '<div class="rl-wk-h"><b>In our frames</b><span>' + r.data.length + (r.data.length === 1 ? ' frame' : ' frames') + ' they marked</span></div>' +
+          '<div class="rl-grid">' + r.data.slice(0, 30).map(function (x) {
+            var n = String((x.frame | 0) + 1).padStart(3, '0');
+            return '<a class="rl-g" href="events/' + esc(x.event_slug) + '/#f' + ((x.frame | 0) + 1) + '"><img src="events/' + esc(x.event_slug) + '/media/' + n + '_t.jpg" alt="" loading="lazy" decoding="async"></a>';
+          }).join('') + '</div>';
+      }).catch(function () { fr.remove(); });
+    }
+    s.appendChild(pan); d.body.appendChild(s); SHEET = s;
     d.documentElement.style.overflow = 'hidden';
     function close() { s.remove(); if (SHEET === s) SHEET = null; d.documentElement.style.overflow = ''; d.removeEventListener('keydown', onKey); }
     function onKey(e) { if (e.key === 'Escape') close(); }

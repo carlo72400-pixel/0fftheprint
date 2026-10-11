@@ -154,7 +154,7 @@
     home.appendChild(mk); home.appendChild(el('span', '', 'FF THE PRINT'));
     n.appendChild(home);
     var links = el('span', 'bn-links');
-    [['Home', ''], ['Nights', 'events/'], ['Stories', '#stories'], ['People', '#people']].forEach(function (x) {
+    [['Home', ''], ['Nights', 'events/'], ['Stories', '#stories'], ['Coven', '#people']].forEach(function (x) {
       var a = el('a', '', x[0]); a.href = BASE + x[1];
       try { if (new URL(a.href).pathname === location.pathname) a.setAttribute('aria-current', 'page'); } catch (e) {}
       links.appendChild(a);

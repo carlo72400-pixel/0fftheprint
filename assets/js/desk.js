@@ -267,6 +267,54 @@
       return c.storage.from("take").getPublicUrl(name).data.publicUrl;
     },
 
+    // 037 (10/11): a photo for a member's own pack. Same shrink as a take photo, the `packs`
+    // bucket, the member's own folder, forty a day (the policy counts). Returns the storage KEY
+    // (what pack_save wants), not the public url: packs.js builds the url when it draws.
+    async uploadPackPhoto(file) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const { data: { user } } = await c.auth.getUser();
+      if (!user) throw new Error("Log in first.");
+      if (!/^image\//.test(file.type || "") || /\.(gif)$/i.test(file.name || "")) throw new Error("Photos only in a pack: JPG, PNG or WebP.");
+      let src;
+      try { src = await createImageBitmap(file, { imageOrientation: "from-image" }); }
+      catch (e) {
+        src = await new Promise((ok, no) => {
+          const im = new Image();
+          im.onload = () => ok(im);
+          im.onerror = () => no(new Error("That photo would not open. Try a JPG or a PNG."));
+          im.src = URL.createObjectURL(file);
+        });
+      }
+      const w0 = src.width || src.naturalWidth, h0 = src.height || src.naturalHeight;
+      if (!w0 || !h0) throw new Error("That photo would not open. Try a JPG or a PNG.");
+      const k = Math.min(1, 2000 / Math.max(w0, h0));
+      const cv = document.createElement("canvas");
+      cv.width = Math.max(1, Math.round(w0 * k)); cv.height = Math.max(1, Math.round(h0 * k));
+      const g = cv.getContext("2d");
+      g.fillStyle = "#000"; g.fillRect(0, 0, cv.width, cv.height);
+      g.drawImage(src, 0, 0, cv.width, cv.height);
+      const blob = await new Promise((ok, no) => cv.toBlob(
+        b => b ? ok(b) : no(new Error("That photo would not open. Try a JPG or a PNG.")), "image/jpeg", 0.88));
+      const name = `${user.id}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`;
+      const { error } = await c.storage.from("packs").upload(name, blob, {
+        cacheControl: "31536000", upsert: false, contentType: "image/jpeg",
+      });
+      if (error) {
+        let n = null;
+        if (/row-level security|policy|unauthorized/i.test(error.message || "")) {
+          try { const r = await c.rpc("uploads_today", { p_bucket: "packs" }); if (!r.error) n = r.data; } catch (e) {}
+        }
+        throw new Error(n != null && n >= 40
+          ? "That is forty pack photos today. Try again tomorrow."
+          : "That photo did not upload. Try again, and if it keeps happening tell the desk.");
+      }
+      return { key: name, url: c.storage.from("packs").getPublicUrl(name).data.publicUrl, w: cv.width, h: cv.height };
+    },
+    packPhotoUrl(key) {
+      const c = sb(); if (!c || !key) return "";
+      return c.storage.from("packs").getPublicUrl(key).data.publicUrl;
+    },
+
     // May this session post to the timeline? Card holders, the desk, and anyone on
     // The Wall who is not banned (033). False on a database that has not run 033.
     async canTake() {

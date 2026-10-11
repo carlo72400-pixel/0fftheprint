@@ -1,0 +1,344 @@
+{
+ "v": 1,
+ "checked": "2026-10-11",
+ "rooms": [
+  {
+   "name": "Zen Haus",
+   "key": "zen haus",
+   "aliases": [
+    "zenhaus",
+    "zenhouse",
+    "zen house",
+    "zen haus fri",
+    "zen haus sa"
+   ],
+   "city": "San Antonio",
+   "address": "119 Heiman St, 2nd Floor, San Antonio, TX 78205",
+   "lat": 29.42123,
+   "lng": -98.47923,
+   "city_only": false
+  },
+  {
+   "name": "The Mix",
+   "key": "the mix",
+   "aliases": [
+    "mix",
+    "the mix satx",
+    "the mix bar"
+   ],
+   "city": "San Antonio",
+   "address": "2423 N St Mary's St, San Antonio, TX 78212",
+   "lat": 29.44896,
+   "lng": -98.48806,
+   "city_only": false
+  },
+  {
+   "name": "Rah Rah Room",
+   "key": "rah rah room",
+   "aliases": [
+    "rah! rah! room",
+    "the rah rah room",
+    "rahrahroom",
+    "rah rah"
+   ],
+   "city": "San Antonio",
+   "address": "6322 San Pedro Ave, San Antonio, TX 78216",
+   "lat": 29.49438,
+   "lng": -98.49917,
+   "city_only": false
+  },
+  {
+   "name": "Paper Tiger",
+   "key": "paper tiger",
+   "aliases": [
+    "papertiger",
+    "paper tiger satx"
+   ],
+   "city": "San Antonio",
+   "address": "2410 N St Mary's St, San Antonio, TX 78212",
+   "lat": 29.44866,
+   "lng": -98.48771,
+   "city_only": false
+  },
+  {
+   "name": "El Luchador Bar",
+   "key": "el luchador bar",
+   "aliases": [
+    "el luchador",
+    "luchador bar",
+    "luchador",
+    "el luchador bar sa"
+   ],
+   "city": "San Antonio",
+   "address": "622 Roosevelt Ave, San Antonio, TX 78210",
+   "lat": 29.39747,
+   "lng": -98.48597,
+   "city_only": false
+  },
+  {
+   "name": "Mi Vaquita",
+   "key": "mi vaquita",
+   "aliases": [
+    "vaquita",
+    "mi vaquita nightclub",
+    "mi vaquita satx"
+   ],
+   "city": "San Antonio",
+   "address": "212 College St, Ste 200 (3rd floor), San Antonio, TX 78205",
+   "lat": 29.42575,
+   "lng": -98.48922,
+   "city_only": false
+  },
+  {
+   "name": "Slackers",
+   "key": "slackers",
+   "aliases": [
+    "slackers bar",
+    "slackers arcade bar",
+    "slackers sports bar",
+    "slackers st marys",
+    "slackers bar sa"
+   ],
+   "city": "San Antonio",
+   "address": "2719 N St Mary's St, San Antonio, TX 78212",
+   "lat": 29.45062,
+   "lng": -98.48695,
+   "city_only": false
+  },
+  {
+   "name": "Wav Room",
+   "key": "wav room",
+   "aliases": [
+    "wavroom",
+    "the wav room",
+    "wav room satx",
+    "wavroom_"
+   ],
+   "city": "San Antonio",
+   "address": "3000 N St Mary's St, San Antonio, TX 78212",
+   "lat": 29.45256,
+   "lng": -98.48474,
+   "city_only": false
+  },
+  {
+   "name": "The Deco",
+   "key": "the deco",
+   "aliases": [
+    "deco",
+    "deco ballroom",
+    "deco ballroom and event center",
+    "the deco ballroom"
+   ],
+   "city": "San Antonio",
+   "address": "1906 Fredericksburg Rd, San Antonio, TX 78201",
+   "lat": 29.46275,
+   "lng": -98.5241,
+   "city_only": false
+  },
+  {
+   "name": "Bar House",
+   "key": "bar house",
+   "aliases": [
+    "barhouse",
+    "bar house satx",
+    "bar house san antonio"
+   ],
+   "city": "San Antonio",
+   "address": "820 N Alamo St, San Antonio, TX 78215",
+   "lat": 29.43204,
+   "lng": -98.48147,
+   "city_only": false
+  },
+  {
+   "name": "Club 212",
+   "key": "club 212",
+   "aliases": [
+    "club212",
+    "club 212 satx",
+    "club212 bar & nightclub",
+    "club 212 rooftop"
+   ],
+   "city": "San Antonio",
+   "address": "212 College St, San Antonio, TX 78205",
+   "lat": 29.42575,
+   "lng": -98.48922,
+   "city_only": false
+  },
+  {
+   "name": "Exotic Takeout",
+   "key": "exotic takeout",
+   "aliases": [
+    "exotic take out",
+    "exotic takeout 2.0",
+    "exotictakeout"
+   ],
+   "city": "San Antonio",
+   "address": "10315 Perrin Beitel Rd, San Antonio, TX 78217",
+   "lat": 29.53407,
+   "lng": -98.41114,
+   "city_only": false
+  },
+  {
+   "name": "The Rock Box",
+   "key": "the rock box",
+   "aliases": [
+    "rock box",
+    "rockbox",
+    "the rockbox",
+    "rock box sa"
+   ],
+   "city": "San Antonio",
+   "address": "1223 E Houston St, San Antonio, TX 78205",
+   "lat": 29.42518,
+   "lng": -98.47876,
+   "city_only": false
+  },
+  {
+   "name": "Friendly Rio Market",
+   "key": "friendly rio market",
+   "aliases": [
+    "rio market",
+    "friendly rio",
+    "the friendly rio market"
+   ],
+   "city": "Austin",
+   "address": "620 W 29th St, Austin, TX 78705",
+   "lat": 30.2961,
+   "lng": -97.74354,
+   "city_only": false
+  },
+  {
+   "name": "Mohawk",
+   "key": "mohawk",
+   "aliases": [
+    "mohawk austin",
+    "the mohawk"
+   ],
+   "city": "Austin",
+   "address": "912 Red River St, Austin, TX 78701",
+   "lat": 30.27005,
+   "lng": -97.73608,
+   "city_only": false
+  },
+  {
+   "name": "Germania Insurance Amphitheater",
+   "key": "germania insurance amphitheater",
+   "aliases": [
+    "germania",
+    "germania amphitheater",
+    "germania insurance amphitheatre",
+    "austin360 amphitheater",
+    "cota amphitheater"
+   ],
+   "city": "Austin",
+   "address": "9201 Circuit of the Americas Blvd, Austin, TX 78617",
+   "lat": 30.13564,
+   "lng": -97.64404,
+   "city_only": false
+  },
+  {
+   "name": "Tulips FTW",
+   "key": "tulips ftw",
+   "aliases": [
+    "tulips",
+    "tulips fort worth",
+    "tulips ft worth"
+   ],
+   "city": "Fort Worth",
+   "address": "112 St. Louis Ave, Fort Worth, TX 76104",
+   "lat": 32.74321,
+   "lng": -97.329,
+   "city_only": false
+  },
+  {
+   "name": "Warehouse Live Midtown",
+   "key": "warehouse live midtown",
+   "aliases": [
+    "warehouse live",
+    "whl midtown",
+    "warehouse live houston"
+   ],
+   "city": "Houston",
+   "address": "2600 Travis St, Houston, TX 77006",
+   "lat": 29.74585,
+   "lng": -95.37546,
+   "city_only": false
+  },
+  {
+   "name": "Puzzles Deep Ellum",
+   "key": "puzzles deep ellum",
+   "aliases": [
+    "puzzles",
+    "puzzles dallas",
+    "puzzles deep ellum dallas"
+   ],
+   "city": "Dallas",
+   "address": "2824 Main St, Dallas, TX 75226",
+   "lat": 32.78393,
+   "lng": -96.78228,
+   "city_only": false
+  },
+  {
+   "name": "AM/FM",
+   "key": "amfm",
+   "aliases": [
+    "am/fm",
+    "am fm",
+    "amfm dallas",
+    "am/fm dallas",
+    "amfm lounge",
+    "am/fm backyard"
+   ],
+   "city": "Dallas",
+   "address": "1950 Market Center Blvd, Dallas, TX 75207",
+   "lat": 32.79755,
+   "lng": -96.82433,
+   "city_only": false
+  },
+  {
+   "name": "New Guild Co-op",
+   "key": "new guild coop",
+   "aliases": [
+    "new guild co-op",
+    "new guild",
+    "new guild atx",
+    "newguildcoop",
+    "new guild coop atx"
+   ],
+   "city": "Austin",
+   "address": null,
+   "lat": 30.26493,
+   "lng": -97.74741,
+   "city_only": true
+  },
+  {
+   "name": "21st Street Co-op",
+   "key": "21st street coop",
+   "aliases": [
+    "21st street co-op",
+    "21st street",
+    "21st st co-op",
+    "21ststreetcoop",
+    "21st st coop"
+   ],
+   "city": "Austin",
+   "address": null,
+   "lat": 30.26493,
+   "lng": -97.74741,
+   "city_only": true
+  },
+  {
+   "name": "Private Park",
+   "key": "private park",
+   "aliases": [
+    "private park smtx",
+    "privateparksmtx"
+   ],
+   "city": "San Marcos",
+   "address": null,
+   "lat": 29.88264,
+   "lng": -97.94058,
+   "city_only": true
+  }
+ ]
+}

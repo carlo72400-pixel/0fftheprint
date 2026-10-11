@@ -1,0 +1,791 @@
+{
+ "v": 1,
+ "nights": [
+  {
+   "slug": "2026-09-25-wap",
+   "title": "WAP",
+   "venue": "Private Park",
+   "date": "2026-09-25",
+   "date_short": "09.25.26",
+   "looks": [
+    "WAP",
+    "RISO 2-INK",
+    "FUNSAVER",
+    "CINEMATIC"
+   ],
+   "count": 45,
+   "frames": [
+    {
+     "i": 0,
+     "thumb": "media/001_t.jpg",
+     "w": 1923,
+     "h": 2560,
+     "prints": [
+      {
+       "name": "WAP",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-25-wap/001.jpg"
+      },
+      {
+       "name": "RISO 2-INK",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-25-wap/001_riso-2-ink.jpg"
+      },
+      {
+       "name": "FUNSAVER",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-25-wap/001_funsaver.jpg"
+      },
+      {
+       "name": "CINEMATIC",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-25-wap/001_cinematic.jpg"
+      }
+     ]
+    },
+    {
+     "i": 22,
+     "thumb": "media/023_t.jpg",
+     "w": 2560,
+     "h": 1923,
+     "prints": [
+      {
+       "name": "WAP",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-25-wap/023.jpg"
+      },
+      {
+       "name": "RISO 2-INK",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-25-wap/023_riso-2-ink.jpg"
+      },
+      {
+       "name": "FUNSAVER",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-25-wap/023_funsaver.jpg"
+      },
+      {
+       "name": "CINEMATIC",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-25-wap/023_cinematic.jpg"
+      }
+     ]
+    },
+    {
+     "i": 44,
+     "thumb": "media/045_t.jpg",
+     "w": 1923,
+     "h": 2560,
+     "prints": [
+      {
+       "name": "WAP",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-25-wap/045.jpg"
+      },
+      {
+       "name": "RISO 2-INK",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-25-wap/045_riso-2-ink.jpg"
+      },
+      {
+       "name": "FUNSAVER",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-25-wap/045_funsaver.jpg"
+      },
+      {
+       "name": "CINEMATIC",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-25-wap/045_cinematic.jpg"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "2026-09-24-harambe-4-ever",
+   "title": "HARAMBE 4 EVER",
+   "venue": "Paper Tiger",
+   "date": "2026-09-24",
+   "date_short": "09.24.26",
+   "looks": [
+    "SIDE STAGE",
+    "HEAVEN LIGHT"
+   ],
+   "count": 62,
+   "frames": [
+    {
+     "i": 0,
+     "thumb": "media/001_t.jpg",
+     "w": 1920,
+     "h": 2560,
+     "prints": [
+      {
+       "name": "SIDE STAGE",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-24-harambe-4-ever/001.jpg"
+      },
+      {
+       "name": "HEAVEN LIGHT",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-24-harambe-4-ever/001_heaven-light.jpg"
+      }
+     ]
+    },
+    {
+     "i": 31,
+     "thumb": "media/032_t.jpg",
+     "w": 1920,
+     "h": 2560,
+     "prints": [
+      {
+       "name": "SIDE STAGE",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-24-harambe-4-ever/032.jpg"
+      },
+      {
+       "name": "HEAVEN LIGHT",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-24-harambe-4-ever/032_heaven-light.jpg"
+      }
+     ]
+    },
+    {
+     "i": 61,
+     "thumb": "media/062_t.jpg",
+     "w": 2560,
+     "h": 1923,
+     "prints": [
+      {
+       "name": "SIDE STAGE",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-24-harambe-4-ever/062.jpg"
+      },
+      {
+       "name": "HEAVEN LIGHT",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-24-harambe-4-ever/062_heaven-light.jpg"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "2026-09-20-chill-and-smoke",
+   "title": "Chill & Smoke",
+   "venue": "Exotic Takeout",
+   "date": "2026-09-20",
+   "date_short": "09.20.26",
+   "looks": [
+    "CHILL & SMOKE",
+    "NATURAL"
+   ],
+   "count": 19,
+   "frames": [
+    {
+     "i": 0,
+     "thumb": "media/001_t.jpg",
+     "w": 2560,
+     "h": 1923,
+     "prints": [
+      {
+       "name": "CHILL & SMOKE",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/001.jpg"
+      },
+      {
+       "name": "NATURAL",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/001_natural.jpg"
+      }
+     ]
+    },
+    {
+     "i": 9,
+     "thumb": "media/010_t.jpg",
+     "w": 2560,
+     "h": 1923,
+     "prints": [
+      {
+       "name": "CHILL & SMOKE",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/010.jpg"
+      },
+      {
+       "name": "NATURAL",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/010_natural.jpg"
+      }
+     ]
+    },
+    {
+     "i": 18,
+     "thumb": "media/019_t.jpg",
+     "w": 2560,
+     "h": 1923,
+     "prints": [
+      {
+       "name": "CHILL & SMOKE",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/019.jpg"
+      },
+      {
+       "name": "NATURAL",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-20-chill-and-smoke/019_natural.jpg"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "2026-09-18-baptism",
+   "title": "BAPTISM",
+   "venue": "The Deco",
+   "date": "2026-09-18",
+   "date_short": "09.18.26",
+   "looks": [
+    "RELIQUARY",
+    "NATURAL"
+   ],
+   "count": 60,
+   "frames": [
+    {
+     "i": 0,
+     "thumb": "media/001_t.jpg",
+     "w": 1923,
+     "h": 2560,
+     "prints": [
+      {
+       "name": "RELIQUARY",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-18-baptism/001.jpg"
+      },
+      {
+       "name": "NATURAL",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-18-baptism/001_natural.jpg"
+      }
+     ]
+    },
+    {
+     "i": 30,
+     "thumb": "media/031_t.jpg",
+     "w": 1923,
+     "h": 2560,
+     "prints": [
+      {
+       "name": "RELIQUARY",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-18-baptism/031.jpg"
+      },
+      {
+       "name": "NATURAL",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-18-baptism/031_natural.jpg"
+      }
+     ]
+    },
+    {
+     "i": 59,
+     "thumb": "media/060_t.jpg",
+     "w": 1923,
+     "h": 2560,
+     "prints": [
+      {
+       "name": "RELIQUARY",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-18-baptism/060.jpg"
+      },
+      {
+       "name": "NATURAL",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-18-baptism/060_natural.jpg"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "2026-09-18-zen-haus",
+   "title": "Third Friday Night Market",
+   "venue": "Zen Haus",
+   "date": "2026-09-18",
+   "date_short": "09.18.26",
+   "looks": [
+    "HAUS INFRARED",
+    "NATURAL"
+   ],
+   "count": 50,
+   "frames": [
+    {
+     "i": 0,
+     "thumb": "media/001_t.jpg",
+     "w": 2560,
+     "h": 1923,
+     "prints": [
+      {
+       "name": "HAUS INFRARED",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-18-zen-haus/001.jpg"
+      },
+      {
+       "name": "NATURAL",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-18-zen-haus/001_natural.jpg"
+      }
+     ]
+    },
+    {
+     "i": 25,
+     "thumb": "media/026_t.jpg",
+     "w": 1923,
+     "h": 2560,
+     "prints": [
+      {
+       "name": "HAUS INFRARED",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-18-zen-haus/026.jpg"
+      },
+      {
+       "name": "NATURAL",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-18-zen-haus/026_natural.jpg"
+      }
+     ]
+    },
+    {
+     "i": 49,
+     "thumb": "media/050_t.jpg",
+     "w": 2560,
+     "h": 1923,
+     "prints": [
+      {
+       "name": "HAUS INFRARED",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-18-zen-haus/050.jpg"
+      },
+      {
+       "name": "NATURAL",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-18-zen-haus/050_natural.jpg"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "2026-09-17-bar-hop",
+   "title": "Bar Hop",
+   "venue": "Club 212 · Bar House",
+   "date": "2026-09-17",
+   "date_short": "09.17.26",
+   "looks": [
+    "PULP FICTION",
+    "NATURAL"
+   ],
+   "count": 39,
+   "frames": [
+    {
+     "i": 0,
+     "thumb": "media/001_t.jpg",
+     "w": 2560,
+     "h": 1920,
+     "prints": [
+      {
+       "name": "PULP FICTION",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-17-bar-hop/001.jpg"
+      },
+      {
+       "name": "NATURAL",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-17-bar-hop/001_natural.jpg"
+      }
+     ]
+    },
+    {
+     "i": 19,
+     "thumb": "media/020_t.jpg",
+     "w": 1923,
+     "h": 2560,
+     "prints": [
+      {
+       "name": "PULP FICTION",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-17-bar-hop/020.jpg"
+      },
+      {
+       "name": "NATURAL",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-17-bar-hop/020_natural.jpg"
+      }
+     ]
+    },
+    {
+     "i": 38,
+     "thumb": "media/039_t.jpg",
+     "w": 2560,
+     "h": 1920,
+     "prints": [
+      {
+       "name": "PULP FICTION",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-17-bar-hop/039.jpg"
+      },
+      {
+       "name": "NATURAL",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-17-bar-hop/039_natural.jpg"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "2026-09-16-sadboyz-club",
+   "title": "Sadboyz Club",
+   "venue": "Wav Room",
+   "date": "2026-09-16",
+   "date_short": "09.16.26",
+   "looks": [
+    "SADBOYZ CLUB",
+    "NATURAL"
+   ],
+   "count": 59,
+   "frames": [
+    {
+     "i": 0,
+     "thumb": "media/001_t.jpg",
+     "w": 2560,
+     "h": 1923,
+     "prints": [
+      {
+       "name": "SADBOYZ CLUB",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-16-sadboyz-club/001.jpg"
+      },
+      {
+       "name": "NATURAL",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-16-sadboyz-club/001_natural.jpg"
+      }
+     ]
+    },
+    {
+     "i": 29,
+     "thumb": "media/030_t.jpg",
+     "w": 2560,
+     "h": 1923,
+     "prints": [
+      {
+       "name": "SADBOYZ CLUB",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-16-sadboyz-club/030.jpg"
+      },
+      {
+       "name": "NATURAL",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-16-sadboyz-club/030_natural.jpg"
+      }
+     ]
+    },
+    {
+     "i": 58,
+     "thumb": "media/059_t.jpg",
+     "w": 1923,
+     "h": 2560,
+     "prints": [
+      {
+       "name": "SADBOYZ CLUB",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-16-sadboyz-club/059.jpg"
+      },
+      {
+       "name": "NATURAL",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-16-sadboyz-club/059_natural.jpg"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "2026-09-13-burlesque-night",
+   "title": "Burlesque Night",
+   "venue": "Rah Rah Room",
+   "date": "2026-09-13",
+   "date_short": "09.13.26",
+   "looks": [
+    "RED VELVET",
+    "INSOMNIA",
+    "OXBLOOD",
+    "OXWULF"
+   ],
+   "count": 44,
+   "frames": [
+    {
+     "i": 0,
+     "thumb": "media/001_t.jpg",
+     "w": 2560,
+     "h": 1923,
+     "prints": [
+      {
+       "name": "RED VELVET",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-3/releases/download/2026-09-13-burlesque-night/001.jpg"
+      },
+      {
+       "name": "INSOMNIA",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-3/releases/download/2026-09-13-burlesque-night/001_insomnia.jpg"
+      },
+      {
+       "name": "OXBLOOD",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-3/releases/download/2026-09-13-burlesque-night/001_oxblood.jpg"
+      },
+      {
+       "name": "OXWULF",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-3/releases/download/2026-09-13-burlesque-night/001_oxwulf.jpg"
+      }
+     ]
+    },
+    {
+     "i": 22,
+     "thumb": "media/023_t.jpg",
+     "w": 2560,
+     "h": 1923,
+     "prints": [
+      {
+       "name": "RED VELVET",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-3/releases/download/2026-09-13-burlesque-night/023.jpg"
+      },
+      {
+       "name": "INSOMNIA",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-3/releases/download/2026-09-13-burlesque-night/023_insomnia.jpg"
+      },
+      {
+       "name": "OXBLOOD",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-3/releases/download/2026-09-13-burlesque-night/023_oxblood.jpg"
+      },
+      {
+       "name": "OXWULF",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-3/releases/download/2026-09-13-burlesque-night/023_oxwulf.jpg"
+      }
+     ]
+    },
+    {
+     "i": 43,
+     "thumb": "media/044_t.jpg",
+     "w": 2560,
+     "h": 1923,
+     "prints": [
+      {
+       "name": "RED VELVET",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-3/releases/download/2026-09-13-burlesque-night/044.jpg"
+      },
+      {
+       "name": "INSOMNIA",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-3/releases/download/2026-09-13-burlesque-night/044_insomnia.jpg"
+      },
+      {
+       "name": "OXBLOOD",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-3/releases/download/2026-09-13-burlesque-night/044_oxblood.jpg"
+      },
+      {
+       "name": "OXWULF",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-3/releases/download/2026-09-13-burlesque-night/044_oxwulf.jpg"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "2026-09-12-lucha-night",
+   "title": "Lucha Night",
+   "venue": "El Luchador Bar",
+   "date": "2026-09-12",
+   "date_short": "09.12.26",
+   "looks": [
+    "LUCHA NIGHT",
+    "RESERVOIR DOGS",
+    "DEATH PROOF"
+   ],
+   "count": 25,
+   "frames": [
+    {
+     "i": 0,
+     "thumb": "media/001_t.jpg",
+     "w": 1440,
+     "h": 2560,
+     "prints": [
+      {
+       "name": "LUCHA NIGHT",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/001.jpg"
+      },
+      {
+       "name": "RESERVOIR DOGS",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/001_reservoir-dogs.jpg"
+      },
+      {
+       "name": "DEATH PROOF",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/001_death-proof.jpg"
+      }
+     ]
+    },
+    {
+     "i": 12,
+     "thumb": "media/013_t.jpg",
+     "w": 2560,
+     "h": 1440,
+     "prints": [
+      {
+       "name": "LUCHA NIGHT",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/013.jpg"
+      },
+      {
+       "name": "RESERVOIR DOGS",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/013_reservoir-dogs.jpg"
+      },
+      {
+       "name": "DEATH PROOF",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/013_death-proof.jpg"
+      }
+     ]
+    },
+    {
+     "i": 24,
+     "thumb": "media/025_t.jpg",
+     "w": 2560,
+     "h": 1440,
+     "prints": [
+      {
+       "name": "LUCHA NIGHT",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/025.jpg"
+      },
+      {
+       "name": "RESERVOIR DOGS",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/025_reservoir-dogs.jpg"
+      },
+      {
+       "name": "DEATH PROOF",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-lucha-night/025_death-proof.jpg"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "2026-09-12-migx",
+   "title": "MIGX",
+   "venue": "Mi Vaquita",
+   "date": "2026-09-12",
+   "date_short": "09.12.26",
+   "looks": [
+    "DEMON TIME",
+    "TENET",
+    "PULP FICTION",
+    "HELL THERMAL",
+    "BLACKLIGHT UV"
+   ],
+   "count": 37,
+   "frames": [
+    {
+     "i": 0,
+     "thumb": "media/001_t.jpg",
+     "w": 2560,
+     "h": 1923,
+     "prints": [
+      {
+       "name": "DEMON TIME",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-migx/001.jpg"
+      },
+      {
+       "name": "TENET",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-migx/001_tenet.jpg"
+      },
+      {
+       "name": "PULP FICTION",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-migx/001_pulp-fiction.jpg"
+      },
+      {
+       "name": "HELL THERMAL",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-migx/001_hell-thermal.jpg"
+      },
+      {
+       "name": "BLACKLIGHT UV",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-migx/001_blacklight-uv.jpg"
+      }
+     ]
+    },
+    {
+     "i": 18,
+     "thumb": "media/019_t.jpg",
+     "w": 1923,
+     "h": 2560,
+     "prints": [
+      {
+       "name": "DEMON TIME",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-migx/019.jpg"
+      },
+      {
+       "name": "TENET",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-migx/019_tenet.jpg"
+      },
+      {
+       "name": "PULP FICTION",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-migx/019_pulp-fiction.jpg"
+      },
+      {
+       "name": "HELL THERMAL",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-migx/019_hell-thermal.jpg"
+      },
+      {
+       "name": "BLACKLIGHT UV",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-migx/019_blacklight-uv.jpg"
+      }
+     ]
+    },
+    {
+     "i": 36,
+     "thumb": "media/037_t.jpg",
+     "w": 2560,
+     "h": 1923,
+     "prints": [
+      {
+       "name": "DEMON TIME",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-migx/037.jpg"
+      },
+      {
+       "name": "TENET",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-migx/037_tenet.jpg"
+      },
+      {
+       "name": "PULP FICTION",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-migx/037_pulp-fiction.jpg"
+      },
+      {
+       "name": "HELL THERMAL",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-migx/037_hell-thermal.jpg"
+      },
+      {
+       "name": "BLACKLIGHT UV",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-12-migx/037_blacklight-uv.jpg"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "2026-09-01-billy-release-party",
+   "title": "B.I.L.L.Y Release Party",
+   "venue": "Slackers",
+   "date": "2026-09-01",
+   "date_short": "09.01.26",
+   "looks": [
+    "HERO",
+    "CHARACTER"
+   ],
+   "count": 58,
+   "frames": [
+    {
+     "i": 0,
+     "thumb": "media/001_t.jpg",
+     "w": 1923,
+     "h": 2560,
+     "prints": [
+      {
+       "name": "HERO",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/001.jpg"
+      },
+      {
+       "name": "CHARACTER",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/001_character.jpg"
+      }
+     ]
+    },
+    {
+     "i": 29,
+     "thumb": "media/030_t.jpg",
+     "w": 2560,
+     "h": 1923,
+     "prints": [
+      {
+       "name": "HERO",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/030.jpg"
+      },
+      {
+       "name": "CHARACTER",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/030_character.jpg"
+      }
+     ]
+    },
+    {
+     "i": 57,
+     "thumb": "media/058_t.jpg",
+     "w": 2560,
+     "h": 1923,
+     "prints": [
+      {
+       "name": "HERO",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/058.jpg"
+      },
+      {
+       "name": "CHARACTER",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-01-billy-release-party/058_character.jpg"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

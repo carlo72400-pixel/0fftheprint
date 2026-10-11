@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Packs · 0FF THE PRINT</title>
+<meta name="description" content="Photo packs by the house and its artists. Tear one open, flip the cards, keep the ones you like.">
+<meta name="theme-color" content="#0a0a0d">
+<meta property="og:site_name" content="0FF THE PRINT">
+<meta property="og:title" content="Packs · 0FF THE PRINT">
+<meta property="og:description" content="Photo packs by the house and its artists. Tear one open, flip the cards, keep the ones you like.">
+<meta property="og:image" content="https://0fftheprint.com/preview.jpg">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/packs.css?v=b7e7ad1b">
+</head>
+<body>
+<div class="leopard-bar"></div>
+<div class="wrap">
+  <a class="back" href="../#photos">&larr; Photos</a>
+  <!-- THE PACK MAKER (10/11): assets/js/packs.js draws everything into this mount, three ways:
+       the shelf (/packs/), one pack (?p=slug), the builder (#new, ?edit=slug). Database = migration 037. -->
+  <div id="pk-app"><p class="pk-note">Loading the packs&hellip;</p></div>
+</div>
+<script src="../supabase-config.js?v=f1348482"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="../assets/js/desk.js?v=b1b40641" defer></script>
+<script src="../assets/js/packs.js?v=4aa93b3f" defer></script>
+</body>
+</html>
