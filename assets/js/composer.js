@@ -196,7 +196,7 @@
   go.onclick = async () => {
     const text = ta.value.trim();
     if (!text && !file) return;
-    if (!text) { msg('Say something with it.', 'err'); return; }
+    // 038: a photo says enough. Words alone still need words.
     go.disabled = true;
     const label = go.textContent;
     try {

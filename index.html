@@ -43,13 +43,13 @@
 <script src="supabase-config.js?v=f1348482" defer></script>
 <script src="assets/js/desk.js?v=b1b40641" defer></script>
 <script src="assets/js/door.js?v=f663129d" defer></script>
-<script src="assets/js/composer.js?v=f434af3f" defer></script>
+<script src="assets/js/composer.js?v=bc5024bf" defer></script>
 <script src="assets/js/edit.js?v=052f00ae" defer></script>
 <script src="assets/js/binder.js?v=614975a8" defer></script>
 <script src="assets/js/cathedral.js?v=8668be8b" defer></script>
 <script src="assets/js/lounge.js?v=72627a44" defer></script>
-<script src="assets/js/music.js?v=8ef301b1" defer></script>
-<script src="assets/js/people.js?v=efa7966f" defer></script>
+<script src="assets/js/music.js?v=3dd98162" defer></script>
+<script src="assets/js/people.js?v=9ad4e792" defer></script>
 <script src="assets/js/photos.js?v=e0ff9e40" defer></script>
 <script>/* tabs: pick the page before first paint, off the #hash. Old links like /#desk still land right. */
 (function(){var M={do:'home',take:'home',drops:'photos',tape:'photos',videos:'photos',work:'photos',slate:'stories',desk:'stories',catalog:'stories',music:'music',open:'people',roster:'people',dates:'more',pitch:'more',experts:'more'},T=['home','photos','stories','music','people','more'],h=(location.hash||'').slice(1),d=document.documentElement;d.className+=' tabs';d.setAttribute('data-tab',T.indexOf(h)>=0?h:(M[h]||'home'));})();</script>
@@ -3900,7 +3900,7 @@
 <link rel="stylesheet" href="assets/css/binder.css?v=487bb4e0">
 <link rel="stylesheet" href="assets/css/cathedral.css?v=4465d22f">
 <link rel="stylesheet" href="assets/css/lounge.css?v=2d07e1fc">
-<link rel="stylesheet" href="assets/css/music.css?v=bb889008">
+<link rel="stylesheet" href="assets/css/music.css?v=a944a3cf">
 <link rel="stylesheet" href="assets/css/people.css?v=112fa352">
 <link rel="stylesheet" href="assets/css/photos.css?v=d4b8ccf7">
 </head>
@@ -5515,7 +5515,8 @@
         ? `<span class="av" data-bg="${esc(avUrl)}"></span>`
         : `<span class="av av-fallback">${esc(Array.from(String(who.name || '0').trim())[0] || '0')}</span>`;
       const isExt = /^https?:\/\//.test(who.link || '');
-      const body = md(p.text || p.body || '');
+      const bodyTxt = String(p.text || p.body || '').trim();
+      const body = bodyTxt ? md(bodyTxt) : '';   // 038: a photo alone is a whole post
       const imgUrl = safeUrl(p.image);
       const vid = imgUrl && (window.OTP && OTP.isVideo ? OTP.isVideo(imgUrl)
                              : /\.(mp4|mov|webm|m4v)(\?|#|$)/i.test(imgUrl));

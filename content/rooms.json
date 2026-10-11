@@ -76,20 +76,6 @@
    "city_only": false
   },
   {
-   "name": "Mi Vaquita",
-   "key": "mi vaquita",
-   "aliases": [
-    "vaquita",
-    "mi vaquita nightclub",
-    "mi vaquita satx"
-   ],
-   "city": "San Antonio",
-   "address": "212 College St, Ste 200 (3rd floor), San Antonio, TX 78205",
-   "lat": 29.42575,
-   "lng": -98.48922,
-   "city_only": false
-  },
-  {
    "name": "Slackers",
    "key": "slackers",
    "aliases": [
@@ -153,10 +139,11 @@
    "name": "Club 212",
    "key": "club 212",
    "aliases": [
-    "club212",
+    "club 212 rooftop",
     "club 212 satx",
+    "club212",
     "club212 bar & nightclub",
-    "club 212 rooftop"
+    "mi vaquita"
    ],
    "city": "San Antonio",
    "address": "212 College St, San Antonio, TX 78205",

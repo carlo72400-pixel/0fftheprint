@@ -21,7 +21,7 @@ All of these are cropped, so all of them say "Cropped."
 | 0TP-029 | The Wolf Keeps A Calendar | Aaron Taylor-Johnson at the 82nd Venice International Film Festival, Aug 2025 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Aaron_Taylor-Johnson_at_82nd_Venice_International_Film_Festival-1.jpg) · LucaFazPhoto | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
 | 0TP-023 to 0TP-028 | Six night stories, 9/19 to 10/2 | Night gallery frames | **Ours.** Shot by the house | House |
 | 0TP-022 | Red on Red on Red | A performer in a corset and gloves on the Rah Rah Room stage | **Ours.** Shot by the house | House |
-| 0TP-021 | Bull Madrid, Then Everyone in Black | The face-off at El Luchador; tile is the DJ under the MIGX wall at Mi Vaquita | **Ours.** Shot by the house | House |
+| 0TP-021 | Bull Madrid, Then Everyone in Black | The face-off at El Luchador; tile is the DJ under the MIGX wall at Club 212 | **Ours.** Shot by the house | House |
 | 0TP-020 | Every Room a Different Colour | The dance floor at New Guild Co-op; tile is the corset portrait on the porch | **Ours.** Shot by the house | House |
 | 0TP-019 | The Night Before B.I.L.L.Y | Mike Dimes at the DJ booth at Slackers; tile is the hand-signs frame | **Ours.** Shot by the house | House |
 | 0TP-018 | The Afterparty Is the San Antonio Date | Young Thug at Openair Frauenfeld, Switzerland, July 2019 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Young_Thug_-_Openair_Frauenfeld_2019_20.jpg) · Frank Schwichtenberg | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |

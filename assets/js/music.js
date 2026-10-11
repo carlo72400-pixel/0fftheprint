@@ -416,27 +416,91 @@
   }
 
   /* ================= THE ROOMS ================= */
+  // The house's rooms come from music.json. Since 038 members put up their own (a Spotify playlist, a name,
+  // a label, a line): a member's room waits for the desk, the desk's own go live on save, five each.
   function rooms() {
     var sec = d.getElementById('rooms'); if (!sec) return;
-    var list = (M.rooms || []).filter(function (r) { return /^[A-Za-z0-9]{22}$/.test(String(r.id || '')); });
-    if (!list.length) { sec.remove(); return; }
-    head(sec, 'The Rooms', 'the desk’s playlists', 'one room at a time, picked by the desk');
-    var wrap = el('div', 'mx-rooms');
-    list.forEach(function (r) {
-      var c = el('div', 'mx-room');
-      c.innerHTML = '<span class="mx-room-k">' + esc(r.label || 'Room') + '</span><b>' + esc(r.name) + '</b>' +
+    var house = (M.rooms || []).filter(function (r) { return /^[A-Za-z0-9]{22}$/.test(String(r.id || '')); })
+      .map(function (r) { return { playlist: r.id, name: r.name, label: r.label || 'The house', line: r.line || '', house: true }; });
+    head(sec, 'The Rooms', 'theirs and ours', 'the house sound, then the rooms members put up · open one, it plays here');
+    var wrap = el('div', 'mx-rooms'); sec.appendChild(wrap);
+    var mineBox = el('div', 'mx-rooms-mine'); sec.appendChild(mineBox);
+    var foot = el('div', 'mx-rooms-foot'); sec.appendChild(foot);
+    var api = (w.OTP && OTP.configured && OTP.sb) ? OTP.sb() : null;
+    function rpc(name, args) { if (!api) return Promise.resolve({ error: { message: 'asleep' } }); return Promise.resolve(api.rpc(name, args || {})).catch(function (e) { return { error: e }; }); }
+    function card(r) {
+      var c = el('div', 'mx-room' + (r.house ? ' house' : '') + (r.mine && !r.published ? ' wait' : ''));
+      var by = r.house ? '' : (r.card_slug ? 'c/' + encodeURIComponent(r.card_slug) + '/' : (r.sid ? 'wall/#s-' + r.sid : ''));
+      c.innerHTML = '<span class="mx-room-k">' + esc(r.label || (r.house ? 'The house' : (r.author || 'A member') + '’s room')) + '</span><b>' + esc(r.name) + '</b>' +
         (r.line ? '<span class="mx-room-l">' + esc(r.line) + '</span>' : '') +
+        (!r.house ? '<span class="mx-room-by">put up by ' + (by ? '<a href="' + esc(by) + '">' + esc(r.author) + '</a>' : esc(r.author)) + (r.mine && !r.published ? ' · <em>on the desk, not public yet</em>' : '') + '</span>' : '') +
         '<span class="mx-room-go"><button type="button" class="mx-btn">Open the room</button>' +
-        '<a href="https://open.spotify.com/playlist/' + esc(r.id) + '" target="_blank" rel="noopener">In Spotify &rarr;</a></span><span class="mx-room-embed"></span>';
-      c.querySelector('button').addEventListener('click', function () {
+        '<a href="https://open.spotify.com/playlist/' + esc(r.playlist) + '" target="_blank" rel="noopener">In Spotify &rarr;</a>' +
+        (r.mine ? '<button type="button" class="mx-link mx-room-del">Take it down</button>' : '') + '</span><span class="mx-room-embed"></span>';
+      c.querySelector('.mx-btn').addEventListener('click', function () {
         var host = c.querySelector('.mx-room-embed');
         if (host.firstChild) { host.innerHTML = ''; this.textContent = 'Open the room'; return; }
-        host.innerHTML = '<iframe src="https://open.spotify.com/embed/playlist/' + esc(r.id) + '?utm_source=generator&theme=0" height="380" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" title="' + esc(r.name) + '"></iframe>';
+        host.innerHTML = '<iframe src="https://open.spotify.com/embed/playlist/' + esc(r.playlist) + '?utm_source=generator&theme=0" height="380" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" title="' + esc(r.name) + '"></iframe>';
         this.textContent = 'Close the room';
       });
-      wrap.appendChild(c);
+      var del = c.querySelector('.mx-room-del');
+      if (del) del.addEventListener('click', function () {
+        if (!confirm('Take this room down?')) return;
+        rpc('room_delete', { p_id: r.id }).then(function (q) { if (q && q.error) { alert(q.error.message || 'That did not go through.'); return; } c.remove(); });
+      });
+      return c;
+    }
+    house.forEach(function (r) { wrap.appendChild(card(r)); });
+    function paintFoot() {
+      if (!isMember()) { foot.innerHTML = '<p class="mx-note">Members put up rooms. <a href="join/?next=home">Log in</a> or <a href="wall/">join the Crypt</a>.</p>'; return; }
+      if (foot.querySelector('form')) return;
+      foot.innerHTML = '<form class="mx-room-add" novalidate><label>Your playlist<input name="link" maxlength="300" inputmode="url" placeholder="a Spotify playlist link"></label>' +
+        '<label>Name it<input name="name" maxlength="60" placeholder="what the room is called"></label>' +
+        '<label>Label<input name="label" maxlength="40" placeholder="late drives, pre-show, the pit"></label>' +
+        '<label class="wide">A line<input name="line" maxlength="200" placeholder="one line on what plays in there"></label>' +
+        '<div class="mx-room-row"><small>Five rooms each. The desk okays it, then it is out.</small><span class="mx-room-msg" role="status"></span><button type="submit" class="mx-btn">Put it up</button></div></form>';
+      var f = foot.querySelector('form'), msg = f.querySelector('.mx-room-msg');
+      f.elements.link.addEventListener('change', function () {
+        var m = /playlist[\/:]([A-Za-z0-9]{22})/.exec(f.elements.link.value) || /^([A-Za-z0-9]{22})$/.exec(f.elements.link.value.trim());
+        if (!m || f.elements.name.value.trim()) return;
+        fetch('https://open.spotify.com/oembed?url=' + encodeURIComponent('https://open.spotify.com/playlist/' + m[1])).then(function (r) { return r.ok ? r.json() : null; })
+          .then(function (j) { if (j && j.title && !f.elements.name.value.trim()) f.elements.name.value = String(j.title).slice(0, 60); }).catch(function () {});
+      });
+      f.addEventListener('submit', function (ev) {
+        ev.preventDefault();
+        var m = /playlist[\/:]([A-Za-z0-9]{22})/.exec(f.elements.link.value) || /^([A-Za-z0-9]{22})$/.exec(f.elements.link.value.trim());
+        if (!m) { msg.textContent = 'Paste a Spotify playlist link.'; f.elements.link.focus(); return; }
+        if (!f.elements.name.value.trim()) { msg.textContent = 'Name the room.'; f.elements.name.focus(); return; }
+        var btn = f.querySelector('button[type=submit]'); btn.disabled = true; msg.textContent = 'Saving…';
+        rpc('room_save', { p: { playlist: m[1], name: f.elements.name.value.trim(), label: f.elements.label.value.trim(), line: f.elements.line.value.trim() } }).then(function (q) {
+          btn.disabled = false;
+          if (q && q.error) { msg.textContent = q.error.message || 'That did not go through.'; return; }
+          msg.textContent = 'Up. It shows once the desk okays it.';
+          setTimeout(function () { location.replace(location.pathname + '?r=' + Date.now() + '#rooms'); }, 700);
+        });
+      });
+    }
+    paintFoot();
+    try { new MutationObserver(paintFoot).observe(root, { attributes: true, attributeFilter: ['data-door'] }); } catch (e) {}
+    if (!api) return;
+    rpc('rooms_list').then(function (q) {
+      var rows = (q && !q.error && Array.isArray(q.data)) ? q.data : [];
+      rows.filter(function (r) { return r.published; }).forEach(function (r) { wrap.appendChild(card(r)); });
+      var mine = rows.filter(function (r) { return r.mine && !r.published; });
+      if (mine.length) { mineBox.innerHTML = '<div class="rl-wk-h"><b>Yours, on the desk</b><span>' + mine.length + (mine.length === 1 ? ' room' : ' rooms') + ' waiting</span></div>'; mine.forEach(function (r) { mineBox.appendChild(card(r)); }); }
+      // the desk: everything not out yet, with the switch
+      var waiting = rows.filter(function (r) { return !r.published && !r.mine; });
+      if (waiting.length && w.OTP && OTP.me) OTP.me().then(function (me) {
+        if (!(me && me.profile && me.profile.is_admin)) return;
+        var q2 = el('div', 'mx-rooms-queue'); q2.innerHTML = '<div class="rl-wk-h"><b>The desk</b><span>' + waiting.length + ' waiting</span></div>';
+        waiting.forEach(function (r) {
+          var row = el('div', 'mx-room-q', '<b>' + esc(r.name) + '</b><span>' + esc(r.author) + ' · ' + esc(r.label || '') + '</span><a href="https://open.spotify.com/playlist/' + esc(r.playlist) + '" target="_blank" rel="noopener">hear it</a><button type="button" class="mx-btn">Publish</button>');
+          row.querySelector('button').addEventListener('click', function () { this.disabled = true; rpc('room_publish', { p_id: r.id, p_on: true }).then(function (x) { if (x && x.error) { alert(x.error.message || 'That did not go through.'); return; } location.reload(); }); });
+          q2.appendChild(row);
+        });
+        sec.insertBefore(q2, wrap);
+      }).catch(function () {});
     });
-    sec.appendChild(wrap);
   }
 
   /* ================= PUT US ON ================= */

@@ -1,6 +1,6 @@
 The plan was Club 212 on the River Walk. The room was dead, so the night moved, which is the most San Antonio thing a Thursday can do. Up to the 212 rooftop first, where the string lights and the downtown skyline do most of the work, then north to Bar House on North Alamo, then a last dark blue LED club at ten to three in the morning.
 
-212 College Street is worth a line on its own. It is one building with more than one room in it: Mi Vaquita is upstairs, and this house shot MIGX in that room five days earlier. Same address, different night, different floor, completely different photograph. Bar House is the opposite kind of place, a three level bar built into a hundred year old house on North Alamo with a rooftop deck pointed at the skyline, multicolour panelling inside and a DJ on the weekend.
+212 College Street is worth a line on its own. It is one building with more than one room in it: Club 212 is upstairs, and this house shot MIGX in that room five days earlier. Same address, different night, different floor, completely different photograph. Bar House is the opposite kind of place, a three level bar built into a hundred year old house on North Alamo with a rooftop deck pointed at the skyline, multicolour panelling inside and a DJ on the weekend.
 
 Two cameras went out. A Luna Ultra for the portraits and a wide action camera for the rooftop, which is why a handful of frames are a fisheye of the table with the photographer in them. Both shot RAW, both graded from the RAW.
 

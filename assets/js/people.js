@@ -98,7 +98,7 @@
     if (!canPost) { box.innerHTML = '<p class="rl-note">Put your Instagram in at <a href="wall/">the Crypt</a> and you can post here.</p>'; return; }
     box.innerHTML = '<div class="rl-post-top"></div>' +
       '<label class="rl-pick"><input type="file" accept="' + (casual ? 'image/*' : 'image/*,video/*') + '" hidden><span class="rl-pick-b">&#43; ' + (casual ? 'Post a photo' : 'Post a photo or clip') + '</span></label>' +
-      '<div class="rl-draft" hidden><div class="rl-prev"></div><textarea maxlength="800" rows="2" placeholder="Say something with it" aria-label="Your line"></textarea>' +
+      '<div class="rl-draft" hidden><div class="rl-prev"></div><textarea maxlength="800" rows="2" placeholder="A line, if you want one" aria-label="Your line"></textarea>' +
       '<div class="rl-draft-row"><button type="button" class="rl-x">Remove</button><span class="rl-msg" role="status"></span><button type="button" class="rl-go" disabled>Post</button></div></div>';
     box.querySelector('.rl-post-top').appendChild(avatar(meP));
     box.querySelector('.rl-post-top').appendChild(el('span', 'rl-post-who', '<b>' + esc(meP.name) + '</b><span>' + (casual ? 'photos only, twelve a day' : 'photos, GIFs and clips') + '</span>'));
@@ -106,7 +106,7 @@
         ta = box.querySelector('textarea'), go = box.querySelector('.rl-go'), msg = box.querySelector('.rl-msg');
     var file = null, url = null, upFile = null, upUrl = null;
     function say(t, bad) { msg.textContent = t || ''; msg.classList.toggle('bad', !!bad); }
-    function sync() { go.disabled = !(file && ta.value.trim().length && ta.value.trim().length <= 800); }
+    function sync() { go.disabled = !(file && ta.value.trim().length <= 800); }   // 038: a photo says enough
     function clear() {
       if (upUrl && w.OTP && OTP.deleteImage) { OTP.deleteImage(upUrl).catch(function () {}); }
       upFile = null; upUrl = null; file = null;
@@ -126,7 +126,7 @@
     ta.addEventListener('input', sync);
     box.querySelector('.rl-x').addEventListener('click', clear);
     go.addEventListener('click', function () {
-      var text = ta.value.trim(); if (!file || !text) return;
+      var text = ta.value.trim(); if (!file) return;
       go.disabled = true; var label = go.textContent;
       (async function () {
         try {
