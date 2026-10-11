@@ -49,6 +49,7 @@
 <script src="assets/js/cathedral.js?v=8668be8b" defer></script>
 <script src="assets/js/lounge.js?v=72627a44" defer></script>
 <script src="assets/js/music.js?v=8ef301b1" defer></script>
+<script src="assets/js/people.js?v=51afd0ef" defer></script>
 <script>/* tabs: pick the page before first paint, off the #hash. Old links like /#desk still land right. */
 (function(){var M={do:'home',take:'home',drops:'photos',tape:'photos',videos:'photos',work:'photos',slate:'stories',desk:'stories',catalog:'stories',music:'music',open:'people',roster:'people',dates:'more',pitch:'more',experts:'more'},T=['home','photos','stories','music','people','more'],h=(location.hash||'').slice(1),d=document.documentElement;d.className+=' tabs';d.setAttribute('data-tab',T.indexOf(h)>=0?h:(M[h]||'home'));})();</script>
 <style>
@@ -3899,6 +3900,7 @@
 <link rel="stylesheet" href="assets/css/cathedral.css?v=4465d22f">
 <link rel="stylesheet" href="assets/css/lounge.css?v=2d07e1fc">
 <link rel="stylesheet" href="assets/css/music.css?v=bb889008">
+<link rel="stylesheet" href="assets/css/people.css?v=a2feba45">
 </head>
 <body>
 
@@ -4363,9 +4365,18 @@
     <section id="rooms" data-tab="music"></section>
     <section id="putuson" data-tab="music"></section>
 
-    <!-- ===== OPEN A PACK — leads the page now. The booster card used to sit
-         at the end of the curators grid, four screens down, which is a long walk
-         for the one thing on this page that is a toy. ===== -->
+    <!-- ===== THE ROLL (10/11): the People tab is the members' photo feed. people.js draws it into
+         #roll-mount: the door card for a stranger, the roll for a member (post, this week, the photos
+         and the house's nights, clips, every frame). Private by his call; Open A Pack under it is public. ===== -->
+    <section id="roll" data-tab="people">
+      <div class="section-head">
+        <h2>The Roll <span class="accent">members only</span></h2>
+        <div class="sub">photos from the people in the house &nbsp;·&nbsp; post one &nbsp;·&nbsp; tap a name</div>
+      </div>
+      <div id="roll-mount"></div>
+    </section>
+
+    <!-- ===== OPEN A PACK — the toy stays public, under the roll. ===== -->
     <section id="open" data-tab="people">
       <div class="section-head">
         <h2>Open A Pack <span class="accent">one random card</span></h2>
@@ -6312,6 +6323,7 @@
   // Counts are public (take_tally). Reacting, reading and writing comments is for members
   // of The Wall. On a database without 033 the RPC is missing and the bar falls back to
   // what it was before: a local, per-browser toy.
+  window.OTPWireReactions = wireReactions;   // 10/11: the Roll's cards wear the same bar, so a tap there is the same tap
   function wireReactions(mount){
     // called again for older posts: only bars it has not wired yet
     const bars = [...mount.querySelectorAll('.react-bar')].filter(b => !b.dataset.wired);
