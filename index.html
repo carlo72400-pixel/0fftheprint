@@ -42,8 +42,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" defer></script>
 <script src="supabase-config.js?v=f1348482" defer></script>
 <script src="assets/js/desk.js?v=15d61348" defer></script>
-<script src="assets/js/door.js?v=a477c9aa" defer></script>
-<script src="assets/js/composer.js?v=d96dc31e" defer></script>
+<script src="assets/js/door.js?v=f663129d" defer></script>
+<script src="assets/js/composer.js?v=f434af3f" defer></script>
 <script src="assets/js/edit.js?v=85b56ab2" defer></script>
 <script src="assets/js/binder.js?v=b5792041" defer></script>
 <script src="assets/js/cathedral.js?v=8668be8b" defer></script>
@@ -3887,7 +3887,7 @@
   <a href="#home" class="wm" aria-label="0FF THE PRINT, home"><img src="assets/cathedral/mark.webp" alt="" width="240" height="228"><span>FF THE PRINT</span></a>
   <a href="join/?next=home" id="nav-key" class="key" title="Members and card holders log in here.">Log in</a>
   <a href="#home" class="tablink" data-tab-link="home">Home</a>
-  <a href="wall/" id="nav-wall" title="Every flyer in SA, San Marcos and Austin this week." hidden>The Wall</a>
+  <a href="wall/" id="nav-wall" title="Every flyer in SA, San Marcos and Austin this week." hidden>CRYPT</a>
   <a href="#photos" class="tablink" data-tab-link="photos">Photos</a>
   <a href="#stories" class="tablink" data-tab-link="stories">Stories</a>
   <a href="#music" class="tablink" data-tab-link="music">Music</a>
@@ -4109,7 +4109,7 @@
          faces came off 10/7 (his ask); The Wall's People tab still has its own. ===== -->
     <section id="do" data-tab="home">
       <!-- THE DOCK (10/4). The newest night, as a pack you tear from the front door.
-           The first thing under the lounge used to be a locked door ("Join The Wall, got the code?"; the code itself went 10/4, migration 035).
+           The first thing under the lounge used to be a locked door ("Join the Crypt, got the code?"; the code itself went 10/4, migration 035).
            Now it is the one thing a stranger can do with no login: open the night they were at.
            cathedral.js fills it from events.json and the binder says how far in this phone is.
            ⛔ Still a LINK to the night's own page (#rip tears on arrival): one implementation of the tear. -->
@@ -4126,13 +4126,13 @@
            The What's coming tile opens The Wall's calendar (10/4: one calendar, not two) and reads the house's next date
            off the database once it answers (cathedral.js). -->
       <div class="do-rail" id="do-rail">
-        <a class="do wall" id="do-wall" href="wall/" hidden><img class="di" src="assets/cathedral/a/wall.webp" alt="" width="44" height="44" decoding="async"><b>The Wall</b><span>tonight&rsquo;s flyers</span></a>
+        <a class="do wall" id="do-wall" href="wall/" hidden><img class="di" src="assets/cathedral/a/wall.webp" alt="" width="44" height="44" decoding="async"><b>CRYPT</b><span>tonight&rsquo;s flyers</span></a>
         <a class="do" href="#drops"><img class="di" src="assets/cathedral/a/photos.webp" alt="" width="44" height="44" decoding="async"><b>Find your photos</b><span>every night we shot</span></a>
-        <a class="do" href="wall/#cal" id="do-next"><img class="di" src="assets/cathedral/a/coming.webp" alt="" width="44" height="44" decoding="async"><b>What&rsquo;s coming</b><span>the calendar, on The Wall</span></a>
+        <a class="do" href="wall/#cal" id="do-next"><img class="di" src="assets/cathedral/a/coming.webp" alt="" width="44" height="44" decoding="async"><b>What&rsquo;s coming</b><span>the calendar, in the Crypt</span></a>
         <a class="do" href="#open"><img class="di" src="assets/cathedral/a/pack.webp" alt="" width="44" height="44" decoding="async"><b>Open a pack</b><span>one random card</span></a>
         <a class="do" href="#music"><img class="di" src="assets/cathedral/a/music.webp" alt="" width="44" height="44" decoding="async"><b>Play something</b><span>on rotation</span></a>
         <a class="do" href="#desk"><img class="di" src="assets/cathedral/a/story.webp" alt="" width="44" height="44" decoding="async"><b>Read a story</b><span>from the house</span></a>
-        <a class="do wall" id="do-join" href="wall/" hidden><img class="di" src="assets/cathedral/a/join.webp" alt="" width="44" height="44" decoding="async"><b>Join The Wall</b><span>all it takes is an @</span></a>
+        <a class="do wall" id="do-join" href="wall/" hidden><img class="di" src="assets/cathedral/a/join.webp" alt="" width="44" height="44" decoding="async"><b>Join the Crypt</b><span>all it takes is an @</span></a>
       </div>
     </section>
 
@@ -4161,13 +4161,13 @@
       <div class="tipline" id="take-tip">
         <b>Spotted something?</b>
         <div class="tl-row"><textarea id="tip2-text" rows="1" maxlength="1800" placeholder="Who was where, with who." aria-label="Your tip for the desk"></textarea><button type="button" class="tip-send" id="tip2-send">Send tip</button></div>
-        <span class="tl-alt">Off the record stays off the record. Opens your mail to the desk, or <a href="https://instagram.com/vamppsych" target="_blank" rel="noopener">DM The Lens</a>. Members post right here: <a href="join/?next=home">log in</a> or <a href="wall/">join The Wall</a>.</span>
+        <span class="tl-alt">Off the record stays off the record. Opens your mail to the desk, or <a href="https://instagram.com/vamppsych" target="_blank" rel="noopener">DM The Lens</a>. Members post right here: <a href="join/?next=home">log in</a> or <a href="wall/">join the Crypt</a>.</span>
       </div>
       <div id="composer"></div>
       <div class="feed" id="take-mount"></div>
       <a class="feed-cta" id="take-cta" href="join/?next=home">
         <b>Log in to post.</b>
-        <span>Everybody on The Wall posts to this timeline, reacts and comments. No login yet? Join The Wall. All it takes is an Instagram.</span>
+        <span>Everybody in the Crypt posts to this timeline, reacts and comments. No login yet? Join the Crypt. All it takes is an Instagram.</span>
       </a>
     </section>
 
@@ -6030,7 +6030,7 @@
     }
     function nudge(bar, what){
       const n = bar.parentElement.querySelector('.tk-nudge'); if (!n) return;
-      n.innerHTML = `${esc(what)} is for members. <a href="join/?next=home">Log in</a>, or <a href="wall/">join The Wall</a>. All it takes is an Instagram.`;
+      n.innerHTML = `${esc(what)} is for members. <a href="join/?next=home">Log in</a>, or <a href="wall/">join the Crypt</a>. All it takes is an Instagram.`;
       n.hidden = false;
     }
     const ago = iso => { const m = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 60000)); return m < 1 ? 'now' : m < 60 ? m + 'm' : m < 1440 ? Math.round(m / 60) + 'h' : Math.round(m / 1440) + 'd'; };

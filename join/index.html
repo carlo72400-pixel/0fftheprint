@@ -16,9 +16,9 @@
   <a class="back" href="../">&larr; 0FF THE PRINT</a>
   <h1 id="ttl">Join the Desk</h1>
   <div class="sub">log in &nbsp;·&nbsp; cards are approved by hand</div>
-  <p class="door-note">On The Wall or holding a card? Log in. Want a card? Knock:
+  <p class="door-note">In the Crypt or holding a card? Log in. Want a card? Knock:
     sign up with your Instagram so the desk knows who's asking.</p>
-  <p class="door-note">Just want in? <a href="../wall/" style="color:var(--pink-glow)">Join The Wall</a>.
+  <p class="door-note">Just want in? <a href="../wall/" style="color:var(--pink-glow)">Join the Crypt</a>.
     All it takes is an Instagram, one account each, and you can post today. Cards the desk approves by hand, usually after it wakes up.</p>
 
   <div class="setup" id="setup" style="display:none">
@@ -59,7 +59,7 @@
 
     <div class="msg" id="msg"></div>
     <div class="note" id="note">
-      Signing up here asks for a card and puts you on The Wall, so you can post today. Cards the
+      Signing up here asks for a card and puts you in the Crypt, so you can post today. Cards the
       desk approves by hand. One account per Instagram. You will not get email from us for anything else.
     </div>
   </div>
@@ -101,7 +101,7 @@
     const esc = t => String(t ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     $('panel').innerHTML = `<b style="font-family:var(--f-display);font-style:italic;font-size:26px;text-transform:uppercase">One more step.</b>
       <div class="note">Signed in as ${esc(me.user.email)}. This login has no Instagram on it yet, and that is the way in.
-      <a href="../wall/" style="color:var(--pink-glow)">Put yours in on The Wall</a> and you can post today. One account per Instagram.</div>
+      <a href="../wall/" style="color:var(--pink-glow)">Put yours in at the Crypt</a> and you can post today. One account per Instagram.</div>
       <button class="btn ghost" id="out" type="button">Sign out</button>`;
     $('out').onclick = async () => { await OTP.signOut(); location.reload(); };
     return;
@@ -167,16 +167,16 @@
         let got = null;
         try { const j = await OTP.sb().rpc('wall_join', { p_ig: ig }); got = j && !j.error ? j.data : null; } catch (e2) {}
         if (got === 'in') {
-          msg("You're on The Wall. Your card request is with the desk, which approves by hand.", 'good');
+          msg("You're in the Crypt. Your card request is with the desk, which approves by hand.", 'good');
           setTimeout(() => { location.href = NEXT || '../#take'; }, 1400);
         } else if (got === 'taken') {
           $('panel').innerHTML = `<b style="font-family:var(--f-display);font-style:italic;font-size:26px;text-transform:uppercase">One more step.</b>
             <div class="note">You're signed up, but that Instagram already has an account. If it is yours, sign out and log in with that one.
-            If not, <a href="../wall/" style="color:var(--pink-glow)">put your own in on The Wall</a>.</div>
+            If not, <a href="../wall/" style="color:var(--pink-glow)">put your own in at the Crypt</a>.</div>
             <button class="btn ghost" id="out" type="button">Sign out</button>`;
           $('out').onclick = async () => { await OTP.signOut(); location.reload(); };
         } else {
-          msg("Request sent. The desk approves cards by hand. To post today, finish on The Wall.", 'good');
+          msg("Request sent. The desk approves cards by hand. To post today, finish in the Crypt.", 'good');
           $('form').reset();
         }
       } else {

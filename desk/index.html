@@ -564,7 +564,7 @@
     });
     panel.querySelectorAll('[data-retire]').forEach(b => b.onclick = async () => {
       const name = b.dataset.name;
-      if (!confirm('Revoke ' + name + ', pull everything they posted, and close The Wall to them? You can put it back.')) return;
+      if (!confirm('Revoke ' + name + ', pull everything they posted, and close the Crypt to them? You can put it back.')) return;
       b.disabled = true;
       try {
         const was = members.find(p => p.id === b.dataset.retire);
