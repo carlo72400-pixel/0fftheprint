@@ -460,8 +460,11 @@
             s: row && row.hidden ? 'hidden' : (v.status || 'live'),
             state: row && row.hidden ? 'hidden' : (row ? 'draft' : 'git'),
             open: function () {
+              // 10/10: the Stories cover shows the newest story on its own. A save
+              // here PINS this slate over it until a newer story is out; set_at
+              // is the pin's clock and bake.py folds it into slate.json with the rest.
               sheet({
-                title: 'THE SLATE', why: 'the marquee at the top of the page',
+                title: 'THE SLATE', why: 'pins over the newest story on the Stories cover, until a newer one is out',
                 art: full(v.art),
                 fields: [
                   { key: 'kicker', label: 'Kicker', value: p.kicker != null ? p.kicker : next.kicker },
@@ -469,13 +472,14 @@
                   { key: 'line', label: 'Line', type: 'textarea', rows: 3, value: p.line != null ? p.line : next.line },
                   { key: 'status', label: 'Status stamp', value: p.status != null ? p.status : next.status },
                   { key: 'link', label: 'Link', value: p.link != null ? p.link : next.link },
-                  { key: 'hidden', label: 'Hide the slate entirely', type: 'check', value: !!(row && row.hidden) }
+                  { key: 'hidden', label: 'Unpin, the newest story takes the cover', type: 'check', value: !!(row && row.hidden) }
                 ],
                 save: async function (val) {
                   var patch = {};
                   ['kicker', 'title', 'line', 'status', 'link'].forEach(function (k) {
                     if (val[k] !== undefined) patch[k] = val[k];
                   });
+                  if (!val.hidden) patch.set_at = new Date().toISOString();
                   await OTP.setSiteOverride('slate', '', patch, { hidden: !!val.hidden });
                 }
               });

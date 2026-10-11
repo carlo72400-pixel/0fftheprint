@@ -133,22 +133,32 @@
         });
       });
 
-      /* THE SLATE, desk only. Whole-section patch onto slate.next. */
+      /* THE SLATE, desk only. Whole-section patch onto slate.next.
+         10/10: the marquee is THE COVER now and shows the newest story on its
+         own. Saving here PINS slate.next over it (set_at is the pin's clock),
+         and the pin holds until a newer story is out. So the fields fill from
+         slate.next itself, never from the marquee, which may be showing a story:
+         reading the DOM would pin that story's words over the slate's art. */
       var sm = d.getElementById('slate-marquee');
-      if (sm) pencil(sm, 'Edit the slate', function () {
+      if (sm) pencil(sm, 'Pin a cover', function () {
         var cur = overrideFor('slate', '');
         var p = (cur && cur.patch) || {};
-        var g = function (c) { var e = sm.querySelector(c); return e ? e.textContent.trim() : ''; };
-        panel('THE SLATE', [
-          { key: 'kicker', label: 'Kicker', value: p.kicker != null ? p.kicker : g('.slate-kicker').split('·')[0].trim() },
-          { key: 'title',  label: 'Title',  value: p.title  != null ? p.title  : g('.slate-title') },
-          { key: 'line',   label: 'Line',   value: p.line   != null ? p.line   : g('.slate-line'), type: 'textarea', rows: 3 },
-          { key: 'status', label: 'Status', value: p.status != null ? p.status : g('.slate-status') },
-          { key: 'link',   label: 'Link',   value: p.link   != null ? p.link   : '' },
-          { key: 'hidden', label: 'Hide the slate entirely', type: 'check', value: !!(cur && cur.hidden) }
+        var nx = window.__OTP_SLATE_NEXT || null;
+        var g = function (c, k) {
+          if (nx && nx[k] != null) return String(nx[k]);
+          var e = sm.querySelector(c); return e ? e.textContent.trim() : '';
+        };
+        panel('THE COVER · pin the slate over the newest story', [
+          { key: 'kicker', label: 'Kicker', value: p.kicker != null ? p.kicker : g('.slate-kicker', 'kicker').split('·')[0].trim() },
+          { key: 'title',  label: 'Title',  value: p.title  != null ? p.title  : g('.slate-title', 'title') },
+          { key: 'line',   label: 'Line',   value: p.line   != null ? p.line   : g('.slate-line', 'line'), type: 'textarea', rows: 3 },
+          { key: 'status', label: 'Status', value: p.status != null ? p.status : g('.slate-status', 'status') },
+          { key: 'link',   label: 'Link',   value: p.link   != null ? p.link   : (nx && nx.link) || '' },
+          { key: 'hidden', label: 'Unpin, the newest story takes the cover', type: 'check', value: !!(cur && cur.hidden) }
         ], async function (v) {
           var patch = {};
           ['kicker', 'title', 'line', 'status', 'link'].forEach(function (k) { if (v[k] !== undefined) patch[k] = v[k]; });
+          if (!v.hidden) patch.set_at = new Date().toISOString();
           await OTP.setSiteOverride('slate', '', patch, { hidden: !!v.hidden });
         });
       });
