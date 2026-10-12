@@ -622,6 +622,12 @@ color:var(--ink);width:46px;height:46px;border-radius:50%;cursor:pointer;font-si
 font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#f7b9dd;text-decoration:none;
 border:1px solid rgba(255,121,198,.45);border-radius:999px;padding:8px 14px;background:rgba(10,10,13,.75)}
 .lb-dl:hover{color:#0a0a0d;background:#f7b9dd}
+/* take it down: top left, across from the close button, so it never fights the
+   bottom row (full res, the counter, the looks, "I'm in this one") on a phone */
+.lb-td{position:fixed;left:18px;top:18px;z-index:12;font-family:var(--f-mono,monospace);
+font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);text-decoration:none;
+border:1px solid var(--line);border-radius:999px;padding:8px 14px;background:rgba(10,10,13,.75)}
+.lb-td:hover{color:#f7b9dd;border-color:rgba(255,121,198,.45)}
 .lb-count{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);
 font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;color:var(--muted)}
 @media (max-width:640px){.grid{columns:2 150px;column-gap:8px}.tile{margin-bottom:8px}
@@ -639,6 +645,7 @@ __LOOKSLINE__
   <div class="foot">Shot by 0FF THE PRINT &nbsp;·&nbsp;
     <a href="https://instagram.com/vamppsych" target="_blank" rel="noopener">@vamppsych</a>
     &nbsp;·&nbsp; Tagged in one of these? DM for the full-res file.<br>
+    In one you want gone? Open it and tap take it down. Your face, your call.<br>
     Want your own night shot? DM, or <a href="mailto:offtheprintcollective@gmail.com">offtheprintcollective@gmail.com</a>.</div>
 </div>
 <div class="lb" id="lb">
@@ -649,6 +656,7 @@ __LOOKSLINE__
   <div class="lb-looks" id="lblooks" hidden></div>
   <div class="lb-count" id="lbc"></div>
   <a class="lb-dl" id="lbdl" href="#" target="_blank" rel="noopener">full res &darr;</a>
+  <a class="lb-td" id="lbtd" href="mailto:offtheprintcollective@gmail.com">take it down</a>
 </div>
 <script>
 const MEDIA = __MEDIA__;
@@ -677,6 +685,14 @@ function show(i){
   // so it saves rather than navigating anyway.
   const dl=document.getElementById('lbdl');
   if(v.full){dl.href=v.full;dl.style.display='';}else{dl.style.display='none';}
+  // Take it down: the same email the Photos tab form writes, this frame filled in.
+  // OTPNight is set on the last line of this script, before anyone can tap a tile.
+  const nt=window.OTPNight||{}, fr=cur+1, dot=' '+String.fromCharCode(183)+' ';
+  document.getElementById('lbtd').href='mailto:offtheprintcollective@gmail.com?subject='+
+    encodeURIComponent('TAKE IT DOWN'+dot+(nt.title||'')+dot+'frame '+fr)+'&body='+
+    encodeURIComponent(['TAKE IT DOWN','','Night: '+(nt.title||'')+' ('+(nt.slug||'')+')','Frame: '+fr,
+      'Link: https://0fftheprint.com/events/'+(nt.slug||'')+'/#f'+fr,'Reach me: ','',
+      '(sent from 0fftheprint.com, the night page)'].join(String.fromCharCode(10)));
   const multi = m.looks && m.looks.length>1;
   if(multi){
     chips.innerHTML = m.looks.map(x=>`<button type="button"${x.name===v.name?' class="on"':''} data-look="${esc(x.name)}">${esc(x.name)}</button>`).join('');
@@ -871,6 +887,13 @@ def main():
                 .replace("__DATELONG__", datelong)
                 .replace("__COUNT__", str(len(items)))
                 .replace("__SLUG__", slug))
+    # the template's script and stylesheet tags carry no ?v=; give them the current ones
+    try:
+        sys.path.insert(0, ROOT)
+        from stamp import stamp_text
+        page = stamp_text(page)
+    except Exception as e:
+        print(f"  page not stamped ({e}); run stamp.py before the commit")
     open(os.path.join(out, "index.html"), "w", encoding="utf-8").write(page)
     json.dump({"slug": slug, "title": title, "venue": a.venue, "date": a.date,
                "date_short": dateshort, "count": len(items), "looks": all_looks,
@@ -903,6 +926,36 @@ def main():
         framewall.build()
     except BaseException as e:
         print(f"  contact sheet index not rebuilt ({e}); run framewall.py")
+    # THE LOOKS (content/looks.json) and THE TAPE (video/index.html, ITEMS baked in) only change
+    # when looks.py and videos.py run, and nothing ran them, so a new multi-look night or a night
+    # with clips stayed off the Photos tab strip and /video/ until somebody remembered. Decoration
+    # too. looks.py does its work at import, so it runs as its own process.
+    try:
+        r = subprocess.run([sys.executable, os.path.join(ROOT, "looks.py")], cwd=ROOT,
+                           capture_output=True, text=True)
+        if r.returncode == 0:
+            print("  " + ((r.stdout or "").strip().splitlines() or ["looks.json rebuilt"])[0])
+        else:
+            print(f"  looks not rebuilt ({(r.stderr or '').strip().splitlines()[-1:]}); run looks.py")
+    except Exception as e:
+        print(f"  looks not rebuilt ({e}); run looks.py")
+    try:
+        import videos
+        videos.build()
+    except BaseException as e:
+        print(f"  tape not rebuilt ({e}); run videos.py")
+    # THE MAP pins a night by tight-matching each venue (split on the middle dot) against
+    # content/rooms.json, the same test as photos.js nightsAt(). A new room has no pin until
+    # somebody adds it, and nothing said so.
+    try:
+        tight = lambda s: re.sub(r"[^a-z0-9]", "", str(s or "").lower())
+        rooms = json.load(open(os.path.join(ROOT, "content", "rooms.json"), encoding="utf-8")).get("rooms", [])
+        keys = {tight(k) for r in rooms for k in [r.get("key")] + list(r.get("aliases") or [])}
+        for seg in [s.strip() for s in a.venue.split(chr(183)) if s.strip()]:
+            if tight(seg) not in keys:
+                print(f"  ⚠️  no map pin for {seg}: add it to content/rooms.json (name, key, aliases, lat, lng)")
+    except Exception as e:
+        print(f"  map pins not checked ({e})")
 
     size = dir_size(out)
     print(f"\n  {out}")

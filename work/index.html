@@ -52,6 +52,11 @@ align-items:center;justify-content:center;flex-direction:column;padding:16px}
 .lb.open{display:flex}
 .lb img{max-width:96vw;max-height:82vh;border-radius:6px}
 .lb-cap{margin-top:12px;font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--pink)}
+/* a frame from a night we put up gets a way to the rest of that night */
+.lb-night{margin-top:8px;font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--pink-glow);
+text-decoration:none;border-bottom:1px solid rgba(255,121,198,.45);padding-bottom:2px}
+.lb-night:hover{color:var(--ink)}
+.lb-night[hidden]{display:none}
 .lb-x,.lb-n,.lb-p{position:absolute;background:rgba(18,18,24,.9);border:1px solid var(--line);
 color:var(--ink);width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer;line-height:1}
 .lb-x{top:16px;right:16px}
@@ -59,8 +64,8 @@ color:var(--ink);width:44px;height:44px;border-radius:50%;font-size:20px;cursor:
 .lb-n{right:12px;top:50%;transform:translateY(-50%)}
 @media(max-width:640px){.lb-p,.lb-n{bottom:14px;top:auto;transform:none}.lb-p{left:14px}.lb-n{right:14px}}
 </style>
-<link rel="stylesheet" href="../assets/css/binder.css?v=487bb4e0">
-<script src="../assets/js/binder.js?v=614975a8" defer></script>
+<link rel="stylesheet" href="../assets/css/binder.css?v=00f24508">
+<script src="../assets/js/binder.js?v=e63104e6" defer></script>
 </head>
 <body>
 <div class="leopard-bar"></div>
@@ -80,6 +85,7 @@ color:var(--ink);width:44px;height:44px;border-radius:50%;font-size:20px;cursor:
   <button class="lb-n" id="lbn" aria-label="Next">&#8250;</button>
   <img id="lbi" alt="">
   <div class="lb-cap" id="lbc"></div>
+  <a class="lb-night" id="lbnight" href="../events/" hidden>see the night &rarr;</a>
 </div>
 <script>
 (async function(){
@@ -126,16 +132,26 @@ color:var(--ink);width:44px;height:44px;border-radius:50%;font-size:20px;cursor:
   }).join('');
 
   // lightbox opens the full 1400px source, arrows respect the active filter
-  const lb = document.getElementById('lb'), lbi = document.getElementById('lbi'), lbc = document.getElementById('lbc');
+  const lb = document.getElementById('lb'), lbi = document.getElementById('lbi'), lbc = document.getElementById('lbc'), lbNight = document.getElementById('lbnight');
   let cur = 0;
   const visible = () => items.map((it, i) => i).filter(i => active === 'ALL' || venueOf(items[i]) === active);
-  const show = i => { cur = i; lbi.src = '../' + items[i].src; lbi.alt = items[i].alt || ''; lbc.textContent = items[i].label || ''; lb.classList.add('open'); };
+  // `night` (optional, in work.json) is the slug of the night's own gallery; only the shape newevent.py writes gets a link
+  const nightOf = it => typeof it.night === 'string' && /^\d{4}-\d{2}-\d{2}-[a-z0-9-]{1,60}$/.test(it.night) ? it.night : '';
+  const show = i => {
+    cur = i; lbi.src = '../' + items[i].src; lbi.alt = items[i].alt || ''; lbc.textContent = items[i].label || '';
+    const nt = nightOf(items[i]); lbNight.hidden = !nt; if (nt) lbNight.href = '../events/' + nt + '/';
+    lb.classList.add('open');
+  };
   const step = d => { const v = visible(); const p = v.indexOf(cur); show(v[(p + d + v.length) % v.length]); };
   grid.addEventListener('click', e => { const t = e.target.closest('.tile'); if (t) show(Number(t.dataset.i)); });
-  // work/#N opens that frame straight away, which is what makes the homepage
-  // rail worth tapping: you land on the picture you clicked, not on the grid.
+  // work/#<file name> (work/#w7-pa-073.jpg) opens that frame straight away, which is what makes the homepage
+  // rail worth tapping: you land on the picture you clicked, not on the grid. By NAME, because the desk can hide,
+  // reorder or add frames on the homepage and this page reads the committed file until a bake, so a position
+  // pointed at the wrong photo. work/#N (the old links) still opens the Nth frame.
   const fromHash = () => {
-    const n = Number(String(location.hash).replace('#', ''));
+    let h = String(location.hash).replace('#', '');
+    try { h = decodeURIComponent(h); } catch (e) {}
+    const n = /^\d+$/.test(h) ? Number(h) : items.findIndex(it => it.src.split('/').pop() === h);
     if (Number.isInteger(n) && n >= 0 && n < items.length) {
       show(n);
       document.querySelector(`.tile[data-i="${n}"]`)?.scrollIntoView({block:'center'});

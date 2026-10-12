@@ -70,7 +70,13 @@ for row in rows:
     md = no_dash(row["body_md"])
     if not md.endswith("\n"):
         md += "\n"
-    body = md_to_html(md, story_dir, story_dir)
+    # md_to_html sys.exit()s on a missing local image or a local video. One bad
+    # phone edit must not stop the rest of the bake, so it is a SKIP here.
+    try:
+        body = md_to_html(md, story_dir, story_dir)
+    except SystemExit as e:
+        print(f"  SKIP {slug}: {e}")
+        continue
     new_stamp = format(zlib.crc32(md.encode()) & 0xFFFFFFFF, "08x")
 
     page = re.sub(r'<article( data-stamp="[a-f0-9]{8}")?>',
@@ -90,8 +96,19 @@ print(f"\n{baked} page(s) rewritten.")
 # static catalog pages. Each one gets the next 0TP number, a cover, a thumb,
 # and a desk.json card via newstory.py, with the member's name on the byline.
 # ============================================================================
+import html as _html
 import subprocess
 import tempfile
+from newstory import slugify  # noqa: E402
+
+# ⛔ THE FOLDER IS THE DATABASE SLUG, NEVER THE TITLE. The desk can retitle a member
+#    story (desk/, board.js) and the slug stays pinned (migration 010's guard), while
+#    newstory.py names the folder slugify(--title) unless it is handed --slug. So a
+#    retitled story baked into word/<new-title>/, the writer's card page linked
+#    word/<slug>/ (a 404 with their name on it), and the next run found word/<slug>/
+#    missing and promoted the same story again under a second 0TP number.
+NEWSTORY = os.path.join(HERE, "newstory.py")
+TAKES_SLUG = '"--slug"' in open(NEWSTORY).read()
 
 sreq = urllib.request.Request(
     f"{URL}/rest/v1/word_stories?select=slug,title,dek,body_md,cover_url,display_name,baked&baked=eq.false",
@@ -104,8 +121,35 @@ except Exception:
 promoted = []
 for st in stories:
     slug = st["slug"]
-    if os.path.exists(os.path.join(WORD, slug)):
-        print(f"  SKIP story {slug}: a page already exists there")
+    here = os.path.join(WORD, slug)
+    if os.path.exists(here):
+        # Two very different reasons a folder is already there. Either an earlier run
+        # promoted this very story and nobody tapped BAKED yet (its page carries the
+        # FROM THE FLOOR kicker and the writer's byline), or a HOUSE story owns that
+        # slug, since member slugs are only unique among member stories.
+        page_path = os.path.join(here, "index.html")
+        page = open(page_path).read() if os.path.exists(page_path) else ""
+        who = _html.escape(no_dash(st.get("display_name") or "a card holder"))
+        # display_name comes live from profiles, so a name changed since the earlier
+        # bake misses the byline. The desk.json card newstory.py wrote (link + kicker)
+        # is the second proof. No house story carries the FROM THE FLOOR kicker.
+        try:
+            carded = any(it.get("link") == f"word/{slug}/" and it.get("kicker") == "FROM THE FLOOR"
+                         for it in json.load(open(os.path.join(HERE, "content", "desk.json")))["items"])
+        except Exception:
+            carded = False
+        if '<div class="kicker">FROM THE FLOOR</div>' in page and (f"<b>{who}</b>" in page or carded):
+            promoted.append(slug)
+            print(f"  story {slug}: already in the catalog from an earlier bake (tap BAKED for it)")
+        else:
+            print(f"  ⛔ SKIP story {slug}: a HOUSE story already lives at word/{slug}/. "
+                  f"This member story cannot bake under that name, so it stays live at "
+                  f"word/live/?s={slug} and unbaked.")
+        continue
+    if not TAKES_SLUG and slugify(st["title"]) != slug:
+        print(f"  ⛔ SKIP story {slug}: retitled at the desk ({st['title']!r}), and this "
+              f"newstory.py has no --slug, so it would land at word/{slugify(st['title'])}/ "
+              f"while the writer's card page links word/{slug}/. Give newstory.py --slug first.")
         continue
     with tempfile.TemporaryDirectory() as td:
         draft = os.path.join(td, "draft.md")
@@ -122,10 +166,11 @@ for st in stories:
             # house plate when the member skipped the cover
             cover = os.path.join(HERE, "assets", "take-01-manifesto.jpg")
         r = subprocess.run(
-            [sys.executable, os.path.join(HERE, "newstory.py"), draft,
+            [sys.executable, NEWSTORY, draft,
              "--title", st["title"], "--dek", st["dek"], "--cover", cover,
              "--kicker", "FROM THE FLOOR",
-             "--author", st.get("display_name") or "a card holder"],
+             "--author", st.get("display_name") or "a card holder"]
+            + (["--slug", slug] if TAKES_SLUG else []),
             capture_output=True, text=True)
         if r.returncode != 0:
             print(f"  FAILED story {slug}: {r.stderr.strip().splitlines()[-1] if r.stderr else r.stdout}")
@@ -213,7 +258,58 @@ except Exception:
 
 redundant = []
 
-def bake_list(section, filename, key_of, allow_add=False):
+# ============================================================================
+# A FRAME ADDED FROM THE PHONE (board.js ADD A FRAME) is a row whose patch.src is
+# its Supabase storage URL. Copying that URL into work.json was not enough: /work/
+# only shows assets/... files and paints derive.py's assets/grid/ copy, so an added
+# frame never reached the archive, even after a bake, and every rail link after it
+# opened the wrong frame. So the bake brings the file home under the SAME basename
+# (the row's item_key), which also means the row keeps matching the frame afterwards
+# and reads as REDUNDANT below instead of re-pointing src at storage on every bake.
+# ============================================================================
+STORAGE = URL.rstrip("/") + "/storage/v1/object/public/"
+WORK_DIR = os.path.join(HERE, "assets", "work")
+fetched = []
+
+
+def localize_work(patch, item=None):
+    src = str(patch.get("src") or "")
+    if not src.startswith(STORAGE):
+        return patch
+    name = _base(src).split("?")[0]
+    if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]{0,120}\.(?:jpe?g|png)", name, re.I):
+        return patch                  # derive.py only builds jpg/png, so leave anything else on storage
+    dst = os.path.join(WORK_DIR, name)
+    if not os.path.exists(dst):
+        tmp = dst + ".part"
+        try:
+            os.makedirs(WORK_DIR, exist_ok=True)
+            urllib.request.urlretrieve(src, tmp)
+            from PIL import Image
+            with Image.open(tmp) as im:
+                im.verify()
+            os.replace(tmp, dst)
+            fetched.append(name)
+            print(f"  work: fetched {name} into assets/work/")
+        except Exception as e:
+            if os.path.exists(tmp):
+                os.remove(tmp)
+            print(f"  work: could not fetch {name} ({e}); it stays on storage and /work/ skips it")
+            return patch
+    out = dict(patch)
+    out["src"] = "assets/work/" + name
+    if not (out.get("w") and out.get("h")):
+        try:
+            from PIL import Image, ImageOps
+            with Image.open(dst) as im:
+                im = ImageOps.exif_transpose(im)
+                out["w"], out["h"] = im.width, im.height
+        except Exception:
+            pass
+    return out
+
+
+def bake_list(section, filename, key_of, allow_add=False, localize=None):
     """Apply the section's overrides to a {"items":[...]} content file."""
     rows = [o for o in site_ovs if o.get("section") == section]
     if not rows:
@@ -235,6 +331,8 @@ def bake_list(section, filename, key_of, allow_add=False):
             print(f"  {section} dropped: {k}")
             continue
         patch = o.get("patch") or {}
+        if localize:
+            patch = localize(patch, item)
         already = all(item.get(kk) == v for kk, v in patch.items())
         if patch and not already:
             item = dict(item)
@@ -263,6 +361,8 @@ def bake_list(section, filename, key_of, allow_add=False):
             patch = o.get("patch") or {}
             if not patch.get("src"):
                 continue
+            if localize:
+                patch = localize(patch)
             item = dict(patch)
             if o.get("sort") is not None:
                 item["_sort"] = o["sort"]
@@ -286,7 +386,16 @@ def bake_list(section, filename, key_of, allow_add=False):
     return changed
 
 if site_ovs:
-    bake_list("work", "work.json", lambda it: _base(it.get("src")), allow_add=True)
+    bake_list("work", "work.json", lambda it: _base(it.get("src")), allow_add=True,
+              localize=localize_work)
+    if fetched:
+        # the grid and /work/ paint assets/grid/work/<name>, not the 1600px file
+        try:
+            import derive
+            derive.build()
+        except Exception as e:
+            print(f"  ⛔ derive.py did not run ({e}). Run it before the push, or the new "
+                  f"frame shows blank on the grid and on /work/.")
     bake_list("roster", "roster.json", lambda it: str(it.get("name") or ""))
     # creators only ever has rows once migration 017 widens the section CHECK.
     # Before that this is a no-op, which is why it is safe to ship first.
@@ -327,10 +436,16 @@ if site_ovs:
                 cur = cur[part]
             cur[parts[-1]] = val
 
+        # ⛔ fields whose element left the page: a row for one bakes into a key
+        #    nothing reads, so it is listed to clear instead
+        dead = {"pulse_route": "the route line left the page on 8/26"}
         for o in site_rows:
             if o.get("hidden"):
                 continue
             k = o["item_key"]
+            if k in dead:
+                redundant.append(("site", f"{k}  (nothing on the page reads it: {dead[k]})"))
+                continue
             v = (o.get("patch") or {}).get("value")
             if v is None:
                 continue
@@ -371,8 +486,11 @@ if site_ovs:
         elif patch:
             redundant.append(("slate", ""))
 
-    # 'latest_drop' patches the strip under the marquee, 'release:<num>' patches
-    # one row of the catalog. Same overlay, same file, different item_key.
+    # 'release:<num>' patches one row of the catalog. Same overlay, same file,
+    # different item_key.
+    # ⛔ 'latest_drop' patched the strip under the marquee, and that strip left the
+    #    page on 8/26 (751fd33). Nothing reads the key since, so baking a row only
+    #    wrote a dead block back into slate.json. Such a row is listed to clear.
     slate_extra = [o for o in site_ovs
                    if o.get("section") == "slate" and o.get("item_key") not in ("", None)]
     if slate_extra:
@@ -383,19 +501,7 @@ if site_ovs:
             key = o["item_key"]
             patch = o.get("patch") or {}
             if key == "latest_drop":
-                if o.get("hidden"):
-                    if sdoc.pop("latest_drop", None) is not None:
-                        n += 1
-                        print("  slate.json: latest_drop removed")
-                    continue
-                cur = sdoc.get("latest_drop") or {}
-                if patch and not all(cur.get(k) == v for k, v in patch.items()):
-                    cur.update(patch)
-                    sdoc["latest_drop"] = cur
-                    n += 1
-                    print(f"  slate.json latest_drop patched ({', '.join(sorted(patch))})")
-                elif patch:
-                    redundant.append(("slate", key))
+                redundant.append(("slate", key + "  (nothing on the page reads it since 8/26)"))
                 continue
             m = re.match(r"^release:(.+)$", key)
             if not m:

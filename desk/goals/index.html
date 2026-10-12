@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#0a0a0d">
 <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../assets/css/auth.css">
+<link rel="stylesheet" href="../../assets/css/auth.css?v=57b34045">
 <style>
   .goal{font-family:var(--f-display);font-style:italic;text-transform:uppercase;font-size:30px;
     line-height:1.08;margin-top:6px}
@@ -71,7 +71,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="../../supabase-config.js?v=f1348482"></script>
-<script src="../../assets/js/desk.js?v=b1b40641"></script>
+<script src="../../assets/js/desk.js?v=c10b36ef"></script>
 <script>
 (async () => {
   const panel = document.getElementById('panel');
@@ -79,7 +79,7 @@
 
   if (!OTP.configured) { panel.innerHTML = '<div class="setup"><b>Backend not configured.</b></div>'; return; }
   const me = await OTP.me();
-  if (!me) { location.href = '../../join/'; return; }
+  if (!me) { location.href = '../../join/?next=goals'; return; }
   if (!me.profile?.is_admin) {
     panel.innerHTML = `<div class="card"><b style="font-family:var(--f-display);font-style:italic;font-size:24px;text-transform:uppercase">Desk only.</b>
       <div class="note">Signed in as ${esc(me.user.email)}, but this page is the owner's.</div>
@@ -88,6 +88,10 @@
     return;
   }
 
+  // ⛔ The hunt card counts the hitlist table, and the only page that ever wrote
+  // to it (/desk/targets/) was deleted 10/1, so its numbers have not moved since.
+  // It stays (his call whether it goes) but says so in its heading. hitlist_meta
+  // is live: the goals and the checkpoints below still save to it.
   const c = OTP.sb();
   const [metaR, ckR, listR] = await Promise.all([
     c.from('hitlist_meta').select('v').eq('k', 'goals').maybeSingle(),
@@ -128,7 +132,8 @@
     </div>
 
     <div class="card">
-      <h2 class="sec">The hunt, live</h2>
+      <h2 class="sec">The hunt, frozen since 10/1</h2>
+      <div class="note" style="margin:0 0 8px">Nothing on the site writes to the hit list since /desk/targets/ came off, so these numbers stay where they were.</div>
       <div class="stats">
         <div class="stat"><b>${rows.length}</b><span>doors</span></div>
         <div class="stat"><b>${n('to hit')}</b><span>to hit</span></div>
@@ -137,7 +142,7 @@
       </div>
       ${bookedNames.length
         ? `<div class="bookedlist"><b>Booked:</b> ${bookedNames.map(esc).join(' · ')}</div>`
-        : `<div class="bookedlist" style="color:var(--muted)">Nothing booked off the list yet. Right track = the pitched number moving every week.</div>`}
+        : `<div class="bookedlist" style="color:var(--muted)">Nothing booked off the list.</div>`}
     </div>
 
     ${ck ? `<div class="card">

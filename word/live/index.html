@@ -29,6 +29,8 @@
     text-transform:uppercase;color:var(--muted);margin:18px 0 26px;
     padding-bottom:18px;border-bottom:1px solid var(--line)}
   .byline b{color:var(--ink)}
+  .byline a{color:inherit;text-decoration:none}
+  .byline a:hover{color:var(--pink)}
   .cover{margin:0 0 30px;border-radius:14px;overflow:hidden;border:1px solid var(--line);display:none}
   .cover img{width:100%;display:block}
   article{font-size:17.5px;line-height:1.85}
@@ -71,8 +73,8 @@
 
 <script src="../../supabase-config.js?v=f1348482"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="../../assets/js/desk.js?v=b1b40641" defer></script>
-<script src="../../assets/js/word.js?v=faaae268" defer></script>
+<script src="../../assets/js/desk.js?v=c10b36ef" defer></script>
+<script src="../../assets/js/word.js?v=1fb66209" defer></script>
 <script defer>
 document.addEventListener('DOMContentLoaded', async () => {
   const $ = id => document.getElementById(id);
@@ -98,7 +100,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   $('ttl').textContent = row.title;
   $('dek').textContent = row.dek;
   const d = new Date(row.created_at);
-  $('byline').innerHTML = '<b>' + OTPWord.esc(row.display_name || row.card_slug || 'card holder') + '</b>' +
+  // The name goes to the writer's card page (c/?s= answers before bake.py
+  // has made c/<slug>/). A pending row read off the table has no card_slug.
+  const who = OTPWord.esc(row.display_name || row.card_slug || 'card holder');
+  $('byline').innerHTML = '<b>' + (row.card_slug
+      ? '<a href="../../c/?s=' + encodeURIComponent(row.card_slug) + '">' + who + '</a>' : who) + '</b>' +
     ' &nbsp;·&nbsp; FROM THE FLOOR' +
     (isNaN(d) ? '' : ' &nbsp;·&nbsp; ' + d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase()) +
     (row._pending ? ' &nbsp;·&nbsp; <span style="color:#ff6a7e">ON THE DESK, NOT PUBLIC YET</span>' : '');

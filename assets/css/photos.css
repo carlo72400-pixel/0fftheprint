@@ -15,7 +15,7 @@
 /* ---- FIND YOURSELF ---- */
 .ph-bar{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 10px;}
 .ph-bar label{display:flex;flex-direction:column;gap:5px;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
-.ph-bar select{font:400 14px/1.3 var(--f-body);color:var(--ink);background:#0d0c11;border:1px solid var(--line);border-radius:10px;padding:10px 12px;}
+.ph-bar select{font:400 16px/1.3 var(--f-body);color:var(--ink);background:#0d0c11;border:1px solid var(--line);border-radius:10px;padding:10px 12px;}
 .ph-bar select:focus{outline:none;border-color:var(--pink-glow);}
 .ph-chips{grid-column:1 / -1;display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin;scrollbar-color:var(--pink-deep) transparent;}
 .ph-chip{flex:none;display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:7px 12px;border:1px solid var(--line);border-radius:10px;background:#0d0c11;color:var(--ink);cursor:pointer;
@@ -73,9 +73,13 @@
 .ph-map .leaflet-popup-content-wrapper,.ph-map .leaflet-popup-tip{background:#121218;color:var(--ink);border:1px solid var(--line);box-shadow:0 12px 30px rgba(0,0,0,.6);}
 .ph-map .leaflet-popup-content{margin:12px 14px;font-size:13px;}
 .ph-pop b{display:block;font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;font-size:17px;line-height:1;color:#fff;}
-.ph-pop > span{display:block;font-family:var(--f-mono);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:3px 0 6px;}
+.ph-pop-r > span{display:block;font-family:var(--f-mono);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:3px 0 6px;}
 .ph-pop ul{margin:0;padding:0;list-style:none;display:grid;gap:4px;} .ph-pop li a{color:var(--pink-glow);text-decoration:none;font-weight:600;} .ph-pop li em{font-style:normal;font-family:var(--f-mono);font-size:8.5px;color:var(--muted);margin-left:6px;}
 .ph-pop i{font-style:normal;font-family:var(--f-mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--pink-glow);}
+/* two rooms on one spot (private spaces in one city share the city point) share one pin: one block each */
+.ph-pop-r + .ph-pop-r{margin-top:10px;padding-top:9px;border-top:1px solid var(--line);}
+/* the map did not load: the rooms are listed in the box instead */
+.ph-map.ph-map-off{height:auto;max-height:520px;overflow:auto;padding:4px 16px 16px;}
 .ph-map .leaflet-control-attribution{background:rgba(10,10,13,.7);color:var(--muted);font-size:9px;} .ph-map .leaflet-control-attribution a{color:var(--pink-glow);}
 .ph-map .leaflet-bar a{background:#121218;color:var(--ink);border-color:var(--line);}
 
@@ -83,8 +87,10 @@
 .ph-td{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:640px;}
 .ph-td label{display:flex;flex-direction:column;gap:5px;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
 .ph-td label.wide{grid-column:1 / -1;}
-.ph-td input,.ph-td select,.ph-td textarea{font:400 14px/1.3 var(--f-body);color:var(--ink);background:#0d0c11;border:1px solid var(--line);border-radius:8px;padding:10px 12px;resize:vertical;}
+.ph-td input,.ph-td select,.ph-td textarea{font:400 16px/1.3 var(--f-body);color:var(--ink);background:#0d0c11;border:1px solid var(--line);border-radius:8px;padding:10px 12px;resize:vertical;}
 .ph-td input:focus,.ph-td select:focus,.ph-td textarea:focus{outline:none;border-color:var(--pink-glow);}
+/* the longest night title would push the column past the gutter on a 320px phone: let it shrink */
+.ph-td label{min-width:0;} .ph-td input,.ph-td select,.ph-td textarea{width:100%;min-width:0;}
 .ph-td-row{grid-column:1 / -1;display:flex;align-items:center;justify-content:space-between;gap:12px;}
 .ph-td-row small{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.06em;color:var(--muted);}
 .ph-td-msg{grid-column:1 / -1;margin:0;min-height:1em;font-size:12.5px;color:var(--pink-glow);}

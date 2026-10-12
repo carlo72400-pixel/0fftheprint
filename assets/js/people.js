@@ -40,8 +40,13 @@
   }
   function slugify(s) { return String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''); }
   function tight(s) { return String(s || '').toLowerCase().replace(/[^a-z0-9]/g, ''); }
-  // the 96px cut of a local photo (derive.py), the file itself for anything hosted
-  function av(u) { u = safe(u); if (!u) return ''; var m = /^assets\/(?!(av|thumb|card|grid)\/)(.+)\.(jpe?g|png)$/i.exec(u); return m ? 'assets/av/' + m[2] + '.jpg' : u; }
+  // the 96px cut of a local photo (derive.py), the file itself for anything hosted. A card holder's own
+  // card art ships as a -full/-card pair (uploadCardArt), and a circle gets the -card one, like index.html sized().
+  function av(u) {
+    u = safe(u); if (!u) return '';
+    if (/\/storage\/v1\/object\/public\/cards\/.+-full\.jpg$/i.test(u)) return u.replace(/-full\.jpg$/i, '-card.jpg');
+    var m = /^assets\/(?!(av|thumb|card|grid)\/)(.+)\.(jpe?g|png)$/i.exec(u); return m ? 'assets/av/' + m[2] + '.jpg' : u;
+  }
   function isVideo(u) { return w.OTP && OTP.isVideo ? OTP.isVideo(u) : /\.(mp4|mov|webm|m4v)(\?|#|$)/i.test(String(u || '')); }
   function ymd(s) { var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(s || '')); return m ? new Date(+m[1], +m[2] - 1, +m[3], 12) : null; }
   function ago(iso) {
@@ -59,18 +64,29 @@
   function learn(items) {
     (items || []).forEach(function (x) {
       if (!x || !x.name) return;
-      var rec = { name: x.name, photo: x.photo || '', accent: x.accent || '' };
+      var rec = { name: x.name, photo: x.photo || '', accent: x.accent || '', seat: x.type_label || '' };
       ROSTER.bySlug[slugify(x.name)] = rec; ROSTER.byTight[tight(x.name)] = rec;
     });
   }
+  // The card art a card holder uploaded (/card/, or "Tap to change your photo" on /my/), off the cards view by slug.
+  // /my/ promises "your card photo is your face across the site", so it wins over the roster art; the roster is the floor.
+  var CARDPHOTO = {};
+  function learnCards(rows) {
+    (rows || []).forEach(function (rw) { if (rw && rw.card_slug && rw.card_photo) { CARDPHOTO[rw.card_slug] = rw.card_photo; CARDPHOTO[tight(rw.card_slug)] = rw.card_photo; } });
+  }
+  function cardPhoto(slug) { return slug ? (CARDPHOTO[slug] || CARDPHOTO[tight(slug)] || '') : ''; }
   function who(r) {
     var kind = r.kind || 'member';
     var rec = (kind !== 'member') ? (ROSTER.bySlug[r.card_slug || ''] || ROSTER.byTight[tight(r.card_slug || '')] || ROSTER.byTight[tight(r.display_name || '')]) : null;
     var name = (rec && rec.name) || r.display_name || (kind === 'desk' ? 'THE DESK' : 'Member');
     var link = kind === 'member' ? (r.sid ? 'wall/#s-' + r.sid : '') : (r.card_slug ? 'c/' + encodeURIComponent(r.card_slug) + '/' : '');
+    // a card holder: their uploaded card art, then the roster's, then whatever picture the feed carries
+    var photo = kind === 'member' ? safe(r.pic) : (av(cardPhoto(r.card_slug)) || av(rec && rec.photo) || av(r.pic));
     return { key: (kind === 'member' ? 'm:' + (r.sid || tight(r.display_name)) : 'c:' + (r.card_slug || tight(name))),
-      name: name, photo: kind === 'member' ? safe(r.pic) : av(rec && rec.photo), link: link, kind: kind,
-      seat: kind === 'desk' ? 'The desk' : kind === 'card' ? 'Card holder' : 'Member', accent: ACC[r.accent] || ACC[rec && rec.accent] || '' };
+      name: name, photo: photo, link: link, kind: kind, sid: r.sid || '',
+      // the card's own seat line (THE LENS), the same one Home prints
+      seat: (kind !== 'member' && rec && rec.seat) || (kind === 'desk' ? 'The desk' : kind === 'card' ? 'Card holder' : 'Member'),
+      accent: ACC[r.accent] || ACC[rec && rec.accent] || '' };
   }
   function avatar(p, cls) {
     var s = el('span', 'rl-av' + (cls ? ' ' + cls : ''));
@@ -92,8 +108,10 @@
 
   /* ---------- POST: photo first ---------- */
   function composer(me, canPost, casual, box) {
-    var mine = me && me.profile ? (ROSTER.bySlug[me.profile.card_slug || ''] || ROSTER.byTight[tight(me.profile.display_name || '')]) : null;
-    var meP = { name: (me && me.profile && me.profile.display_name) || 'You', photo: casual ? '' : av(mine && mine.photo), accent: '' };
+    // ⛔ TWO KEYS: The Ink holds `theink`, WUN MOR holds `wunmor`, so the tight slug comes before the name
+    var mine = me && me.profile ? (ROSTER.bySlug[me.profile.card_slug || ''] || ROSTER.byTight[tight(me.profile.card_slug || '')] || ROSTER.byTight[tight(me.profile.display_name || '')]) : null;
+    var meP = { name: (me && me.profile && me.profile.display_name) || 'You',
+      photo: casual ? '' : (av(me.profile.card_photo) || av(cardPhoto(me.profile.card_slug)) || av(mine && mine.photo)), accent: '' };
     box.className = 'rl-post';
     if (!canPost) { box.innerHTML = '<p class="rl-note">Put your Instagram in at <a href="wall/">the Crypt</a> and you can post here.</p>'; return; }
     box.innerHTML = '<div class="rl-post-top"></div>' +
@@ -152,7 +170,9 @@
     var head = el('div', 'rl-head');
     var a = el('a', 'rl-who'); a.href = p.link || '#roll'; a.dataset.who = p.key;
     a.appendChild(avatar(p));
-    a.appendChild(el('span', 'rl-nm', '<b>' + esc(p.name) + '</b><span>' + esc(p.seat) + ' · ' + esc(ago(r.created_at)) + '</span>'));
+    // edited_at is stamped by the database on any change to the words or the photo, the desk's included,
+    // "so the marker cannot be dodged" (guard_post_update), so the card says so
+    a.appendChild(el('span', 'rl-nm', '<b>' + esc(p.name) + '</b><span>' + esc(p.seat) + ' · ' + esc(ago(r.created_at)) + (r.edited_at ? ' · edited' : '') + '</span>'));
     head.appendChild(a);
     if (r.mine && r.id != null) { var del = el('button', 'rl-del', 'Delete'); del.type = 'button'; del.dataset.del = String(r.id); head.appendChild(del); }
     c.appendChild(head);
@@ -205,7 +225,7 @@
   function week(rows, people, box) {
     box.className = 'rl-week';
     var cut = Date.now() - 7 * 864e5, seen = {}, list = [];
-    rows.forEach(function (r) { if (new Date(r.created_at).getTime() < cut) return; var p = people[r.id]; if (!p || seen[p.key]) return; seen[p.key] = 1; list.push({ p: p, pid: r.id }); });
+    rows.forEach(function (r) { if (new Date(r.created_at).getTime() < cut) return; var p = people[r.id]; if (!p || seen[p.key]) return; seen[p.key] = 1; if (p.sid) seen['h:' + p.sid] = 1; list.push({ p: p, pid: r.id }); });
     function circle(p, href, sub, onTap) {
       var a = el('a', 'rl-wk'); a.href = href || '#roll';
       a.appendChild(avatar(p, 'big'));
@@ -234,6 +254,37 @@
     try { c.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch (e) { c.scrollIntoView(); }
     c.classList.add('lit'); setTimeout(function () { c.classList.remove('lit'); }, 1400);
   }
+  // ?post=<id>: that post goes mid-screen (under a sticky nav, above the tab bar) and stays there. The router puts #roll
+  // back at its top for the first ~3 s (index.html show(), settle) and the photos above it load late and push it down,
+  // so it holds until the reader scrolls, taps or types, 10 s at most.
+  function holdOn(pid) {
+    var c = mount.querySelector('.rl-card[data-pid="' + pid + '"]'); if (!c) return;
+    var t0 = Date.now(), done = false, ro = null, quit = ['wheel', 'touchmove', 'keydown', 'pointerdown'];
+    function place() {
+      if (done) return;
+      if (Date.now() - t0 > 10000) { stop(); return; }
+      if (!c.isConnected || !c.getClientRects().length) return;   // taken down, or the People tab is not showing
+      var nav = d.querySelector('nav.site'), bar = d.querySelector('.tabbar');
+      var top = nav && getComputedStyle(nav).position === 'sticky' ? nav.offsetHeight : 0;
+      var bot = w.innerHeight - (bar && getComputedStyle(bar).position === 'fixed' ? bar.offsetHeight : 0);
+      var r = c.getBoundingClientRect(), room = bot - top;
+      var dy = Math.round(r.top - (r.height <= room ? top + (room - r.height) / 2 : top + 8));
+      if (Math.abs(dy) < 2) return;
+      try { w.scrollTo({ top: w.scrollY + dy, left: 0, behavior: 'instant' }); } catch (e) { w.scrollTo(0, w.scrollY + dy); }
+    }
+    function stop() {
+      done = true;
+      quit.forEach(function (ev) { w.removeEventListener(ev, stop, true); });
+      w.removeEventListener('scroll', place);
+      if (ro) ro.disconnect();
+    }
+    quit.forEach(function (ev) { w.addEventListener(ev, stop, { capture: true, passive: true }); });
+    w.addEventListener('scroll', place, { passive: true });   // any scroll the reader did not make is the router's
+    try { ro = new ResizeObserver(place); ro.observe(d.body); ro.observe(mount); } catch (e) {}
+    setTimeout(stop, 10500);
+    place();
+    c.classList.add('lit'); setTimeout(function () { c.classList.remove('lit'); }, 1800);
+  }
 
   /* ---------- a name: their page as a sheet ---------- */
   var SHEET = null;
@@ -243,7 +294,8 @@
     var pan = el('div', 'rl-pan');
     var top = el('div', 'rl-pan-top'); top.appendChild(avatar(p, 'big'));
     var photos = rows.filter(function (r) { return r.key === p.key && safe(r.image_url) && !isVideo(r.image_url); });
-    top.appendChild(el('div', 'rl-pan-who', '<b>' + esc(p.name) + '</b><span>' + esc(p.seat) + '</span><em>' + rows.filter(function (r) { return r.key === p.key; }).length + ' posts here</em>' +
+    var nPosts = rows.filter(function (r) { return r.key === p.key; }).length;
+    top.appendChild(el('div', 'rl-pan-who', '<b>' + esc(p.name) + '</b><span>' + esc(p.seat) + '</span><em>' + nPosts + (nPosts === 1 ? ' post here' : ' posts here') + '</em>' +
       (p.link ? '<a href="' + esc(p.link) + '">' + (p.kind === 'member' ? 'Their page in the Crypt' : 'Their page') + ' &rarr;</a>' : '')));
     var x = el('button', 'rl-pan-x', '&times;'); x.type = 'button'; x.setAttribute('aria-label', 'Close'); top.appendChild(x);
     pan.appendChild(top);
@@ -255,17 +307,22 @@
     });
     if (!photos.length) grid.appendChild(el('p', 'rl-g-none', 'No photos yet.'));
     pan.appendChild(grid);
-    // the frames they marked "I'm in this one" (037), members only, when they show themselves on The Wall
-    var sidM = /^wall\/#s-([a-z0-9]+)$/.exec(p.link || '');
-    if (sidM && w.OTP && OTP.configured && OTP.sb) {
+    // the frames they marked "I'm in this one" (037), members only, for anyone who shows on The Wall. That is a
+    // card holder too (take_feed sends their sid), not only somebody whose link is their Crypt page.
+    var sid = /^[a-z0-9]+$/.test(p.sid || '') ? p.sid : ((/^wall\/#s-([a-z0-9]+)$/.exec(p.link || '') || [])[1] || '');
+    if (sid && w.OTP && OTP.configured && OTP.sb) {
       var fr = el('div', 'rl-pan-frames'); pan.appendChild(fr);
-      Promise.resolve(OTP.sb().rpc('frames_of', { p_sid: sidM[1] })).then(function (r) {
+      Promise.resolve(OTP.sb().rpc('frames_of', { p_sid: sid })).then(function (r) {
         if (!r || r.error || !Array.isArray(r.data) || !r.data.length) { fr.remove(); return; }
-        fr.innerHTML = '<div class="rl-wk-h"><b>In our frames</b><span>' + r.data.length + (r.data.length === 1 ? ' frame' : ' frames') + ' they marked</span></div>' +
-          '<div class="rl-grid">' + r.data.slice(0, 30).map(function (x) {
-            var n = String((x.frame | 0) + 1).padStart(3, '0');
-            return '<a class="rl-g" href="events/' + esc(x.event_slug) + '/#f' + ((x.frame | 0) + 1) + '"><img src="events/' + esc(x.event_slug) + '/media/' + n + '_t.jpg" alt="" loading="lazy" decoding="async"></a>';
-          }).join('') + '</div>';
+        var shown = r.data.slice(0, 30), slugs = [];
+        shown.forEach(function (x) { if (x && x.event_slug && slugs.indexOf(x.event_slug) === -1) slugs.push(x.event_slug); });
+        return Promise.all(slugs.map(night)).then(function (lists) {
+          var by = {}; slugs.forEach(function (sl, i) { by[sl] = lists[i]; });
+          fr.innerHTML = '<div class="rl-wk-h"><b>In our frames</b><span>' + (r.data.length > shown.length ? shown.length + ' of ' : '') + r.data.length + (r.data.length === 1 ? ' frame' : ' frames') + ' they marked</span></div>' +
+            '<div class="rl-grid">' + shown.map(function (x) {
+              return '<a class="rl-g" href="events/' + esc(x.event_slug) + '/#f' + ((x.frame | 0) + 1) + '"><img src="' + esc(thumbOf(x.event_slug, x.frame | 0, by[x.event_slug])) + '" alt="" loading="lazy" decoding="async"></a>';
+            }).join('') + '</div>';
+        });
       }).catch(function () { fr.remove(); });
     }
     s.appendChild(pan); d.body.appendChild(s); SHEET = s;
@@ -274,6 +331,18 @@
     function onKey(e) { if (e.key === 'Escape') close(); }
     x.addEventListener('click', close); s.addEventListener('click', function (e) { if (e.target === s) close(); }); d.addEventListener('keydown', onKey);
     setTimeout(function () { s.classList.add('open'); }, 20);
+  }
+
+  /* A night's own list of frames (events/<slug>/data.json), asked for once. A tag is stored as the frame's
+     place in that list, and the thumb's file name is NOT always that place plus one: some nights skip numbers
+     (08-25 The Mix jumps from 020 to 023) and clips are v01_t.jpg and on. Building the name from the number
+     drew somebody else's photo or a broken tile, so the name comes from the list, the guess only if it fails. */
+  var NIGHTS = {};
+  function night(slug) { return NIGHTS[slug] || (NIGHTS[slug] = getJSON('events/' + encodeURIComponent(slug) + '/data.json')); }
+  function thumbOf(slug, frame, data) {
+    var m = data && Array.isArray(data.media) ? data.media[frame] : null;
+    var t = m && /^media\/[\w.-]+\.(jpe?g|png|webp)$/i.test(String(m.thumb || '')) ? m.thumb : 'media/' + String(frame + 1).padStart(3, '0') + '_t.jpg';
+    return 'events/' + slug + '/' + t;
   }
 
   /* ---------- EVERY FRAME ---------- */
@@ -304,10 +373,13 @@
     var results = await Promise.all([
       getJSON('content/roster.json'), getJSON('content/creators.json'), getJSON('events/events.json'),
       (w.OTP && OTP.configured && OTP.sb) ? Promise.resolve(OTP.sb().rpc('take_feed', { p_limit: 60 })).then(function (r) { return (r && !r.error && Array.isArray(r.data)) ? r.data : []; }).catch(function () { return []; }) : Promise.resolve([]),
-      (w.OTP && OTP.me) ? OTP.me().catch(function () { return null; }) : Promise.resolve(null)
+      (w.OTP && OTP.me) ? OTP.me().catch(function () { return null; }) : Promise.resolve(null),
+      // the faces only: raced like the homepage's own cards read, so a slow answer never holds the roll up
+      (w.OTP && OTP.configured && OTP.cards) ? Promise.race([OTP.cards().catch(function () { return []; }),
+        new Promise(function (r) { setTimeout(function () { r([]); }, 2000); })]) : Promise.resolve([])
     ]);
-    learn(results[0] && results[0].items); learn(results[1] && results[1].items);
-    var house = ROSTER.bySlug.vamppsych || ROSTER.byTight.vamppsych; if (house) HOUSE.photo = av(house.photo);
+    learn(results[0] && results[0].items); learn(results[1] && results[1].items); learnCards(results[5]);
+    var house = ROSTER.bySlug.vamppsych || ROSTER.byTight.vamppsych; if (house) HOUSE.photo = av(cardPhoto('vamppsych')) || av(house.photo);
     var nights = ((results[2] && results[2].items) || []).filter(function (n) { return n && n.slug && n.date; });
     var rows = results[3].filter(function (r) { return r && safe(r.image_url); });
     var me = results[4];
@@ -355,6 +427,9 @@
       if (p) sheet(p, rows);
     });
     root.setAttribute('data-roll', 'ready');
+    // ?post=<id>#roll opens the roll on that post (a page elsewhere can link one photo), the top if it is not in the 60
+    var want = new URLSearchParams(location.search).get('post');
+    if (want && /^\d{1,12}$/.test(want)) holdOn(want);
   }
 
   function paint() {

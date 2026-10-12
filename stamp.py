@@ -19,6 +19,14 @@ and every night page, next to sealed.js. Same rule: stamp after touching either.
 sealed.js and calendar.js now build markup that only the new sealed.css /
 calendar.css know how to lay out, so a fresh script next to a cached sheet is a
 broken pack for as long as the cache lives. Same cure, same hash.
+
+10/11: auth.css joins TRACKED_CSS (19 pages load it and it was never stamped),
+and wall/index.html joins DOCS. wall_build.py copies the homepage's desk.js and
+supabase-config.js stamps only when the Crypt is rebuilt, so a desk.js edit
+stamped here left the Crypt on the old file until the next weekly build.
+stamp_text() is the same rewrite for ONE page's text: repage.py, newevent.py
+and videos.py run their output through it, because their templates carry bare
+src="...js" tags and every page they rebuilt used to lose its stamps.
 """
 import hashlib
 import pathlib
@@ -37,7 +45,8 @@ TRACKED = ["assets/js/desk.js", "assets/js/door.js", "assets/js/composer.js",
 # stylesheet path (relative to ROOT)  ->  how it appears in href="..."
 TRACKED_CSS = ["assets/css/cathedral.css", "assets/css/pack.css",
                "assets/css/sealed.css", "assets/css/calendar.css",
-               "assets/css/binder.css", "assets/css/lounge.css", "assets/css/music.css", "assets/css/people.css", "assets/css/packs.css", "assets/css/photos.css"]
+               "assets/css/binder.css", "assets/css/lounge.css", "assets/css/music.css", "assets/css/people.css", "assets/css/packs.css", "assets/css/photos.css",
+               "assets/css/auth.css"]
 
 # every document that loads them
 DOCS = ["index.html", "join/index.html", "compose/index.html", "desk/index.html", "packs/index.html",
@@ -49,7 +58,12 @@ DOCS = ["index.html", "join/index.html", "compose/index.html", "desk/index.html"
         "card/index.html", "desk/word/index.html", "reset/index.html",
         "word/new/index.html", "word/live/index.html", "my/index.html",
         # 10/4: these carry binder.js (the house bar and the binder chip)
-        "word/index.html", "video/index.html", "work/index.html"] + [
+        "word/index.html", "video/index.html", "work/index.html",
+        # 10/11: the Crypt loads desk.js + supabase-config.js. wall_build.py
+        # copies the homepage's stamps at build time; this keeps it current
+        # between builds. Only its two script tags match, the sealed payload
+        # is ciphertext and never does.
+        "wall/index.html"] + [
         # every story page carries desk.js + word.js
         str(p.relative_to(ROOT)) for p in sorted(ROOT.glob("word/*/index.html"))] + [
         # every baked card back carries desk.js + cardback.js. bake.py copies
@@ -66,12 +80,14 @@ def short_hash(path: pathlib.Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()[:8]
 
 
-def main() -> int:
+def current(quiet=False):
+    """(script stamps, stylesheet stamps) by file name, off the files as they are now."""
     stamps = {}
     for rel in TRACKED:
         f = ROOT / rel
         if not f.exists():
-            print(f"  skip (missing): {rel}")
+            if not quiet:
+                print(f"  skip (missing): {rel}")
             continue
         stamps[pathlib.PurePosixPath(rel).name] = short_hash(f)
 
@@ -79,9 +95,36 @@ def main() -> int:
     for rel in TRACKED_CSS:
         f = ROOT / rel
         if not f.exists():
-            print(f"  skip (missing): {rel}")
+            if not quiet:
+                print(f"  skip (missing): {rel}")
             continue
         css[pathlib.PurePosixPath(rel).name] = short_hash(f)
+    return stamps, css
+
+
+def stamp_text(text, stamps=None, css=None):
+    """Put the current ?v= on every tracked script and stylesheet tag in one page's text."""
+    if stamps is None or css is None:
+        stamps, css = current(quiet=True)
+    for name, h in stamps.items():
+        # src="../assets/js/desk.js"  or  src="assets/js/desk.js?v=old"
+        text = re.sub(
+            r'(src="(?:\.\./)*(?:assets/js/)?%s)(?:\?v=[^"]*)?"' % re.escape(name),
+            r'\1?v=%s"' % h,
+            text,
+        )
+    for name, h in css.items():
+        # href="../../assets/css/sealed.css"  or  href="assets/css/sealed.css?v=old"
+        text = re.sub(
+            r'(href="(?:\.\./)*assets/css/%s)(?:\?v=[^"]*)?"' % re.escape(name),
+            r'\1?v=%s"' % h,
+            text,
+        )
+    return text
+
+
+def main() -> int:
+    stamps, css = current()
 
     if not stamps:
         print("nothing to stamp")
@@ -93,20 +136,7 @@ def main() -> int:
         if not d.exists():
             continue
         text = original = d.read_text(encoding="utf-8")
-        for name, h in stamps.items():
-            # src="../assets/js/desk.js"  or  src="assets/js/desk.js?v=old"
-            text = re.sub(
-                r'(src="(?:\.\./)*(?:assets/js/)?%s)(?:\?v=[^"]*)?"' % re.escape(name),
-                r'\1?v=%s"' % h,
-                text,
-            )
-        for name, h in css.items():
-            # href="../../assets/css/sealed.css"  or  href="assets/css/sealed.css?v=old"
-            text = re.sub(
-                r'(href="(?:\.\./)*assets/css/%s)(?:\?v=[^"]*)?"' % re.escape(name),
-                r'\1?v=%s"' % h,
-                text,
-            )
+        text = stamp_text(text, stamps, css)
         if text != original:
             d.write_text(text, encoding="utf-8")
             changed += 1

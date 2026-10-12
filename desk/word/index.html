@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Edit a story · The Desk · 0FF THE PRINT</title>
 <link rel="icon" href="../../assets/favicon.svg">
-<link rel="stylesheet" href="../../assets/css/auth.css">
+<link rel="stylesheet" href="../../assets/css/auth.css?v=57b34045">
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@700;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
 .wrap{max-width:760px;margin:0 auto;padding:0 16px 90px}
@@ -58,7 +58,7 @@
 
 <script src="../../supabase-config.js?v=f1348482"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="../../assets/js/desk.js?v=b1b40641" defer></script>
+<script src="../../assets/js/desk.js?v=c10b36ef" defer></script>
 <script defer>
 (() => {
   const $ = id => document.getElementById(id);
@@ -120,7 +120,7 @@
     const me = await OTP.me().catch(() => null);
     if (!me || !me.profile || !me.profile.is_admin) {
       $('gate').style.display = '';
-      $('gate').innerHTML = '<p class="door-note">Desk only. <a href="../../join/">The door is that way.</a></p>';
+      $('gate').innerHTML = '<p class="door-note">Desk only. <a href="../../join/?next=deskword">The door is that way.</a></p>';
       return;
     }
     const desk = await fetch('../../content/desk.json', { cache: 'no-cache' }).then(r => r.json());
@@ -130,7 +130,12 @@
       //    invite an override that can never render. Prose stories only.
       .filter(it => (it.link || '').startsWith('word/') && (it.dept || 'story') === 'story')
       .map(it => ({ slug: it.link.replace(/^word\//, '').replace(/\/$/, ''), title: it.title }));
-    showList();
+    // ?s=<slug> (the story pencil on the homepage, the board's story sheet)
+    // opens that story straight away. A slug that is not a page on the list
+    // falls back to the list, so a stale link still lands somewhere useful.
+    const want = new URLSearchParams(location.search).get('s');
+    if (want && stories.some(st => st.slug === want)) openStory(want);
+    else showList();
 
     $('back').onclick = showList;
     $('save').onclick = async () => {

@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Your card · 0FF THE PRINT</title>
 <link rel="icon" href="../assets/favicon.svg">
-<link rel="stylesheet" href="../assets/css/auth.css">
+<link rel="stylesheet" href="../assets/css/auth.css?v=57b34045">
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@700;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
 /* Page chrome only. Every .poke* rule is pulled from index.html at runtime so
@@ -63,10 +63,11 @@ input:focus,select:focus{outline:2px solid var(--pink-deep);outline-offset:1px}
 </head>
 <body>
 <div class="wrap">
-  <header style="padding:34px 0 22px">
+  <a class="back" href="../" style="margin-top:22px">&larr; 0FF THE PRINT</a>
+  <header style="padding:4px 0 22px">
     <div style="font-family:var(--f-display);font-style:italic;font-weight:900;font-size:26px;text-transform:uppercase">Your card</div>
     <div style="font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;color:var(--muted);margin-top:8px">
-      0FF THE PRINT &middot; CARD HOLDERS ONLY</div>
+      0FF THE PRINT &middot; CARD HOLDERS ONLY &middot; <a href="../wall/" style="color:var(--pink-glow);text-decoration:none;font-weight:600">THE CRYPT &rarr;</a></div>
   </header>
 
   <div id="gate" class="gate" style="display:none"></div>
@@ -76,7 +77,7 @@ input:focus,select:focus{outline:2px solid var(--pink-deep);outline-offset:1px}
       <h2>Preview</h2>
       <div id="prev"></div>
       <div class="hint">This is the real card renderer and the real stylesheet, pulled
-        from the homepage, so what you see here is what the roster shows.</div>
+        from the homepage, so what you see here is what Open A Pack shows.</div>
     </div>
 
     <div>
@@ -145,7 +146,7 @@ input:focus,select:focus{outline:2px solid var(--pink-deep);outline-offset:1px}
 
 <script src="../supabase-config.js?v=f1348482"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="../assets/js/desk.js?v=b1b40641" defer></script>
+<script src="../assets/js/desk.js?v=c10b36ef" defer></script>
 <script defer>
 (() => {
   const $ = id => document.getElementById(id);
@@ -171,9 +172,12 @@ input:focus,select:focus{outline:2px solid var(--pink-deep);outline-offset:1px}
   }
 
   // Mirrors renderPokeCard()'s DOM shape so the real classes apply.
+  // No upload of their own means the card shows the house art (the homepage and
+  // c/ pages fall back to it the same way), so the preview does too. The seed's
+  // path is from the site root, and this page is one folder down.
   function preview(){
     const frame = state.card_frame || seed?.rarity || 'common';
-    const photo = state.card_photo || null;
+    const photo = state.card_photo || (seed?.photo ? '../' + String(seed.photo).replace(/^\.?\//, '') : null);
     const art = photo
       ? `<div class="poke-art" style="background-image:url('${esc(photo)}');background-size:cover;background-position:50% 26%"></div>`
       : `<div class="poke-art poke-art-pending"><span class="pend-seat">${esc(seed?.pending_glyph || '0FF')}</span><span class="pend-stamp">${esc(seed?.pending_stamp || 'PHOTO PENDING')}</span></div>`;
@@ -224,7 +228,7 @@ input:focus,select:focus{outline:2px solid var(--pink-deep);outline-offset:1px}
     me = await OTP.me();
     if (!me) {
       $('gate').style.display = 'block';
-      $('gate').innerHTML = '<p class="door-note">Card holders only. <a href="../join/">Log in</a> and this page becomes your card.</p>';
+      $('gate').innerHTML = '<p class="door-note">Card holders only. <a href="../join/?next=card">Log in</a> and this page becomes your card.</p>';
       return;
     }
     if (!me.profile.approved) {
@@ -239,20 +243,29 @@ input:focus,select:focus{outline:2px solid var(--pink-deep);outline-offset:1px}
       const r = await fetch('../content/roster.json', { cache: 'no-cache' }).then(x => x.json());
       const c = await fetch('../content/creators.json', { cache: 'no-cache' }).then(x => x.json());
       const slugify = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      // ⛔ TWO KEYS, like the homepage: a card's slug is not always slugify(name).
+      // The Ink holds `theink` and WUN MOR holds `wunmor`.
+      const tight = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+      const mine = me.profile.card_slug || '';
       seed = [...(c.items || []), ...(r.items || [])]
-        .find(x => slugify(x.name) === me.profile.card_slug) || null;
+        .find(x => slugify(x.name) === mine || (mine && tight(x.name) === tight(mine))) || null;
     } catch (e) { seed = null; }
 
     // Only what the member actually SAVED. The roster seed still paints the
     // preview via the fallbacks below, but it never rides along in a save, so
     // changing your song can never bounce off a frame you were never granted.
+    // ⛔ The photo too: the seed is a path in the repo, never a file in their
+    // storage folder, and the database refuses it ("That photo is not in your
+    // folder."), which took the song, the frame and the link down with it.
+    // card_photo is only sent when they uploaded or removed art on this visit.
     state.card_frame = me.profile.card_frame || null;
-    state.card_photo = me.profile.card_photo || seed?.photo || null;
+    state.card_photo = me.profile.card_photo || null;
+    state.photoTouched = false;
     $('theme').value = me.profile.theme_track || '';
     $('start').value = me.profile.theme_start || '';
     $('handle').value = me.profile.link_handle || '';
     $('plat').innerHTML = '<option value="">none</option>' +
-      OTP.LINK_PLATFORMS.map(p => `<option value="${p}"${me.profile.link_platform === p ? ' selected' : ''}>${p}</option>`).join('');
+      (OTP.CARD_LINK_PLATFORMS || ['instagram', 'tiktok', 'youtube', 'spotify', 'soundcloud', 'bandcamp']).map(p => `<option value="${p}"${me.profile.link_platform === p ? ' selected' : ''}>${p}</option>`).join('');
     if (state.card_photo) $('rmart').style.display = 'inline-block';
 
     try {
@@ -278,6 +291,7 @@ input:focus,select:focus{outline:2px solid var(--pink-deep);outline-offset:1px}
       $('msg').className = 'msg'; $('msg').textContent = 'Shrinking and uploading...';
       try {
         state.card_photo = await OTP.uploadCardArt(f);
+        state.photoTouched = true;
         $('rmart').style.display = 'inline-block';
         preview();
         $('msg').className = 'msg ok'; $('msg').textContent = 'Art ready. Hit save.';
@@ -286,8 +300,10 @@ input:focus,select:focus{outline:2px solid var(--pink-deep);outline-offset:1px}
       }
       e.target.value = '';
     };
+    // Taking your own art off puts the house art back on the card, so that is
+    // what the preview shows.
     $('rmart').onclick = () => {
-      state.card_photo = null; $('rmart').style.display = 'none'; preview();
+      state.card_photo = null; state.photoTouched = true; $('rmart').style.display = 'none'; preview();
     };
     /* ---- SAY WHAT THE LINK IS, WHILE THEY TYPE -------------------------
        Spotify's oembed needs no key and no login, so the box can name the
@@ -330,18 +346,19 @@ input:focus,select:focus{outline:2px solid var(--pink-deep);outline-offset:1px}
       $('msg').className = 'msg'; $('msg').textContent = 'Saving...';
       try {
         const payload = {
-          card_photo: state.card_photo,
           theme_song: $('theme').value,
           theme_start: $('start').value,
           link_platform: $('plat').value,
           link_handle: $('handle').value,
         };
         if (state.card_frame) payload.card_frame = state.card_frame;
+        if (state.photoTouched) payload.card_photo = state.card_photo;
         await OTP.saveCard(payload);
+        state.photoTouched = false;
         const feat = await OTP.setFeatured([$('f1').value, $('f2').value, $('f3').value]);
         const dropped = (feat && feat.skipped) || [];
         $('msg').className = dropped.length ? 'msg bad' : 'msg ok';
-        $('msg').textContent = 'Saved. It shows on the roster next time the page loads.'
+        $('msg').textContent = 'Saved. It shows on your page and in Open A Pack next time they load.'
           + (dropped.length ? '  Featured ' + dropped.map(x => x.n).join(' and ')
               + ' did not take: ' + dropped[0].why : '');
       } catch (err) {

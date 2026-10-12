@@ -18,34 +18,83 @@
   // SEVEN rules: paragraph, ## heading, > quote, ![figure](img), [link](url),
   // **bold**, *italic*. Any widening must land in newstory.py's md_to_html in
   // the SAME commit or baked pages and overlays render differently.
-  // Overrides are DESK-authored (RLS: admin only writes story_pages), but the
-  // figure src is pinned to a same-directory image name anyway.
+  // `newstory.py --parity` renders every word/*/source.md both ways and diffs.
+  //
+  // Two figure rules. HOUSE mode ({house: true}) is newstory.py's: the image
+  // on the block's first line, the lines under it its caption (where a CC
+  // credit goes), an http src, an .mp4/.m4v/.mov clip with {poster=...}. Only
+  // the story_pages override passes it, and only the desk writes story_pages
+  // (RLS: admin). MEMBER mode (word/new preview, word/live) keeps the narrow
+  // rule: a bare figure block, src pinned to a same-directory image name,
+  // because member body_md is not the desk's.
   function inline(s) {
     // & < > only, matching newstory.py's html.escape(quote=False) byte for
     // byte — inline text lands between tags, never in an attribute. Attribute
-    // contexts (figure src/alt) go through the full esc() instead.
+    // contexts (figure src/alt) go through attr() instead.
     s = String(s).replace(/—/g, ',')
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    s = s.replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g,
+    // ⛔ One level of balanced parens, same as newstory.py: Wikimedia file
+    //    names carry them, and [^)\s]+ cut the credit link short. A " can
+    //    never be part of the url: quotes are not escaped here, so one would
+    //    close href="..." and open an attribute of the writer's choosing.
+    s = s.replace(/\[([^\]]+)\]\((https?:\/\/(?:[^()\s"]|\([^()\s"]*\))+)\)/g,
       '<a href="$2" target="_blank" rel="noopener">$1</a>');
     s = s.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
     s = s.replace(/\*([^*]+)\*/g, '<i>$1</i>');
     return s;
   }
-  function mdToHtml(md) {
+  // Python's html.escape(quote=True), byte for byte, for figure attributes.
+  const attr = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#x27;');
+  const isHttp = s => /^https?:\/\//.test(s);
+  // newstory.py copies a local file in next to the page under its base name.
+  // A local name with a scheme in it is not a file newstory could copy.
+  const localName = s => { const n = s.split('/').pop(); return n && n.indexOf(':') === -1 ? n : ''; };
+  function houseFigure(b) {
+    const lines = b.split('\n');
+    const m = /^!\[([^\]]*)\]\(([^)\s]+)\)(?:\{poster=([^}\s]+)\})?$/.exec(lines[0].trim());
+    if (!m) return null;
+    const alt = m[1];
+    let src = m[2], poster = m[3];
+    const cap = lines.slice(1).map(l => l.trim()).filter(Boolean).join(' ');
+    if (/\.(mp4|m4v|mov)$/i.test(src)) {
+      // newstory.py refuses a clip that is not an http url on the media Pages site
+      if (!isHttp(src)) return '';
+      let pa = '';
+      if (poster) {
+        if (!isHttp(poster)) poster = localName(poster);
+        if (poster) pa = ' poster="' + attr(poster) + '"';
+      }
+      return '<figure class="clip"><video controls playsinline preload="none"' + pa +
+        ' src="' + attr(src) + '"></video>' +
+        ((cap || alt) ? '<figcaption>' + inline(cap || alt) + '</figcaption>' : '') + '</figure>';
+    }
+    if (!isHttp(src)) src = localName(src);
+    if (!src) return '';
+    return '<figure><img src="' + attr(src) + '" alt="' + attr(alt) + '" loading="lazy">' +
+      (cap ? '<figcaption>' + inline(cap) + '</figcaption>' : '') + '</figure>';
+  }
+  function mdToHtml(md, opts) {
+    const house = !!(opts && opts.house);
     return String(md).trim().split(/\n\s*\n/).map(block => {
       const b = block.trim();
       if (!b) return '';
       if (b.startsWith('## ')) return '<h2>' + inline(b.slice(3)) + '</h2>';
       if (b.startsWith('> ')) {
-        const q = b.split('\n').map(l => l.replace(/^>\s?/, '').trim()).join(' ');
+        // ln.lstrip("> ").strip() in newstory.py
+        const q = b.split('\n').map(l => l.replace(/^[> ]+/, '').trim()).join(' ');
         return '<blockquote>' + inline(q) + '</blockquote>';
       }
-      const fig = /^!\[([^\]]*)\]\(([^)\s]+)\)$/.exec(b);
-      if (fig) {
-        const src = fig[2];
-        if (!/^[A-Za-z0-9._-]+\.(jpg|jpeg|png|webp)$/i.test(src)) return '';
-        return '<figure><img src="' + esc(src) + '" alt="' + esc(fig[1]) + '" loading="lazy"></figure>';
+      if (house) {
+        const hf = houseFigure(b);
+        if (hf !== null) return hf;
+      } else {
+        const fig = /^!\[([^\]]*)\]\(([^)\s]+)\)$/.exec(b);
+        if (fig) {
+          const src = fig[2];
+          if (!/^[A-Za-z0-9._-]+\.(jpg|jpeg|png|webp)$/i.test(src)) return '';
+          return '<figure><img src="' + attr(src) + '" alt="' + attr(fig[1]) + '" loading="lazy"></figure>';
+        }
       }
       return '<p>' + inline(b.split('\n').map(l => l.trim()).join(' ')) + '</p>';
     }).filter(Boolean).join('\n');
@@ -77,7 +126,9 @@
       console.warn('story override is stale (baked since), ignoring');
       return;
     }
-    article.innerHTML = mdToHtml(ov.body_md);
+    // House rules: source.md seeds the desk's editor, and house stories carry
+    // captioned photos and clips the narrow member rule would print as text.
+    article.innerHTML = mdToHtml(ov.body_md, { house: true });
     const byline = document.querySelector('.byline');
     if (byline && ov.updated_at) {
       const d = new Date(ov.updated_at);
@@ -100,9 +151,17 @@
     if (!entries.length && !canPost) return;   // nothing to show, stay hidden
     wallEl.hidden = false;
 
+    // The name goes to their card page. c/?s= answers before bake.py has made
+    // c/<slug>/. Inline style: the baked pages' CSS has no rule for it.
+    const who = e => {
+      const n = esc(e.display_name || e.card_slug || 'card holder');
+      return e.card_slug
+        ? `<a href="../../c/?s=${encodeURIComponent(e.card_slug)}" style="color:inherit;text-decoration:none">${n}</a>`
+        : n;
+    };
     list.innerHTML = entries.map(e => `
       <div class="wall-entry">
-        <div class="we-by">${esc(e.display_name || e.card_slug || 'card holder')}</div>
+        <div class="we-by">${who(e)}</div>
         <div class="we-text">${esc(e.text)}</div>
       </div>`).join('') ||
       '<div class="we-none">Nothing on the wall yet. First card holder in gets the top slot.</div>';

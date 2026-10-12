@@ -5,112 +5,128 @@
    "label": "PULSE ANGELS 3 \u00b7 21st st co-op \u00b7 10.03",
    "alt": "Someone in black feathered angel wings seen from behind, facing a packed room under a ceiling of projected light",
    "w": 1400,
-   "h": 1052
+   "h": 1052,
+   "night": "2026-10-03-pulse-angels-3"
   },
   {
    "src": "assets/work/w7-pa-story-1.jpg",
    "label": "PULSE ANGELS 3 \u00b7 story collage \u00b7 10.03",
    "alt": "Story collage in magenta and teal: a stone angel carrying a cross glows white over photos of a dancer in black wings, three friends and a peace sign, with Cabanel\u2019s Fallen Angel in the corner",
    "w": 1080,
-   "h": 1920
+   "h": 1920,
+   "night": "2026-10-03-pulse-angels-3"
   },
   {
    "src": "assets/work/w7-pa-story-2.jpg",
    "label": "PULSE ANGELS 3 \u00b7 story collage \u00b7 10.03",
    "alt": "Story collage in violet and ice blue: a weeping stone angel beside photos of a dancer, three friends at a stone wall and hands up at the booth, with a curled marble angel below",
    "w": 1080,
-   "h": 1920
+   "h": 1920,
+   "night": "2026-10-03-pulse-angels-3"
   },
   {
    "src": "assets/work/w7-pa-story-3.jpg",
    "label": "PULSE ANGELS 3 \u00b7 story collage \u00b7 10.03",
    "alt": "Story collage in oxblood and rose: a white statue with spread wings across photos of the red stage, a guest carried in someone\u2019s arms, a DJ and an embrace",
    "w": 1080,
-   "h": 1920
+   "h": 1920,
+   "night": "2026-10-03-pulse-angels-3"
   },
   {
    "src": "assets/work/w6-wap-094.jpg",
    "label": "WAP \u00b7 private park \u00b7 09.25",
    "alt": "A guest in a captain\u2019s hat saluting the camera in a San Marcos backyard, printed as a two-ink riso in pink and blue",
    "w": 1050,
-   "h": 1400
+   "h": 1400,
+   "night": "2026-09-25-wap"
   },
   {
    "src": "assets/work/w6-har-109.jpg",
    "label": "HARAMBE 4 EVER \u00b7 paper tiger \u00b7 09.24",
    "alt": "The Midnight Dawn singer mid headbang on the Paper Tiger side stage, blond hair thrown up under the red wash",
    "w": 1050,
-   "h": 1400
+   "h": 1400,
+   "night": "2026-09-24-harambe-4-ever"
   },
   {
    "src": "assets/work/w6-cs-454.jpg",
    "label": "CHILL & SMOKE \u00b7 exotic takeout \u00b7 09.20",
    "alt": "A photographer out front of Exotic Takeout holding a camera up to the lens, printed in the flyer\u2019s emerald, cream and takeout red",
    "w": 1400,
-   "h": 1050
+   "h": 1050,
+   "night": "2026-09-20-chill-and-smoke"
   },
   {
    "src": "assets/work/w5-bap-259.jpg",
    "label": "BAPTISM \u00b7 the deco \u00b7 09.18",
    "alt": "A guest in bat wings and star fishnets on the white throne, printed as a silver plate with blood and rose inks",
    "w": 1052,
-   "h": 1400
+   "h": 1400,
+   "night": "2026-09-18-baptism"
   },
   {
    "src": "assets/work/w5-zen-069.jpg",
    "label": "ZEN HAUS \u00b7 third friday \u00b7 09.18",
    "alt": "The night market courtyard at St Paul Square, every tree printed crimson on colour infrared",
    "w": 1400,
-   "h": 1052
+   "h": 1052,
+   "night": "2026-09-18-zen-haus"
   },
   {
    "src": "assets/work/w5-bh-041.jpg",
    "label": "BAR HOUSE \u00b7 north alamo \u00b7 09.17",
    "alt": "Bar House lit up at night, a doorman on the porch of the old house",
    "w": 1400,
-   "h": 1052
+   "h": 1052,
+   "night": "2026-09-17-bar-hop"
   },
   {
    "src": "assets/work/w4-md-337.jpg",
    "label": "SLACKERS \u00b7 b.i.l.l.y release party \u00b7 09.01",
    "alt": "Mike Dimes throwing hand signs above the crowd in the Bangerz tee, gold medallion swinging",
    "w": 1052,
-   "h": 1400
+   "h": 1400,
+   "night": "2026-09-01-billy-release-party"
   },
   {
    "src": "assets/work/w4-lucha-018.jpg",
    "label": "EL LUCHADOR \u00b7 lucha night \u00b7 09.12",
    "alt": "A red-masked luchador, the referee and Bull Madrid squared up under the string lights",
    "w": 1400,
-   "h": 1052
+   "h": 1052,
+   "night": "2026-09-12-lucha-night"
   },
   {
    "src": "assets/work/w4-migx-121.jpg",
    "label": "Club 212 \u00b7 migx \u00b7 09.12",
    "alt": "The DJ under the MIGX LED wall",
    "w": 1052,
-   "h": 1400
+   "h": 1400,
+   "night": "2026-09-12-migx"
   },
   {
    "src": "assets/work/w4-bq-063.jpg",
    "label": "RAH RAH ROOM \u00b7 burlesque night \u00b7 09.13",
    "alt": "A performer in a sequinned corset with feather fans on the red velvet stage",
    "w": 787,
-   "h": 1400
+   "h": 1400,
+   "night": "2026-09-13-burlesque-night"
   },
   {
    "src": "assets/work/w3-zen-025.jpg",
    "label": "ZEN HAUS \u00b7 night market \u00b7 08.21",
    "alt": "Night market courtyard from above, string lights over the vendor tables",
    "w": 1400,
-   "h": 788
+   "h": 788,
+   "night": "2026-08-21-zen-haus"
   },
   {
    "src": "assets/work/w2-mix-010.jpg",
    "label": "THE MIX \u00b7 st mary's \u00b7 08.16",
    "alt": "Window light across a worn couch inside The Mix",
    "w": 1400,
-   "h": 787
+   "h": 787,
+   "night": "2026-08-16-the-mix"
   },
   {
    "src": "assets/work/w3-ink-shop.jpg",
@@ -124,28 +140,32 @@
    "label": "PAPER TIGER \u00b7 after hours \u00b7 08.14",
    "alt": "Portrait in front of the red Paper Tiger snake mural",
    "w": 1400,
-   "h": 1050
+   "h": 1050,
+   "night": "2026-08-14-blade-rave"
   },
   {
    "src": "assets/work/w2-mix-037.jpg",
    "label": "THE MIX \u00b7 st mary's \u00b7 08.16",
    "alt": "Performer on the mic in green stage wash",
    "w": 1400,
-   "h": 787
+   "h": 787,
+   "night": "2026-08-16-the-mix"
   },
   {
    "src": "assets/work/w3-zen-016.jpg",
    "label": "ZEN HAUS \u00b7 night market \u00b7 08.21",
    "alt": "Vendor in a painted mask with both hands up behind his table",
    "w": 1400,
-   "h": 788
+   "h": 788,
+   "night": "2026-08-21-zen-haus"
   },
   {
    "src": "assets/work/w2-blade-037.jpg",
    "label": "PAPER TIGER \u00b7 after hours \u00b7 08.14",
    "alt": "Stage beams cutting over the crowd",
    "w": 1400,
-   "h": 1050
+   "h": 1050,
+   "night": "2026-08-14-blade-rave"
   },
   {
    "src": "assets/work/w3-ink-work.jpg",
@@ -166,21 +186,24 @@
    "label": "THE MIX \u00b7 st mary's \u00b7 08.16",
    "alt": "Performer swinging the mic cable under red light",
    "w": 1400,
-   "h": 787
+   "h": 787,
+   "night": "2026-08-16-the-mix"
   },
   {
    "src": "assets/work/w2-blade-049.jpg",
    "label": "PAPER TIGER \u00b7 after hours \u00b7 08.14",
    "alt": "Wide of the patio floor under string lights",
    "w": 1400,
-   "h": 787
+   "h": 787,
+   "night": "2026-08-14-blade-rave"
   },
   {
    "src": "assets/work/w3-zen-019.jpg",
    "label": "ZEN HAUS \u00b7 night market \u00b7 08.21",
    "alt": "Two shoppers holding up plush toys in a magenta-lit room",
    "w": 1400,
-   "h": 788
+   "h": 788,
+   "night": "2026-08-21-zen-haus"
   },
   {
    "src": "assets/work/w06-arcade-godzilla.jpg",
@@ -201,14 +224,16 @@
    "label": "THE MIX \u00b7 st mary's \u00b7 08.16",
    "alt": "Dartboard corner, bar texture",
    "w": 1400,
-   "h": 787
+   "h": 787,
+   "night": "2026-08-16-the-mix"
   },
   {
    "src": "assets/work/w2-blade-013.jpg",
    "label": "PAPER TIGER \u00b7 after hours \u00b7 08.14",
    "alt": "Vendor jewelry table in pink light",
    "w": 1400,
-   "h": 787
+   "h": 787,
+   "night": "2026-08-14-blade-rave"
   },
   {
    "src": "assets/work/w02-night-diner.jpg",
@@ -222,14 +247,16 @@
    "label": "THE MIX \u00b7 st mary's \u00b7 08.16",
    "alt": "Bar portrait in neon",
    "w": 1400,
-   "h": 787
+   "h": 787,
+   "night": "2026-08-16-the-mix"
   },
   {
    "src": "assets/work/w3-zen-033.jpg",
    "label": "ZEN HAUS \u00b7 night market \u00b7 08.21",
    "alt": "Flash portrait of two guests throwing peace signs at the night market",
    "w": 787,
-   "h": 1400
+   "h": 1400,
+   "night": "2026-08-21-zen-haus"
   },
   {
    "src": "assets/work/w3-ink-altar.jpg",
@@ -243,7 +270,8 @@
    "label": "PAPER TIGER \u00b7 after hours \u00b7 08.14",
    "alt": "The pit in full red wash",
    "w": 1400,
-   "h": 1050
+   "h": 1050,
+   "night": "2026-08-14-blade-rave"
   },
   {
    "src": "assets/work/w08-arcade-300.jpg",
@@ -292,7 +320,8 @@
    "label": "ZEN HAUS \u00b7 night market \u00b7 08.21",
    "alt": "Ceramics table under string lights, the makers working behind it",
    "w": 1400,
-   "h": 788
+   "h": 788,
+   "night": "2026-08-21-zen-haus"
   },
   {
    "src": "assets/work/w2-night-121.jpg",

@@ -289,8 +289,8 @@
   packEl.addEventListener('click', tear);
   /* ---------- I'M IN THIS ONE (10/11, migration 037) ----------
      A member marks a frame as theirs from the lightbox. Their marks show as a dot on the grid tiles;
-     other members see who is in a frame under the counter. Strangers see none of it: the three calls
-     are members-only at the database, so this only draws when the door says in. */
+     other members see who is in a frame under the counter, each name a link to their Crypt page. Strangers see
+     none of it: this only draws when is_wall_member says yes, and the tag calls are members-only at the database. */
   (function tags() {
     var lb = d.getElementById('lb'), lbc = d.getElementById('lbc'), lbdl = d.getElementById('lbdl');
     if (!lb || !lbc || !slugOk) return;
@@ -321,14 +321,30 @@
         else if (!has && dot) dot.remove();
       }
     }
+    // The look chips (a night printed more than one way) sit over the bottom of the lightbox and wrap to two rows
+    // on a phone, right where this row was pinned, so the row moves up over them. The stylesheet reads --lb-tag-b.
+    function place() {
+      var chips = d.getElementById('lblooks'), b = 52;
+      if (chips && !chips.hidden && chips.offsetHeight) b = Math.max(b, Math.round(lb.getBoundingClientRect().bottom - chips.getBoundingClientRect().top + 8));
+      lb.style.setProperty('--lb-tag-b', b + 'px');
+    }
     function paint() {
       if (!ready || cur < 0) { btn.hidden = true; who.hidden = true; return; }
       btn.hidden = false;
       btn.classList.toggle('on', !!MINE[cur]);
       btn.textContent = MINE[cur] ? "You're in this one" : "I'm in this one";
-      var names = (WHO[cur] || []).map(function (x) { return x.name; });
-      who.hidden = !names.length;
-      who.textContent = names.length ? 'In this frame: ' + names.join(', ') : '';
+      // each name opens that person's page in the Crypt (frame_tags_of only sends people whose page is open).
+      // ⛔ textContent for the names, never innerHTML: a display name is whatever its owner typed.
+      var list = WHO[cur] || [];
+      who.hidden = !list.length;
+      who.textContent = list.length ? 'In this frame: ' : '';
+      list.forEach(function (x, i) {
+        if (i) who.appendChild(d.createTextNode(', '));
+        var sid = String(x.sid || '');
+        if (/^[0-9a-f]{10}$/.test(sid)) { var a = d.createElement('a'); a.href = '../../wall/#s-' + sid; a.textContent = x.name; who.appendChild(a); }
+        else who.appendChild(d.createTextNode(x.name));
+      });
+      place();
     }
     function read() {
       var m = /(\d+)\s*\/\s*\d+/.exec(lbc.textContent || '');
@@ -342,19 +358,29 @@
         if (r && r.error) { btn.textContent = String(r.error.message || 'That did not go through.').slice(0, 60); return; }
         if (want) MINE[cur] = 1; else delete MINE[cur];
         dots(); paint();
+        names();   // your own name joins (or leaves) the line now, not on the next visit
       });
     });
     try { new MutationObserver(read).observe(lbc, { childList: true, characterData: true, subtree: true }); } catch (e) {}
-    // only a member: the first call tells us (anyone else is refused and we stay quiet)
-    rpc('my_frames').then(function (r) {
+    try { w.addEventListener('resize', function () { if (ready) place(); }); } catch (e) {}
+    function names() {
+      return rpc('frame_tags_of', { p_slug: seed }).then(function (r) {
+        if (!r || r.error || !Array.isArray(r.data)) return;
+        WHO = {};
+        r.data.forEach(function (x) { (WHO[x.frame | 0] = WHO[x.frame | 0] || []).push({ name: x.name, sid: x.sid }); });
+        paint();
+      });
+    }
+    // only a member. my_frames answers any login (an empty list for somebody who is not in the Crypt yet), so
+    // the member test asks first: anyone else would be offered the button and then told "Members only."
+    rpc('is_wall_member').then(function (m) {
+      if (!m || m.error || m.data !== true) return null;
+      return rpc('my_frames');
+    }).then(function (r) {
       if (!r || r.error || !Array.isArray(r.data)) return;
       r.data.forEach(function (x) { if (x.event_slug === seed) MINE[x.frame | 0] = 1; });
       ready = true; dots(); read();
-      return rpc('frame_tags_of', { p_slug: seed });
-    }).then(function (r) {
-      if (!r || r.error || !Array.isArray(r.data)) return;
-      r.data.forEach(function (x) { (WHO[x.frame | 0] = WHO[x.frame | 0] || []).push({ name: x.name, sid: x.sid }); });
-      paint();
+      return names();
     });
   })();
 

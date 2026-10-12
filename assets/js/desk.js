@@ -34,9 +34,103 @@
   };
   // 033: a casual member's photo lives in the small `take` bucket, a card
   // holder's media in `posts`. Same key shape in both, so say which bucket.
+  // 037 / 030: pack photos (`packs`) and Crypt page pictures (`spaces`) have the
+  // same <uid>/<file> keys and their own delete policies (own folder, or the
+  // desk), so deleteImage can take those back too. Nothing here widens who may
+  // delete: storage refuses a key that is not the caller's.
   const objectRef = url => {
-    const m = /\/storage\/v1\/object\/public\/(posts|take)\/([^?#]+)/.exec(String(url || ""));
+    const m = /\/storage\/v1\/object\/public\/(posts|take|packs|spaces)\/([^?#]+)/.exec(String(url || ""));
     return m ? { bucket: m[1], name: m[2] } : null;
+  };
+
+  // Where the site lives, read off this script's own address, so a check can ask
+  // for a page by path from any depth (/word/new/, /card/, the homepage). Null in
+  // anything that is not a browser page, and every caller treats null as "skip".
+  const ROOT = (() => {
+    try {
+      const s = document.currentScript && document.currentScript.src;
+      const m = s && /^(.*\/)assets\/js\/desk\.js(?:[?#].*)?$/.exec(s);
+      return m ? m[1] : null;
+    } catch (e) { return null; }
+  })();
+
+  // ---- one shrink for a still photo ----------------------------------------
+  // The same decode as uploadTakePhoto: from-image honours EXIF on Safari 15,
+  // and a browser that rejects the option lands in the <img> path, which always
+  // has. Never upscales. Returns the JPEG and the size it came out at.
+  const STILL_BAD = "That photo would not open. Try a JPG or a PNG.";
+  async function openStill(file) {
+    try { return await createImageBitmap(file, { imageOrientation: "from-image" }); }
+    catch (e) {
+      return await new Promise((ok, no) => {
+        const im = new Image();
+        const u = URL.createObjectURL(file);
+        im.onload = () => { URL.revokeObjectURL(u); ok(im); };
+        im.onerror = () => { URL.revokeObjectURL(u); no(new Error(STILL_BAD)); };
+        im.src = u;
+      });
+    }
+  }
+  async function shrinkStill(file, edge, q) {
+    const src = await openStill(file);
+    const w0 = src.width || src.naturalWidth, h0 = src.height || src.naturalHeight;
+    if (!w0 || !h0) throw new Error(STILL_BAD);
+    const k = Math.min(1, edge / Math.max(w0, h0));
+    const cv = document.createElement("canvas");
+    cv.width = Math.max(1, Math.round(w0 * k)); cv.height = Math.max(1, Math.round(h0 * k));
+    const g = cv.getContext("2d");
+    g.fillStyle = "#000"; g.fillRect(0, 0, cv.width, cv.height);
+    g.drawImage(src, 0, 0, cv.width, cv.height);
+    try { if (src.close) src.close(); } catch (e) {}
+    const blob = await new Promise((ok, no) => cv.toBlob(
+      b => b ? ok(b) : no(new Error(STILL_BAD)), "image/jpeg", q));
+    return { blob, w: cv.width, h: cv.height, scaled: k < 1 };
+  }
+  // A card holder's timeline photo used to go up as the camera wrote it: a 3.7MB
+  // JPEG sat on the homepage for every visitor, against 5GB/mo of egress. Camera
+  // formats only (JPEG, HEIC). PNG, WebP and AVIF can carry transparency that a
+  // JPEG would paint black, and GIFs move, so those go up untouched.
+  const POST_EDGE = 2048, POST_Q = 0.88, POST_KEEP = 1.5 * 1024 * 1024;
+
+  // ---- member stories: the lengths migration 010 holds them to ------------
+  // char_length counts characters and JS .length counts UTF-16 units, so an
+  // emoji is one to the database and two here. Count the way the database does.
+  const chars = s => Array.from(String(s == null ? "" : s)).length;
+  const STORY_SAYS = {
+    title_short: "Give it a headline, 3 characters or more.",
+    title_long:  "Headlines stop at 80 characters. Trim it.",
+    dek_short:   "Give it a one-line dek.",
+    dek_long:    "The dek is one line, 200 characters at most.",
+    body_short:  "The story needs at least a couple of sentences.",
+    body_long:   "20,000 characters is the ceiling. Trim it.",
+  };
+  // Checks only the fields it is handed, as they will be SENT (after NO_DASH and trim).
+  const storyFits = ({ title, dek, body }) => {
+    if (title !== undefined) {
+      const n = chars(title);
+      if (n < 3) throw new Error(STORY_SAYS.title_short);
+      if (n > 80) throw new Error(STORY_SAYS.title_long);
+    }
+    if (dek !== undefined) {
+      const n = chars(dek);
+      if (n < 3) throw new Error(STORY_SAYS.dek_short);
+      if (n > 200) throw new Error(STORY_SAYS.dek_long);
+    }
+    if (body !== undefined) {
+      const n = chars(body);
+      if (n < 30) throw new Error(STORY_SAYS.body_short);
+      if (n > 20000) throw new Error(STORY_SAYS.body_long);
+    }
+  };
+  // A 23514 that gets past storyFits still reads as a sentence, not a constraint name.
+  const storyWhy = error => {
+    const m = String((error && error.message) || "");
+    if (/member_stories_title_check/.test(m)) return new Error("Headlines run 3 to 80 characters.");
+    if (/member_stories_dek_check/.test(m)) return new Error("The dek runs 3 to 200 characters.");
+    if (/member_stories_body_md_check/.test(m)) return new Error("The story runs 30 to 20,000 characters.");
+    if (/member_stories_cover_ours/.test(m)) return new Error("That cover photo is not in your folder.");
+    if (/member_stories_slug_check/.test(m)) return new Error("That title needs more to it.");
+    return new Error("Something in that story is too long or too short.");
   };
 
   // ---- THE EXCHANGE (022) ---------------------------------------------------
@@ -79,12 +173,43 @@
   // or() branch at all.
   const CAL_SLUG_OK = /^[a-z0-9][a-z0-9-]{0,58}[a-z0-9]$/;
 
+  // ---- ONE me() PER PAGE LOAD ------------------------------------------------
+  // The homepage asks five times (door, composer, edit, people, music) and every
+  // ask was a getUser round trip plus my_profile, one after the other on a phone.
+  // The first ask is shared. It is forgotten on sign in, sign up, sign out, a
+  // changed user, and after any write to the caller's own profile, so nothing
+  // reads a stale answer after it changed something. A failed or doubtful answer
+  // is never kept.
+  // meUid is undefined until an answer is kept (null then means a kept "nobody
+  // signed in"). meSaw is the user a SIGNED_IN named while the first ask was
+  // still out: supabase-js fires one for the saved login as the client starts,
+  // which is the same person, not a new one. MIXED means two different people.
+  const MIXED = {};
+  let meP = null, meUid, meSaw;
+  const forgetMe = () => { meP = null; meUid = undefined; meSaw = undefined; };
+
   let client = null;
   function sb() {
     if (!READY) return null;
     if (!client) {
       if (!w.supabase || !w.supabase.createClient) return null;
       client = w.supabase.createClient(CFG.url, CFG.anonKey);
+      // Covers logins that go round OTP (a page calling sb().auth itself, a
+      // password reset). Only resets a variable: the docs warn against calling
+      // back into the client from inside this callback. TOKEN_REFRESHED and
+      // INITIAL_SESSION change nobody, and a SIGNED_IN for the same person (a tab
+      // coming back into focus, or the client starting on a saved login) keeps
+      // the answer. One that lands while the first ask is still out is noted and
+      // checked against that answer when it comes back.
+      try {
+        client.auth.onAuthStateChange((ev, session) => {
+          const uid = session && session.user ? session.user.id : null;
+          if (ev === "SIGNED_OUT" || ev === "USER_UPDATED") { forgetMe(); return; }
+          if (ev !== "SIGNED_IN") return;
+          if (meP && meUid === undefined) { meSaw = (meSaw === undefined || meSaw === uid) ? uid : MIXED; return; }
+          if (meUid !== undefined && uid !== meUid) forgetMe();
+        });
+      } catch (e) {}
     }
     return client;
   }
@@ -94,26 +219,47 @@
     sb,
     FEED_CAP,
 
+    // { user, profile } for the session, or null when nobody is signed in.
+    // `failed: true` rides along when my_profile would not answer twice running:
+    // the login is real but the profile is unknown, which is not the same thing
+    // as a login with no profile. Every caller gets its own copy of the profile.
     async me() {
-      const c = sb(); if (!c) return null;
-      const { data: { user } } = await c.auth.getUser();
-      if (!user) return null;
+      if (!meP) {
+        const p = meP = (async () => {
+          // No client yet (the library has not loaded) is not an answer to keep.
+          const c = sb(); if (!c) return { r: null, keep: false };
+          const { data, error } = await c.auth.getUser();
+          const user = data && data.user;
+          // No user AND an error is a network hiccup as often as a signed-out
+          // visitor, so that null is handed back but not kept.
+          if (!user) return { r: null, keep: !error };
 
-      // Preferred path: is_admin stops being a readable column once migration
-      // 002 lands, so it comes back through an RPC that only ever returns the
-      // caller's own row. Nobody gets to enumerate who runs the desk.
-      const rpc = await c.rpc("my_profile");
-      if (!rpc.error && rpc.data && rpc.data[0]) {
-        return { user, profile: rpc.data[0] };
+          // is_admin stopped being a readable column with migration 002, so the
+          // profile comes back through an RPC that only ever returns the caller's
+          // own row. Nobody gets to enumerate who runs the desk.
+          // ⛔ The pre-002 fallback that used to sit here selected is_admin
+          // straight off profiles, which no API role may read, so a one-off
+          // my_profile failure turned a card holder (or the desk) into a plain
+          // login for that page load. One retry instead.
+          let rpc = await c.rpc("my_profile");
+          if (rpc.error) {
+            await new Promise(ok => setTimeout(ok, 600));
+            rpc = await c.rpc("my_profile");
+          }
+          if (!rpc.error) return { r: { user, profile: (rpc.data && rpc.data[0]) || null }, keep: true };
+          console.warn("me: my_profile did not answer,", rpc.error.message);
+          return { r: { user, profile: null, failed: true }, keep: false };
+        })();
+        p.then(x => {
+          if (meP !== p) return;
+          const uid = x.r && x.r.user ? x.r.user.id : null;
+          // a SIGNED_IN for somebody else came in while this was out: do not keep it
+          if (!x.keep || (meSaw !== undefined && meSaw !== uid)) { meP = null; meSaw = undefined; return; }
+          meUid = uid; meSaw = undefined;
+        }, () => { if (meP === p) { meP = null; meSaw = undefined; } });
       }
-      // Fallback for the pre-002 schema, so this file is safe to deploy before
-      // the migration runs. Remove once 002 is live everywhere.
-      const { data: profile } = await c
-        .from("profiles")
-        .select("id, display_name, card_slug, approved, is_admin")
-        .eq("id", user.id)
-        .single();
-      return { user, profile: profile || null };
+      const { r } = await meP;
+      return r && Object.assign({}, r, { profile: r.profile ? Object.assign({}, r.profile) : r.profile });
     },
 
     // `via` is "wall" when the signup comes from The Wall's join form (a code member,
@@ -129,22 +275,43 @@
         instagram: /^[a-z0-9._]{1,30}$/.test(ig) ? ig : "",
       };
       if (via === "wall") data.via = "wall";
+      forgetMe();
       const { error } = await c.auth.signUp({
         email, password,
         options: { data },
       });
+      forgetMe();
       if (error) throw error;
     },
 
     async signIn(email, password) {
       const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      forgetMe();
       const { error } = await c.auth.signInWithPassword({ email, password });
+      forgetMe();
       if (error) throw error;
     },
 
+    // ⛔ Every page on the site shares one localStorage, so a sign-out on /my/ has
+    // to take the last person's door with it. otp_door is the homepage nav's
+    // remembered state (it repainted "Desk" for the next visitor), and wall-k is
+    // the Crypt's cached key (the Crypt opened on it before checking the login).
+    // The going marks (wall-going and its -synced and -off notes), wall-mine
+    // (your own events) and wall-watch (the watchlist) are left alone on purpose:
+    // a night more than 120 days out and a mark made offline live on this phone
+    // only, so clearing them would delete them, and clearing only the notes would
+    // bring back marks taken off. Keeping them apart per person is the Crypt's job.
     async signOut() {
       const c = sb(); if (!c) return;
-      await c.auth.signOut();
+      forgetMe();
+      try {
+        await c.auth.signOut();
+      } finally {
+        forgetMe();
+        ["otp_door", "wall-k"].forEach(k => {
+          try { w.localStorage.removeItem(k); } catch (e) {}
+        });
+      }
     },
 
     // ---- password reset, through the email and nothing else --------------
@@ -193,10 +360,24 @@
           : "That photo is over 50MB, which is a lot of photo. Shrink it first.");
       }
 
+      // A camera photo goes up at most POST_EDGE on the long edge (see POST_EDGE).
+      // A JPEG that is already small stays byte for byte what they picked. A HEIC
+      // that opens comes out a JPEG, which every browser can show. Anything that
+      // will not open here (a HEIC on a desktop Chrome, say) goes up as it was.
+      let body = file;
+      if (ext === "jpg" || ext === "heic" || ext === "heif") {
+        try {
+          const s = await shrinkStill(file, POST_EDGE, POST_Q);
+          if (ext !== "jpg" || ((s.scaled || file.size > POST_KEEP) && s.blob.size < file.size)) {
+            body = s.blob; ext = "jpg";
+          }
+        } catch (e) { body = file; }
+      }
+
       // The key MUST start with <uid>/ or the storage policy refuses it. That is
       // what stops one member from touching another member's photos.
       const name = `${user.id}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-      const { error } = await c.storage.from("posts").upload(name, file, {
+      const { error } = await c.storage.from("posts").upload(name, body, {
         cacheControl: "3600",
         upsert: false,
         // Explicit, because phones lie. Some Android pickers report image/jpg,
@@ -356,10 +537,23 @@
 
     async deletePost(id) {
       const c = sb(); if (!c) throw new Error("Backend not configured yet.");
-      const { data, error } = await c.from("posts").delete().eq("id", id).select("id");
+      const { data, error } = await c.from("posts").delete().eq("id", id).select("id, image_url");
       if (error) throw error;
       if (!data || !data.length) {
         throw new Error("That one is not yours to delete any more. The desk has it.");
+      }
+      // The photo goes with the post, from every place a post can be deleted (Home,
+      // the Roll, the pencil, /compose/, the desk), not only Home's quick Delete.
+      // Asked the database's own question first: another post by the same author
+      // can still be using the file, and the desk's storage policy (unlike a
+      // member's) would let that file go anyway. Best effort: the row is already
+      // gone, and the orphan queue the trigger filled is still the backstop.
+      const ref = objectRef(data[0].image_url);
+      if (ref && (ref.bucket === "posts" || ref.bucket === "take")) {
+        try {
+          const u = await c.rpc("post_image_in_use", { p_name: ref.name });
+          if (!u.error && u.data === false) await c.storage.from(ref.bucket).remove([ref.name]);
+        } catch (e) {}
       }
     },
 
@@ -374,6 +568,7 @@
       const v = OTP.ACCENTS.indexOf(key) !== -1 ? key : null;
       const { error } = await c.from("profiles").update({ accent: v }).eq("id", user.id);
       if (error) throw error;
+      forgetMe();
       return v;
     },
 
@@ -384,26 +579,21 @@
     // database, so a crafted request is refused whatever this array says.
     OPEN_FRAMES: ["common", "uncommon", "rare", "rare-holo"],
 
-    // Every frame that has CSS behind it, for labelling a granted one.
-    ALL_FRAMES: ["common", "uncommon", "rare", "rare-holo", "rainbow-rare",
-      "tera-ex", "gold-rare", "full-art", "darklord", "warlord", "amazing",
-      "diamond-rare", "vampy", "stone", "tag-team"],
+    // The card's ONE link (profiles.link_platform), kept in step with the CHECK
+    // profiles_link_platform_known in migration-007. ⛔ Not LINK_PLATFORMS: that
+    // name is the page's links list further down (021, nine platforms), and two
+    // keys with one name in this object meant the later one won, so the card
+    // builder offered x, twitch and threads, which this column refuses.
+    CARD_LINK_PLATFORMS: ["instagram", "tiktok", "youtube", "spotify", "soundcloud", "bandcamp"],
 
-    LINK_PLATFORMS: ["instagram", "tiktok", "youtube", "spotify", "soundcloud", "bandcamp"],
-
-    // Pull the bare 22-char id out of whatever a member pasted. Mirrors
-    // parseSpotifyId() in index.html. Storing the ID and never a URL is what
-    // makes a scheme unrepresentable in the column.
-    trackId(s) {
-      return OTP.readTrack(s).id;
-    },
-    // Same matching trackId always did, plus a REASON when it fails. Nothing
-    // that parsed before stops parsing: the loose /track\/<22>/ pattern already
-    // covers open.spotify.com, spotify: URIs and the /intl-xx/ prefix a phone
-    // in another locale hands you.
-    // ⛔ This exists because every surface that took a song used to save
-    // trackId()'s null and then say "Saved." A link that did not parse wiped
-    // the song and reported success, which is the worst possible pairing.
+    // Pull the bare 22-char id out of whatever a member pasted, plus a REASON
+    // when it fails. Mirrors parseSpotifyId() in index.html. Storing the ID and
+    // never a URL is what makes a scheme unrepresentable in the column. The
+    // loose /track\/<22>/ pattern covers open.spotify.com, spotify: URIs and the
+    // /intl-xx/ prefix a phone in another locale hands you.
+    // ⛔ The reason exists because every surface that took a song used to save
+    // a bare null and then say "Saved." A link that did not parse wiped the
+    // song and reported success, which is the worst possible pairing.
     readTrack(s) {
       const v = String(s == null ? "" : s).trim();
       if (!v) return { id: null, empty: true };
@@ -447,13 +637,24 @@
         patch.link_handle = /^[A-Za-z0-9._-]{1,30}$/.test(h) ? h : null;
       }
       const { error } = await c.from("profiles").update(patch).eq("id", user.id);
-      // The database is the gate, so surface WHY rather than a raw code.
+      // The database is the gate, so surface WHY rather than a raw code. Every
+      // CHECK on these columns answers 23514, so the constraint's name says which
+      // one it was. Only the frame's own CHECK reads as the frame.
       if (error) {
+        const m = String(error.message || "");
         if (error.code === "22P02") throw new Error("That frame does not exist.");
-        if (error.code === "23514") throw new Error("That frame is not yours to pick yet.");
+        if (error.code === "23514") {
+          if (/card_photo_ours/.test(m)) throw new Error("That photo is not in your folder.");
+          if (/link_platform_known/.test(m)) throw new Error("A card links to Instagram, TikTok, YouTube, Spotify, SoundCloud or Bandcamp.");
+          if (/link_handle_shape/.test(m)) throw new Error("A handle can only be letters, numbers, dots, dashes and underscores, up to 30.");
+          if (/theme_track_id/.test(m)) throw new Error("That song link did not read. Paste the Spotify song link again.");
+          if (/theme_start_sane/.test(m)) throw new Error("The start time has to be within the first hour of the song.");
+          throw new Error("That frame is not yours to pick yet.");
+        }
         if (error.code === "42501") throw new Error("That photo is not in your folder.");
         throw error;
       }
+      forgetMe();
       return patch;
     },
 
@@ -601,19 +802,35 @@
       const slug = OTP.slugifyTitle(title);
       if (slug.length < 3) throw new Error("That title needs more to it.");
       if (/^!\[/m.test(body || "")) throw new Error("Images inside the story are not a thing yet. One cover photo is.");
-      const { error } = await c.from("member_stories").insert({
+      const row = {
         author_id: user.id, slug,
         title: NO_DASH(title).trim(),
         dek: NO_DASH(dek).trim(),
         body_md: NO_DASH(body),
         cover_url: coverUrl || null,
-      });
+      };
+      storyFits({ title: row.title, dek: row.dek, body: row.body_md });
+      // ⛔ A HOUSE story is a folder (word/<slug>/), not a row, so the unique slug
+      // on member_stories cannot see it, and neither can the composer's own
+      // word/new/ or the reader's word/live/. A member story under one of those
+      // slugs never bakes (bake.py finds the folder and skips it). Ask for the
+      // folder first. Fails open: no answer is not a reason to refuse a story.
+      if (ROOT) {
+        let taken = false;
+        try {
+          const r = await fetch(ROOT + "word/" + slug + "/", { method: "HEAD", cache: "no-store" });
+          taken = !!(r && r.ok);
+        } catch (e) {}
+        if (taken) throw new Error("A story already runs under that title. Pick another.");
+      }
+      const { error } = await c.from("member_stories").insert(row);
       if (error) {
         if (error.code === "23505") {
           throw new Error(error.message.indexOf("one_pending") !== -1
             ? "You already have one on the desk. One at a time."
             : "A story already runs under that title. Pick another.");
         }
+        if (error.code === "23514") throw storyWhy(error);
         throw error;
       }
       return slug;
@@ -629,9 +846,13 @@
         patch.body_md = NO_DASH(body);
       }
       if (coverUrl !== undefined) patch.cover_url = coverUrl || null;
+      storyFits({ title: patch.title, dek: patch.dek, body: patch.body_md });
       const { data, error } = await c.from("member_stories")
         .update(patch).eq("id", id).select("id");
-      if (error) throw error;
+      if (error) {
+        if (error.code === "23514") throw storyWhy(error);
+        throw error;
+      }
       if (!data || !data.length) throw new Error("That one is live. Edits go through the desk now.");
     },
 
@@ -724,9 +945,15 @@
         if (/^!\[/m.test(body || "")) throw new Error("Images inside the story are not a thing yet. One cover photo is.");
         patch.body_md = NO_DASH(body);
       }
+      // Checked before the write, so a too-long headline is a sentence, not a
+      // Postgres constraint name, and nothing reached the database.
+      storyFits({ title: patch.title, dek: patch.dek, body: patch.body_md });
       const { data, error } = await c.from("member_stories")
         .update(patch).eq("id", id).select("id");
-      if (error) throw error;
+      if (error) {
+        if (error.code === "23514") throw storyWhy(error);
+        throw error;
+      }
       if (!data || !data.length) throw new Error("Could not write that story.");
     },
 
@@ -1080,15 +1307,25 @@
     // visible to the person who has to decide about it.
     async calendarAll(limit = 200) {
       const c = sb(); if (!c) return [];
+      // ⛔ profiles!submitted_by, NOT a bare profiles(...). 025 adds a SECOND
+      // foreign key to profiles (credited_to), and PostgREST refuses an embed it
+      // cannot tell apart (PGRST201, which calTry does not step down on), so the
+      // board's RUN and the desk's /dates/ would both have come back empty the
+      // day 025 runs. The hint names the column, works before 025 and after, and
+      // the key in the JSON is still `profiles`.
       const BASE = "id,submitted_by,title,kind,on_date,start_time,city,venue,link,note," +
-                   "published,created_at, profiles(display_name,card_slug)";
+                   "published,created_at, profiles!submitted_by(display_name,card_slug)";
       // The DESK reads the base table, not the view, so it wants the raw uuid.
       // The board resolves it against its own members list rather than paying
       // for a second embed.
-      return await calTry(cols => c.from("calendar_dates")
+      // ⛔ The cap is taken from the NEWEST end, then the rows are handed back
+      // oldest first as they always were. Capped ascending, a full table kept
+      // last year and dropped the upcoming dates and the open house asks.
+      const rows = await calTry(cols => c.from("calendar_dates")
         .select(cols)
-        .order("on_date", { ascending: true }).limit(limit),
+        .order("on_date", { ascending: false }).limit(limit),
         BASE + "," + CAL_EXCH + ",credited_to", BASE + "," + CAL_EXCH, BASE);
+      return rows.slice().reverse();
     },
 
     async myDates() {
@@ -1537,6 +1774,16 @@
       });
     },
 
+    // The other shape: the WHOLE photo, never cropped and never enlarged, long
+    // edge at most `edge`, JPEG. fitCardArt cover-crops to exactly W x H, which is
+    // right for a card and wrong for a frame: through it a 3:2 landscape lost a
+    // third of its width to a square. Resolves { blob, w, h } so the caller can
+    // store the real size next to the url.
+    async fitWithin(file, edge = 1600, q = 0.88) {
+      const s = await shrinkStill(file, edge, q);
+      return { blob: s.blob, w: s.w, h: s.h };
+    },
+
     async myPosts(limit = 30) {
       const c = sb(); if (!c) return [];
       const { data: { user } } = await c.auth.getUser();
@@ -1599,11 +1846,11 @@
       const c = sb(); if (!c) return [];
       const rpc = await c.rpc("desk_profiles");
       if (!rpc.error) return rpc.data || [];
-      // pre-002 fallback
-      const { data } = await c.from("profiles")
-        .select("id, display_name, card_slug, approved, is_admin, created_at")
-        .order("created_at", { ascending: false });
-      return data || [];
+      // The pre-002 fallback that used to sit here selected is_admin straight off
+      // profiles, which no API role may read since 002, so it failed every time
+      // and ended in this same empty list. Now it just says so in the console.
+      console.warn("desk_profiles did not answer,", rpc.error.message);
+      return [];
     },
 
     // ⛔ THREE STATES SINCE 023, not two. "Waiting" means nobody has looked yet;
@@ -1671,7 +1918,7 @@
       try {
         const c = sb(); const r = c ? await c.rpc("wall_me") : null;
         const m = r && !r.error && r.data && r.data[0];
-        if (m && m.member && !m.card_ask) return "This part is for card holders. You can ask for a card on The Wall, under People.";
+        if (m && m.member && !m.card_ask) return "This part is for card holders. You can ask for a card in the Crypt, under Kin.";
       } catch (e) {}
       return d.line;
     },
@@ -1740,8 +1987,6 @@
       const { error } = await c.from("posts").update({ published }).eq("id", id);
       if (error) throw error;
     },
-
-    async pullPost(id) { return OTP.setPublished(id, false); },
 
     async setPinned(id, pinned) {
       const c = sb(); if (!c) throw new Error("Backend not configured yet.");

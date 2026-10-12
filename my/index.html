@@ -7,7 +7,7 @@
 <title>Your desk · 0FF THE PRINT</title>
 <meta name="theme-color" content="#0a0a0d">
 <link rel="icon" href="../assets/favicon.svg">
-<link rel="stylesheet" href="../assets/css/auth.css">
+<link rel="stylesheet" href="../assets/css/auth.css?v=57b34045">
 <link rel="stylesheet" href="../assets/css/calendar.css?v=1646f26d">
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@700;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -62,7 +62,8 @@
 <div class="wrap">
   <a class="back" href="../">&larr; 0FF THE PRINT</a>
   <h1>Your desk</h1>
-  <div class="sub" id="sub">your card &nbsp;·&nbsp; your posts &nbsp;·&nbsp; what's waiting</div>
+  <div class="sub" id="sub">your card &nbsp;·&nbsp; your posts &nbsp;·&nbsp; what's waiting &nbsp;·&nbsp;
+    <a href="../wall/" style="color:var(--pink-glow);text-decoration:none;font-weight:600">THE CRYPT &rarr;</a></div>
 
   <div id="gate" class="gate" style="display:none"></div>
 
@@ -169,7 +170,7 @@
 
 <script src="../supabase-config.js?v=f1348482"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="../assets/js/desk.js?v=b1b40641" defer></script>
+<script src="../assets/js/desk.js?v=c10b36ef" defer></script>
 <script src="../assets/js/calendar.js?v=52b31f44" defer></script>
 <script defer>
 document.addEventListener('DOMContentLoaded', async () => {
@@ -182,7 +183,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       '<p class="door-note">The backend is not switched on yet.</p>'; return;
   }
   const me = await OTP.me().catch(() => null);
-  if (!me) { location.href = '../join/'; return; }
+  if (!me) { location.href = '../join/?next=my'; return; }
   if (!me.profile || !me.profile.approved) {
     $('gate').style.display = ''; $('gate').innerHTML =
       '<p class="door-note">' + esc(await OTP.doorLine(me.profile)) + '</p>'; return;
@@ -283,15 +284,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         fetch('../content/creators.json', { cache: 'no-cache' }).then(x => x.json()),
       ]);
       const slugify = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      // ⛔ TWO KEYS, like the homepage: The Ink holds `theink`, WUN MOR holds `wunmor`.
+      const tight = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+      const mine = me.profile.card_slug || '';
       seed = [...(c.items || []), ...(r.items || [])]
-        .find(x => slugify(x.name) === me.profile.card_slug) || null;
+        .find(x => slugify(x.name) === mine || (mine && tight(x.name) === tight(mine))) || null;
     } catch (e) { seed = null; }
     paintCard();
   })();
 
   function paintCard() {
     const frame = me.profile.card_frame || (seed && seed.rarity) || 'common';
-    const photo = me.profile.card_photo || (seed && seed.photo) || null;
+    // the house art's path is from the site root, and this page is one folder down
+    const photo = me.profile.card_photo || (seed && seed.photo ? '../' + String(seed.photo).replace(/^\.?\//, '') : null);
     const name = (seed && seed.name) || me.profile.display_name;
     const art = photo
       ? `<div class="poke-art" style="background-image:url('${esc(photo)}');background-size:cover;background-position:50% 26%"></div>`
@@ -328,13 +333,22 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
 
   // ---- everything waiting, everything live --------------------------------
-  const [stories, tracks, entries, posts, vids] = await Promise.all([
+  // Rooms (038) and packs (037) come off their own lists, which mark yours
+  // (mine). They are managed where they live (Take it down on the Music tab,
+  // edit on /packs/), so here they are a line and a link, no Withdraw.
+  const mineOf = n => Promise.resolve(OTP.sb().rpc(n))
+    .then(q => (q && !q.error && Array.isArray(q.data)) ? q.data.filter(x => x && x.mine) : [])
+    .catch(() => []);
+  const [stories, tracks, entries, posts, vids, rooms, packs] = await Promise.all([
     OTP.myStories ? OTP.myStories().catch(() => []) : [],
     OTP.myRotation ? OTP.myRotation().catch(() => []) : [],
     OTP.myEntriesAll ? OTP.myEntriesAll().catch(() => []) : [],
     OTP.myPosts ? OTP.myPosts(3).catch(() => []) : [],
     OTP.myVideos ? OTP.myVideos().catch(() => []) : [],
+    mineOf('rooms_list'),
+    mineOf('packs_list'),
   ]);
+  const roomLabel = r => (r.name || 'A room') + (r.label ? ' · ' + r.label : '');
 
   const waiting = [
     ...stories.filter(x => !x.published).map(x => ({ kind: 'STORY', label: x.title, wd: () => OTP.withdrawStory(x.id), href: '../word/new/' })),
@@ -343,12 +357,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     // there is no withdrawVideo: the RLS delete policy already refuses a
     // published row, so deleteVideo IS the withdraw for an unpublished one
     ...vids.filter(x => !x.published).map(x => ({ kind: 'VIDEO', label: x.title + ' · ' + x.provider, wd: () => OTP.deleteVideo(x.id), href: '../compose/' })),
+    ...rooms.filter(x => !x.published).map(x => ({ kind: 'ROOM', label: roomLabel(x), href: '../#rooms' })),
+    ...packs.filter(x => !x.published).map(x => ({ kind: 'PACK', label: x.title || 'A pack', href: '../packs/?edit=' + encodeURIComponent(x.slug) })),
   ];
   const live = [
     ...stories.filter(x => x.published).map(x => ({ kind: x.baked ? 'STORY · IN THE CATALOG' : 'STORY', label: x.title, href: '../word/live/?s=' + encodeURIComponent(x.slug), gold: x.baked })),
     ...tracks.filter(x => x.published).map(x => ({ kind: 'ON ROTATION', label: x.title + ' · ' + x.artist, href: '../#music' })),
     ...entries.filter(x => x.published).map(x => ({ kind: 'ENTRY', label: 'on ' + x.story_slug, href: '../word/' + x.story_slug + '/' })),
     ...vids.filter(x => x.published).map(x => ({ kind: x.featured ? 'ON THE REEL · FEATURED' : 'ON THE REEL', label: x.title + ' · ' + x.provider, href: '../#videos', gold: x.featured })),
+    ...rooms.filter(x => x.published).map(x => ({ kind: 'ROOM', label: roomLabel(x), href: '../#rooms' })),
+    ...packs.filter(x => x.published).map(x => ({ kind: 'PACK', label: x.title || 'A pack', href: '../packs/?p=' + encodeURIComponent(x.slug) })),
   ];
 
   if (waiting.length) {
@@ -357,7 +375,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       <div class="row">
         <span class="t">${w.href ? `<a href="${w.href}" style="color:var(--ink);text-decoration:none">${esc(w.label)}</a>` : esc(w.label)}</span>
         <span class="st wait">${w.kind}</span>
-        <button type="button" data-wd="${i}">Withdraw</button>
+        ${w.wd ? `<button type="button" data-wd="${i}">Withdraw</button>` : ''}
       </div>`).join('');
     $('waitlist').querySelectorAll('[data-wd]').forEach(b => b.onclick = async () => {
       b.disabled = true;
@@ -447,7 +465,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   $('postlist').innerHTML = posts.length ? posts.map(p => `
     <div class="row">
-      <span class="t">${esc((p.text || '').slice(0, 60))}</span>
+      <span class="t">${esc((p.text || (p.image_url ? 'a photo' : '')).slice(0, 60))}</span>
       <span class="st ${p.published ? 'live' : 'wait'}">${p.published ? 'LIVE' : 'PULLED'}</span>
     </div>`).join('') : '<div class="hint">Nothing posted yet. The timeline is right there.</div>';
 });

@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#0a0a0d">
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/auth.css">
+<link rel="stylesheet" href="../assets/css/auth.css?v=57b34045">
 <style>
   .drop{margin-top:14px;border:1px dashed var(--line);border-radius:12px;padding:18px;text-align:center;
     font-family:var(--f-mono);font-size:11.5px;letter-spacing:.14em;color:var(--muted);cursor:pointer;text-transform:uppercase}
@@ -52,7 +52,8 @@
   <div class="sub" id="sub">the timeline &nbsp;·&nbsp; goes live instantly &nbsp;·&nbsp;
     <a href="../my/" style="color:var(--pink-glow);text-decoration:none;font-weight:600">YOUR DESK &rarr;</a> &nbsp;·&nbsp;
     <a href="../card/" style="color:var(--pink-glow);text-decoration:none;font-weight:600">YOUR CARD &rarr;</a> &nbsp;·&nbsp;
-    <a href="../word/new/" style="color:var(--pink-glow);text-decoration:none;font-weight:600">WRITE A STORY &rarr;</a></div>
+    <a href="../word/new/" style="color:var(--pink-glow);text-decoration:none;font-weight:600">WRITE A STORY &rarr;</a> &nbsp;·&nbsp;
+    <a href="../wall/" style="color:var(--pink-glow);text-decoration:none;font-weight:600">THE CRYPT &rarr;</a></div>
 
   <div class="card" id="panel"><div class="empty">checking your card…</div></div>
   <div id="rot"></div>
@@ -62,7 +63,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="../supabase-config.js?v=f1348482"></script>
-<script src="../assets/js/desk.js?v=b1b40641"></script>
+<script src="../assets/js/desk.js?v=c10b36ef"></script>
 <script>
 (async () => {
   const $ = id => document.getElementById(id);
@@ -76,7 +77,7 @@
     return;
   }
   const me = await OTP.me();
-  if (!me) { location.href = '../join/'; return; }
+  if (!me) { location.href = '../join/?next=compose'; return; }
   if (!me.profile?.approved) {
     // 033: a Wall member posts from the timeline, not from this page (this box is the
     // card holder's: GIFs, video). Send them where their post box is.
@@ -166,7 +167,8 @@
 
   $('go').onclick = async () => {
     const text = $('text').value.trim();
-    if (!text) { msg('Say something first.', 'err'); return; }
+    // 038: words, or a photo with no words. Same rule as the homepage box and the Roll.
+    if (!text && !file) { msg('Say something or add a photo first.', 'err'); return; }
     $('go').disabled = true; $('go').textContent = 'Posting…';
     try {
       let url = null;
@@ -311,7 +313,7 @@
     vidBox.innerHTML = `
       <h2 style="margin-top:26px">Put a video up</h2>
       <div class="card">
-        <div class="empty" style="margin-bottom:10px">Paste a YouTube, TikTok or Instagram link. The desk gets it first.</div>
+        <div class="empty" style="margin-bottom:10px">Paste a YouTube, TikTok or Instagram link. It goes up when you add it, and the desk can pull it.</div>
         <input type="text" id="vd-url" placeholder="https://www.tiktok.com/@you/video/..." autocomplete="off"
           style="width:100%;background:#0d0d12;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:12px;font-size:16px;min-height:44px">
         <input type="text" id="vd-title" placeholder="what is it" autocomplete="off" maxlength="80"
@@ -454,7 +456,8 @@
         const btn = ev.currentTarget;
         const t = document.getElementById('e' + p.id).value.trim();
         const a = p.image_url ? document.getElementById('a' + p.id).value.trim() : undefined;
-        if (!t) { const m = document.getElementById('m' + p.id); m.textContent = 'It needs to say something.'; m.className = 'msg show err'; return; }
+        // 038: a post with a photo can lose its words, one without has to keep some
+        if (!t && !p.image_url) { const m = document.getElementById('m' + p.id); m.textContent = 'It needs to say something.'; m.className = 'msg show err'; return; }
         btn.disabled = true; btn.textContent = 'Saving…';
         try { await OTP.updatePost(p.id, { text: t, imageAlt: a }); renderMine(); }
         catch (e) {

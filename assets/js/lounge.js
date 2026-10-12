@@ -69,6 +69,10 @@
     if (kind === 'tape') return { href: 'video/', label: 'Watch the tape →' };
     if (kind === 'sheet') return { act: 'sheet', label: 'Find yourself ↓' };
     if (kind === 'radio') return { act: 'radio', label: 'Put a record on' };
+    // 'It stays between us.' Signed out, #take opens on the tip line. Signed in, #take opens on the PUBLIC
+    // composer (the tip line is a stranger's box), so a member gets the same mail the tip boxes open instead.
+    if (d.documentElement.getAttribute('data-door') !== 'out')
+      return { href: 'mailto:offtheprintcollective@gmail.com?subject=' + encodeURIComponent('Tip for the desk'), label: 'Tell the desk →' };
     return { href: '#take', label: 'Tell the desk →' };
   }
   function fill(line) {
@@ -226,7 +230,9 @@
         }
         deal();
         var foot = d.getElementById('fr-foot');
-        if (foot) { foot.textContent = ''; foot.appendChild(el('b', '', String(data.total || FR.flat.length))); foot.appendChild(d.createTextNode(' frames from ')); foot.appendChild(el('b', '', String(data.nights.length))); foot.appendChild(d.createTextNode(' nights · tap one, it goes in your binder')); }
+        if (foot) { foot.textContent = ''; foot.appendChild(el('b', '', String(data.total || FR.flat.length))); foot.appendChild(d.createTextNode(' frames from ')); foot.appendChild(el('b', '', String(data.nights.length))); foot.appendChild(d.createTextNode(' nights on the sheet · tap one, it goes in your binder')); }
+        // 'on the sheet': the brand card counts every frame on the shelf (clips and each night's hit too, the way
+        // a night's own page counts them). The sheet leaves both out, so on its own its total read as a second house count.
         sec.hidden = false;
         grid.addEventListener('click', function (e) { var t = e.target.closest('.fr-t'); if (t) show(t._k); });
         var dl = d.getElementById('fr-deal'); if (dl) dl.addEventListener('click', deal);

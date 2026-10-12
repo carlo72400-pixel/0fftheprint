@@ -43,6 +43,7 @@
     text-transform:uppercase;color:var(--pink)}
   dl.rec dd{font-size:15.5px;line-height:1.6;color:var(--ink)}
   dl.rec dd span{color:var(--muted)}
+  dl.rec dd span[data-n]{color:inherit}
   @media(max-width:560px){dl.rec > div{grid-template-columns:1fr;gap:5px}}
   ul.plain{margin:0 0 22px;padding-left:19px;max-width:640px}
   ul.plain li{font-size:16.5px;line-height:1.7;margin-bottom:9px}
@@ -75,18 +76,19 @@
     <div><dt>Contact</dt><dd><a href="mailto:offtheprintcollective@gmail.com">offtheprintcollective@gmail.com</a></dd></div>
   </dl>
   <p>0FF THE PRINT is a one-desk operation. Assignments are made in house, and the editor and the
-  photographer are the same person. Everything published here was reported and shot by us, and any
-  photograph we did not take carries its photographer, source and licence under it.</p>
+  photographer are the same person. Every house story and night gallery was reported and shot by us,
+  and any photograph in them we did not take carries its photographer, source and licence under it.
+  Card holders also write and post here, under their own names.</p>
 
   <h2>What we publish</h2>
   <dl class="rec">
-    <div><dt>The Word</dt><dd>Reported stories. Thirty one published, each numbered and dated. <a href="../#desk">Read the archive</a></dd></div>
-    <div><dt>Events</dt><dd>Full night galleries, nineteen published. <a href="../events/">See them</a></dd></div>
-    <div><dt>The Work</dt><dd>Forty eight frames from nights, shops, stages, a ring and back rooms. <a href="../work/">See the archive</a></dd></div>
+    <div><dt>The Word</dt><dd>Reported stories. <span data-n="word" data-cap>Thirty one</span> published, each numbered and dated. <a href="../#desk">Read the archive</a></dd></div>
+    <div><dt>Events</dt><dd>Full night galleries, <span data-n="events">nineteen</span> published. <a href="../events/">See them</a></dd></div>
+    <div><dt>The Work</dt><dd><span data-n="work" data-cap>Fifty one</span> frames from nights, shops, stages, a ring and back rooms. <a href="../work/">See the archive</a></dd></div>
     <div><dt>The Tape</dt><dd>Cuts, interviews and night clips. <a href="../video/">Watch</a></dd></div>
   </dl>
   <p>Every piece carries a catalogue number in the form <b>0TP-000</b> and a publication date, so
-  anything we have run can be found and checked. The most recent story is dated September 2, 2026.</p>
+  anything we have run can be found and checked. The most recent story is dated <span data-newest>October 7, 2026</span>.</p>
 
   <h2>Coverage</h2>
   <ul class="plain">
@@ -124,5 +126,42 @@
   </div>
 
 </div>
+<script>
+/* The record reads the same files the site runs on (desk.json, work.json,
+   events.json), so it cannot go stale the way the hand-typed numbers did.
+   The written numbers above stay when a file or JS is missing. */
+(() => {
+  const ONES = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven',
+    'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+  const TENS = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+  const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September',
+    'October', 'November', 'December'];
+  const words = n => n < 20 ? ONES[n]
+    : n < 100 ? TENS[Math.floor(n / 10)] + (n % 10 ? ' ' + ONES[n % 10] : '')
+    : n < 1000 ? ONES[Math.floor(n / 100)] + ' hundred' + (n % 100 ? ' ' + words(n % 100) : '')
+    : String(n);
+  const put = (key, n) => document.querySelectorAll('[data-n="' + key + '"]').forEach(el => {
+    const w = words(n);
+    el.textContent = el.hasAttribute('data-cap') ? w.charAt(0).toUpperCase() + w.slice(1) : w;
+  });
+  const items = url => fetch(url, { cache: 'no-cache' })
+    .then(r => { if (!r.ok) throw new Error(url); return r.json(); })
+    .then(j => { if (!j || !Array.isArray(j.items)) throw new Error(url); return j.items; });
+
+  items('../content/desk.json').then(all => {
+    const ours = all.filter(x => x.platform !== 'READ');   // READ cards link out to someone else's piece
+    if (ours.length) put('word', ours.length);
+    let newest = '';
+    ours.forEach(x => {
+      const m = /^(\d\d)\.(\d\d)\.(\d\d)$/.exec(x.date || '');   // MM.DD.YY
+      if (m && '20' + m[3] + m[1] + m[2] > newest) newest = '20' + m[3] + m[1] + m[2];
+    });
+    const el = document.querySelector('[data-newest]');
+    if (newest && el) el.textContent = MONTHS[+newest.slice(4, 6) - 1] + ' ' + (+newest.slice(6, 8)) + ', ' + newest.slice(0, 4);
+  }).catch(() => {});
+  items('../content/work.json').then(all => { if (all.length) put('work', all.length); }).catch(() => {});
+  items('../events/events.json').then(all => { if (all.length) put('events', all.length); }).catch(() => {});
+})();
+</script>
 </body>
 </html>

@@ -12,8 +12,9 @@ Two sources, merged, newest first:
          and they carry their own line of copy.
   NIGHTS events/*/data.json, walked. Every clip already published on an event
          page, reusing the poster that event already committed. Nothing here is
-         hand maintained, so a new dump joins the tape the moment newevent.py
-         runs and repage.py cannot drift from it.
+         hand maintained, but the page BAKES the list (ITEMS), so a clip joins
+         or leaves the tape only when this runs. newevent.py and takedown.py
+         call build() (10/11); after editing a night's clips by hand, run it.
 
 ⛔ VIDEO IS NEVER SERVED FROM A RELEASE ASSET. GitHub types every one of them
    application/octet-stream + content-disposition: attachment and iOS Safari
@@ -33,6 +34,7 @@ import io
 import json
 import os
 import re
+import sys
 from datetime import datetime
 
 ROOT   = os.path.dirname(os.path.abspath(__file__))
@@ -117,6 +119,11 @@ def build():
     left = re.findall(r"__[A-Z]+__", page)
     if left:
         raise SystemExit(f"placeholders unfilled: {sorted(set(left))}")
+    # the template's binder.js / binder.css tags carry no ?v=; every rebuild used
+    # to strip the stamps stamp.py had put on the page
+    sys.path.insert(0, ROOT)
+    from stamp import stamp_text
+    page = stamp_text(page)
     io.open(os.path.join(OUT, "index.html"), "w", encoding="utf-8").write(page)
     print(f"  video/: {len(items)} pieces ({n_cut} cuts, {n_nig} night clips)")
 

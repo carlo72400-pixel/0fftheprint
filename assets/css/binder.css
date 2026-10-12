@@ -43,6 +43,8 @@ html.bn-has-bar .leopard-bar{height:3px;background:linear-gradient(90deg,transpa
   .bn-bar{gap:12px;padding:7px 14px}
   .bn-bar .bn-wm span{display:none}
   .bn-bar .bn-links{gap:15px}
+  /* the mark is the way home here; with Home in the row, Coven ran off the edge at 360 to 390px */
+  .bn-bar .bn-links .bn-home{display:none}
 }
 
 /* ---------------- a pack tile: how far in you are ---------------- */

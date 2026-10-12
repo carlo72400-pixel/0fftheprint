@@ -61,7 +61,10 @@
         'box-shadow:0 0 8px rgba(255,121,198,.7)}' +
       '.artname{font-family:var(--f-mono,ui-monospace,monospace);font-size:9px;letter-spacing:.14em;' +
         'text-transform:uppercase;color:var(--muted,#8b8595);text-align:center;line-height:1;' +
-        'margin-top:-2px;min-height:9px}';
+        'margin-top:-2px;min-height:9px}' +
+      // a clip in The Take: a real <video>, because an mp4 as a background paints nothing
+      '.post video.im{display:block;height:auto;object-fit:cover;border:0;' +
+        'border-bottom:1px solid var(--line,#26232e)}';
     var el = document.createElement('style');
     el.textContent = css;
     document.head.appendChild(el);
@@ -102,7 +105,10 @@
     threads:    ['Threads',    'https://www.threads.net/@'],
     spotify:    ['Spotify',    'https://open.spotify.com/artist/'],
     soundcloud: ['SoundCloud', 'https://soundcloud.com/'],
-    bandcamp:   ['Bandcamp',   'https://bandcamp.com/']
+    // ⛔ an artist's Bandcamp is <handle>.bandcamp.com. bandcamp.com/<handle> is a
+    // fan's collection page, or a 404. The handle CHECK keeps it a bare word, so the
+    // host is still always under bandcamp.com.
+    bandcamp:   ['Bandcamp',   function (h) { return 'https://' + encodeURIComponent(h) + '.bandcamp.com/'; }]
   };
   // ⛔ The base is hardcoded and the handle is a bare word. The database will
   // not hold a host (007's CHECK pins link_platform to a known list and the
@@ -110,7 +116,8 @@
   function outLink(p, h) {
     var base = LINK_BASE[p];
     if (!p || !h || !base) return null;
-    return { url: base[1] + encodeURIComponent(h), label: '@' + h, plat: p, name: base[0] };
+    var url = typeof base[1] === 'function' ? base[1](h) : base[1] + encodeURIComponent(h);
+    return { url: url, label: '@' + h, plat: p, name: base[0] };
   }
 
   /* THE LINK ROW. This page is the URL they put in their bio, so the links are
@@ -156,9 +163,11 @@
     var c = data.card || {};
     back.innerHTML =
       '<div class="sh">' +
-        '<h3>Your words</h3>' +
-        '<div class="note">The only two things on this page you type. Everything else fills ' +
-        'itself in from what you post, write and put on rotation.</div>' +
+        '<h3>' + (mine ? 'Your words' : 'Their words') + '</h3>' +
+        '<div class="note">' + (mine
+          ? 'The only two things on this page you type. Everything else fills ' +
+            'itself in from what you post, write and put on rotation.'
+          : 'The two things on this page they type. This saves on their card, not yours.') + '</div>' +
         '<label>Tagline</label>' +
         '<input id="w-tag" type="text" maxlength="80" value="' + esc(c.tagline || '') + '" ' +
           'placeholder="one line. who you are in the room.">' +
@@ -196,7 +205,18 @@
       var go = this;
       go.disabled = true; say.className = 'say'; say.textContent = 'Saving…';
       try {
-        await OTP.saveMyWords({ tagline: tag.value, bio: bio.value });
+        if (mine) {
+          await OTP.saveMyWords({ tagline: tag.value, bio: bio.value });
+        } else {
+          // ⛔ saveMyWords writes the CALLER's row. The desk's pen on somebody
+          // else's page used it, so KAV-MAN's fix landed on /c/vamppsych/ and his
+          // own page never changed. The cards view has no id, so the desk's own
+          // list finds whose card this is, and the desk's call writes that row.
+          var rows = await OTP.deskProfiles();
+          var them = (rows || []).filter(function (r) { return r && r.card_slug === c.card_slug; })[0];
+          if (!them || !them.id) throw new Error('Could not find whose card this is. Fix it from the board.');
+          await OTP.setMemberWords(them.id, { tagline: tag.value, bio: bio.value });
+        }
         shut();
         await load();
       } catch (e) {
@@ -554,11 +574,17 @@
       data.posts.forEach(function (p) {
         var el = d.createElement('article');
         el.className = 'post';
-        el.innerHTML = (p.image_url ? '<span class="im"></span>' : '') +
+        var clip = !!(p.image_url && OTP.isVideo && OTP.isVideo(p.image_url) && /^https:\/\//i.test(p.image_url));
+        el.innerHTML = (p.image_url ? (clip ? '<video class="im" muted playsinline controls preload="metadata"></video>'
+                                            : '<span class="im"></span>') : '') +
           '<div class="tx">' + esc(p.text || '') + '</div>' +
           '<div class="when">' + (p.pinned ? '<span class="pin">pinned</span> · ' : '') +
           esc(when(p.created_at)) + '</div>';
-        if (p.image_url) {
+        if (clip) {
+          var v = el.querySelector('video.im');
+          v.src = p.image_url;
+          if (p.image_alt) v.setAttribute('aria-label', p.image_alt);
+        } else if (p.image_url) {
           var im = el.querySelector('.im');
           im.style.backgroundImage = 'url("' + p.image_url.replace(/"/g, '%22') + '")';
           im.setAttribute('role', 'img');
@@ -645,14 +671,30 @@
   var houseCard = null;
   async function loadHouseCard() {
     var tight = function (v) { return String(v || '').toLowerCase().replace(/[^a-z0-9]/g, ''); };
+    var section = 'roster', ov = null;
     try {
       var pair = await Promise.all([
         fetch(BASE + 'content/roster.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }),
-        fetch(BASE + 'content/creators.json', { cache: 'no-cache' }).then(function (r) { return r.json(); })
+        fetch(BASE + 'content/creators.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }),
+        // the board's edits (below) ride along with the JSON, not a round trip of their own before the page paints
+        (w.OTP && OTP.siteOverrides) ? OTP.siteOverrides().catch(function () { return null; }) : null
       ]);
-      var all = (pair[1].items || []).concat(pair[0].items || []);
-      houseCard = all.filter(function (x) { return tight(x.name) === tight(slug); })[0] || null;
+      var match = function (x) { return tight(x.name) === tight(slug); };
+      var fromCreators = (pair[1].items || []).filter(match)[0];
+      if (fromCreators) section = 'creators';
+      houseCard = fromCreators || (pair[0].items || []).filter(match)[0] || null;
+      ov = pair[2];
     } catch (e) { houseCard = null; }
+    /* THE BOARD'S EDITS. The desk fixes lore and flavor from /board/ as
+       site_overrides rows keyed on the card's name, and the homepage folds them
+       in on every load. Without them here his fix showed in Open A Pack while
+       this page kept the old words until a laptop bake. Same merge as the
+       homepage's applyList. "Hide from the roster" is not read: this is still
+       their own page. The JSON stays the floor if the call fails. */
+    if (houseCard && Array.isArray(ov)) {
+      var row = ov.filter(function (r) { return r && r.section === section && r.item_key === houseCard.name; })[0];
+      if (row && row.patch && typeof row.patch === 'object') houseCard = Object.assign({}, houseCard, row.patch);
+    }
   }
 
   async function load() {
@@ -679,9 +721,11 @@
       fail('Backend not switched on yet.', 'supabase-config.js has not been filled in.');
       return;
     }
+    // the house card loads alongside the login check: neither needs the other, and this is the link-in-bio page
+    var house = loadHouseCard();
     try { me = await OTP.me(); } catch (e) { me = null; }
     admin = !!(me && me.profile && me.profile.is_admin);
-    await loadHouseCard();
+    await house;
     try { await load(); }
     catch (e) {
       console.error(e);

@@ -24,6 +24,20 @@ html.cath nav.site a.wm::after{display:none;}
 html.cath nav.site a.wm img{display:block;height:30px;width:auto;margin:-6px 0;filter:drop-shadow(0 0 7px rgba(255,121,198,.5));}
 html.cath nav.site .cta{border-radius:3px;position:relative;}
 @media (min-width:821px) and (max-width:1180px){ html.cath nav.site a.wm span{display:none;} }
+/* ⛔ ONE ROW, IN EVERY DOOR STATE. Signed in, the nav also carries CRYPT, a longer key ("Your desk") and the
+   binder chip: at 821-900 that pushed the whole page sideways (an iPad slid, Follow was cut off), and at
+   1121-1366 the sticky bar wrapped to two rows on every tab. Measured at 821-1600 for out, pending, casual,
+   card and desk. Tablets get tighter spacing; small laptops keep the tablet rules (no handle after Follow).
+   :not(.wm) because a bare `a` here ties a.wm above on specificity and comes later, so it re-tracked the wordmark. */
+@media (min-width:821px) and (max-width:1120px){
+  html.cath.tabs nav.site{gap:12px;padding-left:16px;padding-right:16px;}
+  html.cath.tabs nav.site a:not(.wm){letter-spacing:.1em;}
+}
+@media (min-width:1121px) and (max-width:1440px){
+  html.cath.tabs nav.site{flex-wrap:nowrap;gap:18px;padding-left:22px;padding-right:22px;}
+  html.cath.tabs nav.site a:not(.wm){white-space:nowrap;letter-spacing:.16em;}
+  html.cath.tabs nav.site .nav-long{display:none;}
+}
 @media (max-width:820px){
   html.cath nav.site{gap:12px;padding:10px 16px;flex-wrap:nowrap;}
   html.cath nav.site a.wm{font-size:12.5px;letter-spacing:.12em;order:-1;}

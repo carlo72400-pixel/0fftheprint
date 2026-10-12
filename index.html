@@ -41,18 +41,20 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700..900&family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Pirata+One&family=Luckiest+Guy&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" defer></script>
 <script src="supabase-config.js?v=f1348482" defer></script>
-<script src="assets/js/desk.js?v=b1b40641" defer></script>
-<script src="assets/js/door.js?v=f663129d" defer></script>
-<script src="assets/js/composer.js?v=bc5024bf" defer></script>
-<script src="assets/js/edit.js?v=052f00ae" defer></script>
-<script src="assets/js/binder.js?v=614975a8" defer></script>
+<script src="assets/js/desk.js?v=c10b36ef" defer></script>
+<script src="assets/js/door.js?v=cc6793cf" defer></script>
+<script src="assets/js/composer.js?v=64abdad9" defer></script>
+<script src="assets/js/edit.js?v=6f38a483" defer></script>
+<script src="assets/js/binder.js?v=e63104e6" defer></script>
 <script src="assets/js/cathedral.js?v=8668be8b" defer></script>
-<script src="assets/js/lounge.js?v=72627a44" defer></script>
-<script src="assets/js/music.js?v=3dd98162" defer></script>
-<script src="assets/js/people.js?v=9ad4e792" defer></script>
-<script src="assets/js/photos.js?v=e0ff9e40" defer></script>
-<script>/* tabs: pick the page before first paint, off the #hash. Old links like /#desk still land right. */
-(function(){var M={do:'home',take:'home',drops:'photos',tape:'photos',videos:'photos',work:'photos',slate:'stories',desk:'stories',catalog:'stories',music:'music',open:'people',roster:'people',dates:'more',pitch:'more',experts:'more'},T=['home','photos','stories','music','people','more'],h=(location.hash||'').slice(1),d=document.documentElement;d.className+=' tabs';d.setAttribute('data-tab',T.indexOf(h)>=0?h:(M[h]||'home'));})();</script>
+<script src="assets/js/lounge.js?v=8d283bec" defer></script>
+<script src="assets/js/music.js?v=1c885448" defer></script>
+<script src="assets/js/people.js?v=41c2bf4b" defer></script>
+<script src="assets/js/photos.js?v=bb964946" defer></script>
+<script>/* tabs: pick the page before first paint, off the #hash. Old links like /#desk still land right.
+   ⛔ M has to name every main.feed > section[id] (the router below the body only corrects it after the
+   page has painted, so a missing id flashes Home first: /#roll from the Crypt did). Add new sections here. */
+(function(){var M={do:'home',frames:'home',take:'home',dates:'home',find:'photos',drops:'photos',artpacks:'photos',tape:'photos',videos:'photos',looks:'photos',work:'photos',map:'photos',takedown:'photos',slate:'stories',desk:'stories',catalog:'stories',music:'music',battle:'music',played:'music',holders:'music',texas:'music',lineage:'music',lineup:'music',releases:'music',rooms:'music',putuson:'music',roll:'people',open:'people',roster:'people',pitch:'more',experts:'more'},T=['home','photos','stories','music','people','more'],h=(location.hash||'').slice(1),d=document.documentElement;d.className+=' tabs';d.setAttribute('data-tab',T.indexOf(h)>=0?h:(M[h]||'home'));})();</script>
 <style>
   :root{
     --bg:#0a0a0d;
@@ -600,7 +602,7 @@
   .edm-l input,.edm-l textarea{
     display:block;width:100%;margin-top:6px;box-sizing:border-box;
     background:#0f0e14;border:1px solid var(--line);border-radius:8px;
-    color:var(--ink);font-family:var(--f-body,inherit);font-size:14px;padding:9px 11px;
+    color:var(--ink);font-family:var(--f-body,inherit);font-size:16px;padding:9px 11px;   /* 16px or iOS zooms on focus */
     letter-spacing:normal;text-transform:none;resize:vertical;
   }
   .edm-l input:focus,.edm-l textarea:focus{outline:none;border-color:var(--pink-deep);}
@@ -1019,10 +1021,6 @@
   }
   .track:hover .track-hint{opacity:1;}
 
-  @media (max-width:720px){
-    /* This Is Us: one card, so no carousel, just stop it being a billboard */
-    .curators-grid .poke{max-width:280px;margin:0 auto;}
-  }
   .poke{
     --mx:50%;--my:50%;
     --ty:0px;--ry:0deg;--rx:0deg;--sc:1;
@@ -1906,8 +1904,6 @@
     .rotation-grid, .tile-grid, .tile-grid.two{
       gap:8px;
     }
-    /* Mobile: curators stays single column. */
-    .curators-grid{grid-template-columns:1fr;}
     .wrap{padding:14px 12px 26px;}
     nav.site a{font-size:10px;letter-spacing:.16em;}
     .brand-card img{max-width:240px;}
@@ -2051,8 +2047,6 @@
 
   /* ============ NEW SECTIONS ============ */
 
-  /* Curators Hero — cheetah-bordered cards as landing */
-  .curators-hero{margin-bottom:32px;}
   /* One booster on its own. It used to be the last tile in the curators grid,
      which gave it a column; standing alone it needs its own or the card stretches
      the entire content width and reads as a poster instead of a pack.
@@ -2062,15 +2056,6 @@
   .booster-mount{display:grid;grid-template-columns:repeat(auto-fill,minmax(0,262px));gap:14px;}
   @media (max-width:460px){ .booster-mount{grid-template-columns:minmax(0,1fr);} }
 
-  .curators-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
-    gap:18px;
-    perspective:1000px;
-  }
-  @media (max-width:1100px){.curators-grid{grid-template-columns:repeat(3,minmax(0,1fr));}}
-  @media (max-width:780px){.curators-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}}
-  @media (max-width:460px){.curators-grid{grid-template-columns:1fr;}}
 
   /* ===== BOOSTER PACK card ===== */
   .poke.booster-pack{
@@ -2556,17 +2541,6 @@
     border:1px dashed rgba(255,121,198,.65);color:#ffd7ee;
     background:rgba(10,10,13,.6);transform:rotate(-1.2deg);}
   .slate-marquee:hover{border-color:var(--pink-glow);}
-  .slate-latest{
-    display:flex;align-items:center;gap:10px;margin-top:10px;padding:10px 14px;
-    border:1px solid var(--line);border-radius:10px;text-decoration:none;color:inherit;
-    font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
-    background:var(--panel);
-  }
-  .slate-latest:hover{border-color:var(--pink-glow);}
-  .slate-latest .l{color:var(--pink-glow);white-space:nowrap;}
-  .slate-latest .t{color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .slate-latest .c{margin-left:auto;color:var(--muted);white-space:nowrap;}
-  @media (max-width:640px){.slate-latest .c{display:none;}}
 
   .desk-play{background:rgba(255,121,198,.2);border-color:rgba(255,121,198,.6);color:#ffd7ee;}
   /* THE WORD is a rail, same grammar as the drops, the run and the tape. It was
@@ -2949,10 +2923,6 @@
     -webkit-text-fill-color:currentColor;
     background:none;
   }
-
-  .pulse-route{display:inline-flex;flex-wrap:wrap;justify-content:center;gap:6px 12px;font-family:var(--f-mono);font-size:12px;letter-spacing:.2em;color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:9px 20px;background:linear-gradient(180deg,rgba(244,143,200,.10),rgba(47,107,255,.06));}
-  .pulse-route b{color:var(--pink-glow);font-weight:600;}
-  .pulse-route .nx{color:var(--muted);}
 
   /* ===== PENDING / CLASSIFIED CARD ART ===== */
   .poke-art-pending{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;background:repeating-linear-gradient(-45deg,#101016 0 14px,#0c0c11 14px 28px);}
@@ -3871,7 +3841,7 @@
   .tk-box{margin-top:10px;padding:12px;border:1px solid var(--line);border-radius:14px;background:rgba(10,10,13,.5);display:grid;gap:10px;}
   .tk-box[hidden],.tk-nudge[hidden]{display:none !important;}
   .tk-form{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:end;}
-  .tk-form textarea{width:100%;min-height:44px;max-height:140px;resize:vertical;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:400 15px/1.4 var(--f-body);}
+  .tk-form textarea{width:100%;min-height:44px;max-height:140px;resize:vertical;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:400 16px/1.4 var(--f-body);}   /* 16px or iOS zooms the page on focus */
   .tk-form textarea::placeholder{color:var(--muted);}
   .tk-form button{min-height:44px;padding:0 16px;border:0;border-radius:999px;background:linear-gradient(180deg,var(--pink),var(--pink-deep));color:#0a0a0d;font-family:var(--f-body);font-weight:800;font-size:12px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;}
   .tk-form button:disabled{opacity:.5;cursor:default;}
@@ -3897,12 +3867,12 @@
 </style>
 <!-- THE CATHEDRAL (10/3): the homepage skin. Scoped under html.cath, loaded last on purpose. -->
 <link rel="stylesheet" href="assets/css/pack.css?v=3c0b0f68">
-<link rel="stylesheet" href="assets/css/binder.css?v=487bb4e0">
-<link rel="stylesheet" href="assets/css/cathedral.css?v=4465d22f">
+<link rel="stylesheet" href="assets/css/binder.css?v=00f24508">
+<link rel="stylesheet" href="assets/css/cathedral.css?v=a8c3c33f">
 <link rel="stylesheet" href="assets/css/lounge.css?v=2d07e1fc">
-<link rel="stylesheet" href="assets/css/music.css?v=a944a3cf">
-<link rel="stylesheet" href="assets/css/people.css?v=112fa352">
-<link rel="stylesheet" href="assets/css/photos.css?v=d4b8ccf7">
+<link rel="stylesheet" href="assets/css/music.css?v=07ac4683">
+<link rel="stylesheet" href="assets/css/people.css?v=041f32cf">
+<link rel="stylesheet" href="assets/css/photos.css?v=94911edf">
 </head>
 <body>
 
@@ -4401,7 +4371,7 @@
         <div class="sub">slide it under the door. we answer it ourselves.</div>
       </div>
       <div class="pitch-dm">
-        <p class="pitch-lead">No inbox nobody reads. The desk answers DMs.</p>
+        <p class="pitch-lead">The desk answers its own messages. DMs for the pitch, email for the paperwork.</p>
         <div class="pitch-actions">
           <a class="pitch-btn" href="https://instagram.com/vamppsych" target="_blank" rel="noopener"><b>DM The Lens</b><span>@vamppsych · interviews · scene tips · footage</span></a>
           <a class="pitch-btn blue" href="mailto:offtheprintcollective@gmail.com"><b>Email The Desk</b><span>offtheprintcollective@gmail.com · bookings · quotes · paperwork</span></a>
@@ -4528,11 +4498,13 @@
 
   /* Members: the Wall tile. door.js shows #nav-wall for anyone who is in; mirror that, never decide it here. */
   var navWall = document.getElementById('nav-wall'), tile = document.getElementById('do-wall');
-  var join = document.getElementById('do-join');
+  var join = document.getElementById('do-join'), navKey = document.getElementById('nav-key');
   function syncWall(){
     if (!navWall) return;
     if (tile) tile.hidden = navWall.hidden;
-    if (join) join.hidden = !navWall.hidden;          // logged out, or not on The Wall yet: the way in
+    // logged out, or not on The Wall yet: the way in. Not for a card holder door.js hid CRYPT from (a Crypt
+    // ban, 032): that door refuses them, so 'Join the Crypt' would be the same dead end under another name.
+    if (join) join.hidden = !navWall.hidden || !!(navKey && navKey.getAttribute('data-st') === 'in');
   }
   if (navWall) { try { new MutationObserver(syncWall).observe(navWall, {attributes: true, attributeFilter: ['hidden']}); } catch(e){} syncWall(); }
 })();
@@ -4696,8 +4668,27 @@
         }
         return !!(window.OTP && OTP.configured);
       })();
-      if (readyOTP) {
-        const ov = await OTP.siteOverrides();
+      // ⛔ BOUNDED, like the feed below. Every section on this page is drawn after
+      // this block, so a request that never answered left the whole front page on
+      // 'loading…' over files that had already downloaded. Past the cap the page
+      // draws from the committed JSON (the render floor) and the overlay is skipped
+      // for this visit. A literal, not LIVE_TIMEOUT_MS: that const is declared
+      // further down this function and is not readable here yet.
+      // ⛔ A LATE ANSWER STILL REACHES THE PENCILS. edit.js fills every site pencil
+      // from window.__OTP_OVERRIDES first, and saving writes the whole field back.
+      // Left unset, the desk's pencils opened on the committed words and a save put
+      // them over his unbaked edits (and un-hid a hidden frame). The page itself
+      // stays on the committed draw; only the pencils read the late rows.
+      const ovP = readyOTP ? OTP.siteOverrides() : null;
+      const ov = ovP
+        ? await Promise.race([ovP, new Promise(r => setTimeout(() => r(null), 2500))])
+        : null;
+      if (ovP && !ov) ovP.then(rows => {
+        const b = {};
+        (rows || []).forEach(o => { (b[o.section] = b[o.section] || []).push(o); });
+        window.__OTP_OVERRIDES = b;
+      }).catch(() => {});
+      if (ov) {
         const bySection = {};
         (ov || []).forEach(o => { (bySection[o.section] = bySection[o.section] || []).push(o); });
 
@@ -4775,9 +4766,10 @@
           else setPath(site, r.item_key, v);
         });
 
-        // '' patches slate.next, 'latest_drop' patches the strip under it, and
-        // 'release:<num>' patches one row of the catalog. Before this, only the
-        // marquee could be touched without a push.
+        // '' patches slate.next and 'release:<num>' patches one row of the catalog.
+        // Before this, only the marquee could be touched without a push.
+        // ('latest_drop' patched a strip under the marquee that left the page on
+        // 8/26. Nothing draws it, so a row for it is inert and bake.py lists it to clear.)
         const slRows = (bySection.slate || []);
         const sl0 = slRows.find(r => r.item_key === '');
         if (sl0) {
@@ -4792,12 +4784,6 @@
             slate = Object.assign({}, slate, { next: Object.assign({}, slate.next, sl0.patch || {}) });
             slatePinAt = Date.parse(sl0.updated_at || '') || 0;
           }
-        }
-        const slLatest = slRows.find(r => r.item_key === 'latest_drop');
-        if (slLatest) {
-          if (slLatest.hidden) slate = Object.assign({}, slate, { latest_drop: null });
-          else if (slate.latest_drop)
-            slate = Object.assign({}, slate, { latest_drop: Object.assign({}, slate.latest_drop, slLatest.patch || {}) });
         }
         const slRel = {};
         slRows.forEach(r => { const m = /^release:(.+)$/.exec(r.item_key || ''); if (m) slRel[m[1]] = r; });
@@ -5090,7 +5076,6 @@
   // set_at the desk tools stamp into the patch, which bake.py folds into slate.json.
   // ⛔ Member stories never take the cover. It is the house's front page.
   const smq = document.getElementById('slate-marquee');
-  const slt = document.getElementById('slate-latest');
   window.__OTP_SLATE_NEXT = slate.next ? Object.assign({}, slate.next) : slateHeld;   // edit.js fills its pencil from this
   if (smq) {
     const pinAt = Math.max(slatePinAt, Date.parse((slate.next && slate.next.set_at) || '') || 0);
@@ -5147,15 +5132,11 @@
       <div class="slate-status">${d ? 'OUT ' + MON3[d.getMonth()] + ' ' + d.getDate() : 'OUT NOW'}</div>`;
     } else { smq.closest('section').remove(); }
   }
-  if (slt && slate.latest_drop) {
-    const L = slate.latest_drop;
-    slt.href = safeUrl(L.link) || 'events/';
-    slt.innerHTML = `<span class="l">${esc(L.label || 'LATEST DROP')} &rarr;</span>
-      <span class="t">${esc(L.title || '')}</span><span class="c">${esc(L.count || '')}</span>`;
-  } else if (slt) { slt.remove(); }
 
   const ticker = document.getElementById('ticker');
-  if (ticker) ticker.innerHTML = (site.ticker_headlines || []).map(h => '⚡ ' + esc(h)).join(' &nbsp;·&nbsp; ');
+  // One <span> per headline: the house-voice pencil reads the crawl back with '#ticker *'. As bare text it
+  // found nothing, opened the Ticker field empty, and one typed line then replaced all twelve.
+  if (ticker) ticker.innerHTML = (site.ticker_headlines || []).map(h => '<span>⚡ ' + esc(h) + '</span>').join(' &nbsp;·&nbsp; ');
 
   // THE PULSE BANNER. This was three lines of literal HTML, which meant the
   // first thing anyone reads on the site was the one thing he could not change
@@ -5169,8 +5150,6 @@
   if (pl && (site.pulse_line_1 || site.pulse_line_2))
     pl.innerHTML = esc(site.pulse_line_1 || '') +
       (site.pulse_line_2 ? '<br><span class="blue">' + esc(site.pulse_line_2) + '</span>' : '');
-  const pr = document.querySelector('.pulse-route');
-  if (pr && site.pulse_route) pr.textContent = site.pulse_route;
 
   // PITCH US and WHY. These were the last two blocks written straight into this
   // markup, which is what made them the last two things he could not touch
@@ -5289,15 +5268,8 @@
     if (handleLink) handleLink.textContent = site.handle;
   }
 
-  // ============ Curators Hero — top-tier Pokémon TCG cards ============
-  const cMount = document.getElementById('curators-mount');
-  if (cMount && creators) {
-    cMount.innerHTML = creators.map((c, i) => {
-      if (c.open_seat) return ''; // legacy open-seat handled by booster instead
-      return renderPokeCard(c, 'curator', i);
-    }).join('');
-    wirePokeCards(cMount);
-  }
+  // (THIS IS US, the curators grid, came out 8/27 and its #curators-mount with it. `creators`
+  // stays: the ?card= lookup, the booster and the pack pool still read it.)
 
   // ---- OPEN A PACK, at the top of the page ----
   // The booster used to be the last tile in the curators grid, which is now the
@@ -5347,7 +5319,10 @@
     // art, the handle and the seat. cardTight is the same people, keyed the way
     // pageFor() already matches them.
     const cardTight = {};
-    [...(creators || []), ...(roster || [])].forEach(c => {
+    // Built again after the card overlay below: a card holder's own photo and link land on the roster
+    // objects there, and a copy taken only here kept the house art on their posts while /my/ told
+    // them 'Your card photo is your face across the site'.
+    const fillCardPeople = () => [...(creators || []), ...(roster || [])].forEach(c => {
       const key = slugify(c.name);
       cardTight[tightKey(c.name)] = cardPeople[key] = {
         name: c.name,
@@ -5359,6 +5334,7 @@
           : (c.platform || '')
       };
     });
+    fillCardPeople();
 
     function timeAgo(iso){
       if (!iso) return '';
@@ -5483,6 +5459,7 @@
           }));
         }
       } catch (e) { console.warn('card overlay skipped:', e.message); }
+      fillCardPeople();
     }
 
     // The pin is hoisted to the front BEFORE the slice, so it can never fall off
@@ -5505,7 +5482,8 @@
       const who = (!isMember && (cardPeople[slugify(p.author || '')] || cardTight[tightKey(p.author || '')])) || {
         name: p.author_name || p.author || 'THE DESK',
         photo: p.avatar || '', link: p.sid ? 'wall/#s-' + p.sid : '#', handle: p.handle || '',
-        seat: isMember ? 'Member' : ''
+        // a card holder with no roster entry (made in the Crypt or on /desk/) keeps the tag
+        seat: isMember ? 'Member' : (p.kind === 'card' ? 'Card holder' : '')
       };
       // NOT an inline style attribute: the HTML parser decodes entities before the
       // CSS parser sees them, so an escaped quote still breaks out of url(). Painted
@@ -5515,6 +5493,9 @@
         ? `<span class="av" data-bg="${esc(avUrl)}"></span>`
         : `<span class="av av-fallback">${esc(Array.from(String(who.name || '0').trim())[0] || '0')}</span>`;
       const isExt = /^https?:\/\//.test(who.link || '');
+      // A card holder whose card has no outside link carries '#roster', and that grid left on 10/7: the avatar
+      // opened the Coven tab, not the person. Their own page instead, the same one their name opens.
+      const avHref = (!isMember && /^#/.test(who.link || '') && pageFor(p.author || who.name)) || safeUrl(who.link) || '#';
       const bodyTxt = String(p.text || p.body || '').trim();
       const body = bodyTxt ? md(bodyTxt) : '';   // 038: a photo alone is a whole post
       const imgUrl = safeUrl(p.image);
@@ -5536,7 +5517,7 @@
       // lookup above slugifies it, so the two can never disagree.
       const pid = p.id != null ? ` data-pid="${esc(String(p.id))}"` : '';
       return `<article class="post-t${p.pinned ? ' pinned' : ''}${accClass(p.accent || who.accent)}"${pid} data-author="${esc(slugify(p.author || ''))}" data-ts="${esc(String(p.date || p.ts || ''))}">
-        <a class="post-av" href="${esc(safeUrl(who.link) || '#')}" ${isExt ? 'target="_blank" rel="noopener"' : ''}>${av}</a>
+        <a class="post-av" href="${esc(avHref)}" ${isExt ? 'target="_blank" rel="noopener"' : ''}>${av}</a>
         <div class="post-main">
           <div class="post-who">
             ${(() => { const pg = isMember ? (p.sid ? 'wall/#s-' + p.sid : '') : pageFor(p.author || who.name);
@@ -5544,7 +5525,8 @@
                         : `<b>${esc(who.name)}</b>`; })()}
             ${who.handle ? `<span class="hnd">${esc(who.handle)}</span>` : ''}
             ${who.seat ? `<span class="seat">${esc(who.seat)}</span>` : ''}
-            <span class="dot">·</span><span class="when">${esc(timeAgo(p.date))}</span>
+            <span class="dot">·</span><span class="when">${esc(timeAgo(p.date || p.ts))}</span>
+            ${p.edited ? '<span class="dot">·</span><span class="when">edited</span>' : ''}
             ${pin}${p.mine && isMember && p.id != null ? `<button type="button" class="post-del" data-del="${esc(String(p.id))}">Delete</button>` : ''}
           </div>
           <div class="post-body">${body}</div>
@@ -5771,7 +5753,6 @@
     if (rn) rn.textContent = rotation.length;
     // Hand the Music tab everything it needs, computed once, here: the rotation after the desk's
     // overlay, the live picks, the roster with the members' own songs, site.json after the overlay.
-    window.OTPTrackEmbed = openTrackEmbed;
     window.__OTP_MUSIC = { music, rotation, live: picks, roster, site, esc, safeUrl, sized, tile: trackTile };
     window.dispatchEvent(new Event('otp:music'));
   }
@@ -5808,12 +5789,16 @@
       if (liveStories && liveStories.length) {
         const seededSlugs = new Set(desk.map(x => String(x.link || '')
           .replace(/^word\//, '').replace(/\/$/, '')));
+        // The day it went up, in desk.json's own MM.DD.YY (local day), so the tile shows a date and sorts
+        // with the rest of its shelf. Undated, pubDay read 0 and every live story filed after every dated one.
+        const mdy = v => { const d = new Date(v || ''); return isNaN(d) ? ''
+          : String(d.getMonth() + 1).padStart(2, '0') + '.' + String(d.getDate()).padStart(2, '0') + '.' + String(d.getFullYear()).slice(2); };
         liveStories.filter(s => !seededSlugs.has(s.slug)).reverse().forEach(s => {
           desk.unshift({
             title: s.title,
             kicker: 'FROM THE FLOOR',
             dek: s.dek,
-            date: '',
+            date: mdy(s.created_at),
             lanes: ['story'],
             // ⛔ index.html is itself a WRITER of desk items. Move the pill axis
             //    to dept without stamping it here and every unbaked member story
@@ -5853,7 +5838,9 @@
     const card = (it, i) => {
       const el = document.createElement('a');
       el.className = 'desk-item' + (it.dek ? ' story' : '');
-      const cLink  = safeUrl(it.link);
+      // A live member story's reader link carries ?s=<slug> (built above from an encoded slug), and safeUrl
+      // refuses any query string, so every live tile used to link to '#' and went nowhere.
+      const cLink  = /^word\/live\/\?s=[\w%.~-]+$/.test(String(it.link || '')) ? it.link : safeUrl(it.link);
       const cThumb = safeUrl(it.thumb);
       const ytId = (it.youtube && /^[A-Za-z0-9_-]{6,20}$/.test(it.youtube)) ? it.youtube : '';
       el.href = ytId ? '#' : (cLink || '#');
@@ -5873,11 +5860,11 @@
         <div class="desk-platform ${esc(it.platform)}">${esc(platformLabel[it.platform] || it.platform)}</div>
         <div class="desk-lanes">${lanesHtml}</div>
         <div class="desk-meta">
-          <!-- A stored num wins. Position is only the fallback, because a number
-               computed from array position renumbers the whole catalog on every
-               insert and nothing ever keeps its identity. The Ink was literally
-               titled 0TP-002 while rendering as Drop 03. -->
-          <div class="desk-num">${it.num ? esc(it.num) : 'Drop ' + String(i+1).padStart(2,'0')}${it.date ? ' · ' + esc(it.date) : ''}</div>
+          <!-- The stored num only, never one made up from position: a number computed
+               from array position renumbers the whole catalog on every insert, and
+               nothing keeps its identity (The Ink was titled 0TP-002 while rendering as
+               Drop 03). A live member story has no number yet: its day and its writer. -->
+          <div class="desk-num">${[it.num, it.date, it.by ? 'by ' + it.by : ''].filter(Boolean).map(esc).join(' · ')}</div>
           ${it.kicker ? `<div class="desk-kicker">${esc(it.kicker)}</div>` : ''}
           <div class="desk-title">${esc(it.title)}</div>
           ${it.dek ? `<div class="desk-dek">${esc(it.dek)}</div>` : ''}
@@ -5893,15 +5880,20 @@
         //    tiles that already fit: no class, no second paint, no blur layer.
         // 🔑 new Image() is the honest probe. A CSS background never reports its
         //    natural size, and an <img> in a hidden tab never fires load.
-        const probe = new Image();
-        probe.onload = () => {
-          const r = probe.naturalWidth / probe.naturalHeight;
-          if (probe.naturalHeight && Math.abs(r - 0.8) > 0.02) {
-            el.classList.add('off-ratio');
-            el.querySelector('.desk-bed').style.backgroundImage = 'url("' + tUrl + '")';
-          }
-        };
-        probe.src = tUrl;
+        // ⛔ NOT FOR A COMMITTED STORY THUMB. Those are cut 4:5 by newstory.py, so the probe never changed one,
+        //    and it is not lazy like the CSS background: every visit downloaded all of them (~145 KB each, the
+        //    whole shelf about 4.5 MB on a phone) whether or not Stories was ever opened.
+        if (!/^word\/[a-z0-9][a-z0-9-]*\/thumb\.jpg$/.test(cThumb)) {
+          const probe = new Image();
+          probe.onload = () => {
+            const r = probe.naturalWidth / probe.naturalHeight;
+            if (probe.naturalHeight && Math.abs(r - 0.8) > 0.02) {
+              el.classList.add('off-ratio');
+              el.querySelector('.desk-bed').style.backgroundImage = 'url("' + tUrl + '")';
+            }
+          };
+          probe.src = tUrl;
+        }
       }
       return el;
     };
@@ -5964,6 +5956,14 @@
       a.dataset.next = key;
       a.href = n.href;
       if (/^https?:\/\//.test(n.href)) { a.target = '_blank'; a.rel = 'noopener'; }
+      // 'Tell the desk' (#take) lands a stranger on the tip line. Signed in, #take is the PUBLIC composer, which is
+      // no place for an off-the-record tip, so a member gets the mail the tip boxes open. Decided on the tap, not
+      // here: this shelf can be drawn before door.js has said who is at the door.
+      if (n.href === '#take') a.addEventListener('click', e => {
+        if (document.documentElement.getAttribute('data-door') === 'out') return;
+        e.preventDefault();
+        location.href = 'mailto:offtheprintcollective@gmail.com?subject=' + encodeURIComponent('Tip for the desk');
+      });
       a.innerHTML = `<img class="nx-i" src="assets/cathedral/a/${n.i}.webp" alt="" width="120" height="120" loading="lazy" decoding="async">
         <span class="nx-k">${esc(n.k)}</span><span class="nx-t">${esc(n.t)}</span>
         ${n.l ? `<span class="nx-l">${esc(n.l)}</span>` : ''}<span class="nx-go">${esc(n.go)} &rarr;</span>`;
@@ -6045,7 +6045,10 @@
     // A rail scrolls, so it can carry more than a grid could without eating the
     // page. Each frame is a LINK now: it was a bare <figure>, so the one section
     // made of photographs was the one thing on this page you could not tap.
-    // work/#N opens that exact frame in the archive's lightbox.
+    // work/#<file name> opens that exact frame in the archive's lightbox. By NAME, not position: this list is
+    // after the desk's overlay (hide, reorder, add) and /work/ reads the committed file, so work/#N opened the
+    // wrong photo after any reorder. A frame added from the phone lives on storage until a bake and is not in
+    // the archive at all, so it opens the archive itself.
     const FEATURED = 12;
     wMount.innerHTML = work.slice(0, FEATURED).map((it, i) => {
       const w = Number(it.w) || 0, h = Number(it.h) || 0;
@@ -6053,8 +6056,10 @@
       if (!u) return '';
       const tall = h > w;
       const img = esc(sized(u, 'grid'));
+      const inArchive = /^assets\/[A-Za-z0-9._/-]+\.(jpe?g|png|webp)$/i.test(it.src || '');
+      const href = inArchive ? 'work/#' + encodeURIComponent(String(it.src).split('/').pop()) : 'work/';
       return `
-      <a class="work-item${tall ? ' tall' : ''}" href="work/#${i}">
+      <a class="work-item${tall ? ' tall' : ''}" href="${esc(href)}">
         ${tall ? `<img class="bed" src="${img}" alt="" aria-hidden="true" loading="lazy" decoding="async">` : ''}
         <img class="main" src="${img}" alt="${esc(it.alt || it.label || '')}"${w && h ? ` width="${w}" height="${h}"` : ''} loading="lazy" decoding="async">
         <figcaption>${esc(it.label || '')}</figcaption>
@@ -6387,7 +6392,15 @@
     }
     function nudge(bar, what){
       const n = bar.parentElement.querySelector('.tk-nudge'); if (!n) return;
-      n.innerHTML = `${esc(what)} is for members. <a href="join/?next=home">Log in</a>, or <a href="wall/">join the Crypt</a>. All it takes is an Instagram.`;
+      // Signed in already ('Almost in'): 'Log in' sent them to /join/, which bounces a session straight back
+      // here. Their one step is the Instagram, at the Crypt, the same line the composer gives them.
+      // (A signed-in 'in' that is not a member is a Crypt ban: no way in to offer, so no link.)
+      const door = document.documentElement.getAttribute('data-door');
+      n.innerHTML = door === 'wait'
+        ? `${esc(what)} is for members. One more step: put your Instagram in at <a href="wall/">the Crypt</a>. One account per Instagram.`
+        : door === 'in'
+          ? `${esc(what)} is for members of the Crypt.`
+          : `${esc(what)} is for members. <a href="join/?next=home">Log in</a>, or <a href="wall/">join the Crypt</a>. All it takes is an Instagram.`;
       n.hidden = false;
     }
     const ago = iso => { const m = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 60000)); return m < 1 ? 'now' : m < 60 ? m + 'm' : m < 1440 ? Math.round(m / 60) + 'h' : Math.round(m / 1440) + 'd'; };
@@ -6477,13 +6490,12 @@
     mount.querySelectorAll('.post-del[data-del]:not([data-wired])').forEach(b => { b.dataset.wired = '1'; b.addEventListener('click', async () => {
       if (b.dataset.sure !== '1') { b.dataset.sure = '1'; b.textContent = 'Tap again to delete'; return; }
       b.disabled = true;
-      const art = b.closest('.post-t'), im = art && art.querySelector('.post-img img');
-      const photo = im ? im.getAttribute('src') : '';
+      const art = b.closest('.post-t');
       try {
+        // the photo goes with it: OTP.deletePost takes it down itself now (every delete path, not only this
+        // one), and only when the database says no other post still uses the file
         await OTP.deletePost(+b.dataset.del);
         if (art) art.remove();
-        // their photo goes with it now, instead of waiting in the desk's takedown queue
-        if (photo && OTP.deleteImage) { try { await OTP.deleteImage(photo); } catch (e2) {} }
       }
       catch (e) { b.disabled = false; b.dataset.sure = ''; b.textContent = 'Could not delete'; }
     }); });

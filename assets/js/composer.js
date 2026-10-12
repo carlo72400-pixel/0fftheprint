@@ -59,7 +59,7 @@
     wc.innerHTML = `<a class="word-write" href="word/new/">
         <span class="ww-plus">&#43;</span>
         <span class="ww-txt"><b>Write a story</b>
-          <span>Long form, with a cover. The desk reads it before it goes up.</span></span>
+          <span>Long form, with a cover. It goes up when you send it, and the desk can pull it.</span></span>
       </a>`;
   })();
 

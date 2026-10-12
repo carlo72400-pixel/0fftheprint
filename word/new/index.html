@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#0a0a0d">
 <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../assets/css/auth.css">
+<link rel="stylesheet" href="../../assets/css/auth.css?v=57b34045">
 <style>
   textarea#body{min-height:46vh;font-family:'JetBrains Mono',monospace;line-height:1.6}
   .hint{color:var(--muted);font-size:13px;line-height:1.6;margin:8px 0 0}
@@ -44,8 +44,8 @@
 
 <script src="../../supabase-config.js?v=f1348482"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="../../assets/js/desk.js?v=b1b40641" defer></script>
-<script src="../../assets/js/word.js?v=faaae268" defer></script>
+<script src="../../assets/js/desk.js?v=c10b36ef" defer></script>
+<script src="../../assets/js/word.js?v=1fb66209" defer></script>
 <script defer>
 document.addEventListener('DOMContentLoaded', async () => {
   const $ = id => document.getElementById(id);
@@ -56,14 +56,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     panel.innerHTML = '<div class="empty">The backend is not switched on yet.</div>'; return;
   }
   const me = await OTP.me().catch(() => null);
-  if (!me) { location.href = '../../join/'; return; }
+  // next=write brings them back here after the login (join's allowlist)
+  if (!me) { location.href = '../../join/?next=write'; return; }
   if (!me.profile || !me.profile.approved) {
     panel.innerHTML = '<div class="empty">' + esc(await OTP.doorLine(me.profile)) + '</div>'; return;
   }
 
   let coverUrl = null, pendingRow = null;
+  // Covers uploaded on THIS visit. A file is public the moment it lands, so one
+  // that gets replaced or removed before a save comes down again. A cover
+  // that was saved with a story is never deleted from here.
+  const fresh = new Set();
+  const dropFresh = url => {
+    if (!url || !fresh.has(url)) return;
+    fresh.delete(url);
+    OTP.deleteImage(url).catch(() => {});
+  };
+  // The database's own limits (migration 010), said plainly before it answers
+  // with a constraint name. Counted the way Postgres counts characters.
+  const chars = s => [...String(s || '')].length;
 
-  async function paint() {
+  async function paint(note) {
     const mine = await OTP.myStories().catch(() => []);
     pendingRow = mine.find(s => !s.published) || null;
     const mineHtml = mine.length ? `
@@ -82,9 +95,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       <label for="title">Title</label>
       <input id="title" type="text" maxlength="80" placeholder="say it like a headline">
       <label for="dek">The dek, one line under the title</label>
-      <input id="dek" type="text" maxlength="200" placeholder="what this is and why it matters">
+      <input id="dek" type="text" maxlength="200" required placeholder="what this is and why it matters">
       <label for="body">The story</label>
-      <textarea id="body" placeholder="Plain paragraphs, blank line between them.&#10;&#10;## makes a heading&#10;> makes a pull quote&#10;**bold** *italic* [link](https://...)"></textarea>
+      <textarea id="body" maxlength="20000" placeholder="Plain paragraphs, blank line between them.&#10;&#10;## makes a heading&#10;> makes a pull quote&#10;**bold** *italic* [link](https://...)"></textarea>
       <div class="hint">Same grammar as every house story. Keep it yours; the desk can pull one, it does not rewrite them.</div>
       <div class="drop" id="cdrop">Tap to add a cover photo (optional)</div>
       <input type="file" id="cfile" accept="image/*" hidden>
@@ -98,6 +111,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       <div class="msg" id="msg"></div>
       ${mineHtml}`;
 
+    // A new story starts with no cover. Without this the last story's cover
+    // rode along, unseen, on the next one sent from the same visit. Anything
+    // still in `fresh` here was never saved (a withdraw, say), so it goes.
+    [...fresh].forEach(dropFresh);
+    coverUrl = null;
     if (pendingRow) {
       $('title').value = pendingRow.title;
       $('dek').value = pendingRow.dek;
@@ -117,13 +135,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Downscale before upload: a raw phone photo painted into a 440px
         // catalog tile is the egress mistake the card builder already fixed.
         const blob = await OTP.fitCardArt(f, 1280, 720);
+        const prev = coverUrl;
         coverUrl = await OTP.uploadImage(blob);
+        fresh.add(coverUrl);
+        dropFresh(prev);
         $('cimg').src = coverUrl; $('cprev').style.display = 'block';
         msg('Cover is on.', 'good');
       } catch (err) { msg(err.message, 'err'); }
       e.target.value = '';
     };
-    $('crm').onclick = () => { coverUrl = null; $('cprev').style.display = 'none'; };
+    $('crm').onclick = () => { dropFresh(coverUrl); coverUrl = null; $('cprev').style.display = 'none'; };
 
     $('pvbtn').onclick = () => {
       const pv = $('pv');
@@ -134,22 +155,32 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
 
     $('send').onclick = async () => {
+      const t = $('title').value.trim(), d = $('dek').value.trim(), b = $('body').value;
+      const bad = chars(t) < 3 ? 'Give it a headline, three letters at least.'
+        : chars(d) < 3 ? 'Give it a dek, one line under the title.'
+        : chars(b.trim()) < 30 ? 'The story needs at least a couple of sentences.'
+        : chars(b) > 20000 ? 'That runs past 20,000 characters. Cut it down or split it in two.' : '';
+      if (bad) { msg(bad, 'err'); return; }
       $('send').disabled = true;
       try {
+        let done;
         if (pendingRow) {
           await OTP.updateMyStory(pendingRow.id, {
             title: $('title').value, dek: $('dek').value,
             body: $('body').value, coverUrl,
           });
-          msg('Saved. Back on the desk.', 'good');
+          done = 'Saved. Back on the desk.';
         } else {
           const slug = await OTP.submitStory({
             title: $('title').value, dek: $('dek').value,
             body: $('body').value, coverUrl,
           });
-          msg('Up. It is live at word/live/?s=' + slug, 'good');
+          done = 'Up. It is live at word/live/?s=' + slug;
         }
-        paint();
+        fresh.delete(coverUrl);   // saved with the story now
+        // paint() rebuilds the panel, message box and all, so the line goes
+        // in after it (it used to be wiped the moment it showed)
+        paint([done, 'good']);
       } catch (err) { msg(err.message || 'That did not go through.', 'err'); $('send').disabled = false; }
     };
 
@@ -158,6 +189,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       try { await OTP.withdrawStory(pendingRow.id); paint(); }
       catch (err) { msg(err.message, 'err'); }
     };
+    if (note) msg(note[0], note[1]);
   }
   paint();
 });

@@ -3,7 +3,7 @@
  * "you can favorite people's pictures", and "make it easy for me".
  *
  *   /packs/              the shelf: every pack that is out (packs_list), newest first. Members: Make a pack.
- *                        The desk: the queue (desk_packs), publish / take down.
+ *                        The desk: the queue (desk_packs), publish / take down, edit, delete.
  *   /packs/?p=<slug>     one pack, sealed. Tear it open, the cards deal face down, tap to flip, the rarity
  *                        shows (common, rare, holo, full art, the hit). Favourite a card (members, pack_fave;
  *                        counts for everyone). What you flipped stays on this phone (localStorage otp-packs).
@@ -30,6 +30,36 @@
   function sb() { return (w.OTP && OTP.configured && OTP.sb) ? OTP.sb() : null; }
   function rpc(name, args) { var c = sb(); if (!c) return Promise.resolve({ error: { message: 'The backend is asleep.' } }); return Promise.resolve(c.rpc(name, args || {})).catch(function (e) { return { error: e }; }); }
   function note(msg, bad) { var n = el('p', 'pk-note' + (bad ? ' bad' : ''), esc(msg)); app.innerHTML = ''; app.appendChild(n); }
+  // the way in, for somebody who is not a member yet. Signed in with no Instagram is "Almost in": a Log in link
+  // would only bounce them off the login page (join/ sends anyone signed in straight on), so they get the one step.
+  function door() {
+    return ME ? '<a href="../wall/">One more step at the Crypt</a> and you are in.'
+      : '<a href="../join/?next=packs">Log in</a> or <a href="../wall/">join the Crypt</a>.';
+  }
+  // A flipped card is remembered on this phone by its PHOTO, not its card id: every save re-makes the cards
+  // with new ids (pack_save), so an id-keyed flip went stale after any edit. A photo used twice in one pack gets
+  // #2 on the second copy. Old id-keyed flips still count until the pack is opened once, then they are rewritten.
+  function flipKeys(cards) {
+    var seen = {};
+    cards.forEach(function (c) { var k = String(c.image || ''); seen[k] = (seen[k] || 0) + 1; c.fk = seen[k] > 1 ? k + '#' + seen[k] : k; });
+  }
+  function flipped(st, c) { var f = (st && st.f) || []; return f.indexOf(c.fk) >= 0 || f.indexOf(c.id) >= 0; }
+  // Photos that leave a pack (taken out in the builder, or the whole pack deleted) come off storage too, so the old
+  // public link stops working. Only after the save or the delete went through, and never a photo another pack still
+  // uses (pack_image_in_use, the same test the storage rule runs for a member; the desk's rule has none). Best effort.
+  async function sweep(keys) {
+    var done = {};
+    for (var i = 0; i < keys.length; i++) {
+      var k = keys[i]; if (!k || done[k]) continue; done[k] = 1;
+      try {
+        var u = await rpc('pack_image_in_use', { p_name: k });
+        if (!u || u.error || u.data !== false) continue;
+        if (w.OTP && OTP.deleteImage) await OTP.deleteImage(url(k));
+      } catch (e) {}
+    }
+  }
+  function keysOf(P) { return P ? [P.cover].concat((P.cards || []).map(function (c) { return c.image; })).filter(Boolean) : []; }
+  function soon(p, ms) { return Promise.race([p, new Promise(function (ok) { setTimeout(ok, ms); })]); }
 
   var ME = null, MEMBER = false, ADMIN = false;
   async function whoami() {
@@ -50,14 +80,16 @@
     app.appendChild(head);
     var row = el('div', 'pk-cta');
     if (MEMBER) row.innerHTML = '<a class="pk-btn" href="#new">&#43; Make a pack</a><span class="pk-cta-l">Three to twelve photos, your own rarities. ' + (ADMIN ? 'Yours go live on save.' : 'The desk okays it, then it is out.') + '</span>';
-    else row.innerHTML = '<span class="pk-cta-l">Members make packs. <a href="../join/?next=home">Log in</a> or <a href="../wall/">join the Crypt</a>.</span>';
+    else row.innerHTML = '<span class="pk-cta-l">Members make packs. ' + door() + '</span>';
     app.appendChild(row);
     if (ADMIN) await queue();
     if (!list.length) { app.appendChild(el('p', 'pk-note', 'No packs out yet. Make the first one.')); return; }
-    var mine = list.filter(function (p) { return p.mine; }), out = list.filter(function (p) { return p.published; });
+    // your own packs show under Yours only, so Out now counts (and shows) everybody else's
+    var mine = list.filter(function (p) { return p.mine; }), out = list.filter(function (p) { return p.published && !p.mine; });
     if (mine.length) { app.appendChild(el('h2', 'pk-h2', 'Yours')); app.appendChild(grid(mine, true)); }
     app.appendChild(el('h2', 'pk-h2', 'Out now <span>' + out.length + '</span>'));
-    app.appendChild(grid(out.filter(function (p) { return !p.mine; }).concat([]), false));
+    if (out.length) app.appendChild(grid(out, false));
+    else app.appendChild(el('p', 'pk-note', 'Nothing out from anybody else yet.'));
   }
   function grid(list, mine) {
     var g = el('div', 'pk-grid');
@@ -67,7 +99,7 @@
       a.href = '?p=' + encodeURIComponent(p.slug);
       var st = S.p[p.slug];
       a.innerHTML = '<span class="pk-cov">' + (p.cover ? '<img src="' + esc(url(p.cover)) + '" alt="" loading="lazy" decoding="async">' : '') +
-        (!p.published ? '<span class="pk-badge wait">' + (p.mine ? 'On the desk' : 'Draft') + '</span>' : (st ? '<span class="pk-badge">Opened · ' + (st.f || []).length + ' / ' + p.cards + '</span>' : '<span class="pk-badge seal">Sealed</span>')) +
+        (!p.published ? '<span class="pk-badge wait">' + (p.mine ? 'On the desk' : 'Draft') + '</span>' : (st ? '<span class="pk-badge">Opened · ' + Math.min((st.f || []).length, p.cards | 0) + ' / ' + p.cards + '</span>' : '<span class="pk-badge seal">Sealed</span>')) +
         '</span><span class="pk-t">' + esc(p.title) + '</span>' +
         '<span class="pk-by">' + esc(p.author) + ' · ' + esc(kindWord(p.kind)) + '</span>' +
         '<span class="pk-m">' + p.cards + ' cards' + (p.has_hit ? ' · one hit' : '') + (p.faves ? ' · ' + p.faves + ' ♥' : '') + '</span>';
@@ -85,12 +117,24 @@
     var ul = el('div', 'pk-q');
     rows.forEach(function (x) {
       var li = el('div', 'pk-q-row' + (x.published ? ' on' : ''));
+      // Edit opens the builder on their pack (a caption, a rarity, a photo out: migration 042 lets the desk save
+      // a member's pack). Delete is the same pack_delete the builder's button calls.
       li.innerHTML = '<a href="?p=' + encodeURIComponent(x.slug) + '"><b>' + esc(x.title) + '</b><span>' + esc(x.author) + ' · ' + x.cards + ' cards · ' + esc(when(x.updated_at)) + '</span></a>' +
-        '<button type="button" class="pk-btn ' + (x.published ? 'ghost' : '') + '">' + (x.published ? 'Take down' : 'Publish') + '</button>';
-      li.querySelector('button').addEventListener('click', async function () {
+        '<span class="pk-q-acts"><a class="pk-link" href="?edit=' + encodeURIComponent(x.slug) + '">Edit</a><button type="button" class="pk-link pk-q-del">Delete</button>' +
+        '<button type="button" class="pk-btn pk-q-pub ' + (x.published ? 'ghost' : '') + '">' + (x.published ? 'Take down' : 'Publish') + '</button></span>';
+      li.querySelector('.pk-q-pub').addEventListener('click', async function () {
         this.disabled = true;
         var q = await rpc('pack_publish', { p_id: x.id, p_on: !x.published });
         if (q && q.error) { this.disabled = false; alert(q.error.message || 'That did not go through.'); return; }
+        location.reload();
+      });
+      li.querySelector('.pk-q-del').addEventListener('click', async function () {
+        if (!confirm('Take "' + x.title + '" down for good? This deletes the pack.')) return;
+        this.disabled = true;
+        var o = await rpc('pack_open', { p_slug: x.slug });
+        var q = await rpc('pack_delete', { p_id: x.id });
+        if (q && q.error) { this.disabled = false; alert(q.error.message || 'That did not go through.'); return; }
+        await soon(sweep(keysOf(o && !o.error ? o.data : null)), 4000);
         location.reload();
       });
       ul.appendChild(li);
@@ -105,8 +149,12 @@
     var P = r && !r.error ? r.data : null;
     if (!P) { note('That pack is not out. It may still be on the desk.', true); app.appendChild(el('p', 'pk-note', '<a href="./">Back to the shelf</a>')); return; }
     d.title = P.title + ' · Packs · 0FF THE PRINT';
-    var S = store(), st = S.p[slug] || { f: [] };
+    var S = store();
     var cards = (P.cards || []).slice();
+    flipKeys(cards);
+    // rewrite this phone's flips for this pack as photo keys, dropping any card that is no longer in it
+    if (S.p[slug]) { S.p[slug].f = cards.filter(function (c) { return flipped(S.p[slug], c); }).map(function (c) { return c.fk; }); store(S); }
+    var st = S.p[slug] || { f: [] };
     var coverKey = P.cover || (cards[0] && cards[0].image) || '';
     app.innerHTML = '';
     var head = el('div', 'pk-head');
@@ -114,7 +162,7 @@
     head.innerHTML = '<div class="kicker">A pack by ' + (by ? '<a href="' + esc(by) + '">' + esc(P.author) + '</a>' : esc(P.author)) + ' · ' + esc(kindWord(P.kind)) + (!P.published ? ' · <span class="wait">on the desk, not public yet</span>' : '') + '</div>' +
       '<h1>' + esc(P.title) + '</h1>' + (P.line ? '<p class="pk-dek">' + esc(P.line) + '</p>' : '') +
       '<p class="pk-meta">' + cards.length + ' cards' + (cards.some(function (c) { return c.rarity === 'hit'; }) ? ' · one hit inside' : '') + ' · ' + esc(when(P.created_at)) +
-      (P.mine ? ' · <a href="?edit=' + esc(slug) + '">Edit</a>' : '') + ' · <button type="button" class="pk-link pk-share">Copy the link</button></p>';
+      ((P.mine || ADMIN) ? ' · <a href="?edit=' + esc(slug) + '">Edit</a>' : '') + ' · <button type="button" class="pk-link pk-share">Copy the link</button></p>';
     app.appendChild(head);
     head.querySelector('.pk-share').addEventListener('click', function () {
       var u = location.origin + location.pathname + '?p=' + encodeURIComponent(slug);
@@ -145,13 +193,13 @@
       tally();
     }
     function paintLine() {
-      var n = cards.length, f = (S.p[slug] && S.p[slug].f || []).length;
-      var hitUp = cards.some(function (c) { return c.rarity === 'hit' && (S.p[slug].f || []).indexOf(c.id) >= 0; });
+      var n = cards.length, f = cards.filter(function (c) { return flipped(S.p[slug], c); }).length;
+      var hitUp = cards.some(function (c) { return c.rarity === 'hit' && flipped(S.p[slug], c); });
       var txt = line.querySelector('.pk-line-t') || line.insertBefore(el('span', 'pk-line-t'), line.firstChild);
       txt.textContent = f >= n ? 'All ' + n + ' flipped.' + (hitUp ? ' You found the hit.' : '') : f + ' of ' + n + ' flipped.' + (hitUp ? ' The hit is yours.' : cards.some(function (c) { return c.rarity === 'hit'; }) ? ' The hit is still face down.' : '');
     }
     function card(c, i) {
-      var up = (st.f || []).indexOf(c.id) >= 0;
+      var up = flipped(st, c);
       var k = el('div', 'pk-card r-' + c.rarity + (up ? ' up' : ''));
       k.dataset.id = c.id; k.style.animationDelay = (i * 70) + 'ms';
       k.innerHTML = '<div class="pk-flip"><div class="pk-back"><img src="../assets/cathedral/mark.webp" alt=""></div>' +
@@ -166,7 +214,7 @@
         k.classList.add('up');
         if (c.rarity === 'hit') { k.classList.add('pop'); }
         S = store(); S.p[slug] = S.p[slug] || { f: [], t: Date.now() };
-        if (S.p[slug].f.indexOf(c.id) < 0) S.p[slug].f.push(c.id);
+        if (S.p[slug].f.indexOf(c.fk) < 0) S.p[slug].f.push(c.fk);
         store(S); paintLine();
       });
       var fav = k.querySelector('.pk-fav');
@@ -185,7 +233,7 @@
     }
     function nudge(k, msg) {
       var old = k.querySelector('.pk-nudge'); if (old) old.remove();
-      var n = el('span', 'pk-nudge', msg ? esc(msg) : 'Keeping a card is for members. <a href="../join/?next=home">Log in</a> or <a href="../wall/">join the Crypt</a>.');
+      var n = el('span', 'pk-nudge', msg ? esc(msg) : 'Keeping a card is for members. ' + door());
       k.querySelector('.pk-face').appendChild(n);
       setTimeout(function () { n.remove(); }, 4000);
     }
@@ -206,7 +254,7 @@
   /* ================= THE BUILDER ================= */
   async function build(editSlug) {
     d.title = 'Make a pack · 0FF THE PRINT';
-    if (!MEMBER) { note('Members make packs.', true); app.appendChild(el('p', 'pk-note', '<a href="../join/?next=home">Log in</a> or <a href="../wall/">join the Crypt</a>. All it takes is an Instagram.')); return; }
+    if (!MEMBER) { note('Members make packs.', true); app.appendChild(el('p', 'pk-note', door() + (ME ? '' : ' All it takes is an Instagram.'))); return; }
     var P = null;
     if (editSlug) {
       var r = await rpc('pack_open', { p_slug: editSlug });
@@ -215,6 +263,11 @@
     }
     var cards = P ? (P.cards || []).map(function (c) { return { key: c.image, url: url(c.image), rarity: c.rarity, caption: c.caption || '' }; }) : [];
     var cover = P ? P.cover : '';
+    // every photo this pack held when it opened, and every one uploaded here: what the save leaves out comes off storage
+    var had = keysOf(P), uploaded = [];
+    // the desk fixing a member's pack: the photos have to come out of the maker's own folder (pack_save checks),
+    // so there is nothing to upload from here
+    var theirs = !!(P && !P.mine);
     app.innerHTML = '';
     var head = el('div', 'pk-head');
     head.innerHTML = '<div class="kicker"><a href="./">&larr; Packs</a></div><h1>' + (P ? 'Edit the pack' : 'Make a pack') + '</h1>' +
@@ -223,7 +276,8 @@
     var f = el('form', 'pk-form'); f.setAttribute('novalidate', '');
     f.innerHTML = '<label>Title<input name="title" maxlength="60" value="' + esc(P ? P.title : '') + '" placeholder="Side Stage Nights"></label>' +
       '<label>A line<input name="line" maxlength="200" value="' + esc(P ? P.line : '') + '" placeholder="Five frames from the pit, one of them you"></label>' +
-      '<div class="pk-add"><label class="pk-btn ghost"><input type="file" accept="image/jpeg,image/png,image/webp" multiple hidden>&#43; Add photos</label><span class="pk-add-l">JPG, PNG or WebP. Forty uploads a day.</span></div>' +
+      (theirs ? '<p class="pk-add-l">This is ' + esc(P.author) + '&rsquo;s pack. Fix a caption, a rarity, the order or the cover, or take a photo out. New photos come from them.</p>'
+        : '<div class="pk-add"><label class="pk-btn ghost"><input type="file" accept="image/jpeg,image/png,image/webp" multiple hidden>&#43; Add photos</label><span class="pk-add-l">JPG, PNG or WebP. Forty uploads a day.</span></div>') +
       '<div class="pk-cards"></div>' +
       '<div class="pk-form-row"><span class="pk-msg" role="status"></span>' + (P ? '<button type="button" class="pk-link pk-del">Delete the pack</button>' : '') + '<button type="submit" class="pk-btn">' + (ADMIN ? 'Save and publish' : 'Save and send to the desk') + '</button></div>';
     app.appendChild(f);
@@ -253,13 +307,13 @@
       var n = cards.filter(function (c) { return c.key; }).length;
       list.appendChild(el('p', 'pk-count', n + ' of 12' + (cards.some(function (c) { return c.rarity === 'hit'; }) ? ' · one hit set' : ' · no hit yet')));
     }
-    input.addEventListener('change', async function () {
+    if (input) input.addEventListener('change', async function () {
       var files = Array.prototype.slice.call(input.files || []); input.value = '';
       if (cards.length + files.length > 12) { say('Twelve photos is the ceiling.', true); files = files.slice(0, Math.max(0, 12 - cards.length)); }
       for (var k = 0; k < files.length; k++) {
         var c = { key: '', url: URL.createObjectURL(files[k]), rarity: 'common', caption: '', busy: true };
         cards.push(c); draw();
-        try { var up = await OTP.uploadPackPhoto(files[k]); c.key = up.key; c.url = up.url; c.busy = false; }
+        try { var up = await OTP.uploadPackPhoto(files[k]); uploaded.push(up.key); c.key = up.key; c.url = up.url; c.busy = false; }
         catch (e) { c.busy = false; c.err = (e && e.message) || 'That one did not upload.'; }
         draw();
       }
@@ -272,18 +326,24 @@
       if (cards.some(function (c) { return c.busy; })) { say('Still uploading, one second.', true); return; }
       if (ready.length < 3) { say('A pack is at least three photos.', true); return; }
       var btn = f.querySelector('button[type=submit]'); btn.disabled = true; say('Saving…');
-      var q = await rpc('pack_save', { p: { id: P ? P.id : null, title: title, line: line, cover: cover || ready[0].key,
+      var keep = cover || ready[0].key;
+      var q = await rpc('pack_save', { p: { id: P ? P.id : null, title: title, line: line, cover: keep,
         cards: ready.map(function (c) { return { image: c.key, rarity: c.rarity, caption: c.caption }; }) } });
-      btn.disabled = false;
-      if (q && q.error) { say(q.error.message || 'That did not go through.', true); return; }
+      // the button stays off once the save went through: a second tap during the photo sweep would save a new pack twice
+      if (q && q.error) { btn.disabled = false; say(q.error.message || 'That did not go through.', true); return; }
       say(ADMIN ? 'Live.' : 'Sent to the desk.');
-      setTimeout(function () { location.href = '?p=' + encodeURIComponent(q.data); }, 500);
+      var saved = {}; saved[keep] = 1; ready.forEach(function (c) { saved[c.key] = 1; });
+      var gone = had.concat(uploaded).filter(function (k) { return !saved[k]; });
+      await Promise.all([soon(sweep(gone), 4000), new Promise(function (ok) { setTimeout(ok, 500); })]);
+      location.href = '?p=' + encodeURIComponent(q.data);
     });
     var del = f.querySelector('.pk-del');
     if (del) del.addEventListener('click', async function () {
       if (!confirm('Take this pack down for good?')) return;
+      del.disabled = true;
       var q = await rpc('pack_delete', { p_id: P.id });
-      if (q && q.error) { say(q.error.message || 'That did not go through.', true); return; }
+      if (q && q.error) { del.disabled = false; say(q.error.message || 'That did not go through.', true); return; }
+      await soon(sweep(had.concat(uploaded)), 4000);
       location.href = './';
     });
     draw();

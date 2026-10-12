@@ -22,16 +22,18 @@
  * ALMOST NO NEW SQL. Everything wired here writes through methods that already
  * exist. The reorder arrows lean on the `sort` column 014 shipped, which the
  * homepage already sorted by and bake.py already folded into the JSON: it had
- * no UI, that is all. The nested site fields, the latest drop strip and the
- * numbered releases were legal rows in site_overrides the whole time and simply
- * were never READ. One value in one CHECK constraint needed widening, for the
- * curator cards, and that is all migration 017 is.
+ * no UI, that is all. The nested site fields and the numbered releases were
+ * legal rows in site_overrides the whole time and simply were never READ. One
+ * value in one CHECK constraint needed widening, for the curator cards, and that
+ * is all migration 017 is.
  *
- * WHAT IS STILL COLD, and it is short: the Pitch Us and Why blocks, which are
- * literal HTML in index.html, and adding a NEW work frame, which needs the file
- * on disk and derive.py. Everything else on this page is warm. The curator
- * cards need migration-017-the-board.sql run once, and the tile says so in
- * plain words if the database refuses the write.
+ * WHAT IS STILL COLD, and it is short: a new night (newevent.py on the laptop),
+ * and the one liner that search sees (edit it here, then bake and push).
+ * Everything else on this page is warm.
+ *
+ * 10/11: THIS IS US, the latest drop strip and the banner's route line came off
+ * the board. Their homepage sections went 8/26 and 8/27, so a save there landed
+ * in the overlay and changed nothing anybody could see.
  */
 (function (w, d) {
   'use strict';
@@ -72,6 +74,19 @@
     return /^https?:/.test(s) ? s : '../' + s;
   }
 
+  // The Run's date box is a date picker now, which always hands back
+  // YYYY-MM-DD. A browser with no picker shows a text box instead, and Postgres
+  // turned "10/25" or "25/10/2026" into a raw error. So the shape is checked
+  // here and refused in words, before anything is sent.
+  function isoDay(v) {
+    var s = String(v || '').trim();
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s);
+    var t = m ? new Date(Date.UTC(+m[1], +m[2] - 1, +m[3])) : null;
+    if (!t || t.getUTCMonth() !== +m[2] - 1 || t.getUTCDate() !== +m[3])
+      throw new Error('Pick the date in the date box, or type it as YYYY-MM-DD (2026-10-25).');
+    return s;
+  }
+
   var toastT = null;
   function toast(msg, bad) {
     var old = d.querySelector('.toast');
@@ -81,12 +96,13 @@
     t.textContent = msg;
     d.body.appendChild(t);
     clearTimeout(toastT);
-    toastT = setTimeout(function () { t.remove(); }, bad ? 5200 : 2600);
+    // a long line (the track add's 'filed, not up yet') needs longer than 2.6s to read
+    toastT = setTimeout(function () { t.remove(); }, bad || String(msg).length > 60 ? 5200 : 2600);
   }
 
   /* ============================== the sheet ==============================
      One at a time, bottom anchored so it lands under a thumb on a phone.
-     fields: [{key,label,value,type,rows,hint}], type in text|textarea|check|file|url
+     fields: [{key,label,value,type,rows,hint}], type in text|textarea|check|file|url|date|select|song
      save(values, say) may be async. Throwing shows the message in the sheet
      instead of a browser alert he has to dismiss before he can read it. */
 
@@ -131,7 +147,7 @@
         return lab + '<input type="file" data-k="' + esc(f.key) + '" accept="' +
                esc(f.accept || 'image/*') + '">' +
                (f.hint ? '<div class="note">' + esc(f.hint) + '</div>' : '');
-      return lab + '<input type="' + (f.type === 'url' ? 'url' : 'text') + '" data-k="' +
+      return lab + '<input type="' + (f.type === 'url' ? 'url' : f.type === 'date' ? 'date' : 'text') + '" data-k="' +
              esc(f.key) + '" value="' + esc(f.value == null ? '' : f.value) + '">' +
              (f.hint ? '<div class="note">' + esc(f.hint) + '</div>' : '');
     }).join('');
@@ -442,9 +458,8 @@
       }
     });
 
-    /* ---- THE SLATE. slate.next is the only part with an overlay path: the
-       page merges site_overrides['slate'][''] onto next and ignores any other
-       key. latest_drop and the releases list are still git. ---- */
+    /* ---- THE SLATE. slate.next, patched by site_overrides['slate']['']. The
+       numbered releases have their own rows under THE CATALOG. ---- */
     R.push({
       key: 'slate', nm: 'THE SLATE', src: 'content/slate.json + overlay',
       note: 'what the house is putting out next',
@@ -486,34 +501,8 @@
             }
           });
         }
-        var ld = (C.slate && C.slate.latest_drop) || null;
-        if (ld) {
-          var lp = ovPatch('slate', 'latest_drop'), lr = ovRow('slate', 'latest_drop');
-          var lv = Object.assign({}, ld, lp);
-          out.push({
-            t: lv.title || 'Latest drop', glyph: '⧉', s: lv.count || '', off: !!(lr && lr.hidden),
-            state: lr && lr.hidden ? 'hidden' : (lr ? 'draft' : 'git'),
-            open: function () {
-              sheet({
-                title: 'LATEST DROP', why: 'the strip under the marquee',
-                fields: [
-                  { key: 'label', label: 'Label', value: lp.label != null ? lp.label : (ld.label || 'LATEST DROP') },
-                  { key: 'title', label: 'Title', value: lp.title != null ? lp.title : (ld.title || '') },
-                  { key: 'count', label: 'Count line', value: lp.count != null ? lp.count : (ld.count || '') },
-                  { key: 'link', label: 'Link', value: lp.link != null ? lp.link : (ld.link || '') },
-                  { key: 'hidden', label: 'Hide the strip', type: 'check', value: !!(lr && lr.hidden) }
-                ],
-                save: async function (val) {
-                  var patch = {};
-                  ['label', 'title', 'count', 'link'].forEach(function (kk) {
-                    if (val[kk] !== undefined) patch[kk] = val[kk];
-                  });
-                  await writeOv('slate', 'latest_drop', patch, { hidden: !!val.hidden });
-                }
-              });
-            }
-          });
-        }
+        // ⛔ No LATEST DROP tile (10/11). The strip under the marquee left the
+        // page on 8/26, so this tile saved rows nothing read.
         return out;
       }
     });
@@ -554,7 +543,7 @@
                 why: when + ' · ' + (r.venue || '') + (r.city ? ' · ' + r.city : '') + ' · ' + who,
                 fields: [
                   { key: 'title', label: 'What it is', value: r.title || '' },
-                  { key: 'on_date', label: 'Date', value: r.on_date || '', hint: 'YYYY-MM-DD' },
+                  { key: 'on_date', label: 'Date', type: 'date', value: r.on_date || '' },
                   { key: 'venue', label: 'Venue', value: r.venue || '' },
                   { key: 'city', label: 'City', value: r.city || '' },
                   { key: 'link', label: 'Link', value: r.link || '', hint: 'https:// or blank' },
@@ -600,7 +589,7 @@
                 ],
                 save: async function (v) {
                   await OTP.updateDate(r.id, {
-                    title: v.title, onDate: v.on_date, venue: v.venue,
+                    title: v.title, onDate: isoDay(v.on_date), venue: v.venue,
                     city: v.city, link: v.link, note: v.note
                   });
                   if (!!v.published !== (r.published !== false))
@@ -677,7 +666,7 @@
             title: 'ADD A DATE', why: 'goes on the calendar straight away',
             fields: [
               { key: 'title', label: 'What it is' },
-              { key: 'on_date', label: 'Date', hint: 'YYYY-MM-DD' },
+              { key: 'on_date', label: 'Date', type: 'date' },
               { key: 'venue', label: 'Venue' },
               { key: 'city', label: 'City' },
               { key: 'link', label: 'Link', hint: 'https:// or blank' },
@@ -685,7 +674,7 @@
             ],
             saveLabel: 'Put it on',
             save: async function (v) {
-              await OTP.addDate({ title: v.title, onDate: v.on_date, venue: v.venue,
+              await OTP.addDate({ title: v.title, onDate: isoDay(v.on_date), venue: v.venue,
                                   city: v.city, link: v.link, note: v.note });
             },
             done: 'On the calendar.'
@@ -711,7 +700,9 @@
                 fields: [
                   { key: 'title', label: 'Title', value: v.title },
                   { key: 'published', label: 'Live on the page', type: 'check', value: !!v.published },
-                  { key: 'featured', label: 'Featured (front of the rail)', type: 'check', value: !!v.featured }
+                  // The homepage rail came off 10/11. Featured is a label on
+                  // their card page's Reel now; it does not move the video.
+                  { key: 'featured', label: 'Featured (says so on their page)', type: 'check', value: !!v.featured }
                 ],
                 save: async function (val) {
                   if (val.title !== v.title) await OTP.updateVideo(v.id, { title: val.title });
@@ -884,9 +875,14 @@
                   { key: 'published', label: 'Live on the page', type: 'check', value: !!s.published },
                   { key: 'baked', label: 'Baked into git (the overlay lets go)', type: 'check', value: !!s.baked }
                 ],
+                // ⛔ TWO EDITORS, BY WHERE THE BODY LIVES. Until it is baked the
+                // body is the database row, edited on /desk/. desk/word/ only
+                // lists committed pages, so it never had an unbaked story in it.
                 body: '<div class="note">Long body edits open in the story editor, which is a better ' +
                       'box for markdown than this one.</div>' +
-                      '<div class="row" style="margin-top:12px"><a class="btn ghost sm" href="../desk/word/">Open the story editor</a></div>',
+                      '<div class="row" style="margin-top:12px"><a class="btn ghost sm" href="' +
+                      (s.baked ? '../desk/word/?s=' : '../desk/?s=') + encodeURIComponent(s.slug || '') +
+                      '">Open the story editor</a></div>',
                 save: async function (v) {
                   if (v.title !== s.title || v.dek !== (s.dek || ''))
                     await OTP.updateStory(s.id, { title: v.title, dek: v.dek });
@@ -1003,7 +999,11 @@
       add: {
         label: 'ADD A TRACK', glyph: '♫', on: function () {
           sheet({
-            title: 'ADD A TRACK', why: 'spotify link, the house reads the rest',
+            // ⛔ SAID "On rotation." AND WAS NOT. submitTrack files a pick like a
+            // card holder's: off until it is ticked on, then shown under Card
+            // Holders' Picks, not in the six seeds of On Rotation. The words say
+            // what happens. Where the desk's own adds should land is his call.
+            title: 'ADD A TRACK', why: 'files it as a pick, off until you tick it on',
             fields: [
               { key: 'url', label: 'Spotify link', type: 'url' },
               { key: 'artist', label: 'Artist', hint: 'Spotify sends the title and the cover, never the artist. Type who it is by.' }
@@ -1016,7 +1016,7 @@
               say('Reading the track…');
               await OTP.submitTrack({ url: v.url, artist: v.artist || '' });
             },
-            done: 'On rotation.'
+            done: 'Filed, not up yet. Open it on this rail and tick On the grid. It shows under Card Holders’ Picks.'
           });
         }
       }
@@ -1081,19 +1081,57 @@
       }
     });
 
-    /* ---- THE WORK. 37 frames, captions and order both editable from here.
-       Adding a frame is still a git thing: the file has to exist and derive.py
-       has to make its three sizes before the page can paint it. ---- */
+    /* ---- THE WORK. Every committed frame, captions and order both editable
+       from here, plus the frames ADD A FRAME put up from a phone. Those live
+       only in the overlay (a row with its own src) until bake.py folds them
+       into work.json, and they used to be missing from this rail. ---- */
     R.push({
       key: 'work', nm: 'THE WORK', src: 'content/work.json + overlay',
       note: 'tap a frame to fix the caption, arrows to move it',
       tiles: function () {
         var items = ((C.work && C.work.items) || []);
-        var keys = ordered('work', items, function (it) { return base(it.src); });
+        var have = {};
+        items.forEach(function (it) { have[base(it.src)] = 1; });
+        // Same rule as applyList on the homepage: a row no committed frame
+        // claims, carrying a src, is a frame of its own. Appended after the
+        // file's frames, so with no sort it lands where the homepage puts it.
+        Object.keys(OV.work || {}).forEach(function (k) {
+          var ap = ovPatch('work', k);
+          if (!have[k] && ap.src) items = items.concat([{ src: ap.src, _added: k }]);
+        });
+        var keyOf = function (it) { return it._added || base(it.src); };
+        var keys = ordered('work', items, keyOf);
         return keys.map(function (k, i) {
-          var it = items.filter(function (x) { return base(x.src) === k; })[0];
+          var it = items.filter(function (x) { return keyOf(x) === k; })[0];
           var p = ovPatch('work', k), row = ovRow('work', k);
           var v = Object.assign({}, it, p);
+          if (it._added) return {
+            img: thumb(p.src), off: !!(row && row.hidden),
+            t: v.label || k, s: row && row.hidden ? 'hidden' : 'added from a phone',
+            state: row && row.hidden ? 'hidden' : 'draft',
+            move: function (dir) { nudge('work', keys, i, i + dir); },
+            open: function () {
+              sheet({
+                title: 'THE WORK', why: 'added from a phone, not in git yet', art: full(p.src),
+                fields: [
+                  { key: 'label', label: 'Caption', value: p.label || '' },
+                  { key: 'alt', label: 'Alt text', type: 'textarea', rows: 2, value: p.alt || '' },
+                  { key: 'hidden', label: 'Hide this frame', type: 'check', value: !!(row && row.hidden) }
+                ],
+                // ⛔ THE WHOLE PATCH GOES BACK. src, w and h ARE this frame:
+                // a save that sent only the caption would drop the picture.
+                save: async function (val) {
+                  await writeOv('work', k, Object.assign({}, p, { label: val.label, alt: val.alt }),
+                                { hidden: !!val.hidden });
+                },
+                // Drops the row, so the frame is off the grid for good. The
+                // photo file stays in storage: a bake that ran but was not
+                // pushed yet may already point at it.
+                kill: function () { return OTP.clearSiteOverride('work', k); },
+                killLabel: 'Take it off the grid for good'
+              });
+            }
+          };
           return {
             img: thumb(it.src), off: !!(row && row.hidden),
             t: v.label || k, s: row && row.hidden ? 'hidden' : (row ? 'edited' : 'in git'),
@@ -1108,7 +1146,9 @@
                   { key: 'hidden', label: 'Hide this frame', type: 'check', value: !!(row && row.hidden) }
                 ],
                 save: async function (val) {
-                  var patch = {};
+                  // setSiteOverride replaces the patch: keep any other key the
+                  // row already carries.
+                  var patch = Object.assign({}, p);
                   if (val.label !== undefined) patch.label = val.label;
                   if (val.alt !== undefined) patch.alt = val.alt;
                   await writeOv('work', k, patch, { hidden: !!val.hidden });
@@ -1129,7 +1169,7 @@
               { key: 'alt', label: 'Alt text', type: 'textarea', rows: 2,
                 hint: 'what is in the frame, for anyone who cannot see it' }
             ],
-            body: '<div class="note">Goes straight to the FRONT of the six frames ' +
+            body: '<div class="note">Goes straight to the FRONT of the twelve frames ' +
                   'the front page features. The full archive at /work/ reads the ' +
                   'committed file, so it picks this up on the next bake and push.</div>',
             saveLabel: 'Put it up',
@@ -1139,8 +1179,13 @@
               say('Shrinking…');
               // ⛔ Downscale BEFORE upload. A phone hands over a 12MP jpg and
               // the grid renders it at 250px; shipping the original torches the
-              // egress budget for nothing. Same reason card art has fitCardArt.
-              var f = OTP.fitCardArt ? await OTP.fitCardArt(v.file, 1600, 1600) : v.file;
+              // egress budget for nothing.
+              // ⛔ fitWithin, NOT fitCardArt. fitCardArt cover-crops to exactly
+              // W x H, so through it at 1600x1600 a 3:2 frame lost a third of its
+              // width to a square. fitWithin keeps the whole frame and hands back
+              // its real size, which the grid needs for its shape (w, h).
+              var fit = OTP.fitWithin ? await OTP.fitWithin(v.file, 1600) : null;
+              var f = fit ? fit.blob : v.file;
               say('Uploading…');
               var url = await OTP.uploadImage(f);
               // The item_key is the uploaded BASENAME, which is what
@@ -1150,11 +1195,11 @@
               say('Putting it up…');
               // ⛔ sort -1 puts it FIRST. Committed frames have no sort, which
               // reads as 0, and an addition is appended, so without this a new
-              // frame lands at position 38 of 37 and the homepage only features
-              // the top SIX. It would upload fine and be invisible.
-              await OTP.setSiteOverride('work', key, {
-                src: url, label: v.label, alt: v.alt || ''
-              }, { sort: -1 });
+              // frame lands at the end of the file and the homepage only
+              // features the top twelve. It would upload fine and be invisible.
+              var patch = { src: url, label: v.label, alt: v.alt || '' };
+              if (fit && fit.w && fit.h) { patch.w = fit.w; patch.h = fit.h; }
+              await OTP.setSiteOverride('work', key, patch, { sort: -1 });
             },
             done: 'Up, at the front of the grid.'
           });
@@ -1235,54 +1280,8 @@
       }
     });
 
-    /* ---- THIS IS US. creators.json has no overlay section yet. ---- */
-    R.push({
-      key: 'curators', nm: 'THIS IS US', src: 'content/creators.json',
-      note: 'the outlet, the lens, the open seats',
-      tiles: function () {
-        var items = ((C.creators && C.creators.items) || []);
-        var keys = ordered('creators', items, function (it) { return String(it.name || ''); });
-        return keys.map(function (k, i) {
-          var c = items.filter(function (x) { return String(x.name || '') === k; })[0];
-          var p = ovPatch('creators', k), row = ovRow('creators', k);
-          var v = Object.assign({}, c, p);
-          return {
-            img: thumb(c.photo), tall: true, off: !!(row && row.hidden),
-            t: v.name, s: row && row.hidden ? 'hidden' : (v.role || ''),
-            state: row && row.hidden ? 'hidden' : (row && Object.keys(p).length ? 'draft' : 'git'),
-            move: function (dir) { nudge('creators', keys, i, i + dir); },
-            open: function () {
-              sheet({
-                title: c.name, why: c.kind === 'ex' ? 'the lens' : 'a voice',
-                art: full(c.photo),
-                fields: [
-                  { key: 'role', label: 'Role', value: p.role != null ? p.role : (c.role || '') },
-                  { key: 'tag', label: 'Tag line', value: p.tag != null ? p.tag : (c.tag || '') },
-                  { key: 'flavor', label: 'Flavor line', value: p.flavor != null ? p.flavor : (c.flavor || '') },
-                  { key: 'lore', label: 'Lore', type: 'textarea', rows: 6, value: p.lore != null ? p.lore : (c.lore || '') },
-                  { key: 'hidden', label: 'Hide this card', type: 'check', value: !!(row && row.hidden) }
-                ],
-                save: async function (val) {
-                  var patch = {};
-                  ['role', 'tag', 'flavor', 'lore'].forEach(function (kk) {
-                    if (val[kk] !== undefined) patch[kk] = val[kk];
-                  });
-                  try {
-                    await writeOv('creators', k, patch, { hidden: !!val.hidden });
-                  } catch (e) {
-                    // The section CHECK is the only thing that can refuse this,
-                    // and it refuses with a constraint error nobody can read.
-                    if (/violates check|check constraint|23514/i.test(e.message || ''))
-                      throw new Error('The database still refuses a creators row. Run migration-017-the-board.sql, then try again.');
-                    throw e;
-                  }
-                }
-              });
-            }
-          };
-        });
-      }
-    });
+    // ⛔ No THIS IS US rail (10/11). The homepage section came out 8/27,
+    // creators.json is empty, and the rail had no way to add to it.
 
     return R;
   }
@@ -1350,7 +1349,9 @@
         var batch = await OTP.retireMember(p.id);
         if (batch) w.__lastRetire = batch;
       } : null,
-      killLabel: 'Retire this member'
+      // Says what it does, and that this page cannot take it back: the only
+      // undo is the strip /desk/ shows after its own Revoke.
+      killLabel: 'Retire them and pull their posts (no undo from here)'
     });
   }
 
@@ -1396,11 +1397,12 @@
 
   function voiceGroups() {
     var g = [
-      ['THE BANNER', 'the first three lines anybody reads', [
+      // No route line: the hero lost it on 8/26, and the field saved into
+      // nothing (10/11).
+      ['THE BANNER', 'the first lines anybody reads', [
         { k: 'kicker', l: 'Kicker' },
         { k: 'pulse_line_1', l: 'Headline, first line' },
-        { k: 'pulse_line_2', l: 'Headline, blue line' },
-        { k: 'pulse_route', l: 'Route line' }
+        { k: 'pulse_line_2', l: 'Headline, blue line' }
       ]],
       ['THE CRAWL AND THE QUOTE', 'the marquee and the pull quote', [
         { k: 'ticker_headlines', l: 'The ticker', t: 'ticker' },
@@ -1552,11 +1554,9 @@
         ['Swap any song on the grid', 'here', function () { jump('music'); }],
         ['Hide any frame, card, song or post', 'here', function () { jump('work'); }],
         ['Edit the seeds in the take', 'here', function () { jump('take'); }],
-        ['The banner: kicker, headline, route line', 'here', function () { jump('voice'); }],
+        ['The banner: kicker and headline', 'here', function () { jump('voice'); }],
         ['Social links and every mic check field', 'here', function () { jump('voice'); }],
-        ['The latest drop strip', 'here', function () { jump('slate'); }],
         ['Any numbered release in the catalog', 'here', function () { jump('catalog'); }],
-        ['Curator cards', 'here', function () { jump('curators'); }],
         ['The one liner that search sees', 'cold', 'edit here, then bake and push'],
         ['Pitch Us and Why blocks', 'here', function () { jump('voice'); }],
         ['Add a new work frame', 'here', function () { jump('work'); }]
@@ -1575,8 +1575,13 @@
         ['Answer a member asking for the house', 'here', function () { jump('run'); }],
         ['Point a night you shot at its dump', 'here', function () { jump('run'); }],
         ['Publish, bake or delete a story', 'here', function () { jump('word'); }],
-        ['Edit a live story body', 'away', '../desk/word/'],
-        ['Undo a batch pull', 'away', '../desk/'],
+        // A member story's body is the database row until it is baked, and
+        // only /desk/ edits that. desk/word/ is for committed pages.
+        ['Edit a member story body', 'away', '../desk/'],
+        ['Edit a house or baked story body', 'away', '../desk/word/'],
+        // ⛔ The undo is the strip /desk/ shows right after its own Revoke, and
+        // it is gone once that page reloads. A retire from this board has none.
+        ['Undo a revoke (on /desk/, right after, before it reloads)', 'away', '../desk/'],
         ['Clear photos with no post left', 'here', drainNow]
       ]],
       ['THE REST OF THE HOUSE', [
@@ -1653,6 +1658,12 @@
     if (ws) chips.push([ws, 'stor' + (ws > 1 ? 'ies' : 'y') + ' waiting', function () { jump('word'); }, false]);
     var we = (DB.entries || []).filter(function (e) { return !e.published; }).length;
     if (we) chips.push([we, 'entr' + (we > 1 ? 'ies' : 'y') + ' waiting', function () { jump('word'); }, false]);
+    // Packs and rooms are okayed where they live (/packs/, the Music tab's
+    // Rooms), so these two chips leave the board instead of jumping.
+    var pk = +DB.packs || 0;
+    if (pk) chips.push([pk, 'pack' + (pk > 1 ? 's' : '') + ' waiting', function () { location.href = '../packs/'; }, false]);
+    var rm = +DB.rooms || 0;
+    if (rm) chips.push([rm, 'room' + (rm > 1 ? 's' : '') + ' waiting', function () { location.href = '../#rooms'; }, false]);
     // THE EXCHANGE. Upcoming, asked for, and nobody has answered. This one
     // EXPIRES: the night goes ahead either way, so it sits with the door.
     var t0 = (function () { var n = new Date();
@@ -1837,7 +1848,7 @@
   /* ============================== load ================================== */
 
   async function loadContent() {
-    var files = ['site', 'slate', 'work', 'roster', 'rotation', 'desk', 'take', 'creators'];
+    var files = ['site', 'slate', 'work', 'roster', 'rotation', 'desk', 'take'];
     await Promise.all(files.map(async function (f) {
       try {
         var r = await fetch('../content/' + f + '.json', { cache: 'no-cache' });
@@ -1856,6 +1867,17 @@
     }));
   }
 
+  // ⛔ NOW SAID "the house is clean" OVER A WAITING PACK. Packs and rooms wait
+  // for the desk on their own pages and nothing here counted them. These are
+  // the same two queues /packs/ and the Rooms section read, both desk-gated.
+  async function waiting(fn, keep) {
+    var c = OTP.sb && OTP.sb();
+    if (!c) return 0;
+    var r = await c.rpc(fn);
+    if (r && r.error) throw r.error;
+    return ((r && r.data) || []).filter(keep).length;
+  }
+
   async function loadDB() {
     var jobs = {
       posts: OTP.allPosts(60),
@@ -1868,7 +1890,9 @@
       cards: OTP.cards(),
       dates: OTP.calendarAll(200),
       refused: OTP.refused ? OTP.refused().catch(function () { return []; }) : [],
-      orphans: OTP.orphanImages()
+      orphans: OTP.orphanImages(),
+      packs: waiting('desk_packs', function (x) { return !x.published; }),
+      rooms: waiting('rooms_list', function (x) { return !x.published && !x.mine; })
     };
     await Promise.all(Object.keys(jobs).map(async function (k) {
       try { DB[k] = await jobs[k]; }
@@ -1907,7 +1931,8 @@
     // Content first so the shape of the board is on screen while auth resolves.
     await loadContent();
     me = await OTP.me();
-    if (!me) { location.href = '../join/'; return; }
+    // next= so the door can send him back here once the join page knows the key
+    if (!me) { location.href = '../join/?next=board'; return; }
     admin = !!(me.profile && me.profile.is_admin);
     if (!admin) {
       panel.innerHTML = '<div class="card"><b style="font-family:var(--f-display);font-style:italic;' +

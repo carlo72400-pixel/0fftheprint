@@ -163,10 +163,11 @@ a.mx-dr-card:hover{border-color:var(--pink-glow);transform:translateY(-3px);}
 .mx-room-embed iframe{display:block;width:100%;height:380px;border:0;border-radius:12px;margin-top:10px;}
 
 /* ---- PUT US ON ---- */
+/* ⛔ form fields stay at 16px or more: under that iOS zooms the whole page on focus (the room form below too) */
 .mx-pu{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:640px;}
 .mx-pu label{display:flex;flex-direction:column;gap:5px;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
 .mx-pu label.wide{grid-column:1 / -1;}
-.mx-pu input,.mx-pu textarea{font:inherit;font-family:var(--f-body);font-size:14px;letter-spacing:0;text-transform:none;color:var(--ink);
+.mx-pu input,.mx-pu textarea{font:inherit;font-family:var(--f-body);font-size:16px;letter-spacing:0;text-transform:none;color:var(--ink);
   background:#0d0c11;border:1px solid var(--line);border-radius:8px;padding:10px 12px;resize:vertical;}
 .mx-pu input:focus,.mx-pu textarea:focus{outline:none;border-color:var(--pink-glow);}
 .mx-pu-row{grid-column:1 / -1;display:flex;align-items:center;justify-content:space-between;gap:12px;}
@@ -190,7 +191,7 @@ a.mx-dr-card:hover{border-color:var(--pink-glow);transform:translateY(-3px);}
 .mx-room-add{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:640px;padding:14px;border:1px dashed rgba(255,121,198,.5);border-radius:12px;background:#0d0c11;}
 .mx-room-add label{display:flex;flex-direction:column;gap:5px;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
 .mx-room-add label.wide{grid-column:1 / -1;}
-.mx-room-add input{font:400 14px/1.3 var(--f-body);color:var(--ink);background:#0a0a0d;border:1px solid var(--line);border-radius:8px;padding:10px 12px;}
+.mx-room-add input{font:400 16px/1.3 var(--f-body);color:var(--ink);background:#0a0a0d;border:1px solid var(--line);border-radius:8px;padding:10px 12px;}
 .mx-room-add input:focus{outline:none;border-color:var(--pink-glow);}
 .mx-room-row{grid-column:1 / -1;display:flex;flex-wrap:wrap;align-items:center;gap:10px;}
 .mx-room-row small{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.06em;color:var(--muted);} .mx-room-msg{flex:1;font-size:12.5px;color:var(--pink-glow);}

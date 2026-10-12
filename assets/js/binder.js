@@ -154,8 +154,10 @@
     home.appendChild(mk); home.appendChild(el('span', '', 'FF THE PRINT'));
     n.appendChild(home);
     var links = el('span', 'bn-links');
+    // Home carries .bn-home so a phone can drop it (binder.css): the wordmark already goes home, and four
+    // links plus the chip do not fit 390px, so Coven was cut to "COVI" with nothing saying it scrolled
     [['Home', ''], ['Nights', 'events/'], ['Stories', '#stories'], ['Coven', '#people']].forEach(function (x) {
-      var a = el('a', '', x[0]); a.href = BASE + x[1];
+      var a = el('a', x[1] ? '' : 'bn-home', x[0]); a.href = BASE + x[1];
       try { if (new URL(a.href).pathname === location.pathname) a.setAttribute('aria-current', 'page'); } catch (e) {}
       links.appendChild(a);
     });

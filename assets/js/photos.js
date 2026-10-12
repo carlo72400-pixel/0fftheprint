@@ -89,7 +89,12 @@
     var rail = el('div', 'ph-packs'); sec.appendChild(rail);
     var foot = el('div', 'ph-packs-foot'); sec.appendChild(foot);
     function paintFoot() {
-      foot.innerHTML = (member() ? '<a class="ph-btn" href="packs/#new">&#43; Make a pack</a>' : '<span class="ph-note">Members make packs. <a href="join/?next=home">Log in</a> or <a href="wall/">join the Crypt</a>.</span>') +
+      // signed in with no Instagram yet ("Almost in") gets the one step: join/ sends anybody signed in straight on,
+      // so a Log in link only bounced them back to the timeline
+      var st = d.documentElement.getAttribute('data-door');
+      foot.innerHTML = (member() ? '<a class="ph-btn" href="packs/#new">&#43; Make a pack</a>'
+        : st === 'wait' ? '<span class="ph-note">Members make packs. <a href="wall/">One more step at the Crypt</a> and you are in.</span>'
+        : '<span class="ph-note">Members make packs. <a href="join/?next=home">Log in</a> or <a href="wall/">join the Crypt</a>.</span>') +
         '<a class="drops-more" href="packs/">every pack &rarr;</a>';
     }
     paintFoot();
@@ -187,6 +192,20 @@
         var keys = [room.key].concat(room.aliases || []).map(tight);
         return NIGHTS.filter(function (n) { return String(n.venue || '').split('·').some(function (v) { return keys.indexOf(tight(v)) >= 0; }); });
       };
+      // one room's lines: its name, where it is (a private space says the city only), its nights
+      var roomHtml = function (r) {
+        var ns = nightsAt(r);
+        return '<div class="ph-pop-r"><b>' + esc(r.name) + '</b><span>' + esc(r.city_only ? r.city + ' · a private space' : (r.address || r.city)) + '</span>' +
+          (ns.length ? '<ul>' + ns.map(function (n) { var dt = ymd(n.date); return '<li><a href="events/' + esc(n.slug) + '/">' + esc(n.title) + '</a> <em>' + (dt ? MON[dt.getMonth()] + ' ' + dt.getDate() : '') + ' · ' + (n.count | 0) + ' frames</em></li>'; }).join('') + '</ul>' : '<i>coming up</i>') + '</div>';
+      };
+      // ⛔ ONE PIN PER SPOT. Two private spaces in one city sit on the same city point (no addresses), so a pin each
+      //    stacked them and only the top one could be tapped (21st Street hid New Guild, and Brainrot with it).
+      var spots = [], at = {};
+      rooms.forEach(function (r) {
+        var k = r.lat.toFixed(5) + ',' + r.lng.toFixed(5);
+        if (!at[k]) { at[k] = { lat: r.lat, lng: r.lng, rooms: [] }; spots.push(at[k]); }
+        at[k].rooms.push(r);
+      });
       var started = false;
       function start() {
         if (started) return; started = true;
@@ -198,16 +217,16 @@
           // OpenStreetMap's own tiles, turned dark in CSS (.ph-dark-tiles). CARTO's dark rasters want an API key now.
           L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, className: 'ph-dark-tiles', attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(m);
           var pts = [];
-          rooms.forEach(function (r) {
-            var ns = nightsAt(r), shot = ns.length > 0;
-            var mk = L.circleMarker([r.lat, r.lng], { radius: shot ? 9 : 6, color: '#ff79c6', weight: 2, fillColor: shot ? '#ff79c6' : '#0a0a0d', fillOpacity: shot ? .85 : .9 }).addTo(m);
-            mk.bindPopup('<div class="ph-pop"><b>' + esc(r.name) + '</b><span>' + esc(r.city_only ? r.city + ' · a private space' : (r.address || r.city)) + '</span>' +
-              (ns.length ? '<ul>' + ns.map(function (n) { var dt = ymd(n.date); return '<li><a href="events/' + esc(n.slug) + '/">' + esc(n.title) + '</a> <em>' + (dt ? MON[dt.getMonth()] + ' ' + dt.getDate() : '') + ' · ' + (n.count | 0) + ' frames</em></li>'; }).join('') + '</ul>' : '<i>coming up</i>') + '</div>');
-            pts.push([r.lat, r.lng]);
+          spots.forEach(function (sp) {
+            var shot = sp.rooms.some(function (r) { return nightsAt(r).length > 0; });
+            var mk = L.circleMarker([sp.lat, sp.lng], { radius: shot ? 9 : 6, color: '#ff79c6', weight: 2, fillColor: shot ? '#ff79c6' : '#0a0a0d', fillOpacity: shot ? .85 : .9 }).addTo(m);
+            mk.bindPopup('<div class="ph-pop">' + sp.rooms.map(roomHtml).join('') + '</div>');
+            pts.push([sp.lat, sp.lng]);
           });
           if (pts.length > 1) m.fitBounds(pts, { padding: [30, 30], maxZoom: 13 }); else m.setView(pts[0] || [29.4241, -98.4936], 12);
         };
-        sc.onerror = function () { box.innerHTML = '<p class="ph-note">The map did not load. The rooms are listed in the sidebar.</p>'; };
+        // the rooms right here, not "in the sidebar": a phone hides the sidebar on every tab but More
+        sc.onerror = function () { box.classList.add('ph-map-off'); box.innerHTML = '<p class="ph-note">The map did not load. Every room we shot, and its nights:</p><div class="ph-pop ph-rooms">' + rooms.map(roomHtml).join('') + '</div>'; };
         d.head.appendChild(sc);
       }
       try { new IntersectionObserver(function (es, o) { es.forEach(function (e) { if (e.isIntersecting) { start(); o.disconnect(); } }); }, { rootMargin: '400px' }).observe(box); } catch (e) { start(); }

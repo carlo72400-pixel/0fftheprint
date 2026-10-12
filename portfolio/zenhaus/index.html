@@ -123,6 +123,23 @@ const grid=document.getElementById('grid'), lb=document.getElementById('lb'),
       lbmeta=document.getElementById('lbmeta'), countEl=document.getElementById('count');
 let view=IT.slice(), cur=0;
 
+// The full-size files live on github.io (zenhaus-full, too big for this repo's Pages cap), so
+// '../zenhaus-full/' was a 404 here. A browser ignores download= across origins and just opens
+// the JPEG, so the button fetches it (github.io sends access-control-allow-origin *) and
+// saves it under its name. In-app browsers (Instagram, Facebook) keep the plain link:
+// it opens the photo, and long-press saves it there.
+const FULL='https://carlo72400-pixel.github.io/zenhaus-full/';
+dl.addEventListener('click',async e=>{
+  if(/Instagram|FBAN|FBAV/.test(navigator.userAgent)) return;
+  const href=dl.href, name=dl.getAttribute('download')||'';
+  e.preventDefault();
+  try{
+    const r=await fetch(href,{mode:'cors'}); if(!r.ok) throw new Error(r.status);
+    const u=URL.createObjectURL(await r.blob()), a=document.createElement('a');
+    a.href=u; a.download=name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(u),60000);
+  }catch(err){ location.href=href; }
+});
 function pad(n){return String(n).padStart(3,'0')}
 function render(){
   grid.innerHTML='';
@@ -152,9 +169,9 @@ function open(i){
   if(swap){swap.onload=null;swap=null}
   swap=new Image();
   swap.onload=()=>{ if(view[cur]&&view[cur].i===m.i) lbimg.src=swap.src; };
-  swap.src='../zenhaus-full/'+pad(m.i)+'.jpg';
+  swap.src=FULL+pad(m.i)+'.jpg';
   lbimg.alt='Third Friday photo '+m.i;
-  dl.href='../zenhaus-full/'+pad(m.i)+'.jpg';
+  dl.href=FULL+pad(m.i)+'.jpg';
   dl.setAttribute('download','ZenHaus-ThirdFriday-'+pad(m.i)+'.jpg');
   lbmeta.textContent=String(m.i).padStart(3,'0')+' \u00b7 '+m.t+' \u00b7 '+m.s;
   lb.classList.add('on'); document.body.style.overflow='hidden';

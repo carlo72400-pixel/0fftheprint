@@ -143,7 +143,8 @@
       l.className = 'wholine';
       l.innerHTML = me
         ? 'Card holders add their own dates here.'
-        : 'Card holders add their own dates. <a href="../join/">Got a card? Log in.</a>';
+        // next=dates brings them back here after the log in, not to /compose/
+        : 'Card holders add their own dates. <a href="../join/?next=dates">Got a card? Log in.</a>';
       panel.appendChild(l);
     }
 
@@ -213,6 +214,18 @@
     paint();
   }
 
+  // ⛔ ONLY A MISSING TABLE MEANS 020 HAS NOT RUN. The old test was a bare
+  //    /relation|does not exist|schema cache/, and "more than one relationship
+  //    was found" (PGRST201, an embed PostgREST cannot tell apart), a missing
+  //    column or function, or a missing foreign key all matched it, so the desk
+  //    was told to re-run 020 for an error 020 has nothing to do with.
+  //    PGRST205 is PostgREST's "no such table or view", 42P01 is Postgres's own.
+  function tableMissing(e) {
+    var c = e && e.code, m = String((e && e.message) || '');
+    return c === 'PGRST205' || c === '42P01' ||
+           /relation "[^"]+" does not exist|could not find the table/i.test(m);
+  }
+
   async function boot() {
     var panel = d.getElementById('panel');
     if (!w.OTP || !OTP.configured) {
@@ -225,7 +238,7 @@
     catch (e) {
       console.error(e);
       panel.innerHTML = '<div class="note">' +
-        (/relation|does not exist|schema cache/i.test(e.message || '')
+        (tableMissing(e)
           ? 'The calendar is not switched on yet. Run migration-020-the-calendar.sql.'
           : esc(e.message || 'That did not load.')) + '</div>';
     }

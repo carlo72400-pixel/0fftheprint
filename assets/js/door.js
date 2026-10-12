@@ -45,7 +45,7 @@
 
   function paint(s){
     if (!s) return;
-    if (wall) wall.hidden = !s.on;
+    if (wall) wall.hidden = !s.on || s.crypt === false;
     if (key){
       key.href = s.href;
       key.title = s.title;
@@ -74,14 +74,30 @@
 
   if (!window.OTP || !OTP.configured) return;
 
-  let s = S.out;
+  let s = S.out, keep = true;
   try {
     const me = await OTP.me();
+    // my_profile would not answer (desk.js asked twice): the login is real, WHO it is is not known. Painting
+    // on would turn a card holder or the desk into a plain member for this load and save that over the right
+    // answer, so the state this phone last knew stays (already painted above). With none, paint the best guess
+    // below and do not keep it.
+    if (me && me.failed) {
+      let had = null; try { had = JSON.parse(localStorage.getItem('otp_door') || 'null'); } catch(e){}
+      if (had && had.st && had.st !== 'out') return;   // a signed-in state; a saved 'Log in' is plainly wrong now
+      keep = false;
+    }
     if (me && me.profile && me.profile.is_admin) {
       s = Object.assign({}, S.admin);
       try { s.n = (await OTP.pending()).length || 0; } catch(e){}
     } else if (me && me.profile && me.profile.approved) {
       s = S.in;
+      // 032: a Crypt ban closes the Crypt and nothing else (take_author_ok keeps a card holder posting), so the
+      // key stays 'Your desk'. The CRYPT link would only open on a door that refuses them, so it goes. Only a
+      // plain false hides it: a failed ask leaves it where it was.
+      try {
+        const r = await OTP.sb().rpc('is_wall_member');
+        if (r && !r.error && r.data === false) s = Object.assign({}, S.in, {crypt: false});
+      } catch(e){}
     } else if (me) {
       // 023: a refused member lands here too, and that is deliberate. The no is
       // the desk's filter, not a notice. Same nav, same copy, same everything
@@ -103,5 +119,5 @@
   } catch(e) { s = S.out; }
 
   paint(s);
-  try { localStorage.setItem('otp_door', JSON.stringify(s)); } catch(e){}
+  if (keep) try { localStorage.setItem('otp_door', JSON.stringify(s)); } catch(e){}
 })();

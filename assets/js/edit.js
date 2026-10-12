@@ -16,7 +16,7 @@
  *
  * TWO KINDS OF EDITABLE:
  *   live   - a real DB row (tracks, posts, stories). Edited directly.
- *   overlay- a committed JSON item (work, slate, roster). Edited as a patch in
+ *   overlay- a committed JSON item (work, slate, rotation). Edited as a patch in
  *            site_overrides; bake.py folds it into git later and the row goes
  *            inert, exactly how 011's seed overrides work.
  */
@@ -100,13 +100,43 @@
     return null;
   }
 
+  /* The homepage sets window.__OTP_OVERRIDES once the overlay answers, in time or late.
+     Still undefined while the backend is configured means the stored rows are not known
+     yet (slow or failed), and a site pencil would fill from the committed page and save
+     those words over his unbaked edits. So it says so and opens nothing. */
+  function overlayLoading() {
+    if (!(w.OTP && OTP.configured) || w.__OTP_OVERRIDES !== undefined) return false;
+    var p = panel('One moment', [], async function () {});
+    p.el.querySelector('.edm-s').style.display = 'none';
+    p.say('Still loading the desk\'s edits. Try again in a moment, or reload.');
+    return true;
+  }
+
+  /* The committed frames by basename, fetched once, so the work pencil fills
+     from the item itself. Fails soft to {}: the pencil then reads the caption
+     off the tile and leaves alt alone unless he types one. */
+  var WORK = null;
+  function workItems() {
+    if (!WORK) WORK = fetch('content/work.json', { cache: 'no-cache' })
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        var m = {};
+        (j.items || []).forEach(function (it) { m[String(it.src || '').split('/').pop()] = it; });
+        return m;
+      })
+      .catch(function () { return {}; });
+    return WORK;
+  }
+
   /* ---------- what is editable ---------- */
   async function attach() {
     /* THE WORK grid, desk only. Keyed on the image filename, which survives a
        reorder in a way an array index does not. */
     if (admin) {
       d.querySelectorAll('#work .work-item').forEach(function (el) {
-        var img = el.querySelector('img');
+        // ⛔ img.main, NOT the first img. A tall frame paints a blurred .bed
+        // copy first, with alt="", and that is what the pencil used to read.
+        var img = el.querySelector('img.main') || el.querySelector('img');
         var src = img ? (img.getAttribute('src') || '') : '';
         if (!src) return;
         // BASENAME, not the full path: work.json stores assets/work/x.jpg while
@@ -114,20 +144,33 @@
         // override the page could never match back to the item.
         var key = src.split('/').pop();
         if (!key) return;
-        pencil(el, 'Edit this frame', function () {
+        pencil(el, 'Edit this frame', async function () {
+          if (overlayLoading()) return;
           var cur = overrideFor('work', key);
           var p = (cur && cur.patch) || {};
+          // ⛔ THE CAPTION USED TO OPEN EMPTY AND SAVE EMPTY. It was read off a
+          // .work-label the tile does not have (the caption is a figcaption),
+          // so ticking only Hide blanked the caption on the page and, after a
+          // bake, in work.json. The fields start from what the page is showing:
+          // the override's value, else the committed item's.
+          var it = (await workItems())[key] || {};
+          var cap = el.querySelector('figcaption');
+          var label0 = p.label != null ? String(p.label)
+                     : it.label != null ? String(it.label) : (cap ? cap.textContent : '');
+          var alt0 = p.alt != null ? String(p.alt) : (it.alt != null ? String(it.alt) : '');
           panel('THE WORK · ' + key, [
-            { key: 'label', label: 'Caption', value: p.label != null ? p.label : (el.querySelector('.work-label') ? el.querySelector('.work-label').textContent : '') },
-            { key: 'alt', label: 'Alt text', value: p.alt || (img ? img.alt : '') },
+            { key: 'label', label: 'Caption', value: label0 },
+            { key: 'alt', label: 'Alt text', value: alt0 },
             { key: 'hidden', label: 'Hide this frame', type: 'check', value: !!(cur && cur.hidden) }
           ], async function (v) {
-            // !== undefined, not truthiness: a falsy check let him rewrite a
-            // caption but never delete one, and the only escape was clearing the
-            // whole override. bake.py already handles an empty-string patch.
-            var patch = {};
-            if (v.label !== undefined) patch.label = v.label;
-            if (v.alt !== undefined) patch.alt = v.alt;
+            // The row's whole patch goes back: setSiteOverride replaces it, and a
+            // frame added on the board keeps its src, w and h in there, so a
+            // caption-only patch took the picture off the site. Only a field he
+            // changed is written. !== , not truthiness, so a caption can still
+            // be deleted on purpose (bake.py handles an empty-string patch).
+            var patch = Object.assign({}, p);
+            if (v.label !== undefined && v.label !== label0) patch.label = v.label;
+            if (v.alt !== undefined && v.alt !== alt0) patch.alt = v.alt;
             await OTP.setSiteOverride('work', key, patch, { hidden: !!v.hidden });
           });
         });
@@ -141,6 +184,7 @@
          reading the DOM would pin that story's words over the slate's art. */
       var sm = d.getElementById('slate-marquee');
       if (sm) pencil(sm, 'Pin a cover', function () {
+        if (overlayLoading()) return;
         var cur = overrideFor('slate', '');
         var p = (cur && cur.patch) || {};
         var nx = window.__OTP_SLATE_NEXT || null;
@@ -173,6 +217,7 @@
       // paints instead of trusting the selector.
       var kick = d.querySelector('.pulse-kick');
       if (kick) pencil(kick.parentNode || kick, 'Edit the house voice', function () {
+        if (overlayLoading()) return;
         var g = function (k) {
           var r = overrideFor('site', k);
           return r && r.patch ? r.patch.value : '';
@@ -180,14 +225,15 @@
         var tickerNow = [].slice.call(d.querySelectorAll('#ticker *'))
           .map(function (e) { return e.textContent.replace(/^[⚡\s·]+/, '').trim(); })
           .filter(Boolean).join(' | ');
-        var line1 = d.querySelector('.pulse-line'), route = d.querySelector('.pulse-route');
+        // No route line (10/11): the hero lost .pulse-route on 8/26, so that
+        // field saved into nothing.
+        var line1 = d.querySelector('.pulse-line');
         var l1 = line1 ? (line1.childNodes[0] ? String(line1.childNodes[0].textContent).trim() : '') : '';
         var l2 = line1 && line1.querySelector('.blue') ? line1.querySelector('.blue').textContent.trim() : '';
         panel('THE HOUSE VOICE', [
           { key: 'kicker', label: 'Kicker (top line of the banner)', value: g('kicker') || (kick ? kick.textContent.trim() : '') },
           { key: 'pulse_line_1', label: 'Headline, first line', value: g('pulse_line_1') || l1 },
           { key: 'pulse_line_2', label: 'Headline, blue line', value: g('pulse_line_2') || l2 },
-          { key: 'pulse_route', label: 'Route line', value: g('pulse_route') || (route ? route.textContent.trim() : '') },
           { key: 'ticker_headlines', label: 'Ticker, separate each with |', value: g('ticker_headlines') || tickerNow, type: 'textarea', rows: 4 }
         ], async function (v) {
           for (var k in v) {
@@ -197,26 +243,8 @@
         });
       });
 
-      /* ROSTER lore, desk only. Keyed on the member name from roster.json. */
-      d.querySelectorAll('#roster [data-src="roster"]').forEach(function (el) {
-        var nm = (el.querySelector('.poke-name') || el.querySelector('h3') || {}).textContent;
-        nm = (nm || el.dataset.name || '').trim();
-        if (!nm) return;
-        pencil(el, 'Edit this card', function () {
-          var cur = overrideFor('roster', nm);
-          var p = (cur && cur.patch) || {};
-          panel('ROSTER · ' + nm, [
-            { key: 'flavor', label: 'Flavor line', value: p.flavor || '' },
-            { key: 'lore', label: 'Lore', value: p.lore || '', type: 'textarea', rows: 7 },
-            { key: 'pending_stamp', label: 'Stamp (e.g. OUT NOW)', value: p.pending_stamp || '' },
-            { key: 'hidden', label: 'Hide from the roster', type: 'check', value: !!(cur && cur.hidden) }
-          ], async function (v) {
-            var patch = {};
-            ['flavor', 'lore', 'pending_stamp'].forEach(function (k) { if (v[k] !== undefined) patch[k] = v[k]; });
-            await OTP.setSiteOverride('roster', nm, patch, { hidden: !!v.hidden });
-          });
-        });
-      });
+      /* ROSTER lore has no pencil here any more: the #roster grid it hung off
+         came out 10/7, so it drew nothing. The board's THE ROSTER edits it. */
     }
 
     /* MUSIC SEEDS, desk only. The six hand-picked tracks live in
@@ -233,6 +261,7 @@
         if (!m) return;
         var key = m[1];
         pencil(el, 'Swap this track', function () {
+          if (overlayLoading()) return;
           var cur = overrideFor('rotation', key);
           var p = (cur && cur.patch) || {};
           var t = el.querySelector('.track-title'), ar = el.querySelector('.track-artist');
@@ -274,6 +303,7 @@
          on rotation needs its own words: Spotify sends the title and the cover, never the artist. */
       var mc = d.getElementById('mx-cover');
       if (mc) pencil(mc, 'Pin the music cover', function () {
+        if (overlayLoading()) return;
         var K = ['track', 'title', 'artist', 'art', 'note'];
         var g = function (k) { var r = overrideFor('site', 'music_cover.' + k); return r && r.patch ? r.patch.value : ''; };
         var pinned = !!g('track');
@@ -298,8 +328,9 @@
       });
     }
 
-    /* MUSIC. Desk can pull or delete any live track; a member can withdraw
-       their own. Seeds from rotation.json carry no id and are not touched. */
+    /* MUSIC. Desk can pull any live track. A card holder's pencil on their own
+       pick goes to /compose/, where a live pick can be swapped or its artist
+       fixed. Seeds from rotation.json carry no id and are not touched. */
     try {
       var mine = me ? await OTP.myRotation() : [];
       var all = admin ? await OTP.rotationAll() : [];
@@ -312,15 +343,20 @@
         if (!m) return;                       // a seed, not a live row
         var row = byTrack[m[1]];
         if (!row) return;                     // live for someone else, not yours to touch
+        // ⛔ A MEMBER'S PENCIL HERE ALWAYS FAILED. Only published picks are on
+        // the page, the database refuses a member deleting a published row, and
+        // withdraw was the panel's only action, so Save always answered "That
+        // one is on rotation. The desk pulls it." What a card holder CAN do with
+        // a live pick is on /compose/, so the pencil goes there.
+        if (!admin) {
+          pencil(el, 'Swap the song or fix the artist', function () { location.href = 'compose/#rot'; });
+          return;
+        }
         pencil(el, 'Manage this track', function () {
           panel('MUSIC · ' + (row.title || ''), [
             { key: 'published', label: 'Published', type: 'check', value: !!row.published }
           ], async function (v) {
-            // withdrawTrack deletes by id and checks what came back, so it
-            // refuses a published row on its own. The member path leans on that
-            // rather than trusting a branch here.
-            if (admin) await OTP.setTrackPublished(row.id, v.published);
-            else await OTP.withdrawTrack(row.id);
+            await OTP.setTrackPublished(row.id, v.published);
           });
         });
       });
@@ -383,18 +419,24 @@
       }
     } catch (e) { console.warn('edit: take', e.message); }
 
-    /* THE WORD. The dedicated body editor already exists and is better than a
-       popover for long markdown, so this routes there instead of duplicating it. */
+    /* THE WORD. The dedicated body editors already exist and are better than a
+       popover for long markdown, so this routes there instead of duplicating it.
+       ⛔ TWO EDITORS, BY WHERE THE BODY LIVES. An unbaked member story links to
+       word/live/?s=<slug>: its body is the database row, edited on /desk/. A
+       committed page links to word/<slug>/ and is edited in desk/word/, which
+       lists only committed pages. Both open the story straight from ?s=. The
+       slug of a live one comes off the query, never the path, where a path
+       regex reads the literal "live". */
     d.querySelectorAll('#desk .desk-item').forEach(function (el) {
       if (!admin) return;
       var href = el.getAttribute('href') || '';
       if (!/^word\//.test(href)) return;
-      // ⛔ Do NOT parse a slug out of this href. An unbaked member story links
-      // to word/live/?s=<slug>, so /word\/([^\/]+)\// captures the literal
-      // "live". And desk/word/ has no ?s= handling at all: it builds its list
-      // from content/desk.json, so it can only ever open a BAKED catalog story.
-      // Send him to the list and let him pick.
-      pencil(el, 'Edit story bodies', function () { location.href = 'desk/word/'; });
+      var live = /^word\/live\/\?(?:[^#]*&)?s=([^&#]+)/.exec(href);
+      var page = /^word\/([^\/?#]+)\/?$/.exec(href);
+      var to = live ? 'desk/?s=' + live[1]
+             : page && page[1] !== 'live' && page[1] !== 'new' ? 'desk/word/?s=' + page[1]
+             : 'desk/word/';
+      pencil(el, 'Edit this story', function () { location.href = to; });
     });
   }
 

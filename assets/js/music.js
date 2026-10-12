@@ -7,8 +7,9 @@
  *                    plays the night room (music.json night) instead: the lounge goes dark at 7 too.
  *   ROWS             On Rotation (index.html draws it), Card Holders' Picks, From Our Nights,
  *                    Card Holders, The Texas Shelf. Each rail ends on a next-up card.
- *   ROTATION BATTLE  two tracks, members vote for the ISO week in the battle id (migration 036),
- *                    the winner joins On Rotation once the week closes.
+ *   ROTATION BATTLE  two tracks, members vote for the ISO week in the battle id (migration 036).
+ *                    Once the week closes the winner sits first on On Rotation, drawn here only:
+ *                    nothing saves it, so it goes when music.json gets the next battle.
  *   WHO PLAYED       every night we shot, every act on the bill, a play button each.
  *   THE LINEAGE · THE LINEUP · DROPS · THE ROOMS · PUT US ON   (music.json, committed)
  *
@@ -162,19 +163,29 @@
   }
 
   /* ================= ROWS ================= */
-  // On Rotation is drawn by index.html; its rail ends here, on the battle when there is one
+  // On Rotation is drawn by index.html; its rail ends here, on the battle when there is one.
+  // The card says what the battle box will say: no "Vote" before it opens or after it closes.
   function rotationEnd() {
     var rail = d.getElementById('rotation-mount'); if (!rail || rail.querySelector('.shelf-next')) return;
-    var B = M.battle;
-    rail.appendChild(B && B.a && B.b
-      ? nextCard('music', 'Next up', 'Rotation Battle', 'Two tracks fight for a spot. Members vote, the winner stays.', 'Vote', '#battle')
+    var wk = battleWeek();
+    rail.appendChild(wk
+      ? nextCard('music', 'Next up', 'Rotation Battle', 'Two tracks fight for the week. Members vote.',
+          wk.state === 'soon' ? 'Opens ' + when(wk.mon) : wk.state === 'done' ? 'See who won' : 'Vote', '#battle')
       : nextCard('music', 'Next up', 'Your pick here', 'Card holders can put a song on rotation.', 'Put one on', 'compose/#rot'));
+  }
+  // the rotation view credits a pick by card_slug ('kav-man', 'theink'): print the card's own name.
+  // ⛔ a slug is not always slugify(name) (The Ink holds `theink`), so match letters and digits only
+  function tight(s) { return String(s || '').toLowerCase().replace(/[^a-z0-9]/g, ''); }
+  function nameFor(slug) {
+    var k = tight(slug), hit = null;
+    if (k) (P.roster || []).forEach(function (r) { if (!hit && r && r.name && tight(r.name) === k) hit = r.name; });
+    return hit || slug;
   }
   function picks() {
     var host = d.getElementById('mx-picks'); if (!host) return;
     var live = P.live || [];
     var rail = shelf(host, 'picks', 'Card Holders’ Picks', 'put on by people with cards', live.length || null);
-    live.forEach(function (e) { var id = trackId(e.track || e.link); if (!id) return; rail.appendChild(tile({ platform: 'spotify', title: e.title, artist: e.artist, art: e.art, link: spLink(id), track: id, by: e.by, note: noteFor(id, e) })); });
+    live.forEach(function (e) { var id = trackId(e.track || e.link); if (!id) return; rail.appendChild(tile({ platform: 'spotify', title: e.title, artist: e.artist, art: e.art, link: spLink(id), track: id, by: nameFor(e.by), note: noteFor(id, e) })); });
     rail.appendChild(nextCard('music', 'Next up', live.length ? 'Add yours' : 'Be the first', 'Card holders can put a song on rotation. The desk okays it first.', 'Put one on', 'compose/#rot'));
   }
 
@@ -251,7 +262,10 @@
       rail.appendChild(tile({ platform: 'spotify', title: x.title, artist: x.artist, art: x.art, link: spLink(id), track: id,
         sub: [x.city, x.year].filter(Boolean).join(' · '), note: x.fact || '' }));
     });
-    rail.appendChild(nextCard('coming', 'Next up', 'Texas shows', 'Who is playing Texas next, with tickets.', 'The lineup', '#lineup'));
+    // ⛔ lineup() runs after this and takes #lineup off the page when no show is still ahead: no dead link then
+    rail.appendChild(upcoming().length
+      ? nextCard('coming', 'Next up', 'Texas shows', 'Who is playing Texas next, with tickets.', 'The lineup', '#lineup')
+      : nextCard('music', 'Next up', 'Put Us On', 'Making music in Texas? Send the desk your music.', 'Send it', '#putuson'));
   }
 
   /* ================= ROTATION BATTLE ================= */
@@ -260,14 +274,21 @@
     var j4 = new Date(+m[1], 0, 4, 12), mon1 = new Date(j4.getTime() - ((j4.getDay() + 6) % 7) * 864e5);
     return new Date(mon1.getTime() + (+m[2] - 1) * 7 * 864e5);
   }
+  // the battle's week and where it stands (soon / open / done), or null when music.json has no usable battle.
+  // One answer for both the battle box and On Rotation's next-up card.
+  function battleWeek() {
+    var B = M.battle, mon = B && isoMonday(B.id);
+    if (!mon || !B.a || !B.b || !trackId(B.a.track) || !trackId(B.b.track)) return null;
+    var sun = new Date(mon.getTime() + 6 * 864e5), now = today();
+    return { mon: mon, sun: sun, state: days(now, mon) > 0 ? 'soon' : days(sun, now) > 0 ? 'done' : 'open' };
+  }
   function battle() {
     var sec = d.getElementById('battle'), B = M.battle;
     if (!sec) return;
-    var mon = B && isoMonday(B.id), A = B && B.a, Bb = B && B.b;
-    if (!mon || !A || !Bb || !trackId(A.track) || !trackId(Bb.track)) { sec.remove(); return; }
-    var sun = new Date(mon.getTime() + 6 * 864e5), now = today();
-    var state = days(now, mon) > 0 ? 'soon' : days(sun, now) > 0 ? 'done' : 'open';
-    head(sec, 'Rotation Battle', 'week of ' + MON3[mon.getMonth()] + ' ' + mon.getDate(), 'two tracks · members vote · the winner stays on rotation');
+    var wk = battleWeek();
+    if (!wk) { sec.remove(); return; }
+    var mon = wk.mon, sun = wk.sun, state = wk.state, A = B.a, Bb = B.b;
+    head(sec, 'Rotation Battle', 'week of ' + MON3[mon.getMonth()] + ' ' + mon.getDate(), 'two tracks · members vote · one wins the week');
     var box = el('div', 'mx-bt');
     box.dataset.state = state;
     [['a', A], ['b', Bb]].forEach(function (p, i) {
@@ -299,7 +320,7 @@
       });
       var who = state === 'open' ? (isMember() ? (T ? 'Tap one. You can change it till Sunday.' : 'Votes open soon.') : 'Members vote. ')
         : state === 'soon' ? 'Voting opens ' + when(mon) + '.' : '';
-      var tail = state === 'done' ? (T && n ? (a === b ? 'Closed. Dead even, both stay on rotation.' : 'Closed. ' + (a > b ? A.title : Bb.title) + ' won the week and stays on rotation.') : 'Closed.')
+      var tail = state === 'done' ? (T && n ? (a === b ? 'Closed. Dead even.' : 'Closed. ' + (a > b ? A.title : Bb.title) + ' won the week.') : 'Closed.')
         : state === 'open' ? ' Closes ' + when(sun) + '.' : '';
       line.innerHTML = esc(msg || (who + tail)) + (state === 'open' && !isMember() && !msg ? ' <a href="join/">Get in &rarr;</a>' : '');
     }
@@ -322,7 +343,8 @@
     });
     // the door can answer after this runs: repaint when it does
     try { new MutationObserver(function () { paint(); }).observe(root, { attributes: true, attributeFilter: ['data-door'] }); } catch (e) {}
-    // the winner stays: once the week is over it joins On Rotation, first in line
+    // once the week is over the winner (both, on a tie) sits first on On Rotation. Drawn in the page only:
+    // nothing saves the result, so it goes when music.json gets the next battle (the copy says "won the week", no more)
     function stays() {
       if (state !== 'done' || !T || !(T.a + T.b)) return;
       var rail = d.getElementById('rotation-mount'); if (!rail || rail.querySelector('.won')) return;
@@ -359,11 +381,16 @@
   }
 
   /* ================= THE LINEUP ================= */
+  // the shows still ahead (today counts), soonest first. The Texas Shelf asks too, before this section draws.
+  function upcoming() {
+    var now = today();
+    return (M.lineup || []).filter(function (s) { var dt = ymd(s.date); return dt && days(now, dt) >= 0; })
+      .sort(function (a, b) { return ymd(a.date) - ymd(b.date); });
+  }
   function lineup() {
     var sec = d.getElementById('lineup'); if (!sec) return;
     var now = today();
-    var shows = (M.lineup || []).filter(function (s) { var dt = ymd(s.date); return dt && days(now, dt) >= 0; })
-      .sort(function (a, b) { return ymd(a.date) - ymd(b.date); });
+    var shows = upcoming();
     if (!shows.length) { sec.remove(); return; }
     head(sec, 'The Lineup', 'Texas', 'shows coming up, with tickets');
     var list = el('div', 'mx-lu');
@@ -385,7 +412,9 @@
         list.appendChild(row);
       });
       var rest = shows.length - cut.length;
-      more.innerHTML = rest > 0 ? rest + ' more ' + (rest === 1 ? 'date' : 'dates') + ' for members, in the Crypt. <a href="wall/#cal">Open the Crypt &rarr;</a>' : '';
+      // ⛔ never say these dates are "in the Crypt": most are not on its calendar. Members see them all right here.
+      more.innerHTML = rest > 0 ? rest + ' more ' + (rest === 1 ? 'date' : 'dates') + ' for members. ' + (rest === 1 ? 'It shows' : 'They show') +
+        ' right here once you are in the Crypt. <a href="wall/">Get in &rarr;</a>' : '';
       more.hidden = rest <= 0;
     }
     paint();
@@ -452,6 +481,8 @@
     }
     house.forEach(function (r) { wrap.appendChild(card(r)); });
     function paintFoot() {
+      // signed in with no Instagram yet ('wait'): "Log in" would bounce them to the timeline, so send them to the Crypt
+      if (root.getAttribute('data-door') === 'wait') { foot.innerHTML = '<p class="mx-note">Members put up rooms. <a href="wall/">One more step at the Crypt</a> and you are in.</p>'; return; }
       if (!isMember()) { foot.innerHTML = '<p class="mx-note">Members put up rooms. <a href="join/?next=home">Log in</a> or <a href="wall/">join the Crypt</a>.</p>'; return; }
       if (foot.querySelector('form')) return;
       foot.innerHTML = '<form class="mx-room-add" novalidate><label>Your playlist<input name="link" maxlength="300" inputmode="url" placeholder="a Spotify playlist link"></label>' +
@@ -546,6 +577,6 @@
     });
     root.setAttribute('data-music', 'ready');
   }
-  w.OTPMusic = { queue: function () { return P ? queue() : null; }, playFrom: playFrom };
+  w.OTPMusic = { queue: function () { return P ? queue() : null; } };   // lounge.js reads queue(); nothing outside calls playFrom
   if (w.__OTP_MUSIC) render(); else w.addEventListener('otp:music', render);
 })(window, document);

@@ -3,18 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Join the Desk · 0FF THE PRINT</title>
+<title>Log in · 0FF THE PRINT</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#0a0a0d">
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/auth.css">
+<link rel="stylesheet" href="../assets/css/auth.css?v=57b34045">
 </head>
 <body>
 <div class="leopard-bar"></div>
 <div class="wrap">
   <a class="back" href="../">&larr; 0FF THE PRINT</a>
-  <h1 id="ttl">Join the Desk</h1>
+  <h1 id="ttl">Welcome back</h1>
   <div class="sub">log in &nbsp;·&nbsp; cards are approved by hand</div>
   <p class="door-note">In the Crypt or holding a card? Log in. Want a card? Knock:
     sign up with your Instagram so the desk knows who's asking.</p>
@@ -67,7 +67,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="../supabase-config.js?v=f1348482"></script>
-<script src="../assets/js/desk.js?v=b1b40641"></script>
+<script src="../assets/js/desk.js?v=c10b36ef"></script>
 <script>
 (async () => {
   const $ = id => document.getElementById(id);
@@ -82,22 +82,31 @@
 
   // ?next= sends someone back to the page that sent them here. Allowlist only,
   // so the login page can never be used to bounce someone to another site.
-  const NEXT = { wall: '../wall/', home: '../#take' }[new URLSearchParams(location.search).get('next')] || null;
+  // Every page with a "Log in" gate has a key, so logging in from /my/, /card/
+  // or /packs/ lands back there and not on whatever a login defaults to.
+  const NEXT_KEY = new URLSearchParams(location.search).get('next');
+  const NEXT = {
+    wall: '../wall/', home: '../#take', packs: '../packs/',
+    my: '../my/', card: '../card/', compose: '../compose/', write: '../word/new/', dates: '../dates/',
+    desk: '../desk/', goals: '../desk/goals/', board: '../board/', deskword: '../desk/word/',
+  }[NEXT_KEY] || null;
 
   // already signed in? send them where they belong
   const me = await OTP.me();
   if (me) {
-    // The Wall decides who gets in (card holders, the desk, and anybody whose login carries an Instagram: 035)
-    if (NEXT) { location.href = NEXT; return; }
-    if (me.profile?.is_admin) { location.href = '../desk/'; return; }
-    if (me.profile?.approved)  { location.href = '../compose/'; return; }
+    // The Wall decides who gets in (card holders, the desk, and anybody whose login carries an Instagram: 035).
+    // The Crypt has its own Instagram step, so it always gets them back. Anywhere else waits until we know
+    // they are in: a login with no Instagram sent back to the page that said "Log in" just bounced off it.
+    if (NEXT_KEY === 'wall') { location.href = NEXT; return; }
+    if (me.profile?.is_admin) { location.href = NEXT || '../desk/'; return; }
+    if (me.profile?.approved)  { location.href = NEXT || '../compose/'; return; }
     // 033: a member of The Wall is not waiting on anything. They post from the timeline,
     // so a login with nowhere to go sends them there instead of telling them to queue.
     let onWall = false;
     try { onWall = !!(OTP.canTake && await OTP.canTake()); } catch (e) {}
     // 035: a login that carries an Instagram is let onto The Wall on the spot (no code any more)
     if (!onWall) { try { const j = await OTP.sb().rpc('wall_join', { p_ig: null }); onWall = !!(j && !j.error && j.data === 'in'); } catch (e) {} }
-    if (onWall) { location.href = '../#take'; return; }
+    if (onWall) { location.href = NEXT || '../#take'; return; }
     const esc = t => String(t ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     $('panel').innerHTML = `<b style="font-family:var(--f-display);font-style:italic;font-size:26px;text-transform:uppercase">One more step.</b>
       <div class="note">Signed in as ${esc(me.user.email)}. This login has no Instagram on it yet, and that is the way in.

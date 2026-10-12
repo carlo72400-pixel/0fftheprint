@@ -18,6 +18,14 @@ next 0TP number.
 
 Then: git add -A && git commit && git push.
 
+    # after touching md_to_html below OR word.js's copy of it: both renderers
+    # against every committed story, exit 1 on any difference
+    /usr/bin/python3 newstory.py --parity
+
+--slug names the folder (default: slugify(title)). bake.py passes a member
+story's database slug. A slug that is already a story is refused, never
+overwritten.
+
 Markdown understood (deliberately small): blank-line paragraphs, "## " section
 heads, "> " pull quotes, "![alt](img.jpg)" figures (local images are copied in
 next to the page; any lines right under the image, same block, become its
@@ -59,11 +67,23 @@ def inline(s):
     #    File:Xaviersobased_(2-2-23).jpg truncated to ..._(2-2-23 and leaked ".jpg)"
     #    as literal text next to a dead link. On a cover credit that is a broken
     #    attribution, which is a licence problem. Allow one level of balanced parens.
-    s = re.sub(r"\[([^\]]+)\]\((https?://(?:[^()\s]|\([^()\s]*\))+)\)",
+    # ⛔ AND NEVER A " IN THE URL. quote=False leaves quotes raw, so a member's
+    #    [x](https://a/"onmouseover="...) closed href="..." and baked an
+    #    attribute of their choosing into a static page. word.js matches this.
+    s = re.sub(r"\[([^\]]+)\]\((https?://(?:[^()\s\"]|\([^()\s\"]*\))+)\)",
                r'<a href="\2" target="_blank" rel="noopener">\1</a>', s)
     s = re.sub(r"\*\*([^*]+)\*\*", r"<b>\1</b>", s)
     s = re.sub(r"\*([^*]+)\*", r"<i>\1</i>", s)
     return s
+
+def copy_in(src_path, story_dir, name):
+    # ⛔ bake.py folds a phone edit back with md_to_html(md, story_dir, story_dir),
+    #    so the image is ALREADY next to the page and copy2 onto itself raises
+    #    SameFileError: one photo story with an override killed the whole bake.
+    dst = os.path.join(story_dir, name)
+    if os.path.exists(dst) and os.path.samefile(src_path, dst):
+        return
+    shutil.copy2(src_path, dst)
 
 def md_to_html(md, story_dir, src_dir):
     out = []
@@ -95,7 +115,7 @@ def md_to_html(md, story_dir, src_dir):
                         pp = os.path.join(src_dir, poster)
                         if not os.path.exists(pp):
                             sys.exit(f"poster not found next to the draft: {poster}")
-                        shutil.copy2(pp, os.path.join(story_dir, os.path.basename(poster)))
+                        copy_in(pp, story_dir, os.path.basename(poster))
                         poster = os.path.basename(poster)
                     pa = f' poster="{html.escape(poster)}"'
                 out.append(
@@ -109,7 +129,7 @@ def md_to_html(md, story_dir, src_dir):
                 if not os.path.exists(src_path):
                     sys.exit(f"image not found next to the draft: {src}")
                 name = os.path.basename(src)
-                shutil.copy2(src_path, os.path.join(story_dir, name))
+                copy_in(src_path, story_dir, name)
                 src = name
             out.append(f'<figure><img src="{html.escape(src)}" alt="{html.escape(alt)}" loading="lazy">'
                        + (f"<figcaption>{inline(cap)}</figcaption>" if cap else "") + "</figure>")
@@ -219,7 +239,72 @@ PAGE = """<!DOCTYPE html>
 </html>
 """
 
+# word.js repaints a story from the desk's phone edit (story_pages) with its own
+# copy of md_to_html. Run this after touching EITHER renderer:
+#     /usr/bin/python3 newstory.py --parity
+PARITY_JS = r"""
+const vm = require('vm'), fs = require('fs');
+const inp = JSON.parse(fs.readFileSync(0, 'utf8'));
+const ctx = { window: {}, document: { querySelector: () => null, getElementById: () => null } };
+vm.createContext(ctx);
+vm.runInContext(fs.readFileSync(inp.wordjs, 'utf8'), ctx);
+const out = {};
+for (const k of Object.keys(inp.mds)) out[k] = ctx.window.OTPWord.mdToHtml(inp.mds[k], { house: true });
+process.stdout.write(JSON.stringify(out));
+"""
+
+def parity():
+    """Every word/*/source.md through md_to_html and through word.js (house
+    mode, via node), each diffed against the committed <article>. 0 = clean."""
+    import subprocess, tempfile
+    stories = {}
+    for slug in sorted(os.listdir(WORD)):
+        d = os.path.join(WORD, slug)
+        if os.path.exists(os.path.join(d, "source.md")) and os.path.exists(os.path.join(d, "index.html")):
+            stories[slug] = d
+    mds = {s: open(os.path.join(d, "source.md"), encoding="utf-8").read() for s, d in stories.items()}
+    try:
+        r = subprocess.run(["node", "-e", PARITY_JS], capture_output=True, text=True, input=json.dumps(
+            {"wordjs": os.path.join(ROOT, "assets", "js", "word.js"), "mds": mds}))
+        js = json.loads(r.stdout) if r.returncode == 0 else None
+        if js is None:
+            print("  word.js did not run:", (r.stderr.strip().splitlines() or ["?"])[-1])
+    except FileNotFoundError:
+        js = None
+        print("  no node on this machine: checking newstory.py against the pages only")
+    bad = 0
+    with tempfile.TemporaryDirectory() as td:
+        for slug, d in stories.items():
+            page = open(os.path.join(d, "index.html"), encoding="utf-8").read()
+            m = re.search(r'<article data-stamp="[a-f0-9]*">\n(.*?)\n  </article>', page, re.S)
+            committed = m.group(1) if m else None
+            os.makedirs(os.path.join(td, slug))
+            try:
+                py = md_to_html(mds[slug], os.path.join(td, slug), d)
+            except SystemExit as e:
+                py = f"(newstory refused: {e})"
+            fails = []
+            if committed is not None and py != committed:
+                fails.append("newstory.py != page")
+            if js is not None and js.get(slug) != py:
+                fails.append("word.js != newstory.py")
+            if fails:
+                bad += 1
+                print(f"  DIFF {slug}: " + ", ".join(fails))
+                other = "word.js" if fails[-1].startswith("word.js") else "page"
+                a = ((js or {}).get(slug) or "" if other == "word.js" else committed).split("\n")
+                b = py.split("\n")
+                for i in range(max(len(a), len(b))):
+                    if (a[i] if i < len(a) else None) != (b[i] if i < len(b) else None):
+                        print(f"       {other + ':':10} {(a[i] if i < len(a) else '')[:200]}")
+                        print(f"       newstory:  {(b[i] if i < len(b) else '')[:200]}")
+                        break
+    print(f"  {len(stories)} stories, {bad} differ" + ("" if js is not None else " (word.js not checked)"))
+    return 1 if bad or js is None else 0
+
 def main():
+    if "--parity" in sys.argv[1:]:
+        sys.exit(parity())
     ap = argparse.ArgumentParser()
     ap.add_argument("draft", nargs="?", help="markdown file (omit with --link)")
     ap.add_argument("--title", required=True)
@@ -238,14 +323,31 @@ def main():
     ap.add_argument("--date", default=date.today().isoformat())
     ap.add_argument("--author", default="0FF THE PRINT",
                     help="byline; a member story bakes with the member's name")
+    ap.add_argument("--slug", help="folder under word/ (default: from the title). "
+                    "bake.py passes a member story's database slug, which a desk "
+                    "retitle never changes, so the page lands where its links point")
     a = ap.parse_args()
     if not a.draft and not a.link:
         sys.exit("either a markdown draft or --link, one of the two")
+    if a.slug and not re.fullmatch(r"[a-z0-9][a-z0-9-]{2,59}", a.slug):
+        sys.exit(f"--slug must be 3 to 60 of a-z, 0-9 and -, starting with a letter or digit: {a.slug}")
 
     with open(DESK) as f:
         desk = json.load(f)
     num = a.num or next_num(desk["items"])
-    slug = slugify(a.title)
+    slug = a.slug or slugify(a.title)
+
+    # ⛔ A TITLE THAT SLUGIFIES ONTO A RUNNING STORY USED TO OVERWRITE IT: its
+    #    page, source.md and cover went, and desk.json got a second card. A
+    #    folder holding only cover.jpg/thumb.jpg is a failed earlier run of this
+    #    same story (it exits before writing the page), so that one may re-run.
+    taken = os.path.exists(os.path.join(WORD, slug, "index.html")) or any(
+        str(it.get("link", "")) == f"word/{slug}/"
+        or str(it.get("thumb", "")).startswith(f"word/{slug}/") for it in desk["items"])
+    if taken:
+        sys.exit(f"word/{slug}/ is already a story. Pick another title or --slug. "
+                 f"To rebuild one that is not pushed yet, remove word/{slug}/ and its "
+                 f"desk.json card first.")
 
     # thumb for the grid card, self-contained so derive.py is not involved
     story_dir = os.path.join(WORD, slug)

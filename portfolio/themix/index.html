@@ -120,6 +120,23 @@ const grid=document.getElementById('grid'), lb=document.getElementById('lb'),
       lbimg=document.getElementById('lbimg'), dl=document.getElementById('dl'),
       lbmeta=document.getElementById('lbmeta'), countEl=document.getElementById('count');
 let view=IT.slice(), cur=0;
+// The full-size files live on github.io (themix-full, too big for this repo's Pages cap), so
+// '../themix-full/' was a 404 here. A browser ignores download= across origins and just opens
+// the JPEG, so the button fetches it (github.io sends access-control-allow-origin *) and
+// saves it under its name. In-app browsers (Instagram, Facebook) keep the plain link:
+// it opens the photo, and long-press saves it there.
+const FULL='https://carlo72400-pixel.github.io/themix-full/';
+dl.addEventListener('click',async e=>{
+  if(/Instagram|FBAN|FBAV/.test(navigator.userAgent)) return;
+  const href=dl.href, name=dl.getAttribute('download')||'';
+  e.preventDefault();
+  try{
+    const r=await fetch(href,{mode:'cors'}); if(!r.ok) throw new Error(r.status);
+    const u=URL.createObjectURL(await r.blob()), a=document.createElement('a');
+    a.href=u; a.download=name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(u),60000);
+  }catch(err){ location.href=href; }
+});
 function pad(n){return String(n).padStart(3,'0')}
 function render(){
   grid.innerHTML='';
@@ -147,9 +164,9 @@ function open(i){
   if(swap){swap.onload=null;swap=null}
   swap=new Image();
   swap.onload=()=>{ if(view[cur]&&view[cur].i===m.i) lbimg.src=swap.src; };
-  swap.src='../themix-full/'+pad(m.i)+'.jpg';
+  swap.src=FULL+pad(m.i)+'.jpg';
   lbimg.alt='The Mix photo '+m.i;
-  dl.href='../themix-full/'+pad(m.i)+'.jpg';
+  dl.href=FULL+pad(m.i)+'.jpg';
   dl.setAttribute('download','TheMix-Aug23-'+pad(m.i)+'.jpg');
   lbmeta.textContent=pad(m.i)+' \u00b7 '+m.t+' \u00b7 '+m.s;
   lb.classList.add('on'); document.body.style.overflow='hidden';

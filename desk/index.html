@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#0a0a0d">
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/auth.css">
+<link rel="stylesheet" href="../assets/css/auth.css?v=57b34045">
 <style>
   .post-row{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;
     padding:15px 4px;border-bottom:1px solid var(--line)}
@@ -33,6 +33,14 @@
   .slug{font-family:var(--f-mono);font-size:10.5px;color:var(--muted)}
   .broke{background:rgba(255,93,126,.08);border:1px solid rgba(255,93,126,.35);border-radius:10px;
     padding:14px;font-size:13px;color:#ffb3c4}
+  /* ⛔ .person is a 1fr | auto grid (auth.css). The story and video editors were
+     a third child with no column of their own, so they wrapped into the 1fr
+     column beside the buttons and came out about 60px wide on a phone, two
+     letters a line. They span the whole row now, the video's cover sits in one
+     box with its title, and on a phone the buttons drop under the name. */
+  .person > .seed-editor{grid-column:1/-1}
+  .vwho{display:flex;gap:12px;align-items:flex-start;min-width:0}
+  @media (max-width:600px){ .person{grid-template-columns:1fr} }
 </style>
 </head>
 <body>
@@ -42,13 +50,14 @@
   <h1>The Desk</h1>
   <div class="sub">who gets in &nbsp;·&nbsp; what stays up &nbsp;·&nbsp;
     <a href="../board/" style="color:var(--pink-glow);text-decoration:none;font-weight:600">THE BOARD &rarr;</a> &nbsp;·&nbsp;
-    <a href="goals/" style="color:var(--pink-glow);text-decoration:none;font-weight:600">THE GOALS &rarr;</a></div>
+    <a href="goals/" style="color:var(--pink-glow);text-decoration:none;font-weight:600">THE GOALS &rarr;</a> &nbsp;·&nbsp;
+    <a href="../wall/" style="color:var(--pink-glow);text-decoration:none;font-weight:600">THE CRYPT &rarr;</a></div>
   <div id="panel"><div class="empty">checking…</div></div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="../supabase-config.js?v=f1348482"></script>
-<script src="../assets/js/desk.js?v=b1b40641"></script>
+<script src="../assets/js/desk.js?v=c10b36ef"></script>
 <script>
 (async () => {
   const $ = id => document.getElementById(id);
@@ -58,6 +67,11 @@
 
   // Survives a re-render so the undo strip does not vanish under him.
   let lastBatch = null, lastBatchN = 0, lastBatchWho = '', lastRetired = null, lastRetiredWasBanned = false;
+  // ?s=<slug> opens that member story's editor once, after the first paint. The
+  // story pencil on the homepage and the board's story sheet send him here,
+  // because an unbaked story's body is the database row and only this page edits it.
+  const wantSlug = new URLSearchParams(location.search).get('s');
+  let wantDone = !wantSlug;
 
   if (!OTP.configured) {
     panel.innerHTML = `<div class="setup"><b>Backend not switched on yet</b>
@@ -66,7 +80,7 @@
     return;
   }
   const me = await OTP.me();
-  if (!me) { location.href = '../join/'; return; }
+  if (!me) { location.href = '../join/?next=desk'; return; }
   if (!me.profile?.is_admin) {
     panel.innerHTML = `<div class="card"><b style="font-family:var(--f-display);font-style:italic;font-size:24px;text-transform:uppercase">Desk only.</b>
       <div class="note">Signed in as ${esc(me.user.email)}, but this page is the owner's.</div>
@@ -100,24 +114,28 @@
     // way so he can watch a submission BEFORE approving it.
     // An approved story used to be frozen: updateMyStory's RLS refuses a
     // published row, and nothing else could write one. This is the desk half.
+    // maxlength 80: the database holds a story title to 3-80 (010). The old 120
+    // let him type a headline the save then refused. 16px so an iPhone does not
+    // zoom the page every time he taps into a box.
     const storyEditor = x => `
       <div class="seed-editor" id="st-${x.id}" style="display:none;margin-top:10px;width:100%">
-        <input type="text" id="st-t-${x.id}" value="${esc(x.title || '')}" maxlength="120"
-          style="width:100%;background:#0d0d12;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px;font-size:15px;min-height:44px">
+        <input type="text" id="st-t-${x.id}" value="${esc(x.title || '')}" maxlength="80"
+          style="width:100%;background:#0d0d12;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px;font-size:16px;min-height:44px">
         <input type="text" id="st-d-${x.id}" value="${esc(x.dek || '')}" maxlength="200"
-          style="width:100%;background:#0d0d12;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px;font-size:15px;min-height:44px;margin-top:8px">
+          style="width:100%;background:#0d0d12;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px;font-size:16px;min-height:44px;margin-top:8px">
         <textarea id="st-b-${x.id}"
-          style="width:100%;min-height:220px;background:#0d0d12;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px;font-size:14px;margin-top:8px">${esc(x.body_md || '')}</textarea>
+          style="width:100%;min-height:220px;background:#0d0d12;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px;font-size:16px;margin-top:8px">${esc(x.body_md || '')}</textarea>
         <div class="acts">
           <button class="btn ok sm" data-st-save="${x.id}" type="button">Save</button>
           <button class="btn ghost sm" data-st-cancel="${x.id}" type="button">Cancel</button>
         </div>
+        <div class="msg" id="st-m-${x.id}"></div>
       </div>`;
 
     const vidEditor = v => `
       <div class="seed-editor" id="vd-${v.id}" style="display:none;margin-top:10px;width:100%">
         <input type="text" id="vd-t-${v.id}" value="${esc(v.title || '')}" maxlength="80"
-          style="width:100%;background:#0d0d12;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px;font-size:15px;min-height:44px">
+          style="width:100%;background:#0d0d12;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px;font-size:16px;min-height:44px">
         <div class="acts">
           <button class="btn ok sm" data-vd-save="${v.id}" type="button">Save</button>
           <button class="btn ghost sm" data-vd-cancel="${v.id}" type="button">Cancel</button>
@@ -216,8 +234,9 @@
       <div class="card">
         <b style="font-family:var(--f-display);font-style:italic;font-size:24px;text-transform:uppercase">
           The Word${wordPending.length ? ' · waiting ' + wordPending.length : ''}</b>
-        <div class="broke" style="margin-top:12px">Stories and entries go live only after you approve them.
-          <a href="word/" style="color:var(--pink-glow)">Edit a story body &rarr;</a></div>
+        <div class="broke" style="margin-top:12px">Stories go up the moment they are sent. Pull a bad one here.
+          Entries wait for you.
+          <a href="word/" style="color:var(--pink-glow)">Edit a house or baked story body &rarr;</a></div>
         ${storyPending.map(x => `
           <div class="person">
             <div><b style="font-size:14px;font-style:normal;text-transform:none">${esc(x.title)}</b>
@@ -294,14 +313,15 @@
         <b style="font-family:var(--f-display);font-style:italic;font-size:24px;text-transform:uppercase">
           The Reel${vidPending.length ? ' · waiting ' + vidPending.length : ''}</b>
         <div class="broke" style="margin-top:12px">Videos are links, never uploads, so nothing here costs storage.
-          Feature puts one at the front of the rail. Pull takes it off the site but keeps the row.</div>
+          They go up the moment they are sent, under The Reel on the sender's page. Feature marks one featured there.
+          Pull takes it off the site but keeps the row.</div>
         ${vidPending.map(v => `
           <div class="person">
-            ${v.cover_url ? `<div class="pthumb" data-bg="${esc(v.cover_url)}"></div>` : ''}
+            <div class="vwho">${v.cover_url ? `<div class="pthumb" data-bg="${esc(v.cover_url)}"></div>` : ''}
             <div><b style="font-size:14px;font-style:normal;text-transform:none">${esc(v.title)}</b>
               <span class="meta"> · ${esc(v.provider)}</span>
               <div class="meta">from ${esc(nameOf(v.submitted_by))}
-                ${vidLink(v) ? `&nbsp;·&nbsp; <a href="${esc(vidLink(v))}" target="_blank" rel="noopener" style="color:var(--pink-glow)">watch it first</a>` : '<span class="pill pulled">NO CARD SLUG, THIS TILE WILL BE DEAD</span>'}</div></div>
+                ${vidLink(v) ? `&nbsp;·&nbsp; <a href="${esc(vidLink(v))}" target="_blank" rel="noopener" style="color:var(--pink-glow)">watch it first</a>` : '<span class="pill pulled">NO CARD SLUG, THIS TILE WILL BE DEAD</span>'}</div></div></div>
             <div class="row">
               <button class="btn ghost sm" data-vd-edit="${v.id}" type="button">Edit</button>
               <button class="btn ok sm" data-vd-ok="${v.id}" type="button">Approve</button>
@@ -311,12 +331,12 @@
           </div>`).join('') || '<div class="meta" style="margin-top:8px">Nothing waiting.</div>'}
         ${vidLive.length ? vidLive.map(v => `
           <div class="person gone-ok">
-            ${v.cover_url ? `<div class="pthumb" data-bg="${esc(v.cover_url)}"></div>` : ''}
+            <div class="vwho">${v.cover_url ? `<div class="pthumb" data-bg="${esc(v.cover_url)}"></div>` : ''}
             <div><b style="font-size:14px;font-style:normal;text-transform:none">${esc(v.title)}</b>
               <span class="meta"> · ${esc(v.provider)} · UP</span>
               ${v.featured ? '<span class="pill ok">FEATURED</span>' : ''}
               <div class="meta">${esc(nameOf(v.submitted_by))}
-                &nbsp;·&nbsp; <a href="${esc(vidLink(v))}" target="_blank" rel="noopener" style="color:var(--muted)">open</a></div></div>
+                &nbsp;·&nbsp; <a href="${esc(vidLink(v))}" target="_blank" rel="noopener" style="color:var(--muted)">open</a></div></div></div>
             <div class="row">
               <button class="btn ghost sm" data-vd-edit="${v.id}" type="button">Edit</button>
               <button class="btn ghost sm" data-vd-feat="${v.id}" data-on="${v.featured ? '1' : ''}" type="button">${v.featured ? 'Unfeature' : 'Feature'}</button>
@@ -364,7 +384,7 @@
                 ${r.ov ? `<button class="btn ghost sm" data-seed-clear="${r.key}" type="button">Back to the file</button>` : ''}
               </div>
               <div class="seed-editor" id="se-${r.key}" style="display:none;margin-top:10px">
-                <textarea style="width:100%;min-height:120px;background:#0d0d12;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px;font-size:14px">${esc((r.ov && r.ov.new_text) || r.p.text || '')}</textarea>
+                <textarea style="width:100%;min-height:120px;background:#0d0d12;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px;font-size:16px">${esc((r.ov && r.ov.new_text) || r.p.text || '')}</textarea>
                 <div class="acts">
                   <button class="btn ok sm" data-seed-save="${r.key}" type="button">Save</button>
                   <button class="btn ghost sm" data-seed-cancel="${r.key}" type="button">Cancel</button>
@@ -530,14 +550,29 @@
       const box = document.getElementById('st-' + b.dataset.stCancel);
       if (box) box.style.display = 'none';
     });
-    panel.querySelectorAll('[data-st-save]').forEach(b => b.onclick = rerun(b => {
+    // ⛔ NOT rerun. rerun always re-renders, and a re-render rebuilds this editor
+    // from the database: a refused save threw away every word he had typed.
+    // Re-render only once the save landed; on a refusal the editor stays open,
+    // as he left it, with the reason under it.
+    panel.querySelectorAll('[data-st-save]').forEach(b => b.onclick = async () => {
       const id = b.dataset.stSave;
-      return OTP.updateStory(id, {
-        title: document.getElementById('st-t-' + id).value,
-        dek:   document.getElementById('st-d-' + id).value,
-        body:  document.getElementById('st-b-' + id).value,
-      });
-    }));
+      const msg = document.getElementById('st-m-' + id);
+      b.disabled = true;
+      if (msg) { msg.textContent = 'Saving…'; msg.className = 'msg show'; }
+      try {
+        await OTP.updateStory(id, {
+          title: document.getElementById('st-t-' + id).value,
+          dek:   document.getElementById('st-d-' + id).value,
+          body:  document.getElementById('st-b-' + id).value,
+        });
+      } catch (e) {
+        if (msg) { msg.textContent = e.message || 'That did not go through.'; msg.className = 'msg show err'; }
+        else alert(e.message || 'That did not go through.');
+        b.disabled = false;
+        return;
+      }
+      render();
+    });
 
     panel.querySelectorAll('[data-vd-edit]').forEach(b => b.onclick = () => {
       const box = document.getElementById('vd-' + b.dataset.vdEdit);
@@ -564,7 +599,10 @@
     });
     panel.querySelectorAll('[data-retire]').forEach(b => b.onclick = async () => {
       const name = b.dataset.name;
-      if (!confirm('Revoke ' + name + ', pull everything they posted, and close the Crypt to them? You can put it back.')) return;
+      // The undo is the strip this page shows right after, and it lives only
+      // until the page reloads. The question says so.
+      if (!confirm('Revoke ' + name + ', pull everything they posted, and close the Crypt to them? ' +
+                   'You can put it back from this page right after, until it reloads.')) return;
       b.disabled = true;
       try {
         const was = members.find(p => p.id === b.dataset.retire);
@@ -634,6 +672,17 @@
         }
       };
     });
+
+    // ?s=<slug>: open that story's editor, once. A story baked since the link
+    // was made lives in git now, so it goes on to the page editor.
+    if (!wantDone) {
+      wantDone = true;
+      const x = memberStories.find(s => s.slug === wantSlug && !s.baked);
+      const box = x && document.getElementById('st-' + x.id);
+      if (box) { box.style.display = 'block'; box.scrollIntoView({ block: 'center' }); }
+      else if (memberStories.some(s => s.slug === wantSlug && s.baked))
+        location.replace('word/?s=' + encodeURIComponent(wantSlug));
+    }
   }
 
   render();
