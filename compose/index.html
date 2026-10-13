@@ -3,22 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Post · 0FF THE PRINT</title>
+<title>Your posts · 0FF THE PRINT</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#0a0a0d">
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/auth.css?v=57b34045">
 <style>
+  .sub a{color:var(--pink-glow);text-decoration:none;font-weight:600}
   .drop{margin-top:14px;border:1px dashed var(--line);border-radius:12px;padding:18px;text-align:center;
     font-family:var(--f-mono);font-size:11.5px;letter-spacing:.14em;color:var(--muted);cursor:pointer;text-transform:uppercase}
   .drop:hover,.drop.over{border-color:var(--pink-deep);color:var(--pink-glow)}
-  .prev{margin-top:12px;position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--line);display:none}
-  .prev img,.prev video{width:100%;display:block;max-height:340px;object-fit:cover;background:#000}
-  .prev button{position:absolute;top:8px;right:8px;background:rgba(10,10,13,.85);border:1px solid var(--line);
-    color:var(--ink);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px}
-  .cnt{text-align:right;font-family:var(--f-mono);font-size:10.5px;color:var(--muted);margin-top:6px}
-  .cnt.over{color:var(--bad)}
 
   /* ---- your posts ---- */
   .mine{margin-top:22px}
@@ -36,40 +31,81 @@
     border:1px solid var(--line);border-radius:3px;padding:2px 6px}
   .tag.edited{color:var(--muted)}
   .tag.pulled{color:var(--bad);border-color:rgba(255,93,126,.45)}
+  /* where it went: the Take is everyone, the Roll is members only */
+  .tag.take{color:var(--ink)}
+  .tag.roll{color:var(--pink-glow);border-color:var(--pink-deep)}
   /* 44px minimum tap target. These are people on phones, not on a mouse. */
   .macts{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
   .macts .btn{width:auto;margin:0;min-height:44px;font-size:14px;padding:9px 18px}
   .macts .btn:disabled{opacity:.35}
+  /* the first tap on anything that comes down arms it, the second does it */
+  .btn.sure{border-color:var(--bad);color:var(--bad)}
   .locked{font-family:var(--f-mono);font-size:11px;color:var(--muted);margin-top:8px}
+  .fine{font-family:var(--f-mono);font-size:10.5px;color:var(--muted);line-height:1.6;margin-top:8px}
   .mrow textarea{min-height:110px;margin-top:2px}
+
+  /* ---- your videos ---- */
+  .vrow{border-top:1px solid var(--line);padding:12px 0}
+  .vtop{display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .vt{font-size:13px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .vlab{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.14em;color:var(--muted);white-space:nowrap}
+  .vlab.on{color:var(--pink-glow)}
+  .vlab.pulled{color:var(--bad)}
+  .vfix input{margin-top:10px}
+  .vmsg{font-family:var(--f-mono);font-size:11px;color:var(--pink-glow);margin-top:8px;min-height:0}
+  .vmsg:empty{display:none}
+  #vd-msg a,.vmsg a{color:var(--pink-glow)}
+  /* the send button is full width, so its answer goes on the line under it */
+  .sendrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:10px}
+  .sendrow .empty{flex-basis:100%;margin:0;padding:2px 0 0}
+  .sendrow .empty:empty{display:none}
 </style>
 </head>
 <body>
 <div class="leopard-bar"></div>
 <div class="wrap">
   <a class="back" href="../">&larr; 0FF THE PRINT</a>
-  <h1>New Post</h1>
-  <div class="sub" id="sub">the timeline &nbsp;·&nbsp; goes live instantly &nbsp;·&nbsp;
-    <a href="../my/" style="color:var(--pink-glow);text-decoration:none;font-weight:600">YOUR DESK &rarr;</a> &nbsp;·&nbsp;
-    <a href="../card/" style="color:var(--pink-glow);text-decoration:none;font-weight:600">YOUR CARD &rarr;</a> &nbsp;·&nbsp;
-    <a href="../word/new/" style="color:var(--pink-glow);text-decoration:none;font-weight:600">WRITE A STORY &rarr;</a> &nbsp;·&nbsp;
-    <a href="../wall/" style="color:var(--pink-glow);text-decoration:none;font-weight:600">THE CRYPT &rarr;</a></div>
+  <h1>Your posts</h1>
+  <!-- 045 (call 1): the Take on Home is everyone, the Roll on the Coven tab is members only, and this page lists what you put on both -->
+  <div class="sub" id="sub">everything you posted &nbsp;·&nbsp; <a href="../#take">the Take</a> is everyone, <a href="../#roll">the Roll</a> is members only<span id="links" hidden> &nbsp;·&nbsp;
+    <a href="../my/#account">YOUR ACCOUNT &rarr;</a><span data-holder hidden> &nbsp;·&nbsp;
+    <a href="../card/">YOUR CARD &rarr;</a> &nbsp;·&nbsp;
+    <a href="../word/new/">WRITE A STORY &rarr;</a></span><span data-open> &nbsp;·&nbsp;
+    <a href="../wall/">THE CRYPT &rarr;</a></span></span></div>
 
-  <div class="card" id="panel"><div class="empty">checking your card…</div></div>
+  <div class="card" id="panel"><div class="empty">checking…</div></div>
+  <div class="mine" id="mine"></div>
   <div id="rot"></div>
   <div id="vids"></div>
-  <div class="mine" id="mine"></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" integrity="sha384-Rj26LVGvoeRVR6+mwQmFfcR3QOBEwT+ZmuCWpuiqeTzJpCs0ER4ITAWGb4Hiy3Ok" crossorigin="anonymous"></script>
 <script src="../supabase-config.js?v=f1348482"></script>
-<script src="../assets/js/desk.js?v=c10b36ef"></script>
+<script src="../assets/js/desk.js?v=12f3e9e0"></script>
 <script>
 (async () => {
   const $ = id => document.getElementById(id);
   const panel = $('panel');
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const when = iso => { const d = new Date(iso); return isNaN(d) ? '' : d.toLocaleDateString(undefined,{month:'short',day:'numeric'}) + ', ' + d.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'}); };
+
+  // Two taps for anything that comes down. The first arms the button for four
+  // seconds and says so; the second runs it. A slip of the thumb costs nothing.
+  // fn says its own error out loud and throws, so the button comes back.
+  function twoTap(b, again, fn) {
+    const was = b.textContent;
+    const disarm = () => { clearTimeout(b._sure); b.dataset.sure = ''; b.classList.remove('sure'); b.textContent = was; };
+    b.onclick = async () => {
+      if (b.dataset.sure !== '1') {
+        b.dataset.sure = '1'; b.classList.add('sure'); b.textContent = again;
+        clearTimeout(b._sure); b._sure = setTimeout(disarm, 4000);
+        return;
+      }
+      clearTimeout(b._sure); b.disabled = true;
+      try { await fn(); }
+      catch (e) { b.disabled = false; disarm(); }
+    };
+  }
 
   if (!OTP.configured) {
     panel.innerHTML = `<div class="setup"><b>Backend not switched on yet</b>
@@ -78,114 +114,41 @@
   }
   const me = await OTP.me();
   if (!me) { location.href = '../join/?next=compose'; return; }
-  if (!me.profile?.approved) {
-    // 033: a Wall member posts from the timeline, not from this page (this box is the
-    // card holder's: GIFs, video). Send them where their post box is.
-    try { if (OTP.canTake && await OTP.canTake()) { location.href = '../#take'; return; } } catch (e) {}
-    panel.innerHTML = `<b style="font-family:var(--f-display);font-style:italic;font-size:26px;text-transform:uppercase">Not approved yet.</b>
-      <div class="note">Signed in as ${esc(me.user.email)}. The desk approves by hand. Once you're in, this becomes your post box.</div>
-      <button class="btn ghost" id="out" type="button">Sign out</button>`;
-    $('out').onclick = async () => { await OTP.signOut(); location.href = '../join/'; };
-    return;
-  }
 
-  // card_slug is desk-granted now, so a freshly approved member legitimately has none.
-  const noCard = !me.profile.card_slug;
+  // 045 (call 1): this page is EVERY member's list of their own posts now. Posting
+  // lives on Home (the Take, everyone) and on the Roll (the Coven tab, members
+  // only), so nobody gets sent away from here any more: a member who is not a card
+  // holder sees who they are and their posts. Card holders and the desk also get
+  // their color, their picks and their videos below.
+  const prof = me.profile || {};
+  // 044: a close or a ban locks what they posted. The database turns every edit and
+  // delete away (0 rows), so the page says why up front instead of letting each tap
+  // fail with "not yours any more". No answer (null) is an open account, as before.
+  const acct = OTP.account ? await OTP.account() : null;
+  const closed = !!(acct && acct.closed), banned = !!(acct && acct.banned) && !closed;
+  const locked = closed || banned;
+  const holder = !!prof.approved && !locked;
+  const slug = prof.card_slug || '';
+  $('links').hidden = false;
+  document.querySelectorAll('[data-holder]').forEach(el => { el.hidden = !holder; });
+  document.querySelectorAll('[data-open]').forEach(el => { el.hidden = locked; });
+  const lockNote = closed
+    ? (acct.can_reopen
+        ? `This account is closed. Your posts are hidden, not gone. Open it again on <a href="../my/#account">Your account</a> and they come back.`
+        : `This account is closed. Your posts are hidden and locked.`)
+    : `The desk has your account. Your posts are hidden and locked. Text Gianni.`;
 
   panel.innerHTML = `
-    <div class="who">posting as <b>${esc(me.profile.display_name)}</b>
+    <div class="who">signed in as <b>${esc(prof.display_name || me.user.email)}</b>
       <button class="btn ghost sm" id="out" type="button">Sign out</button></div>
-    ${noCard ? `<div class="note">No card on you yet, so your posts run under your name until the desk hands one over.</div>` : ''}
-    <label for="text">What's up</label>
-    <textarea id="text" maxlength="800" placeholder="art, a thought, a bad opinion about a mix"></textarea>
-    <div class="cnt" id="cnt">0 / 800</div>
-    <div class="drop" id="drop">Tap to attach a photo, GIF or clip</div>
-    <input type="file" id="file" accept="image/*,video/*" hidden>
-    <div class="prev" id="prev"><img id="previmg" alt=""><button id="rm" type="button">&times;</button></div>
-    <div id="altwrap" style="display:none">
-      <label for="alt">Describe the photo (optional)</label>
-      <input id="alt" type="text" maxlength="180" placeholder="for anybody who can't see it">
-    </div>
-    <button class="btn" id="go" type="button">Post it</button>
-    <div class="msg" id="msg"></div>
-    <div class="note">Edit it, delete it, whatever. If the desk pulls a post it locks, and that is on purpose.</div>
-
-    <label>Your color</label>
+    ${me.failed ? `<div class="note">Could not read your card just now. Reload in a minute.</div>` : ''}
+    ${locked ? `<div class="note" id="locknote">${lockNote}</div>`
+      : `<div class="note">Post from <a href="../#take">Home</a> now. The Take is for everyone. The Roll, on the <a href="../#roll">Coven tab</a>, is members only.</div>`}
+    ${holder ? `<label>Your color</label>
     <div class="swatches" id="sw"></div>
-    <div class="note" id="swnote">This colors your posts on the timeline, and these pages while you're logged in.</div>`;
-
-  const msg = (t, k) => { const m = $('msg'); m.textContent = t; m.className = 'msg show ' + k; };
-  let file = null;
+    <div class="note" id="swnote">This colors your posts on the timeline, and these pages while you're logged in.</div>` : ''}`;
 
   $('out').onclick = async () => { await OTP.signOut(); location.href = '../join/'; };
-  $('text').oninput = () => {
-    const n = $('text').value.length;
-    $('cnt').textContent = `${n} / 800`;
-    $('cnt').classList.toggle('over', n > 800);
-  };
-  $('drop').onclick = () => $('file').click();
-  $('drop').ondragover = e => { e.preventDefault(); $('drop').classList.add('over'); };
-  $('drop').ondragleave = () => $('drop').classList.remove('over');
-  $('drop').ondrop = e => {
-    e.preventDefault(); $('drop').classList.remove('over');
-    if (e.dataTransfer.files[0]) setFile(e.dataTransfer.files[0]);
-  };
-  $('file').onchange = e => { if (e.target.files[0]) setFile(e.target.files[0]); };
-  $('rm').onclick = () => {
-    file = null; $('prev').style.display = 'none'; $('file').value = '';
-    $('altwrap').style.display = 'none'; $('alt').value = '';
-  };
-
-  function setFile(f) {
-    // The bucket enforces both of these server side too. This is just a faster,
-    // friendlier no than a failed upload.
-    // Kept in step with the homepage box and with what the bucket actually
-    // accepts (50MB, images + mp4/mov/webm/m4v). This page said "photo" and
-    // 8MB for a while after the bucket had already moved.
-    const isVid = /^video\//.test(f.type || '') || /\.(mp4|mov|webm|m4v)$/i.test(f.name || '');
-    if (!isVid && !/^image\//.test(f.type || '')
-        && !/\.(jpe?g|png|gif|webp|heic|heif|avif)$/i.test(f.name || '')) {
-      msg('Photos, GIFs and video clips only.', 'err'); return;
-    }
-    if (f.size > 50 * 1024 * 1024) {
-      msg(isVid ? 'That clip is over 50MB. Trim it or drop the quality a notch.'
-                : 'That photo is over 50MB. Shrink it first.', 'err');
-      return;
-    }
-    file = f;
-    // Swap the preview element to match what they picked, or a video renders
-    // as a broken image icon.
-    const old = $('previmg');
-    const el = document.createElement(isVid ? 'video' : 'img');
-    el.id = 'previmg';
-    if (isVid) { el.controls = true; el.playsInline = true; }
-    el.src = URL.createObjectURL(f);
-    old.replaceWith(el);
-    $('prev').style.display = 'block';
-    $('altwrap').style.display = isVid ? 'none' : 'block';
-  }
-
-  $('go').onclick = async () => {
-    const text = $('text').value.trim();
-    // 038: words, or a photo with no words. Same rule as the homepage box and the Roll.
-    if (!text && !file) { msg('Say something or add a photo first.', 'err'); return; }
-    $('go').disabled = true; $('go').textContent = 'Posting…';
-    try {
-      let url = null;
-      if (file) { $('go').textContent = 'Uploading photo…'; url = await OTP.uploadImage(file); }
-      await OTP.post({ text, imageUrl: url, imageAlt: $('alt').value.trim() || null });
-      msg('Up. It is on the homepage now.', 'good');
-      $('text').value = ''; $('cnt').textContent = '0 / 800';
-      $('rm').click();
-      renderMine();
-    } catch (e) {
-      // The database writes these for humans already, so pass them straight through.
-      const m = e.message || '';
-      msg(/^(Slow down|That is twenty|The desk pulled|Log in first)/.test(m) ? m : (m || 'That did not go through.'), 'err');
-    } finally {
-      $('go').disabled = false; $('go').textContent = 'Post it';
-    }
-  };
 
   /* ================= YOUR COLOR ================= */
   // The key is all that travels. The hexes live in auth.css and index.html and
@@ -214,11 +177,12 @@
       }
     });
   }
-  renderSwatches(me.profile.accent || null);
+  if (holder) renderSwatches(prof.accent || null);
 
   /* ================= PUT A SONG ON ROTATION ================= */
   // Degrades to nothing until migration 009 runs; .catch keeps the page whole.
   const rot = $('rot');
+  let rotShown = false;
   async function renderRotation() {
     if (!rot || !OTP.myRotation) return;
     let minez = [];
@@ -231,9 +195,9 @@
           style="width:100%;background:#0d0d12;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:12px;font-size:16px;min-height:44px">
         <input type="text" id="rt-artist" placeholder="artist name" autocomplete="off" maxlength="40"
           style="width:100%;background:#0d0d12;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:12px;font-size:16px;min-height:44px;margin-top:8px">
-        <div style="display:flex;gap:10px;align-items:center;margin-top:10px">
+        <div class="sendrow">
           <button class="btn" id="rt-send" type="button">Send it in</button>
-          <span class="empty" id="rt-msg" style="margin:0"></span>
+          <span class="empty" id="rt-msg"></span>
         </div>
         ${minez.length ? `<div style="margin-top:14px">` + minez.map(t => `
           <div style="border-top:1px solid var(--line);padding:9px 0">
@@ -241,10 +205,14 @@
               <span style="font-size:13px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(t.title)} · ${esc(t.artist)}</span>
               <span style="font-family:var(--f-mono);font-size:9.5px;letter-spacing:.14em;color:${t.published ? 'var(--pink-glow)' : 'var(--muted)'}">${t.published ? 'ON ROTATION' : 'WAITING'}</span>
             </div>
-            <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+            <div class="macts">
               <button class="btn ghost sm" data-rtswap="${t.id}" type="button">Swap the song</button>
-              ${!t.published ? `<button class="btn ghost sm" data-rtw="${t.id}" type="button">Withdraw</button>` : ''}
+              ${t.published
+                // 045: their own pick comes down whether the desk put it up or not
+                ? `<button class="btn ghost sm" data-rtdown="${t.id}" type="button">Take it down</button>`
+                : `<button class="btn ghost sm" data-rtw="${t.id}" type="button">Withdraw</button>`}
             </div>
+            ${t.published ? `<div class="fine">Takes it off Card Holders' Picks. Sending it again goes back through the desk.</div>` : ''}
             <div id="rts-${t.id}" style="display:none;margin-top:8px">
               <input type="text" id="rts-u-${t.id}" placeholder="new Spotify track link" autocomplete="off"
                 style="width:100%;background:#0d0d12;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:11px;font-size:16px;min-height:44px">
@@ -265,9 +233,8 @@
         // Spotify sends the title and the cover, never the artist, so a blank box went up as "unknown"
         if (!$('rt-artist').value.trim()) throw new Error('Who is it by? Type the artist, Spotify does not tell us.');
         const r = await OTP.submitTrack({ url: $('rt-url').value, artist: $('rt-artist').value });
-        msg.textContent = '"' + r.title + '" is in the queue.';
-        $('rt-url').value = ''; $('rt-artist').value = '';
-        renderRotation();
+        await renderRotation();
+        $('rt-msg').textContent = '"' + r.title + '" is in the queue.';
       } catch (e) { msg.textContent = e.message; }
       $('rt-send').disabled = false;
     };
@@ -287,9 +254,9 @@
           ...(url ? { url } : {}),
           artist: $('rts-a-' + id).value,
         });
+        await renderRotation();
         $('rt-msg').textContent = row && row.published
           ? 'Updated.' : 'Sent back to the desk for a look.';
-        renderRotation();
       } catch (e) { $('rt-msg').textContent = e.message; b.disabled = false; }
     });
     rot.querySelectorAll('[data-rtw]').forEach(b => b.onclick = async () => {
@@ -297,15 +264,35 @@
       try { await OTP.withdrawTrack(b.dataset.rtw); renderRotation(); }
       catch (e) { alert(e.message); b.disabled = false; }
     });
+    rot.querySelectorAll('[data-rtdown]').forEach(b => twoTap(b, 'Tap again to take it down', async () => {
+      try { await OTP.withdrawTrack(b.dataset.rtdown); }
+      catch (e) { $('rt-msg').textContent = e.message; throw e; }
+      await renderRotation();
+      $('rt-msg').textContent = 'Taken down.';
+    }));
+
+    // #rot (Card Holders' Picks on the Music tab ends here): same late jump as #vids
+    if (!rotShown) { rotShown = true; if (location.hash === '#rot') rot.scrollIntoView(); }
   }
-  renderRotation();
 
   /* ================= FEATURED VIDEOS ================= */
   // A LINK, never a file. Uploading clips would eat the free tier's 1GB and its
   // 5GB/mo egress, and egress is shared with auth, so a popular clip takes the
   // login down with it. Members already host on TikTok and YouTube.
+  // Since 023 a video is up the moment it is added and the desk pulls, and the
+  // public reel lives on their own card page now (the homepage Reel came off
+  // 10/11), so that is where this page sends them: c/<slug>/#reel.
   // Degrades to nothing until migration 014 runs; .catch keeps the page whole.
   const vidBox = $('vids');
+  const seeIt = slug ? ` <a href="../c/${encodeURIComponent(slug)}/#reel">See it</a>` : '';
+  // A cover has to match how the rail draws that provider: 9/16 for tiktok and
+  // instagram, 16/9 for youtube. Forcing everything to landscape would crop a
+  // vertical cover to a ribbon. Downscaled BEFORE upload, the egress lesson.
+  const fitCover = (file, provider) => {
+    const vertical = provider !== 'youtube';
+    return OTP.fitCardArt ? OTP.fitCardArt(file, vertical ? 720 : 1280, vertical ? 1280 : 720) : file;
+  };
+  let vidsShown = false;
   async function renderVideos() {
     if (!vidBox || !OTP.myVideos) return;
     let minev = [];
@@ -313,7 +300,7 @@
     vidBox.innerHTML = `
       <h2 style="margin-top:26px">Put a video up</h2>
       <div class="card">
-        <div class="empty" style="margin-bottom:10px">Paste a YouTube, TikTok or Instagram link. It goes up when you add it, and the desk can pull it.</div>
+        <div class="empty" style="margin-bottom:10px">Paste a YouTube, TikTok or Instagram link. It goes up on your page right away.</div>
         <input type="text" id="vd-url" placeholder="https://www.tiktok.com/@you/video/..." autocomplete="off"
           style="width:100%;background:#0d0d12;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:12px;font-size:16px;min-height:44px">
         <input type="text" id="vd-title" placeholder="what is it" autocomplete="off" maxlength="80"
@@ -322,17 +309,43 @@
           TikTok and Instagram need a cover. YouTube pulls its own.</div>
         <div class="drop" id="vd-drop" style="margin-top:0">Tap to attach a cover image</div>
         <input type="file" id="vd-file" accept="image/*" hidden>
-        <div style="display:flex;gap:10px;align-items:center;margin-top:10px">
+        <input type="file" id="vd-cov" accept="image/*" hidden>
+        <div class="sendrow">
           <button class="btn" id="vd-send" type="button">Send it in</button>
-          <span class="empty" id="vd-msg" style="margin:0"></span>
+          <span class="empty" id="vd-msg"></span>
         </div>
-        ${minev.length ? `<div style="margin-top:14px">` + minev.map(v => `
-          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;border-top:1px solid var(--line);padding:9px 0">
-            <span style="font-size:13px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(v.title)} · ${esc(v.provider)}</span>
-            <span style="font-family:var(--f-mono);font-size:9.5px;letter-spacing:.14em;color:${v.published ? 'var(--pink-glow)' : 'var(--muted)'}">${v.published ? (v.featured ? 'FEATURED' : 'UP') : 'WAITING'}</span>
-            ${!v.published ? `<button class="btn ghost sm" data-vdw="${v.id}" type="button">Withdraw</button>` : ''}
-          </div>`).join('') + `</div>` : ''}
+        ${minev.length ? `<div style="margin-top:14px">` + minev.map(v => {
+          const lab = !v.published ? ['PULLED BY THE DESK', 'pulled'] : v.featured ? ['FEATURED', 'on'] : ['ON YOUR PAGE', 'on'];
+          return `
+          <div class="vrow" data-vrow="${v.id}">
+            <div class="vtop">
+              <span class="vt">${esc(v.title)} · ${esc(v.provider)}</span>
+              <span class="vlab ${lab[1]}">${lab[0]}</span>
+            </div>
+            ${v.published ? `
+            <div class="vfix" id="vf-${v.id}" hidden>
+              <input type="text" id="vf-t-${v.id}" value="${esc(v.title)}" maxlength="80" autocomplete="off" aria-label="The title">
+              <div class="macts">
+                <button class="btn" data-vfsave="${v.id}" type="button">Save</button>
+                <button class="btn ghost" data-vfcancel="${v.id}" type="button">Never mind</button>
+              </div>
+            </div>
+            <div class="macts">
+              <button class="btn ghost" data-vfix="${v.id}" type="button">Fix the title</button>
+              <button class="btn ghost" data-vcov="${v.id}" data-prov="${esc(v.provider)}" type="button">New cover</button>
+              <button class="btn bad" data-vdown="${v.id}" type="button">Take it down</button>
+            </div>`
+            : `<div class="locked">The desk has this one. Text Gianni.</div>
+            <div class="macts">
+              <button class="btn bad" data-vdown="${v.id}" type="button">Take it down</button>
+            </div>`}
+            <div class="vmsg" id="vm-${v.id}"></div>
+          </div>`; }).join('') + `</div>` : ''}
       </div>`;
+
+    // where a row's answer goes after the list repaints: the row, or the box at the top when the row is gone
+    const say = (id, html) => { const el = $('vm-' + id) || $('vd-msg'); if (el) el.innerHTML = html; };
+    const after = async (id, html) => { await renderVideos(); say(id, html); };
 
     let coverFile = null;
     const drop = $('vd-drop'), fileIn = $('vd-file');
@@ -353,45 +366,77 @@
         let coverUrl = null;
         if (coverFile) {
           msg.textContent = 'Uploading the cover…';
-          // Downscale BEFORE upload, the egress lesson from member stories.
-          // Shape has to match how the rail draws that provider: 9/16 for
-          // tiktok and instagram, 16/9 for youtube. Forcing everything to
-          // landscape would crop a vertical cover to a ribbon.
-          const vertical = k.provider !== 'youtube';
-          const fitted = OTP.fitCardArt
-            ? await OTP.fitCardArt(coverFile, vertical ? 720 : 1280, vertical ? 1280 : 720)
-            : coverFile;
-          coverUrl = await OTP.uploadImage(fitted);
+          coverUrl = await OTP.uploadImage(await fitCover(coverFile, k.provider));
         } else if (k.provider !== 'youtube') {
           throw new Error('That one needs a cover image. YouTube is the only one that brings its own.');
         }
         msg.textContent = 'Sending…';
         await OTP.submitVideo({ url: $('vd-url').value, title: $('vd-title').value, coverUrl });
-        msg.textContent = 'Up. It is on the reel now.';
-        $('vd-url').value = ''; $('vd-title').value = '';
-        renderVideos();
+        await renderVideos();
+        $('vd-msg').innerHTML = 'Up. It is on your page now.' + seeIt;
+        return;
       } catch (e) { msg.textContent = e.message; }
       btn.disabled = false;
     };
 
-    vidBox.querySelectorAll('[data-vdw]').forEach(b => b.onclick = async () => {
-      b.disabled = true;
-      try { await OTP.deleteVideo(b.dataset.vdw); renderVideos(); }
-      catch (e) { alert(e.message); b.disabled = false; }
+    vidBox.querySelectorAll('[data-vfix]').forEach(b => b.onclick = () => {
+      const box = $('vf-' + b.dataset.vfix);
+      box.hidden = !box.hidden;
+      if (!box.hidden) $('vf-t-' + b.dataset.vfix).focus();
     });
+    vidBox.querySelectorAll('[data-vfcancel]').forEach(b => b.onclick = () => { $('vf-' + b.dataset.vfcancel).hidden = true; });
+    vidBox.querySelectorAll('[data-vfsave]').forEach(b => b.onclick = async () => {
+      const id = b.dataset.vfsave, t = $('vf-t-' + id).value.trim();
+      if (!t) { say(id, 'Give it a title.'); return; }
+      b.disabled = true;
+      try { await OTP.updateVideo(id, { title: t }); await after(id, 'Fixed.'); }
+      catch (e) { say(id, esc(e.message)); b.disabled = false; }
+    });
+
+    // one hidden picker for every row's New cover; the row it is for rides along
+    let coverFor = null;
+    const covIn = $('vd-cov');
+    vidBox.querySelectorAll('[data-vcov]').forEach(b => b.onclick = () => {
+      coverFor = { id: b.dataset.vcov, provider: b.dataset.prov, btn: b };
+      covIn.value = ''; covIn.click();
+    });
+    covIn.onchange = async () => {
+      const f = covIn.files && covIn.files[0], it = coverFor;
+      if (!f || !it) return;
+      it.btn.disabled = true; say(it.id, 'Uploading the cover…');
+      try {
+        const url = await OTP.uploadImage(await fitCover(f, it.provider));
+        await OTP.updateVideo(it.id, { coverUrl: url });
+        await after(it.id, 'Cover is on.');
+      } catch (e) { say(it.id, esc(e.message)); it.btn.disabled = false; }
+    };
+
+    vidBox.querySelectorAll('[data-vdown]').forEach(b => twoTap(b, 'Tap again to take it down', async () => {
+      const id = b.dataset.vdown;
+      try { await OTP.deleteVideo(id); }
+      catch (e) { say(id, esc(e.message)); throw e; }
+      await after(id, 'Taken down.');
+    }));
+
+    // #vids (the Your account page sends people here to fix a video): the list
+    // lands after the page has drawn, so the browser's own jump came too early
+    if (!vidsShown) { vidsShown = true; if (location.hash === '#vids') vidBox.scrollIntoView(); }
   }
-  renderVideos();
 
   /* ================= YOUR POSTS ================= */
   const mine = $('mine');
 
   async function renderMine() {
     const rows = await OTP.myPosts();
+    const head = `<h2>On the Take and the Roll</h2>
+      <div class="note" style="margin-top:2px">${locked
+        ? (closed ? 'Locked while this account is closed.' : 'Locked while the desk has your account.')
+        : 'Edit it, delete it, whatever. If the desk pulls a post it locks, and that is on purpose.'}</div>`;
     if (!rows.length) {
-      mine.innerHTML = `<h2>Your posts</h2><div class="empty">nothing up yet</div>`;
+      mine.innerHTML = head + `<div class="empty">nothing up yet</div>`;
       return;
     }
-    mine.innerHTML = `<h2>Your posts</h2><div class="card" id="minecard"></div>`;
+    mine.innerHTML = head + `<div class="card" id="minecard"></div>`;
     const box = $('minecard');
     box.innerHTML = rows.map(p => {
       const pulled = !p.published;
@@ -407,12 +452,13 @@
           <div class="mtext">${esc(p.text)}</div>
           <div class="mmeta">
             <span>${esc(when(p.created_at))}</span>
+            ${p.members_only === true ? '<span class="tag roll">THE ROLL</span>' : '<span class="tag take">THE TAKE</span>'}
             ${p.edited_at ? '<span class="tag edited">EDITED</span>' : ''}
             ${pulled ? '<span class="tag pulled">PULLED</span>' : ''}
             ${p.pinned ? '<span class="tag">PINNED</span>' : ''}
           </div>
-          ${pulled
-            ? `<div class="locked">The desk has this one. Text Gianni.</div>
+          ${pulled || locked
+            ? `${pulled && !locked ? '<div class="locked">The desk has this one. Text Gianni.</div>' : ''}
                <div class="macts">
                  <button class="btn ghost" disabled type="button">Edit</button>
                  <button class="btn bad" disabled type="button">Delete</button>
@@ -441,25 +487,42 @@
       const row = b.closest('.mrow');
       const p = rows.find(r => String(r.id) === b.dataset.edit);
       const holder = row.querySelector('.mtext').parentElement;
+      const clip = !!(p.image_url && OTP.isVideo(p.image_url));
+      // A Take post can lose its photo and keep its words. A Roll post cannot: the
+      // Roll is photos, and the database says "A post on the Roll needs a photo."
+      const canDrop = !!p.image_url && p.members_only !== true;
+      let dropIt = false;
       holder.innerHTML = `
         <label for="e${p.id}">Fix it up</label>
         <textarea id="e${p.id}" maxlength="800">${esc(p.text)}</textarea>
-        ${p.image_url ? `<label for="a${p.id}">Describe the photo</label>
-          <input id="a${p.id}" type="text" maxlength="180" value="${esc(p.image_alt || '')}">` : ''}
+        ${p.image_url ? `<div id="aw${p.id}"><label for="a${p.id}">Describe the photo</label>
+          <input id="a${p.id}" type="text" maxlength="180" value="${esc(p.image_alt || '')}"></div>` : ''}
+        ${canDrop ? `<div class="macts"><button class="btn ghost" data-rmph="${p.id}" type="button">${clip ? 'Remove the clip' : 'Remove photo'}</button></div>
+          <div class="locked" id="rn${p.id}" hidden>${clip ? 'The clip' : 'The photo'} comes off when you save. The words stay.</div>` : ''}
         <div class="macts">
           <button class="btn" data-save="${p.id}" type="button">Save changes</button>
           <button class="btn ghost" data-cancel="1" type="button">Never mind</button>
         </div>
         <div class="msg" id="m${p.id}"></div>`;
       holder.querySelector('[data-cancel]').onclick = () => renderMine();
+      const rm = holder.querySelector('[data-rmph]');
+      if (rm) rm.onclick = () => {
+        dropIt = !dropIt;
+        rm.textContent = dropIt ? (clip ? 'Keep the clip' : 'Keep the photo') : (clip ? 'Remove the clip' : 'Remove photo');
+        document.getElementById('rn' + p.id).hidden = !dropIt;
+        document.getElementById('aw' + p.id).hidden = dropIt;
+      };
       holder.querySelector('[data-save]').onclick = async (ev) => {
         const btn = ev.currentTarget;
         const t = document.getElementById('e' + p.id).value.trim();
         const a = p.image_url ? document.getElementById('a' + p.id).value.trim() : undefined;
         // 038: a post with a photo can lose its words, one without has to keep some
-        if (!t && !p.image_url) { const m = document.getElementById('m' + p.id); m.textContent = 'It needs to say something.'; m.className = 'msg show err'; return; }
+        if (!t && (!p.image_url || dropIt)) { const m = document.getElementById('m' + p.id); m.textContent = 'It needs to say something.'; m.className = 'msg show err'; return; }
         btn.disabled = true; btn.textContent = 'Saving…';
-        try { await OTP.updatePost(p.id, { text: t, imageAlt: a }); renderMine(); }
+        // a photo that comes off takes its description with it; the old file is
+        // queued for the desk's sweep by the database (photo replaced)
+        const patch = dropIt ? { text: t, imageUrl: null, imageAlt: null } : { text: t, imageAlt: a };
+        try { await OTP.updatePost(p.id, patch); renderMine(); }
         catch (e) {
           const m = document.getElementById('m' + p.id);
           m.textContent = e.message; m.className = 'msg show err';
@@ -470,6 +533,7 @@
   }
 
   renderMine();
+  if (holder) { renderRotation(); renderVideos(); }
 })();
 </script>
 </body>

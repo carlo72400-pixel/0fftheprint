@@ -64,7 +64,14 @@
         'margin-top:-2px;min-height:9px}' +
       // a clip in The Take: a real <video>, because an mp4 as a background paints nothing
       '.post video.im{display:block;height:auto;object-fit:cover;border:0;' +
-        'border-bottom:1px solid var(--line,#26232e)}';
+        'border-bottom:1px solid var(--line,#26232e)}' +
+      // their page in the Crypt, under the chips, for a signed-in viewer the Crypt says may see it
+      '.cryptlink{display:inline-flex;align-items:center;min-height:44px;margin-top:4px;' +
+        'font-family:var(--f-mono,ui-monospace,monospace);font-size:11px;letter-spacing:.16em;' +
+        'text-transform:uppercase;color:var(--pink-glow,#ff79c6);text-decoration:none}' +
+      '.cryptlink:hover{text-decoration:underline}' +
+      // the display above beats the browser's own [hidden] rule, so hidden has to say it again
+      '.cryptlink[hidden]{display:none}';
     var el = document.createElement('style');
     el.textContent = css;
     document.head.appendChild(el);
@@ -418,6 +425,10 @@
     // the badges
     var lr = linkRow(c);
     if (lr) hero.querySelector('.nameblock').insertBefore(lr, meta);
+    // their page in the Crypt goes under the chips once the Crypt has answered
+    var cl = d.createElement('a');
+    cl.className = 'cryptlink'; cl.id = 'cryptlink'; cl.hidden = true;
+    hero.querySelector('.nameblock').appendChild(cl);
     var chip = function (txt, href, hot) {
       var el = d.createElement(href ? 'a' : 'span');
       el.className = 'chip' + (hot ? ' hot' : '');
@@ -441,14 +452,21 @@
     if (mine) {
       var y = d.createElement('div');
       y.className = 'yours';
+      // Call 2: one photo and one song per card holder, shared with their page in
+      // the Crypt. The words are not shared: the tagline and bio here are public,
+      // and what they write in the Crypt stays behind the door. Say both, here.
+      // Posting lives on Home's Take now (call 1); /compose/ is the list of it.
       y.innerHTML = '<b>This one is yours</b>' +
         '<div class="note">Two things you type, a tagline and a bio. Everything else on this ' +
         'page shows up on its own when you post, write, or get a song on rotation.</div>' +
+        '<div class="note">Your photo and your song are the same here and on your page in the Crypt. ' +
+        'Your tagline and bio are public. What you write in the Crypt stays there.</div>' +
         '<div class="row">' +
           '<button class="btn sm" id="y-words">Your words</button>' +
           '<a class="btn ghost sm" href="' + BASE + 'card/">Your card</a>' +
-          '<a class="btn ghost sm" href="' + BASE + 'compose/">Post something</a>' +
-          '<a class="btn ghost sm" href="' + BASE + 'my/">Your desk</a>' +
+          '<a class="btn ghost sm" href="' + BASE + '#take">Post something</a>' +
+          '<a class="btn ghost sm" id="y-crypt" href="' + cryptHref() + '">Your page in the Crypt</a>' +
+          '<a class="btn ghost sm" href="' + BASE + 'my/#account">Your account</a>' +
         '</div>';
       body.appendChild(y);
       y.querySelector('#y-words').onclick = wordsSheet;
@@ -475,6 +493,9 @@
 
     /* the music: their theme song, their three, and anything of theirs the
        desk put on the house grid */
+    // ⛔ The song is the DATABASE's only (call 2): the house seed songs moved into
+    //    the profiles, and a song the holder cleared must not come back from
+    //    roster.json. Never fall back to houseCard.theme_song here.
     var theme = trackId(c.theme_song);
     var three = (c.featured || []).slice().sort(function (a, b) { return (a.slot || 0) - (b.slot || 0); });
     var rot = data.tracks || [];
@@ -622,9 +643,11 @@
       body.appendChild(ss);
     }
 
-    /* their clips */
+    /* their clips. The Reel's only home since it came off the homepage 10/11
+       (call 14), so /compose/ and /my/ link straight to it: c/<slug>/#reel */
     if (data.videos.length) {
       var vs = d.createElement('section');
+      vs.id = 'reel';
       vs.appendChild(h2('The Reel', data.videos.length + ' up'));
       var vr = d.createElement('div');
       vr.className = 'rows';
@@ -651,6 +674,43 @@
     page.appendChild(f);
 
     d.title = (c.display_name || c.card_slug) + ' · 0FF THE PRINT';
+    paintCrypt();
+
+    // #reel (and any other section id) only exists once this has drawn, so the
+    // browser's own jump on load found nothing. Once per page load.
+    if (!jumped) {
+      jumped = true;
+      var to = /^#[a-z]{1,20}$/.test(location.hash) ? d.getElementById(location.hash.slice(1)) : null;
+      if (to && page.contains(to)) to.scrollIntoView();
+    }
+  }
+
+  /* THEIR PAGE IN THE CRYPT (call 2). One person, two pages: a member reading
+     this card gets a way to the same person's page behind the door. The
+     database decides who may see it (wall_page_of: members only, and not a
+     hidden page), and a stranger never asks: no login, no call. */
+  var cryptSid = null, jumped = false;
+  function cryptHref() {
+    // #s-<sid> opens that page; #me is your own, for the moment before the answer lands
+    return BASE + 'wall/' + (cryptSid ? '#s-' + cryptSid : '#me');
+  }
+  function paintCrypt() {
+    var a = d.getElementById('cryptlink');
+    if (a && cryptSid) {
+      a.href = cryptHref();
+      a.innerHTML = (mine ? 'Your page in the Crypt' : 'Their page in the Crypt') + ' &rarr;';
+      a.hidden = false;
+    }
+    var yb = d.getElementById('y-crypt');
+    if (yb) yb.href = cryptHref();
+  }
+  function askCrypt() {
+    if (!(me && me.user) || !OTP.cryptPageOf) return;
+    OTP.cryptPageOf(slug).then(function (sid) {
+      if (!/^[0-9a-f]{10}$/.test(String(sid || ''))) return;
+      cryptSid = sid;
+      paintCrypt();
+    }, function () {});
   }
 
   function fail(head, note, link) {
@@ -679,10 +739,18 @@
         // the board's edits (below) ride along with the JSON, not a round trip of their own before the page paints
         (w.OTP && OTP.siteOverrides) ? OTP.siteOverrides().catch(function () { return null; }) : null
       ]);
-      var match = function (x) { return tight(x.name) === tight(slug); };
-      var fromCreators = (pair[1].items || []).filter(match)[0];
-      if (fromCreators) section = 'creators';
-      houseCard = fromCreators || (pair[0].items || []).filter(match)[0] || null;
+      // A seat names its card now (roster.json card_slug, call 2), so the slug
+      // match comes first and a seat whose name has drifted from its slug still
+      // finds its card. The old name match stays as the fallback, creators first.
+      var low = String(slug).toLowerCase();
+      var bySlug = function (x) { return !!x && String(x.card_slug || '').toLowerCase() === low; };
+      var byName = function (x) { return !!x && tight(x.name) === tight(slug); };
+      var ros = pair[0].items || [], cre = pair[1].items || [];
+      var hit = ros.filter(bySlug)[0];
+      if (!hit) { hit = cre.filter(bySlug)[0]; if (hit) section = 'creators'; }
+      if (!hit) { hit = cre.filter(byName)[0]; if (hit) section = 'creators'; }
+      if (!hit) hit = ros.filter(byName)[0];
+      houseCard = hit || null;
       ov = pair[2];
     } catch (e) { houseCard = null; }
     /* THE BOARD'S EDITS. The desk fixes lore and flavor from /board/ as
@@ -725,6 +793,7 @@
     var house = loadHouseCard();
     try { me = await OTP.me(); } catch (e) { me = null; }
     admin = !!(me && me.profile && me.profile.is_admin);
+    askCrypt();                    // alongside the card, never ahead of it
     await house;
     try { await load(); }
     catch (e) {

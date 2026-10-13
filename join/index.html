@@ -9,17 +9,20 @@
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/auth.css?v=57b34045">
+<style>
+a.btn{text-decoration:none}
+.btn{min-height:48px}
+</style>
 </head>
 <body>
 <div class="leopard-bar"></div>
 <div class="wrap">
   <a class="back" href="../">&larr; 0FF THE PRINT</a>
   <h1 id="ttl">Welcome back</h1>
-  <div class="sub">log in &nbsp;·&nbsp; cards are approved by hand</div>
-  <p class="door-note">In the Crypt or holding a card? Log in. Want a card? Knock:
-    sign up with your Instagram so the desk knows who's asking.</p>
-  <p class="door-note">Just want in? <a href="../wall/" style="color:var(--pink-glow)">Join the Crypt</a>.
-    All it takes is an Instagram, one account each, and you can post today. Cards the desk approves by hand, usually after it wakes up.</p>
+  <div class="sub">log in &nbsp;·&nbsp; members and card holders</div>
+  <!-- An old "Sign up" link (?mode=up, ?signup) still lands here. Wave 2: the
+       Crypt's form is the one sign-up, so this page says where it went. -->
+  <p class="door-note" id="upnote" hidden>Signing up happens in the Crypt now.</p>
 
   <div class="setup" id="setup" style="display:none">
     <b>Backend not switched on yet</b>
@@ -29,24 +32,9 @@
   </div>
 
   <div class="card" id="panel">
-    <div class="tabs">
-      <button class="tab on" id="tab-in" type="button">Log in</button>
-      <button class="tab" id="tab-up" type="button">Sign up</button>
-    </div>
-
     <form id="form" autocomplete="on">
-      <div id="up-only" style="display:none">
-        <label for="name">Your name</label>
-        <input id="name" type="text" placeholder="how it shows on your posts" autocomplete="name">
-        <label for="ig">Your Instagram</label>
-        <input id="ig" type="text" maxlength="80" placeholder="@yourhandle" autocomplete="off"
-          autocapitalize="none" autocorrect="off" spellcheck="false">
-        <label for="card">Your card</label>
-        <select id="card"><option value="">loading…</option></select>
-      </div>
-
-      <label for="email">Email</label>
-      <input id="email" type="email" required placeholder="you@email.com" autocomplete="email">
+      <label for="email" style="margin-top:0">Email</label>
+      <input id="email" type="email" required placeholder="you@email.com" autocomplete="email" autocapitalize="none" spellcheck="false">
 
       <label for="pw">Password</label>
       <input id="pw" type="password" required minlength="8" placeholder="8 characters or more" autocomplete="current-password">
@@ -54,25 +42,35 @@
       <button class="btn" id="go" type="submit">Log in</button>
       <button class="linky" id="forgot" type="button" style="background:none;border:0;cursor:pointer;
         font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;color:var(--muted);
-        margin-top:10px;padding:8px 0;min-height:40px;display:block">Forgot your password? It goes through your email.</button>
+        margin-top:10px;padding:8px 0;min-height:44px;display:block;text-align:left">Forgot your password? It goes through your email.</button>
     </form>
 
     <div class="msg" id="msg"></div>
     <div class="note" id="note">
-      Signing up here asks for a card and puts you in the Crypt, so you can post today. Cards the
-      desk approves by hand. One account per Instagram. You will not get email from us for anything else.
+      Want a card? Join the Crypt, then ask under Kin. The desk approves cards by hand.
     </div>
+  </div>
+
+  <div class="card" id="newhere">
+    <div class="note" style="margin-top:0">New here? Join the Crypt. All it takes is an Instagram, one account
+      each, and you can post today.</div>
+    <a class="btn ghost" href="../wall/">Join the Crypt</a>
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" integrity="sha384-Rj26LVGvoeRVR6+mwQmFfcR3QOBEwT+ZmuCWpuiqeTzJpCs0ER4ITAWGb4Hiy3Ok" crossorigin="anonymous"></script>
 <script src="../supabase-config.js?v=f1348482"></script>
-<script src="../assets/js/desk.js?v=c10b36ef"></script>
+<script src="../assets/js/desk.js?v=12f3e9e0"></script>
 <script>
 (async () => {
   const $ = id => document.getElementById(id);
   const msg = (t, kind) => { const m = $('msg'); m.textContent = t; m.className = 'msg show ' + kind; };
-  let mode = 'in';
+  const esc = t => String(t ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const Q = new URLSearchParams(location.search);
+
+  // Log in only (Wave 2). Signing up is the Crypt's form, the one door, so
+  // the tabs, the card picker and the sign-up branch are gone from here.
+  if (Q.get('mode') === 'up' || Q.has('signup')) $('upnote').hidden = false;
 
   if (!OTP.configured) {
     $('setup').style.display = 'block';
@@ -84,65 +82,59 @@
   // so the login page can never be used to bounce someone to another site.
   // Every page with a "Log in" gate has a key, so logging in from /my/, /card/
   // or /packs/ lands back there and not on whatever a login defaults to.
-  const NEXT_KEY = new URLSearchParams(location.search).get('next');
+  // The Crypt's own links carry where they were (a night, a page, the calendar)
+  // as ?h=, and only those three shapes ride along; anything else is dropped.
+  const NEXT_KEY = Q.get('next');
+  const H = Q.get('h') || '';
+  const HASH = /^(e-[a-z0-9]{1,40}|s-[0-9a-f]{10}|cal)$/i.test(H) ? '#' + H : '';
   const NEXT = {
-    wall: '../wall/', home: '../#take', packs: '../packs/',
-    my: '../my/', card: '../card/', compose: '../compose/', write: '../word/new/', dates: '../dates/',
-    desk: '../desk/', goals: '../desk/goals/', board: '../board/', deskword: '../desk/word/',
+    wall: '../wall/' + HASH, home: '../#take', packs: '../packs/',
+    my: '../my/', account: '../my/#account', card: '../card/', compose: '../compose/', write: '../word/new/', dates: '../dates/',
+    desk: '../board/', goals: '../desk/goals/', board: '../board/', deskword: '../desk/word/',
   }[NEXT_KEY] || null;
 
   // already signed in? send them where they belong
   const me = await OTP.me();
   if (me) {
     // The Wall decides who gets in (card holders, the desk, and anybody whose login carries an Instagram: 035).
-    // The Crypt has its own Instagram step, so it always gets them back. Anywhere else waits until we know
-    // they are in: a login with no Instagram sent back to the page that said "Log in" just bounced off it.
-    if (NEXT_KEY === 'wall') { location.href = NEXT; return; }
-    if (me.profile?.is_admin) { location.href = NEXT || '../desk/'; return; }
+    // The Crypt has its own Instagram step, so it always gets them back, and so does Your account, which has a
+    // page for every login (a closed one, one that is almost in). Anywhere else waits until we know they are in:
+    // a login with no Instagram sent back to the page that said "Log in" just bounced off it.
+    if (NEXT_KEY === 'wall' || NEXT_KEY === 'my' || NEXT_KEY === 'account') { location.href = NEXT; return; }
+    if (me.profile?.is_admin) { location.href = NEXT || '../board/'; return; }
     if (me.profile?.approved)  { location.href = NEXT || '../compose/'; return; }
     // 033: a member of The Wall is not waiting on anything. They post from the timeline,
     // so a login with nowhere to go sends them there instead of telling them to queue.
-    let onWall = false;
+    let onWall = false, word = null;
     try { onWall = !!(OTP.canTake && await OTP.canTake()); } catch (e) {}
-    // 035: a login that carries an Instagram is let onto The Wall on the spot (no code any more)
-    if (!onWall) { try { const j = await OTP.sb().rpc('wall_join', { p_ig: null }); onWall = !!(j && !j.error && j.data === 'in'); } catch (e) {} }
+    // 035: a login that carries an Instagram is let onto The Wall on the spot (no code any more).
+    // 044: a closed account gets a word back (closed, or shut when the desk closed it), never an error.
+    // A banned login is the one error (it can't join the Crypt), and it gets its own panel, not "One more step".
+    if (!onWall) { try {
+      const j = await OTP.sb().rpc('wall_join', { p_ig: null });
+      if (j && !j.error) word = j.data;
+      else if (j && j.error && /can.t join/i.test(j.error.message || '')) word = 'banned';
+      onWall = word === 'in';
+    } catch (e) {} }
     if (onWall) { location.href = NEXT || '../#take'; return; }
-    const esc = t => String(t ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-    $('panel').innerHTML = `<b style="font-family:var(--f-display);font-style:italic;font-size:26px;text-transform:uppercase">One more step.</b>
-      <div class="note">Signed in as ${esc(me.user.email)}. This login has no Instagram on it yet, and that is the way in.
-      <a href="../wall/" style="color:var(--pink-glow)">Put yours in at the Crypt</a> and you can post today. One account per Instagram.</div>
-      <button class="btn ghost" id="out" type="button">Sign out</button>`;
+    $('newhere').style.display = 'none';
+    if (word === 'closed' || word === 'shut') {
+      $('panel').innerHTML = `<b style="font-family:var(--f-display);font-style:italic;font-size:26px;text-transform:uppercase">This account is closed.</b>
+        <div class="note">Signed in as ${esc(me.user.email)}. <a href="../my/#account">Your account</a> has the rest.</div>
+        <button class="btn ghost" id="out" type="button">Sign out</button>`;
+    } else if (word === 'banned') {
+      $('panel').innerHTML = `<b style="font-family:var(--f-display);font-style:italic;font-size:26px;text-transform:uppercase">The Crypt is closed to this account.</b>
+        <div class="note">Signed in as ${esc(me.user.email)}. <a href="../my/#account">Your account</a> has the rest.</div>
+        <button class="btn ghost" id="out" type="button">Sign out</button>`;
+    } else {
+      $('panel').innerHTML = `<b style="font-family:var(--f-display);font-style:italic;font-size:26px;text-transform:uppercase">One more step.</b>
+        <div class="note">Signed in as ${esc(me.user.email)}. This login has no Instagram on it yet, and that is the way in.
+        <a href="../wall/" style="color:var(--pink-glow)">Put yours in at the Crypt</a> and you can post today. One account per Instagram.</div>
+        <button class="btn ghost" id="out" type="button">Sign out</button>`;
+    }
     $('out').onclick = async () => { await OTP.signOut(); location.reload(); };
     return;
   }
-
-  // card list comes from the roster so it can never drift
-  try {
-    const [r, c] = await Promise.all([
-      fetch('../content/roster.json').then(r => r.json()),
-      fetch('../content/creators.json').then(r => r.json()),
-    ]);
-    const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
-    const opts = [...c.items, ...r.items]
-      .map(x => `<option value="${slug(x.name)}">${x.name}</option>`).join('');
-    // New artists have no seat yet, and that is the normal case now. The desk
-    // hands cards after approval; picking one here is only for people whose
-    // card already exists on the roster.
-    $('card').innerHTML = '<option value="">no card yet, I\'m new</option>' + opts;
-  } catch (e) { $('card').innerHTML = '<option value="">(roster unavailable)</option>'; }
-
-  const setMode = m => {
-    mode = m;
-    $('tab-in').classList.toggle('on', m === 'in');
-    $('tab-up').classList.toggle('on', m === 'up');
-    $('up-only').style.display = m === 'up' ? 'block' : 'none';
-    $('go').textContent = m === 'up' ? 'Request access' : 'Log in';
-    $('ttl').textContent = m === 'up' ? 'Join the Desk' : 'Welcome back';
-    $('pw').setAttribute('autocomplete', m === 'up' ? 'new-password' : 'current-password');
-    $('msg').className = 'msg';
-  };
-  $('tab-in').onclick = () => setMode('in');
-  $('tab-up').onclick = () => setMode('up');
 
   // Reset runs on the email in the box; no email, no guessing.
   $('forgot').onclick = async () => {
@@ -161,37 +153,8 @@
     e.preventDefault();
     $('go').disabled = true;
     try {
-      if (mode === 'up') {
-        if (!$('name').value.trim()) throw new Error('Need a name.');
-        // 035: an Instagram is the way in, one account each. Read the way the database reads it:
-        // "@Ana.Reyes" and the pasted profile link are both ana.reyes.
-        const raw = $('ig').value.trim();
-        const x = raw.toLowerCase().replace(/^(https?:\/\/)?(www\.)?instagram\.com\//, '').replace(/[/?#].*$/, '').replace(/^@+/, '');
-        const ig = /^[a-z0-9._]{1,30}$/.test(x) ? x : '';
-        if (!ig) throw new Error(raw ? 'That does not look like an Instagram handle. Letters, numbers, dots and underscores.'
-                                     : 'Drop your Instagram. It is the way in, one account each.');
-        await OTP.signUp($('email').value.trim(), $('pw').value,
-                         $('name').value.trim(), $('card').value, ig);
-        // the login exists now. The door: in at once, or told why not.
-        let got = null;
-        try { const j = await OTP.sb().rpc('wall_join', { p_ig: ig }); got = j && !j.error ? j.data : null; } catch (e2) {}
-        if (got === 'in') {
-          msg("You're in the Crypt. Your card request is with the desk, which approves by hand.", 'good');
-          setTimeout(() => { location.href = NEXT || '../#take'; }, 1400);
-        } else if (got === 'taken') {
-          $('panel').innerHTML = `<b style="font-family:var(--f-display);font-style:italic;font-size:26px;text-transform:uppercase">One more step.</b>
-            <div class="note">You're signed up, but that Instagram already has an account. If it is yours, sign out and log in with that one.
-            If not, <a href="../wall/" style="color:var(--pink-glow)">put your own in at the Crypt</a>.</div>
-            <button class="btn ghost" id="out" type="button">Sign out</button>`;
-          $('out').onclick = async () => { await OTP.signOut(); location.reload(); };
-        } else {
-          msg("Request sent. The desk approves cards by hand. To post today, finish in the Crypt.", 'good');
-          $('form').reset();
-        }
-      } else {
-        await OTP.signIn($('email').value.trim(), $('pw').value);
-        location.reload();
-      }
+      await OTP.signIn($('email').value.trim(), $('pw').value);
+      location.reload();
     } catch (err) {
       msg(err.message || 'That did not work.', 'err');
     } finally {

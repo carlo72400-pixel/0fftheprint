@@ -10,7 +10,8 @@
    site points at the folder. /c/?s=<slug> always answers, so a miss on a card address goes there. */
 (function () {
   var m = /^\/c\/([a-z0-9][a-z0-9-]{0,58}[a-z0-9])\/?$/.exec(location.pathname);
-  if (m) location.replace('/c/?s=' + encodeURIComponent(m[1]));
+  // a section hash (#reel) rides along; anything else in the hash is dropped
+  if (m) location.replace('/c/?s=' + encodeURIComponent(m[1]) + (/^#[a-z]{1,20}$/.test(location.hash) ? location.hash : ''));
 })();
 </script>
 <style>

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Your desk · 0FF THE PRINT</title>
+<title>Your account · 0FF THE PRINT</title>
 <meta name="theme-color" content="#0a0a0d">
 <link rel="icon" href="../assets/favicon.svg">
 <link rel="stylesheet" href="../assets/css/auth.css?v=57b34045">
@@ -20,24 +20,37 @@
   border:1px solid var(--line);border-radius:9px;color:var(--ink);text-decoration:none;
   font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;text-align:center;padding:8px}
 .quick a:hover{border-color:var(--pink-deep);color:var(--pink-glow)}
-.row{display:flex;justify-content:space-between;align-items:center;gap:10px;
+/* A row wraps on a phone: the words and the chip on top, Fix and Take down
+   underneath on the right, so a long title never squeezes a button off. */
+.row{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 10px;
   border-top:1px solid var(--line);padding:11px 0}
 .row:first-of-type{border-top:0}
-.row .t{font-size:14px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .t{flex:1 1 140px;font-size:14px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .row .st{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;flex:none}
 .st.wait{color:var(--muted)} .st.live{color:var(--pink-glow)} .st.gold{color:#f7d046}
-.row button{background:transparent;color:var(--ink);border:1px solid var(--line);border-radius:7px;
-  padding:8px 13px;font-size:12px;cursor:pointer;min-height:38px;flex:none}
-.row button:hover{border-color:var(--bad,#ff6a7e);color:var(--bad,#ff6a7e)}
+.st.roll{color:#9db9ff} .st.pulled{color:var(--bad)}
+.row .acts{display:flex;gap:8px;flex:none;margin-left:auto}
+/* :not(.btn): a real .btn in a row (Save links, Put a date up) keeps its own look */
+.row button:not(.btn),.row a.act{background:transparent;color:var(--ink);border:1px solid var(--line);border-radius:7px;
+  padding:8px 13px;font-size:12px;cursor:pointer;min-height:44px;flex:none;font-family:var(--f-body);
+  display:inline-flex;align-items:center;text-decoration:none}
+.row button:not(.btn):hover{border-color:var(--bad,#ff6a7e);color:var(--bad,#ff6a7e)}
+.row a.act:hover{border-color:var(--pink-deep);color:var(--pink-glow)}
+.row button.arm{border-color:var(--bad);color:var(--bad)}
+.row button:disabled{opacity:.5;cursor:default}
 .sec{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:20px;
   text-transform:uppercase;margin-bottom:6px}
 .hint{color:var(--muted);font-size:12.5px;line-height:1.6}
+.hint a{color:var(--pink-glow)}
 .drop{border:1px dashed var(--line);border-radius:10px;padding:13px;text-align:center;
   font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;color:var(--muted);
   cursor:pointer;text-transform:uppercase;margin-top:10px}
 .drop:hover{border-color:var(--pink-deep);color:var(--pink-glow)}
-.msg{font-family:var(--f-mono);font-size:11.5px;min-height:16px;margin-top:8px;color:var(--muted)}
+/* ⛔ display:block on purpose. auth.css hides every .msg until it carries .show,
+   and nothing on this page ever added it, so "Saved." never once showed here. */
+.msg{display:block;padding:0;font-family:var(--f-mono);font-size:11.5px;min-height:16px;margin-top:8px;color:var(--muted)}
 .msg.ok{color:var(--ok)} .msg.bad{color:var(--bad)}
+.msg:empty{min-height:0;margin-top:0}
 .gate{max-width:520px;margin:80px auto;text-align:center}
 .who-line{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .card.exch{border-color:rgba(47,107,255,.32);background:linear-gradient(180deg,rgba(47,107,255,.07),transparent)}
@@ -47,25 +60,60 @@
 .row a.t-link:hover{color:var(--pink-glow)}
 .ex-none{color:var(--muted);font-size:12.5px;line-height:1.6;margin-top:12px;
   border-top:1px solid var(--line);padding-top:12px}
-  .lk-row{display:grid;grid-template-columns:minmax(0,140px) minmax(0,1fr) 36px;gap:8px;
+  .lk-row{display:grid;grid-template-columns:minmax(0,140px) minmax(0,1fr) 44px;gap:8px;
     align-items:center;margin-top:8px}
   .lk-row select,.lk-row input{margin:0}
   .lk-x{background:none;border:1px solid var(--line);border-radius:8px;color:var(--muted);
-    height:42px;cursor:pointer;font-size:16px;line-height:1}
+    height:44px;cursor:pointer;font-size:16px;line-height:1}
   .lk-x:hover{border-color:rgba(255,93,126,.5);color:var(--bad)}
-  @media(max-width:520px){ .lk-row{grid-template-columns:minmax(0,1fr) 36px}
+  /* stacked on a phone, and on a computer too: there the card sits in the
+     300px column, and three across left the handle box about 60px wide */
+  @media(max-width:520px),(min-width:860px){ .lk-row{grid-template-columns:minmax(0,1fr) 44px}
     .lk-row select{grid-column:1 / -1} }
+/* ---- YOUR ACCOUNT: every role gets this card ---- */
+.btn.sm{min-height:44px}
+.card.acct{scroll-margin-top:16px}
+.chip{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;
+  border:1px solid var(--line);border-radius:3px;padding:4px 8px;color:var(--muted);flex:none}
+.chip.desk{color:#f7d046;border-color:rgba(247,208,70,.45)}
+.chip.card{color:var(--pink-glow);border-color:rgba(255,121,198,.45)}
+.chip.member{color:#9db9ff;border-color:rgba(157,185,255,.45)}
+.aset{border-top:1px solid var(--line);margin-top:16px;padding-top:14px}
+.ak{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.av{font-size:16px;font-weight:600;margin-bottom:4px;overflow-wrap:anywhere}
+.aset .btn.sm{margin-top:10px}
+.fold{margin-top:4px}
+.fold[hidden]{display:none}
+.linky{background:none;border:0;cursor:pointer;color:var(--muted);font-family:var(--f-mono);font-size:11px;
+  letter-spacing:.08em;text-align:left;padding:10px 0;min-height:44px;display:block;margin-top:6px;overflow-wrap:anywhere}
+.linky:hover{color:var(--pink-glow)}
+details.close summary{cursor:pointer;min-height:44px;display:flex;align-items:center;
+  font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--bad)}
+details.close p{margin-top:8px}
+.tick{display:flex;gap:10px;align-items:flex-start;text-transform:none;letter-spacing:0;font-family:var(--f-body);
+  font-size:14px;color:var(--ink);line-height:1.45;min-height:44px;cursor:pointer;margin:14px 0 4px}
+.tick input{width:22px;height:22px;flex:none;margin:0;accent-color:var(--pink-deep)}
+.btn.bad{background:transparent;border:1px solid rgba(255,93,126,.6);color:var(--bad)}
+.btn.bad:hover{border-color:var(--bad);color:var(--bad)}
+.shut .btn{margin-top:14px}
+a.btn{text-decoration:none}
 </style>
 </head>
 <body>
 <div class="leopard-bar"></div>
 <div class="wrap">
   <a class="back" href="../">&larr; 0FF THE PRINT</a>
-  <h1>Your desk</h1>
-  <div class="sub" id="sub">your card &nbsp;·&nbsp; your posts &nbsp;·&nbsp; what's waiting &nbsp;·&nbsp;
+  <h1>Your account</h1>
+  <div class="sub" id="sub">your name &nbsp;·&nbsp; your login &nbsp;·&nbsp; what you put up &nbsp;·&nbsp;
     <a href="../wall/" style="color:var(--pink-glow);text-decoration:none;font-weight:600">THE CRYPT &rarr;</a></div>
 
   <div id="gate" class="gate" style="display:none"></div>
+
+  <!-- A CLOSED ACCOUNT gets this and nothing else. -->
+  <div class="card shut" id="closed" style="display:none"></div>
+
+  <!-- MEMBERS (and a login that is almost in): their page lives in the Crypt. -->
+  <div class="card" id="crypt" style="display:none"></div>
 
   <div id="app" class="grid" style="display:none">
     <div class="card">
@@ -74,15 +122,17 @@
       <div class="drop" id="pic">Tap to change your photo</div>
       <input type="file" id="picfile" accept="image/*" hidden>
       <div class="msg" id="picmsg"></div>
-      <div class="quick">
-        <a href="../card/">Card builder</a>
-        <a href="../compose/">New post</a>
+      <div class="quick" id="quick">
+        <a href="../card/">Your card</a>
+        <a href="../#take">Post</a>
+        <a href="../compose/">Your posts</a>
+        <a href="../wall/#me">Your page in the Crypt</a>
         <a href="../word/new/">Write a story</a>
         <a href="../compose/#rot">Song on rotation</a>
-        <a id="backlink" href="#" style="display:none">See your page</a>
+        <a id="backlink" href="#" style="display:none">Your card page</a>
       </div>
-      <div class="hint" style="margin-top:12px">Your card photo is your face across the site.
-        Frames, songs and your link live in the builder.</div>
+      <div class="hint" style="margin-top:12px">This photo is your face everywhere: your card, your posts
+        and your page in the Crypt. Frames and songs live in the builder.</div>
     </div>
 
     <!-- THE BACK OF THE CARD. Two fields, and they are the only two on the
@@ -92,7 +142,8 @@
     <div class="card" id="wordscard" style="display:none">
       <div class="sec">The back of your card</div>
       <div class="hint">One line and a short paragraph. That is all you type. Your posts, your
-        songs, your stories and your clips show up on your page on their own.</div>
+        songs, your stories and your clips show up on your page on their own. These two are
+        public, on your card. What you write in the Crypt stays in the Crypt.</div>
       <label for="w-tag">Tagline</label>
       <input type="text" id="w-tag" maxlength="80" placeholder="one line. who you are in the room.">
       <div class="hint" id="w-tagc" style="text-align:right"></div>
@@ -105,11 +156,13 @@
 
     <!-- THEIR LINKS. This is what makes /c/<slug>/ worth putting in a bio.
          ⛔ Platform + handle, never a URL: the page rebuilds the host, so a
-         member cannot point their own page anywhere but their own profile. -->
-    <div class="card" id="linkscard" style="display:none">
+         member cannot point their own page anywhere but their own profile.
+         Wave 2: this is the ONE place links change. The card builder's single
+         link is gone, and their page in the Crypt reads these. -->
+    <div class="card" id="linkscard" style="display:none;scroll-margin-top:16px">
       <div class="sec">Your links</div>
-      <div class="hint">Up to five. They sit at the top of your page, under your name.
-        Give the handle only, not the whole address.</div>
+      <div class="hint">Up to five. They sit at the top of your card page and on your page in the
+        Crypt. This is the one place to change them. Give the handle only, not the whole address.</div>
       <div id="lk-rows"></div>
       <div class="row" style="margin-top:12px">
         <button class="btn ghost sm" id="lk-add" type="button" style="width:auto">Add a link</button>
@@ -133,7 +186,7 @@
           is no. Asking costs nothing and the desk answers it itself.</div>
         <div id="exchlist"></div>
         <div class="row" style="margin-top:14px">
-          <button class="btn sm" id="ex-add" type="button" style="width:auto">Add a date</button>
+          <button class="btn sm" id="ex-add" type="button" style="width:auto">Put a date up</button>
           <a class="btn ghost sm" href="../dates/" style="width:auto">The whole run</a>
         </div>
         <div class="msg" id="ex-msg"></div>
@@ -143,54 +196,398 @@
         <div class="sec">Waiting on the desk</div>
         <div class="hint">Sent, not live yet. The desk clears these by hand. Withdraw pulls one back.</div>
         <div id="waitlist"></div>
+        <div class="msg" id="waitmsg"></div>
       </div>
 
       <div class="card" id="livecard" style="display:none">
         <div class="sec">Up right now</div>
+        <div class="hint">Yours to fix or take down until a story goes in the catalog.</div>
         <div id="livelist"></div>
+        <div class="msg" id="livemsg"></div>
+      </div>
+
+      <div class="card" id="pulledcard" style="display:none">
+        <div class="sec">Pulled by the desk</div>
+        <div class="hint">Only you and the desk see these. Fix one, or take it down.</div>
+        <div id="pulledlist"></div>
+        <div class="msg" id="pulledmsg"></div>
       </div>
 
       <div class="card">
         <div class="sec">Your posts</div>
         <div id="postlist"><div class="hint">loading…</div></div>
         <div class="quick" style="grid-template-columns:1fr">
-          <a href="../compose/">Manage your posts &rarr;</a>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="who-line">
-          <span class="hint" id="acct"></span>
-          <button class="btn ghost sm" id="out" type="button" style="width:auto">Sign out</button>
+          <a href="../compose/">All your posts &rarr;</a>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- YOUR ACCOUNT (call 7): every role that is not closed. Name, Instagram,
+       email, password, log out, close. Email, password and close each ask for
+       the password again first (OTP's reauth), because "Secure password change"
+       is on. ⛔ The desk's email changes only in the Supabase dashboard, and the
+       desk account cannot be closed, so neither form is drawn for the desk. -->
+  <div class="card acct" id="account" style="display:none">
+    <div class="sec">Your login</div>
+    <div class="who-line">
+      <span class="hint" id="a-who"></span>
+      <span class="chip" id="a-role" hidden></span>
+    </div>
+
+    <div class="aset" id="a-name-set" hidden>
+      <label for="a-name" style="margin-top:0">Your name</label>
+      <input type="text" id="a-name" maxlength="40" autocomplete="nickname">
+      <div class="hint" style="margin-top:6px">It's on your posts, comments, going lists and messages.</div>
+      <button class="btn sm" id="a-name-save" type="button">Save name</button>
+      <div class="msg" id="a-name-msg" role="status"></div>
+    </div>
+    <div class="aset" id="a-name-ro" hidden>
+      <div class="ak">Your name</div>
+      <div class="av" id="a-name-v"></div>
+      <div class="hint">Ask the desk to change a card holder's name. Your card page follows it.</div>
+    </div>
+
+    <div class="aset">
+      <div class="ak">Instagram</div>
+      <div id="a-ig"></div>
+    </div>
+
+    <div class="aset" id="a-email-set" hidden>
+      <div class="ak">Email</div>
+      <div class="av" id="a-email-v"></div>
+      <button class="btn ghost sm" id="a-email-open" type="button" aria-expanded="false" aria-controls="a-email-form">Change email</button>
+      <form class="fold" id="a-email-form" hidden novalidate>
+        <label for="a-em1">New email</label>
+        <input type="email" id="a-em1" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false">
+        <label for="a-em2">Same email again</label>
+        <input type="email" id="a-em2" autocomplete="off" inputmode="email" autocapitalize="none" spellcheck="false">
+        <label for="a-em-pw">Your password</label>
+        <input type="password" id="a-em-pw" autocomplete="current-password">
+        <button class="btn sm" id="a-em-go" type="submit">Change email</button>
+      </form>
+      <div class="msg" id="a-email-msg" role="status"></div>
+    </div>
+    <div class="aset" id="a-email-desk" hidden>
+      <div class="ak">Email</div>
+      <div class="av" id="a-email-dv"></div>
+      <div class="hint">The desk changes its email in the Supabase dashboard.</div>
+    </div>
+
+    <div class="aset">
+      <div class="ak">Password</div>
+      <button class="btn ghost sm" id="a-pw-open" type="button" aria-expanded="false" aria-controls="a-pw-form">Change password</button>
+      <form class="fold" id="a-pw-form" hidden novalidate>
+        <label for="a-pw0">Your password now</label>
+        <input type="password" id="a-pw0" autocomplete="current-password">
+        <label for="a-pw1">New password</label>
+        <input type="password" id="a-pw1" autocomplete="new-password" placeholder="8 characters or more">
+        <label for="a-pw2">Same one again</label>
+        <input type="password" id="a-pw2" autocomplete="new-password">
+        <button class="btn sm" id="a-pw-go" type="submit">Set it</button>
+      </form>
+      <button class="linky" id="a-forgot" type="button" hidden></button>
+      <div class="msg" id="a-pw-msg" role="status"></div>
+    </div>
+
+    <div class="aset">
+      <button class="btn ghost" id="a-out" type="button" style="margin-top:0">Log out</button>
+      <div class="hint" style="margin-top:8px">Logs you out on every phone and computer.</div>
+    </div>
+
+    <details class="aset close" id="a-close" hidden>
+      <summary>Close your account</summary>
+      <p class="hint">Closing hides you everywhere: your page, posts, comments, packs, rooms, frame tags
+        and your name on going lists. Your messages stay with the people you sent them to, under Closed
+        account. Nothing is deleted, so you can open it again by logging back in. A card ask still
+        waiting goes, and so do your own events and watchlist on this phone.</p>
+      <p class="hint" id="a-close-card" hidden>Your card page goes dark too. Stories already in the catalog
+        stay up until the desk takes them down.</p>
+      <label for="a-c-pw">Your password</label>
+      <input type="password" id="a-c-pw" autocomplete="current-password">
+      <label class="tick"><input type="checkbox" id="a-c-sure"> <span>Close it. I can open it again by logging in.</span></label>
+      <label class="tick"><input type="checkbox" id="a-c-back"> <span>Also take back every message I sent. This one cannot be undone.</span></label>
+      <label for="a-c-note">Anything the desk should know? (optional)</label>
+      <textarea id="a-c-note" rows="3" maxlength="280" style="min-height:90px"></textarea>
+      <button class="btn bad" id="a-c-go" type="button">Close my account</button>
+      <div class="msg" id="a-c-msg" role="status"></div>
+    </details>
+  </div>
 </div>
 
 <script src="../supabase-config.js?v=f1348482"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="../assets/js/desk.js?v=c10b36ef" defer></script>
-<script src="../assets/js/calendar.js?v=52b31f44" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" integrity="sha384-Rj26LVGvoeRVR6+mwQmFfcR3QOBEwT+ZmuCWpuiqeTzJpCs0ER4ITAWGb4Hiy3Ok" crossorigin="anonymous"></script>
+<script src="../assets/js/desk.js?v=12f3e9e0" defer></script>
+<script src="../assets/js/calendar.js?v=2cd5da5c" defer></script>
 <script defer>
 document.addEventListener('DOMContentLoaded', async () => {
   const $ = id => document.getElementById(id);
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g,
     c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const say = (el, t, kind) => { if (!el) return; el.className = 'msg' + (kind ? ' ' + kind : ''); el.textContent = t || ''; };
+  const gate = html => { $('gate').style.display = ''; $('gate').innerHTML = html; };
+
+  // ?next= and the Crypt's links land on #account or #linkscard, which are
+  // drawn after the page loads, so the browser's own jump finds nothing. Snap
+  // to the one asked for each time something above it is drawn, until they
+  // touch the page or six seconds pass (the card preview waits on the
+  // homepage's stylesheet, which is the slow one on a phone).
+  const WANT = /^#[a-z][a-z0-9-]{0,30}$/i.test(location.hash) ? location.hash.slice(1) : '';
+  let hands = false;
+  const t0 = Date.now();
+  ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(ev =>
+    addEventListener(ev, () => { hands = true; }, { passive: true, once: true }));
+  const jump = () => {
+    if (!WANT || hands || Date.now() - t0 > 6000) return;
+    const el = $(WANT);
+    if (el && el.offsetParent !== null) el.scrollIntoView({ block: 'start' });
+  };
 
   if (!window.OTP || !OTP.configured) {
-    $('gate').style.display = ''; $('gate').innerHTML =
-      '<p class="door-note">The backend is not switched on yet.</p>'; return;
+    gate('<p class="door-note">The backend is not switched on yet.</p>'); return;
   }
   const me = await OTP.me().catch(() => null);
   if (!me) { location.href = '../join/?next=my'; return; }
-  if (!me.profile || !me.profile.approved) {
-    $('gate').style.display = ''; $('gate').innerHTML =
-      '<p class="door-note">' + esc(await OTP.doorLine(me.profile)) + '</p>'; return;
+  if (me.failed || !me.profile) {
+    gate('<p class="door-note">Could not load your account. Try again in a minute.</p>' +
+      '<button class="btn ghost" type="button" onclick="location.reload()">Try again</button>');
+    return;
   }
+  const P = me.profile;
+  // my_account (044): kind, banned, closed, can_reopen, the ask. Never throws;
+  // null only when it did not answer, and then the page runs on the profile.
+  const acct = await OTP.account();
+  const kind = (acct && acct.kind) || (P.is_admin ? 'desk' : P.approved ? 'card' : 'member');
+  const isDesk = kind === 'desk' || !!P.is_admin;
+  let email = (me.user && me.user.email) || '';
+
+  const logOut = async b => {
+    if (b) b.disabled = true;
+    try { await OTP.signOut(); } catch (e) {}
+    location.href = '../join/';
+  };
+
+  // ---- CLOSED: this panel and nothing else ---------------------------------
+  // can_reopen is the only fact the page gets (044 never says who closed it).
+  function drawClosed(canReopen) {
+    const box = $('closed');
+    box.style.display = '';
+    box.innerHTML = '<div class="sec">This account is closed.</div>' +
+      (canReopen ? '<p class="hint">Your page, posts and the rest are hidden, not gone. Open it again and it all comes back.</p>' +
+                   '<button class="btn" id="c-open" type="button">Open it again</button>' : '') +
+      '<button class="btn ghost" id="c-out" type="button">Log out</button>' +
+      '<div class="msg" id="c-msg" role="status"></div>';
+    $('c-out').onclick = () => logOut($('c-out'));
+    if (!canReopen) return;
+    $('c-open').onclick = async () => {
+      const b = $('c-open');
+      b.disabled = true; say($('c-msg'), 'Opening it back up…');
+      try {
+        const r = await OTP.reopenMyAccount();
+        if (r === 'open') { say($('c-msg'), 'Open again. Welcome back.', 'ok'); location.href = '../wall/'; return; }
+        drawClosed(false);
+      } catch (e) {
+        say($('c-msg'), e.message || 'That did not go through. Try again.', 'bad');
+        b.disabled = false;
+      }
+    };
+  }
+  if (acct && acct.closed) { drawClosed(!!acct.can_reopen); jump(); return; }
+
+  // ---- THE ACCOUNT CARD (every role) ---------------------------------------
+  // One form open at a time: opening email, password or close shuts the others.
+  const folds = [];
+  const shutOthers = keep => folds.forEach(f => { if (f !== keep) f.shut(); });
+  function fold(btn, form) {
+    const f = {
+      shut() { form.hidden = true; btn.setAttribute('aria-expanded', 'false'); },
+      open() { shutOthers(f); form.hidden = false; btn.setAttribute('aria-expanded', 'true');
+               const first = form.querySelector('input'); if (first) first.focus({ preventScroll: true }); },
+    };
+    btn.onclick = () => (form.hidden ? f.open() : f.shut());
+    folds.push(f);
+    return f;
+  }
+
+  function drawAccount() {
+    $('account').style.display = '';
+    const whoLine = () => { $('a-who').innerHTML = email ? 'Signed in as <b>' + esc(email) + '</b>' : 'Signed in'; };
+    whoLine();
+    const CHIP = { desk: 'THE DESK', card: 'CARD HOLDER', member: 'IN THE CRYPT', pending: 'ALMOST IN' };
+    // a banned login is not in the Crypt, so it gets no chip rather than a wrong one
+    if (CHIP[kind] && !(acct && acct.banned)) {
+      const chip = $('a-role');
+      chip.textContent = CHIP[kind]; chip.className = 'chip ' + kind; chip.hidden = false;
+    }
+
+    // -- name: members and the desk change it here, card holders through the desk
+    const name = (acct && acct.name) || P.display_name || '';
+    if (kind === 'card') {
+      $('a-name-ro').hidden = false;
+      $('a-name-v').textContent = name;
+    } else {
+      $('a-name-set').hidden = false;
+      const inp = $('a-name'), b = $('a-name-save'), m = $('a-name-msg');
+      inp.value = name;
+      // The desk renames the house, which shows on every house post, so it is two taps.
+      let armed = false, timer = null;
+      const disarm = () => { armed = false; clearTimeout(timer); b.textContent = 'Save name'; };
+      b.onclick = async () => {
+        if (isDesk && !armed) {
+          armed = true; b.textContent = 'Tap again: rename the house';
+          timer = setTimeout(disarm, 5000);
+          return;
+        }
+        disarm();
+        b.disabled = true; say(m, 'Saving…');
+        try {
+          const r = await OTP.setMyName(inp.value);
+          if (r.same) say(m, "That's already your name.");
+          else {
+            inp.value = r.name || inp.value;
+            say(m, r.shared
+              ? `Saved. ${r.shared} other member${r.shared === 1 ? ' goes' : 's go'} by that too. Your @ tells you apart.`
+              : `Saved. You're ${r.name} now.`, 'ok');
+          }
+        } catch (e) { say(m, e.message || 'That name did not save. Try again.', 'bad'); }
+        b.disabled = false;
+      };
+    }
+
+    // -- Instagram: read only for everyone this wave (his call 7: "later")
+    const ig = acct && acct.ig;
+    $('a-ig').innerHTML = ig
+      ? '<div class="av">@' + esc(ig) + '</div><div class="hint">' +
+        (isDesk ? 'Change it on the board, under Members.' : 'Ask the desk to change it.') + '</div>'
+      : '<div class="hint">No Instagram on this login yet. <a href="../wall/">Put it in at the Crypt</a>.</div>';
+
+    // -- email
+    if (isDesk) {
+      $('a-email-desk').hidden = false;
+      $('a-email-dv').textContent = email;
+    } else {
+      $('a-email-set').hidden = false;
+      $('a-email-v').textContent = email;
+      const f = fold($('a-email-open'), $('a-email-form'));
+      $('a-email-form').onsubmit = async ev => {
+        ev.preventDefault();
+        const b = $('a-em-go'), m = $('a-email-msg');
+        b.disabled = true; say(m, 'Checking it is you…');
+        try {
+          const r = await OTP.changeEmail($('a-em1').value, $('a-em2').value, $('a-em-pw').value);
+          $('a-em-pw').value = '';
+          if (r.pending) say(m, `Check ${r.email} for a link to finish.`, 'ok');
+          else {
+            email = r.email;
+            $('a-email-v').textContent = email; whoLine(); forgotLine();
+            $('a-em1').value = ''; $('a-em2').value = '';
+            say(m, `Done. Log in with ${r.email} from now on.`, 'ok');
+          }
+          f.shut();
+        } catch (e) { say(m, e.message || 'That did not go through.', 'bad'); }
+        b.disabled = false;
+      };
+    }
+
+    // -- password
+    const pf = fold($('a-pw-open'), $('a-pw-form'));
+    $('a-pw-form').onsubmit = async ev => {
+      ev.preventDefault();
+      const b = $('a-pw-go'), m = $('a-pw-msg');
+      b.disabled = true; say(m, 'Checking it is you…');
+      try {
+        await OTP.changePassword($('a-pw0').value, $('a-pw1').value, $('a-pw2').value);
+        ['a-pw0', 'a-pw1', 'a-pw2'].forEach(k => { $(k).value = ''; });
+        say(m, "Done. That's your password now.", 'ok');
+        pf.shut();
+      } catch (e) { say(m, e.message || 'That did not go through.', 'bad'); }
+      b.disabled = false;
+    };
+    const forgot = $('a-forgot');
+    function forgotLine() {
+      forgot.hidden = !email;
+      forgot.textContent = 'Forgot it? Send a reset link to ' + email;
+    }
+    forgotLine();
+    forgot.onclick = async () => {
+      const m = $('a-pw-msg');
+      forgot.disabled = true; say(m, 'Sending…');
+      try {
+        await OTP.requestPasswordReset(email);
+        say(m, 'Sent. Check that inbox (and spam) for the link.', 'ok');
+      } catch (e) { say(m, e.message || 'That did not go through.', 'bad'); }
+      forgot.disabled = false;
+    };
+
+    $('a-out').onclick = () => logOut($('a-out'));
+
+    // -- close (not for the desk: 'The desk account stays open.')
+    if (!isDesk) {
+      const d = $('a-close');
+      d.hidden = false;
+      if (kind === 'card') $('a-close-card').hidden = false;
+      const cf = { shut() { d.open = false; } };
+      folds.push(cf);
+      d.addEventListener('toggle', () => { if (d.open) shutOthers(cf); });
+      $('a-c-go').onclick = async () => {
+        const b = $('a-c-go'), m = $('a-c-msg');
+        // Nothing is sent until the box is ticked and the password is in.
+        if (!$('a-c-sure').checked) { say(m, 'Tick "Close it" first.', 'bad'); return; }
+        const pw = $('a-c-pw').value;
+        if (!pw) { say(m, 'Put your password in first.', 'bad'); return; }
+        b.disabled = true; say(m, 'Closing…');
+        try {
+          await OTP.closeMyAccount(pw, $('a-c-note').value, $('a-c-back').checked);
+          say(m, "Closed. You're logged out.", 'ok');
+          setTimeout(() => { location.href = '../'; }, 1500);
+        } catch (e) {
+          say(m, e.message || 'That did not go through.', 'bad');
+          b.disabled = false;
+        }
+      };
+    }
+  }
+  drawAccount();
+  jump();
+
+  // ---- MEMBERS: their page is in the Crypt ---------------------------------
+  if (!P.approved) {
+    const box = $('crypt');
+    box.style.display = '';
+    if (acct && acct.banned) {
+      box.innerHTML = '<div class="sec">The Crypt</div><p class="hint">The Crypt is closed to this account.</p>';
+    } else if (kind === 'pending') {
+      box.innerHTML = '<div class="sec">One more step.</div>' +
+        "<p class=\"hint\">Put your Instagram in at the Crypt and you're in.</p>" +
+        '<a class="btn" href="../wall/">Go to the Crypt</a>';
+    } else {
+      // doorLine is written for a card holder page ("This part is for card
+      // holders"). This is their own page, so a member who never asked gets the
+      // offer instead. Waiting and a quiet no still read as doorLine says.
+      const OFFER = 'Want a card? Ask in the Crypt, under Kin.';
+      let line;
+      if (acct && acct.card_want && acct.card_ask === 'asked') line = 'You asked for a card: ' + acct.card_want;
+      else if (acct && !acct.card_ask && !P.denied) line = OFFER;
+      else {
+        line = await OTP.doorLine(P);
+        if (/^This part is for card holders/.test(line)) line = OFFER;
+      }
+      box.innerHTML = '<div class="sec">Your page in the Crypt</div>' +
+        '<p class="hint">Your page, your Kin and your messages live in the Crypt.</p>' +
+        '<a class="btn" href="../wall/#me">Open your page</a>' +
+        '<p class="hint" style="margin-top:12px">' + esc(line) + '</p>' +
+        '<div class="quick"><a href="../compose/">Your posts</a><a href="../packs/">Packs</a>' +
+        '<a href="../#rooms">Rooms</a></div>';
+    }
+    jump();
+    return;
+  }
+
+  // ---- CARD HOLDERS (and the desk): the card holder app --------------------
   $('app').style.display = '';
-  $('acct').textContent = me.user.email;
-  $('out').onclick = async () => { await OTP.signOut(); location.href = '../join/'; };
+  if (isDesk) $('quick').insertAdjacentHTML('afterbegin', '<a href="../board/">The board</a>');
+  const mySlug = P.card_slug || (acct && acct.card_slug) || '';
+  jump();
 
   // ---- the back of the card: the only two fields a member types -----------
   // A member without a card_slug has no page to point at yet (the desk hands
@@ -223,18 +620,28 @@ document.addEventListener('DOMContentLoaded', async () => {
       const row = document.createElement('div');
       row.className = 'lk-row';
       row.innerHTML =
-        '<select>' + PLATS.map(pl =>
+        '<select aria-label="Platform">' + PLATS.map(pl =>
           `<option value="${pl}"${l && l.p === pl ? ' selected' : ''}>${pl}</option>`).join('') + '</select>' +
-        `<input type="text" maxlength="30" placeholder="handle" value="${(l && l.h ? String(l.h).replace(/"/g,'&quot;') : '')}">` +
+        `<input type="text" maxlength="30" placeholder="handle" aria-label="Handle" autocapitalize="none" spellcheck="false" value="${esc(l && l.h ? l.h : '')}">` +
         '<button type="button" class="lk-x" aria-label="Remove">&times;</button>';
       row.querySelector('.lk-x').onclick = () => row.remove();
       lkRows.appendChild(row);
     };
+    // The card builder's one old link (007's link_platform / link_handle) still
+    // shows on the card page and in packs, and /card/ has no box for it any
+    // more. So it joins the list here, where it can be kept or removed, and a
+    // save clears the old pair (the list carries it from then on).
+    const oldP = P.link_platform || '', oldH = P.link_handle || '';
+    let oldLink = !!(oldP || oldH);
     (async () => {
       let mine = [];
       try { mine = await OTP.myLinks(); } catch (e) {}
+      if (oldP && oldH && PLATS.indexOf(oldP) !== -1 && mine.length < 5 &&
+          !mine.some(l => l && l.p === oldP && String(l.h || '').toLowerCase() === oldH.toLowerCase()))
+        mine = mine.concat([{ p: oldP, h: oldH }]);
       lkCard.style.display = '';
       (mine.length ? mine : [null]).forEach(drawLink);
+      jump();
       $('lk-add').onclick = () => {
         if (lkRows.children.length >= 5) return;
         drawLink(null);
@@ -248,8 +655,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         b.disabled = true; msg.className = 'msg'; msg.textContent = 'Saving…';
         try {
           const saved = await OTP.saveMyLinks(list);
+          if (oldLink) {
+            try { await OTP.saveCard({ link_platform: null, link_handle: null }); oldLink = false; }
+            catch (e) {
+              msg.className = 'msg bad';
+              msg.textContent = 'Saved, but your old card link is still up. Tap Save links again.';
+              b.disabled = false;
+              return;
+            }
+          }
+          msg.className = 'msg ok';
           msg.textContent = saved.length
-            ? `Saved. ${saved.length} link${saved.length > 1 ? 's' : ''} on your page.`
+            ? `Saved. ${saved.length} link${saved.length > 1 ? 's' : ''} on your card page and your page in the Crypt.`
             : 'Saved. No links on your page.';
         } catch (e) { msg.className = 'msg bad'; msg.textContent = e.message || String(e); }
         b.disabled = false;
@@ -261,7 +678,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       b.disabled = true; msg.className = 'msg'; msg.textContent = 'Saving…';
       try {
         await OTP.saveMyWords({ tagline: tag.value, bio: bio.value });
-        msg.textContent = 'Saved. It is on your page now.';
+        msg.className = 'msg ok'; msg.textContent = 'Saved. It is on your page now.';
       } catch (e) {
         msg.className = 'msg bad'; msg.textContent = e.message || String(e);
       }
@@ -271,6 +688,26 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // ---- the card preview: real renderer CSS, adopted from the homepage so it
   // cannot drift (same trick as the builder) --------------------------------
+  // ⛔ ONLY the card's own rules. The homepage's sheet also styles .wrap (a
+  //    two-column grid on a computer), .btn, .card and .drop, and adopting the
+  //    whole thing put this page in two columns and restyled every button on it.
+  const CARD_RULE = /poke|pend-/;
+  function cardRulesOnly(box) {
+    const list = box.cssRules;
+    for (let i = list.length - 1; i >= 0; i--) {
+      const r = list[i];
+      if (typeof r.selectorText === 'string' && r.style) {
+        const all = r.selectorText.split(',');
+        const keep = all.filter(s => CARD_RULE.test(s));
+        if (!keep.length) box.deleteRule(i);
+        else if (keep.length < all.length) r.selectorText = keep.join(',');
+      } else if (r.cssRules && !(window.CSSKeyframesRule && r instanceof CSSKeyframesRule)) {
+        cardRulesOnly(r);                       // @media, @supports
+        if (!r.cssRules.length) box.deleteRule(i);
+      }
+      // @keyframes, @font-face and the rest stay as they are
+    }
+  }
   let seed = null;
   (async () => {
     try {
@@ -279,6 +716,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         .map(b => b.replace(/<\/?style>/gi, '')).join('\n');
       const el = document.createElement('style'); el.textContent = css;
       document.head.appendChild(el);
+      try { cardRulesOnly(el.sheet); } catch (e) { /* the preview keeps them all rather than none */ }
       const [r, c] = await Promise.all([
         fetch('../content/roster.json', { cache: 'no-cache' }).then(x => x.json()),
         fetch('../content/creators.json', { cache: 'no-cache' }).then(x => x.json()),
@@ -286,18 +724,21 @@ document.addEventListener('DOMContentLoaded', async () => {
       const slugify = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
       // ⛔ TWO KEYS, like the homepage: The Ink holds `theink`, WUN MOR holds `wunmor`.
       const tight = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-      const mine = me.profile.card_slug || '';
-      seed = [...(c.items || []), ...(r.items || [])]
-        .find(x => slugify(x.name) === mine || (mine && tight(x.name) === tight(mine))) || null;
+      const items = [...(c.items || []), ...(r.items || [])];
+      // Wave 2: roster.json carries each seat's card_slug, so that wins; the
+      // name keys stay for files that do not carry one (creators.json).
+      seed = (mySlug && items.find(x => x.card_slug === mySlug)) ||
+        items.find(x => slugify(x.name) === mySlug || (mySlug && tight(x.name) === tight(mySlug))) || null;
     } catch (e) { seed = null; }
     paintCard();
+    jump();
   })();
 
   function paintCard() {
-    const frame = me.profile.card_frame || (seed && seed.rarity) || 'common';
+    const frame = P.card_frame || (seed && seed.rarity) || 'common';
     // the house art's path is from the site root, and this page is one folder down
-    const photo = me.profile.card_photo || (seed && seed.photo ? '../' + String(seed.photo).replace(/^\.?\//, '') : null);
-    const name = (seed && seed.name) || me.profile.display_name;
+    const photo = P.card_photo || (seed && seed.photo ? '../' + String(seed.photo).replace(/^\.?\//, '') : null);
+    const name = (seed && seed.name) || P.display_name;
     const art = photo
       ? `<div class="poke-art" style="background-image:url('${esc(photo)}');background-size:cover;background-position:50% 26%"></div>`
       : `<div class="poke-art poke-art-pending"><span class="pend-seat">${esc((seed && seed.pending_glyph) || '0FF')}</span><span class="pend-stamp">PHOTO PENDING</span></div>`;
@@ -325,17 +766,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
       const url = await OTP.uploadCardArt(f);
       await OTP.saveCard({ card_photo: url });
-      me.profile.card_photo = url;
+      P.card_photo = url;
       paintCard();
       m.className = 'msg ok'; m.textContent = 'That is your face now.';
     } catch (err) { m.className = 'msg bad'; m.textContent = err.message; }
     e.target.value = '';
   };
 
-  // ---- everything waiting, everything live --------------------------------
+  // ---- everything waiting, everything live, everything pulled ------------
   // Rooms (038) and packs (037) come off their own lists, which mark yours
   // (mine). They are managed where they live (Take it down on the Music tab,
   // edit on /packs/), so here they are a line and a link, no Withdraw.
+  // 045: their own stories, lines, picks and videos come down whenever they
+  // like (a story until it is baked into the catalog). Stories and videos go up
+  // on add (023), so one that is not published is one the desk pulled.
   const mineOf = n => Promise.resolve(OTP.sb().rpc(n))
     .then(q => (q && !q.error && Array.isArray(q.data)) ? q.data.filter(x => x && x.mine) : [])
     .catch(() => []);
@@ -349,48 +793,79 @@ document.addEventListener('DOMContentLoaded', async () => {
     mineOf('packs_list'),
   ]);
   const roomLabel = r => (r.name || 'A room') + (r.label ? ' · ' + r.label : '');
+  const storyHref = x => '../word/live/?s=' + encodeURIComponent(x.slug);
+  const reel = mySlug ? '../c/' + encodeURIComponent(mySlug) + '/#reel' : '../#videos';
+  const vidLabel = x => x.title + ' · ' + x.provider;
 
   const waiting = [
-    ...stories.filter(x => !x.published).map(x => ({ kind: 'STORY', label: x.title, wd: () => OTP.withdrawStory(x.id), href: '../word/new/' })),
     ...tracks.filter(x => !x.published).map(x => ({ kind: 'SONG', label: x.title + ' · ' + x.artist, wd: () => OTP.withdrawTrack(x.id) })),
-    ...entries.filter(x => !x.published).map(x => ({ kind: 'ENTRY', label: 'on ' + x.story_slug + ': ' + x.text.slice(0, 40), wd: () => OTP.withdrawEntry(x.id) })),
-    // there is no withdrawVideo: the RLS delete policy already refuses a
-    // published row, so deleteVideo IS the withdraw for an unpublished one
-    ...vids.filter(x => !x.published).map(x => ({ kind: 'VIDEO', label: x.title + ' · ' + x.provider, wd: () => OTP.deleteVideo(x.id), href: '../compose/' })),
+    ...entries.filter(x => !x.published).map(x => ({ kind: 'ENTRY', label: 'on ' + x.story_slug + ': ' + String(x.text || '').slice(0, 40), wd: () => OTP.withdrawEntry(x.id) })),
     ...rooms.filter(x => !x.published).map(x => ({ kind: 'ROOM', label: roomLabel(x), href: '../#rooms' })),
     ...packs.filter(x => !x.published).map(x => ({ kind: 'PACK', label: x.title || 'A pack', href: '../packs/?edit=' + encodeURIComponent(x.slug) })),
   ];
   const live = [
-    ...stories.filter(x => x.published).map(x => ({ kind: x.baked ? 'STORY · IN THE CATALOG' : 'STORY', label: x.title, href: '../word/live/?s=' + encodeURIComponent(x.slug), gold: x.baked })),
-    ...tracks.filter(x => x.published).map(x => ({ kind: 'ON ROTATION', label: x.title + ' · ' + x.artist, href: '../#music' })),
-    ...entries.filter(x => x.published).map(x => ({ kind: 'ENTRY', label: 'on ' + x.story_slug, href: '../word/' + x.story_slug + '/' })),
-    ...vids.filter(x => x.published).map(x => ({ kind: x.featured ? 'ON THE REEL · FEATURED' : 'ON THE REEL', label: x.title + ' · ' + x.provider, href: '../#videos', gold: x.featured })),
+    ...stories.filter(x => x.published).map(x => x.baked
+      ? { kind: 'STORY · IN THE CATALOG', label: x.title, href: storyHref(x), cls: 'gold' }
+      : { kind: 'STORY', label: x.title, href: storyHref(x), fix: '../word/new/?id=' + encodeURIComponent(x.id), down: () => OTP.withdrawStory(x.id) }),
+    ...tracks.filter(x => x.published).map(x => ({ kind: 'ON ROTATION', label: x.title + ' · ' + x.artist, href: '../#music', down: () => OTP.withdrawTrack(x.id) })),
+    ...entries.filter(x => x.published).map(x => ({ kind: 'ENTRY', label: 'on ' + x.story_slug, href: '../word/' + encodeURIComponent(x.story_slug) + '/', down: () => OTP.withdrawEntry(x.id) })),
+    ...vids.filter(x => x.published).map(x => ({ kind: x.featured ? 'ON YOUR PAGE · FEATURED' : 'ON YOUR PAGE', label: vidLabel(x), href: reel, cls: x.featured ? 'gold' : '',
+      fix: '../compose/#vids', down: () => OTP.deleteVideo(x.id) })),
     ...rooms.filter(x => x.published).map(x => ({ kind: 'ROOM', label: roomLabel(x), href: '../#rooms' })),
     ...packs.filter(x => x.published).map(x => ({ kind: 'PACK', label: x.title || 'A pack', href: '../packs/?p=' + encodeURIComponent(x.slug) })),
   ];
+  // A pulled story that is already in the catalog is the desk's to fix, so it gets no buttons.
+  const pulled = [
+    ...stories.filter(x => !x.published).map(x => ({ kind: 'PULLED BY THE DESK', label: x.title, href: storyHref(x),
+      fix: x.baked ? null : '../word/new/?id=' + encodeURIComponent(x.id), down: x.baked ? null : () => OTP.withdrawStory(x.id) })),
+    ...vids.filter(x => !x.published).map(x => ({ kind: 'PULLED BY THE DESK', label: vidLabel(x),
+      fix: '../compose/#vids', down: () => OTP.deleteVideo(x.id) })),
+  ];
 
-  if (waiting.length) {
-    $('waitcard').style.display = '';
-    $('waitlist').innerHTML = waiting.map((w, i) => `
-      <div class="row">
-        <span class="t">${w.href ? `<a href="${w.href}" style="color:var(--ink);text-decoration:none">${esc(w.label)}</a>` : esc(w.label)}</span>
-        <span class="st wait">${w.kind}</span>
-        ${w.wd ? `<button type="button" data-wd="${i}">Withdraw</button>` : ''}
+  // Take down is two taps ("Sure?"); Withdraw on something still waiting is one.
+  function drawList(cardId, listId, msgId, rows, cls) {
+    if (!rows.length) return;
+    $(cardId).style.display = '';
+    const list = $(listId), m = $(msgId);
+    list.innerHTML = rows.map((r, i) => `
+      <div class="row" data-i="${i}">
+        <span class="t">${r.href ? `<a class="t-link" href="${esc(r.href)}">${esc(r.label)}</a>` : esc(r.label)}</span>
+        <span class="st ${esc(r.cls || cls)}">${esc(r.kind)}</span>
+        ${(r.fix || r.down || r.wd) ? `<span class="acts">${r.fix ? `<a class="act" href="${esc(r.fix)}">Fix</a>` : ''}${
+          r.down ? '<button type="button" data-down>Take down</button>' : ''}${
+          r.wd ? '<button type="button" data-wd>Withdraw</button>' : ''}</span>` : ''}
       </div>`).join('');
-    $('waitlist').querySelectorAll('[data-wd]').forEach(b => b.onclick = async () => {
+    const gone = (row, text) => {
+      row.remove();
+      say(m, text, 'ok');
+      if (!list.children.length) list.innerHTML = '<div class="ex-none">Nothing here now.</div>';
+    };
+    list.querySelectorAll('[data-wd]').forEach(b => b.onclick = async () => {
+      const row = b.closest('.row');
       b.disabled = true;
-      try { await waiting[+b.dataset.wd].wd(); location.reload(); }
-      catch (err) { alert(err.message); b.disabled = false; }
+      try { await rows[+row.dataset.i].wd(); gone(row, 'Withdrawn.'); }
+      catch (err) { say(m, err.message || 'That did not go through.', 'bad'); b.disabled = false; }
+    });
+    list.querySelectorAll('[data-down]').forEach(b => {
+      let armed = false, timer = null;
+      const reset = () => { armed = false; clearTimeout(timer); b.textContent = 'Take down'; b.classList.remove('arm'); };
+      b.onclick = async () => {
+        if (!armed) {
+          armed = true; b.textContent = 'Sure?'; b.classList.add('arm');
+          timer = setTimeout(reset, 4000);
+          return;
+        }
+        reset();
+        const row = b.closest('.row');
+        b.disabled = true;
+        try { await rows[+row.dataset.i].down(); gone(row, 'Taken down.'); }
+        catch (err) { say(m, err.message || 'That did not go through.', 'bad'); b.disabled = false; }
+      };
     });
   }
-  if (live.length) {
-    $('livecard').style.display = '';
-    $('livelist').innerHTML = live.map(l => `
-      <div class="row">
-        <span class="t"><a href="${l.href}" style="color:var(--ink);text-decoration:none">${esc(l.label)}</a></span>
-        <span class="st ${l.gold ? 'gold' : 'live'}">${esc(l.kind)}</span>
-      </div>`).join('');
-  }
+  drawList('waitcard', 'waitlist', 'waitmsg', waiting, 'wait');
+  drawList('livecard', 'livelist', 'livemsg', live, 'live');
+  drawList('pulledcard', 'pulledlist', 'pulledmsg', pulled, 'pulled');
 
   // ---- THE EXCHANGE: their dates, and one tap to ask ----------------------
   // ⛔ myDates() returns EVERY date they have, past included, because the half
@@ -458,16 +933,22 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     $('ex-add').onclick = () => {
       if (!window.OTPCal) { location.href = '../dates/'; return; }
-      OTPCal.sheet(null, draw, { admin: !!(me.profile && me.profile.is_admin) });
+      OTPCal.sheet(null, draw, { admin: isDesk });
     };
     await draw();
+    jump();
   })();
 
-  $('postlist').innerHTML = posts.length ? posts.map(p => `
+  // LIVE on the Take, ROLL (members only, 045), or PULLED by the desk.
+  $('postlist').innerHTML = posts.length ? posts.map(p => {
+    const st = !p.published ? ['wait', 'PULLED'] : p.members_only ? ['roll', 'ROLL'] : ['live', 'LIVE'];
+    return `
     <div class="row">
-      <span class="t">${esc((p.text || (p.image_url ? 'a photo' : '')).slice(0, 60))}</span>
-      <span class="st ${p.published ? 'live' : 'wait'}">${p.published ? 'LIVE' : 'PULLED'}</span>
-    </div>`).join('') : '<div class="hint">Nothing posted yet. The timeline is right there.</div>';
+      <span class="t">${esc((p.text || (p.image_url ? '(photo)' : '')).slice(0, 60))}</span>
+      <span class="st ${st[0]}">${st[1]}</span>
+    </div>`;
+  }).join('') : '<div class="hint">Nothing posted yet. The timeline is right there.</div>';
+  jump();
 });
 </script>
 </body>

@@ -58,7 +58,7 @@ input:focus,select:focus{outline:2px solid var(--pink-deep);outline-offset:1px}
   color:var(--muted);cursor:pointer;font-size:14px}
 .drop:hover{border-color:var(--pink-deep)}
 .gate{max-width:520px;margin:80px auto;text-align:center}
-.gate a{color:var(--pink-glow)}
+.gate a,.hint a{color:var(--pink-glow)}
 </style>
 </head>
 <body>
@@ -67,7 +67,8 @@ input:focus,select:focus{outline:2px solid var(--pink-deep);outline-offset:1px}
   <header style="padding:4px 0 22px">
     <div style="font-family:var(--f-display);font-style:italic;font-weight:900;font-size:26px;text-transform:uppercase">Your card</div>
     <div style="font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;color:var(--muted);margin-top:8px">
-      0FF THE PRINT &middot; CARD HOLDERS ONLY &middot; <a href="../wall/" style="color:var(--pink-glow);text-decoration:none;font-weight:600">THE CRYPT &rarr;</a></div>
+      0FF THE PRINT &middot; CARD HOLDERS ONLY &middot; <a href="../my/" style="color:var(--ink);text-decoration:none;font-weight:600">YOUR ACCOUNT</a>
+      &middot; <a href="../wall/" style="color:var(--pink-glow);text-decoration:none;font-weight:600">THE CRYPT &rarr;</a></div>
   </header>
 
   <div id="gate" class="gate" style="display:none"></div>
@@ -90,10 +91,11 @@ input:focus,select:focus{outline:2px solid var(--pink-deep);outline-offset:1px}
 
       <fieldset>
         <legend>Card art</legend>
-        <div class="drop" id="drop">Tap to pick a photo. Portrait works best, it gets
-          cropped to 3:4 and shrunk before it uploads.</div>
+        <div class="drop" id="drop">Tap to pick a photo.</div>
         <input type="file" id="file" accept="image/*" style="display:none">
         <button class="btn ghost" id="rmart" style="margin-top:10px;display:none">Remove art</button>
+        <div class="hint">One photo for everything: your card, your posts and your page in the Crypt.
+          Portrait works best, it gets cropped to 3:4 and shrunk before it uploads.</div>
       </fieldset>
 
       <fieldset>
@@ -107,9 +109,9 @@ input:focus,select:focus{outline:2px solid var(--pink-deep);outline-offset:1px}
             <input type="number" id="start" min="0" max="3600" placeholder="0">
           </div>
         </div>
-        <div class="hint">This plays when somebody opens your card. Heads up: anyone not
-          logged into Spotify only gets the 30 second preview, so a start past 0:30 does
-          nothing for them.</div>
+        <div class="hint">This plays when somebody opens your card. It is the song on your page
+          in the Crypt too. Heads up: anyone not logged into Spotify only gets the 30 second
+          preview, so a start past 0:30 does nothing for them.</div>
       </fieldset>
 
       <fieldset>
@@ -123,19 +125,13 @@ input:focus,select:focus{outline:2px solid var(--pink-deep);outline-offset:1px}
         <div class="hint">These sit on the back of your card. Same song twice gets dropped.</div>
       </fieldset>
 
+      <!-- Wave 2: the card's one link (link_platform / link_handle) is gone from
+           here. Their links (up to five) live on Your account, the one place
+           they change, and the card page and the Crypt page both read those. -->
       <fieldset>
-        <legend>Your link</legend>
-        <div class="row">
-          <div>
-            <label for="plat">Platform</label>
-            <select id="plat"><option value="">none</option></select>
-          </div>
-          <div>
-            <label for="handle">Handle</label>
-            <input type="text" id="handle" placeholder="yourname">
-          </div>
-        </div>
-        <div class="hint">Handle only, no link. The site builds the address itself.</div>
+        <legend>Your links</legend>
+        <div class="hint" style="margin-top:0">Your links live on Your account now, up to five.
+          <a href="../my/#linkscard">Change them there.</a></div>
       </fieldset>
 
       <button class="btn" id="save">Save card</button>
@@ -145,8 +141,8 @@ input:focus,select:focus{outline:2px solid var(--pink-deep);outline-offset:1px}
 </div>
 
 <script src="../supabase-config.js?v=f1348482"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="../assets/js/desk.js?v=c10b36ef" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" integrity="sha384-Rj26LVGvoeRVR6+mwQmFfcR3QOBEwT+ZmuCWpuiqeTzJpCs0ER4ITAWGb4Hiy3Ok" crossorigin="anonymous"></script>
+<script src="../assets/js/desk.js?v=12f3e9e0" defer></script>
 <script defer>
 (() => {
   const $ = id => document.getElementById(id);
@@ -160,6 +156,26 @@ input:focus,select:focus{outline:2px solid var(--pink-deep);outline-offset:1px}
   // the right long-term fix, but it is a refactor and it belongs in its own
   // commit. Until then: fetch index.html once and adopt its <style> block, so a
   // frame tweak on the homepage shows up here with no second copy to maintain.
+  // ⛔ ONLY the card's own rules. The homepage's sheet also styles .wrap (a
+  //    two-column grid on a computer), .btn and .drop, and adopting the whole
+  //    thing squeezed this form into a 160px column beside the header.
+  const CARD_RULE = /poke|pend-/;
+  function cardRulesOnly(box){
+    const list = box.cssRules;
+    for (let i = list.length - 1; i >= 0; i--) {
+      const r = list[i];
+      if (typeof r.selectorText === 'string' && r.style) {
+        const all = r.selectorText.split(',');
+        const keep = all.filter(s => CARD_RULE.test(s));
+        if (!keep.length) box.deleteRule(i);
+        else if (keep.length < all.length) r.selectorText = keep.join(',');
+      } else if (r.cssRules && !(window.CSSKeyframesRule && r instanceof CSSKeyframesRule)) {
+        cardRulesOnly(r);                       // @media, @supports
+        if (!r.cssRules.length) box.deleteRule(i);
+      }
+      // @keyframes, @font-face and the rest stay as they are
+    }
+  }
   async function loadCardStyles(){
     try {
       const html = await fetch('../index.html', { cache: 'no-cache' }).then(r => r.text());
@@ -168,6 +184,7 @@ input:focus,select:focus{outline:2px solid var(--pink-deep);outline-offset:1px}
       const el = document.createElement('style');
       el.textContent = css;
       document.head.appendChild(el);
+      try { cardRulesOnly(el.sheet); } catch (e) { /* the preview keeps them all rather than none */ }
     } catch (e) { /* preview degrades to unstyled, the form still works */ }
   }
 
@@ -228,7 +245,15 @@ input:focus,select:focus{outline:2px solid var(--pink-deep);outline-offset:1px}
     me = await OTP.me();
     if (!me) {
       $('gate').style.display = 'block';
-      $('gate').innerHTML = '<p class="door-note">Card holders only. <a href="../join/?next=card">Log in</a> and this page becomes your card.</p>';
+      $('gate').innerHTML = '<p class="door-note">Card holders only. <a href="../join/?next=card">Log in</a>. ' +
+        'No card yet? <a href="../wall/">Join the Crypt</a> and ask under Kin.</p>';
+      return;
+    }
+    // my_profile did not answer (twice): say so, never a blank page
+    if (me.failed || !me.profile) {
+      $('gate').style.display = 'block';
+      $('gate').innerHTML = '<p class="door-note">Could not load your card. Try again in a minute.</p>' +
+        '<button class="btn ghost" type="button" onclick="location.reload()">Try again</button>';
       return;
     }
     if (!me.profile.approved) {
@@ -247,8 +272,11 @@ input:focus,select:focus{outline:2px solid var(--pink-deep);outline-offset:1px}
       // The Ink holds `theink` and WUN MOR holds `wunmor`.
       const tight = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
       const mine = me.profile.card_slug || '';
-      seed = [...(c.items || []), ...(r.items || [])]
-        .find(x => slugify(x.name) === mine || (mine && tight(x.name) === tight(mine))) || null;
+      const items = [...(c.items || []), ...(r.items || [])];
+      // Wave 2: roster.json carries each seat's card_slug, so that wins; the
+      // name keys stay for files that do not carry one (creators.json).
+      seed = (mine && items.find(x => x.card_slug === mine)) ||
+        items.find(x => slugify(x.name) === mine || (mine && tight(x.name) === tight(mine))) || null;
     } catch (e) { seed = null; }
 
     // Only what the member actually SAVED. The roster seed still paints the
@@ -263,9 +291,6 @@ input:focus,select:focus{outline:2px solid var(--pink-deep);outline-offset:1px}
     state.photoTouched = false;
     $('theme').value = me.profile.theme_track || '';
     $('start').value = me.profile.theme_start || '';
-    $('handle').value = me.profile.link_handle || '';
-    $('plat').innerHTML = '<option value="">none</option>' +
-      (OTP.CARD_LINK_PLATFORMS || ['instagram', 'tiktok', 'youtube', 'spotify', 'soundcloud', 'bandcamp']).map(p => `<option value="${p}"${me.profile.link_platform === p ? ' selected' : ''}>${p}</option>`).join('');
     if (state.card_photo) $('rmart').style.display = 'inline-block';
 
     try {
@@ -345,11 +370,11 @@ input:focus,select:focus{outline:2px solid var(--pink-deep);outline-offset:1px}
       $('save').disabled = true;
       $('msg').className = 'msg'; $('msg').textContent = 'Saving...';
       try {
+        // ⛔ No link keys: a save from here never touches link_platform or
+        // link_handle, so the links set on Your account are left alone.
         const payload = {
           theme_song: $('theme').value,
           theme_start: $('start').value,
-          link_platform: $('plat').value,
-          link_handle: $('handle').value,
         };
         if (state.card_frame) payload.card_frame = state.card_frame;
         if (state.photoTouched) payload.card_photo = state.card_photo;
