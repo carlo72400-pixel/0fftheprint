@@ -77,8 +77,21 @@
   if (!canPost && OTP.canTake) { try { canPost = await OTP.canTake(); } catch (e) {} }
   // 035: the door is an Instagram. A login that carries one and is not on The Wall yet is let in here
   // (same quiet ask door.js makes; whichever runs first wins, the other is told 'in').
+  // Wave 2 (044): a closed account hears 'closed' (they closed it) or 'shut' (the desk did). Same line for both.
+  let closed = false;
   if (!canPost && OTP.sb) {
-    try { const j = await OTP.sb().rpc('wall_join', { p_ig: null }); if (j && !j.error && j.data === 'in') canPost = true; } catch (e) {}
+    try {
+      const j = await OTP.sb().rpc('wall_join', { p_ig: null });
+      if (j && !j.error && j.data === 'in') canPost = true;
+      else if (j && !j.error && (j.data === 'closed' || j.data === 'shut')) closed = true;
+    } catch (e) {}
+  }
+
+  // ---------- signed in, the account is closed ----------
+  if (closed) {
+    line(`<span class="cav plain"></span>
+      <div class="cgrow"><span class="clink">This account is closed. <a href="my/#account">Your account</a></span></div>`);
+    return;
   }
 
   // ---------- signed in, not on The Wall, still in the queue ----------
@@ -92,25 +105,12 @@
   const casual = !approved;
 
   // ---------- the real box ----------
-  // Their card art, so the box looks like them. Falls back to a plain ring.
-  let avatar = '';
-  if (!casual) try {
-    const [r, c] = await Promise.all([
-      fetch('content/roster.json', { cache: 'no-cache' }).then(x => x.json()).catch(() => ({ items: [] })),
-      fetch('content/creators.json', { cache: 'no-cache' }).then(x => x.json()).catch(() => ({ items: [] })),
-    ]);
-    const slugify = t => String(t || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-    const mine = [...(c.items || []), ...(r.items || [])]
-      .find(x => slugify(x.name) === (me.profile.card_slug || ''));
-    avatar = safeUrl(mine && mine.photo);
-  } catch (e) { /* a missing avatar is not worth a broken box */ }
-
   // Array.from, not [0]: a name that opens with an emoji is two code units and [0] is half of it
   const first = Array.from((me.profile.display_name || '0').trim())[0] || '0';
   mount.innerHTML = `
     <div class="cbox">
       <div class="crow">
-        <span class="cav${avatar ? '' : ' plain'}" id="c-av">${avatar ? '' : esc(first)}</span>
+        <span class="cav plain" id="c-av">${esc(first)}</span>
         <div class="cgrow">
           <textarea id="c-text" maxlength="800" rows="1"
             placeholder="What's up, ${esc((me.profile.display_name || '').split(' ')[0])}?"></textarea>
@@ -122,12 +122,28 @@
             <button class="cpost" id="c-go" type="button" disabled>Post</button>
           </div>
           <div class="cmsg" id="c-msg"></div>
+          <div class="cnote">Everyone sees the Take. Photos just for members go on <a href="#roll">the Roll</a>.</div>
         </div>
       </div>
       <input type="file" id="c-file" accept="${casual ? 'image/*' : 'image/*,video/*'}" hidden>
     </div>`;
 
-  if (avatar) document.getElementById('c-av').style.backgroundImage = 'url("' + avatar + '")';
+  // Their card art, so the box looks like them; a plain ring with their initial until it lands (or if it never
+  // does). Wave 2 (call 2): the one list every page reads, OTP.people() (the house seats with the database's
+  // photos, plus card holders with no seat), found by card slug. Painted late on purpose: the box never waits on it.
+  if (!casual && me.profile.card_slug && OTP.people) {
+    OTP.people().then(list => {
+      const slug = String(me.profile.card_slug || '').toLowerCase();
+      const mine = (list || []).find(x => x && String(x.card_slug || '').toLowerCase() === slug);
+      let avatar = safeUrl(mine && mine.photo);
+      // a member's card art ships as a -full/-card pair: a 40px ring gets the small one
+      if (/\/storage\/v1\/object\/public\/cards\/.+-full\.jpg$/i.test(avatar)) avatar = avatar.replace(/-full\.jpg$/i, '-card.jpg');
+      const av = document.getElementById('c-av');
+      if (!avatar || !av) return;
+      av.textContent = ''; av.classList.remove('plain');
+      av.style.backgroundImage = 'url("' + avatar + '")';
+    }).catch(() => { /* a missing avatar is not worth a broken box */ });
+  }
 
   const $ = id => document.getElementById(id);
   const ta = $('c-text'), prev = $('c-prev'), go = $('c-go'), msgEl = $('c-msg'), countEl = $('c-count');
@@ -210,7 +226,9 @@
         url = upUrl;
       }
       go.textContent = 'Posting…';
-      await OTP.post({ text, imageUrl: url });
+      // Wave 2 (call 1, 045): the Home box is the Take, out in the open. It always says so: a photo with no
+      // flag would land on the Roll (the database fails closed for a page that sends nothing).
+      await OTP.post({ text, imageUrl: url, membersOnly: false });
       upFile = null; upUrl = null;          // the post owns the photo now; removing it below must not delete it
       ta.value = ''; grow(); $('c-rm').click();
       msg('Up.', 'good');

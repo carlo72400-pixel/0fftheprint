@@ -1,4 +1,4 @@
-/* THE ROLL (10/11): the People tab's member photo feed, drawn by assets/js/people.js.
+/* THE ROLL (10/11): the People tab's member photo feed, drawn by assets/js/people.js. Members only since Wave 2.
    Reactions, comments and the nudge reuse the timeline's own classes (.react-bar, .tk-box, .tk-nudge).
    ⛔ Run stamp.py after editing. ⛔ Circles and squares only, no filled arches. */
 
@@ -26,6 +26,9 @@
 .rl-post-who{display:flex;flex-direction:column;gap:2px;min-width:0;}
 .rl-post-who b{font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;font-size:16px;line-height:1;color:#fff;}
 .rl-post-who span{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);}
+/* Your posts: every post you made, on compose/ */
+.rl-mine{margin-left:auto;flex:none;display:inline-flex;align-items:center;min-height:40px;padding:0 4px;font-family:var(--f-mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--pink-glow);text-decoration:none;white-space:nowrap;}
+.rl-mine:hover{text-decoration:underline;}
 .rl-pick{display:block;cursor:pointer;}
 .rl-pick-b{display:flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 16px;border:1px dashed rgba(255,121,198,.6);border-radius:12px;
   font-family:var(--f-body);font-weight:700;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--pink-glow);transition:background .2s;}
@@ -33,20 +36,23 @@
 .rl-draft{display:grid;gap:10px;}
 .rl-draft[hidden]{display:none;}
 .rl-prev img,.rl-prev video{display:block;width:100%;max-height:420px;object-fit:contain;border-radius:10px;background:#0a0a0d;}
-.rl-draft textarea{width:100%;resize:vertical;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:#0d0c11;color:var(--ink);font:400 16px/1.4 var(--f-body);}
-.rl-draft textarea:focus{outline:none;border-color:var(--pink-glow);}
+.rl-draft textarea,.rl-ed textarea{width:100%;resize:vertical;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:#0d0c11;color:var(--ink);font:400 16px/1.4 var(--f-body);}
+.rl-draft textarea:focus,.rl-ed textarea:focus{outline:none;border-color:var(--pink-glow);}
 .rl-draft-row{display:flex;align-items:center;gap:10px;}
 .rl-msg{flex:1;font-size:12.5px;color:var(--ink);}
 .rl-msg.bad{color:#ff8a8a;}
-.rl-x{background:none;border:0;color:var(--muted);font-family:var(--f-mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;}
-.rl-go{min-height:40px;padding:0 18px;border:0;border-radius:999px;background:linear-gradient(180deg,var(--pink),var(--pink-deep));color:#0a0a0d;font-family:var(--f-body);font-weight:800;font-size:12px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;}
-.rl-go:disabled{opacity:.45;cursor:default;}
+.rl-x,.rl-ed-no{min-height:40px;padding:0 4px;background:none;border:0;color:var(--muted);font-family:var(--f-mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;}
+.rl-x:hover,.rl-ed-no:hover{color:#fff;}
+.rl-go,.rl-ed-go{min-height:40px;padding:0 18px;border:0;border-radius:999px;background:linear-gradient(180deg,var(--pink),var(--pink-deep));color:#0a0a0d;font-family:var(--f-body);font-weight:800;font-size:12px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;}
+.rl-go:disabled,.rl-ed-go:disabled{opacity:.45;cursor:default;}
+/* the Roll is for members; the Take on Home is for everyone */
+.rl-fine{margin:0;font-size:12px;line-height:1.5;color:var(--muted);}
+.rl-fine a{color:var(--pink-glow);}
 
 /* ---- row heads ---- */
 .rl-wk-h{display:flex;align-items:baseline;gap:10px;margin:0 0 10px;padding-bottom:7px;border-bottom:1px solid var(--line);}
 .rl-wk-h b{font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;font-size:21px;line-height:1;color:var(--ink);}
 .rl-wk-h span{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);}
-.rl-wk-h .rl-deal{margin-left:auto;background:none;border:1px solid var(--line);border-radius:999px;padding:5px 11px;color:var(--pink-glow);font-family:var(--f-mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;}
 .rl-feed-h{max-width:540px;margin:18px auto 10px;}
 
 /* ---- THIS WEEK ---- */
@@ -69,9 +75,18 @@
 .rl-nm b{font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;font-size:15px;line-height:1;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .rl-nm span{font-family:var(--f-mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);}
 .rl-who:hover .rl-nm b{color:var(--pink-glow);}
-.rl-tag{margin-left:auto;font-family:var(--f-mono);font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--pink-glow);border:1px dashed rgba(255,121,198,.55);border-radius:3px;padding:3px 7px;}
-.rl-del{margin-left:auto;background:none;border:1px solid var(--line);border-radius:999px;padding:4px 10px;color:var(--muted);font-family:var(--f-mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;}
-.rl-del:hover{color:#fff;border-color:var(--pink-glow);}
+.rl-tag{margin-left:auto;flex:none;font-family:var(--f-mono);font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--pink-glow);border:1px dashed rgba(255,121,198,.55);border-radius:3px;padding:3px 7px;white-space:nowrap;}
+/* On Home: this one went up on the Take too, so everyone can see it (a Roll post carries no tag) */
+.rl-tag.rl-pub{margin-left:auto;color:var(--ice,#a0e6ff);border:1px solid rgba(160,230,255,.45);cursor:help;}
+/* Edit / Delete (your own) and Pull (the desk): a 40px button, and a 44px hit area (::before sits off the padding box, so 3px is 2px past the border) */
+.rl-del,.rl-edit,.rl-pull{position:relative;flex:none;margin-left:auto;display:inline-flex;align-items:center;min-height:40px;padding:0 12px;background:none;border:1px solid var(--line);border-radius:999px;
+  color:var(--muted);font-family:var(--f-mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap;cursor:pointer;}
+.rl-del::before,.rl-edit::before,.rl-pull::before{content:"";position:absolute;inset:-3px -4px;}
+.rl-del:hover,.rl-edit:hover,.rl-pull:hover{color:#fff;border-color:var(--pink-glow);}
+.rl-del:disabled,.rl-edit:disabled,.rl-pull:disabled{opacity:.5;cursor:default;}
+.rl-pull{color:#ff8a8a;border-color:rgba(255,138,138,.45);}
+/* the first thing after the name pushes right; the rest sit beside it on the head's own gap */
+.rl-tag ~ .rl-edit,.rl-tag ~ .rl-del,.rl-tag ~ .rl-pull,.rl-edit ~ .rl-del{margin-left:0;}
 .rl-pic{position:relative;display:block;background:#0a0a0d;user-select:none;-webkit-user-select:none;}
 .rl-pic img,.rl-pic video{display:block;width:100%;height:auto;max-height:640px;object-fit:cover;}
 .rl-pic.wide img{aspect-ratio:1200/630;}
@@ -81,9 +96,14 @@
 .rl-main{padding:10px 12px 12px;}
 .rl-cap{margin:0 0 6px;font-size:14px;line-height:1.5;color:var(--ink);overflow-wrap:anywhere;}
 .rl-cap b{font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;font-size:13px;color:#fff;margin-right:4px;}
+.rl-cap[hidden]{display:none;}
+/* Edit in place: your words, the photo stays */
+.rl-ed{display:grid;gap:8px;margin:0 0 8px;}
 .rl-night-go{display:inline-block;margin-top:4px;font-family:var(--f-mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--pink-glow);text-decoration:none;}
 .rl-night-go:hover{text-decoration:underline;}
 .rl-card .react-bar{margin-top:4px;border-top:0;padding-top:0;gap:6px;}
+.rl-card .react-btn{min-height:40px;}
+@media (max-width:420px){.rl-head{gap:6px;padding:10px;}.rl-del,.rl-edit,.rl-pull{padding:0 9px;}.rl-tag{padding:3px 5px;letter-spacing:.14em;}}
 
 /* ---- CLIPS ---- */
 .rl-clips{max-width:540px;margin:18px auto 0;}
@@ -92,13 +112,24 @@
 .rl-clip video{display:block;width:100%;aspect-ratio:9/16;object-fit:cover;border-radius:12px;background:#000;border:1px solid var(--line);}
 .rl-clip span{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
 
-/* ---- grids: the sheet and EVERY FRAME ---- */
+/* ---- grids: the sheet and FRAMES YOU'RE IN (three across on a phone) ---- */
 .rl-grid,.rl-fgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px;}
+@media (min-width:721px){.rl-fgrid{grid-template-columns:repeat(6,minmax(0,1fr));}}
 .rl-g{display:block;aspect-ratio:1/1;overflow:hidden;background:#16151c;}
 .rl-g img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .4s;}
 .rl-g:hover img{transform:scale(1.05);}
 .rl-g-none{grid-column:1 / -1;margin:0;padding:18px;text-align:center;font-size:13px;color:var(--muted);}
 .rl-frames{margin:24px 0 8px;}
+.rl-all{display:flex;align-items:center;justify-content:center;min-height:44px;width:100%;max-width:320px;margin:12px auto 0;padding:0 16px;background:none;border:1px solid var(--line);border-radius:999px;
+  color:var(--pink-glow);font-family:var(--f-mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;}
+.rl-all:hover{border-color:var(--pink-glow);}
+.rl-all:disabled{opacity:.5;cursor:default;}
+/* nothing marked yet: the way to Find Yourself */
+.rl-f-none{display:flex;flex-direction:column;align-items:center;gap:12px;padding:18px 12px;text-align:center;border:1px dashed var(--line);border-radius:14px;}
+.rl-f-none p{margin:0;max-width:440px;font-size:13.5px;line-height:1.5;color:#d9d3e0;}
+.rl-f-none b{color:#fff;}
+.rl-find{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 20px;border-radius:999px;background:linear-gradient(180deg,var(--pink),var(--pink-deep));
+  color:#0a0a0d;font-family:var(--f-body);font-weight:800;font-size:12px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;}
 
 /* ---- the sheet ---- */
 .rl-sheet{position:fixed;inset:0;z-index:420;display:flex;align-items:flex-end;justify-content:center;background:rgba(6,6,9,.82);opacity:0;transition:opacity .2s;}
@@ -111,9 +142,9 @@
 .rl-pan-who b{font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;font-size:24px;line-height:1;color:#fff;}
 .rl-pan-who span{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--pink-glow);}
 .rl-pan-who em{font-style:normal;font-size:12.5px;color:var(--muted);}
-.rl-pan-who a{font-family:var(--f-mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink);text-decoration:none;margin-top:4px;}
+.rl-pan-who a{display:inline-flex;align-items:center;align-self:flex-start;min-height:40px;font-family:var(--f-mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink);text-decoration:none;}
 .rl-pan-who a:hover{color:var(--pink-glow);}
-.rl-pan-x{flex:none;width:38px;height:38px;border-radius:50%;background:#121218;border:1px solid var(--line);color:var(--ink);font-size:20px;cursor:pointer;}
+.rl-pan-x{flex:none;width:44px;height:44px;border-radius:50%;background:#121218;border:1px solid var(--line);color:var(--ink);font-size:20px;cursor:pointer;}
 .rl-pan-x:hover{border-color:var(--pink-glow);}
 .rl-pan .rl-grid{padding:3px;}
 

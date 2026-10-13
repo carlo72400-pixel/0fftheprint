@@ -4,7 +4,8 @@
 
    ⛔ SELF-CONTAINED AND SCOPED. This file is loaded by the homepage, /events/ and every
       night page, and each of those owns its own .wrap .back .grid .foot and h1.
-      Everything in here is .bn-*, plus the two hooks binder.js puts on a pack tile.
+      Everything in here is .bn-*, plus the two hooks binder.js puts on a pack tile (and, since Wave 2, the
+      .bn-* controls sealed.js puts in a night's .lb-who line, at the bottom).
    ⛔ EVERY COLOR HAS A FALLBACK. The night pages define the same variables the homepage
       does, but a page that does not must still get a readable bar. */
 
@@ -129,10 +130,54 @@ html.bn-open-sheet,html.bn-open-sheet body{overflow:hidden}
 .bn-face.got span{color:var(--pink,#f7b9dd)}
 .bn-link{display:inline-block;margin-top:12px;font:700 11.5px/1.4 Verdana,Geneva,Tahoma,sans-serif;color:var(--pink-glow,#ff79c6);text-decoration:underline;text-underline-offset:2px}
 .bn-fine{margin:18px 0 0;font:11px/1.5 Verdana,Geneva,Tahoma,sans-serif;color:var(--muted,#9a93a3)}
+.bn-face .bn-glyph{display:grid;place-items:center;aspect-ratio:1;border:1px solid rgba(244,238,242,.25);background:#0a0a0d;
+  font-family:var(--f-display,'Saira Condensed',sans-serif);font-style:italic;font-weight:900;font-size:16px;color:var(--muted,#9a93a3)}
+/* the packs this phone opened, and the cards a member kept (Wave 2): square thumbs, three across */
+.bn-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 8px}
+.bn-tile{display:block;min-width:0;text-decoration:none;color:var(--ink,#f4eef2)}
+.bn-sq{position:relative;display:block;aspect-ratio:1;border:1px solid rgba(244,238,242,.25);background:#0a0a0d;overflow:hidden}
+.bn-sq img{display:block;width:100%;height:100%;object-fit:cover}
+.bn-sq.none::after{content:'';position:absolute;inset:28%;background:url(../cathedral/mark.webp) center/contain no-repeat;opacity:.35}
+.bn-sq i{position:absolute;left:4px;bottom:4px;padding:2px 5px;font-style:normal;font-family:var(--f-mono,monospace);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:rgba(10,10,13,.8)}
+.bn-tile:hover .bn-sq{border-color:var(--pink-glow,#ff79c6)}
+.bn-tile.hit .bn-sq{border-color:#f7d046;box-shadow:0 0 10px rgba(247,208,70,.45)}
+.bn-tile.r-hit .bn-sq{border-color:var(--pink-glow,#ff79c6);box-shadow:0 0 10px rgba(255,121,198,.5)}
+.bn-tile.r-hit .bn-sq i{background:var(--pink-glow,#ff79c6);color:#0a0a0d}
+.bn-tile b{display:block;margin-top:5px;font-family:var(--f-display,'Saira Condensed',sans-serif);font-style:italic;font-weight:900;text-transform:uppercase;font-size:14px;line-height:1.05;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bn-tile > span{display:block;margin-top:3px;font-family:var(--f-mono,monospace);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted,#9a93a3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bn-tile.done > span{color:var(--pink,#f7b9dd)}
+.bn-tile > .bn-hitf{color:#f7d046}
+.bn-empty{margin:4px 0 0;font:12px/1.5 Verdana,Geneva,Tahoma,sans-serif;color:var(--muted,#9a93a3)}
+.bn-empty a{color:var(--pink-glow,#ff79c6);text-decoration:underline;text-underline-offset:2px}
 @media (max-width:560px){
   /* a sheet off the bottom edge, under the thumb */
   .bn-sheet{place-items:end center;padding:0}
   .bn-card{width:100%;max-height:88vh;border-left:0;border-right:0;border-bottom:0}
   .bn-body{padding-bottom:calc(22px + env(safe-area-inset-bottom,0px))}
 }
+/* ---------------- a night's lightbox: the tag line's controls (sealed.js, Wave 2) ----------------
+   Not the binder's, but this file is on every night page and sealed.css belongs to no Wave 2 task, so they live here,
+   .bn-* like the rest. The desk's cross takes one tag off; a member's Not them? opens the chooser under the names. */
+.lb-who .bn-untag{display:inline-grid;place-items:center;min-width:28px;min-height:28px;margin-left:4px;padding:0 6px;vertical-align:middle;cursor:pointer;
+  border:1px solid rgba(255,121,198,.55);border-radius:0;background:transparent;color:var(--pink-glow,#ff79c6);font:700 15px/1 var(--f-mono,monospace)}
+.lb-who .bn-untag:hover{background:var(--pink-glow,#ff79c6);color:#0a0a0d}
+.lb-who .bn-untag:disabled{opacity:.5;cursor:default}
+.lb-who .bn-notthem{display:inline-block;min-height:32px;margin-left:6px;padding:6px 8px;vertical-align:middle;border:0;background:none;cursor:pointer;color:var(--pink,#f7b9dd);font:inherit;letter-spacing:.08em;text-decoration:underline;text-underline-offset:2px}
+.lb-who .bn-sent{margin-left:6px;color:var(--muted,#9a93a3);font-size:9px;letter-spacing:.16em;text-transform:uppercase}
+.lb-who .bn-said{display:block;margin-top:6px;color:var(--pink,#f7b9dd)}
+.lb-who .bn-why{display:block;margin-top:8px;padding-top:8px;border-top:1px dotted rgba(244,238,242,.3)}
+.lb-who .bn-why b{display:block;margin-bottom:6px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+.lb-who .bn-why-c{display:flex;flex-wrap:wrap;gap:6px}
+.lb-who .bn-why-b{min-height:34px;padding:0 10px;cursor:pointer;border:1px solid rgba(244,238,242,.3);border-radius:0;background:#0d0c11;color:var(--ink,#f4eef2);
+  font:400 10px/1.2 var(--f-mono,monospace);letter-spacing:.12em;text-transform:uppercase}
+.lb-who .bn-why-b:hover{border-color:var(--pink-glow,#ff79c6)}
+.lb-who .bn-why-b.go{background:var(--pink-glow,#ff79c6);color:#0a0a0d;border-color:var(--pink-glow,#ff79c6)}
+.lb-who .bn-why-b:disabled{opacity:.5;cursor:default}
+/* 16px: a smaller box makes a phone zoom the whole page in */
+.lb-who .bn-why input{display:block;width:100%;margin:8px 0 6px;padding:8px 10px;border:1px solid rgba(244,238,242,.3);border-radius:0;background:#0d0c11;color:var(--ink,#f4eef2);
+  font:400 16px/1.3 var(--f-body,'Inter',system-ui,sans-serif);letter-spacing:0}
+.lb-who .bn-why input:focus{outline:none;border-color:var(--pink-glow,#ff79c6)}
+.lb-who .bn-why-m{margin:6px 0 0;color:#ff8a8a}
+
 @media (prefers-reduced-motion:reduce){ .bn-card,.bn-chip.bump{animation:none} .bn-go,.bn-chip{transition:none} }

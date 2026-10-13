@@ -40,12 +40,41 @@
       }).catch(function () { return []; });
     return nightsP;
   }
-  var STORY = /^word\/[a-z0-9][a-z0-9-]{0,90}\/$/, STHUMB = /^word\/[a-z0-9][a-z0-9-]{0,90}\/thumb\.jpg$/;
+  // a story's page, or (Wave 2) a live one the reader serves before the bake: word/live/?s=<slug>
+  var STORY = /^word\/(?:[a-z0-9][a-z0-9-]{0,90}\/|live\/\?s=[a-z0-9][a-z0-9-]{0,90})$/, STHUMB = /^word\/[a-z0-9][a-z0-9-]{0,90}\/thumb\.jpg$/;
+  // Wave 2: wait for something the page sets (window[flag] stops being undefined, or it fires ev), 2 s at most.
+  function settled(flag, ev, ms) {
+    return new Promise(function (ok) {
+      if (w[flag] !== undefined) { ok(); return; }
+      var done = false, fin = function () { if (!done) { done = true; w.removeEventListener(ev, fin); ok(); } };
+      w.addEventListener(ev, fin);
+      setTimeout(fin, ms);
+    });
+  }
+  // The house's stories for the timeline: desk.json, with the desk's hand on it from the board (call 12). The page
+  // hands over its overlay rows ('otp:overrides') and the house's own live stories ('otp:houselive'); a 'desk' row
+  // keyed by the story's link pulls it (hidden) or retitles it (title, dek, kicker), the same as the shelves.
   function stories() {
-    if (!storiesP) storiesP = fetch('content/desk.json', { cache: 'no-cache' })
-      .then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (j) { return ((j && j.items) || []).filter(function (x) { return x && STORY.test(x.link || '') && x.title; }); })
-      .catch(function () { return []; });
+    if (!storiesP) storiesP = Promise.all([
+      fetch('content/desk.json', { cache: 'no-cache' })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (j) { return (j && j.items) || []; })
+        .catch(function () { return []; }),
+      settled('__OTP_OVERRIDES', 'otp:overrides', 2000),
+      settled('__OTP_HOUSE_LIVE', 'otp:houselive', 2000)
+    ]).then(function (got) {
+      var rows = ((w.__OTP_OVERRIDES || {}).desk) || [], by = {};
+      if (Array.isArray(rows)) rows.forEach(function (r) { if (r && typeof r.item_key === 'string') by[r.item_key] = r; });
+      var list = got[0].filter(function (x) { var r = x && by[x.link]; return !(r && r.hidden); }).map(function (x) {
+        var r = x && by[x.link], p = r && r.patch && typeof r.patch === 'object' ? r.patch : null;
+        if (!p) return x;
+        var y = {}; for (var k in x) y[k] = x[k];
+        ['title', 'dek', 'kicker'].forEach(function (k) { if (typeof p[k] === 'string' && p[k].trim()) y[k] = p[k]; });
+        return y;
+      });
+      var live = Array.isArray(w.__OTP_HOUSE_LIVE) ? w.__OTP_HOUSE_LIVE : [];
+      return list.concat(live).filter(function (x) { return x && STORY.test(x.link || '') && x.title; });
+    }).catch(function () { return []; });
     return storiesP;
   }
   // ⛔ Y-M-D by hand, never new Date('2026-09-15'): that is UTC midnight, the evening BEFORE in San Antonio.
@@ -271,22 +300,38 @@
     try { new MutationObserver(go).observe(mount, { childList: true }); } catch (e) {}
   }
 
-  /* ---------- the friend space: the roster's own card art, cut small ---------- */
+  /* ---------- the friend space: the roster's own card art, cut small ----------
+     Wave 2 (call 13): the page adds card holders with no hand-typed row once the card list answers, each with
+     its card photo in data-photo, and says so ('otp:spotlight'). A house face (FACES) still wins; a photo off
+     data-photo is used only from this site or the database's own file store. */
   var FACES = { 'kav-man': 'kavman', 'virgosgateway': 'virgosgateway', 'wrathfol': 'wrathfol', 'theink': 'theink',
                 'wunmor': 'wunmor', 'kurlytop': 'kurlytop', 'josh-fuego': 'joshfuego', 'vamppsych': 'vamppsych' };
+  function okPhoto(u) {
+    u = String(u || '');
+    if (!u || u.length > 600 || /["'()\\\s<>]/.test(u)) return '';
+    if (/^assets\/[a-z0-9\/._-]+\.(?:jpe?g|png|webp)$/i.test(u)) return u;
+    var x, host = '';
+    try { x = new URL(u, d.baseURI); } catch (e) { return ''; }
+    try { host = new URL((w.OTP_SUPABASE || {}).url || '').host; } catch (e) {}
+    if (x.protocol === 'https:' && host && x.host === host && /^\/storage\/v1\/object\/public\/(?:cards|spaces)\//.test(x.pathname)) return x.href;
+    if (x.origin === w.location.origin && /\.(?:jpe?g|png|webp)$/i.test(x.pathname)) return x.href;
+    return '';
+  }
   function friends() {
     var list = d.querySelectorAll('.friends .creator');
     Array.prototype.forEach.call(list, function (a) {
+      var pic = a.querySelector('.creator-pic'); if (!pic || pic.classList.contains('has')) return;
       var m = /^c\/([a-z0-9-]+)\/$/.exec(a.getAttribute('href') || '');
-      var f = m && FACES[m[1]]; if (!f) return;
-      var pic = a.querySelector('.creator-pic'); if (!pic) return;
+      var f = m && FACES[m[1]];
+      var src = f ? 'assets/cathedral/av/' + f + '.jpg' : okPhoto(pic.getAttribute('data-photo'));
+      if (!src) return;
       var probe = new Image();
       probe.onload = function () {
         // the markup sets `background:` inline (the gradient), which resets size and position, so all three go on together
-        pic.style.backgroundImage = 'url("assets/cathedral/av/' + f + '.jpg")'; pic.style.backgroundSize = 'cover'; pic.style.backgroundPosition = '50% 20%';
+        pic.style.backgroundImage = 'url("' + src + '")'; pic.style.backgroundSize = 'cover'; pic.style.backgroundPosition = '50% 20%';
         pic.classList.add('has');
       };
-      probe.src = 'assets/cathedral/av/' + f + '.jpg';
+      probe.src = src;
     });
   }
 
@@ -351,6 +396,7 @@
 
   function boot() {
     housePack(); door(); lastNight(); nextUp(); friends(); tipbox(); houseFeed();
+    w.addEventListener('otp:spotlight', friends);
     if (d.readyState === 'complete') idle(threeD); else w.addEventListener('load', function () { idle(threeD); }, { once: true });
   }
   if (d.readyState === 'loading') d.addEventListener('DOMContentLoaded', boot, { once: true }); else boot();

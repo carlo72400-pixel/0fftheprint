@@ -1,21 +1,30 @@
 /* THE ROLL (10/11). His call on the People tab: "make people like an instagram feed for the members",
  * then "make it private, photos only", and the house's nights fill it while members warm up.
+ * Wave 2 (his call 1): the Roll is MEMBERS ONLY for real. It reads roll_feed(60, photos) (045), not the public
+ * take_feed, and what you post here stays behind the door. Home's Take is the public one.
  *
  *   THE DOOR     members only (html[data-door="in"], painted by cathedral.js off door.js). A stranger gets
  *                the door card and nothing else; Open A Pack under it stays public.
- *   POST         photo first: pick a photo, write a line, post. Same OTP calls as the timeline's composer
- *                (uploadTakePhoto / uploadImage, then post), same rules (a line with it, 12 a day for a
- *                casual member). The page reloads onto #roll so the new post lands through one render path.
+ *   POST         photo first: pick a photo, write a line, post. post({..., membersOnly: true}), so it never shows
+ *                on Home. A casual member's photo goes up through uploadTakePhoto(file, {roll: true}) (the take
+ *                bucket, an hour's cache, not a year), a card holder's through uploadImage. Same rules as the
+ *                timeline (a line is optional, 12 a day for a casual member). The page reloads onto #roll so the
+ *                new post lands through one render path. 'Your posts' is compose/, every post you made.
  *   THIS WEEK    a circle for everyone who posted in the last 7 days, ring in their accent, tap = their
  *                newest post. Fewer than three? Faces of members with pages (wall_here) fill the row.
- *   THE ROLL     the photo posts off take_feed(60): the same posts as The Take on Home, photos only, the
- *                photo leads. Plus one card per night the house shot (events/events.json), newest first.
- *                Hearts, fire, skull, eye and comments are the timeline's own wiring
- *                (window.OTPWireReactions), so a tap here is the same tap as on Home. Double tap = heart.
+ *   THE ROLL     the photo posts off roll_feed(60, photos): members only, the photo leads. A post made in Home's
+ *                box shows here too and says On Home (everyone can see that one). Plus one card per night the
+ *                house shot (events/events.json), newest first. Hearts, fire, skull, eye and comments are the
+ *                timeline's own wiring (window.OTPWireReactions), so a tap here is the same tap as on Home.
+ *                Double tap = heart. Your own post: Edit (your words, in place) and Delete. The desk: Pull on
+ *                anybody else's (deskHide, so it is hidden, not gone: the board can put it back).
  *   CLIPS        the video posts (card holders can post video), one row.
- *   A NAME       tap one, their page opens as a sheet: avatar, name, seat, posts, a grid of their photos,
- *                and the link to their page (a card holder's /c/, a member's space in the Crypt).
- *   EVERY FRAME  30 of the house's frames at random, three across, tap = the gallery at that frame.
+ *   A NAME       tap one, their page opens as a sheet: avatar, name, seat, posts, a grid of their photos, the
+ *                frames they marked, and their links: a card holder's card (/c/) and, for anybody on the Wall,
+ *                their page in the Crypt. Faces and names come off OTP.people() (044's one list: roster.json
+ *                with the cards and the dark seats folded in), keyed by card slug.
+ *   FRAMES YOU'RE IN  the frames you marked "I'm in this one" (my_frames, by name since 043), 30, then Show all.
+ *                Every frame (30 at random) came off by his call 4: it repeated Home's Contact Sheet.
  *
  * Everything fails quiet. ⛔ Run stamp.py after editing. ⛔ No em dashes in copy. ⛔ No arch shapes.
  */
@@ -59,29 +68,29 @@
   function getJSON(url) { return fetch(url, { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }); }
   function door() { return root.getAttribute('data-door'); }
 
-  /* ---------- who is who: card art for card holders and the desk, their own pic for a member ---------- */
+  /* ---------- who is who: one list for faces and names (OTP.people(), 044) ---------- */
+  // roster.json with the cards folded in: a holder's own card photo is item.photo (the house art when they set
+  // none), and a banned, closed or demoted holder's seat is already dark (left out). Keyed by the card slug and
+  // its tight form. ⛔ TWO KEYS: The Ink holds `theink`, WUN MOR holds `wunmor`, so a feed row's slug finds the seat.
   var ROSTER = { bySlug: {}, byTight: {} };
   function learn(items) {
     (items || []).forEach(function (x) {
       if (!x || !x.name) return;
-      var rec = { name: x.name, photo: x.photo || '', accent: x.accent || '', seat: x.type_label || '' };
-      ROSTER.bySlug[slugify(x.name)] = rec; ROSTER.byTight[tight(x.name)] = rec;
+      var rec = { name: x.display_name || x.name, photo: x.photo || '', accent: x.accent || '', seat: x.type_label || '' };
+      var slug = String(x.card_slug || '').trim().toLowerCase() || slugify(x.name);   // an older list with no card_slug goes by its name
+      if (slug && !ROSTER.bySlug[slug]) ROSTER.bySlug[slug] = rec;
+      if (tight(slug) && !ROSTER.byTight[tight(slug)]) ROSTER.byTight[tight(slug)] = rec;
     });
   }
-  // The card art a card holder uploaded (/card/, or "Tap to change your photo" on /my/), off the cards view by slug.
-  // /my/ promises "your card photo is your face across the site", so it wins over the roster art; the roster is the floor.
-  var CARDPHOTO = {};
-  function learnCards(rows) {
-    (rows || []).forEach(function (rw) { if (rw && rw.card_slug && rw.card_photo) { CARDPHOTO[rw.card_slug] = rw.card_photo; CARDPHOTO[tight(rw.card_slug)] = rw.card_photo; } });
-  }
-  function cardPhoto(slug) { return slug ? (CARDPHOTO[slug] || CARDPHOTO[tight(slug)] || '') : ''; }
+  function seatOf(slug) { slug = String(slug || '').trim().toLowerCase(); return slug ? (ROSTER.bySlug[slug] || ROSTER.byTight[tight(slug)] || null) : null; }
   function who(r) {
     var kind = r.kind || 'member';
-    var rec = (kind !== 'member') ? (ROSTER.bySlug[r.card_slug || ''] || ROSTER.byTight[tight(r.card_slug || '')] || ROSTER.byTight[tight(r.display_name || '')]) : null;
-    var name = (rec && rec.name) || r.display_name || (kind === 'desk' ? 'THE DESK' : 'Member');
+    var rec = kind !== 'member' ? seatOf(r.card_slug) : null;
+    // one profile: the name they go by (the database's), the seat's name only when the row has none
+    var name = r.display_name || (rec && rec.name) || (kind === 'desk' ? 'THE DESK' : 'Member');
     var link = kind === 'member' ? (r.sid ? 'wall/#s-' + r.sid : '') : (r.card_slug ? 'c/' + encodeURIComponent(r.card_slug) + '/' : '');
-    // a card holder: their uploaded card art, then the roster's, then whatever picture the feed carries
-    var photo = kind === 'member' ? safe(r.pic) : (av(cardPhoto(r.card_slug)) || av(rec && rec.photo) || av(r.pic));
+    // a card holder: their card photo off the one list (the roster's art when they set none), then whatever the feed carries
+    var photo = kind === 'member' ? safe(r.pic) : (av(rec && rec.photo) || av(r.pic));
     return { key: (kind === 'member' ? 'm:' + (r.sid || tight(r.display_name)) : 'c:' + (r.card_slug || tight(name))),
       name: name, photo: photo, link: link, kind: kind, sid: r.sid || '',
       // the card's own seat line (THE LENS), the same one Home prints
@@ -96,30 +105,39 @@
   }
 
   /* ---------- the door ---------- */
+  // A closed account paints like 'wait' (door.js), with its key on Your account. Banned stays the quiet 'wait' (023).
+  function closedDoor() {
+    var k = d.getElementById('nav-key');
+    return root.getAttribute('data-door') === 'wait' && !!k && /(^|\/)my\/#account$/.test(k.getAttribute('href') || '');
+  }
   function doorCard(state) {
     mount.innerHTML = '';
     var c = el('div', 'rl-door');
     c.innerHTML = '<img src="assets/cathedral/a/join.webp" alt="" width="96" height="96" decoding="async">' +
       '<b>Members only.</b><p>The Roll is where the people in the house post their photos. It stays behind the door.</p>' +
-      (state === 'wait' ? '<p class="rl-door-l"><a href="wall/">One more step at the Crypt</a> and you are in.</p>'
+      (state === 'wait' && closedDoor() ? '<p class="rl-door-l">This account is closed. <a href="my/#account">Your account &rarr;</a></p>'
+        : state === 'wait' ? '<p class="rl-door-l"><a href="wall/">One more step at the Crypt</a> and you are in.</p>'
         : '<p class="rl-door-l"><a href="join/?next=home">Log in</a> or <a href="wall/">join the Crypt</a>. All it takes is an Instagram.</p>');
     mount.appendChild(c);
   }
 
-  /* ---------- POST: photo first ---------- */
+  /* ---------- POST: photo first, members only ---------- */
   function composer(me, canPost, casual, box) {
-    // ⛔ TWO KEYS: The Ink holds `theink`, WUN MOR holds `wunmor`, so the tight slug comes before the name
-    var mine = me && me.profile ? (ROSTER.bySlug[me.profile.card_slug || ''] || ROSTER.byTight[tight(me.profile.card_slug || '')] || ROSTER.byTight[tight(me.profile.display_name || '')]) : null;
-    var meP = { name: (me && me.profile && me.profile.display_name) || 'You',
-      photo: casual ? '' : (av(me.profile.card_photo) || av(cardPhoto(me.profile.card_slug)) || av(mine && mine.photo)), accent: '' };
+    // the face comes off the same one list as the feed, by card slug
+    var prof = (me && me.profile) || {};
+    var mine = seatOf(prof.card_slug);
+    var meP = { name: prof.display_name || 'You', photo: casual ? '' : (av(mine && mine.photo) || av(prof.card_photo)), accent: '' };
     box.className = 'rl-post';
     if (!canPost) { box.innerHTML = '<p class="rl-note">Put your Instagram in at <a href="wall/">the Crypt</a> and you can post here.</p>'; return; }
     box.innerHTML = '<div class="rl-post-top"></div>' +
       '<label class="rl-pick"><input type="file" accept="' + (casual ? 'image/*' : 'image/*,video/*') + '" hidden><span class="rl-pick-b">&#43; ' + (casual ? 'Post a photo' : 'Post a photo or clip') + '</span></label>' +
       '<div class="rl-draft" hidden><div class="rl-prev"></div><textarea maxlength="800" rows="2" placeholder="A line, if you want one" aria-label="Your line"></textarea>' +
-      '<div class="rl-draft-row"><button type="button" class="rl-x">Remove</button><span class="rl-msg" role="status"></span><button type="button" class="rl-go" disabled>Post</button></div></div>';
-    box.querySelector('.rl-post-top').appendChild(avatar(meP));
-    box.querySelector('.rl-post-top').appendChild(el('span', 'rl-post-who', '<b>' + esc(meP.name) + '</b><span>' + (casual ? 'photos only, twelve a day' : 'photos, GIFs and clips') + '</span>'));
+      '<div class="rl-draft-row"><button type="button" class="rl-x">Remove</button><span class="rl-msg" role="status"></span><button type="button" class="rl-go" disabled>Post</button></div></div>' +
+      '<p class="rl-fine">Only members see the Roll. For everyone, post on the Take on <a href="#take">Home</a>.</p>';
+    var top = box.querySelector('.rl-post-top');
+    top.appendChild(avatar(meP));
+    top.appendChild(el('span', 'rl-post-who', '<b>' + esc(meP.name) + '</b><span>' + (casual ? 'members only · photos, twelve a day' : 'members only · photos and clips') + '</span>'));
+    var yours = el('a', 'rl-mine', 'Your posts'); yours.href = 'compose/'; top.appendChild(yours);
     var input = box.querySelector('input[type=file]'), draft = box.querySelector('.rl-draft'), prev = box.querySelector('.rl-prev'),
         ta = box.querySelector('textarea'), go = box.querySelector('.rl-go'), msg = box.querySelector('.rl-msg');
     var file = null, url = null, upFile = null, upUrl = null;
@@ -148,15 +166,16 @@
       go.disabled = true; var label = go.textContent;
       (async function () {
         try {
-          if (upFile !== file || !upUrl) { go.textContent = 'Uploading…'; upUrl = casual ? await OTP.uploadTakePhoto(file) : await OTP.uploadImage(file); upFile = file; }
+          // a Roll photo is cached for an hour, not a year: one the desk or its owner takes down must not live on in phones
+          if (upFile !== file || !upUrl) { go.textContent = 'Uploading…'; upUrl = casual ? await OTP.uploadTakePhoto(file, { roll: true }) : await OTP.uploadImage(file); upFile = file; }
           go.textContent = 'Posting…';
-          await OTP.post({ text: text, imageUrl: upUrl });
+          await OTP.post({ text: text, imageUrl: upUrl, membersOnly: true });   // ⛔ 045: always says which, and this is the Roll
           upFile = null; upUrl = null;
-          say('Up.');
+          say('Up. Members only.');
           setTimeout(function () { location.replace(location.pathname + '?r=' + Date.now() + '#roll'); }, 500);
         } catch (e) {
           var m = (e && e.message) || '';
-          say(/^(Slow down|That is twenty|That is twelve|The desk pulled|Log in first|That clip|That photo|Photos, GIFs|Photos only)/.test(m) ? m : (m || 'That did not go through.'), true);
+          say(/^(Slow down|That is twenty|That is twelve|The desk pulled|Log in first|That clip|That photo|Photos, GIFs|Photos only|The Roll)/.test(m) ? m : (m || 'That did not go through.'), true);
           go.disabled = false; go.textContent = label;
         }
       })();
@@ -164,17 +183,27 @@
   }
 
   /* ---------- the cards ---------- */
+  // edited_at is stamped by the database on any change to the words or the photo, the desk's included,
+  // "so the marker cannot be dodged" (guard_post_update), so the card says so
+  function meta(r, p) { return '<b>' + esc(p.name) + '</b><span>' + esc(p.seat) + ' · ' + esc(ago(r.created_at)) + (r.edited_at ? ' · edited' : '') + '</span>'; }
+  function cap(r, p) { return '<b>' + esc(p.name) + '</b> ' + esc(String(r.text).slice(0, 800)).replace(/\n/g, '<br>'); }
   function postCard(r, p) {
     var c = el('article', 'rl-card'); c.dataset.key = p.key; c.dataset.pid = String(r.id);
     if (p.accent) c.style.setProperty('--ring', p.accent);
     var head = el('div', 'rl-head');
     var a = el('a', 'rl-who'); a.href = p.link || '#roll'; a.dataset.who = p.key;
     a.appendChild(avatar(p));
-    // edited_at is stamped by the database on any change to the words or the photo, the desk's included,
-    // "so the marker cannot be dodged" (guard_post_update), so the card says so
-    a.appendChild(el('span', 'rl-nm', '<b>' + esc(p.name) + '</b><span>' + esc(p.seat) + ' · ' + esc(ago(r.created_at)) + (r.edited_at ? ' · edited' : '') + '</span>'));
+    a.appendChild(el('span', 'rl-nm', meta(r, p)));
     head.appendChild(a);
-    if (r.mine && r.id != null) { var del = el('button', 'rl-del', 'Delete'); del.type = 'button'; del.dataset.del = String(r.id); head.appendChild(del); }
+    // 045: a post made in Home's box shows here too, and to everyone on the Take, so it says so. A Roll post says
+    // nothing: behind the door is the Roll's normal.
+    if (r.members_only === false) { var pub = el('span', 'rl-tag rl-pub', 'On Home'); pub.title = 'Everyone can see this one. It went up on Home.'; head.appendChild(pub); }
+    if (r.mine && r.id != null) {
+      var ed = el('button', 'rl-edit', 'Edit'); ed.type = 'button'; ed.dataset.edit = String(r.id); head.appendChild(ed);
+      var del = el('button', 'rl-del', 'Delete'); del.type = 'button'; del.dataset.del = String(r.id); head.appendChild(del);
+    } else if (DESK && r.id != null) {
+      var pl = el('button', 'rl-pull', 'Pull'); pl.type = 'button'; pl.dataset.pull = String(r.id); head.appendChild(pl);
+    }
     c.appendChild(head);
     var img = safe(r.image_url);
     var pic = el('div', 'rl-pic');
@@ -182,7 +211,7 @@
     else { pic.innerHTML = '<img src="' + esc(img) + '" alt="' + esc(r.image_alt || '') + '" loading="lazy" decoding="async">'; }
     c.appendChild(pic);
     var main = el('div', 'rl-main');
-    if (r.text) main.appendChild(el('p', 'rl-cap', '<b>' + esc(p.name) + '</b> ' + esc(String(r.text).slice(0, 800)).replace(/\n/g, '<br>')));
+    if (r.text) main.appendChild(el('p', 'rl-cap', cap(r, p)));
     var key = 'p' + r.id;
     main.insertAdjacentHTML('beforeend',
       '<div class="react-bar" data-post="' + esc(key) + '" data-base-likes="0">' +
@@ -220,6 +249,43 @@
     return c;
   }
   var HOUSE = { key: 'house', name: 'THE HOUSE', photo: '', link: 'c/vamppsych/', seat: 'The desk', accent: ACC.pink };
+
+  /* ---------- Edit: your own words, in place (updatePost; the database stamps it edited) ---------- */
+  function editPost(btn) {
+    var c = btn.closest('.rl-card'), r = c && POSTS[c.dataset.pid], p = c && PEOPLE[c.dataset.pid];
+    if (!r || !p || c.querySelector('.rl-ed') || !w.OTP || !OTP.updatePost) return;
+    var main = c.querySelector('.rl-main'), old = main.querySelector('.rl-cap');
+    var box = el('div', 'rl-ed',
+      '<textarea maxlength="800" rows="3" placeholder="A line, if you want one" aria-label="Your words"></textarea>' +
+      '<div class="rl-draft-row"><button type="button" class="rl-ed-no">Never mind</button><span class="rl-msg" role="status"></span><button type="button" class="rl-ed-go">Save</button></div>');
+    var ta = box.querySelector('textarea'), go = box.querySelector('.rl-ed-go'), msg = box.querySelector('.rl-msg');
+    ta.value = r.text || '';
+    if (old) old.hidden = true;
+    main.insertBefore(box, main.firstChild);
+    btn.disabled = true;
+    function close() { box.remove(); var k = main.querySelector('.rl-cap'); if (k) k.hidden = false; btn.disabled = false; }
+    box.querySelector('.rl-ed-no').addEventListener('click', close);
+    go.addEventListener('click', function () {
+      var text = ta.value.trim();
+      if (text === String(r.text || '').trim()) { close(); return; }
+      go.disabled = true; go.textContent = 'Saving…'; msg.textContent = ''; msg.classList.remove('bad');
+      OTP.updatePost(r.id, { text: text }).then(function (row) {
+        r.text = row && row.text != null ? row.text : text;
+        r.edited_at = (row && row.edited_at) || new Date().toISOString();
+        var k = main.querySelector('.rl-cap');
+        if (r.text) { if (!k) { k = el('p', 'rl-cap'); main.insertBefore(k, box.nextSibling); } k.innerHTML = cap(r, p); }
+        else if (k) k.remove();
+        var nm = c.querySelector('.rl-nm'); if (nm) nm.innerHTML = meta(r, p);
+        close();
+      }).catch(function (e) {
+        var m = (e && e.message) || '';
+        msg.textContent = /^(That one|Slow down|The Roll|A post|The desk|Log in)/.test(m) ? m : 'That did not save. Try again.';
+        msg.classList.add('bad');
+        go.disabled = false; go.textContent = 'Save';
+      });
+    });
+    ta.focus();
+  }
 
   /* ---------- THIS WEEK ---------- */
   function week(rows, people, box) {
@@ -295,8 +361,12 @@
     var top = el('div', 'rl-pan-top'); top.appendChild(avatar(p, 'big'));
     var photos = rows.filter(function (r) { return r.key === p.key && safe(r.image_url) && !isVideo(r.image_url); });
     var nPosts = rows.filter(function (r) { return r.key === p.key; }).length;
-    top.appendChild(el('div', 'rl-pan-who', '<b>' + esc(p.name) + '</b><span>' + esc(p.seat) + '</span><em>' + nPosts + (nPosts === 1 ? ' post here' : ' posts here') + '</em>' +
-      (p.link ? '<a href="' + esc(p.link) + '">' + (p.kind === 'member' ? 'Their page in the Crypt' : 'Their page') + ' &rarr;</a>' : '')));
+    // anybody who shows on the Wall has a page in the Crypt: a card holder too (roll_feed sends their sid), not only
+    // somebody whose link is their Crypt page. A card holder's card is the other link.
+    var sid = /^[a-z0-9]+$/.test(p.sid || '') ? p.sid : ((/^wall\/#s-([a-z0-9]+)$/.exec(p.link || '') || [])[1] || '');
+    var go = (p.kind !== 'member' && p.link ? '<a href="' + esc(p.link) + '">Their card &rarr;</a>' : '') +
+      (sid ? '<a href="wall/#s-' + esc(sid) + '">Their page in the Crypt &rarr;</a>' : '');
+    top.appendChild(el('div', 'rl-pan-who', '<b>' + esc(p.name) + '</b><span>' + esc(p.seat) + '</span><em>' + nPosts + (nPosts === 1 ? ' post here' : ' posts here') + '</em>' + go));
     var x = el('button', 'rl-pan-x', '&times;'); x.type = 'button'; x.setAttribute('aria-label', 'Close'); top.appendChild(x);
     pan.appendChild(top);
     var grid = el('div', 'rl-grid');
@@ -307,21 +377,16 @@
     });
     if (!photos.length) grid.appendChild(el('p', 'rl-g-none', 'No photos yet.'));
     pan.appendChild(grid);
-    // the frames they marked "I'm in this one" (037), members only, for anyone who shows on The Wall. That is a
-    // card holder too (take_feed sends their sid), not only somebody whose link is their Crypt page.
-    var sid = /^[a-z0-9]+$/.test(p.sid || '') ? p.sid : ((/^wall\/#s-([a-z0-9]+)$/.exec(p.link || '') || [])[1] || '');
-    if (sid && w.OTP && OTP.configured && OTP.sb) {
+    // the frames they marked "I'm in this one" (037, by name since 043), members only, for anyone with a sid
+    if (sid && w.OTP && OTP.framesOf && OTP.frameThumb && OTP.frameLink && OTP.frameName) {
       var fr = el('div', 'rl-pan-frames'); pan.appendChild(fr);
-      Promise.resolve(OTP.sb().rpc('frames_of', { p_sid: sid })).then(function (r) {
-        if (!r || r.error || !Array.isArray(r.data) || !r.data.length) { fr.remove(); return; }
-        var shown = r.data.slice(0, 30), slugs = [];
-        shown.forEach(function (x) { if (x && x.event_slug && slugs.indexOf(x.event_slug) === -1) slugs.push(x.event_slug); });
-        return Promise.all(slugs.map(night)).then(function (lists) {
-          var by = {}; slugs.forEach(function (sl, i) { by[sl] = lists[i]; });
-          fr.innerHTML = '<div class="rl-wk-h"><b>In our frames</b><span>' + (r.data.length > shown.length ? shown.length + ' of ' : '') + r.data.length + (r.data.length === 1 ? ' frame' : ' frames') + ' they marked</span></div>' +
-            '<div class="rl-grid">' + shown.map(function (x) {
-              return '<a class="rl-g" href="events/' + esc(x.event_slug) + '/#f' + ((x.frame | 0) + 1) + '"><img src="' + esc(thumbOf(x.event_slug, x.frame | 0, by[x.event_slug])) + '" alt="" loading="lazy" decoding="async"></a>';
-            }).join('') + '</div>';
+      OTP.framesOf(sid).then(function (list) {
+        list = (Array.isArray(list) ? list : []).filter(function (f) { return f && f.event_slug; });
+        if (!list.length) { fr.remove(); return; }
+        var shown = list.slice(0, 30);
+        return tiles(shown).then(function (h) {
+          fr.innerHTML = '<div class="rl-wk-h"><b>In our frames</b><span>' + (list.length > shown.length ? shown.length + ' of ' : '') + list.length + (list.length === 1 ? ' frame' : ' frames') + ' they marked</span></div>' +
+            '<div class="rl-grid">' + h + '</div>';
         });
       }).catch(function () { fr.remove(); });
     }
@@ -333,57 +398,79 @@
     setTimeout(function () { s.classList.add('open'); }, 20);
   }
 
-  /* A night's own list of frames (events/<slug>/data.json), asked for once. A tag is stored as the frame's
-     place in that list, and the thumb's file name is NOT always that place plus one: some nights skip numbers
-     (08-25 The Mix jumps from 020 to 023) and clips are v01_t.jpg and on. Building the name from the number
-     drew somebody else's photo or a broken tile, so the name comes from the list, the guess only if it fails. */
-  var NIGHTS = {};
+  /* A frame tile. Since 043 a tag names its photo ('017', 'v01'), so a photo taken down or added never moves anybody's
+     tag: the thumb is media/<name>_t.jpg and the link lands on that photo (#m<name>). A tag from before 043 with no
+     name goes by its place in the night's own list (events/<slug>/data.json, asked for once): the name comes from the
+     list, the number guess only if the list fails. Some nights skip numbers (08-25 The Mix jumps from 020 to 023) and
+     clips are v01_t.jpg and on, so building the name from the number drew somebody else's photo or a broken tile. */
+  var NIGHTS = {}, TITLES = {};
   function night(slug) { return NIGHTS[slug] || (NIGHTS[slug] = getJSON('events/' + encodeURIComponent(slug) + '/data.json')); }
   function thumbOf(slug, frame, data) {
     var m = data && Array.isArray(data.media) ? data.media[frame] : null;
     var t = m && /^media\/[\w.-]+\.(jpe?g|png|webp)$/i.test(String(m.thumb || '')) ? m.thumb : 'media/' + String(frame + 1).padStart(3, '0') + '_t.jpg';
     return 'events/' + slug + '/' + t;
   }
-
-  /* ---------- EVERY FRAME ---------- */
-  function frames(box) {
-    getJSON('content/frames.json').then(function (fr) {
-      var all = [];
-      ((fr && fr.nights) || []).forEach(function (nt) { (nt.f || []).forEach(function (f) { all.push({ s: nt.s, t: nt.t, n: f[1], i: f[0] }); }); });
-      if (!all.length) { box.remove(); return; }
-      box.className = 'rl-frames';
-      box.innerHTML = '<div class="rl-wk-h"><b>Every frame</b><span>' + all.length + ' frames from ' + ((fr && fr.nights) || []).length + ' nights · tap one</span><button type="button" class="rl-deal">Deal again</button></div><div class="rl-fgrid"></div>';
-      var g = box.querySelector('.rl-fgrid');
-      function deal() {
-        var pick = all.slice(); for (var i = pick.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = pick[i]; pick[i] = pick[j]; pick[j] = t; }
-        g.innerHTML = pick.slice(0, 30).map(function (x) {
-          return '<a class="rl-g" href="events/' + esc(x.s) + '/#f' + (x.i + 1) + '" title="' + esc(x.t) + '"><img src="events/' + esc(x.s) + '/media/' + esc(x.n) + '_t.jpg" alt="" loading="lazy" decoding="async"></a>';
-        }).join('');
-      }
-      deal(); box.querySelector('.rl-deal').addEventListener('click', deal);
+  function tiles(list) {
+    var need = [];
+    list.forEach(function (x) { if (!OTP.frameThumb(x.event_slug, x.media) && need.indexOf(x.event_slug) === -1) need.push(x.event_slug); });
+    return Promise.all(need.map(night)).then(function (lists) {
+      var by = {}; need.forEach(function (sl, i) { by[sl] = lists[i]; });
+      return list.map(function (x) {
+        var slug = x.event_slug, m = x.media, src = OTP.frameThumb(slug, m);
+        if (!src) {
+          var data = by[slug], f = x.frame | 0, it = data && Array.isArray(data.media) ? data.media[f] : null;
+          m = (it && OTP.frameName(it.thumb)) || '';
+          src = m ? OTP.frameThumb(slug, m) : thumbOf(slug, f, data);
+        }
+        var href = OTP.frameLink(slug, m), t = TITLES[slug] || '';
+        if (!src || !href) return '';    // a night slug that does not read
+        return '<a class="rl-g" href="' + esc(href) + '"' + (t ? ' title="' + esc(t) + '"' : '') + '><img src="' + esc(src) + '" alt="" loading="lazy" decoding="async"></a>';
+      }).join('');
     });
   }
 
+  /* ---------- FRAMES YOU'RE IN ---------- */
+  function framesIn(box) {
+    if (!w.OTP || !OTP.myFrames || !OTP.frameThumb || !OTP.frameLink || !OTP.frameName) { box.remove(); return; }
+    box.className = 'rl-frames';
+    OTP.myFrames().then(function (list) {
+      list = (Array.isArray(list) ? list : []).filter(function (x) { return x && x.event_slug; });
+      if (!list.length) {
+        box.innerHTML = '<div class="rl-wk-h"><b>Frames you\'re in</b></div>' +
+          '<div class="rl-f-none"><p>Nothing marked yet. Find yourself in a night\'s photos and tap <b>I\'m in this one</b>.</p><a class="rl-find" href="#find">Find Yourself</a></div>';
+        return;
+      }
+      var n = list.length;
+      box.innerHTML = '<div class="rl-wk-h"><b>Frames you\'re in</b><span>' + n + ' you marked · tap one</span></div><div class="rl-fgrid"></div>' +
+        (n > 30 ? '<button type="button" class="rl-all">Show all ' + n + '</button>' : '');
+      var g = box.querySelector('.rl-fgrid'), all = box.querySelector('.rl-all');
+      tiles(list.slice(0, 30)).then(function (h) { g.innerHTML = h; });
+      if (all) all.addEventListener('click', function () { all.disabled = true; tiles(list).then(function (h) { g.innerHTML = h; all.remove(); }, function () { all.disabled = false; }); });
+    }).catch(function () { box.remove(); });
+  }
+
   /* ---------- the roll itself ---------- */
-  var RENDERED = null;
+  var RENDERED = null, DESK = false, POSTS = {}, PEOPLE = {};
   async function roll() {
     if (RENDERED === 'in') return; RENDERED = 'in';
     mount.innerHTML = '<p class="rl-note">Loading the roll…</p>';
     var post = el('div'), wk = el('div'), feed = el('div', 'rl-feed'), clips = el('div'), fr = el('div');
     var results = await Promise.all([
-      getJSON('content/roster.json'), getJSON('content/creators.json'), getJSON('events/events.json'),
-      (w.OTP && OTP.configured && OTP.sb) ? Promise.resolve(OTP.sb().rpc('take_feed', { p_limit: 60 })).then(function (r) { return (r && !r.error && Array.isArray(r.data)) ? r.data : []; }).catch(function () { return []; }) : Promise.resolve([]),
-      (w.OTP && OTP.me) ? OTP.me().catch(function () { return null; }) : Promise.resolve(null),
-      // the faces only: raced like the homepage's own cards read, so a slow answer never holds the roll up
-      (w.OTP && OTP.configured && OTP.cards) ? Promise.race([OTP.cards().catch(function () { return []; }),
-        new Promise(function (r) { setTimeout(function () { r([]); }, 2000); })]) : Promise.resolve([])
+      // the one list (044): roster.json with the cards and the dark seats folded in; its own 3 s cap, roster.json is the floor
+      (w.OTP && OTP.people) ? OTP.people().catch(function () { return []; }) : getJSON('content/roster.json').then(function (j) { return (j && j.items) || []; }),
+      getJSON('events/events.json'),
+      // 045: the Roll's own read, members only (a stranger never gets this far: the door card stops them)
+      (w.OTP && OTP.rollFeed) ? OTP.rollFeed(60, { photos: true }).catch(function () { return []; }) : Promise.resolve([]),
+      (w.OTP && OTP.me) ? OTP.me().catch(function () { return null; }) : Promise.resolve(null)
     ]);
-    learn(results[0] && results[0].items); learn(results[1] && results[1].items); learnCards(results[5]);
-    var house = ROSTER.bySlug.vamppsych || ROSTER.byTight.vamppsych; if (house) HOUSE.photo = av(cardPhoto('vamppsych')) || av(house.photo);
-    var nights = ((results[2] && results[2].items) || []).filter(function (n) { return n && n.slug && n.date; });
-    var rows = results[3].filter(function (r) { return r && safe(r.image_url); });
-    var me = results[4];
-    var people = {}; rows.forEach(function (r) { var p = who(r); people[r.id] = p; r.key = p.key; });
+    learn(Array.isArray(results[0]) ? results[0] : []);
+    var house = seatOf('vamppsych'); if (house) HOUSE.photo = av(house.photo);
+    var nights = ((results[1] && results[1].items) || []).filter(function (n) { return n && n.slug && n.date; });
+    nights.forEach(function (n) { TITLES[n.slug] = n.title || ''; });
+    var rows = (Array.isArray(results[2]) ? results[2] : []).filter(function (r) { return r && safe(r.image_url); });
+    var me = results[3];
+    DESK = !!(me && me.profile && me.profile.is_admin);
+    var people = PEOPLE; rows.forEach(function (r) { var p = who(r); people[r.id] = p; POSTS[r.id] = r; r.key = p.key; });
     var approved = !!(me && me.profile && me.profile.approved), canPost = approved;
     if (me && !canPost && w.OTP && OTP.canTake) { try { canPost = await OTP.canTake(); } catch (e) {} }
     mount.innerHTML = '';
@@ -405,19 +492,33 @@
       vids.forEach(function (r) { var p = people[r.id]; var c = el('div', 'rl-clip'); c.innerHTML = '<video src="' + esc(safe(r.image_url)) + '" controls playsinline preload="metadata"></video><span>' + esc(p.name) + '</span>'; rail.appendChild(c); });
       mount.appendChild(clips);
     }
-    frames(fr); mount.appendChild(fr);
+    framesIn(fr); mount.appendChild(fr);
     // the timeline's own reactions and comments, once index.html has handed them over
     var t0 = Date.now(); (function wire() {
       if (w.OTPWireReactions) { try { w.OTPWireReactions(feed); } catch (e) {} return; }
       if (Date.now() - t0 < 8000) setTimeout(wire, 150);
     })();
-    // names open the sheet; delete is the member's own
+    // names open the sheet; Edit and Delete are the member's own; Pull is the desk's
     mount.addEventListener('click', function (ev) {
       var del = ev.target.closest && ev.target.closest('.rl-del');
       if (del) {
         ev.preventDefault(); if (!w.OTP || !OTP.deletePost || !confirm('Take this one down?')) return;
         del.disabled = true;
         OTP.deletePost(del.dataset.del).then(function () { var c = del.closest('.rl-card'); if (c) c.remove(); }).catch(function () { del.disabled = false; });
+        return;
+      }
+      var ed = ev.target.closest && ev.target.closest('.rl-edit');
+      if (ed) { ev.preventDefault(); editPost(ed); return; }
+      var pull = ev.target.closest && ev.target.closest('.rl-pull');
+      if (pull) {
+        ev.preventDefault(); if (!w.OTP || !OTP.deskHide || !confirm('Pull this one? It comes off the Roll, and off Home if it is there too. The board can put it back.')) return;
+        pull.disabled = true;
+        OTP.deskHide('post', pull.dataset.pull, true).then(function () { var c = pull.closest('.rl-card'); if (c) c.remove(); }).catch(function (e) {
+          var m = (e && e.message) || '';
+          if (/already gone/i.test(m)) { var c = pull.closest('.rl-card'); if (c) c.remove(); return; }
+          // the reason goes in the button itself: a phone never shows a title
+          pull.disabled = false; pull.textContent = m ? m.slice(0, 40) : 'Did not pull'; pull.title = m;
+        });
         return;
       }
       var a = ev.target.closest && ev.target.closest('.rl-who'); if (!a) return;

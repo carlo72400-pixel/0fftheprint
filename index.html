@@ -39,22 +39,24 @@
 <link rel="preload" as="image" href="assets/cathedral/hero.webp" media="(min-width:561px)">
 <link rel="preload" as="image" href="assets/cathedral/hero-m.webp" media="(max-width:560px)">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700..900&family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Pirata+One&family=Luckiest+Guy&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" defer></script>
+<!-- ⛔ PINNED with SRI (Wave 2). The floating @2 let the CDN swap the library under the site with no commit:
+     it served 2.117.3 while the site was tested on 2.117.2. A new version is a new hash, on every page at once. -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" integrity="sha384-Rj26LVGvoeRVR6+mwQmFfcR3QOBEwT+ZmuCWpuiqeTzJpCs0ER4ITAWGb4Hiy3Ok" crossorigin="anonymous" defer></script>
 <script src="supabase-config.js?v=f1348482" defer></script>
-<script src="assets/js/desk.js?v=c10b36ef" defer></script>
-<script src="assets/js/door.js?v=cc6793cf" defer></script>
-<script src="assets/js/composer.js?v=64abdad9" defer></script>
-<script src="assets/js/edit.js?v=6f38a483" defer></script>
-<script src="assets/js/binder.js?v=e63104e6" defer></script>
-<script src="assets/js/cathedral.js?v=8668be8b" defer></script>
-<script src="assets/js/lounge.js?v=8d283bec" defer></script>
-<script src="assets/js/music.js?v=1c885448" defer></script>
-<script src="assets/js/people.js?v=41c2bf4b" defer></script>
-<script src="assets/js/photos.js?v=bb964946" defer></script>
+<script src="assets/js/desk.js?v=12f3e9e0" defer></script>
+<script src="assets/js/door.js?v=c30bcb85" defer></script>
+<script src="assets/js/composer.js?v=f7ec8eea" defer></script>
+<script src="assets/js/edit.js?v=46763485" defer></script>
+<script src="assets/js/binder.js?v=12b7dbe1" defer></script>
+<script src="assets/js/cathedral.js?v=a2494309" defer></script>
+<script src="assets/js/lounge.js?v=5a3b6868" defer></script>
+<script src="assets/js/music.js?v=ce46d8f9" defer></script>
+<script src="assets/js/people.js?v=2f3206de" defer></script>
+<script src="assets/js/photos.js?v=58c9be8c" defer></script>
 <script>/* tabs: pick the page before first paint, off the #hash. Old links like /#desk still land right.
    ⛔ M has to name every main.feed > section[id] (the router below the body only corrects it after the
    page has painted, so a missing id flashes Home first: /#roll from the Crypt did). Add new sections here. */
-(function(){var M={do:'home',frames:'home',take:'home',dates:'home',find:'photos',drops:'photos',artpacks:'photos',tape:'photos',videos:'photos',looks:'photos',work:'photos',map:'photos',takedown:'photos',slate:'stories',desk:'stories',catalog:'stories',music:'music',battle:'music',played:'music',holders:'music',texas:'music',lineage:'music',lineup:'music',releases:'music',rooms:'music',putuson:'music',roll:'people',open:'people',roster:'people',pitch:'more',experts:'more'},T=['home','photos','stories','music','people','more'],h=(location.hash||'').slice(1),d=document.documentElement;d.className+=' tabs';d.setAttribute('data-tab',T.indexOf(h)>=0?h:(M[h]||'home'));})();</script>
+(function(){var M={do:'home',frames:'home',take:'home',dates:'home',find:'photos',drops:'photos',artpacks:'photos',tape:'photos',videos:'photos',looks:'photos',work:'photos',map:'photos',takedown:'photos',slate:'stories',desk:'stories',catalog:'stories',music:'music',battle:'music',played:'music',holders:'music',texas:'music',lineage:'music',lineup:'music',releases:'music',rooms:'music',putuson:'music',roll:'people',open:'people',roster:'people','acct-strip':'more',pitch:'more',experts:'more'},T=['home','photos','stories','music','people','more'],h=(location.hash||'').slice(1),d=document.documentElement;d.className+=' tabs';d.setAttribute('data-tab',T.indexOf(h)>=0?h:(M[h]||'home'));})();</script>
 <style>
   :root{
     --bg:#0a0a0d;
@@ -3858,6 +3860,43 @@
   .tk-acts button{border:0;background:none;padding:2px 0;color:var(--muted);font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;}
   .tk-acts button:hover{color:var(--pink-glow);}
   .tk-empty{font-family:var(--f-mono);font-size:11.5px;color:var(--muted);}
+  /* ---- Wave 2 (calls 8, 9): fix your own comment, block, report ---- */
+  .tk-acts{flex-wrap:wrap;gap:4px 14px;}
+  .tk-acts button{min-height:32px;}
+  .tk-acts button.sure{color:var(--pink-glow);}
+  .tk-acts .tk-done{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);align-self:center;}
+  .tk-ed{display:grid;gap:8px;margin-top:4px;}
+  .tk-ed textarea{width:100%;min-height:44px;max-height:160px;resize:vertical;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:400 16px/1.4 var(--f-body);}   /* 16px or iOS zooms the page */
+  .tk-ed .tk-row{display:flex;flex-wrap:wrap;gap:8px;}
+  .tk-ed button,.tk-why button{min-height:40px;padding:0 14px;border:1px solid var(--line);border-radius:999px;background:none;color:var(--ink);font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;cursor:pointer;}
+  .tk-ed button.go,.tk-why button.go{border:0;background:linear-gradient(180deg,var(--pink),var(--pink-deep));color:#0a0a0d;font-weight:800;}
+  .tk-ed button:disabled,.tk-why button:disabled{opacity:.5;cursor:default;}
+  .tk-why{display:grid;gap:8px;margin-top:6px;padding:10px 12px;border:1px dashed var(--line);border-radius:12px;}
+  .tk-list li > .tk-why{grid-column:1 / -1;margin-top:0;}
+  .tk-why b{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700;}
+  .tk-why .tk-chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .tk-why input{width:100%;min-height:40px;padding:8px 12px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:400 16px/1.4 var(--f-body);}   /* 16px or iOS zooms */
+  .tk-msg{font-family:var(--f-mono);font-size:11px;line-height:1.5;color:var(--muted);margin-top:4px;}
+  .tk-msg.err{color:#ff8a8a;}
+  /* member card art is a portrait: keep the face in the circle, not the chest. paintBg() drops data-bg once it has
+     painted, so postHTML also marks those avatars with .av-card; the class is what holds after the paint. */
+  .post-av .av[data-bg*="/public/cards/"],.post-av .av.av-card{background-position:50% 26%;}
+  /* a button that reads as a link (Log out) */
+  .linkbtn{display:inline;border:0;background:none;padding:0;margin:0;font:inherit;color:var(--pink-glow);cursor:pointer;text-decoration:underline;text-underline-offset:3px;}
+  .linkbtn:hover{color:var(--ink);}
+  .linkbtn:disabled{opacity:.6;cursor:default;}
+  #footer-acct a,#footer-acct .linkbtn{font-size:12px;}
+  #footer-acct .linkbtn{text-decoration:none;}       /* the footer's links carry no underline; neither does its button */
+  #acct-strip[hidden]{display:none !important;}
+  #acct-strip{margin-bottom:22px;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:var(--panel);}
+  .acct-line{margin:0;font-size:14px;line-height:1.7;color:var(--muted);overflow-wrap:anywhere;}
+  .acct-line b{color:var(--ink);}
+  .acct-line a{color:var(--pink-glow);}
+  .acct-line .linkbtn{min-height:32px;}
+  /* one line that says what just happened (Blocked.), then goes */
+  .otp-toast{position:fixed;left:50%;bottom:calc(76px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:500;
+    max-width:min(92vw,460px);padding:12px 16px;border:1px solid var(--pink-deep);border-radius:12px;background:rgba(13,12,17,.96);
+    color:var(--ink);font-size:13.5px;line-height:1.45;box-shadow:0 8px 30px rgba(0,0,0,.5);}
   @media (max-width:820px){
     /* a little tighter on a phone so the timeline starts sooner */
     #do{margin-bottom:18px;}
@@ -3867,11 +3906,11 @@
 </style>
 <!-- THE CATHEDRAL (10/3): the homepage skin. Scoped under html.cath, loaded last on purpose. -->
 <link rel="stylesheet" href="assets/css/pack.css?v=3c0b0f68">
-<link rel="stylesheet" href="assets/css/binder.css?v=00f24508">
+<link rel="stylesheet" href="assets/css/binder.css?v=f47d0aee">
 <link rel="stylesheet" href="assets/css/cathedral.css?v=a8c3c33f">
 <link rel="stylesheet" href="assets/css/lounge.css?v=2d07e1fc">
-<link rel="stylesheet" href="assets/css/music.css?v=07ac4683">
-<link rel="stylesheet" href="assets/css/people.css?v=041f32cf">
+<link rel="stylesheet" href="assets/css/music.css?v=815cfdc9">
+<link rel="stylesheet" href="assets/css/people.css?v=1b2deba6">
 <link rel="stylesheet" href="assets/css/photos.css?v=94911edf">
 </head>
 <body>
@@ -4019,29 +4058,21 @@
         <dt>No.</dt><dd>0TP &middot; pretty-first, with teeth</dd>
         <dt>Last seen</dt><dd id="bc-seen">in the rooms</dd>
       </dl>
-      <div class="bc-acts"><a href="#drops">Find your photos</a><a href="#open">Open a pack</a><a href="wall/#cal">What&rsquo;s coming</a><a href="#pitch">Pitch the desk</a></div>
+      <!-- What's coming: dates/ (the Run, public) for a stranger; door.js points every a[data-cal] at the Crypt's
+           calendar for a member (call 6: the Run is the one place). -->
+      <div class="bc-acts"><a href="#find">Find your photos</a><a href="#open">Open a pack</a><a href="dates/" data-cal>What&rsquo;s coming</a><a href="#pitch">Pitch the desk</a></div>
     </section>
 
-    <section class="card">
-      <h3>On The Slate</h3>
-      <div class="featured" style="margin-bottom:8px;">
-        <span class="dot"></span>
-        <span><em>Interview 002</em> · <a href="ink/" style="color:inherit;">The Ink</a> <span style="color:var(--pink-glow);">(out now)</span></span>
-      </div>
-      <div class="featured" style="margin-bottom:8px;">
-        <span class="dot" style="background:var(--dye-blue);box-shadow:0 0 8px var(--dye-blue),0 0 14px var(--dye-blue);"></span>
-        <span><em>The Voice</em> · KAV-MAN <span style="color:var(--muted);">(loading)</span></span>
-      </div>
-      <div class="featured">
-        <span class="dot" style="background:#fff;box-shadow:0 0 8px #fff,0 0 14px #fff;"></span>
-        <span><em>The Signal</em> · VIRGOSGATEWAY <span style="color:var(--muted);">(classified)</span></span>
-      </div>
-    </section>
+    <!-- ON THE SLATE came out in Wave 2 (call 13). It was hand-typed, and it said "loading" and "classified"
+         for weeks about things nobody had promised. The cover on the Stories tab picks the newest story itself. -->
 
-    <section class="card">
+    <!-- THE ROOMS (call 13): site.json rooms_box (one room per line, "NAME · a few words") and rooms_box_sub,
+         rewordable from the board. The lines below are the floor; the page paints the file over them and
+         hides the box when both are empty. -->
+    <section class="card" id="rooms-box">
       <h3>The Rooms</h3>
-      <p style="color:var(--muted);font-size:12px;margin:-6px 0 10px;font-family:var(--f-mono);letter-spacing:.12em;text-transform:uppercase;">where the desk stands</p>
-      <div class="featured" style="font-size:12.5px;line-height:1.9;display:block;color:#d6d0da;font-family:var(--f-mono);">
+      <p id="rooms-box-sub" style="color:var(--muted);font-size:12px;margin:-6px 0 10px;font-family:var(--f-mono);letter-spacing:.12em;text-transform:uppercase;">where the desk stands</p>
+      <div class="featured" id="rooms-box-list" style="font-size:12.5px;line-height:1.9;display:block;color:#d6d0da;font-family:var(--f-mono);">
         ZENHOUSE · <em style="color:var(--pink);">fridays</em><br>
         THE MIX · <em style="color:var(--pink);">st mary's strip</em><br>
         RAH RAH ROOM · <em style="color:var(--pink);">they called us</em><br>
@@ -4064,8 +4095,12 @@
          OWN PAGE rather than off to somebody else's platform, because the
          page is ours and it is the better destination. Cam is the one
          outside name on the list, so Cam is the one link that leaves.
-         Add a name: copy a row, set the handle, the tag and the href. -->
-    <section class="card friends">
+         Wave 2 (call 13): the card list keeps it. Once OTP.people() answers, a
+         c/<slug>/ row whose card is gone (out, banned, closed, taken back) drops,
+         and a card holder with no row here joins before the open seat. Nobody
+         is added by hand any more: make them a card holder on the board. The
+         rows below are the floor for a page whose database did not answer. -->
+    <section class="card friends" id="spotlight">
       <h3>Creator Spotlight</h3>
       <p class="fr-count">people we&rsquo;re watching</p>
       <div class="creator-list">
@@ -4180,12 +4215,12 @@
         </span>
       </a>
       <!-- The tiles (10/4 order). What a stranger can do comes first; the door with a code on it comes last.
-           The What's coming tile opens The Wall's calendar (10/4: one calendar, not two) and reads the house's next date
-           off the database once it answers (cathedral.js). -->
+           The What's coming tile opens the Run: dates/ for a stranger, the Crypt's calendar for a member (door.js sets every
+           a[data-cal], Wave 2 call 6), and reads the house's next date off the database once it answers (cathedral.js). -->
       <div class="do-rail" id="do-rail">
         <a class="do wall" id="do-wall" href="wall/" hidden><img class="di" src="assets/cathedral/a/wall.webp" alt="" width="44" height="44" decoding="async"><b>CRYPT</b><span>tonight&rsquo;s flyers</span></a>
-        <a class="do" href="#drops"><img class="di" src="assets/cathedral/a/photos.webp" alt="" width="44" height="44" decoding="async"><b>Find your photos</b><span>every night we shot</span></a>
-        <a class="do" href="wall/#cal" id="do-next"><img class="di" src="assets/cathedral/a/coming.webp" alt="" width="44" height="44" decoding="async"><b>What&rsquo;s coming</b><span>the calendar, in the Crypt</span></a>
+        <a class="do" href="#find"><img class="di" src="assets/cathedral/a/photos.webp" alt="" width="44" height="44" decoding="async"><b>Find your photos</b><span>every night we shot</span></a>
+        <a class="do" href="dates/" id="do-next" data-cal><img class="di" src="assets/cathedral/a/coming.webp" alt="" width="44" height="44" decoding="async"><b>What&rsquo;s coming</b><span>what the house has coming</span></a>
         <a class="do" href="#open"><img class="di" src="assets/cathedral/a/pack.webp" alt="" width="44" height="44" decoding="async"><b>Open a pack</b><span>one random card</span></a>
         <a class="do" href="#music"><img class="di" src="assets/cathedral/a/music.webp" alt="" width="44" height="44" decoding="async"><b>Play something</b><span>on rotation</span></a>
         <a class="do" href="#desk"><img class="di" src="assets/cathedral/a/story.webp" alt="" width="44" height="44" decoding="async"><b>Read a story</b><span>from the house</span></a>
@@ -4209,7 +4244,7 @@
     <section id="take" data-tab="home">
       <div class="section-head">
         <h2>The Take <span class="accent">the timeline</span></h2>
-        <div class="sub">everybody posts &nbsp;·&nbsp; art, thoughts, whatever</div>
+        <div class="sub">out in the open &nbsp;·&nbsp; art, thoughts, whatever</div>
       </div>
       <!-- THE TIP LINE (10/4). Signed out, the first box on the timeline was a lock ("Log in to post").
            A stranger cannot post, but a stranger can talk: this is the sidebar's tip box, moved to
@@ -4228,21 +4263,13 @@
       </a>
     </section>
 
-    <!-- ===== THE DROPS — leads the page. Most arrivals want THEIR photos. ===== -->
     <!-- ===== THE PHOTOS TAB, rebuilt 10/11 (his picks: find yourself by room or date, the pack game, the craft,
          housekeeping, the wildcards). assets/js/photos.js draws #find, #artpacks, #looks, the tape pills, #map and
          #takedown from events.json, looks.json (looks.py), rooms.json, video.json and packs_list (migration 037).
-         The Reel came out: it had been hidden and empty since the roster stopped featuring videos. ===== -->
+         The Reel came out: it had been hidden and empty since the roster stopped featuring videos.
+         THE DROPS came out in Wave 2 (call 4): Find Yourself is the one way to your photos. An old #drops link
+         opens #find (the router below). .drops-rail stays in the stylesheet: the tape and the stories use it. ===== -->
     <section id="find" data-tab="photos"></section>
-
-    <section id="drops" data-tab="photos">
-      <div class="section-head">
-        <h2>The Drops <span class="accent">find yours</span></h2>
-        <div class="sub">every night we shot &nbsp;·&nbsp; sealed &nbsp;·&nbsp; full quality</div>
-      </div>
-      <div class="drops-rail" id="drops-rail"></div>
-      <a class="drops-more" href="events/">every drop &rarr;</a>
-    </section>
 
     <section id="artpacks" data-tab="photos"></section>
 
@@ -4315,7 +4342,7 @@
          Rotation (it owns the desk's overlay and the tile builder); assets/js/music.js draws the rest
          from content/music.json and what this page hands it (window.__OTP_MUSIC, then otp:music).
          Every section below has an id, so #battle, #lineup, #releases... open this tab at that spot.
-         ⛔ #drops is the PHOTOS tab's section: the music countdown is #releases, never reuse an id. ===== -->
+         ⛔ #drops is taken: an old link to the Photos tab's drops opens #find. The music countdown is #releases, never reuse an id. ===== -->
     <section id="music" data-tab="music">
       <div class="section-head">
         <h2>Music <span class="accent">on rotation</span></h2>
@@ -4342,11 +4369,13 @@
 
     <!-- ===== THE ROLL (10/11): the People tab is the members' photo feed. people.js draws it into
          #roll-mount: the door card for a stranger, the roll for a member (post, this week, the photos
-         and the house's nights, clips, every frame). Private by his call; Open A Pack under it is public. ===== -->
+         and the house's nights, clips, frames you're in). Private by his call; Open A Pack under it is public.
+         Since 045 (call 1) a Roll post is members only in the database too: it never reaches the Take,
+         take_feed or a stranger. The Take above is the open one. ===== -->
     <section id="roll" data-tab="people">
       <div class="section-head">
         <h2>The Roll <span class="accent">members only</span></h2>
-        <div class="sub">photos from the people in the house &nbsp;·&nbsp; post one &nbsp;·&nbsp; tap a name</div>
+        <div class="sub">behind the door &nbsp;·&nbsp; post a photo &nbsp;·&nbsp; tap a name</div>
       </div>
       <div id="roll-mount"></div>
     </section>
@@ -4363,6 +4392,12 @@
     <!-- THE ROSTER grid came out 10/7 (his call, "grid only"). roster.json still
          feeds Open A Pack, the binder, ?card= links and the member pages. -->
 
+
+    <!-- ===== YOUR ACCOUNT (Wave 2, call 7): who is signed in, the way to /my/#account, and Log out.
+         Hidden for a stranger; door.js shows it for every other state and wires the button. ===== -->
+    <section id="acct-strip" data-tab="more" hidden>
+      <p class="acct-line">Signed in as <b id="acct-name"></b>. <a href="my/#account">Your account</a> &middot; <button type="button" id="acct-out" class="linkbtn">Log out</button></p>
+    </section>
 
     <!-- ===== PITCH US ===== -->
     <section id="pitch" data-tab="more">
@@ -4422,7 +4457,7 @@
       &nbsp;·&nbsp; <a href="#" target="_blank" rel="noopener" data-social="instagram">IG</a>
       / <a href="#" target="_blank" rel="noopener" data-social="tiktok">TikTok</a>
       / <a href="#" target="_blank" rel="noopener" data-social="youtube">YouTube</a><br>
-      <a href="press/" style="font-size:12px;">Press &amp; masthead &rarr;</a><br><a href="portfolio/" style="font-size:12px;">Giancarlo Ortiz &middot; portfolio &rarr;</a><br><a href="join/?next=home" id="footer-key" style="font-size:12px;">Log in &rarr;</a><br>
+      <a href="press/" style="font-size:12px;">Press &amp; masthead &rarr;</a><br><a href="portfolio/" style="font-size:12px;">Giancarlo Ortiz &middot; portfolio &rarr;</a><br><a href="join/?next=home" id="footer-key" style="font-size:12px;">Log in &rarr;</a><span id="footer-acct" hidden><br><a href="my/#account">Your account &rarr;</a> &middot; <button type="button" id="footer-out" class="linkbtn">Log out</button></span><br>
       <span style="color:#5a5560;">Off the record stays off the record.</span>
     </div>
   </div>
@@ -4443,6 +4478,17 @@
   var SEC = {};
   Array.prototype.forEach.call(main.children, function(el){ if (el.tagName === 'SECTION' && el.id && el.dataset.tab) SEC[el.id] = el.dataset.tab; });
   SEC.roster = 'people';   // the grid is gone (10/7); an old #roster link still opens People
+  SEC.drops = 'photos';    // The Drops is gone (Wave 2, call 4); an old #drops link lands on Find Yourself (route() below)
+  // An old #dates link (the Run used to be drawn on this page) goes to the Run itself, wherever What's coming points:
+  // dates/ for a stranger, the Crypt's calendar for a member. door.js paints #do-next after this script runs, so the
+  // state it last painted on this phone is read first (the same value it is about to paint), then the tile's own href.
+  function calHref(){
+    var cal = '';
+    try { cal = (JSON.parse(localStorage.getItem('otp_door') || 'null') || {}).cal || ''; } catch(e){}
+    if (cal === 'dates/' || cal === 'wall/#cal') return cal;
+    var a = document.getElementById('do-next');
+    return (a && a.getAttribute('href')) || 'dates/';
+  }
   var cur = root.getAttribute('data-tab') || 'home', touched = false;
   function paint(){
     document.querySelectorAll('[data-tab-link]').forEach(function(a){
@@ -4471,6 +4517,8 @@
   }
   function route(hash, o){
     var h = String(hash || '').replace(/^#/, '');
+    if (h === 'dates') { location.replace(calHref()); return true; }
+    if (h === 'drops') h = 'find';
     if (TABS.indexOf(h) >= 0) { show(h, o); return true; }
     if (SEC[h]) { o = o || {}; o.section = h === 'do' ? null : h; show(SEC[h], o); return true; }
     return false;
@@ -4482,8 +4530,10 @@
     if (href === '#') { e.preventDefault(); return; }             // a placeholder link goes nowhere, it does not jump Home
     if (href.charAt(0) !== '#' || href.length < 2) return;
     var h = href.slice(1);
-    if (TABS.indexOf(h) < 0 && !SEC[h]) return;
+    if (TABS.indexOf(h) < 0 && !SEC[h] && h !== 'dates') return;
     e.preventDefault();
+    if (h === 'dates') { route(h); return; }
+    if (h === 'drops') href = '#find';
     if (location.hash !== href) { try { history.pushState(null, '', href); } catch(err){} }
     route(h, {scroll: true});
   });
@@ -4494,7 +4544,11 @@
   ['wheel', 'touchmove', 'keydown', 'pointerdown'].forEach(function(ev){ window.addEventListener(ev, function(){ touched = true; }, {passive: true, once: true}); });
   paint();
   var h0 = (location.hash || '').slice(1);
-  if (SEC[h0] && h0 !== 'do') show(SEC[h0], {section: h0, settle: true});
+  if (h0 === 'dates') route(h0);
+  else {
+    if (h0 === 'drops') { h0 = 'find'; try { history.replaceState(null, '', '#find'); } catch(e){} }
+    if (SEC[h0] && h0 !== 'do') show(SEC[h0], {section: h0, settle: true});
+  }
 
   /* Members: the Wall tile. door.js shows #nav-wall for anyone who is in; mirror that, never decide it here. */
   var navWall = document.getElementById('nav-wall'), tile = document.getElementById('do-wall');
@@ -4604,6 +4658,10 @@
   let slatePinAt = 0;   // 10/10: when the desk last saved slate.next over the cover (ms). 0 = never pinned.
   let slateHeld = null; // 10/10: an UNPINNED slate.next, kept so the pencil can re-pin it with its own words
   let events = [];
+  // Wave 2 (call 2): the roster seats the desk hid on the board ('roster' rows by name, 'c:<slug>' rows for a card
+  // holder with no seat), as card slugs. applyList() already drops a hidden seat; this also keeps its card holder
+  // from coming back in as a database-only card when the cards are merged in (OTP.peopleMerge, The Take below).
+  let rosterHide = [];
   try {
     // FAULT-ISOLATED ON PURPOSE. This used to be seven bare fetches under one catch,
     // so a single malformed JSON file blanked the entire homepage. Now one bad file
@@ -4656,6 +4714,18 @@
     // edits an overlay and bake.py folds it back down later. The git file is
     // always the render floor: an empty table changes nothing, and a failed
     // fetch costs the overlay only, never the page.
+    // Wave 2 (call 12): 'otp:overrides' goes out ONCE on every path (in time, late, failed, no backend), because
+    // cathedral.js holds the timeline's stories for it (2 s at most) to drop a pulled story and show a retitled one.
+    // window.__OTP_OVERRIDES is set only when the rows are KNOWN. Never on a failed or skipped read: edit.js reads
+    // undefined as "still loading" and opens no pencil over his unbaked edits.
+    let ovSaid = false;
+    const groupOv = rows => { const b = {}; (rows || []).forEach(o => { if (o && o.section) (b[o.section] = b[o.section] || []).push(o); }); return b; };
+    const ovDone = rows => {
+      if (rows !== undefined) window.__OTP_OVERRIDES = rows;
+      if (ovSaid) return;
+      ovSaid = true;
+      try { window.dispatchEvent(new Event('otp:overrides')); } catch (e) {}
+    };
     try {
       // desk.js is `defer`, so it may not have defined OTP by the time this
       // inline script gets here. A bare `if (window.OTP)` silently skipped the
@@ -4680,24 +4750,25 @@
       // them over his unbaked edits (and un-hid a hidden frame). The page itself
       // stays on the committed draw; only the pencils read the late rows.
       const ovP = readyOTP ? OTP.siteOverrides() : null;
+      // A rejected read is a late answer of nothing, not a reason to skip 'otp:overrides' below.
       const ov = ovP
-        ? await Promise.race([ovP, new Promise(r => setTimeout(() => r(null), 2500))])
+        ? await Promise.race([ovP, new Promise(r => setTimeout(() => r(null), 2500))]).catch(() => null)
         : null;
-      if (ovP && !ov) ovP.then(rows => {
-        const b = {};
-        (rows || []).forEach(o => { (b[o.section] = b[o.section] || []).push(o); });
-        window.__OTP_OVERRIDES = b;
-      }).catch(() => {});
+      // no client after the wait: nothing will come on this load. Said now, but nothing is set: desk.js may still
+      // arrive late, and a pencil must not read "no edits" off a read that never happened.
+      if (!ovP) ovDone();
+      if (ovP && !ov) ovP.then(rows => ovDone(groupOv(rows))).catch(() => ovDone());
       if (ov) {
-        const bySection = {};
-        (ov || []).forEach(o => { (bySection[o.section] = bySection[o.section] || []).push(o); });
+        const bySection = groupOv(ov);
+        window.__OTP_OVERRIDES = bySection;          // the rows are known: the pencils may read them even if a step below throws
 
-        // allowAdd is OPT IN, and only THE WORK passes it. An override whose
-        // key matches nothing was always treated as inert, which is correct for
-        // a rotation seed whose link got rewritten, but it is what made "add a
-        // frame" laptop only: the overlay could patch a frame the page already
-        // knew about and could not introduce one. A row carrying its own src is
-        // not a failed patch, it is a new item.
+        // allowAdd is OPT IN. An override whose key matches nothing was always
+        // treated as inert, which is correct for a rotation seed whose link got
+        // rewritten, but it is what made "add a frame" laptop only: the overlay
+        // could patch a frame the page already knew about and could not introduce
+        // one. Wave 2: allowAdd is a test on the row's patch, so each list says
+        // what a NEW item needs (a frame its src, a track a Spotify link). A row
+        // that passes is not a failed patch, it is a new item.
         const applyList = (list, rows, keyOf, allowAdd) => {
           if (!rows || !rows.length) return list;
           const map = {};
@@ -4716,11 +4787,11 @@
               return { it: r ? Object.assign({}, it, r.patch || {}) : it,
                        s: r && r.sort != null ? r.sort : 0 };
             });
-          if (allowAdd) {
+          if (typeof allowAdd === 'function') {
             rows.forEach(r => {
               if (seen[r.item_key] || r.hidden) return;
               const patch = r.patch || {};
-              if (!patch.src) return;          // no picture, no frame
+              if (!allowAdd(patch)) return;    // no picture, no frame; no Spotify link, no track
               built.push({ it: Object.assign({}, patch), s: r.sort != null ? r.sort : 0 });
             });
           }
@@ -4731,11 +4802,32 @@
         // renders assets/grid/work/x.jpg, so a full-path key would never match
         // the element the pencil was attached to.
         const base = v => String(v || '').split('/').pop();
-        work   = applyList(work,   bySection.work,   it => base(it.src), true);
+        work   = applyList(work,   bySection.work,   it => base(it.src), p => !!p.src);
         // rotation seeds key on the spotify id in their link, which survives a
-        // reorder and a retitle in a way an array index does not
-        rotation = applyList(rotation, bySection.rotation, it => parseSpotifyId(it.link) || '');
+        // reorder and a retitle in a way an array index does not. A row whose key
+        // is no seed and whose patch carries a Spotify link is a track the desk
+        // added on the board (ADD A TRACK), and it joins the list.
+        // ⛔ A swap row bake.py already folded (its key is the OLD seed, its link
+        // the seed rotation.json now holds) is not a new track: without the seed
+        // check it came back as a second copy with no artist.
+        const seedIds = new Set(rotation.map(it => parseSpotifyId(it.link)).filter(Boolean));
+        rotation = applyList(rotation, bySection.rotation, it => parseSpotifyId(it.link) || '',
+          p => { const id = parseSpotifyId(p.link); return !!id && !seedIds.has(id); });
+        // The seats the desk hid, as card slugs, read BEFORE applyList drops them (a hidden seat is gone after).
+        // A seat row is keyed by its name; a 'c:<slug>' row hides a card holder who has no seat.
+        (bySection.roster || []).forEach(r => {
+          if (!r || !r.hidden) return;
+          const k = String(r.item_key || ''), m = /^c:([a-z0-9][a-z0-9-]{0,60})$/.exec(k);
+          if (m) { rosterHide.push(m[1]); return; }
+          const seat = roster.find(it => String(it.name || '') === k);
+          if (seat && seat.card_slug) rosterHide.push(String(seat.card_slug));
+          if (slugify(k)) rosterHide.push(slugify(k));
+        });
         roster = applyList(roster, bySection.roster, it => String(it.name || ''));
+        // THE WORD (call 12): a 'desk' row is keyed by the story's link (word/<slug>/). Hidden pulls it off the
+        // shelves, the catalog, the cover and (cathedral.js) the timeline; a patch retitles, rewords or reshelves it
+        // (title, dek, kicker, shelf; shelf '' goes back to following the kicker). bake.py folds both into git.
+        desk = applyList(desk, bySection.desk, it => String(it.link || ''));
 
         // 'site' is in 014's CHECK but nothing used it: the hero kicker, the
         // one liner and the ticker were git-only, so a typo in the ticker meant
@@ -4761,7 +4853,7 @@
           // HERE, in bake.py, and read as an array by whatever paints it.
           // Three places. Miss one and the committed file and the live page
           // disagree about the type.
-          if (r.item_key === 'ticker_headlines' || r.item_key === 'why.bullets')
+          if (r.item_key === 'ticker_headlines' || r.item_key === 'why.bullets' || r.item_key === 'rooms_box')
             setPath(site, r.item_key, String(v).split('|').map(x => x.trim()).filter(Boolean));
           else setPath(site, r.item_key, v);
         });
@@ -4797,9 +4889,9 @@
         // creators only applies once migration 017 widens the section CHECK.
         // Until then bySection.creators is simply empty and this is a no-op.
         creators = applyList(creators, bySection.creators, it => String(it.name || ''));
-        window.__OTP_OVERRIDES = bySection;
+        ovDone(bySection);
       }
-    } catch (e) { console.warn('overrides skipped:', e.message); }
+    } catch (e) { console.warn('overrides skipped:', e.message); ovDone(); }
   } catch (err) {
     console.error('Content load failed', err);
     document.body.innerHTML = '<div style="padding:40px;color:#fff;font-family:system-ui;text-align:center;">Content failed to load. Refresh, or DM <a href="https://instagram.com/vamppsych" style="color:#ff79c6;">@vamppsych</a>.</div>';
@@ -4810,13 +4902,15 @@
   // ---- WHAT'S COMING: the next date, for the Home tile ----
   // 10/4: the Run used to be drawn here too (a month grid and a rail on More), which made two calendars: this one
   // and The Wall's. There is one now. The house's dates are read into The Wall when it opens; this page only asks
-  // for the next few so the tile can say "Next: Tue Oct 13" (cathedral.js paints it). The tile opens wall/#cal.
+  // for the next few so the tile can say "Next: Tue Oct 13" (cathedral.js paints it). The tile opens the Run
+  // (dates/, or the Crypt's calendar for a member: door.js). Wave 2 (call 6): OTP.upcoming(60) is the page's ONE
+  // calendar read, shared with the Music tab's lineup (music.js asks for the same 60), so this asks for 60 and keeps 3.
   // ⛔ Y-M-D strings only. new Date('2026-09-15') is UTC MIDNIGHT, the evening BEFORE in San Antonio.
   (async () => {
     if (!document.getElementById('do-next')) return;
     try {
       if (!(window.OTP && OTP.configured)) return;
-      const run = await OTP.calendar(3);
+      const run = await (OTP.upcoming ? OTP.upcoming(60) : OTP.calendar(3));
       if (!Array.isArray(run) || !run.length) return;
       window.__OTP_RUN = run.slice(0, 3).map(r => ({on_date: r.on_date, title: r.title, venue: r.venue, city: r.city}));   // plain fields only
       window.dispatchEvent(new Event('otp:run'));
@@ -4826,45 +4920,9 @@
     }
   })();
 
-  // ---- THE DROPS rail ----
-  const dropsRail = document.getElementById('drops-rail');
-  if (dropsRail) {
-    // newest first, and only nights that actually have frames
-    const drops = events
-      .filter(e => e && e.slug && (e.count | 0) > 0)
-      .sort((a, b) => String(b.date).localeCompare(String(a.date)))
-      .slice(0, 8);
-    if (!drops.length) {
-      dropsRail.closest('section').remove();
-    } else {
-      drops.forEach(e => {
-        const a = document.createElement('a');
-        a.className = 'drop party';
-        a.href = 'events/' + e.slug + '/';
-        const when = e.date_short || String(e.date || '');
-        // THE PARTY PACK (10/3). Every night is a full-art booster: events/<slug>/pack.webp
-        // is the night's own photo printed edge to edge on the pouch (makepack.py draws it,
-        // newevent.py calls that for every new night). A night with none wears the house pack.
-        // The title is printed over it here, as the pack's logo.
-        // ⛔ Still a LINK. The tear happens on the night's own page (sealed.js), so
-        // somebody hunting their photo is one tap from it, same as before.
-        const title = String(e.title || '');
-        a.innerHTML =
-          '<span class="pp">' +
-            '<img class="pp-w" src="events/' + esc(e.slug) + '/pack.webp" alt="" width="520" height="878" loading="lazy">' +
-            '<span class="pp-t' + (title.length <= 7 ? ' short' : title.length > 16 ? ' long' : '') + '">' + esc(title) + '</span>' +
-            '<span class="pp-d">' + esc(when) + '</span>' +
-          '</span>' +
-          '<span class="cap">' +
-            '<span class="v">' + esc(e.venue || e.title || '') + '</span>' +
-            '<span class="d">' + (e.count | 0) + ' frames &middot; sealed</span>' +
-          '</span>';
-        const wr = a.querySelector('.pp-w');
-        if (wr) wr.addEventListener('error', () => { wr.src = 'assets/cathedral/pack-house.webp'; }, { once: true });
-        dropsRail.appendChild(a);
-      });
-    }
-  }
+  // ---- THE DROPS rail came out in Wave 2 (call 4). Find Yourself (photos.js, #find) is the one way to your
+  // photos now, and an old #drops link lands there (the tab router). The night packs it drew still open from
+  // the dock, the timeline's night cards and every night page.
 
   // ---- THE TAPE ----
   // The newest authored cuts. Posters only, no <video> on the homepage: 8 clips
@@ -5268,6 +5326,77 @@
     if (handleLink) handleLink.textContent = site.handle;
   }
 
+  // THE ROOMS (call 13): site.json rooms_box, one room per line ("NAME · a few words"), and rooms_box_sub, both
+  // rewordable from the board. textContent only. The markup's lines are the floor for a site.json with neither key;
+  // both there and both empty hides the box. The first '·' splits the name from its words.
+  const roomsBox = document.getElementById('rooms-box');
+  if (roomsBox && ('rooms_box' in site || 'rooms_box_sub' in site)) {
+    const lines = (Array.isArray(site.rooms_box) ? site.rooms_box : String(site.rooms_box || '').split('|'))
+      .map(x => String(x == null ? '' : x).trim()).filter(Boolean).slice(0, 40);
+    const subTxt = String(site.rooms_box_sub || '').trim();
+    const rSub = document.getElementById('rooms-box-sub'), rList = document.getElementById('rooms-box-list');
+    roomsBox.hidden = !lines.length && !subTxt;
+    if (rSub) { rSub.textContent = subTxt; rSub.style.display = subTxt ? '' : 'none'; }
+    if (rList) {
+      rList.textContent = '';
+      lines.forEach((ln, i) => {
+        const at = ln.indexOf('·');
+        const name = at >= 0 ? ln.slice(0, at).trim() : ln, note = at >= 0 ? ln.slice(at + 1).trim() : '';
+        if (i) rList.appendChild(document.createElement('br'));
+        rList.appendChild(document.createTextNode(name + (note ? ' · ' : '')));
+        if (note) { const em = document.createElement('em'); em.style.color = 'var(--pink)'; em.textContent = note; rList.appendChild(em); }
+      });
+      rList.style.display = lines.length ? 'block' : 'none';
+    }
+  }
+
+  // CREATOR SPOTLIGHT (call 13): the card list keeps it. Once OTP.people() answers WITH the database in it, a
+  // hand-typed c/<slug>/ row whose card is gone (out, banned, closed, taken back, or hidden from the roster on the
+  // board) drops, and a card holder with no row joins before the open seat (never the house's own card). No answer,
+  // an empty one, or one with no card from the database in it (the cards read lost its race) keeps the markup as is.
+  // A new row carries its card photo in data-photo, and cathedral.js paints the faces again on 'otp:spotlight'.
+  (async () => {
+    const box = document.querySelector('#spotlight .creator-list');
+    if (!box || !(window.OTP && OTP.configured && OTP.people)) return;
+    let list = null;
+    try { list = await Promise.race([OTP.people(), new Promise(r => setTimeout(() => r(null), 4000))]); } catch (e) {}
+    if (!Array.isArray(list) || !list.some(x => x && x.hasDb)) return;
+    const hide = new Set(rosterHide.map(x => String(x).toLowerCase()));
+    const held = new Map();
+    list.forEach(x => {
+      const sl = String((x && x.card_slug) || '').toLowerCase();
+      if (x && x.hasDb && /^[a-z0-9][a-z0-9-]{0,60}$/.test(sl) && !hide.has(sl) && !held.has(sl)) held.set(sl, x);
+    });
+    const have = new Set();
+    box.querySelectorAll('a.creator').forEach(a => {
+      const m = /^c\/([a-z0-9-]+)\/$/.exec(a.getAttribute('href') || '');
+      if (!m) return;                              // Cam (outside) and the open seat stay
+      if (held.has(m[1])) have.add(m[1]); else a.remove();
+    });
+    const seat = box.querySelector('a.creator[href="#pitch"]');
+    const house = OTP.HOUSE_SLUG || 'vamppsych';
+    held.forEach((x, sl) => {
+      if (have.has(sl) || sl === house) return;
+      const name = String(x.display_name || x.name || sl).trim() || sl;
+      const a = document.createElement('a');
+      a.className = 'creator'; a.href = 'c/' + sl + '/';
+      const pic = document.createElement('div');
+      pic.className = 'creator-pic';
+      pic.style.background = 'linear-gradient(135deg, var(--pink-glow), var(--dye-blue))';
+      pic.textContent = (Array.from(name)[0] || '0').toUpperCase();
+      const ph = sized(safeUrl(x.photo), 'av');
+      if (ph) pic.dataset.photo = ph;
+      const meta = document.createElement('div'); meta.className = 'creator-meta';
+      const nm = document.createElement('div'); nm.className = 'creator-name'; nm.textContent = name;
+      const tg = document.createElement('div'); tg.className = 'creator-tag'; tg.textContent = String(x.tagline || '').trim().slice(0, 60) || 'card holder';
+      meta.appendChild(nm); meta.appendChild(tg);
+      const pl = document.createElement('div'); pl.className = 'creator-platform'; pl.textContent = '0TP';
+      a.appendChild(pic); a.appendChild(meta); a.appendChild(pl);
+      box.insertBefore(a, seat);
+    });
+    try { window.dispatchEvent(new Event('otp:spotlight')); } catch (e) {}
+  })();
+
   // (THIS IS US, the curators grid, came out 8/27 and its #curators-mount with it. `creators`
   // stays: the ?card= lookup, the booster and the pack pool still read it.)
 
@@ -5299,6 +5428,45 @@
         new Promise(r => setTimeout(() => r([]), LIVE_TIMEOUT_MS)),
       ]).catch(() => [])
     : Promise.resolve([]);
+  // Live stories (migration 010; since 045 the house's own from the board too) are asked for HERE, next to the
+  // other live reads, so the timeline's house news (cathedral.js, window.__OTP_HOUSE_LIVE) does not wait for the
+  // Stories tab to be drawn. Same race, same floor: losing it means the committed shelves alone.
+  const wordLiveP = (window.OTP && OTP.configured && OTP.wordStories)
+    ? Promise.race([
+        OTP.wordStories(24),
+        new Promise(r => setTimeout(() => r([]), LIVE_TIMEOUT_MS)),
+      ]).catch(e => { console.warn('member stories overlay skipped:', e.message); return []; })
+    : Promise.resolve([]);
+  // The day it went up, in desk.json's own MM.DD.YY (local day), so the tile shows a date and sorts
+  // with the rest of its shelf. Undated, pubDay read 0 and every live story filed after every dated one.
+  const liveDay = v => { const d = new Date(v || ''); return isNaN(d) ? ''
+    : String(d.getMonth() + 1).padStart(2, '0') + '.' + String(d.getDate()).padStart(2, '0') + '.' + String(d.getFullYear()).slice(2); };
+  // One live story as a desk.json item. Call 12: a HOUSE row (the desk wrote it on the board) is the house's
+  // story, on its own shelf under its own kicker, with no member byline. A member's goes on From The Floor.
+  const liveItem = s => ({
+    title: s.title,
+    kicker: s.house ? (String(s.kicker || '').trim() || 'THE WORD') : 'FROM THE FLOOR',
+    dek: s.dek,
+    date: liveDay(s.created_at),
+    lanes: ['story'],
+    // ⛔ index.html is itself a WRITER of desk items. Move the pill axis
+    //    to dept without stamping it here and every unbaked member story
+    //    goes invisible under every pill except All.
+    dept: 'story',
+    platform: 'SITE',
+    thumb: safeUrl(s.cover_url) || 'assets/take-01-manifesto.jpg',
+    link: 'word/live/?s=' + encodeURIComponent(s.slug),
+    by: s.house ? '' : (s.display_name || s.card_slug || ''),
+    shelf: s.house ? String(s.shelf || '') : '',
+  });
+  const deskSlugs = () => new Set((desk || []).map(x => String(x.link || '').replace(/^word\//, '').replace(/\/$/, '')));
+  // The house's live stories, for the timeline (cathedral.js waits on 'otp:houselive', 2 s at most). Plain fields.
+  wordLiveP.then(rows => {
+    const seeded = deskSlugs();
+    window.__OTP_HOUSE_LIVE = (Array.isArray(rows) ? rows : []).filter(x => x && x.house && x.slug && !seeded.has(x.slug)).map(liveItem);
+  }).catch(() => { window.__OTP_HOUSE_LIVE = []; })
+    .then(() => { try { window.dispatchEvent(new Event('otp:houselive')); } catch (e) {} });
+
   const tMount = document.getElementById('take-mount');
   if (tMount && take) {
     // Authors resolve out of the roster + curator cards, so a member's avatar
@@ -5322,18 +5490,28 @@
     // Built again after the card overlay below: a card holder's own photo and link land on the roster
     // objects there, and a copy taken only here kept the house art on their posts while /my/ told
     // them 'Your card photo is your face across the site'.
-    const fillCardPeople = () => [...(creators || []), ...(roster || [])].forEach(c => {
-      const key = slugify(c.name);
-      cardTight[tightKey(c.name)] = cardPeople[key] = {
-        name: c.name,
-        photo: c.photo || '',
-        link: c.link || '#',
-        seat: c.type_label || '',
-        handle: (c.link || '').includes('instagram.com')
-          ? '@' + (c.link || '').replace(/\/+$/, '').split('/').pop()
-          : (c.platform || '')
-      };
-    });
+    const fillCardPeople = () => {
+      // built from scratch each time: a seat that went dark in the merge must not keep its old face
+      [cardPeople, cardTight].forEach(m => Object.keys(m).forEach(k => { delete m[k]; }));
+      [...(creators || []), ...(roster || [])].forEach(c => {
+        const key = slugify(c.name);
+        const face = {
+          name: c.name,
+          photo: c.photo || '',
+          link: c.link || '#',
+          seat: c.type_label || '',
+          handle: (c.link || '').includes('instagram.com')
+            ? '@' + (c.link || '').replace(/\/+$/, '').split('/').pop()
+            : (c.platform || '')
+        };
+        cardTight[tightKey(c.name)] = cardPeople[key] = face;
+        // Wave 2: a post names its author by card slug, and a card of their own (_db) need not slugify from its name
+        if (c.card_slug) {
+          const k = String(c.card_slug).toLowerCase();
+          cardPeople[k] = cardPeople[k] || face; cardTight[tightKey(k)] = cardTight[tightKey(k)] || face;
+        }
+      });
+    };
     fillCardPeople();
 
     function timeAgo(iso){
@@ -5409,55 +5587,27 @@
     // the way live posts overlay take.json: the committed JSON is the render
     // floor, DB rows only override what a member actually saved. Same race, same
     // reason, and losing it just means the desk-authored cards show.
-    if (window.OTP && OTP.configured && OTP.cards) {
+    // Wave 2 (call 2, one profile): OTP.peopleMerge does the whole merge, the same
+    // one every page uses. A card row patches its seat (card_slug, then the name);
+    // a card holder with no seat joins as a card of their own (_db); a seat whose
+    // holder is banned, closed or demoted goes dark (dark_seats), and a seat the
+    // desk hid on the board stays out (rosterHide). It runs before the faces
+    // below, the Music tab's handoff and the pack pool, so all three see one list.
+    if (window.OTP && OTP.configured && OTP.cards && OTP.peopleMerge) {
       try {
-        const rows = await Promise.race([
-          OTP.cards(),
-          new Promise(r => setTimeout(() => r([]), LIVE_TIMEOUT_MS)),
+        const late = (p, none) => Promise.race([
+          Promise.resolve(p).catch(() => none),
+          new Promise(r => setTimeout(() => r(none), LIVE_TIMEOUT_MS)),
         ]);
-        if (rows && rows.length) {
-          const by = {}, byTight = {};
-          const tightOf = v => String(v || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-          rows.forEach(rw => { if (rw && rw.card_slug) { by[rw.card_slug] = rw; byTight[tightOf(rw.card_slug)] = rw; } });
-          window.__OTP_SLUGS = window.__OTP_SLUGS || {};
-          rows.forEach(rw => {
-            if (!rw || !rw.card_slug) return;
-            const tight = v => String(v || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-            window.__OTP_SLUGS[tight(rw.card_slug)] = rw.card_slug;
-            if (rw.display_name) window.__OTP_SLUGS[tight(rw.display_name)] = rw.card_slug;
-          });
-          // The handle is regex-pinned at the database; the HOST is ours, never
-          // theirs. This is what makes a member link unable to point anywhere
-          // but their own profile on a known platform.
-          const LINK_BASE = {
-            instagram:  h => 'https://www.instagram.com/' + h + '/',
-            tiktok:     h => 'https://www.tiktok.com/@' + h,
-            youtube:    h => 'https://www.youtube.com/@' + h,
-            spotify:    h => 'https://open.spotify.com/artist/' + h,
-            soundcloud: h => 'https://soundcloud.com/' + h,
-            bandcamp:   h => 'https://' + h + '.bandcamp.com/',
-          };
-          [roster, creators].forEach(list => (list || []).forEach(v => {
-            // ⛔ a card's slug is not always slugify(name): The Ink holds `theink`, WUN MOR holds `wunmor`.
-            // Keyed by slugify alone, whatever those two saved in the card builder never reached this page.
-            const rw = by[slugify(v.name)] || byTight[tightOf(v.name)];
-            if (!rw) return;
-            if (rw.card_frame) v.rarity = rw.card_frame;
-            if (rw.card_photo) v.photo = rw.card_photo;
-            if (rw.theme_song && parseSpotifyId(rw.theme_song)) {
-              v.theme_song = rw.theme_song;
-              v.theme_start = rw.theme_start || 0;
-            }
-            if (Array.isArray(rw.featured) && rw.featured.length) {
-              v.featured = rw.featured.slice(0, 3);
-            }
-            if (rw.link_platform && rw.link_handle && LINK_BASE[rw.link_platform]
-                && /^[A-Za-z0-9._-]{1,30}$/.test(rw.link_handle)) {
-              v.link = LINK_BASE[rw.link_platform](rw.link_handle);
-              v.platform = rw.link_platform.charAt(0).toUpperCase() + rw.link_platform.slice(1);
-            }
-          }));
-        }
+        const [rows, dark] = await Promise.all([late(OTP.cards(), []), late(OTP.darkSeats ? OTP.darkSeats() : [], [])]);
+        const live = Array.isArray(rows) ? rows : [];
+        window.__OTP_SLUGS = window.__OTP_SLUGS || {};
+        live.forEach(rw => {
+          if (!rw || !rw.card_slug) return;
+          window.__OTP_SLUGS[tightKey(rw.card_slug)] = rw.card_slug;
+          if (rw.display_name) window.__OTP_SLUGS[tightKey(rw.display_name)] = rw.card_slug;
+        });
+        roster = OTP.peopleMerge(roster, live, { hide: rosterHide, dark: Array.isArray(dark) ? dark : [] });
       } catch (e) { console.warn('card overlay skipped:', e.message); }
       fillCardPeople();
     }
@@ -5490,7 +5640,7 @@
       // through the CSSOM below instead, where a bad value is rejected, not executed.
       const avUrl = sized(safeUrl(who.photo), 'av');
       const av = avUrl
-        ? `<span class="av" data-bg="${esc(avUrl)}"></span>`
+        ? `<span class="av${/\/public\/cards\//.test(avUrl) ? ' av-card' : ''}" data-bg="${esc(avUrl)}"></span>`
         : `<span class="av av-fallback">${esc(Array.from(String(who.name || '0').trim())[0] || '0')}</span>`;
       const isExt = /^https?:\/\//.test(who.link || '');
       // A card holder whose card has no outside link carries '#roster', and that grid left on 10/7: the avatar
@@ -5743,9 +5893,18 @@
     const seeded = new Set(rotation.map(e => parseSpotifyId(e.link)).filter(Boolean));
     const picks = liveTracks.filter(t => t && t.track && !seeded.has(t.track)).slice(0, 12);
     const notes = (music && music.notes) || {};
+    // Wave 2 (call 11): a battle winner stays on rotation and says so. build_music.py close writes
+    // won: {week, mon, tie} (mon is the Monday, Y-M-D, read by hand: never new Date('2026-10-12'), that is UTC).
+    const MON_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const wonSub = w => {
+      const m = w && typeof w === 'object' && /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(w.mon || ''));
+      if (!m || +m[2] < 1 || +m[2] > 12) return '';
+      return (w.tie ? 'tied' : 'won') + ' the week of ' + MON_SHORT[+m[2] - 1] + ' ' + (+m[3]);
+    };
     rotation.forEach(entry => {
       const id = entry.track || parseSpotifyId(entry.link);
-      const t = trackTile(Object.assign({}, entry, { note: entry.note || (id && notes[id]) || '' }));
+      const won = wonSub(entry.won);
+      const t = trackTile(Object.assign({}, entry, { note: entry.note || (id && notes[id]) || '' }, won ? { sub: won } : {}));
       if (id) { t.dataset.t = entry.title || ''; t.dataset.a = entry.artist || ''; }
       rMount.appendChild(t);
     });
@@ -5780,36 +5939,13 @@
     // Live member stories (migration 010) sit on top of the committed catalog.
     // Baked ones are excluded by the query: once a story earns its number the
     // git floor carries it and the overlay lets go. Slug-dedupe covers the day
-    // both exist between bake and clear.
+    // both exist between bake and clear. Asked for up top (wordLiveP), 24 of them
+    // since Wave 2: the house's own live stories ride along and take their shelf.
     try {
-      const liveStories = await Promise.race([
-        (window.OTP && OTP.configured && OTP.wordStories) ? OTP.wordStories(6) : Promise.resolve([]),
-        new Promise(r => setTimeout(() => r([]), LIVE_TIMEOUT_MS)),
-      ]);
+      const liveStories = await wordLiveP;
       if (liveStories && liveStories.length) {
-        const seededSlugs = new Set(desk.map(x => String(x.link || '')
-          .replace(/^word\//, '').replace(/\/$/, '')));
-        // The day it went up, in desk.json's own MM.DD.YY (local day), so the tile shows a date and sorts
-        // with the rest of its shelf. Undated, pubDay read 0 and every live story filed after every dated one.
-        const mdy = v => { const d = new Date(v || ''); return isNaN(d) ? ''
-          : String(d.getMonth() + 1).padStart(2, '0') + '.' + String(d.getDate()).padStart(2, '0') + '.' + String(d.getFullYear()).slice(2); };
-        liveStories.filter(s => !seededSlugs.has(s.slug)).reverse().forEach(s => {
-          desk.unshift({
-            title: s.title,
-            kicker: 'FROM THE FLOOR',
-            dek: s.dek,
-            date: mdy(s.created_at),
-            lanes: ['story'],
-            // ⛔ index.html is itself a WRITER of desk items. Move the pill axis
-            //    to dept without stamping it here and every unbaked member story
-            //    goes invisible under every pill except All.
-            dept: 'story',
-            platform: 'SITE',
-            thumb: safeUrl(s.cover_url) || 'assets/take-01-manifesto.jpg',
-            link: 'word/live/?s=' + encodeURIComponent(s.slug),
-            by: s.display_name || s.card_slug || '',
-          });
-        });
+        const seededSlugs = deskSlugs();
+        liveStories.filter(s => s && s.slug && !seededSlugs.has(s.slug)).reverse().forEach(s => { desk.unshift(liveItem(s)); });
       }
     } catch (e) { console.warn('member stories overlay skipped:', e.message); }
     const platformLabel = { youtube:'YouTube', tiktok:'TikTok', instagram:'Instagram', spotify:'Spotify' };
@@ -5928,8 +6064,10 @@
     // or the door the next one comes through (the tip line, the pitch, the
     // composer). ⛔ Never a promise nobody made: the old slate said "loading"
     // for six weeks.
+    // The calendar doors follow What's coming: dates/ for a stranger, the Crypt's calendar for a member. They carry
+    // data-cal, so door.js moves them with the tile whether it speaks before or after these are drawn (call 6).
     const doNext = document.getElementById('do-next');
-    const calHref = (doNext && doNext.getAttribute('href')) || 'wall/#cal';
+    const calHref = (doNext && doNext.getAttribute('href')) || 'dates/';
     const NEXT = {
       nights:     { i: 'coming', k: 'Next up', t: 'The next night',        l: 'Every date the house is headed to, on one calendar.', go: 'The calendar', href: calHref },
       guides:     { i: 'story',  k: 'Next up', t: 'You pick the next one', l: 'Want something broken down? Tell the desk what to take apart next.', go: 'Tell the desk', href: '#take' },
@@ -5955,6 +6093,7 @@
       a.className = 'shelf-next';
       a.dataset.next = key;
       a.href = n.href;
+      if (n.href === calHref) a.dataset.cal = '';
       if (/^https?:\/\//.test(n.href)) { a.target = '_blank'; a.rel = 'noopener'; }
       // 'Tell the desk' (#take) lands a stranger on the tip line. Signed in, #take is the PUBLIC composer, which is
       // no place for an off-the-record tip, so a member gets the mail the tip boxes open. Decided on the tap, not
@@ -6406,27 +6545,111 @@
     const ago = iso => { const m = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 60000)); return m < 1 ? 'now' : m < 60 ? m + 'm' : m < 1440 ? Math.round(m / 60) + 'h' : Math.round(m / 1440) + 'd'; };
     const ini = n => String(n || '?').trim().split(/\s+/).slice(0, 2).map(w => Array.from(w)[0] || '').join('').toUpperCase() || '?';
 
+    // Wave 2 (calls 8, 9), per comment, the database saying who may do what (take_thread, 045):
+    //   yours: Edit (in place, no time limit; readers see 'edited') and Delete
+    //   on your post: Delete, and Block the writer (not the desk)
+    //   the desk: Hide / Unhide (can_hide is the desk's alone)
+    //   anybody else's, not the desk's, for anybody but the desk: Report (the chooser below)
+    // A report this login already sent reads 'Reported'. Errors land in the comment's own row.
     async function loadThread(bar){
       const k = bar.dataset.post, box = bar.parentElement.querySelector('.tk-box'), c = client(); if (!box || !c) return;
       let rows = null;
       try { const r = await c.rpc('take_thread', {p_key: k}); if (!r.error && Array.isArray(r.data)) rows = r.data; } catch (e) {}
-      const old = box.querySelector('textarea'), draft = old ? old.value : '';      // read AFTER the wait: they may have typed
       if (!rows) {                                                                    // a failed load is not an empty thread
         if (!box.querySelector('.tk-form')) box.innerHTML = '<p class="tk-empty">Could not load the comments. <button type="button" class="post-del" data-retry>Try again</button></p>';
         return;
       }
+      // which of the others' comments this login already reported (never throws; a stranger never gets this far)
+      const canReport = x => !x.mine && x.kind !== 'desk' && !x.can_hide;
+      let reported = new Set();
+      const theirs = rows.filter(canReport).map(x => String(x.id));
+      if (theirs.length && window.OTP && OTP.myReports) { try { reported = await OTP.myReports('take_comment', theirs); } catch (e) {} }
+      const old = box.querySelector('textarea'), draft = old ? old.value : '';      // read AFTER the waits: they may have typed
+      box._rows = {};
+      rows.forEach(x => { box._rows[String(x.id)] = x; });
       state(k).c = rows.filter(x => !x.hidden).length; paint(bar);
+      const acts = x => {
+        const id = esc(String(x.id)), b = [];
+        if (x.mine) b.push(`<button type="button" data-cedit="${id}">Edit</button>`);
+        if (x.mine || x.can_delete) b.push(`<button type="button" data-cdel="${id}">Delete</button>`);
+        if (x.on_mine && !x.mine && x.kind !== 'desk') b.push(`<button type="button" data-cblock="${id}">Block</button>`);
+        if (x.can_hide && !x.mine) b.push(`<button type="button" data-chide="${id}" data-h="${x.hidden ? 0 : 1}">${x.hidden ? 'Unhide' : 'Hide'}</button>`);
+        if (canReport(x)) b.push(reported.has(String(x.id)) ? '<span class="tk-done">Reported</span>' : `<button type="button" data-crep="${id}">Report</button>`);
+        return b.length ? `<div class="tk-acts">${b.join('')}</div>` : '';
+      };
       box.innerHTML = `<form class="tk-form"><textarea maxlength="280" rows="2" placeholder="Say something" aria-label="Your comment"></textarea><button type="submit">Post</button></form>
-        ${rows.length ? `<ol class="tk-list">${rows.map(x => `<li class="${x.hidden ? 'hid' : ''}">
+        ${rows.length ? `<ol class="tk-list">${rows.map(x => `<li class="${x.hidden ? 'hid' : ''}" data-cid="${esc(String(x.id))}">
           ${x.pic && /^https:\/\//.test(x.pic) ? `<img class="tk-av" src="${esc(sized(x.pic, 'av'))}" alt="" loading="lazy" decoding="async">` : `<span class="tk-av" aria-hidden="true">${esc(ini(x.name))}</span>`}
           <div><div class="tk-top">${x.sid ? `<a href="wall/#s-${esc(x.sid)}"><b>${esc(x.name)}</b></a>` : `<b>${esc(x.name)}</b>`}
             ${x.kind === 'desk' ? '<span class="tk-k">the desk</span>' : x.kind === 'card' ? '<span class="tk-k">card holder</span>' : ''}
-            <time>${esc(ago(x.created_at))}</time>${x.hidden ? '<span class="tk-k">hidden</span>' : ''}</div>
+            <time>${esc(ago(x.created_at))}</time>${x.edited_at ? '<span class="tk-k">edited</span>' : ''}${x.hidden ? '<span class="tk-k">hidden</span>' : ''}</div>
             <p>${esc(x.body)}</p>
-            ${x.can_delete ? `<div class="tk-acts"><button type="button" data-cdel="${esc(String(x.id))}">Delete</button>${x.mine ? '' : `<button type="button" data-chide="${esc(String(x.id))}" data-h="${x.hidden ? 0 : 1}">${x.hidden ? 'Unhide' : 'Hide'}</button>`}</div>` : ''}
+            ${acts(x)}
           </div></li>`).join('')}</ol>` : '<p class="tk-empty">No comments yet. Say something.</p>'}`;
       const ta = box.querySelector('textarea'); if (ta && draft) ta.value = draft;
     }
+
+    // ---- the little pieces the thread's buttons share ----
+    // a line in the comment's own row: what went wrong, or what just happened
+    const rowSay = (li, text, bad) => {
+      if (!li) return;
+      const host = li.lastElementChild || li;
+      let m = host.querySelector(':scope > .tk-msg');
+      if (!m) { m = document.createElement('div'); m.className = 'tk-msg'; host.appendChild(m); }
+      m.className = 'tk-msg' + (bad ? ' err' : ''); m.textContent = text;
+    };
+    // the first tap arms the button for 4 s and says what the second one does
+    const armed = (t, label) => {
+      if (t.dataset.sure === '1') return true;
+      const was = t.textContent;
+      t.dataset.sure = '1'; t.textContent = label; t.classList.add('sure');
+      setTimeout(() => { if (t.isConnected && t.dataset.sure === '1') { t.dataset.sure = ''; t.textContent = was; t.classList.remove('sure'); } }, 4000);
+      return false;
+    };
+    // THE REPORT CHOOSER (calls 8, 9; the shared pattern the Crypt, packs and pages copy): 'Tell the desk why', one
+    // chip per reason OTP.reportChoices(kind) gives, 'Never mind'. 'Something else' opens a short note (140, optional)
+    // and Send. The database answers 'sent' or 'already'; who sent it is only ever the desk's to see.
+    const openChooser = (li, kind, target, done) => {
+      const host = li;                                 // under the whole row (avatar column too): a phone needs the width
+      const had = host.querySelector(':scope > .tk-why'); if (had) { had.remove(); return; }
+      const w = document.createElement('div'); w.className = 'tk-why';
+      const head = document.createElement('b'); head.textContent = 'Tell the desk why'; w.appendChild(head);
+      const chips = document.createElement('div'); chips.className = 'tk-chips'; w.appendChild(chips);
+      const send = async (why, note, btns) => {
+        btns.forEach(b => { b.disabled = true; });
+        try {
+          const r = await OTP.report(kind, target, why, note);
+          w.remove();
+          rowSay(li, r === 'already' ? 'You sent this one. The desk has it.' : 'Sent. Only the desk sees who sent it.');
+          if (done) done();
+        } catch (e) {
+          btns.forEach(b => { b.disabled = false; });
+          rowSay(li, e.message || 'That did not send. Try again.', true);
+        }
+      };
+      const chip = (label, fn, go) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = label; if (go) b.className = 'go'; b.addEventListener('click', fn); chips.appendChild(b); return b; };
+      (OTP.reportChoices ? OTP.reportChoices(kind) : []).forEach(([why, label]) => {
+        chip(label, () => {
+          if (why !== 'other') { send(why, null, [...chips.querySelectorAll('button')]); return; }
+          if (w.querySelector('input')) return;
+          const inp = document.createElement('input'); inp.type = 'text'; inp.maxLength = 140; inp.placeholder = 'What is wrong? (optional)';
+          inp.setAttribute('aria-label', 'What is wrong? (optional)');
+          const row = document.createElement('div'); row.className = 'tk-chips';
+          const go = document.createElement('button'); go.type = 'button'; go.className = 'go'; go.textContent = 'Send';
+          go.addEventListener('click', () => send('other', inp.value.trim() || null, [...w.querySelectorAll('button')]));
+          row.appendChild(go); w.appendChild(inp); w.appendChild(row); inp.focus();
+        });
+      });
+      chip('Never mind', () => w.remove());
+      host.appendChild(w);
+    };
+    let toastT = null;
+    const toast = text => {
+      let t = document.querySelector('.otp-toast');
+      if (!t) { t = document.createElement('div'); t.className = 'otp-toast'; t.setAttribute('role', 'status'); document.body.appendChild(t); }
+      t.textContent = text;
+      clearTimeout(toastT); toastT = setTimeout(() => t.remove(), 4800);
+    };
 
     bars.forEach(bar => {
       const k = bar.dataset.post;
@@ -6474,14 +6697,65 @@
           ta.value = ''; loadThread(bar);
         });
         box.addEventListener('click', async e => {
-          const t = e.target.closest('button'); if (!t) return;
+          const t = e.target.closest('button'); if (!t || t.closest('.tk-why')) return;   // the chooser wires its own
           if (t.dataset.retry != null) { box.innerHTML = '<p class="tk-empty">Loading…</p>'; loadThread(bar); return; }
-          if (t.dataset.cdel) {
-            if (t.dataset.sure !== '1') { t.dataset.sure = '1'; t.textContent = 'Tap again'; return; }
-            try { await client().rpc('take_uncomment', {p_id: +t.dataset.cdel}); } catch (err) {}
-            loadThread(bar);
+          const li = t.closest('li[data-cid]');
+          // a database refusal written for a person comes through as is; anything else is the plain line
+          const said = (r, fallback) => (r && r.error && /^[A-Z][^\n]{3,140}\.$/.test(r.error.message || '') && !/permission denied|violates|function/i.test(r.error.message)) ? r.error.message : fallback;
+          if (t.dataset.cedit) {
+            const x = (box._rows || {})[t.dataset.cedit], p = li && li.querySelector('p');
+            if (!x || !p || li.querySelector('.tk-ed')) return;
+            const ed = document.createElement('div'); ed.className = 'tk-ed';
+            const area = document.createElement('textarea'); area.maxLength = 280; area.rows = 2; area.value = x.body || ''; area.setAttribute('aria-label', 'Fix your comment');
+            const row = document.createElement('div'); row.className = 'tk-row';
+            const save = document.createElement('button'); save.type = 'button'; save.className = 'go'; save.textContent = 'Save';
+            const no = document.createElement('button'); no.type = 'button'; no.textContent = 'Never mind';
+            row.appendChild(save); row.appendChild(no); ed.appendChild(area); ed.appendChild(row);
+            p.hidden = true; p.insertAdjacentElement('afterend', ed); area.focus();
+            no.addEventListener('click', () => { ed.remove(); p.hidden = false; });
+            save.addEventListener('click', async () => {
+              const body = area.value.trim();
+              if (!body) { rowSay(li, 'Say something, or delete it instead.', true); return; }
+              if (body === String(x.body || '').trim()) { ed.remove(); p.hidden = false; return; }
+              save.disabled = no.disabled = true;
+              try { await OTP.editComment('take', +t.dataset.cedit, body); loadThread(bar); }
+              catch (err) { save.disabled = no.disabled = false; rowSay(li, err.message || 'That did not save. Try again.', true); }
+            });
+            return;
           }
-          if (t.dataset.chide) { try { await client().rpc('take_hide', {p_id: +t.dataset.chide, p_hidden: t.dataset.h === '1'}); } catch (err) {} loadThread(bar); }
+          if (t.dataset.cdel) {
+            if (!armed(t, 'Tap again')) return;
+            t.disabled = true;
+            let r; try { r = await client().rpc('take_uncomment', {p_id: +t.dataset.cdel}); } catch (err) { r = {error: err}; }
+            if (r && !r.error && r.data !== false) { loadThread(bar); return; }
+            // false: somebody else (the desk, the post's author) already took it down; a retry can never work
+            if (r && !r.error && r.data === false) { rowSay(li, 'That one is already gone.', false); setTimeout(() => loadThread(bar), 1200); return; }
+            t.disabled = false; rowSay(li, said(r, 'That did not come down. Try again.'), true);
+            return;
+          }
+          if (t.dataset.cblock) {
+            if (!armed(t, 'Tap again to block')) return;
+            t.disabled = true;
+            try {
+              await OTP.blockAuthor('take_comment', t.dataset.cblock);
+              toast("Blocked. They can't write on your page, comment on your posts or message you.");
+              loadThread(bar);
+            } catch (err) { t.disabled = false; rowSay(li, err.message || 'That did not go through. Try again.', true); }
+            return;
+          }
+          if (t.dataset.chide) {
+            t.disabled = true;
+            let r; try { r = await client().rpc('take_hide', {p_id: +t.dataset.chide, p_hidden: t.dataset.h === '1'}); } catch (err) { r = {error: err}; }
+            if (r && !r.error) { loadThread(bar); return; }
+            t.disabled = false; rowSay(li, said(r, 'That did not go through. Try again.'), true);
+            return;
+          }
+          if (t.dataset.crep && li) {
+            openChooser(li, 'take_comment', t.dataset.crep, () => {
+              const done = document.createElement('span'); done.className = 'tk-done'; done.textContent = 'Reported';
+              t.replaceWith(done);
+            });
+          }
         });
       }
     });
@@ -6775,7 +7049,8 @@
       const asCurator = (creators || []).map(c => ({data:c, src:'curator'}));
       const asRoster  = (roster   || []).map(c => ({data:c, src:'roster'}));
       const pool = generic ? asCurator.concat(asRoster) : (curated ? asCurator : asRoster);
-      const match = pool.find(x => slugify(x.data.name) === slug);
+      // a card's own slug first (theink, wunmor, a card of their own), then the name the way old links were made
+      const match = pool.find(x => x.data.card_slug && String(x.data.card_slug).toLowerCase() === slug) || pool.find(x => slugify(x.data.name) === slug);
       if (!match) return;
       let vIdx = 0;
       if (want){
@@ -6825,9 +7100,10 @@
   // `?? 0` would make those cards unpullable. Below gold-rare on purpose.
   const BESPOKE_WEIGHT = 3;
   function weightedPull(){
-    // Pool: every roster card + every non-open-seat curator
+    // Pool: every roster card + every non-open-seat curator. A card of their own (a card holder with no
+    // roster seat, Wave 2) joins only once it has a photo: the house seats have art, a blank card in a pack does not.
     const pool = [];
-    (roster || []).forEach(v => pool.push({type:'roster', card:v}));
+    (roster || []).forEach(v => { if (v._db && !safeUrl(v.photo)) return; pool.push({type:'roster', card:v}); });
     (creators || []).forEach(v => { if (!v.open_seat) pool.push({type:'curator', card:v}); });
     if (!pool.length) return null;
     // ⛔ This used to roll a rarity from PULL_WEIGHTS, look for a card whose
@@ -6889,7 +7165,8 @@
       if (pull) {
         boosterReveal.innerHTML = renderPokeCard(pull.card, pull.type, 0) + spotifyEmbed(pull.card.theme_song, true, pull.card.theme_start);
         // the binder keeps who you pulled (binder.js, optional)
-        try { if (window.OTPBinder && pull.type === 'roster') OTPBinder.card(pull.card.name); } catch (e) {}
+        // a card of their own files under binder_key (c-<slug>), so it can never collide with a seat's name
+        try { if (window.OTPBinder && pull.type === 'roster') OTPBinder.card(pull.card.binder_key || pull.card.name); } catch (e) {}
         paintBg(boosterReveal);
         wireSpotifyEmbeds(boosterReveal);
         playChime(pull.card.rarity);

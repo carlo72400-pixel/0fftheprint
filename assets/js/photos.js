@@ -3,7 +3,8 @@
  *
  *   FIND YOURSELF   pick a room, a month or one of the last nights, and THE SET LIST shows those packs. Every night
  *                   is a pack tile with where this phone stands on it (the binder: sealed, opened n of N, hit found,
- *                   complete). Tap = the night's gallery. The binder line counts the lot.
+ *                   complete). Tap = the night's gallery. The binder line counts the lot. The last line goes to
+ *                   events/, every night in one list (Wave 2: Home's Drops rail is gone, this is the way there).
  *   ARTIST PACKS    packs made by the house and its artists (packs_list, migration 037): the shelf, Make a pack.
  *   THE LOOKS       nights printed more than one way (content/looks.json, looks.py): one frame, two prints, a handle
  *                   to drag between them, chips for the other prints. Credits under each.
@@ -47,6 +48,8 @@
     var line = el('p', 'ph-binder'); sec.appendChild(line);
     var grid = el('div', 'ph-set'); sec.appendChild(grid);
     var none = el('p', 'ph-none', 'Nothing shot there that month. Yet.'); none.hidden = true; sec.appendChild(none);
+    // the last line (Wave 2, call 4): the Drops rail came off Home, so this is the way to the whole list of nights
+    sec.appendChild(el('div', 'ph-all', '<a class="drops-more" href="events/">Every night, one list &rarr;</a>'));
     var state = { room: '', month: '', slug: '' };
     function stateOf(slug) { try { return (w.OTPBinder && w.OTPBinder.night) ? w.OTPBinder.night(slug) : null; } catch (e) { return null; } }
     function tile(n) {
@@ -92,7 +95,10 @@
       // signed in with no Instagram yet ("Almost in") gets the one step: join/ sends anybody signed in straight on,
       // so a Log in link only bounced them back to the timeline
       var st = d.documentElement.getAttribute('data-door');
+      // a closed account paints 'wait' too, with its key on Your account (door.js); banned stays the quiet step
+      var key = d.getElementById('nav-key'), closed = st === 'wait' && !!key && /(^|\/)my\/#account$/.test(key.getAttribute('href') || '');
       foot.innerHTML = (member() ? '<a class="ph-btn" href="packs/#new">&#43; Make a pack</a>'
+        : closed ? '<span class="ph-note">Members make packs. This account is closed. <a href="my/#account">Your account &rarr;</a></span>'
         : st === 'wait' ? '<span class="ph-note">Members make packs. <a href="wall/">One more step at the Crypt</a> and you are in.</span>'
         : '<span class="ph-note">Members make packs. <a href="join/?next=home">Log in</a> or <a href="wall/">join the Crypt</a>.</span>') +
         '<a class="drops-more" href="packs/">every pack &rarr;</a>';

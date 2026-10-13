@@ -6,7 +6,10 @@
  *                        The desk: the queue (desk_packs), publish / take down, edit, delete.
  *   /packs/?p=<slug>     one pack, sealed. Tear it open, the cards deal face down, tap to flip, the rarity
  *                        shows (common, rare, holo, full art, the hit). Favourite a card (members, pack_fave;
- *                        counts for everyone). What you flipped stays on this phone (localStorage otp-packs).
+ *                        counts for everyone). What you flipped stays on this phone (localStorage otp-packs,
+ *                        { f, t, n, ti, cv, h } a pack since Wave 2, so the binder can show it). A member can
+ *                        Report somebody else's pack to the desk (Wave 2, call 9).
+ *                        Members also see the cards they kept on the shelf (my_faves, Wave 2, call 16).
  *   /packs/#new          the builder: title, a line, 3 to 12 photos (uploaded to the member's own folder in
  *   /packs/?edit=<slug>  the packs bucket), a rarity and a caption per photo, a cover. Save = pack_save. A
  *                        member's pack waits for the desk; the desk's own goes live on save.
@@ -72,6 +75,8 @@
   async function shelf() {
     d.title = 'Packs · 0FF THE PRINT';
     app.innerHTML = '<p class="pk-note">Loading the shelf…</p>';
+    // a member's kept cards ask at the same time as the shelf (OTP.myFaves never throws; [] for anyone else)
+    var keptP = (MEMBER && w.OTP && typeof OTP.myFaves === 'function') ? OTP.myFaves() : Promise.resolve([]);
     var r = await rpc('packs_list');
     var list = (r && !r.error && Array.isArray(r.data)) ? r.data : [];
     app.innerHTML = '';
@@ -83,6 +88,9 @@
     else row.innerHTML = '<span class="pk-cta-l">Members make packs. ' + door() + '</span>';
     app.appendChild(row);
     if (ADMIN) await queue();
+    // the kept row holds its place and fills when my_faves answers: the shelf never waits on it
+    var slot = el('div', 'pk-keptslot'); app.appendChild(slot);
+    keptP.then(function (kept) { if (slot.isConnected) keptRow(Array.isArray(kept) ? kept : [], slot); }, function () {});
     if (!list.length) { app.appendChild(el('p', 'pk-note', 'No packs out yet. Make the first one.')); return; }
     // your own packs show under Yours only, so Out now counts (and shows) everybody else's
     var mine = list.filter(function (p) { return p.mine; }), out = list.filter(function (p) { return p.published && !p.mine; });
@@ -107,6 +115,22 @@
       g.appendChild(a);
     });
     return g;
+  }
+  // CARDS YOU KEPT (Wave 2, call 16): the hearts a member gave, newest first, each one back to its pack. Hidden when empty.
+  function keptRow(rows, slot) {
+    var box = el('div', 'pk-keptbox'), row = el('div', 'pk-kept'), n = 0;
+    rows.slice(0, 24).forEach(function (x) {
+      if (!x || !slugOk(x.pack_slug) || !x.image) return;
+      var rr = Object.prototype.hasOwnProperty.call(R, x.rarity) ? x.rarity : 'common';
+      var a = el('a', 'pk-kc r-' + rr); a.href = '?p=' + encodeURIComponent(x.pack_slug); a.title = String(x.pack_title || '');
+      a.innerHTML = '<span class="pk-kc-img"><img src="' + esc(url(x.image)) + '" alt="" loading="lazy" decoding="async"><span class="pk-kc-r">' + esc(R[rr]) + '</span></span>' +
+        '<span class="pk-kc-t">' + esc(x.pack_title || 'A pack') + '</span>';
+      row.appendChild(a); n++;
+    });
+    if (!n) { slot.remove(); return; }
+    box.appendChild(el('h2', 'pk-h2', 'Cards you kept <span>' + n + '</span>'));
+    box.appendChild(row);
+    slot.parentNode.replaceChild(box, slot);
   }
   async function queue() {
     var r = await rpc('desk_packs'); var rows = (r && !r.error && Array.isArray(r.data)) ? r.data : [];
@@ -152,8 +176,17 @@
     var S = store();
     var cards = (P.cards || []).slice();
     flipKeys(cards);
+    // What the binder shows of this pack (Wave 2): n cards, its title, the cover's public address and whether the hit
+    // is face up. Written with every save of this pack's entry; an entry from before only has f and t until then.
+    function mark(e) {
+      if (!e) return e;
+      e.n = cards.length; e.ti = String(P.title || '').slice(0, 60);
+      var cv = url(P.cover || (cards[0] && cards[0].image) || ''); if (cv) e.cv = cv; else delete e.cv;
+      e.h = cards.some(function (c) { return c.rarity === 'hit' && flipped(e, c); });
+      return e;
+    }
     // rewrite this phone's flips for this pack as photo keys, dropping any card that is no longer in it
-    if (S.p[slug]) { S.p[slug].f = cards.filter(function (c) { return flipped(S.p[slug], c); }).map(function (c) { return c.fk; }); store(S); }
+    if (S.p[slug]) { S.p[slug].f = cards.filter(function (c) { return flipped(S.p[slug], c); }).map(function (c) { return c.fk; }); mark(S.p[slug]); store(S); }
     var st = S.p[slug] || { f: [] };
     var coverKey = P.cover || (cards[0] && cards[0].image) || '';
     app.innerHTML = '';
@@ -162,8 +195,15 @@
     head.innerHTML = '<div class="kicker">A pack by ' + (by ? '<a href="' + esc(by) + '">' + esc(P.author) + '</a>' : esc(P.author)) + ' · ' + esc(kindWord(P.kind)) + (!P.published ? ' · <span class="wait">on the desk, not public yet</span>' : '') + '</div>' +
       '<h1>' + esc(P.title) + '</h1>' + (P.line ? '<p class="pk-dek">' + esc(P.line) + '</p>' : '') +
       '<p class="pk-meta">' + cards.length + ' cards' + (cards.some(function (c) { return c.rarity === 'hit'; }) ? ' · one hit inside' : '') + ' · ' + esc(when(P.created_at)) +
-      ((P.mine || ADMIN) ? ' · <a href="?edit=' + esc(slug) + '">Edit</a>' : '') + ' · <button type="button" class="pk-link pk-share">Copy the link</button></p>';
+      ((P.mine || ADMIN) ? ' · <a href="?edit=' + esc(slug) + '">Edit</a>' : '') + ' · <button type="button" class="pk-link pk-share">Copy the link</button>' +
+      (canReport(P) ? ' · <button type="button" class="pk-link pk-report">Report</button>' : '') + '</p>';
     app.appendChild(head);
+    var rep = head.querySelector('.pk-report');
+    if (rep) {
+      rep.addEventListener('click', function () { chooser(head, rep, P.id); });
+      // already told the desk about this one (report_mine; an empty Set on any failure)
+      Promise.resolve(OTP.myReports('pack', [String(P.id)])).then(function (got) { if (got && got.has && got.has(String(P.id))) reported(rep); }).catch(function () {});
+    }
     head.querySelector('.pk-share').addEventListener('click', function () {
       var u = location.origin + location.pathname + '?p=' + encodeURIComponent(slug);
       try { navigator.clipboard.writeText(u); this.textContent = 'Copied'; } catch (e) { prompt('The link', u); }
@@ -188,7 +228,7 @@
       var all = el('button', 'pk-link pk-all'); all.type = 'button'; all.textContent = 'Flip them all';
       all.addEventListener('click', function () { table.querySelectorAll('.pk-card:not(.up)').forEach(function (x) { x.click(); }); });
       line.appendChild(all);
-      if (!S.p[slug]) { S.p[slug] = { f: [], t: Date.now() }; store(S); }
+      if (!S.p[slug]) { S.p[slug] = mark({ f: [], t: Date.now() }); store(S); }
       paintLine();
       tally();
     }
@@ -215,7 +255,7 @@
         if (c.rarity === 'hit') { k.classList.add('pop'); }
         S = store(); S.p[slug] = S.p[slug] || { f: [], t: Date.now() };
         if (S.p[slug].f.indexOf(c.fk) < 0) S.p[slug].f.push(c.fk);
-        store(S); paintLine();
+        mark(S.p[slug]); store(S); paintLine();
       });
       var fav = k.querySelector('.pk-fav');
       fav.addEventListener('click', async function (ev) {
@@ -249,6 +289,51 @@
     }
     pouch.querySelector('.pk-tear').addEventListener('click', deal);
     if ((st.f || []).length) { pouch.querySelector('.pk-tear').textContent = 'Open it again'; }
+  }
+
+  /* ================= REPORT A PACK (Wave 2, call 9) =================
+     A member, on somebody else's pack that is out: not the desk, not their own, not the desk's own pack. The chooser
+     is the one the rest of the site uses ('Tell the desk why', a chip per reason, 'Never mind'; 'Something else'
+     opens a short note). The database answers 'sent' or 'already'; who sent it is only ever the desk's to see. */
+  function canReport(P) {
+    return !!(MEMBER && !ADMIN && P && !P.mine && P.published && P.kind !== 'desk' && P.id != null &&
+      w.OTP && typeof OTP.report === 'function' && typeof OTP.reportChoices === 'function' && typeof OTP.myReports === 'function');
+  }
+  function reported(rep) { rep.textContent = 'Reported'; rep.disabled = true; rep.classList.add('pk-reported'); }
+  function chooser(host, rep, target) {
+    var had = host.querySelector('.pk-why'); if (had) { had.remove(); return; }
+    var old = host.querySelector('.pk-said'); if (old) old.remove();
+    var box = el('div', 'pk-why'); box.appendChild(el('b', null, 'Tell the desk why'));
+    var chips = el('div', 'pk-why-c'); box.appendChild(chips);
+    var msg = el('p', 'pk-why-m'); msg.setAttribute('role', 'status');
+    async function send(why, note) {
+      var bs = box.querySelectorAll('button'); bs.forEach(function (b) { b.disabled = true; });
+      try {
+        var r = await OTP.report('pack', target, why, note);
+        box.remove(); reported(rep);
+        var ok = el('p', 'pk-said'); ok.setAttribute('role', 'status');
+        ok.textContent = r === 'already' ? 'You sent this one. The desk has it.' : 'Sent. Only the desk sees who sent it.';
+        host.appendChild(ok);
+      } catch (e) {
+        bs.forEach(function (b) { b.disabled = false; });
+        msg.textContent = (e && e.message) || 'That did not send. Try again.';
+        if (!msg.parentNode) box.appendChild(msg);
+      }
+    }
+    function chip(label, fn, go) { var b = el('button', 'pk-why-b' + (go ? ' go' : '')); b.type = 'button'; b.textContent = label; b.addEventListener('click', fn); chips.appendChild(b); return b; }
+    (OTP.reportChoices('pack') || []).forEach(function (c) {
+      chip(c[1], function () {
+        if (c[0] !== 'other') { send(c[0], null); return; }
+        if (box.querySelector('input')) return;
+        var inp = el('input'); inp.type = 'text'; inp.maxLength = 140; inp.placeholder = 'What is wrong? (optional)';
+        inp.setAttribute('aria-label', 'What is wrong? (optional)');
+        var row = el('div', 'pk-why-c'), go = el('button', 'pk-why-b go'); go.type = 'button'; go.textContent = 'Send';
+        go.addEventListener('click', function () { send('other', inp.value.trim() || null); });
+        row.appendChild(go); box.appendChild(inp); box.appendChild(row); inp.focus();
+      });
+    });
+    chip('Never mind', function () { box.remove(); });
+    host.appendChild(box);
   }
 
   /* ================= THE BUILDER ================= */

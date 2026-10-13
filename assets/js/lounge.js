@@ -64,7 +64,8 @@
     if (kind === 'story') return { href: '#stories', label: 'Read the stories →' };
     if (kind === 'next') {
       var a = d.getElementById('do-next'), h = a && a.getAttribute('href');
-      return { href: h && h !== '#' ? h : 'wall/#cal', label: 'See the date →' };
+      // #do-next always exists; the floor is the public Run, which a stranger can open (wave 2)
+      return { href: h && h !== '#' ? h : 'dates/', label: 'See the date →' };
     }
     if (kind === 'tape') return { href: 'video/', label: 'Watch the tape →' };
     if (kind === 'sheet') return { act: 'sheet', label: 'Find yourself ↓' };
