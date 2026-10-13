@@ -1,0 +1,148 @@
+/* THE BOARD: MEMBERS (board-members.js). The one list of everyone with a login,
+   the person sheet, and the queue sheets. Loaded by board/index.html only.
+   The pills wear the board's own colors (the legend's dots): live green,
+   hidden grey, waiting or edited pink, the desk's blue, dark for a card that
+   is out. Every control a thumb can hit is 40px at least; nothing here makes
+   the page scroll sideways at 390px (the chip rows scroll inside themselves). */
+
+/* ---- the list ---- */
+.mm{min-width:0}
+.mm .mm-h{margin-top:26px}
+.mm-count{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;color:var(--muted);margin-top:6px;
+  line-height:1.6;overflow-wrap:anywhere}
+.mm-q{margin-top:14px}
+.mm-chips{display:flex;flex-wrap:nowrap;gap:6px;overflow-x:auto;overflow-y:hidden;max-width:100%;
+  margin-top:10px;padding:1px 1px 3px;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+.mm-chips::-webkit-scrollbar{display:none}
+.mchip{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;
+  border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--muted);cursor:pointer;
+  font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}
+.mchip i{font-style:normal;color:var(--ink);opacity:.5}
+.mchip:hover{border-color:var(--pink-deep);color:var(--pink-glow)}
+.mchip.on{border-color:var(--pink-deep);color:var(--pink-glow);background:rgba(244,143,200,.1)}
+.mchip.on i{opacity:.8}
+.mm-sort .mchip{border-style:dashed}
+.mm-sort .mchip.on{border-style:solid}
+.mm-hits{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;color:var(--muted);margin-top:8px;min-height:14px}
+.mm-list{margin-top:8px;border-top:1px solid var(--line)}
+.mm-list .empty{padding:26px 0}
+.mm-foot .btn{margin-top:14px}
+
+.mrow{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:center;min-height:56px;min-width:0;
+  padding:10px 4px;border-bottom:1px solid var(--line);color:var(--ink);text-decoration:none}
+.mrow:hover{background:rgba(255,121,198,.05)}
+.mrow:focus-visible{outline:2px solid var(--pink-deep);outline-offset:-2px}
+.mrow.out .mface{opacity:.55}
+.mface{width:44px;height:44px;border-radius:50%;overflow:hidden;flex:0 0 auto;display:flex;align-items:center;
+  justify-content:center;background:#0d0c11;border:1px solid var(--line)}
+.mface img{width:100%;height:100%;object-fit:cover;display:block}
+.mface i{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:20px;line-height:1;color:#5f5b6b}
+.mface.big{width:64px;height:64px}
+.mface.big i{font-size:28px}
+.mbody{display:block;min-width:0}
+.mname{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere;
+  font-size:14.5px;font-weight:600;line-height:1.3}
+.mig{display:block;font-family:var(--f-mono);font-size:10.5px;color:var(--muted);margin-top:2px;overflow-wrap:anywhere}
+.mtags{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+.mline{display:block;font-family:var(--f-mono);font-size:10px;letter-spacing:.04em;color:var(--muted);margin-top:5px;
+  line-height:1.5;overflow-wrap:anywhere}
+
+/* the pills: the legend's dots, as words */
+.mpill{font-family:var(--f-mono);font-size:9px;font-weight:400;letter-spacing:.14em;text-transform:uppercase;
+  border:1px solid var(--line);border-radius:999px;padding:2px 7px;color:#7d7889;white-space:nowrap;line-height:1.5}
+.mpill.live{color:var(--ok);border-color:rgba(126,231,135,.4)}
+.mpill.hidden{color:#7d7889;border-color:#4a4753}
+.mpill.card{color:var(--pink-glow);border-color:rgba(255,121,198,.45)}
+.mpill.wait{color:#ffd479;border-color:rgba(255,212,121,.4)}
+.mpill.git{color:#9db9ff;border-color:rgba(47,107,255,.4)}
+.mpill.bad{color:#ffb3c4;border-color:rgba(255,93,126,.5)}
+.mpill.dark{color:#c8c2d0;background:#0a0a0d;border-color:#6d6878}
+
+/* ---- the person sheet and the queue sheets ---- */
+.sh.mp-sheet{overflow-x:hidden}
+.mp,.mq{min-width:0}
+.mp-top{display:grid;grid-template-columns:64px 1fr;gap:14px;align-items:center;margin-top:16px;min-width:0}
+.mp-who{min-width:0}
+.mp-ig{font-family:var(--f-mono);font-size:12px;color:var(--pink-glow);text-decoration:none;overflow-wrap:anywhere;
+  display:inline-flex;align-items:center;min-height:40px}
+.mp-ig.none{color:var(--muted)}
+.mp-line{font-size:14px;line-height:1.55;color:#ded7e2;margin-top:8px;overflow-wrap:anywhere}
+.mp-line b{color:var(--ink)}
+.mp-links{margin-top:10px}
+.mp-sec{margin-top:24px;padding-top:14px;border-top:1px solid var(--line);min-width:0}
+.mp-sec.wait{border-top-color:rgba(255,121,198,.45)}
+.mp-h{font-family:var(--f-mono);font-size:10px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.mp-h2{font-family:var(--f-mono);font-size:10px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);
+  margin-top:20px}
+.mp-do{margin-top:12px}
+.mp-do .btn{margin:0}
+.mp-inline{display:flex;gap:8px;align-items:stretch;min-width:0}
+.mp-inline input{flex:1 1 auto;min-width:0}
+.mp-inline .btn{flex:0 0 auto;margin:0}
+.mp-say{font-family:var(--f-mono);font-size:11px;color:var(--pink-glow);margin-top:6px;line-height:1.5}
+.mp-say:empty{display:none}
+.mp-say.bad{color:var(--bad)}
+.mp-link{background:none;border:0;padding:0 2px;color:var(--pink-glow);font-family:var(--f-mono);font-size:11px;
+  letter-spacing:.1em;text-transform:uppercase;cursor:pointer;display:inline-flex;align-items:center;min-height:40px;
+  vertical-align:middle}
+.mp-link:hover{text-decoration:underline}
+.mp-still{margin-top:12px}
+.mp-clears .li span{display:flex;align-items:center;gap:8px;min-width:0}
+.mp-thumb{width:48px;height:48px;border-radius:8px;object-fit:cover;border:1px solid var(--line);flex:0 0 auto}
+.mp-foot{margin-top:28px;padding-top:14px;border-top:1px solid var(--line)}
+.mp-hist{margin-top:6px;font-family:var(--f-mono);font-size:11px;line-height:1.5;color:#c9c2cf}
+.mp-hist div{padding:6px 0;border-bottom:1px solid rgba(35,34,43,.6);overflow-wrap:anywhere}
+.mp-hist div:last-child{border-bottom:0}
+.mp-more{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px;font-family:var(--f-mono);font-size:10.5px;
+  letter-spacing:.1em;color:var(--muted)}
+.mp-more .btn{margin:0}
+
+/* one thing they made: a picture when there is one, the words, the date and what state it is in, its buttons */
+.mp-items{margin-top:10px;border-top:1px solid var(--line)}
+.mp-items .empty{padding:22px 0}
+.mi{display:grid;grid-template-columns:auto 1fr;gap:10px;padding:11px 0;border-bottom:1px solid var(--line);min-width:0}
+.mi > .mi-b:first-child{grid-column:1 / -1}
+.mi-pic{width:52px;height:52px;border-radius:8px;overflow:hidden;background:#0d0c11;border:1px solid var(--line);flex:0 0 auto}
+.mi-pic img{width:100%;height:100%;object-fit:cover;display:block}
+.mi-b{min-width:0}
+.mi-t{font-size:13.5px;line-height:1.45;color:var(--ink);overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:4;
+  -webkit-box-orient:vertical;overflow:hidden}
+.mi-t a{color:var(--pink-glow)}
+.mi-s{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin-top:5px;font-family:var(--f-mono);font-size:10px;
+  letter-spacing:.06em;color:var(--muted)}
+.mi-s > span{margin-right:3px;overflow-wrap:anywhere}
+.mi-do{margin-top:8px;gap:6px}
+.mi-do .btn{margin:0}
+
+/* a reported thing */
+.mg{margin-top:14px;padding:12px 14px;border:1px solid rgba(255,93,126,.35);border-radius:12px;background:rgba(255,93,126,.04);min-width:0}
+.mg.closed{border-color:var(--line);background:transparent;opacity:.8}
+.mg-h{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+.mg-h > b{font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;font-size:17px;line-height:1.1}
+.mg-h .mtags{margin-top:0}
+.mg-by{font-family:var(--f-mono);font-size:10.5px;color:var(--muted);display:inline-flex;align-items:center;gap:4px;min-width:0}
+.mg-by .mp-link{text-transform:none;letter-spacing:.02em;font-size:12px;overflow-wrap:anywhere;text-align:left}
+.mg-shot{margin-top:8px}
+.mg-pic{display:block;max-width:100%;max-height:200px;border-radius:8px;border:1px solid var(--line);margin-top:8px;object-fit:contain;
+  background:#0d0c11}
+.mg-r{font-family:var(--f-mono);font-size:10.5px;color:var(--muted);margin-top:8px;line-height:1.5;overflow-wrap:anywhere}
+.mg-r b{color:var(--ink);font-weight:500}
+.mg-r .note.quote{margin-top:4px}
+.mg-msgs{margin-top:10px;border-left:2px solid var(--line);padding-left:10px}
+.mg-m{padding:8px 0;border-bottom:1px solid rgba(35,34,43,.6);min-width:0}
+.mg-m:last-child{border-bottom:0}
+.mg-m.gone .mg-mb{color:var(--muted);font-style:italic}
+.mg-mh{font-family:var(--f-mono);font-size:10px;color:var(--muted)}
+.mg-mh b{color:var(--ink);font-weight:500}
+.mg-mb{font-size:14px;line-height:1.5;margin-top:3px;overflow-wrap:anywhere;white-space:pre-wrap}
+.mg-m .btn{margin-top:6px}
+.mq-top{margin-top:12px}
+
+@media (max-width:420px){
+  .mp-inline{flex-wrap:wrap}
+  .mp-inline .btn{flex:1 1 100%}
+}
+/* the smallest phones: a clear row's button goes under its words (the board's own .li rule puts it on the right) */
+@media (max-width:360px){
+  .sh .list.mp-clears .li .btn{grid-column:1;grid-row:auto;justify-self:start}
+}

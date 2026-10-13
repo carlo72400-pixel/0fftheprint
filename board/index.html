@@ -9,6 +9,7 @@
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/auth.css?v=57b34045">
+<link rel="stylesheet" href="../assets/css/board-members.css?v=52c3bdb5">
 <style>
   /* THE BOARD. One screen, the whole house.
      Built wide on purpose: nothing here is a menu you have to remember. */
@@ -21,15 +22,35 @@
      control rules to 16px now, and both are more specific than a bare class. */
   .sh textarea.tell-copy{margin-top:14px;line-height:1.5;min-height:132px;}
 
+  /* ---- the header: back, sign out, the two tabs. ---- */
+  .bhead{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .bhead .back{margin-bottom:0;min-height:40px;display:inline-flex;align-items:center}
+  .signout{background:none;border:1px solid var(--line);border-radius:999px;color:var(--muted);
+    font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+    min-height:40px;padding:0 15px;cursor:pointer}
+  .signout:hover{color:var(--pink-glow);border-color:var(--pink-deep)}
+  .wrap.board h1{margin-top:12px}
+  .sub a{color:var(--pink-glow);text-decoration:none;font-weight:600;display:inline-block;padding:10px 0}
+  .btabs{margin-top:18px}
+  .btabs .tab{min-height:44px;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    font-size:11.5px;color:var(--ink)}
+  .btabs .tab .chip{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:15px;
+    line-height:1;color:#1a0a14;background:var(--pink-glow);border-radius:999px;padding:3px 8px 2px}
+
+  /* ---- every control a thumb can hit: 40px at least, on every screen. ---- */
+  .wrap.board button,.wrap.board .btn,.sh button,.sh .btn,.toast button{min-height:40px}
+  .wrap.board .btn.sm,.sh .btn.sm{display:inline-flex;align-items:center}
+  .sure{background:rgba(255,93,126,.16)!important;border-color:var(--bad)!important;color:#ffb3c4!important}
+
   /* ---- sticky jump bar. The only navigation, and it never leaves. ---- */
   .jump{position:sticky;top:0;z-index:60;background:rgba(10,10,13,.93);
     backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
-    margin:0 -16px 18px;padding:9px 16px;display:flex;gap:6px;overflow-x:auto;
+    margin:14px -16px 18px;padding:8px 16px;display:flex;gap:6px;overflow-x:auto;
     scrollbar-width:none}
   .jump::-webkit-scrollbar{display:none}
   .jump a{flex:0 0 auto;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;
     text-transform:uppercase;color:var(--muted);text-decoration:none;border:1px solid var(--line);
-    border-radius:999px;padding:6px 11px;white-space:nowrap}
+    border-radius:999px;padding:0 12px;white-space:nowrap;min-height:40px;display:inline-flex;align-items:center}
   .jump a:hover,.jump a.on{color:var(--pink-glow);border-color:var(--pink-deep)}
   .jump .n{color:var(--ink);opacity:.5;margin-left:5px}
 
@@ -42,13 +63,15 @@
   .dot.hidden{background:#4a4753}
   .dot.draft{background:var(--pink-glow)}
   .dot.git{background:var(--dye-blue)}
+  /* dark: a roster seat whose card is out (banned, closed or taken back) */
+  .dot.dark{background:#0a0a0d;box-shadow:inset 0 0 0 1.5px #6d6878}
 
   /* ---- NOW. Only ever shows what is actually waiting. ---- */
   .now{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
   .now:empty{display:none}
   .nowchip{display:flex;align-items:center;gap:9px;background:rgba(255,121,198,.09);
     border:1px solid rgba(255,121,198,.4);border-radius:12px;padding:10px 14px;cursor:pointer;
-    color:var(--ink);font-family:var(--f-body);font-size:13.5px;text-align:left}
+    color:var(--ink);font-family:var(--f-body);font-size:13.5px;text-align:left;min-height:44px;max-width:100%}
   .nowchip:hover{border-color:var(--pink-glow);background:rgba(255,121,198,.15)}
   .nowchip b{font-family:var(--f-display);font-style:italic;font-size:21px;line-height:1;
     color:var(--pink-glow)}
@@ -85,6 +108,9 @@
     color:#5f5b6b;margin-left:auto}
   .rail-note{font-family:var(--f-mono);font-size:10.5px;color:var(--muted);letter-spacing:.06em;
     margin-top:3px}
+  .rail-h .rail-act{margin-left:auto;font-size:12px;padding:0 14px}
+  .rail-h .src + .rail-act{margin-left:0}
+  @media(max-width:640px){.rail-h .src{margin-left:0;flex-basis:100%}.rail-h .rail-act{margin-left:0}}
   .strip{display:flex;gap:10px;overflow-x:auto;padding:13px 2px 6px;scroll-snap-type:x proximity}
   .strip::-webkit-scrollbar{height:6px}
   .strip::-webkit-scrollbar-thumb{background:var(--pink-deep);border-radius:999px}
@@ -110,6 +136,11 @@
   .tile .s{font-family:var(--f-mono);font-size:9px;letter-spacing:.09em;text-transform:uppercase;
     color:var(--muted);margin-top:5px;display:flex;align-items:center;gap:5px}
   .tile.off{opacity:.42}
+  /* THE TAKEDOWNS: a photo still up on its night wears the stamp */
+  .tile.down.up .shot{position:relative}
+  .tile.down.up .shot::after{content:'COMING DOWN';position:absolute;left:6px;bottom:6px;
+    font-family:var(--f-mono);font-size:8.5px;letter-spacing:.14em;color:#fff;
+    background:rgba(255,93,126,.85);border-radius:4px;padding:3px 6px}
   .tile .nudge{position:absolute;top:6px;right:6px;display:flex;gap:3px;opacity:0;transition:opacity .12s}
   .tile:hover .nudge,.tile.touch .nudge{opacity:1}
   .nudge button{width:24px;height:24px;border-radius:7px;border:1px solid var(--line);
@@ -119,11 +150,11 @@
   /* ⛔ A phone has no hover and nothing ever set .touch, so on a phone the
      arrows sat at opacity 0: reordering could not be seen, and a tap on a
      tile's corner moved it by accident. On a touch screen they always show,
-     at a size a thumb can hit. */
-  @media (hover:none){
-    .tile .nudge{opacity:1}
-    .nudge button{width:32px;height:32px;font-size:14px}
-  }
+     at a size a thumb can hit. Wave 2: 40px on every screen, so they sit in
+     a row of their own under the caption instead of on the picture, always
+     shown (a mouse gets the same target a thumb does). */
+  .wrap.board .tile .nudge{position:static;opacity:1;padding:0 6px 7px;gap:6px}
+  .wrap.board .nudge button{flex:1 1 0;width:auto;height:40px;min-height:40px;font-size:14px}
   .tile.add{border-style:dashed;display:flex;align-items:center;justify-content:center;
     min-height:150px;color:var(--muted)}
   .tile.add:hover{color:var(--pink-glow)}
@@ -175,6 +206,23 @@
   .sh .foot .btn{flex:1 1 130px;margin:0}
   .sh .kill{background:none;border:0;color:var(--bad);font-family:var(--f-mono);font-size:11px;
     letter-spacing:.12em;text-transform:uppercase;cursor:pointer;padding:10px 0;margin-top:6px}
+  .sh .kill.sure{padding:10px 14px;border:1px solid var(--bad)!important;border-radius:999px}
+  /* the big sheets (a person, everything they made): wide, tall, the title stays put */
+  .sh.tall{max-width:720px;max-height:96vh;overflow:auto}
+  .sh.tall h3{position:sticky;top:-20px;z-index:3;background:var(--panel);
+    margin:-20px -20px 0;padding:20px 20px 10px;border-bottom:1px solid var(--line)}
+  .sh .art.pic{max-height:260px}
+  .sh .links{margin-top:12px}
+  .sh a.btn,.wrap.board a.btn{text-decoration:none}
+  .sh .note.warn{color:#ffb3c4;border-left:2px solid var(--bad);padding-left:10px}
+  .sh .note.quote{color:var(--ink);font-family:var(--f-body);font-size:14px;line-height:1.55}
+  .sh .list{margin-top:14px;border-top:1px solid var(--line)}
+  .sh .list .li{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center;
+    padding:10px 0;border-bottom:1px solid var(--line);min-width:0}
+  .sh .list .li b{font-family:var(--f-mono);font-size:11.5px;font-weight:500;color:var(--ink);
+    overflow-wrap:anywhere;grid-column:1}
+  .sh .list .li span{font-family:var(--f-mono);font-size:10.5px;color:var(--muted);grid-column:1;overflow-wrap:anywhere}
+  .sh .list .li .btn{grid-column:2;grid-row:1 / span 2}
   /* A song field says which track it is holding, before Save is tapped. */
   .songsay{display:flex;align-items:center;gap:9px;margin:7px 0 2px;min-height:34px;
     font-size:13px;color:var(--muted);line-height:1.35}
@@ -197,6 +245,9 @@
   .st.cold{background:#4a4753}
   .caprow .go{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
     color:var(--muted);text-decoration:none}
+  .caprow a.go,.caprow button.go{min-height:40px;min-width:48px;display:inline-flex;align-items:center;
+    justify-content:flex-end;padding:0 2px}
+  .caprow span.go{text-align:right;max-width:46vw}
   .caprow a.go:hover{color:var(--pink-glow)}
   .caprow button.go{background:none;border:0;cursor:pointer;color:var(--pink-glow)}
 
@@ -210,21 +261,39 @@
     padding:11px 19px;font-family:var(--f-mono);font-size:11.5px;color:var(--ink);
     box-shadow:0 8px 30px rgba(0,0,0,.5);max-width:88vw;text-align:center}
   .toast.bad{border-color:rgba(255,93,126,.6);color:#ffb3c4}
+  /* ⛔ A toast never eats a tap: it sits over the sheet's own buttons on a
+     phone, and a Save tapped in its first 2.6 seconds used to land on it. Only
+     its Undo takes a tap. */
+  .toast{pointer-events:none}
+  /* ban, close, hide: what happened, with an Undo for 8 seconds */
+  .toast.has-undo{display:flex;align-items:center;gap:12px;padding:6px 6px 6px 19px;text-align:left;
+    width:max-content;max-width:min(92vw,560px)}
+  .toast .undo{pointer-events:auto}
+  .toast .undo{flex:0 0 auto;background:var(--pink-deep);color:#1a0a14;border:0;border-radius:999px;
+    font-family:var(--f-display);font-style:italic;font-weight:900;font-size:16px;text-transform:uppercase;
+    padding:0 16px;cursor:pointer}
+  .toast .undo:disabled{opacity:.5}
+  .lift{min-height:40px}
 </style>
 </head>
 <body>
 <div class="leopard-bar"></div>
 <div class="wrap board">
-  <a class="back" href="../">&larr; 0FF THE PRINT</a>
+  <div class="bhead">
+    <a class="back" href="../">&larr; 0FF THE PRINT</a>
+    <button type="button" class="signout" id="signout" hidden>Sign out</button>
+  </div>
   <h1>The Board</h1>
   <div class="sub">everything the house can do &nbsp;·&nbsp; one screen &nbsp;·&nbsp;
-    <a href="../wall/" style="color:var(--pink-glow);text-decoration:none;font-weight:600">THE CRYPT &rarr;</a></div>
+    <a href="../wall/">THE CRYPT &rarr;</a> &nbsp;·&nbsp; <a href="../desk/goals/">GOALS</a></div>
   <div id="panel"><div class="note">opening the house&hellip;</div></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<!-- pinned with its hash (Wave 2): the desk's most powerful page runs only the exact file it was tested on -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" integrity="sha384-Rj26LVGvoeRVR6+mwQmFfcR3QOBEwT+ZmuCWpuiqeTzJpCs0ER4ITAWGb4Hiy3Ok" crossorigin="anonymous"></script>
 <script src="../supabase-config.js?v=f1348482"></script>
-<script src="../assets/js/desk.js?v=c10b36ef"></script>
-<script src="../assets/js/board.js?v=4e921c90"></script>
+<script src="../assets/js/desk.js?v=12f3e9e0"></script>
+<script src="../assets/js/board.js?v=5ce7f7de"></script>
+<script src="../assets/js/board-members.js?v=e97944d7"></script>
 </body>
 </html>

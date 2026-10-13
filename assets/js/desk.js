@@ -38,9 +38,58 @@
   // same <uid>/<file> keys and their own delete policies (own folder, or the
   // desk), so deleteImage can take those back too. Nothing here widens who may
   // delete: storage refuses a key that is not the caller's.
+  // 044: card art (`cards`) too. Its own folder for a member, any folder for the
+  // desk ("admin deletes any card art").
+  const FILE_BUCKETS = ["posts", "take", "packs", "spaces", "cards"];
   const objectRef = url => {
-    const m = /\/storage\/v1\/object\/public\/(posts|take|packs|spaces)\/([^?#]+)/.exec(String(url || ""));
+    const m = /\/storage\/v1\/object\/public\/(posts|take|packs|spaces|cards)\/([^?#]+)/.exec(String(url || ""));
     return m ? { bucket: m[1], name: m[2] } : null;
+  };
+
+  // ---- Wave 2 shared bits ----------------------------------------------------
+  // The database's own sentence, as an Error, with its code kept for callers that
+  // branch on it. A raise in SQL is already written for a person to read.
+  // Postgres's own "permission denied for function x" is not: it is what a door
+  // that anon cannot run says to a page whose login ended (another tab logged
+  // out, the session ran out), so it reads as the login it is missing.
+  const fail = e => {
+    const msg = String((e && e.message) || "");
+    if (e && e.code === "42501" && /^permission denied for function/i.test(msg)) {
+      const x = new Error("Log in first."); x.code = e.code; return x;
+    }
+    const x = new Error(msg || "That did not go through. Try again.");
+    if (e && e.code) x.code = e.code;
+    return x;
+  };
+  // A note somebody typed: no em dashes, trimmed, and a real NULL when empty.
+  const noteOf = s => NO_DASH(s).trim() || null;
+  // em and en dash, built from code points so no escape sits in this file
+  const DASHES = new RegExp("[" + String.fromCharCode(8212, 8211) + "]", "g");
+  const slugify = s => String(s == null ? "" : s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  // ⛔ A card's slug is not always slugify(name): The Ink holds `theink`, WUN MOR
+  // holds `wunmor`. Letters and digits only is the second key every page uses.
+  const tight = s => String(s == null ? "" : s).toLowerCase().replace(/[^a-z0-9]/g, "");
+  const CARD_SLUG_OK = /^[a-z0-9]([a-z0-9-]{0,58}[a-z0-9])?$/;
+  const NIGHT_SLUG_OK = /^[0-9]{4}-[0-9]{2}-[0-9]{2}-[a-z0-9-]{1,60}$/;
+  const UUID_OK = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  const EMAIL_OK = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  // The page's ONE link list (021). Host hardcoded, handle a bare word, the same
+  // base cardback.js builds a c/ page's link row from.
+  const LINK_BASE = {
+    instagram:  ["Instagram",  h => "https://instagram.com/" + encodeURIComponent(h)],
+    tiktok:     ["TikTok",     h => "https://www.tiktok.com/@" + encodeURIComponent(h)],
+    youtube:    ["YouTube",    h => "https://www.youtube.com/@" + encodeURIComponent(h)],
+    x:          ["X",          h => "https://x.com/" + encodeURIComponent(h)],
+    twitch:     ["Twitch",     h => "https://twitch.tv/" + encodeURIComponent(h)],
+    threads:    ["Threads",    h => "https://www.threads.net/@" + encodeURIComponent(h)],
+    spotify:    ["Spotify",    h => "https://open.spotify.com/artist/" + encodeURIComponent(h)],
+    soundcloud: ["SoundCloud", h => "https://soundcloud.com/" + encodeURIComponent(h)],
+    bandcamp:   ["Bandcamp",   h => "https://" + encodeURIComponent(h) + ".bandcamp.com/"],
+  };
+  const linkOf = (p, h) => {
+    const base = LINK_BASE[String(p || "").toLowerCase()];
+    if (!base || !/^[A-Za-z0-9._-]{1,30}$/.test(String(h || ""))) return null;
+    return { link: base[1](h), platform: base[0] };
   };
 
   // Where the site lives, read off this script's own address, so a check can ask
@@ -129,6 +178,10 @@
     if (/member_stories_dek_check/.test(m)) return new Error("The dek runs 3 to 200 characters.");
     if (/member_stories_body_md_check/.test(m)) return new Error("The story runs 30 to 20,000 characters.");
     if (/member_stories_cover_ours/.test(m)) return new Error("That cover photo is not in your folder.");
+    // 045: the cover has to be one of ours (a photo in the posts bucket), never a link
+    if (/member_stories_cover_shape/.test(m)) return new Error("Covers have to be a photo uploaded here.");
+    if (/member_stories_kicker_ok/.test(m)) return new Error("A kicker is 2 to 24 capitals, numbers, spaces and & ' . ! ? -, like THE NIGHT.");
+    if (/member_stories_shelf_ok/.test(m)) return new Error("That shelf is not one of the five.");
     if (/member_stories_slug_check/.test(m)) return new Error("That title needs more to it.");
     return new Error("Something in that story is too long or too short.");
   };
@@ -186,7 +239,11 @@
   // which is the same person, not a new one. MIXED means two different people.
   const MIXED = {};
   let meP = null, meUid, meSaw;
-  const forgetMe = () => { meP = null; meUid = undefined; meSaw = undefined; };
+  // THE RUN: upcoming() shares one calendar read per page (keyed by limit). It
+  // goes wherever the me() answer goes, because the desk reads pulled dates a
+  // stranger cannot, so a sign in or out must not hand back the other's list.
+  const upMemo = new Map();
+  const forgetMe = () => { meP = null; meUid = undefined; meSaw = undefined; upMemo.clear(); };
 
   let client = null;
   function sb() {
@@ -212,6 +269,115 @@
       } catch (e) {}
     }
     return client;
+  }
+
+  // ---- Wave 2 plumbing (used by the headed blocks inside OTP) ----------------
+  // One RPC, the database's own sentence on a refusal.
+  async function call(name, args) {
+    const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+    const { data, error } = args ? await c.rpc(name, args) : await c.rpc(name);
+    if (error) throw fail(error);
+    return data;
+  }
+
+  // Is anybody signed in on this phone? The saved session, read locally, so a
+  // stranger's page never sends a members-only call just to be told no.
+  async function hasSession(c) {
+    try {
+      if (c.auth.getSession) {
+        const { data } = await c.auth.getSession();
+        return !!(data && data.session);
+      }
+      const { data } = await c.auth.getUser();
+      return !!(data && data.user);
+    } catch (e) { return false; }
+  }
+
+  // Files the database hands back after a desk clear or a removal. One remove per
+  // file, in the bucket the database named (and only a bucket this site has).
+  // Best effort: the row is already changed, so a failed unlink never throws
+  // back at the desk; it leaves one file, same as the orphan queue does.
+  // A card photo has a -card twin made from the same upload (uploadCardArt), so
+  // the twin goes with it. Returns how many of the named files came off.
+  async function dropFiles(files) {
+    const c = sb(); if (!c || !Array.isArray(files)) return 0;
+    let n = 0;
+    for (const f of files) {
+      if (!f || FILE_BUCKETS.indexOf(f.bucket) === -1) continue;
+      const name = String(f.name || "");
+      if (!name || name.charAt(0) === "/" || name.indexOf("..") !== -1) continue;
+      try {
+        const r = await c.storage.from(f.bucket).remove([name]);
+        if (!(r && r.error)) n++;
+      } catch (e) {}
+      if (f.bucket === "cards" && /-full\.jpg$/.test(name)) {
+        try { await c.storage.from("cards").remove([name.replace(/-full\.jpg$/, "-card.jpg")]); } catch (e) {}
+      }
+    }
+    return n;
+  }
+
+  // A video row and then its cover. The cover is read FIRST: 014 had no orphan
+  // trigger (002's is posts-only), and a bare row delete left the cover in the
+  // 1GB posts bucket forever. The file goes only after a row came back, so a
+  // refused delete never takes somebody's cover with it. Returns rows deleted.
+  async function dropVideo(id) {
+    const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+    let key = null;
+    try {
+      const { data } = await c.from("featured_videos")
+        .select("cover_url").eq("id", id).maybeSingle();
+      key = data ? objectName(data.cover_url) : null;   // the same parser posts use
+    } catch (e) { /* the row still has to go */ }
+    const { data, error } = await c.from("featured_videos").delete().eq("id", id).select("id");
+    if (error) throw error;
+    const n = (data || []).length;
+    if (n && key) { try { await c.storage.from("posts").remove([key]); } catch (e) {} }
+    return n;
+  }
+
+  async function dropDate(id) {
+    const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+    const { data, error } = await c.from("calendar_dates").delete().eq("id", id).select("id");
+    if (error) throw error;
+    return (data || []).length;
+  }
+
+  // THE MEMBERS MANAGER: a desk_members row, with the names the pre-045 lists
+  // carried (display_name, is_admin, approved, denied) for pages still on them.
+  const deskRow = p => Object.assign({}, p, {
+    display_name: p.name,
+    is_admin: p.role === "desk",
+    approved: p.role === "card" || p.role === "desk",
+    denied: !!p.said_no,
+  });
+
+  // ONE PROFILE: people() answers once per page load.
+  let peopleP = null;
+  const PEOPLE_WAIT_MS = 3000;
+
+  // YOUR ACCOUNT: prove it is still them before an email, password or close.
+  // A fresh sign in with the password they typed, for the email on the login.
+  // A wrong password is a sentence, never GoTrue's wording. Both ends forget the
+  // me() answer, because a sign in is a new session even for the same person.
+  async function reauth(c, pw) {
+    const { data, error } = await c.auth.getUser();
+    const user = data && data.user;
+    if (error || !user) throw new Error("Log in first.");
+    if (!user.email) throw new Error("Log out and back in, then try again.");
+    if (!pw) throw new Error("Put your password in first.");
+    forgetMe();
+    try {
+      const r = await c.auth.signInWithPassword({ email: user.email, password: String(pw) });
+      if (r && r.error) {
+        const e = r.error;
+        if (e.code === "invalid_credentials" || /invalid login/i.test(e.message || ""))
+          throw new Error("That's not your password.");
+        throw fail(e);
+      }
+    } finally {
+      forgetMe();
+    }
   }
 
   const OTP = {
@@ -301,6 +467,9 @@
     // a night more than 120 days out and a mark made offline live on this phone
     // only, so clearing them would delete them, and clearing only the notes would
     // bring back marks taken off. Keeping them apart per person is the Crypt's job.
+    // Wave 2 adds two that belong to the login, not the phone: wall-fix (the
+    // desk's Crypt flyer fixes, read through the members-only table) and otp-kept
+    // (the cards a member kept, cached with their uid for pages without desk.js).
     async signOut() {
       const c = sb(); if (!c) return;
       forgetMe();
@@ -308,7 +477,7 @@
         await c.auth.signOut();
       } finally {
         forgetMe();
-        ["otp_door", "wall-k"].forEach(k => {
+        ["otp_door", "wall-k", "wall-fix", "otp-kept"].forEach(k => {
           try { w.localStorage.removeItem(k); } catch (e) {}
         });
       }
@@ -400,7 +569,10 @@
     // on the phone (1600px JPEG) and goes to the `take` bucket: 4MB a file, photos
     // only, twelve a day, all enforced by the bucket and its policy, not by this.
     // Card holders keep uploadImage() above (GIFs, video, 50MB).
-    async uploadTakePhoto(file) {
+    // 045 (THE ROLL): a Roll photo is members only, so it is cached for an hour
+    // like a card holder's post, not a year: a photo taken down must not live on
+    // in every phone's cache. opts.roll says which.
+    async uploadTakePhoto(file, opts = {}) {
       const c = sb(); if (!c) throw new Error("Backend not configured yet.");
       const { data: { user } } = await c.auth.getUser();
       if (!user) throw new Error("Log in first.");
@@ -432,7 +604,7 @@
         b => b ? ok(b) : no(new Error("That photo would not open. Try a JPG or a PNG.")), "image/jpeg", 0.86));
       const name = `${user.id}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`;
       const { error } = await c.storage.from("take").upload(name, blob, {
-        cacheControl: "31536000", upsert: false, contentType: "image/jpeg",
+        cacheControl: (opts && opts.roll) ? "3600" : "31536000", upsert: false, contentType: "image/jpeg",
       });
       if (error) {
         // The policy refuses for more than one reason (the daily twelve, a ban, a
@@ -505,7 +677,10 @@
     },
 
     /* ---- posting: your own stuff, no approval needed ---- */
-    async post({ text, imageUrl, imageAlt }) {
+    // ⛔ 045: members_only is ALWAYS sent, false from Home's box and true from the
+    // Roll. The column has no default and the database fails closed: a post that
+    // arrives without the flag and with a member's photo goes behind the door.
+    async post({ text, imageUrl, imageAlt, membersOnly }) {
       const c = sb(); if (!c) throw new Error("Backend not configured yet.");
       const { data: { user } } = await c.auth.getUser();
       if (!user) throw new Error("Log in first.");
@@ -514,7 +689,8 @@
         text: NO_DASH(text),
         image_url: imageUrl || null,
         image_alt: imageAlt || null,
-      }).select("id, text, image_url, image_alt, published, created_at, edited_at").single();
+        members_only: !!membersOnly,
+      }).select("id, text, image_url, image_alt, published, created_at, edited_at, members_only").single();
       if (error) throw error;
       return data;
     },
@@ -727,12 +903,13 @@
       }
     },
 
+    // 045: a member takes their own line down, published or not.
     async withdrawEntry(id) {
       const c = sb(); if (!c) throw new Error("Backend not configured yet.");
       const { data, error } = await c.from("word_entries").delete()
         .eq("id", id).select("id");
       if (error) throw error;
-      if (!data || !data.length) throw new Error("The desk already has that one.");
+      if (!data || !data.length) throw new Error("That one is not yours to take down.");
     },
 
     // desk: everything pending + everything on the walls
@@ -745,17 +922,21 @@
       return data || [];
     },
 
+    // The desk's publish and delete setters hand back how many rows they touched,
+    // so deskHide / deskDelete can say "already gone" instead of "done".
     async setEntryPublished(id, on) {
       const c = sb(); if (!c) throw new Error("Backend not configured yet.");
-      const { error } = await c.from("word_entries")
-        .update({ published: !!on }).eq("id", id);
+      const { data, error } = await c.from("word_entries")
+        .update({ published: !!on }).eq("id", id).select("id");
       if (error) throw error;
+      return (data || []).length;
     },
 
     async deleteEntry(id) {
       const c = sb(); if (!c) throw new Error("Backend not configured yet.");
-      const { error } = await c.from("word_entries").delete().eq("id", id);
+      const { data, error } = await c.from("word_entries").delete().eq("id", id).select("id");
       if (error) throw error;
+      return (data || []).length;
     },
 
     // ---- SEED OVERRIDES (migration 011) ----------------------------------
@@ -790,12 +971,22 @@
     },
 
     // ---- MEMBER STORIES (migration 010) ----------------------------------
+    // ---- STORIES (045) ----
+    // Members fix and take down their own (calls 8, 12): an edit while the
+    // story is not baked yet is theirs, with the old words kept as a revision
+    // the desk can read (storyRevisions). Once bake.py folds it into the
+    // catalog it is the desk's. The desk files HOUSE stories through the same
+    // insert (house, kicker, shelf), and the database publishes an author's own
+    // story itself, so WRITE ONE never lands unpublished.
+    // Every read below carries edited_at, house, kicker and shelf.
+    SHELVES: ["nights", "guides", "dates", "culture", "interviews"],
+
     slugifyTitle(t) {
       return String(t || "").toLowerCase().replace(/[^a-z0-9]+/g, "-")
         .replace(/(^-|-$)/g, "").slice(0, 60);
     },
 
-    async submitStory({ title, dek, body, coverUrl }) {
+    async submitStory({ title, dek, body, coverUrl, house, kicker, shelf }) {
       const c = sb(); if (!c) throw new Error("Backend not configured yet.");
       const { data: { user } } = await c.auth.getUser();
       if (!user) throw new Error("Log in first.");
@@ -809,6 +1000,14 @@
         body_md: NO_DASH(body),
         cover_url: coverUrl || null,
       };
+      // A house story: the desk's own, filed under a kicker and a shelf. The
+      // guard refuses `house` from anybody who is not the desk, and drops the
+      // kicker and shelf from a member's row whatever this sends.
+      if (house) {
+        row.house = true;
+        row.kicker = String(kicker == null ? "" : kicker).replace(DASHES, "-").trim().toUpperCase().slice(0, 24) || null;
+        row.shelf = OTP.SHELVES.indexOf(shelf) !== -1 ? shelf : null;
+      }
       storyFits({ title: row.title, dek: row.dek, body: row.body_md });
       // ⛔ A HOUSE story is a folder (word/<slug>/), not a row, so the unique slug
       // on member_stories cannot see it, and neither can the composer's own
@@ -851,9 +1050,12 @@
         .update(patch).eq("id", id).select("id");
       if (error) {
         if (error.code === "23514") throw storyWhy(error);
-        throw error;
+        // 55000 is the twenty-edits-an-hour ceiling, already a sentence
+        throw fail(error);
       }
-      if (!data || !data.length) throw new Error("That one is live. Edits go through the desk now.");
+      // 045: the policy is "own story, not baked yet", so zero rows means bake.py
+      // has folded it into the catalog.
+      if (!data || !data.length) throw new Error("That one is in the catalog now. The desk fixes it from here.");
     },
 
     async withdrawStory(id) {
@@ -861,7 +1063,7 @@
       const { data, error } = await c.from("member_stories").delete()
         .eq("id", id).select("id");
       if (error) throw error;
-      if (!data || !data.length) throw new Error("That one is live. The desk pulls it.");
+      if (!data || !data.length) throw new Error("That one is in the catalog now. The desk takes it down from here.");
     },
 
     async myStories() {
@@ -869,7 +1071,7 @@
       const { data: { user } } = await c.auth.getUser();
       if (!user) return [];
       const { data, error } = await c.from("member_stories")
-        .select("id,slug,title,dek,body_md,cover_url,published,baked,created_at")
+        .select("id,slug,title,dek,body_md,cover_url,published,baked,created_at,edited_at,house,kicker,shelf")
         .eq("author_id", user.id).order("created_at", { ascending: false });
       if (error) throw error;
       return data || [];
@@ -877,10 +1079,12 @@
 
     // Published, unbaked member stories for the homepage overlay. Baked ones
     // are skipped because the committed desk.json floor carries them by then.
-    async wordStories(limit = 8) {
+    // 045: house rows ride along (house, kicker, shelf), which is how a story the
+    // desk files from the board reaches the Stories tab before the bake.
+    async wordStories(limit = 24) {
       const c = sb(); if (!c) return [];
       const { data, error } = await c.from("word_stories")
-        .select("slug,title,dek,cover_url,baked,created_at,display_name,card_slug")
+        .select("slug,title,dek,cover_url,baked,created_at,display_name,card_slug,edited_at,house,kicker,shelf")
         .eq("baked", false)
         .order("created_at", { ascending: false }).limit(limit);
       if (error) throw error;
@@ -890,7 +1094,7 @@
     async wordStory(slug) {
       const c = sb(); if (!c) return null;
       const { data, error } = await c.from("word_stories")
-        .select("slug,title,dek,body_md,cover_url,created_at,display_name,card_slug")
+        .select("slug,title,dek,body_md,cover_url,created_at,display_name,card_slug,edited_at,house,kicker,shelf")
         .eq("slug", slug).maybeSingle();
       if (error) throw error;
       return data || null;
@@ -901,7 +1105,7 @@
     async storyAnyRole(slug) {
       const c = sb(); if (!c) return null;
       const { data, error } = await c.from("member_stories")
-        .select("slug,title,dek,body_md,cover_url,published,created_at")
+        .select("slug,title,dek,body_md,cover_url,published,created_at,edited_at,house,kicker,shelf")
         .eq("slug", slug).maybeSingle();
       if (error) return null;
       return data || null;
@@ -910,7 +1114,7 @@
     async deskStories() {
       const c = sb(); if (!c) throw new Error("Backend not configured yet.");
       const { data, error } = await c.from("member_stories")
-        .select("id,slug,title,dek,body_md,published,baked,created_at, profiles(display_name)")
+        .select("id,slug,title,dek,body_md,cover_url,published,baked,created_at,edited_at,house,kicker,shelf, profiles(display_name)")
         .order("created_at", { ascending: false }).limit(50);
       if (error) throw error;
       return data || [];
@@ -918,9 +1122,10 @@
 
     async setStoryPublished(id, on) {
       const c = sb(); if (!c) throw new Error("Backend not configured yet.");
-      const { error } = await c.from("member_stories")
-        .update({ published: !!on }).eq("id", id);
+      const { data, error } = await c.from("member_stories")
+        .update({ published: !!on }).eq("id", id).select("id");
       if (error) throw error;
+      return (data || []).length;
     },
 
     // The laptop's mark, tapped from the desk after bake.py + push: the git
@@ -936,7 +1141,9 @@
     // refuses a PUBLISHED row ("That one is live. Edits go through the desk
     // now."), so once a story was approved NOBODY could fix a typo in it. This
     // is the "through the desk" half that message always promised.
-    async updateStory(id, { title, dek, body }) {
+    // 045 (call 12): the cover too. undefined leaves it, null clears it, and a
+    // URL sets it (the guard lets the desk pick a photo from its own folder).
+    async updateStory(id, { title, dek, body, coverUrl }) {
       const c = sb(); if (!c) throw new Error("Backend not configured yet.");
       const patch = {};
       if (title !== undefined) patch.title = NO_DASH(title).trim();
@@ -945,6 +1152,7 @@
         if (/^!\[/m.test(body || "")) throw new Error("Images inside the story are not a thing yet. One cover photo is.");
         patch.body_md = NO_DASH(body);
       }
+      if (coverUrl !== undefined) patch.cover_url = coverUrl || null;
       // Checked before the write, so a too-long headline is a sentence, not a
       // Postgres constraint name, and nothing reached the database.
       storyFits({ title: patch.title, dek: patch.dek, body: patch.body_md });
@@ -970,8 +1178,9 @@
 
     async deleteStory(id) {
       const c = sb(); if (!c) throw new Error("Backend not configured yet.");
-      const { error } = await c.from("member_stories").delete().eq("id", id);
+      const { data, error } = await c.from("member_stories").delete().eq("id", id).select("id");
       if (error) throw error;
+      return (data || []).length;
     },
 
     // ---- FEATURED VIDEOS (migration 014) ---------------------------------
@@ -1059,8 +1268,9 @@
 
     async setVideoPublished(id, on) {
       const c = sb(); if (!c) throw new Error("Backend not configured yet.");
-      const { error } = await c.from("featured_videos").update({ published: !!on }).eq("id", id);
+      const { data, error } = await c.from("featured_videos").update({ published: !!on }).eq("id", id).select("id");
       if (error) throw error;
+      return (data || []).length;
     },
 
     async setVideoFeatured(id, on) {
@@ -1069,21 +1279,10 @@
       if (error) throw error;
     },
 
+    // 045: a member takes down their own video, published or not ("author
+    // withdraws own video"), so zero rows is the one answer that means no.
     async deleteVideo(id) {
-      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
-      // Read the cover FIRST. 014 has no orphan trigger (002's is posts-only),
-      // so a bare row delete left the cover in the 1GB posts bucket forever.
-      let key = null;
-      try {
-        const { data } = await c.from("featured_videos")
-          .select("cover_url").eq("id", id).maybeSingle();
-        key = data ? objectName(data.cover_url) : null;   // the same parser posts use
-      } catch (e) { /* the row still has to go */ }
-      const { error } = await c.from("featured_videos").delete().eq("id", id);
-      if (error) throw error;
-      // Best effort: the row is already gone, so a failed unlink must not throw
-      // back at the desk. It just leaves one file, same as the orphan card.
-      if (key) { try { await c.storage.from("posts").remove([key]); } catch (e) {} }
+      if (!(await dropVideo(id))) throw new Error("That one is not yours to take down.");
     },
 
     // ---- SITE OVERRIDES, the front-page CMS (migration 014) ---------------
@@ -1219,7 +1418,8 @@
       const { data, error } = await c.from("rotation_tracks").delete()
         .eq("id", id).select("id");
       if (error) throw error;
-      if (!data || !data.length) throw new Error("That one is on rotation. The desk pulls it.");
+      // 045: their own pick comes down whether it is on rotation or not
+      if (!data || !data.length) throw new Error("That one is not yours to take down.");
     },
 
     async rotationAll() {
@@ -1233,15 +1433,17 @@
 
     async setTrackPublished(id, on) {
       const c = sb(); if (!c) throw new Error("Backend not configured yet.");
-      const { error } = await c.from("rotation_tracks")
-        .update({ published: !!on }).eq("id", id);
+      const { data, error } = await c.from("rotation_tracks")
+        .update({ published: !!on }).eq("id", id).select("id");
       if (error) throw error;
+      return (data || []).length;
     },
 
     async deleteTrack(id) {
       const c = sb(); if (!c) throw new Error("Backend not configured yet.");
-      const { error } = await c.from("rotation_tracks").delete().eq("id", id);
+      const { data, error } = await c.from("rotation_tracks").delete().eq("id", id).select("id");
       if (error) throw error;
+      return (data || []).length;
     },
 
     // Public card overlay for the homepage: every approved member's saved card
@@ -1282,13 +1484,16 @@
         return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,"0")}-${String(n.getDate()).padStart(2,"0")}`;
       })();
       const BASE = "id,title,kind,on_date,start_time,city,venue,link,note,by,by_name";
+      // 025 is live, so the credit rides along (the Music tab's lineup and the
+      // Run say whose night it is). It only SELECTs the column, never filters on
+      // it, so a database without 025 steps down a shape and loses just that.
       return await calTry(cols => c.from("calendar")
         .select(cols)
         .gte("on_date", d)
         // restate the order: a view's ORDER BY is not guaranteed to survive LIMIT
         .order("on_date", { ascending: true })
         .order("start_time", { ascending: true, nullsFirst: true })
-        .limit(limit), BASE + "," + CAL_EXCH, BASE);
+        .limit(limit), BASE + "," + CAL_EXCH + "," + CAL_CREDIT, BASE + "," + CAL_EXCH, BASE);
     },
 
     async calendarPast(limit = 40) {
@@ -1296,11 +1501,12 @@
       const n = new Date();
       const today = `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,"0")}-${String(n.getDate()).padStart(2,"0")}`;
       const BASE = "id,title,kind,on_date,start_time,city,venue,link,note,by,by_name";
+      // the credit rides along here too (wave 2): /dates/ reads whose night a past date was off this
       return await calTry(cols => c.from("calendar")
         .select(cols)
         .lt("on_date", today)
         .order("on_date", { ascending: false }).limit(limit),
-        BASE + "," + CAL_EXCH, BASE);
+        BASE + "," + CAL_EXCH + "," + CAL_CREDIT, BASE + "," + CAL_EXCH, BASE);
     },
 
     // The desk's view: unpublished rows included, so a pulled date is still
@@ -1428,16 +1634,14 @@
     },
 
     async deleteDate(id) {
-      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
-      const { data, error } = await c.from("calendar_dates").delete().eq("id", id).select("id");
-      if (error) throw error;
-      if (!data || !data.length) throw new Error("That date is not yours to remove.");
+      if (!(await dropDate(id))) throw new Error("That date is not yours to remove.");
     },
 
     async setDatePublished(id, on) {
       const c = sb(); if (!c) throw new Error("Backend not configured yet.");
-      const { error } = await c.from("calendar_dates").update({ published: !!on }).eq("id", id);
+      const { data, error } = await c.from("calendar_dates").update({ published: !!on }).eq("id", id).select("id");
       if (error) throw error;
+      return (data || []).length;
     },
 
     // ---- THE EXCHANGE, the desk's half (022) --------------------------------
@@ -1582,16 +1786,21 @@
           return data || [];
         }),
         one(async () => {
+          // 045: a house story is the desk's, filed by the house, not a line on
+          // the desk's own card page
           const { data, error } = await c.from("word_stories")
             .select("slug,title,dek,cover_url,baked,created_at")
-            .eq("card_slug", slug).order("created_at", { ascending: false });
+            .eq("card_slug", slug).eq("house", false).order("created_at", { ascending: false });
           if (error) throw error;
           return data || [];
         }),
         one(async () => {
+          // the one they starred first, the same order as the public rail
           const { data, error } = await c.from("videos")
             .select("id,provider,vid,title,link,cover,featured,created_at")
-            .eq("by", slug).order("created_at", { ascending: false });
+            .eq("by", slug)
+            .order("featured", { ascending: false })
+            .order("created_at", { ascending: false });
           if (error) throw error;
           return data || [];
         }),
@@ -1789,7 +1998,7 @@
       const { data: { user } } = await c.auth.getUser();
       if (!user) return [];
       const { data, error } = await c.from("posts")
-        .select("id, text, image_url, image_alt, pinned, published, created_at, edited_at")
+        .select("id, text, image_url, image_alt, pinned, published, created_at, edited_at, members_only")
         .eq("author_id", user.id)
         .order("created_at", { ascending: false })
         .limit(limit);
@@ -1853,42 +2062,9 @@
       return [];
     },
 
-    // ⛔ THREE STATES SINCE 023, not two. "Waiting" means nobody has looked yet;
-    // a refused row is not waiting for anything and must not sit in the queue
-    // being re-read every time the board opens, which is the entire reason the
-    // no exists. On a database without 023 p.denied is undefined, !undefined is
-    // true, and pending() behaves exactly as it did before.
-    // ⛔ 032: everyone who joins The Wall gets a profile too, and before this they all
-    // sat here looking like card applicants (Approve made them card holders). A Wall
-    // member only waits on the desk if they asked for a card. Before 032 runs,
-    // wall_casual is undefined and this is exactly the old filter.
-    // A Wall member with NO card ask on file is not waiting. One with any ask on
-    // file is. (034: somebody who applied on /join/ and then took the member code gets
-    // an open ask stamped at the door, and taking a "no" back re-opens theirs.)
-    // 034: somebody banned on The Wall is not waiting either (Approve would be refused until the
-    // ban comes off). wall_banned is undefined before 034, which leaves the filter as it was.
-    async pending() { return (await OTP.deskProfiles()).filter(p => !p.approved && !p.denied && !p.wall_banned && !(p.wall_casual && !p.card_ask)); },
-    async members() { return (await OTP.deskProfiles()).filter(p => p.approved); },
-    async refused() { return (await OTP.deskProfiles()).filter(p => !!p.denied); },
-
-    async setApproved(id, approved) {
-      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
-      const { error } = await c.from("profiles").update({ approved }).eq("id", id);
-      if (error) throw error;
-    },
-
-    // The no. The trigger stamps denied_at and takes the seat back in the same
-    // write, so this never has to send approved:false itself and can never race
-    // with it. Undoing sends denied:false and leaves them WAITING, not in: the
-    // desk still has to say yes on purpose.
-    async setDenied(id, denied) {
-      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
-      const { error } = await c.from("profiles").update({ denied: !!denied }).eq("id", id);
-      if (error) {
-        if (error.code === "42703") throw new Error("Run migration-023-no-queue-and-the-no.sql first.");
-        throw error;
-      }
-    },
+    // pending(), members(), refused(), setApproved() and setDenied() moved to
+    // THE MEMBERS MANAGER below (044 / 045): same names, one card rule and one
+    // ask rule underneath, read from desk_members instead of filtered here.
 
     // ONE PLACE that turns a profile into what the door should say to them.
     // Eight surfaces used to hardcode "you're in the queue", which meant a
@@ -1947,21 +2123,8 @@
       if (!data || !data.length) throw new Error("The database refused that. Not yours to edit.");
     },
 
-    async retireMember(id) {
-      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
-      const { data, error } = await c.rpc("admin_retire_member", { p_author: id });
-      if (error) throw error;
-      return data;               // pull_batch uuid, hand it to restoreBatch to undo
-    },
-
-    // 034: Revoke + pull posts also closes The Wall for that person, so "Put them back"
-    // has to lift it BEFORE re-approving (the database refuses to approve a banned person).
-    // Before 034 this lifts a ban that was never set, which changes nothing.
-    async wallBan(id, on) {
-      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
-      const { error } = await c.rpc("wall_ban", { p_user: id, p_ban: !!on });
-      if (error && error.code !== "PGRST202" && error.code !== "42883") throw error;   // no Wall yet = nothing to lift
-    },
+    // retireMember() and wallBan() moved to THE MEMBERS MANAGER below: both are
+    // the one ban now (desk_ban), and unban puts everything back.
 
     async restoreBatch(batch) {
       const c = sb(); if (!c) throw new Error("Backend not configured yet.");
@@ -2030,6 +2193,749 @@
         }
       }
       return { cleared, stuck };
+    },
+
+    // ---- YOUR ACCOUNT (044) ----
+    // Call 7: log out, rename, email, password, close. A card holder's name goes
+    // through the desk (his call) and there is no Instagram self-change this wave
+    // ("later"), so neither exists here. Email, password and close each ask for
+    // the password again first (reauth), and "Secure password change" is on.
+    ACCT_SAYS: {
+      name: {
+        closed: "This account is closed.",
+        empty: "Put a name in.",
+        long: "40 characters at most.",
+        taken: "That name belongs to a card holder or the house. Pick another.",
+        card: "Ask the desk to change a card holder's name. Your card page follows it.",
+        slow: "Three name changes a day. Try again tomorrow.",
+      },
+    },
+
+    // { name, ig, kind, banned, closed, can_reopen, closed_at, card_slug, card_ask,
+    //   card_want, names_left, sid } for the login, or null. Never throws.
+    async account() {
+      const c = sb(); if (!c) return null;
+      try {
+        if (!(await hasSession(c))) return null;
+        const { data, error } = await c.rpc("my_account");
+        if (error) { console.warn("my_account did not answer,", error.message); return null; }
+        return (data && typeof data === "object" && !Array.isArray(data)) ? data : null;
+      } catch (e) { return null; }
+    },
+
+    // The member's own name. The database cleans it the way the name guard does
+    // and answers with a word; a word that is not ok is a sentence here.
+    async setMyName(name) {
+      const v = Array.from(String(name == null ? "" : name).trim()).slice(0, 40).join("");
+      const r = (await call("my_rename", { p_name: v })) || {};
+      if (!r.ok && r.why !== "same")
+        throw new Error(OTP.ACCT_SAYS.name[r.why] || "That name did not save. Try again.");
+      forgetMe();
+      return { name: r.name, shared: r.shared || 0, same: r.why === "same" };
+    },
+
+    // ⛔ The desk's own email changes in the Supabase dashboard, never here: a
+    // stolen desk session must not be able to move the login somewhere else.
+    // Refused before anything is sent.
+    async changeEmail(email, again, pw) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const m = await OTP.me();
+      if (m && m.profile && m.profile.is_admin) throw new Error("The desk changes its email in the Supabase dashboard.");
+      if (m && m.failed) throw new Error("Could not check your account. Try again in a minute.");
+      const e = String(email == null ? "" : email).trim().toLowerCase();
+      const e2 = String(again == null ? "" : again).trim().toLowerCase();
+      if (!EMAIL_OK.test(e)) throw new Error("That email doesn't look right.");
+      if (e !== e2) throw new Error("Those two emails don't match.");
+      await reauth(c, pw);
+      const { data, error } = await c.auth.updateUser({ email: e }, { emailRedirectTo: "https://0fftheprint.com/my/#account" });
+      if (error) {
+        const msg = String(error.message || "");
+        if (error.code === "email_exists" || /already been registered/i.test(msg))
+          throw new Error("That email already has an account here.");
+        if (error.code === "over_email_send_rate_limit" || /rate limit/i.test(msg))
+          throw new Error("Too many tries. Give it an hour.");
+        throw fail(error);
+      }
+      forgetMe();
+      return { email: e, pending: !!(data && data.user && data.user.new_email) };
+    },
+
+    async changePassword(pw, next, again) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const n = String(next == null ? "" : next);
+      if (n.length < 8) throw new Error("8 characters or more.");
+      if (n !== String(again == null ? "" : again)) throw new Error("Those two don't match.");
+      await reauth(c, pw);
+      const { error } = await c.auth.updateUser({ password: n });
+      if (error) {
+        const code = error.code || "", msg = String(error.message || "");
+        if (code === "same_password" || /different from the old/i.test(msg)) throw new Error("That's the password you have now.");
+        if (code === "weak_password") throw new Error("Pick a longer one.");
+        if (code === "reauthentication_needed") throw new Error("Log out and back in, then try again.");
+        throw fail(error);
+      }
+      forgetMe();
+      return true;
+    },
+
+    // A hide, nothing deleted, so Open it again puts everything back. takeBack
+    // also blanks every message they sent, which cannot be undone. The Crypt's
+    // phone-only stores go with the login on this phone, then the sign out.
+    async closeMyAccount(pw, note, takeBack) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      const m = await OTP.me();
+      if (m && m.profile && m.profile.is_admin) throw new Error("The desk account stays open.");
+      await reauth(c, pw);
+      const { error } = await c.rpc("account_close", { p_reason: noteOf(note), p_take_back: !!takeBack });
+      if (error) throw fail(error);
+      ["wall-mine", "wall-watch", "wall-check", "wall-cal-mine", "wall-ppl-seen", "wall-fix"].forEach(k => {
+        try { w.localStorage.removeItem(k); } catch (e) {}
+      });
+      try { await OTP.signOut(); } catch (e) { /* closed is closed; the keys above are gone */ }
+      return "closed";
+    },
+
+    // 'open', or 'shut' when the desk closed it (nothing changes then).
+    async reopenMyAccount() {
+      const r = await call("account_reopen");
+      forgetMe();
+      return r;
+    },
+
+    // The card ask from Kin. slug names the card they want (a roster seat needs
+    // the second tap that names it); undefined leaves an open ask's pick alone.
+    // 'asked' | 'holder' | 'denied' | 'held'.
+    async cardAsk(note, slug) {
+      return await call("wall_card_ask", { p_note: noteOf(note), p_slug: slug == null ? null : slug });
+    },
+
+    async unaskCard() { return !!(await call("wall_card_unask")); },
+
+    // A flyer source they sent that the desk has not looked at yet.
+    async withdrawSource(id) { return !!(await call("wall_source_withdraw", { p_id: id })); },
+
+    // ---- THE MEMBERS MANAGER (044 / 045, desk only) ----
+    // Call 3: the board is the control room. Every power is one RPC that starts
+    // with the desk check and writes the account log; nothing here writes a
+    // table straight. A member calling any of these gets "Desk only."
+    // Frames only the desk hands out (frame_grant). Kept in step with the
+    // card_frame enum minus OPEN_FRAMES; the database is the gate.
+    GRANT_FRAMES: ["rainbow-rare", "tera-ex", "gold-rare", "full-art", "darklord", "warlord",
+                   "amazing", "diamond-rare", "vampy", "stone", "tag-team"],
+
+    // One row per person: role 'desk' | 'card' | 'member' | 'login', state
+    // 'closed' | 'banned' | 'active', asks (THE one ask rule), said_no, counts.
+    // No email, ever.
+    async deskMembers() {
+      const d = await call("desk_members");
+      return Array.isArray(d) ? d : [];
+    },
+
+    // Everything about one person (person, words, page, ask, still_public,
+    // history, lists, reports), or null for nobody by that id.
+    async deskMember(id) {
+      return (await call("desk_member_stuff", { p_user: id })) || null;
+    },
+
+    // The next 50 of one list, older than `before` (the last row's at).
+    async deskMemberItems(id, kind, before) {
+      const d = await call("desk_member_items", { p_user: id, p_kind: kind, p_before: before == null ? null : before });
+      return Array.isArray(d) ? d : ((d && Array.isArray(d.rows)) ? d.rows : []);
+    },
+
+    // THE one badge: what is waiting on the desk, by queue, plus the total.
+    // Never throws (a badge that throws takes the nav down with it).
+    async deskWaiting() {
+      const KEYS = ["asks", "sources", "reports", "packs", "rooms", "picks", "comments", "stories", "house", "photos_up", "total"];
+      const z = {}; KEYS.forEach(k => { z[k] = 0; });
+      const c = sb(); if (!c) return z;
+      let r;
+      try { r = await c.rpc("desk_waiting"); } catch (e) { return z; }
+      if (!r.error) {
+        const row = Array.isArray(r.data) ? r.data[0] : r.data;
+        if (row && typeof row === "object") KEYS.forEach(k => { z[k] = Number(row[k]) || 0; });
+        return z;
+      }
+      if (r.error.code !== "PGRST202") return z;
+      // A database without 045 has no desk_waiting. Add up what it can answer:
+      // card asks and sources (032), packs (037), rooms (038), reported chats
+      // (040). Each one that fails counts 0.
+      const one = async fn => { try { return await fn(); } catch (e) { return 0; } };
+      const [counts, packs, rooms, dms] = await Promise.all([
+        one(async () => { const q = await c.rpc("wall_desk_counts"); return (!q.error && Array.isArray(q.data) && q.data[0]) || 0; }),
+        one(async () => { const q = await c.rpc("desk_packs"); return q.error ? 0 : (q.data || []).filter(p => !p.published).length; }),
+        one(async () => { const q = await c.rpc("rooms_list"); return q.error ? 0 : (q.data || []).filter(x => !x.published && !x.mine).length; }),
+        one(async () => { const q = await c.rpc("dm_desk_count"); return q.error ? 0 : (Number(q.data) || 0); }),
+      ]);
+      z.asks = Number(counts && counts.asks) || 0;
+      z.sources = Number(counts && counts.sources) || 0;
+      z.packs = packs; z.rooms = rooms; z.reports = dms;
+      z.total = z.asks + z.sources + z.packs + z.rooms + z.reports;
+      return z;
+    },
+
+    // Packs and rooms waiting (oldest first) and pending sources, or null.
+    async deskQueue() { return await call("desk_queue"); },
+
+    // THE one card rule. Yes makes them a card holder and hands back the card
+    // slug (slug names one; a roster seat is only ever handed out by name).
+    // No is the quiet no: they are never told, and it reads like waiting.
+    async cardDecide(id, yes, slug) {
+      if (yes) return await call("desk_card", { p_user: id, p_on: true, p_slug: slug || null });
+      await call("wall_card_decide", { p_user: id, p_yes: false });
+      return "denied";
+    },
+
+    // Take the card back. They stay a member; card_slug and the frame grant are
+    // kept, so making them a card holder again hands back the same card.
+    async takeCard(id) { return await call("desk_card", { p_user: id, p_on: false }); },
+
+    // Take back the no: they are back in Wants a card, not in.
+    async unNo(id) { return !!(await call("desk_unno", { p_user: id })); },
+
+    // THE one ban: off the Crypt and the whole site at once, and unban puts every
+    // last thing back (a Revoke from before 044 republishes its pulled posts).
+    // 'banned' | 'active' | 'closed' (unbanned but still closed).
+    async ban(id, on, note) {
+      return await call("desk_ban", { p_user: id, p_on: !!on, p_note: noteOf(note) });
+    },
+
+    // Close somebody (a hide, undoable). A desk close shows them the shut lock.
+    async deskClose(id, note) { return await call("desk_close", { p_user: id, p_note: noteOf(note) }); },
+    async deskReopen(id) { return await call("desk_reopen", { p_user: id }); },
+
+    // Fix their info (power b). The database cleans and checks, and logs it.
+    async renameMember(id, name) {
+      return await call("desk_set_name", { p_user: id, p_name: String(name == null ? "" : name).trim() });
+    },
+    // 'ok' | 'cleared' | 'same' | 'taken' | 'bad'. Clearing frees the handle.
+    async setMemberIg(id, ig) {
+      return await call("desk_set_instagram", { p_user: id, p_ig: String(ig == null ? "" : ig).trim() });
+    },
+    async setFrameGrant(id, frame) {
+      return await call("desk_set_frame", { p_user: id, p_frame: frame || null });
+    },
+    // Their card song, which the mirror copies to their Crypt page. A link that
+    // does not read is refused here, before anything is sent; blank clears it.
+    async setMemberSong(id, { song, start } = {}) {
+      const t = OTP.readTrack(song);
+      if (!t.id && !t.empty) throw new Error(t.why);
+      const n = parseInt(start, 10);
+      return await call("desk_set_song", {
+        p_user: id, p_track: t ? t.id : null,
+        p_start: Number.isFinite(n) && n > 0 ? Math.min(n, 3600) : null,
+      });
+    },
+
+    // Clear one thing off their card or Crypt page: page | pic | wallpaper |
+    // pic_one | about | headline | mood | meet | song | links | link_one | tracks.
+    // pic_one takes the picture's url; link_one takes 'platform:handle'. The
+    // database clears, then names the files nothing else uses, and they come off
+    // storage here.
+    async clearSpace(id, what, url) {
+      const r = (await call("desk_space_clear", { p_user: id, p_what: what, p_url: url == null ? null : url })) || {};
+      const removed = await dropFiles(r.files);
+      return { cleared: r.cleared == null ? null : r.cleared, removed };
+    },
+
+    // The board's member sheet ticks (I156). Every tick is one clearSpace now:
+    // no table write is left in here, and each one is logged.
+    async clearMemberCard(id, { photo, links, song, tracks } = {}) {
+      const out = { cleared: [], removed: 0 };
+      const ticks = [[photo, "pic"], [links, "links"], [song, "song"], [tracks, "tracks"]];
+      for (const [on, what] of ticks) {
+        if (!on) continue;
+        const r = await OTP.clearSpace(id, what);
+        out.cleared.push(what); out.removed += r.removed;
+      }
+      return out;
+    },
+
+    // Waiting vs said no: mark one row as seen (story | pick | story_comment |
+    // pack | room), or every waiting row of a kind (refusals from before 045).
+    async deskMarkRead(kind, id) {
+      const n = Number(await call("desk_mark_read", { p_kind: kind, p_id: id == null ? null : id })) || 0;
+      if (id != null && !n) throw new Error("That one is already gone.");
+      return n;
+    },
+    async deskMarkAllSeen(kind) {
+      return Number(await call("desk_mark_read", { p_kind: kind, p_id: null })) || 0;
+    },
+
+    async sourceDecide(id, status) { return await call("wall_source_decide", { p_id: id, p_status: status }); },
+    async packDecide(id, on) { return await call("pack_publish", { p_id: id, p_on: !!on }); },
+    async roomDecide(id, on) { return await call("room_publish", { p_id: id, p_on: !!on }); },
+
+    // Hide (or show again) and delete anything a member made, from one table
+    // (DESK_KINDS, under this object): post, take_comment, flyer_comment, pack,
+    // room, space_post, frame_tag, story, story_comment, pick, video, date,
+    // dm_message, space. extra carries {user, slug, media} for a frame tag and
+    // {user} for a page. Something already gone says so.
+    async deskHide(kind, id, hide) {
+      const k = DESK_KINDS[kind];
+      if (!k) throw new Error("That is not something the desk can hide.");
+      if (!k.hide) throw new Error(k.only);
+      return await k.hide(id, hide === undefined ? true : !!hide);
+    },
+    async deskDelete(kind, id, extra) {
+      const k = DESK_KINDS[kind];
+      if (!k) throw new Error("That is not something the desk can delete.");
+      return await k.del(id, extra || {});
+    },
+
+    // Same names as before, one rule underneath each.
+    async wallBan(id, on) { return await OTP.ban(id, on); },
+    // The old Revoke is the ban now; there is no pull batch to hand back, and
+    // unban republishes. Returns null where it used to return a batch.
+    async retireMember(id) { await OTP.ban(id, true, "revoked"); return null; },
+    async setApproved(id, on) { return on ? await OTP.cardDecide(id, true) : await OTP.takeCard(id); },
+    async setDenied(id, on) { return on ? await OTP.cardDecide(id, false) : await OTP.unNo(id); },
+    // The three old lists, off the one desk read. Each row also carries the
+    // pre-045 names the pages already read (display_name, is_admin, approved,
+    // denied), so a page that has not moved to deskMembers keeps working.
+    async pending() { return (await OTP.deskMembers()).filter(p => p.asks).map(deskRow); },
+    async members() {
+      return (await OTP.deskMembers())
+        .filter(p => (p.role === "card" || p.role === "desk") && p.state === "active").map(deskRow);
+    },
+    async refused() { return (await OTP.deskMembers()).filter(p => p.said_no).map(deskRow); },
+
+    // ---- REPORTS, BLOCKS, EDITS (044 / 045) ----
+    // Calls 8 and 9: a report button on comments, packs, pages, rooms and frame
+    // tags, one list on the board, Block that means block, and fixing your own
+    // comment (no time window; the 'edited' tag tells readers).
+    REPORT_WHY: {
+      mean: "Mean or a threat",
+      spam: "Spam",
+      private: "Private stuff",
+      not_them: "Not theirs to post",
+      other: "Something else",
+    },
+
+    // The chips for one kind, as [why, label] pairs.
+    reportChoices(kind) {
+      const W = OTP.REPORT_WHY, pick = keys => keys.map(k => [k, W[k]]);
+      if (kind === "frame_tag") return [["not_them", "That is not them"], ["other", "Something else"]];
+      if (kind === "space" || kind === "post" || kind === "pack" || kind === "room")
+        return pick(["mean", "spam", "private", "not_them", "other"]);
+      return pick(["mean", "spam", "private", "other"]);
+    },
+
+    // 'sent' | 'already'. The database works out whose it is; a page never says.
+    async report(kind, target, why, note) {
+      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
+      let r;
+      try {
+        r = await c.rpc("report_add", { p_kind: kind, p_target: String(target), p_why: why || null, p_note: noteOf(note) });
+      } catch (e) { throw new Error("That did not send. Try again."); }
+      if (r.error) {
+        // 'Members only.' from report_add, or Postgres refusing anon the door
+        // itself (a page still painted after its login ended)
+        if (/members only|permission denied/i.test(r.error.message || "")) throw new Error("Reporting is for members.");
+        // a refusal written for a person (gone already, yours, the house's, a lot today)
+        if (r.error.code === "22023" || r.error.code === "42501") throw fail(r.error);
+        throw new Error("That did not send. Try again.");
+      }
+      return r.data === "already" ? "already" : "sent";
+    },
+
+    // Which of these targets the caller has an open report on, as a Set of
+    // strings (first 200). Never throws.
+    async myReports(kind, targets) {
+      const out = new Set();
+      const c = sb();
+      const list = (Array.isArray(targets) ? targets : []).map(String).slice(0, 200);
+      if (!c || !list.length) return out;
+      try {
+        if (!(await hasSession(c))) return out;
+        const r = await c.rpc("report_mine", { p_kind: kind, p_targets: list });
+        if (!r.error && Array.isArray(r.data)) r.data.forEach(t => out.add(String(t)));
+      } catch (e) {}
+      return out;
+    },
+
+    // Fix your own comment: 'take' (the timeline and the Roll) or 'flyer' (the Crypt).
+    async editComment(where, id, body) {
+      const fn = where === "take" ? "take_comment_edit" : where === "flyer" ? "wall_comment_edit" : null;
+      if (!fn) throw new Error("Fix which comment?");
+      await call(fn, { p_id: id, p_body: NO_DASH(body) });
+      return true;
+    },
+
+    // Block whoever wrote this comment (take_comment | flyer_comment | space_post).
+    async blockAuthor(kind, target) {
+      return !!(await call("dm_block_author", { p_kind: kind, p_target: String(target) }));
+    },
+    async blockedList() {
+      const d = await call("dm_blocked_list");
+      return Array.isArray(d) ? d : [];
+    },
+    async unblock(sid) { return await call("dm_block", { p_sid: sid, p_on: false }); },
+
+    // The desk's one list: one entry per reported thing, open first.
+    async deskReports({ state = "open", about = null, by = null, limit = 100 } = {}) {
+      const d = await call("report_desk_queue", { p_state: state, p_about: about, p_by: by, p_limit: limit });
+      return Array.isArray(d) ? d : [];
+    },
+    async deskReportCount() {
+      try { return Number(await call("report_desk_count")) || 0; } catch (e) { return 0; }
+    },
+    async closeReport(kind, target, outcome = "kept") {
+      return await call("report_desk_close", { p_kind: kind, p_target: String(target), p_outcome: outcome });
+    },
+
+    // keep | hide | unhide | remove one reported (or any) thing. The database
+    // closes the reports on it and names the files that can go.
+    async deskAct(kind, target, how) {
+      const r = (await call("desk_item_act", { p_kind: kind, p_target: String(target), p_do: how })) || {};
+      await dropFiles(r.files);
+      return { outcome: r.outcome, changed: r.changed, closed: r.closed, files: Array.isArray(r.files) ? r.files : [] };
+    },
+
+    // One message in a chat somebody in it reported. Both of them see
+    // "removed by the desk". Unreported chats are never read.
+    async deskRemoveMessage(id) {
+      if (!(await call("dm_desk_remove", { p_id: id }))) throw new Error("Only a message in a reported chat.");
+      return true;
+    },
+    async dmDeskReports() {
+      const d = await call("dm_desk_reports");
+      return Array.isArray(d) ? d : [];
+    },
+    async dmDeskClose(thread) { return await call("dm_desk_close", { p_thread: thread }); },
+
+    // What a member story said before each edit (the desk reads these).
+    async storyRevisions(storyId) {
+      const c = sb(); if (!c) return [];
+      const { data, error } = await c.from("member_story_revisions")
+        .select("title,dek,body_md,cover_url,replaced_at")
+        .eq("story_id", storyId)
+        .order("replaced_at", { ascending: false });
+      if (error) throw fail(error);
+      return data || [];
+    },
+
+    // ---- ONE PROFILE (044) ----
+    // Call 2: one photo and one song per card holder, shared by the card and the
+    // Crypt page, and one list of who holds a card. A banned, closed or demoted
+    // holder's roster seat goes dark everywhere (the pack, the binder, Music).
+
+    // Card slugs whose holder is banned, closed or demoted. Never throws.
+    async darkSeats() {
+      const c = sb(); if (!c) return [];
+      try {
+        const { data, error } = await c.rpc("dark_seats");
+        if (error || !Array.isArray(data)) return [];
+        return data.filter(s => typeof s === "string" && s);
+      } catch (e) { return []; }
+    },
+
+    // ⛔ PURE: no network, no DOM, so a page or a test can call it on its own
+    // list. The house list (roster.json) is the floor; a DB card row patches the
+    // seat it belongs to IN PLACE, and a card holder with no seat is appended.
+    // Seat to row: card_slug, then slugify(name), then tight(name).
+    // opts.hide: slugs to leave out. opts.dark: slugs whose seat goes dark.
+    peopleMerge(list, rows, opts) {
+      const o = opts || {};
+      const low = s => String(s == null ? "" : s).trim().toLowerCase();
+      const hide = new Set();
+      (o.hide || []).forEach(s => { const v = low(s); if (v) { hide.add(v); hide.add(tight(v)); } });
+      const dark = new Set(), darkTight = new Set();
+      (o.dark || []).forEach(s => { const v = low(s); if (v) { dark.add(v); darkTight.add(tight(v)); } });
+      const by = {}, byTight = {};
+      (Array.isArray(rows) ? rows : []).forEach(rw => {
+        const s = rw && low(rw.card_slug);
+        if (!s) return;
+        if (!by[s]) by[s] = rw;
+        if (!byTight[tight(s)]) byTight[tight(s)] = rw;
+      });
+      const linkFor = rw => {
+        const first = Array.isArray(rw.links) ? rw.links[0] : null;
+        return (first && linkOf(first.p, first.h)) || linkOf(rw.link_platform, rw.link_handle);
+      };
+      const used = new Set(), out = [];
+      (Array.isArray(list) ? list : []).forEach(item => {
+        if (!item || typeof item !== "object") return;
+        const own = low(item.card_slug), sl = slugify(item.name), ti = tight(item.name);
+        let rw = (own && by[own]) || (sl && by[sl]) || (ti && byTight[ti]) || null;
+        if (rw && used.has(rw)) rw = null;               // one row, one seat
+        const slug = rw ? low(rw.card_slug) : "";
+        if ([own, sl, ti, slug, tight(slug)].some(k => k && hide.has(k))) { if (rw) used.add(rw); return; }
+        // A seat names its card (card_slug). An older list without one goes by
+        // its name, because a stranger never gets the dark holder's row to match.
+        const isDark = (own ? dark.has(own) : (dark.has(sl) || darkTight.has(ti))) || (slug && dark.has(slug));
+        if (isDark) { if (rw) used.add(rw); return; }
+        if (rw) {
+          used.add(rw);
+          const house = ("art" in item) ? item.art : item.photo;   // the house art stays on item.art
+          item.art = house;
+          item.photo = rw.card_photo || house;
+          item.rarity = rw.card_frame || item.rarity;
+          item.display_name = rw.display_name || item.display_name || item.name;
+          item.card_slug = rw.card_slug;
+          // ALWAYS: a song the holder cleared must not fall back to the seed
+          item.theme_song = rw.theme_song || "";
+          item.theme_start = rw.theme_start || 0;
+          if (Array.isArray(rw.featured) && rw.featured.length) item.featured = rw.featured.slice(0, 3);
+          const l = linkFor(rw);
+          if (l) { item.link = l.link; item.platform = l.platform; }
+          item.tagline = rw.tagline || "";
+          item.bio = rw.bio || "";
+          item.hasDb = true;
+        }
+        out.push(item);
+      });
+      const extra = [];
+      Object.keys(by).forEach(s => {
+        const rw = by[s];
+        if (used.has(rw) || dark.has(s) || hide.has(s) || hide.has(tight(s)) || !CARD_SLUG_OK.test(s)) return;
+        used.add(rw);
+        const name = String(rw.display_name || "").trim() || s;
+        const l = linkFor(rw);
+        extra.push({
+          name, display_name: name, card_slug: rw.card_slug,
+          photo: rw.card_photo || "", rarity: rw.card_frame || "common",
+          type: "take", type_label: "CARD HOLDER", hp: 100, moves: [],
+          flavor: rw.tagline || "", lore: rw.bio || "", tagline: rw.tagline || "", bio: rw.bio || "",
+          theme_song: rw.theme_song || "", theme_start: rw.theme_start || 0,
+          featured: Array.isArray(rw.featured) ? rw.featured.slice(0, 3) : [],
+          link: l ? l.link : "c/" + s + "/", platform: l ? l.platform : "Card",
+          pending_glyph: tight(name).slice(0, 3).toUpperCase() || "0FF", pending_stamp: "PHOTO PENDING",
+          page: "c/" + s + "/", binder_key: "c-" + s, _db: true, hasDb: true,
+        });
+      });
+      extra.sort((a, b) => a.display_name.localeCompare(b.display_name, undefined, { sensitivity: "base" }));
+      return out.concat(extra);
+    },
+
+    // The merged list for this page: roster.json, the cards and the dark seats.
+    // The two database reads get 3 s; losing means roster.json alone. One answer
+    // per page load ({fresh: true} asks again). Never throws.
+    people(opts) {
+      if (peopleP && !(opts && opts.fresh)) return peopleP.then(l => l.slice());
+      const late = (fn, none) => Promise.race([
+        Promise.resolve().then(fn).catch(() => none),
+        new Promise(ok => setTimeout(() => ok(none), PEOPLE_WAIT_MS)),
+      ]);
+      // the library not up yet is not an answer to keep, the same rule as me()
+      let floorOk = false;
+      const live = !!sb();
+      const p = peopleP = (async () => {
+        const db = Promise.all([late(() => OTP.cards(), []), late(() => OTP.darkSeats(), [])]);
+        let list = [];
+        try {
+          if (ROOT) {
+            const r = await fetch(ROOT + "content/roster.json", { cache: "no-cache" });
+            const j = r && r.ok ? await r.json() : null;
+            if (j && Array.isArray(j.items)) { list = j.items; floorOk = true; }
+          }
+        } catch (e) { list = []; }
+        const [rows, dark] = await db;
+        return OTP.peopleMerge(list, Array.isArray(rows) ? rows : [], { dark: Array.isArray(dark) ? dark : [] });
+      })().catch(() => []);
+      // a page that could not read roster.json (or had no client yet) asks again next time
+      p.then(() => { if ((!floorOk || !live) && peopleP === p) peopleP = null; });
+      return p.then(l => l.slice());
+    },
+
+    // The sid of a card holder's Crypt page, for a signed-in viewer who may see
+    // it, else null. Strangers get null without a call. Never throws.
+    async cryptPageOf(slug) {
+      const s = String(slug == null ? "" : slug).trim().toLowerCase();
+      const c = sb(); if (!c || !CARD_SLUG_OK.test(s)) return null;
+      try {
+        if (!(await hasSession(c))) return null;
+        const { data, error } = await c.rpc("wall_page_of", { p_slug: s });
+        return (!error && typeof data === "string" && data) ? data : null;
+      } catch (e) { return null; }
+    },
+
+    // ---- FRAMES BY NAME (043) ----
+    // Call 15: a tag names the photo ('017', 'v01'), not its place in the
+    // lightbox, so a photo taken down or added never moves anybody's tag.
+    FRAME_NAME_OK: /^[a-z0-9][a-z0-9_-]{0,40}$/,
+
+    // 'media/017_t.jpg' -> '017', or null.
+    frameName(thumb) {
+      const m = /(?:^|\/)media\/([^\/?#]+?)_t\.(?:jpe?g|png|webp)(?:[?#].*)?$/i.exec(String(thumb == null ? "" : thumb));
+      const stem = m ? m[1].toLowerCase() : "";
+      return OTP.FRAME_NAME_OK.test(stem) ? stem : null;
+    },
+    frameThumb(slug, media, base = "") {
+      const s = String(slug == null ? "" : slug), m = String(media == null ? "" : media);
+      if (!NIGHT_SLUG_OK.test(s) || !OTP.FRAME_NAME_OK.test(m)) return "";
+      return `${base}events/${s}/media/${m}_t.jpg`;
+    },
+    frameLink(slug, media, base = "") {
+      const s = String(slug == null ? "" : slug), m = String(media == null ? "" : media);
+      if (!NIGHT_SLUG_OK.test(s)) return "";
+      return OTP.FRAME_NAME_OK.test(m) ? `${base}events/${s}/#m${m}` : `${base}events/${s}/`;
+    },
+
+    // I'm in this one (or not). frame is the position it sat at, kept as a note.
+    async tagFrame(slug, media, on, frame) {
+      return await call("frame_tag_by_name", {
+        p_slug: slug, p_media: media, p_on: !!on,
+        p_frame: Number.isInteger(frame) ? frame : null,
+      });
+    },
+    async myFrames() {
+      const c = sb(); if (!c) return [];
+      if (!(await hasSession(c))) return [];
+      const d = await call("my_frames");
+      return Array.isArray(d) ? d : [];
+    },
+    // Members only. A stranger gets [] with no call, what the database already
+    // answers a login that is not in the Crypt.
+    async framesOf(sid) {
+      const c = sb(); if (!c) return [];
+      if (!(await hasSession(c))) return [];
+      const d = await call("frames_of", { p_sid: sid });
+      return Array.isArray(d) ? d : [];
+    },
+    async frameTagsOf(slug) {
+      const c = sb(); if (!c) return [];
+      if (!(await hasSession(c))) return [];
+      const d = await call("frame_tags_of", { p_slug: slug });
+      return Array.isArray(d) ? d : [];
+    },
+    // Photos that came down (no names), for anybody: the laptop step reads it.
+    async framesDown(slug = null) { const d = await call("frames_down", { p_slug: slug }); return Array.isArray(d) ? d : []; },
+
+    // The desk's side: every tag on a night, everything one person tagged.
+    async deskFrameTags(slug) { const d = await call("desk_frame_tags", { p_slug: slug }); return Array.isArray(d) ? d : []; },
+    async deskFramesOf(userId) { const d = await call("desk_frames_of", { p_user: userId }); return Array.isArray(d) ? d : []; },
+    async deskUntagFrame(userId, slug, media) {
+      if (!(await call("desk_frame_untag", { p_user: userId, p_slug: slug, p_media: media })))
+        throw new Error("That tag is already gone.");
+      return true;
+    },
+    // Take a photo down: the tags come off now, takedown.py takes the file off
+    // the night later. Returns how many tags came off.
+    async takeFrameDown(slug, media, frame, note) {
+      const n = await call("desk_frame_takedown", {
+        p_slug: slug, p_media: media,
+        p_frame: Number.isInteger(frame) ? frame : null, p_note: noteOf(note),
+      });
+      if (n === -1) throw new Error("That photo is already down.");
+      return Number(n) || 0;
+    },
+    async undoFrameDown(slug, media) {
+      return Number(await call("desk_frame_takedown_undo", { p_slug: slug, p_media: media })) || 0;
+    },
+    async frameTakedowns() { const d = await call("desk_frame_takedowns"); return Array.isArray(d) ? d : []; },
+
+    // ---- THE RUN (call 6) ----
+    // The Run is the one place for dates. The house's own card slug, for pages
+    // that tell his nights from a card holder's.
+    HOUSE_SLUG: "vamppsych",
+
+    // calendar(limit), read once per page however many parts of it ask. A
+    // failure is not kept, and a sign in or out forgets it (see forgetMe).
+    upcoming(limit = 60) {
+      if (!sb()) return Promise.resolve([]);      // the library is not up yet: not an answer to keep
+      const k = String(limit);
+      let p = upMemo.get(k);
+      if (!p) {
+        p = OTP.calendar(limit);
+        upMemo.set(k, p);
+        p.catch(() => { if (upMemo.get(k) === p) upMemo.delete(k); });
+      }
+      return p.then(rows => rows.slice());
+    },
+
+    // Where the desk fixes one date on the board.
+    boardDate(id) {
+      return UUID_OK.test(String(id == null ? "" : id)) ? "../board/#run:" + id : "../board/#run";
+    },
+
+    // ---- THE ROLL (045) ----
+    // Call 1: the Roll is members only. post() always says which (members_only),
+    // uploadTakePhoto(file, {roll}) keeps Roll photos out of long caches, and
+    // this reads the Roll itself.
+    async rollFeed(limit = 60, opts) {
+      const photos = !(opts && opts.photos === false);
+      const c = sb(); if (!c) return [];
+      const r = await c.rpc("roll_feed", { p_limit: limit, p_photos: photos });
+      if (!r.error) return Array.isArray(r.data) ? r.data : [];
+      if (r.error.code !== "PGRST202") throw fail(r.error);
+      // No roll_feed yet: the public timeline, which is public anyway.
+      const t = await c.rpc("take_feed", { p_limit: limit });
+      if (t.error) throw fail(t.error);
+      const rows = Array.isArray(t.data) ? t.data : [];
+      return photos ? rows.filter(x => x && x.image_url) : rows;
+    },
+
+    // ---- PACKS (045) ----
+    // Call 16: the cards a member kept (hearts), from packs still up. [] for a
+    // stranger or on any error. Never throws.
+    async myFaves() {
+      const c = sb(); if (!c) return [];
+      try {
+        if (!(await hasSession(c))) return [];
+        const { data, error } = await c.rpc("my_faves");
+        return (!error && Array.isArray(data)) ? data : [];
+      } catch (e) { return []; }
+    },
+  };
+
+  // THE MEMBERS MANAGER: the one dispatch table deskHide / deskDelete read. A
+  // kind with no hide only comes down (or stays), and says so in the database's
+  // own words. Zero rows, or the outcome 'gone', is "already gone".
+  const GONE = "That one is already gone.";
+  const actOrGone = async (kind, id, how) => {
+    const r = await OTP.deskAct(kind, id, how);
+    if (r.outcome === "gone") throw new Error(GONE);
+    return r;
+  };
+  const rowsOrGone = n => { if (!n) throw new Error(GONE); return n; };
+  const viaAct = kind => ({
+    hide: (id, h) => actOrGone(kind, id, h ? "hide" : "unhide"),
+    del: id => actOrGone(kind, id, "remove"),
+  });
+  const DESK_KINDS = {
+    post: viaAct("post"),
+    take_comment: viaAct("take_comment"),
+    flyer_comment: viaAct("flyer_comment"),
+    pack: viaAct("pack"),
+    room: viaAct("room"),
+    space_post: { del: id => actOrGone("space_post", id, "remove"), only: "A page comment comes down or stays." },
+    frame_tag: {
+      del: async (id, x) => {
+        if (!x.user || !x.slug || !x.media) throw new Error("Say whose tag, on which photo.");
+        return await OTP.deskUntagFrame(x.user, x.slug, x.media);
+      },
+      only: "A tag comes off or stays.",
+    },
+    story: {
+      hide: async (id, h) => rowsOrGone(await OTP.setStoryPublished(id, !h)),
+      del: async id => rowsOrGone(await OTP.deleteStory(id)),
+    },
+    story_comment: {
+      hide: async (id, h) => rowsOrGone(await OTP.setEntryPublished(id, !h)),
+      del: async id => rowsOrGone(await OTP.deleteEntry(id)),
+    },
+    pick: {
+      hide: async (id, h) => rowsOrGone(await OTP.setTrackPublished(id, !h)),
+      del: async id => rowsOrGone(await OTP.deleteTrack(id)),
+    },
+    video: {
+      hide: async (id, h) => rowsOrGone(await OTP.setVideoPublished(id, !h)),
+      del: async id => rowsOrGone(await dropVideo(id)),
+    },
+    date: {
+      hide: async (id, h) => rowsOrGone(await OTP.setDatePublished(id, !h)),
+      del: async id => rowsOrGone(await dropDate(id)),
+    },
+    dm_message: { del: id => OTP.deskRemoveMessage(id), only: "A message comes down or stays." },
+    space: {
+      del: async (id, x) => {
+        if (!x.user) throw new Error("Say whose page.");
+        const r = await OTP.clearSpace(x.user, "page");
+        if (r.cleared == null) throw new Error(GONE);
+        return r;
+      },
+      only: "A page gets reset or stays. One picture at a time is on the members list.",
     },
   };
 
