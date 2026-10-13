@@ -1,8 +1,9 @@
 {
  "name": "CRYPT \u00b7 0FF THE PRINT",
  "short_name": "CRYPT",
+ "id": "/wall/",
  "start_url": "/wall/",
- "scope": "/",
+ "scope": "/wall/",
  "display": "standalone",
  "background_color": "#0a0a0d",
  "theme_color": "#0a0a0d",
