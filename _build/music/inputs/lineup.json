@@ -1,0 +1,115 @@
+{
+ "checked": "2026-10-11",
+ "shows": [
+  {
+   "date": "2026-10-13",
+   "artist": "Destroy Lonely",
+   "bill": "$uicideboy$ Grey Day Tour 2026 (with Destroy Lonely, Shakewell, DRAIN, Black Kray, $lim Gucci)",
+   "venue": "Germania Insurance Amphitheater",
+   "city": "Austin",
+   "ticket": "https://www.ticketmaster.com/event/3A00647BC8B110BC",
+   "source": "https://www.germaniaamp.com/events/suicideboys",
+   "list": "anchor"
+  },
+  {
+   "date": "2026-10-17",
+   "artist": "Junkie",
+   "bill": "Junkie, final Texas show (with Warphole, Cannon the Dealers, Pet Peeves), Belalcazar presents, side stage, all ages",
+   "venue": "Paper Tiger",
+   "city": "San Antonio",
+   "ticket": "https://wl.seetickets.us/event/junkie/691118?afflky=PaperTiger",
+   "source": "https://papertigersatx.com/?list1page=2",
+   "list": "local"
+  },
+  {
+   "date": "2026-10-17",
+   "artist": "Soft Kill",
+   "bill": "Soft Kill, only Texas date (with Salt+, VIDE), Belalcazar presents, all ages",
+   "venue": "Paper Tiger",
+   "city": "San Antonio",
+   "ticket": "https://wl.seetickets.us/event/soft-kill/686663?afflky=PaperTiger",
+   "source": "https://papertigersatx.com/?list1page=2",
+   "list": "local"
+  },
+  {
+   "date": "2026-10-17",
+   "artist": "Streetlamp",
+   "bill": "Streetlamp, in-store show at Friendly Rio Market (West Campus)",
+   "venue": "Friendly Rio Market",
+   "city": "Austin",
+   "ticket": "",
+   "source": "https://www.instagram.com/p/Dd9P1XsEft1/",
+   "list": "local"
+  },
+  {
+   "date": "2026-10-25",
+   "artist": "Streetlamp",
+   "bill": "Streetlamp (per the band's own post); the venue's only listing that night is Max Diaz, his last show of the year, support TBA",
+   "venue": "The Rock Box",
+   "city": "San Antonio",
+   "ticket": "https://eventim.us/maxdz26",
+   "source": "https://www.instagram.com/p/Dd9P1XsEft1/",
+   "list": "local"
+  },
+  {
+   "date": "2026-10-30",
+   "artist": "Blade Rave",
+   "bill": "Blade Rave Halloween vampire rave (Paper Tiger presents)",
+   "venue": "Paper Tiger",
+   "city": "San Antonio",
+   "ticket": "https://wl.seetickets.us/event/blade-rave/706873?afflky=PaperTiger",
+   "source": "https://papertigersatx.com/?list1page=4",
+   "list": "local"
+  },
+  {
+   "date": "2026-10-30",
+   "artist": "Blade Rave",
+   "bill": "Blade Rave Halloween vampire rave, 18+",
+   "venue": "Tulips FTW",
+   "city": "Fort Worth",
+   "ticket": "https://wl.seetickets.us/event/blade-rave/705509?afflky=TulipsFTW",
+   "source": "https://www.tulipsftw.com/",
+   "list": "local"
+  },
+  {
+   "date": "2026-10-30",
+   "artist": "Blade Rave",
+   "bill": "Blade Rave Halloween vampire rave",
+   "venue": "Warehouse Live Midtown",
+   "city": "Houston",
+   "ticket": "https://wl.eventim.us/event/BLADE-RAVE/702598?afflky=warehouselive",
+   "source": "https://www.bladerave.com/",
+   "list": "local"
+  },
+  {
+   "date": "2026-10-31",
+   "artist": "Blade Rave",
+   "bill": "Blade Rave Halloween vampire rave (Resound + Mohawk present), outdoor stage, all ages",
+   "venue": "Mohawk",
+   "city": "Austin",
+   "ticket": "https://www.prekindle.com/promo/id/-2852527948995184320",
+   "source": "https://www.prekindle.com/promo/id/-2852527948995184320",
+   "list": "local"
+  },
+  {
+   "date": "2026-10-31",
+   "artist": "Blade Rave",
+   "bill": "Blade Rave, third annual Dallas Halloween, 18+",
+   "venue": "Puzzles Deep Ellum",
+   "city": "Dallas",
+   "ticket": "https://www.eventim.us/profile/Puzzles-Deep-Ellum/16926615",
+   "source": "https://www.puzzlesdeepellum.com/",
+   "list": "local"
+  },
+  {
+   "date": "2026-11-13",
+   "artist": "Streetlamp",
+   "bill": "Caroline Carr with Street Lamp and The Black Velvets (Dolls, Skaters, Moshers Takeover)",
+   "venue": "AM/FM",
+   "city": "Dallas",
+   "ticket": "https://wl.seetickets.us/event/caroline-carr/706367?afflky=FerrisWheelers",
+   "source": "https://amfmdallas.com/live-music/",
+   "list": "local"
+  }
+ ]
+}

@@ -196,3 +196,43 @@ a.mx-dr-card:hover{border-color:var(--pink-glow);transform:translateY(-3px);}
 .mx-room-row{grid-column:1 / -1;display:flex;flex-wrap:wrap;align-items:center;gap:10px;}
 .mx-room-row small{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.06em;color:var(--muted);} .mx-room-msg{flex:1;font-size:12.5px;color:var(--pink-glow);}
 @media (max-width:520px){.mx-room-add{grid-template-columns:1fr;}}
+
+/* ---- WAVE 2 (call 11): PAST WINNERS, under the battle. Square art, never an arch ---- */
+.mx-pw{margin-top:6px;max-width:620px;}
+.mx-pw-list{list-style:none;margin:0;padding:0;display:grid;gap:6px;}
+.mx-pw-row{display:grid;grid-template-columns:40px 1fr auto;gap:12px;align-items:center;padding:7px 12px 7px 7px;border:1px solid var(--line);border-radius:10px;
+  background:var(--panel);text-decoration:none;color:inherit;transition:border-color .2s;}
+.mx-pw-row:hover{border-color:var(--pink-glow);}
+.mx-pw-art{display:block;width:40px;height:40px;border-radius:4px;background:#16151c center/cover no-repeat;}
+.mx-pw-t{min-width:0;font-size:13px;line-height:1.35;color:var(--ink);overflow-wrap:anywhere;}
+.mx-pw-row i{font-style:normal;font-size:10px;color:var(--pink-glow);}
+
+/* ---- WAVE 2 (call 6): THE LINEUP takes the Run. A card holder's night links their card; that row is not one big
+   link (no link inside a link), its ticket side stretches over the row instead ---- */
+.mx-lu-row.has-who{position:relative;}
+.mx-lu-row.tix:hover{border-color:var(--pink-glow);transform:translateX(3px);}
+.mx-lu-hit{text-decoration:none;}
+.mx-lu-hit::after{content:'';position:absolute;inset:0;border-radius:inherit;}
+.mx-lu-m .mx-lu-who{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
+.mx-lu-who a{position:relative;z-index:1;color:var(--pink-glow);text-decoration:none;}
+.mx-lu-who a:hover{text-decoration:underline;}
+
+/* ---- WAVE 2 (call 9): REPORT on a member's room, the shared chooser. Chips wrap and stay thumb-sized (40px) ---- */
+.mx-room-rep.done{font-family:var(--f-mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
+.mx-why{display:flex;flex-direction:column;gap:8px;margin-top:8px;padding:12px;border:1px dashed rgba(255,121,198,.5);border-radius:10px;background:#0d0c11;}
+.mx-why > b{font-family:var(--f-mono);font-size:10px;font-weight:400;letter-spacing:.22em;text-transform:uppercase;color:var(--pink-glow);}
+.mx-chips{display:flex;flex-wrap:wrap;gap:8px;}
+.mx-chips button{min-height:40px;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:#0a0a0d;color:var(--ink);cursor:pointer;
+  font-family:var(--f-body);font-size:13px;line-height:1.2;text-align:left;}
+.mx-chips button:hover{border-color:var(--pink-glow);}
+.mx-chips button.go{background:var(--pink-glow);border-color:var(--pink-glow);color:#0a0a0d;font-weight:700;}
+.mx-chips button:disabled{opacity:.5;cursor:default;}
+/* ⛔ 16px or more, or iOS zooms the page on focus */
+.mx-why input{font:400 16px/1.3 var(--f-body);color:var(--ink);background:#0a0a0d;border:1px solid var(--line);border-radius:8px;padding:10px 12px;}
+.mx-why input:focus{outline:none;border-color:var(--pink-glow);}
+.mx-rep-msg{margin:6px 0 0;font-size:12.5px;color:var(--pink-glow);}
+.mx-rep-msg.bad{color:#ff6b6b;}
+
+/* ---- WAVE 2, edit.js's panel for a card holder's own pick (the Music tab is the only place it opens) ---- */
+.edm-note{margin:0;cursor:default;line-height:1.5;}
+.edm-f .edm-go{margin-right:auto;}

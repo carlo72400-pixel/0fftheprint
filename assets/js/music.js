@@ -8,10 +8,15 @@
  *   ROWS             On Rotation (index.html draws it), Card Holders' Picks, From Our Nights,
  *                    Card Holders, The Texas Shelf. Each rail ends on a next-up card.
  *   ROTATION BATTLE  two tracks, members vote for the ISO week in the battle id (migration 036).
- *                    Once the week closes the winner sits first on On Rotation, drawn here only:
- *                    nothing saves it, so it goes when music.json gets the next battle.
+ *                    Wave 2 (call 11): the winner is real. `_build/music/build_music.py close` reads
+ *                    the tally, writes the winner first into content/rotation.json (won: {week, mon, tie})
+ *                    and into music.json `winners`. Between the week closing and that run, stays() draws
+ *                    the winner first on On Rotation (a .won tile, the gap); once it is a seed it only
+ *                    moves the seed to the front. Past Winners lists the newest four.
  *   WHO PLAYED       every night we shot, every act on the bill, a play button each.
- *   THE LINEAGE · THE LINEUP · DROPS · THE ROOMS · PUT US ON   (music.json, committed)
+ *   THE LINEUP       music.json's shows plus the Run's (call 6: OTP.upcoming, shows and festivals), one
+ *                    row for a night on both. A card holder's night links their card.
+ *   THE LINEAGE · DROPS · THE ROOMS · PUT US ON   (music.json, committed; the rooms also from 038)
  *
  * index.html hands over what it already computed (rotation after the desk's overlay, the live
  * member picks, the roster with the members' own songs, site.json after the overlay, and its
@@ -36,6 +41,12 @@
   function days(a, b) { return Math.round((b.getTime() - a.getTime()) / 864e5); }
   function when(dt) { return DOW3[dt.getDay()] + ' ' + MON3[dt.getMonth()] + ' ' + dt.getDate(); }
   function isMember() { return root.getAttribute('data-door') === 'in'; }
+  // door.js paints a closed account (closed by them or by the desk) as 'wait' too, with the key on Your account.
+  // The Crypt step is not theirs to take, so say what the door says. A banned login stays "Almost in" (door.js 023).
+  function closedDoor() {
+    var k = d.getElementById('nav-key');
+    return root.getAttribute('data-door') === 'wait' && !!k && /(^|\/)my\/#account$/.test(k.getAttribute('href') || '');
+  }
   function night() { var h = new Date().getHours(); return h >= 19 || h < 6; }
   function head(sec, title, accent, sub) {
     var h = el('div', 'section-head', '<h2>' + esc(title) + (accent ? ' <span class="accent">' + esc(accent) + '</span>' : '') + '</h2>' + (sub ? '<div class="sub">' + esc(sub) + '</div>' : ''));
@@ -169,18 +180,23 @@
     var rail = d.getElementById('rotation-mount'); if (!rail || rail.querySelector('.shelf-next')) return;
     var wk = battleWeek();
     rail.appendChild(wk
-      ? nextCard('music', 'Next up', 'Rotation Battle', 'Two tracks fight for the week. Members vote.',
+      ? nextCard('music', 'Next up', 'Rotation Battle', 'Two tracks fight for a spot. Members vote, the winner stays.',
           wk.state === 'soon' ? 'Opens ' + when(wk.mon) : wk.state === 'done' ? 'See who won' : 'Vote', '#battle')
       : nextCard('music', 'Next up', 'Your pick here', 'Card holders can put a song on rotation.', 'Put one on', 'compose/#rot'));
   }
   // the rotation view credits a pick by card_slug ('kav-man', 'theink'): print the card's own name.
   // ⛔ a slug is not always slugify(name) (The Ink holds `theink`), so match letters and digits only
+  // Wave 2 (call 2): the roster arrives merged with the cards (OTP.peopleMerge), so a seat carries its card_slug
+  // and the holder's display_name. The slug is asked first, then the old letters-only match.
   function tight(s) { return String(s || '').toLowerCase().replace(/[^a-z0-9]/g, ''); }
-  function nameFor(slug) {
-    var k = tight(slug), hit = null;
-    if (k) (P.roster || []).forEach(function (r) { if (!hit && r && r.name && tight(r.name) === k) hit = r.name; });
-    return hit || slug;
+  function seatOf(slug) {
+    var s = String(slug || '').toLowerCase(), k = tight(slug), hit = null;
+    if (!k) return null;
+    (P.roster || []).forEach(function (r) { if (!hit && r && r.card_slug && String(r.card_slug).toLowerCase() === s) hit = r; });
+    (P.roster || []).forEach(function (r) { if (!hit && r && r.name && tight(r.name) === k) hit = r; });
+    return hit;
   }
+  function nameFor(slug) { var r = seatOf(slug); return (r && (r.display_name || r.name)) || slug; }
   function picks() {
     var host = d.getElementById('mx-picks'); if (!host) return;
     var live = P.live || [];
@@ -242,13 +258,16 @@
     cards.forEach(function (r) {
       var id = trackId(r.theme_song), st = parseInt(r.theme_start, 10) || 0;
       var mm = st ? Math.floor(st / 60) + ':' + ('0' + (st % 60)).slice(-2) : '';
-      var t = tile({ platform: 'spotify', title: 'Theme song', artist: r.name + '’s theme', art: r.photo || '', link: spLink(id) + (st ? '?t=' + st : ''), track: id,
+      // the holder's own name (call 2: the card row's display_name, else the seat's)
+      var nm = r.display_name || r.name;
+      var t = tile({ platform: 'spotify', title: 'Theme song', artist: nm + '’s theme', art: r.photo || '', link: spLink(id) + (st ? '?t=' + st : ''), track: id,
         sub: mm ? 'opens at ' + mm : '', card: true });
-      t.dataset.a = r.name;
+      t.dataset.a = nm;
       rail.appendChild(t);
       fill(id, function (m) { var ti = t.querySelector('.track-title'); if (ti) ti.textContent = m.title; t.dataset.t = m.title; });
     });
-    rail.appendChild(nextCard('join', 'Next up', 'Get a card', 'Card holders pick their own song. It plays when somebody opens the card.', 'Get in', 'join/'));
+    // call 5, one door: a card is asked for under Kin in the Crypt, never on /join/ (log in only now)
+    rail.appendChild(nextCard('join', 'Next up', 'Get a card', 'Join the Crypt, then ask under Kin.', 'Get in', 'wall/'));
   }
 
   function texas() {
@@ -262,10 +281,20 @@
       rail.appendChild(tile({ platform: 'spotify', title: x.title, artist: x.artist, art: x.art, link: spLink(id), track: id,
         sub: [x.city, x.year].filter(Boolean).join(' · '), note: x.fact || '' }));
     });
-    // ⛔ lineup() runs after this and takes #lineup off the page when no show is still ahead: no dead link then
-    rail.appendChild(upcoming().length
+    // ⛔ lineup() runs after this and takes #lineup off the page when no show is still ahead: no dead link then.
+    // The Run answers later (call 6): when its shows fill an empty lineup, lineup() swaps this card with texasNext(true).
+    TEXAS_RAIL = rail;
+    texasNext(upcoming().length > 0);
+  }
+  var TEXAS_RAIL = null;
+  function texasNext(has) {
+    var rail = TEXAS_RAIL; if (!rail || !rail.isConnected) return;
+    var old = rail.querySelector(':scope > .shelf-next');
+    if (old && (old.getAttribute('href') === '#lineup') === has) return;
+    var card = has
       ? nextCard('coming', 'Next up', 'Texas shows', 'Who is playing Texas next, with tickets.', 'The lineup', '#lineup')
-      : nextCard('music', 'Next up', 'Put Us On', 'Making music in Texas? Send the desk your music.', 'Send it', '#putuson'));
+      : nextCard('music', 'Next up', 'Put Us On', 'Making music in Texas? Send the desk your music.', 'Send it', '#putuson');
+    if (old) rail.replaceChild(card, old); else rail.appendChild(card);
   }
 
   /* ================= ROTATION BATTLE ================= */
@@ -286,9 +315,15 @@
     var sec = d.getElementById('battle'), B = M.battle;
     if (!sec) return;
     var wk = battleWeek();
-    if (!wk) { sec.remove(); return; }
+    if (!wk) {
+      // no battle set: the winners still have their list
+      if (!pastList().length) { sec.remove(); return; }
+      head(sec, 'Rotation Battle', 'past winners', 'every winner stays on rotation');
+      pastWinners(sec);
+      return;
+    }
     var mon = wk.mon, sun = wk.sun, state = wk.state, A = B.a, Bb = B.b;
-    head(sec, 'Rotation Battle', 'week of ' + MON3[mon.getMonth()] + ' ' + mon.getDate(), 'two tracks · members vote · one wins the week');
+    head(sec, 'Rotation Battle', 'week of ' + MON3[mon.getMonth()] + ' ' + mon.getDate(), 'two tracks · members vote · the winner stays on rotation');
     var box = el('div', 'mx-bt');
     box.dataset.state = state;
     [['a', A], ['b', Bb]].forEach(function (p, i) {
@@ -304,7 +339,11 @@
     });
     var line = el('p', 'mx-bt-state');
     sec.appendChild(box); sec.appendChild(line);
-    var T = null;
+    pastWinners(sec);
+    // a closed week build_music.py already recorded (music.json winners): its counts stand in until the
+    // live tally answers, and stay when it cannot (no counts on a phone with no signal is still a result)
+    var rec = (M.winners || []).filter(function (x) { return x && x.battle === B.id && Array.isArray(x.votes); })[0];
+    var T = state === 'done' && rec ? { a: +rec.votes[0] || 0, b: +rec.votes[1] || 0, mine: null } : null;
     function paint(msg) {
       var a = T ? T.a : 0, b = T ? T.b : 0, n = a + b;
       Array.prototype.forEach.call(box.querySelectorAll('.mx-bt-side'), function (s) {
@@ -318,18 +357,19 @@
         btn.hidden = !(state === 'open' && isMember() && T);
         btn.textContent = T && T.mine === k ? 'Your vote' : 'Vote this';
       });
-      var who = state === 'open' ? (isMember() ? (T ? 'Tap one. You can change it till Sunday.' : 'Votes open soon.') : 'Members vote. ')
+      var who = state === 'open' ? (isMember() ? (T ? 'Tap one. You can change it till Sunday.' : 'Votes open soon.') : 'Members vote.')
         : state === 'soon' ? 'Voting opens ' + when(mon) + '.' : '';
-      var tail = state === 'done' ? (T && n ? (a === b ? 'Closed. Dead even.' : 'Closed. ' + (a > b ? A.title : Bb.title) + ' won the week.') : 'Closed.')
+      var tail = state === 'done' ? (T && n ? (a === b ? 'Closed. Dead even. Both stay on rotation.' : 'Closed. ' + (a > b ? A.title : Bb.title) + ' won the week. It stays on rotation.') : 'Closed.')
         : state === 'open' ? ' Closes ' + when(sun) + '.' : '';
-      line.innerHTML = esc(msg || (who + tail)) + (state === 'open' && !isMember() && !msg ? ' <a href="join/">Get in &rarr;</a>' : '');
+      // call 5, one door: a stranger gets in at the Crypt, never /join/ (log in only now)
+      line.innerHTML = esc(msg || (who + tail)) + (state === 'open' && !isMember() && !msg && !closedDoor() ? ' <a href="wall/">Get in at the Crypt &rarr;</a>' : '');
     }
     function load() {
-      if (state === 'soon' || !(w.OTP && OTP.configured && OTP.sb)) { paint(); return; }
+      if (state === 'soon' || !(w.OTP && OTP.configured && OTP.sb)) { paint(); stays(); return; }
       Promise.resolve(OTP.sb().rpc('battle_tally', { p_battle: B.id })).then(function (r) {
         if (r && !r.error && r.data && r.data[0]) { T = r.data[0]; T.a = +T.a || 0; T.b = +T.b || 0; }
         paint(); stays();
-      }).catch(function () { paint(); });
+      }).catch(function () { paint(); stays(); });
     }
     box.addEventListener('click', function (ev) {
       var b = ev.target.closest && ev.target.closest('.mx-bt-vote'); if (!b) return;
@@ -343,20 +383,71 @@
     });
     // the door can answer after this runs: repaint when it does
     try { new MutationObserver(function () { paint(); }).observe(root, { attributes: true, attributeFilter: ['data-door'] }); } catch (e) {}
-    // once the week is over the winner (both, on a tie) sits first on On Rotation. Drawn in the page only:
-    // nothing saves the result, so it goes when music.json gets the next battle (the copy says "won the week", no more)
+    // Once the week is over the winner (both, on a tie, a before b) sits first on On Rotation.
+    // build_music.py close makes it a seed (rotation.json, won: {...}), and index.html already printed
+    // "won the week of" on it: then this only moves that tile to the front, so it keeps the desk's pencil
+    // (edit.js skips .won). Before close runs (the gap), the winner is drawn here as a .won tile.
+    // Runs again after every load(): a tile it finds by data-sp is moved, never drawn twice.
+    // ⛔ Once close has run (music.json winners names this week) the rail is rotation.json plus the desk's
+    //    overlay. A winner the desk took off or swapped stays off: no .won tile, which has no pencil.
+    var closed = (M.winners || []).some(function (x) { return x && x.battle === B.id; });
     function stays() {
       if (state !== 'done' || !T || !(T.a + T.b)) return;
-      var rail = d.getElementById('rotation-mount'); if (!rail || rail.querySelector('.won')) return;
-      var win = T.a === T.b ? [A, Bb] : [T.a > T.b ? A : Bb];
+      var rail = d.getElementById('rotation-mount'); if (!rail) return;
+      var tie = T.a === T.b, win = tie ? [A, Bb] : [T.a > T.b ? A : Bb];
+      var sub = (tie ? 'tied' : 'won') + ' the week of ' + MON3[mon.getMonth()] + ' ' + mon.getDate();
       win.slice().reverse().forEach(function (x) {
-        var id = trackId(x.track);
-        var t = tile({ platform: 'spotify', title: x.title, artist: x.artist, art: x.art, link: spLink(id), track: id, sub: T.a === T.b ? 'tied the battle' : 'won the battle', note: x.note || noteFor(id) });
+        var id = trackId(x.track); if (!id) return;
+        var have = rail.querySelector('.track[data-sp="' + id + '"]');      // id is 22 letters and digits: safe in a selector
+        if (have) {
+          var sb = have.querySelector('.track-sub');
+          if (!sb || /^(won|tied) the (week|battle)/.test(sb.textContent)) {
+            if (!sb) {
+              var info = have.querySelector('.track-info'), after = info && (info.querySelector('.track-artist') || info.querySelector('.track-title'));
+              sb = el('span', 'track-sub');
+              if (after) after.insertAdjacentElement('afterend', sb); else if (info) info.appendChild(sb);
+            }
+            sb.textContent = sub;
+          }
+          if (rail.firstChild !== have) rail.insertBefore(have, rail.firstChild);
+          return;
+        }
+        if (closed) return;                                                  // not on the rail after close: the desk's call
+        var t = tile({ platform: 'spotify', title: x.title, artist: x.artist, art: x.art, link: spLink(id), track: id, sub: sub, note: x.note || noteFor(id) });
         t.classList.add('won');
         rail.insertBefore(t, rail.firstChild);
       });
     }
     paint(); load();
+  }
+  // PAST WINNERS: music.json winners (build_music.py close), newest first, the last four. A tie is two rows.
+  function pastList() {
+    return (M.winners || []).filter(function (x) { return x && trackId(x.track) && x.title; }).slice(0, 4);
+  }
+  function weekLabel(x) {
+    var dt = ymd(x.mon);
+    if (dt) return MON3[dt.getMonth()] + ' ' + dt.getDate();
+    return /^[A-Z][a-z]{2} \d{1,2}$/.test(String(x.week || '')) ? String(x.week) : '';
+  }
+  function pastWinners(sec) {
+    var list = pastList(); if (!list.length) return;
+    var box = el('div', 'mx-pw');
+    box.innerHTML = '<div class="mx-sub-h"><h3>Past Winners</h3><span>each one stays on rotation</span></div>';
+    var ol = el('ol', 'mx-pw-list');
+    list.forEach(function (x) {
+      var id = trackId(x.track), wl = weekLabel(x);
+      var li = el('li');
+      var a = el('a', 'mx-pw-row');
+      a.href = spLink(id); a.target = '_blank'; a.rel = 'noopener';
+      a.innerHTML = '<span class="mx-pw-art" aria-hidden="true"></span><span class="mx-pw-t">' +
+        esc([x.title, x.artist].filter(Boolean).join(', ') + (wl ? ' · week of ' + wl : '')) + '</span><i aria-hidden="true">&#9654;</i>';
+      var art = safe(x.art);
+      if (art) a.querySelector('.mx-pw-art').style.backgroundImage = 'url("' + P.sized(art, 'thumb') + '")';
+      a.addEventListener('click', function (ev) { if (playFrom(id)) ev.preventDefault(); });
+      li.appendChild(a); ol.appendChild(li);
+    });
+    box.appendChild(ol);
+    sec.appendChild(box);
   }
 
   /* ================= THE LINEAGE ================= */
@@ -387,38 +478,101 @@
     return (M.lineup || []).filter(function (s) { var dt = ymd(s.date); return dt && days(now, dt) >= 0; })
       .sort(function (a, b) { return ymd(a.date) - ymd(b.date); });
   }
+  // THE RUN (call 6): the house calendar is the one place for dates. Its shows and festivals from today on
+  // (OTP.upcoming, one calendar read per page) join music.json's lineup. A night on both shows once: same date,
+  // and the same room (the first 6 letters of the venue) or a word of 4+ letters both names share, stop words
+  // out. The Run's row stays and borrows the json's ticket. Two json rows that fit equally (Paper Tiger runs two
+  // stages a night) take no twin: then all of them show.
+  var LU_STOP = { tour: 1, with: 1, night: 1, live: 1, presents: 1, fest: 1, festival: 1, show: 1, party: 1, after: 1, weekend: 1,
+    official: 1, tickets: 1, free: 1, ages: 1, guests: 1, special: 1, release: 1, halloween: 1, band: 1, music: 1 };
+  function luKey(v) { return String(v || '').toLowerCase().replace(/[^a-z0-9]/g, ''); }
+  function luRoom(v) { var k = luKey(v).slice(0, 6); return k.length >= 4 ? k : ''; }
+  function luWords(v) { var o = {}; (String(v || '').toLowerCase().match(/[a-z0-9$]{4,}/g) || []).forEach(function (x) { if (!LU_STOP[x]) o[x] = 1; }); return o; }
+  function luShare(a, b) { for (var k in a) if (b[k]) return true; return false; }
+  function fromRun(r) {
+    return { date: r.on_date, artist: String(r.title || '').trim(), bill: String(r.note || '').trim(), venue: r.venue || '', city: r.city || '',
+      ticket: r.link || '', who: r.credit || r.by || '', whoName: (r.credit ? r.credit_name : r.by_name) || '', run: true };
+  }
+  function merged(json, rows) {
+    var now = today(), out = json.slice(), taken = {}, extra = [];
+    (rows || []).forEach(function (r) {
+      if (!r || (r.kind !== 'show' && r.kind !== 'festival')) return;
+      var dt = ymd(r.on_date); if (!dt || days(now, dt) < 0 || !String(r.title || '').trim()) return;
+      var s = fromRun(r), room = luRoom(s.venue), words = luWords(s.artist), city = luKey(s.city), best = 0, hits = [];
+      json.forEach(function (j, i) {
+        if (taken[i] || String(j.date || '').slice(0, 10) !== String(r.on_date).slice(0, 10)) return;
+        var jc = luKey(j.city), same = !!room && room === luRoom(j.venue), shared = luShare(words, luWords(j.artist));
+        // a shared name alone holds only in the same city (an act on two stages of two cities that night is two nights)
+        if (!same && !(shared && (!city || !jc || city === jc))) return;
+        var sc = (same ? 4 : 0) + (shared ? 2 : 0) + (city && city === jc ? 1 : 0);
+        if (sc > best) { best = sc; hits = [i]; } else if (sc === best) hits.push(i);
+      });
+      if (hits.length !== 1) { extra.push(s); return; }
+      var j = json[hits[0]]; taken[hits[0]] = 1;
+      out[hits[0]] = Object.assign({}, s, { ticket: safe(j.ticket) ? j.ticket : s.ticket, source: j.source || '', bill: s.bill || j.bill || '', twin: true });
+    });
+    return out.concat(extra).sort(function (a, b) { return ymd(a.date) - ymd(b.date); });
+  }
+  // a Run row's card holder (credit, else whoever put it up), when the house is not the one and the seat is
+  // on show: a banned, closed or demoted holder's seat is off the merged roster, so their name stays plain
+  var SLUG_OK = /^[a-z0-9][a-z0-9-]{0,58}[a-z0-9]$/;
+  function holderOf(s) {
+    var slug = String(s.who || '').toLowerCase(), house = (w.OTP && OTP.HOUSE_SLUG) || 'vamppsych';
+    if (!s.run || !SLUG_OK.test(slug) || slug === house) return null;
+    var seat = (P.roster || []).filter(function (r) { return r && String(r.card_slug || '').toLowerCase() === slug; })[0];
+    return seat ? { slug: slug, name: s.whoName || seat.display_name || seat.name || slug } : null;
+  }
   function lineup() {
     var sec = d.getElementById('lineup'); if (!sec) return;
     var now = today();
-    var shows = upcoming();
-    if (!shows.length) { sec.remove(); return; }
-    head(sec, 'The Lineup', 'Texas', 'shows coming up, with tickets');
-    var list = el('div', 'mx-lu');
-    sec.appendChild(list);
-    var more = el('p', 'mx-lu-more');
-    sec.appendChild(more);
+    var shows = upcoming(), list = null, more = null;
+    function draw() {
+      if (list) return;
+      head(sec, 'The Lineup', 'Texas', 'shows coming up, with tickets');
+      list = el('div', 'mx-lu');
+      sec.appendChild(list);
+      more = el('p', 'mx-lu-more');
+      sec.appendChild(more);
+      try { new MutationObserver(paint).observe(root, { attributes: true, attributeFilter: ['data-door'] }); } catch (e) {}
+    }
     function paint() {
       var all = isMember(), cut = all ? shows : shows.slice(0, 3);
       list.innerHTML = '';
       cut.forEach(function (s) {
         var dt = ymd(s.date), off = days(now, dt);
-        var t = safe(s.ticket) || safe(s.source);
-        var row = el(t ? 'a' : 'div', 'mx-lu-row');
-        if (t) { row.href = t; row.target = '_blank'; row.rel = 'noopener'; }
+        var t = safe(s.ticket) || safe(s.source), who = holderOf(s);
+        // a row with a name link is not one big link (no link inside a link): the ticket side stretches over it instead
+        var row = el(t && !who ? 'a' : 'div', 'mx-lu-row' + (s.run ? ' run' : '') + (who ? ' has-who' : '') + (who && t ? ' tix' : ''));
+        row.dataset.src = s.run ? 'run' : 'json';
+        if (s.twin) row.dataset.twin = '1';
+        if (t && !who) { row.href = t; row.target = '_blank'; row.rel = 'noopener'; }
+        var go = (off === 0 ? 'Tonight' : off === 1 ? 'Tomorrow' : 'In ' + off + ' days') + (t ? '<i>Tickets &rarr;</i>' : '');
         row.innerHTML = '<span class="mx-lu-d"><b>' + DOW3[dt.getDay()] + '</b>' + MON3[dt.getMonth()] + ' ' + dt.getDate() + '</span>' +
           '<span class="mx-lu-m"><b>' + esc(s.artist) + '</b>' + (s.bill ? '<span>' + esc(s.bill) + '</span>' : '') +
+          (who ? '<span class="mx-lu-who"><a href="c/' + encodeURIComponent(who.slug) + '/">' + esc(who.name) + '</a>’s night</span>' : '') +
           '<em>' + esc([s.venue, s.city].filter(Boolean).join(' · ')) + '</em></span>' +
-          '<span class="mx-lu-go">' + (off === 0 ? 'Tonight' : off === 1 ? 'Tomorrow' : 'In ' + off + ' days') + (t ? '<i>Tickets &rarr;</i>' : '') + '</span>';
+          (who && t ? '<a class="mx-lu-go mx-lu-hit" href="' + esc(t) + '" target="_blank" rel="noopener">' + go + '</a>' : '<span class="mx-lu-go">' + go + '</span>');
         list.appendChild(row);
       });
       var rest = shows.length - cut.length;
       // ⛔ never say these dates are "in the Crypt": most are not on its calendar. Members see them all right here.
       more.innerHTML = rest > 0 ? rest + ' more ' + (rest === 1 ? 'date' : 'dates') + ' for members. ' + (rest === 1 ? 'It shows' : 'They show') +
-        ' right here once you are in the Crypt. <a href="wall/">Get in &rarr;</a>' : '';
+        ' right here once you are in the Crypt.' + (closedDoor() ? '' : ' <a href="wall/">Get in &rarr;</a>') : '';
       more.hidden = rest <= 0;
     }
-    paint();
-    try { new MutationObserver(paint).observe(root, { attributes: true, attributeFilter: ['data-door'] }); } catch (e) {}
+    // the committed list draws at once; the Run joins when it answers. No answer, an error or no library: json only.
+    if (shows.length) { draw(); paint(); }
+    var run = (w.OTP && OTP.configured && OTP.upcoming) ? Promise.resolve().then(function () { return OTP.upcoming(60); }) : Promise.resolve([]);
+    run.then(function (rows) { return Array.isArray(rows) ? rows : []; }, function () { return []; }).then(function (rows) {
+      var all = merged(shows, rows);
+      // the empty check runs after the merge: a Run show can fill an empty lineup, and nothing at all takes the section off
+      if (!all.length) { sec.remove(); jump(); return; }
+      var grew = all.length !== shows.length || all.some(function (s) { return s.run; });
+      shows = all;
+      if (!list) draw();
+      if (grew || !list.firstChild) paint();
+      texasNext(true); jump();
+    }).catch(function (e) { try { console.warn('music: lineup', e && e.message); } catch (x) {} });
   }
 
   /* ================= DROPS ================= */
@@ -480,7 +634,72 @@
       return c;
     }
     house.forEach(function (r) { wrap.appendChild(card(r)); });
+
+    // CALL 9, REPORT: a member (never the desk) can report somebody else's room that is out. Not the house's
+    // rooms, not the desk's own (report_add refuses both anyway). The shared chooser, as on the Take's comments:
+    // 'Tell the desk why', one chip per reason (OTP.reportChoices), 'Never mind'; 'Something else' opens a short
+    // note. A room this viewer already reported says Reported (OTP.myReports). Who sent it is only the desk's to see.
+    var REP = [], repDone = null, repAsked = false, isDesk = null;
+    function canReport(r) { return !r.house && !!r.published && !r.mine && r.kind !== 'desk' && r.id != null; }
+    function repSay(c, text, bad) {
+      var m = c.querySelector(':scope > .mx-rep-msg');
+      if (!m) { m = el('p', 'mx-rep-msg'); m.setAttribute('role', 'status'); c.insertBefore(m, c.querySelector(':scope > .mx-room-embed')); }
+      m.className = 'mx-rep-msg' + (bad ? ' bad' : ''); m.textContent = text;
+    }
+    function chooser(c, r) {
+      var had = c.querySelector(':scope > .mx-why'); if (had) { had.remove(); return; }
+      var box = el('div', 'mx-why'), chips = el('div', 'mx-chips');
+      box.appendChild(el('b', null, 'Tell the desk why')); box.appendChild(chips);
+      function send(why, note) {
+        var btns = [].slice.call(box.querySelectorAll('button'));
+        btns.forEach(function (b) { b.disabled = true; });
+        OTP.report('room', r.id, why, note).then(function (res) {
+          box.remove();
+          repSay(c, res === 'already' ? 'You sent this one. The desk has it.' : 'Sent. Only the desk sees who sent it.');
+          (repDone = repDone || new Set()).add(String(r.id));
+          var b = c.querySelector('.mx-room-rep'); if (b) b.replaceWith(el('span', 'mx-room-rep done', 'Reported'));
+        }, function (e) {
+          btns.forEach(function (b) { b.disabled = false; });
+          repSay(c, (e && e.message) || 'That did not send. Try again.', true);
+        });
+      }
+      function chip(label, fn, go) { var b = el('button', go ? 'go' : null); b.type = 'button'; b.textContent = label; b.addEventListener('click', fn); chips.appendChild(b); return b; }
+      (OTP.reportChoices ? OTP.reportChoices('room') : []).forEach(function (p) {
+        chip(p[1], function () {
+          if (p[0] !== 'other') { send(p[0], null); return; }
+          if (box.querySelector('input')) return;
+          var inp = el('input'); inp.type = 'text'; inp.maxLength = 140; inp.placeholder = 'What is wrong? (optional)';
+          inp.setAttribute('aria-label', 'What is wrong? (optional)');
+          var row = el('div', 'mx-chips'), go = el('button', 'go'); go.type = 'button'; go.textContent = 'Send';
+          go.addEventListener('click', function () { send('other', inp.value.trim() || null); });
+          row.appendChild(go); box.appendChild(inp); box.appendChild(row); inp.focus();
+        });
+      });
+      chip('Never mind', function () { box.remove(); });
+      c.insertBefore(box, c.querySelector(':scope > .mx-room-embed'));
+    }
+    function paintReports() {
+      var on = isMember() && isDesk === false && !!(w.OTP && OTP.report);
+      REP.forEach(function (x) {
+        var go = x.c.querySelector('.mx-room-go'), b = go.querySelector('.mx-room-rep');
+        if (!on) { if (b) b.remove(); var open = x.c.querySelector(':scope > .mx-why'); if (open) open.remove(); return; }
+        if (b) return;
+        if (repDone && repDone.has(String(x.r.id))) { go.appendChild(el('span', 'mx-room-rep done', 'Reported')); return; }
+        b = el('button', 'mx-link mx-room-rep', 'Report'); b.type = 'button';
+        b.addEventListener('click', function () { chooser(x.c, x.r); });
+        go.appendChild(b);
+      });
+    }
+    // which of them this viewer reported, asked once they are a member (the door can answer after the rooms)
+    function loadReports() {
+      if (!REP.length || isDesk !== false || !isMember() || repAsked || !(w.OTP && OTP.myReports)) { paintReports(); return; }
+      repAsked = true;
+      OTP.myReports('room', REP.map(function (x) { return String(x.r.id); })).then(function (set) { repDone = set; }, function () {}).then(paintReports);
+    }
+
     function paintFoot() {
+      // a closed account: the door's own words and its way back (Your account), never the Crypt step
+      if (closedDoor()) { foot.innerHTML = '<p class="mx-note">Members put up rooms. This account is closed. <a href="my/#account">Your account &rarr;</a></p>'; return; }
       // signed in with no Instagram yet ('wait'): "Log in" would bounce them to the timeline, so send them to the Crypt
       if (root.getAttribute('data-door') === 'wait') { foot.innerHTML = '<p class="mx-note">Members put up rooms. <a href="wall/">One more step at the Crypt</a> and you are in.</p>'; return; }
       if (!isMember()) { foot.innerHTML = '<p class="mx-note">Members put up rooms. <a href="join/?next=home">Log in</a> or <a href="wall/">join the Crypt</a>.</p>'; return; }
@@ -512,11 +731,15 @@
       });
     }
     paintFoot();
-    try { new MutationObserver(paintFoot).observe(root, { attributes: true, attributeFilter: ['data-door'] }); } catch (e) {}
+    try { new MutationObserver(function () { paintFoot(); loadReports(); }).observe(root, { attributes: true, attributeFilter: ['data-door'] }); } catch (e) {}
     if (!api) return;
     rpc('rooms_list').then(function (q) {
       var rows = (q && !q.error && Array.isArray(q.data)) ? q.data : [];
-      rows.filter(function (r) { return r.published; }).forEach(function (r) { wrap.appendChild(card(r)); });
+      rows.filter(function (r) { return r.published; }).forEach(function (r) {
+        var c = card(r); wrap.appendChild(c);
+        if (canReport(r)) REP.push({ c: c, r: r });
+      });
+      if (REP.length && w.OTP && OTP.me) OTP.me().then(function (me) { isDesk = !!(me && me.profile && me.profile.is_admin); }, function () { isDesk = null; }).then(loadReports);
       var mine = rows.filter(function (r) { return r.mine && !r.published; });
       if (mine.length) { mineBox.innerHTML = '<div class="rl-wk-h"><b>Yours, on the desk</b><span>' + mine.length + (mine.length === 1 ? ' room' : ' rooms') + ' waiting</span></div>'; mine.forEach(function (r) { mineBox.appendChild(card(r)); }); }
       // the desk: everything not out yet, with the switch
@@ -562,6 +785,7 @@
   }
 
   /* ================= THE JUMP BAR ================= */
+  // runs again when the lineup's merge lands (it can add or take off #lineup after the first draw)
   function jump() {
     var host = d.getElementById('mx-jump'); if (!host) return;
     var L = [['battle', 'Battle'], ['played', 'Our nights'], ['holders', 'Card holders'], ['texas', 'Texas'], ['lineage', 'Lineage'], ['lineup', 'Lineup'], ['releases', 'Drops'], ['rooms', 'Rooms'], ['putuson', 'Put us on']];

@@ -52,6 +52,20 @@
   .empty{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);
     letter-spacing:.1em;line-height:1.8;margin-top:40px}
   .empty a{color:var(--pink)}
+  /* the writer's own tools (045), and the desk's way to the board. Same type as
+     the byline; every tap target is 44px tall. */
+  .tools{display:flex;flex-wrap:wrap;align-items:center;gap:0 10px;margin:-14px 0 18px;
+    font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted)}
+  .tools[hidden]{display:none}
+  .tools b{color:var(--ink)}
+  .tools a,.tools button{display:inline-flex;align-items:center;min-height:44px;padding:0;border:0;
+    background:none;color:var(--pink);font:inherit;letter-spacing:inherit;text-transform:inherit;
+    text-decoration:none;cursor:pointer}
+  .tools button.sure{color:#ff6a7e}
+  .tools button:disabled{opacity:.5;cursor:default}
+  .tools .said{flex-basis:100%;color:#ff6a7e;text-transform:none;letter-spacing:.06em}
+  .tools .said:empty{display:none}
 </style>
 </head>
 <body>
@@ -63,18 +77,20 @@
     <h1 id="ttl"></h1>
     <div class="dek" id="dek"></div>
     <div class="byline" id="byline"></div>
+    <div class="tools" id="mine" hidden></div>
+    <div class="tools" id="desktools" hidden></div>
     <div class="cover" id="cover"><img id="coverimg" alt=""></div>
     <article id="art"></article>
-    <div class="foot">A card holder wrote this one. When it earns its number it moves
-      into the catalog for good. <a href="../../#desk">Back to The Word &rarr;</a></div>
+    <div class="foot"><span id="footsaid">A card holder wrote this one. When it earns its number it moves
+      into the catalog for good.</span> <a href="../../#desk">Back to The Word &rarr;</a></div>
   </div>
   <div class="empty" id="empty">loading the story…</div>
 </div>
 
 <script src="../../supabase-config.js?v=f1348482"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="../../assets/js/desk.js?v=c10b36ef" defer></script>
-<script src="../../assets/js/word.js?v=1fb66209" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" integrity="sha384-Rj26LVGvoeRVR6+mwQmFfcR3QOBEwT+ZmuCWpuiqeTzJpCs0ER4ITAWGb4Hiy3Ok" crossorigin="anonymous"></script>
+<script src="../../assets/js/desk.js?v=12f3e9e0" defer></script>
+<script src="../../assets/js/word.js?v=e212ba37" defer></script>
 <script defer>
 document.addEventListener('DOMContentLoaded', async () => {
   const $ = id => document.getElementById(id);
@@ -85,29 +101,49 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!/^[a-z0-9][a-z0-9-]{2,59}$/.test(slug)) { gone('No story named on this link.'); return; }
   if (!window.OTP || !OTP.configured || !window.OTPWord) { gone('The backend is asleep, so this one is resting too.'); return; }
 
-  let row = null;
+  let row = null, offView = false;
   try { row = await OTP.wordStory(slug); } catch (e) { row = null; }
   if (!row) {
     // Author or desk reading a pending story: RLS decides who gets the row.
     try {
       row = await OTP.storyAnyRole(slug);
       if (row && !row.published) row._pending = true;
+      // published but not in the view: the writer is banned, closed or no longer holds a card (044's gate)
+      else if (row) offView = true;
     } catch (e) { row = null; }
   }
   if (!row) { gone('That one is not up. It may still be on the desk.'); return; }
 
+  const esc = OTPWord.esc;
   document.title = row.title + ' · 0FF THE PRINT';
   $('ttl').textContent = row.title;
   $('dek').textContent = row.dek;
   const d = new Date(row.created_at);
-  // The name goes to the writer's card page (c/?s= answers before bake.py
-  // has made c/<slug>/). A pending row read off the table has no card_slug.
-  const who = OTPWord.esc(row.display_name || row.card_slug || 'card holder');
-  $('byline').innerHTML = '<b>' + (row.card_slug
-      ? '<a href="../../c/?s=' + encodeURIComponent(row.card_slug) + '">' + who + '</a>' : who) + '</b>' +
-    ' &nbsp;·&nbsp; FROM THE FLOOR' +
-    (isNaN(d) ? '' : ' &nbsp;·&nbsp; ' + d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase()) +
-    (row._pending ? ' &nbsp;·&nbsp; <span style="color:#ff6a7e">ON THE DESK, NOT PUBLIC YET</span>' : '');
+  const date = isNaN(d) ? '' : ' &nbsp;·&nbsp; ' + esc(d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase());
+  // 045 marks every change to the words or the cover after it went up
+  const ed = row.edited_at ? new Date(row.edited_at) : null;
+  const edited = ed && !isNaN(ed) ? ' &nbsp;·&nbsp; EDITED ' + esc(ed.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase()) : '';
+  // Since 023 a story goes up the moment it is sent, so one that is not up was
+  // pulled by the desk. Only its writer and the desk get it at all (RLS).
+  const down = row._pending ? ' &nbsp;·&nbsp; <span style="color:#ff6a7e">PULLED BY THE DESK, NOT PUBLIC</span>'
+             : offView && !row.house ? ' &nbsp;·&nbsp; <span style="color:#ff6a7e">NOT PUBLIC</span>' : '';
+  if (row.house) {
+    // 045: the desk filed it from the phone. It reads like the catalog's own
+    // stories until bake.py gives it a number and a folder of its own.
+    $('kicker').textContent = row.kicker || 'THE WORD';
+    $('byline').innerHTML = '<b>0FF THE PRINT</b>' + date + edited + down;
+    $('footsaid').textContent = 'A house story, up from the phone. It gets its number on the next bake.';
+  } else {
+    // The name goes to the writer's card page (c/?s= answers before bake.py
+    // has made c/<slug>/). A pending row read off the table has no card_slug.
+    var byline = name => {
+      const who = esc(name || row.card_slug || 'card holder');
+      $('byline').innerHTML = '<b>' + (row.card_slug
+          ? '<a href="../../c/?s=' + encodeURIComponent(row.card_slug) + '">' + who + '</a>' : who) + '</b>' +
+        ' &nbsp;·&nbsp; FROM THE FLOOR' + date + edited + down;
+    };
+    byline(row.display_name);
+  }
   if (row.cover_url) {
     $('coverimg').src = row.cover_url;
     $('cover').style.display = 'block';
@@ -115,6 +151,36 @@ document.addEventListener('DOMContentLoaded', async () => {
   $('art').innerHTML = OTPWord.mdToHtml(row.body_md);
   $('empty').style.display = 'none';
   $('story').style.display = '';
+
+  // ---- the writer's own, and the desk's (045). After the story shows, never before.
+  const me = await OTP.me().catch(() => null);
+  if (!me || !me.user) return;
+  // Yours until bake.py folds it into the catalog: then the desk fixes it.
+  const own = (await OTP.myStories().catch(() => [])).find(s => s.slug === slug && !s.baked) || null;
+  if (own) {
+    // a pulled story is read off the table, which carries no name: it is yours
+    if (row._pending && !row.house && !row.display_name && me.profile && me.profile.display_name) byline(me.profile.display_name);
+    const bar = $('mine');
+    // Fix it opens word/new, which is for card holders and the desk; a writer who lost the card can still take it down (045)
+    const canFix = !!(me.profile && (me.profile.approved || me.profile.is_admin));
+    bar.innerHTML = '<b>Yours</b>' + (canFix ? ' <span>·</span> <a href="../new/?id=' + encodeURIComponent(own.id) + '">Fix it</a>' : '') +
+      ' <span>·</span> <button type="button" id="takedown">Take it down</button><span class="said" id="mysaid"></span>';
+    bar.hidden = false;
+    OTPWord.twoTap($('takedown'), 'Tap again to take it down', async () => {
+      try {
+        await OTP.withdrawStory(own.id);
+        $('story').style.display = 'none';
+        $('empty').style.display = '';
+        $('empty').innerHTML = 'Taken down. <a href="../new/">Write another</a> or <a href="../../#desk">go back to The Word.</a>';
+        document.title = 'Taken down · 0FF THE PRINT';
+      } catch (err) { $('mysaid').textContent = (err && err.message) || 'That did not go through. Try again.'; }
+    });
+  }
+  if (me.profile && me.profile.is_admin) {
+    const dt = $('desktools');
+    dt.innerHTML = '<a href="../../board/?mstory=' + encodeURIComponent(slug) + '">Desk: fix this story</a>';
+    dt.hidden = false;
+  }
 });
 </script>
 </body>

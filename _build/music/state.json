@@ -1,0 +1,26 @@
+{
+ "battle": {
+  "id": "2026-w42",
+  "a": {
+   "track": "1qVeiyPNX4KPALXyPpenBd",
+   "title": "whiplash",
+   "artist": "2hollis"
+  },
+  "b": {
+   "track": "5t6aol8L1zmOwEnf2HN430",
+   "title": "her friends",
+   "artist": "Nettspend"
+  }
+ },
+ "winners": [],
+ "rooms": [
+  {
+   "id": "74nGTHB3twhhqG1aeDEMpK",
+   "name": "VAMPLYFE",
+   "label": "The house sound",
+   "line": "117 songs. The house in one room."
+  }
+ ],
+ "cover": null,
+ "built_sha": "66bc271e816fb2008387101c947632df7447ae457c9564842fbe582e15bba11a"
+}

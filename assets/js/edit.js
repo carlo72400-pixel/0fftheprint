@@ -32,10 +32,15 @@
   }
 
   /* ---------- the popover ---------- */
-  function panel(title, fields, onSave, extra) {
+  // opts (Wave 2, optional): save = the action button's words (default Save), done = what it says before the
+  // reload (default "Saved. Reloading…"). A field of type 'note' is a line of words, nothing to fill in.
+  function panel(title, fields, onSave, extra, opts) {
+    opts = opts || {};
     var back = d.createElement('div');
     back.className = 'edm-back';
     var rows = fields.map(function (f) {
+      if (f.type === 'note')
+        return '<p class="edm-c edm-note">' + esc(f.label) + '</p>';
       if (f.type === 'textarea')
         return '<label class="edm-l">' + esc(f.label) +
                '<textarea data-k="' + esc(f.key) + '" rows="' + (f.rows || 4) + '">' + esc(f.value || '') + '</textarea></label>';
@@ -53,7 +58,7 @@
         '<div class="edm-f">' +
           (extra || '') +
           '<button type="button" class="edm-x">Cancel</button>' +
-          '<button type="button" class="edm-s">Save</button>' +
+          '<button type="button" class="edm-s">' + esc(opts.save || 'Save') + '</button>' +
         '</div>' +
       '</div>';
     d.body.appendChild(back);
@@ -71,7 +76,7 @@
         out[el.dataset.k] = el.type === 'checkbox' ? el.checked : el.value;
       });
       this.disabled = true; say('Saving…');
-      try { await onSave(out, say); say('Saved. Reloading…'); setTimeout(function () { location.reload(); }, 550); }
+      try { await onSave(out, say); say(opts.done || 'Saved. Reloading…'); setTimeout(function () { location.reload(); }, 550); }
       catch (err) { this.disabled = false; say(err.message || String(err), true); }
     });
     return { close: close, say: say, el: back };
@@ -253,7 +258,8 @@
        tile swaps; the committed file stays the floor until bake.py folds it. */
     if (admin) {
       // 10/11: only On Rotation's own tiles. The Music tab's other rows (picks, nights, cards, Texas,
-      // the battle) are not seeds, and a battle winner shown on the rail is not one either.
+      // the battle) are not seeds, and a battle winner music.js draws in the gap (.won) is not one either.
+      // Wave 2: once build_music.py close puts the winner in rotation.json it IS a seed (no .won), pencil and all.
       d.querySelectorAll('#rotation-mount .track:not(.won)').forEach(function (el) {
         var a = el.matches('a') ? el : el.querySelector('a[href*="open.spotify.com/track/"]');
         var href = a ? a.getAttribute('href') || '' : '';
@@ -329,7 +335,8 @@
     }
 
     /* MUSIC. Desk can pull any live track. A card holder's pencil on their own
-       pick goes to /compose/, where a live pick can be swapped or its artist
+       pick takes it down (045: withdrawTrack works on a pick that is out) and
+       still points at /compose/, where a live pick can be swapped or its artist
        fixed. Seeds from rotation.json carry no id and are not touched. */
     try {
       var mine = me ? await OTP.myRotation() : [];
@@ -343,13 +350,22 @@
         if (!m) return;                       // a seed, not a live row
         var row = byTrack[m[1]];
         if (!row) return;                     // live for someone else, not yours to touch
-        // ⛔ A MEMBER'S PENCIL HERE ALWAYS FAILED. Only published picks are on
-        // the page, the database refuses a member deleting a published row, and
-        // withdraw was the panel's only action, so Save always answered "That
-        // one is on rotation. The desk pulls it." What a card holder CAN do with
-        // a live pick is on /compose/, so the pencil goes there.
+        // ⛔ A MEMBER'S PENCIL HERE USED TO FAIL: the database refused a member
+        // deleting a published pick, so it went to /compose/ instead. 045 lets
+        // them take their own pick down whether it is out or not (call 8), so
+        // the pencil opens the panel again, with /compose/ one tap away.
+        // Only on their tile in Card Holders' Picks: a pick the desk made a seed
+        // is the desk's tile now, and taking the row down would not move it.
         if (!admin) {
-          pencil(el, 'Swap the song or fix the artist', function () { location.href = 'compose/#rot'; });
+          if (!el.closest('#mx-picks') || el.classList.contains('won')) return;
+          pencil(el, 'Your pick', function () {
+            var pn = panel('MUSIC · ' + (row.title || ''), [
+              { type: 'note', label: "Takes your pick off Card Holders' Picks. You can send it again later; it goes back through the desk." }
+            ], async function () {
+              await OTP.withdrawTrack(row.id);
+            }, '<button type="button" class="edm-go">Swap or fix it</button>', { save: 'Take it down', done: 'Down. Reloading…' });
+            pn.el.querySelector('.edm-go').addEventListener('click', function () { location.href = 'compose/#rot'; });
+          });
           return;
         }
         pencil(el, 'Manage this track', function () {
@@ -422,7 +438,8 @@
     /* THE WORD. The dedicated body editors already exist and are better than a
        popover for long markdown, so this routes there instead of duplicating it.
        ⛔ TWO EDITORS, BY WHERE THE BODY LIVES. An unbaked member story links to
-       word/live/?s=<slug>: its body is the database row, edited on /desk/. A
+       word/live/?s=<slug>: its body is the database row, edited on the board
+       (THE WORD, board/?mstory=<slug>; /desk/ only forwards there now). A
        committed page links to word/<slug>/ and is edited in desk/word/, which
        lists only committed pages. Both open the story straight from ?s=. The
        slug of a live one comes off the query, never the path, where a path
@@ -433,7 +450,7 @@
       if (!/^word\//.test(href)) return;
       var live = /^word\/live\/\?(?:[^#]*&)?s=([^&#]+)/.exec(href);
       var page = /^word\/([^\/?#]+)\/?$/.exec(href);
-      var to = live ? 'desk/?s=' + live[1]
+      var to = live ? 'board/?mstory=' + live[1]
              : page && page[1] !== 'live' && page[1] !== 'new' ? 'desk/word/?s=' + page[1]
              : 'desk/word/';
       pencil(el, 'Edit this story', function () { location.href = to; });

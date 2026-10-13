@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>The Run · 0FF THE PRINT</title>
-<meta name="description" content="The roster's own dates: shows, drops and releases from the 0FF THE PRINT house and its card holders.">
+<meta name="description" content="What the house and the roster have coming: the 0FF THE PRINT house's nights and its card holders' own shows, drops and releases, in one list.">
 <meta name="theme-color" content="#0a0a0d">
 <meta property="og:site_name" content="0FF THE PRINT">
 <meta property="og:title" content="The Run · 0FF THE PRINT">
-<meta property="og:description" content="The roster's own dates. The whole calendar is in the Crypt.">
+<meta property="og:description" content="The house's nights and the roster's own shows, in one list. Every flyer is in the Crypt, for members.">
 <meta property="og:image" content="https://0fftheprint.com/assets/preview.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
@@ -36,13 +36,15 @@
     text-transform:uppercase;color:var(--ink);line-height:1;text-shadow:0 2px 14px #000,0 0 3px #000}
   .cal-hero .sub{margin-top:9px;color:var(--pink);font-size:10px;letter-spacing:.26em;text-shadow:0 1px 8px #000}
   @media (max-width:520px){ .cal-hero{padding-bottom:22px} .cal-hero::after{border-width:10px;border-image-width:34px} .head-lock img{height:32px}
-    .cal-hero .sub{font-size:8.5px;letter-spacing:.14em;white-space:nowrap} }
+    .cal-hero .sub{font-size:8.5px;letter-spacing:.14em;text-wrap:balance} }
 
   .addbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
   .addbar .btn{width:auto;margin:0}
   .wholine{font-family:var(--f-mono);font-size:11px;color:var(--muted);letter-spacing:.06em;
     margin-top:12px;line-height:1.7}
   .wholine a{color:var(--pink-glow)}
+  .addbar + .wholine{margin-top:10px}
+  .d-acts a.btn{text-decoration:none}
 
   .month{font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;
     font-size:26px;line-height:1;color:var(--ink);margin:34px 0 2px;
@@ -105,8 +107,8 @@
     color:#5f5b6b;border:1px dashed var(--line);border-radius:12px;padding:26px;text-align:center;
     margin-top:22px}
 </style>
-<link rel="stylesheet" href="../assets/css/binder.css?v=00f24508">
-<script src="../assets/js/binder.js?v=e63104e6" defer></script>
+<link rel="stylesheet" href="../assets/css/binder.css?v=f47d0aee">
+<script src="../assets/js/binder.js?v=12b7dbe1" defer></script>
 </head>
 <body>
 <div class="leopard-bar"></div>
@@ -117,19 +119,20 @@
       <img src="../assets/cathedral/mark.webp" alt="" width="240" height="228">
       <b>The Run</b>
     </div>
-    <div class="sub">the roster&rsquo;s own dates</div>
+    <div class="sub">what the house and the roster have coming</div>
   </div>
-  <!-- 10/4: ONE CALENDAR. This page is where the house and its card holders put their own dates up (and ask the
-       house to come shoot). It is not the calendar any more: every date here is read into the Crypt's, next to the
-       flyers and the main events. -->
-  <p class="wholine">These are the dates the house and its card holders put up. The whole calendar, every flyer and every main event, is in <a href="../wall/#cal">the Crypt</a>.</p>
+  <!-- WAVE 2, CALL 6: THE RUN IS THE ONE PLACE. This page is where card holders put a date up (and ask the house to
+       come shoot), and it is What's coming for a stranger. The desk runs the list from the board (THE RUN); every date
+       here is read into the Crypt's calendar and the Music lineup. The line below is the stranger's, in the HTML so it
+       is there on the first frame; dates.js swaps it for the signed-in viewer's own line. -->
+  <p class="wholine" id="run-line">The house&rsquo;s nights and the roster&rsquo;s own shows, in one list. Every flyer in SA, San Marcos and Austin is in the Crypt, for members. <a href="../wall/">Get in. All it takes is an @.</a></p>
   <div id="panel"><div class="note" style="margin-top:22px">reading the run&hellip;</div></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" integrity="sha384-Rj26LVGvoeRVR6+mwQmFfcR3QOBEwT+ZmuCWpuiqeTzJpCs0ER4ITAWGb4Hiy3Ok" crossorigin="anonymous"></script>
 <script src="../supabase-config.js?v=f1348482"></script>
-<script src="../assets/js/desk.js?v=c10b36ef"></script>
-<script src="../assets/js/calendar.js?v=52b31f44"></script>
-<script src="../assets/js/dates.js?v=b6e4107b"></script>
+<script src="../assets/js/desk.js?v=12f3e9e0"></script>
+<script src="../assets/js/calendar.js?v=2cd5da5c"></script>
+<script src="../assets/js/dates.js?v=973b3661"></script>
 </body>
 </html>

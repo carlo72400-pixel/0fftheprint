@@ -1,0 +1,476 @@
+{
+ "nights": [
+  {
+   "slug": "2026-10-03-pulse-angels-3",
+   "title": "PULSE ANGELS 3",
+   "venue": "21st Street Co-op",
+   "date": "2026-10-03",
+   "acts": [
+    {
+     "name": "Yowen",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": "https://www.instagram.com/yowenism/",
+     "frame": null
+    },
+    {
+     "name": "Feathervane",
+     "kind": "dj",
+     "spotify": {
+      "track": "3R4688V6wZhUXxH7DFLBoY",
+      "title": "Everywhere",
+      "artist_id": "7j32fTp3oaXsRUmnIQixaX"
+     },
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "Sixfoot5",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": "https://www.instagram.com/dj.sixfoot5/",
+     "frame": null
+    },
+    {
+     "name": "M4C",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "Heavnstar",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "Soul System",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "DJ Estrella",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "Firestation",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "Renvhar",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "Formatics",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "Nephalem",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "Dimebagsigil",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "Utensil",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    }
+   ]
+  },
+  {
+   "slug": "2026-09-25-wap",
+   "title": "WAP",
+   "venue": "Private Park",
+   "date": "2026-09-25",
+   "acts": [
+    {
+     "name": "For My Angelite",
+     "kind": "band",
+     "spotify": {
+      "track": "70U39BTtK06FqZuXIRcUEM",
+      "title": "under your lashline",
+      "artist_id": "0uve9oGXTR0dU2LuJrEmFw"
+     },
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "Blue Navy",
+     "kind": "band",
+     "spotify": {
+      "track": "0Dp8NZ0BhiwhpN1IcamiEu",
+      "title": "Talk",
+      "artist_id": "2llGMmlbaRWAgsMZPELfdk"
+     },
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "Henry J",
+     "kind": null,
+     "spotify": null,
+     "alt_link": "https://www.instagram.com/d1nny_boy0/",
+     "frame": null
+    },
+    {
+     "name": "Cybersonic Sense",
+     "kind": null,
+     "spotify": null,
+     "alt_link": "https://www.instagram.com/gabo_grod/",
+     "frame": null
+    },
+    {
+     "name": "CCM Stereo",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": "https://www.instagram.com/ccmstereo/",
+     "frame": null
+    }
+   ]
+  },
+  {
+   "slug": "2026-09-24-harambe-4-ever",
+   "title": "HARAMBE 4 EVER",
+   "venue": "Paper Tiger",
+   "date": "2026-09-24",
+   "acts": [
+    {
+     "name": "Streetlamp",
+     "kind": "band",
+     "spotify": {
+      "track": "6OEAYL6JjgBA5Yg5PJBNqO",
+      "title": "Sailboat",
+      "artist_id": "0sGxY9iZ9TZXe52YIIsXxQ"
+     },
+     "alt_link": null,
+     "frame": {
+      "i": 3,
+      "thumb": "events/2026-09-24-harambe-4-ever/media/004_t.jpg"
+     }
+    },
+    {
+     "name": "Midnight Dawn",
+     "kind": "band",
+     "spotify": {
+      "track": "1TK7n7ZQE2iDBbiTQvrHvr",
+      "title": "Pink (Get Away)",
+      "artist_id": "0yrYEQle6moCSV5k4xCCbR"
+     },
+     "alt_link": null,
+     "frame": {
+      "i": 23,
+      "thumb": "events/2026-09-24-harambe-4-ever/media/024_t.jpg"
+     }
+    },
+    {
+     "name": "Black Nail Polish",
+     "kind": "band",
+     "spotify": {
+      "track": "2dMRW9t0csaozuPP7JebmQ",
+      "title": "only today",
+      "artist_id": "3UZjKwFbe1wPSt0h6cj2Sq"
+     },
+     "alt_link": null,
+     "frame": {
+      "i": 40,
+      "thumb": "events/2026-09-24-harambe-4-ever/media/041_t.jpg"
+     }
+    },
+    {
+     "name": "GABO",
+     "kind": "band",
+     "spotify": {
+      "track": "7bj1SvqfF46rvDgn9wfhWh",
+      "title": "Floating Away",
+      "artist_id": "6mtZ7p0GQW81RLYBOWGKeM"
+     },
+     "alt_link": "https://www.instagram.com/gabo_grod/",
+     "frame": {
+      "i": 50,
+      "thumb": "events/2026-09-24-harambe-4-ever/media/051_t.jpg"
+     }
+    }
+   ]
+  },
+  {
+   "slug": "2026-09-20-chill-and-smoke",
+   "title": "Chill & Smoke",
+   "venue": "Exotic Takeout",
+   "date": "2026-09-20",
+   "acts": []
+  },
+  {
+   "slug": "2026-09-18-zen-haus",
+   "title": "Third Friday Night Market",
+   "venue": "Zen Haus",
+   "date": "2026-09-18",
+   "acts": []
+  },
+  {
+   "slug": "2026-09-18-baptism",
+   "title": "BAPTISM",
+   "venue": "The Deco",
+   "date": "2026-09-18",
+   "acts": []
+  },
+  {
+   "slug": "2026-09-17-bar-hop",
+   "title": "Bar Hop",
+   "venue": "Club 212 · Bar House",
+   "date": "2026-09-17",
+   "acts": []
+  },
+  {
+   "slug": "2026-09-16-sadboyz-club",
+   "title": "Sadboyz Club",
+   "venue": "Wav Room",
+   "date": "2026-09-16",
+   "acts": [
+    {
+     "name": "WYBMF",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": "https://www.instagram.com/wybmf/",
+     "frame": {
+      "i": 1,
+      "thumb": "events/2026-09-16-sadboyz-club/media/002_t.jpg"
+     }
+    }
+   ]
+  },
+  {
+   "slug": "2026-09-13-burlesque-night",
+   "title": "Burlesque Night",
+   "venue": "Rah Rah Room",
+   "date": "2026-09-13",
+   "acts": []
+  },
+  {
+   "slug": "2026-09-12-lucha-night",
+   "title": "Lucha Night",
+   "venue": "El Luchador Bar",
+   "date": "2026-09-12",
+   "acts": []
+  },
+  {
+   "slug": "2026-09-12-migx",
+   "title": "MIGX",
+   "venue": "Mi Vaquita",
+   "date": "2026-09-12",
+   "acts": [
+    {
+     "name": "MIGX",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": "https://www.instagram.com/migxmusic/",
+     "frame": {
+      "i": 27,
+      "thumb": "events/2026-09-12-migx/media/028_t.jpg"
+     }
+    }
+   ]
+  },
+  {
+   "slug": "2026-09-11-brainrot",
+   "title": "Brainrot",
+   "venue": "New Guild Co-op",
+   "date": "2026-09-11",
+   "acts": [
+    {
+     "name": "DJ Two Bite Hotdog Challenge",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": null,
+     "frame": {
+      "i": 6,
+      "thumb": "events/2026-09-11-brainrot/media/007_t.jpg"
+     }
+    },
+    {
+     "name": "Nathaniel B",
+     "kind": null,
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "Lysing",
+     "kind": null,
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "6 B2B 7",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": null,
+     "frame": {
+      "i": 64,
+      "thumb": "events/2026-09-11-brainrot/media/065_t.jpg"
+     }
+    },
+    {
+     "name": "John Derp",
+     "kind": null,
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "Gucci Morty B2B Gay Little Monkey From The Apple Store",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "ONI",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "iHorse",
+     "kind": null,
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "Triple T",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    },
+    {
+     "name": "DJ Young Hoe",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": null,
+     "frame": null
+    }
+   ]
+  },
+  {
+   "slug": "2026-09-01-billy-release-party",
+   "title": "B.I.L.L.Y Release Party",
+   "venue": "Slackers",
+   "date": "2026-09-01",
+   "acts": [
+    {
+     "name": "Mike Dimes",
+     "kind": "rapper",
+     "spotify": {
+      "track": "099dR5vpsek2xnyxGKnJUK",
+      "title": "EYE LIED",
+      "artist_id": "6rIaHuCIUu32uj2CjlEBN3"
+     },
+     "alt_link": null,
+     "frame": {
+      "i": 44,
+      "thumb": "events/2026-09-01-billy-release-party/media/045_t.jpg"
+     }
+    }
+   ]
+  },
+  {
+   "slug": "2026-08-30-clown-church",
+   "title": "Clown Church",
+   "venue": "Rah Rah Room",
+   "date": "2026-08-30",
+   "acts": []
+  },
+  {
+   "slug": "2026-08-25-the-mix",
+   "title": "Resident Evil vs Silent Hill",
+   "venue": "The Mix",
+   "date": "2026-08-25",
+   "acts": [
+    {
+     "name": "lil trucker hat (alecsoul)",
+     "kind": "dj",
+     "spotify": null,
+     "alt_link": "https://www.instagram.com/liltruckerhat/",
+     "frame": null
+    }
+   ]
+  },
+  {
+   "slug": "2026-08-23-the-showcase",
+   "title": "The Showcase",
+   "venue": "The Mix",
+   "date": "2026-08-23",
+   "acts": [
+    {
+     "name": "$IPOR",
+     "kind": "rapper",
+     "spotify": null,
+     "alt_link": "https://www.instagram.com/fivecantell/",
+     "frame": null
+    }
+   ]
+  },
+  {
+   "slug": "2026-08-21-zen-haus",
+   "title": "Third Friday Night Market",
+   "venue": "Zen Haus",
+   "date": "2026-08-21",
+   "acts": []
+  },
+  {
+   "slug": "2026-08-16-the-mix",
+   "title": "The Mix",
+   "venue": "The Mix",
+   "date": "2026-08-16",
+   "acts": [
+    {
+     "name": "KAV-MAN",
+     "kind": "rapper",
+     "spotify": {
+      "track": "0KJIm3Ukd82n0d7VOCQWWI",
+      "title": "Stardust Breaker",
+      "artist_id": "2M2Uex0a4ZilCAgwb4YOZb"
+     },
+     "alt_link": null,
+     "frame": null
+    }
+   ]
+  },
+  {
+   "slug": "2026-08-14-blade-rave",
+   "title": "Blade Rave",
+   "venue": "Paper Tiger",
+   "date": "2026-08-14",
+   "acts": []
+  }
+ ]
+}

@@ -1,0 +1,2083 @@
+[
+ {
+  "uri": "spotify:track:1zXILiZxAoNW8hpF9HLp7Y",
+  "uid": "ad9e2179663d92f1",
+  "title": "JENNIFER'S BODY",
+  "subtitle": "Julia Wolf,\u00a02DUMB",
+  "isExplicit": false,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": []
+  },
+  "duration": 132324,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/980f200cd60fa141ca773a916c2a756fa4617128"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:4whDDBIZFwynFgkiNlPAqu",
+  "uid": "34ce7c0495145512",
+  "title": "IN MY ROOM",
+  "subtitle": "Julia Wolf,\u00a02DUMB,\u00a0cr1tter",
+  "isExplicit": false,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": []
+  },
+  "duration": 128859,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/4ea94e2afcee18410455ebe9c682d23837835bba"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:5bBNHXx42TKskc8xMBhssf",
+  "uid": "d43c73bad083a2da",
+  "title": "KILL YOU OFF",
+  "subtitle": "Julia Wolf,\u00a02DUMB,\u00a0BBY GOYARD",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 165298,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/96af3398de4559a38dbba941d5669dc25ed10f0d"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:2IGMVunIBsBLtEQyoI1Mu7",
+  "uid": "5408a852a4367862",
+  "title": "Paint The Town Red",
+  "subtitle": "Doja Cat",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 231750,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/5abac156f155bb3b1e40c74616079010eab36fad"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:2sOQNQ7igp0tNolf4DcEoN",
+  "uid": "a8297ccd9f6ee964",
+  "title": "Spaceship",
+  "subtitle": "\u2670 Cash \u2670",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 191187,
+  "isPlayable": false,
+  "playabilityReason": "COUNTRY_RESTRICTED",
+  "audioPreview": null,
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:6RM6SBmaiv1ouUxh9nmQLj",
+  "uid": "8abd235e17cf31bf",
+  "title": "Easter Pink",
+  "subtitle": "fakemink",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 84846,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/135a02a1c013e3d128f59effb323ac723ea2281b"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:23c1TrkpPPYOcJT6DYRRPH",
+  "uid": "0522dd5408b0589a",
+  "title": "Music and Me",
+  "subtitle": "fakemink",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 126037,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/7861783d29e91b1c85a6f1c9a03115788364b60f"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:554qQSs9lpRVq6TlaaiIKT",
+  "uid": "84c2cba5df6fb3b4",
+  "title": "4 Raws",
+  "subtitle": "EsDeeKid",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 146666,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/be29bc24e9ea5878fa071d04916175eb630d8fb7"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:7hKUH1NXQXOt6bQjHhRZQg",
+  "uid": "857f80fd06b88394",
+  "title": "Princess",
+  "subtitle": "Feng",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 87272,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/f2d72902ae32d7ddfa9069870cd452dd406c5486"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:4IBTU8b4bM3ycYYrvwcURk",
+  "uid": "e0941a6ca53ad3cd",
+  "title": "Fidelio",
+  "subtitle": "fakemink",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 154366,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/b2dd320469deb98a54733c9352e7d207efcffa5e"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:4XlNNRHfvBRj5YEz04NGUQ",
+  "uid": "9048e7fb55810fa1",
+  "title": "left to right",
+  "subtitle": "rommulas,\u00a02hollis",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 154285,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/fdd35e0d39193f4c94c6f9e108ea241a9e38cd94"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:6gQiWTYr8RmHzMskzB9g6Z",
+  "uid": "ad753944eaed7fdf",
+  "title": "Sexual Fantasies",
+  "subtitle": "maxon,\u00a0Percaso",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 138805,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/cfd48aba0ae17ffbd5570bcb96d98b2df5e3f88c"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:3ugTIgbsmvICbaGe4ZpYoc",
+  "uid": "05f8dbea4bc93d85",
+  "title": "MO",
+  "subtitle": "762genta,\u00a0Percaso",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 127160,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/3c0c9839c761d454a14844edaf62ae24d9895fd0"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:4DqqqrFeVbMvhE54x7a3fh",
+  "uid": "ba3dbe80a53f419d",
+  "title": "Tartan",
+  "subtitle": "EsDeeKid,\u00a0Fimiguerrero",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 109714,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/14306882ced51c6af8b711cc608bb1b4551f445b"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:3jrY4AAWTvZfmwGs3E7QcN",
+  "uid": "9177bb7d6016e64a",
+  "title": "style",
+  "subtitle": "2hollis",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 99253,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/b6499b883f3230b7944083253bff3f65514fc1cd"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:2cBXDeiRLJfXDGrIbfxwot",
+  "uid": "a69df3113d654885",
+  "title": "NEW TO ME",
+  "subtitle": "Slew",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 122107,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/e1936b8f1c366f2f0556965102dd341620cab7c9"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:2xTk9wtJ6mWf7YV6ppmdCK",
+  "uid": "c98633cd1aa68652",
+  "title": "Impact (with xaviersobased)",
+  "subtitle": "Nettspend,\u00a0xaviersobased",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 115764,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/04ebb306a308e72b21cfe633785fa66eb9f5fb41"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:1Cheunopig5ZrxuGe94MtX",
+  "uid": "765b965aa0e5de46",
+  "title": "tell you straight",
+  "subtitle": "jigitz",
+  "isExplicit": false,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": []
+  },
+  "duration": 124864,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/9985afc479f009b3928ba935ae6c63d1532969a3"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:1qVeiyPNX4KPALXyPpenBd",
+  "uid": "61400a7cb1a84b28",
+  "title": "whiplash",
+  "subtitle": "2hollis",
+  "isExplicit": false,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": []
+  },
+  "duration": 167244,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/d6d7fdb1594b677a1807ac02c8d18d062ad108bc"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:5VIxdjYPJVHfSARcoRXHrl",
+  "uid": "47008c6d59fbec93",
+  "title": "worth it",
+  "subtitle": "xaviersobased",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 92058,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/3df2534b02cf5ae70c91d8f3c6b148b03c545340"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:0hy7672B7uMDPl9ehmrlL7",
+  "uid": "e4999a72606bb991",
+  "title": "ion kno",
+  "subtitle": "xaviersobased",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 127058,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/8170fbd11486a48005b1a022bdece10588ba71fb"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:3W3Y2kXSOkDidmXerJLLU2",
+  "uid": "c2cb70ba499ff236",
+  "title": "uncomfy (feat. OsamaSon)",
+  "subtitle": "xaviersobased,\u00a0OsamaSon",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 175363,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/9a356210ed3f4bcb5d9ca3938fe4a29fcaa72aa4"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:0OmWHmUFbHC2xHNNsSHHKN",
+  "uid": "5d322e630aec98ba",
+  "title": "Special",
+  "subtitle": "xaviersobased",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 104650,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/2eba4fda42e8cf0f906b67bca64a7bb2c46126eb"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:6gXhztP9B1ZkgbTuSNQ520",
+  "uid": "2ba00d20f5c98254",
+  "title": "what zit tooya",
+  "subtitle": "xaviersobased",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 84373,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/c870efe9c3e453204a380d1728a705f72507eb5c"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:4BOZwlrJLGTPmePx9mM9pu",
+  "uid": "38bbe5373b809d6a",
+  "title": "MANNEQUIN",
+  "subtitle": "Che,\u00a0xaviersobased",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 123102,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/32f1208c0da01125733608dde8be3ec1d313400c"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:3y4apZjDG5AXXYFQRmRVrG",
+  "uid": "ec019a2665a8c4a1",
+  "title": "Aw Shit",
+  "subtitle": "ian",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 138380,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/43c747aafbda0e7c83a01e78e4bb039a1a034223"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:4XlYXBrYsMQg90vfwqGSlO",
+  "uid": "8933c98b20fe7a95",
+  "title": "Danielle's Interlude (feat. Bhad Bhabie)",
+  "subtitle": "ian,\u00a0Bhad Bhabie",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 123665,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/690b8e206cac939653d5a7b586929684dfbe4465"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:7kQSYTf3fA2DYl4NbTzSzS",
+  "uid": "8c6f85ca600c3df6",
+  "title": "DIOR LEOPARD",
+  "subtitle": "Che",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 269450,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/d9ca5579563f174fe613123cb874db11b4bdb29a"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:7LLIyWvrVCoOW35WqG9Jx7",
+  "uid": "75b34ad17fb89396",
+  "title": "catastrophe",
+  "subtitle": "Ken Carson",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 130422,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/226e75008fcdf3921bf789bed88b1058a63b4322"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:30S82dxldXsPbuj4ShyVBK",
+  "uid": "a6524c40af82c0e2",
+  "title": "Marble Floors",
+  "subtitle": "Summrs",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 208211,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/4aa88e7fd5e601c22752931108066c1b347d56e9"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:2mNGL7mZILSqZHxGboJaO9",
+  "uid": "c285950b79621d51",
+  "title": "COM\u00cb N GO",
+  "subtitle": "Yeat",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 198620,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/2eee774e0688dedbc348414f4c9636fde150c9b9"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:6CgbSOe4GooCaxkyMJToze",
+  "uid": "7614486546d919d3",
+  "title": "PUT IT ONG",
+  "subtitle": "Yeat",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 157611,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/2156818c49b1f92e32ce35f165080ad9980328bd"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:7tuTUJmXroFsjZv4U3bmBf",
+  "uid": "3961dc94157779d9",
+  "title": "LOCO",
+  "subtitle": "Yeat",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 154285,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/692e7c4d8299ca55fd20b7dec72ea24a52a5d4b5"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:0H77pplHNl1rGYcRi9X7RX",
+  "uid": "f966517f0a362f64",
+  "title": "M.F.U.",
+  "subtitle": "Yeat,\u00a0SahBabii",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 163636,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/cde974b53b6173dc0dd8a2bf63c8ce974cab8de6"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:4yRGHaraXA2z6LFpQp6SCI",
+  "uid": "5131811e8eb0b662",
+  "title": "jumanji",
+  "subtitle": "Destroy Lonely",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 137142,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/a8d467ff4a632da6e55430276d8bc65529d9c2d1"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:5t6aol8L1zmOwEnf2HN430",
+  "uid": "ece06172179c9a6c",
+  "title": "her friends",
+  "subtitle": "Nettspend",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 101210,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/40fc8f253ee696518eab3deb9fdb8822d15e0935"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:54lc9n5UySmSPw7Sa49jqL",
+  "uid": "cf8244f7bee379de",
+  "title": "EEYORE",
+  "subtitle": "Sematary,\u00a0xaviersobased",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 198000,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/1ae4a2ca6e60881978f7e66869f9dda59e1585b9"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:2qjGXZaJ37YXQcEufnl4cN",
+  "uid": "162cd3396b663d9e",
+  "title": "ROBIN JEANS",
+  "subtitle": "Sematary",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 227142,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/5694423a76872182799c2ac8961760c6869b98f1"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:196oh04rH0o2sYFYG6HK0H",
+  "uid": "875dae0153606dd3",
+  "title": "4 IN A FAYGO",
+  "subtitle": "Sematary",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 182112,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/9521216f36232cd808d4f0a8621872f48c2b0e25"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:2gLj1ryvCqiDwWH2nJvf8Z",
+  "uid": "65bd2c128e23c76c",
+  "title": "ICED OUT TREE",
+  "subtitle": "Sematary",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 174929,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/9dd403251f702f95859fcdb4c39ea371a776c5bc"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:3ni8v8YY5dKjKCdgwHyKnI",
+  "uid": "888321eaf28663dc",
+  "title": "WOODSMEN",
+  "subtitle": "Sematary",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 221676,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/b89c6dbe2cdc611f1283de6609e7b0cf439e7204"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:1JIp2r3eg02kX1dh7LfBKE",
+  "uid": "7188b4b87b57dab5",
+  "title": "BORN 2 LOSE",
+  "subtitle": "Sematary",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 183157,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/a35237d391510190975a2e98f5fc307d0b5c945b"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:77q9G0H5wnXlT9OWm1QXTc",
+  "uid": "ca256b014f270f76",
+  "title": "Blow Me",
+  "subtitle": "fakemink",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 130735,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/65b1ca9acb016d23a9b234f3556345f48eb2fd65"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:1vdBPUspGU8kRPqQh1ljuC",
+  "uid": "ef0a2b171ddc4d41",
+  "title": "down",
+  "subtitle": "nate sib",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 123522,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/a24f77a022299fc707577b3474d592edf1a146c7"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:00RnOBCurjoGkZK1uLANMw",
+  "uid": "dda074e3917094ac",
+  "title": "famous",
+  "subtitle": "nate sib",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 106961,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/78eb48719d7b0b540a9624abd4b46c3f1de3a6a0"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:2kWOfoDtiLM6ONlmOecg2O",
+  "uid": "6d5b2e514054e03a",
+  "title": "two bad",
+  "subtitle": "2hollis",
+  "isExplicit": false,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": []
+  },
+  "duration": 214761,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/50db9282c7d6153df784c56152cdd9d94ef31a3a"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:0Gz4Q1Bmyef5yA0G6LIIQZ",
+  "uid": "76f34d8f35fd757a",
+  "title": "poster boy",
+  "subtitle": "2hollis",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 121089,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/8f4ea6e47ece69082d017aa2748a8bde31b669ad"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:7iBRnYx1CRQ1H6drgplfjR",
+  "uid": "bca9998ef0d6847f",
+  "title": "sister",
+  "subtitle": "2hollis",
+  "isExplicit": false,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": []
+  },
+  "duration": 215813,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/a4bbb981da13e1d9e984f0abfa4074a1f9210d70"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:3vMMqHjTyukdNcIVvzka2c",
+  "uid": "dee2545d7415ac28",
+  "title": "girl",
+  "subtitle": "2hollis",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 186122,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/b88ef43774fd4e5533bc72ccb3263281f889bfa9"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:6hxowqRsDm1fsm00y2eHJP",
+  "uid": "ce51f5c057aa6d3f",
+  "title": "sidekick",
+  "subtitle": "2hollis",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 78400,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/9196311333e6a1a4fa82b2bbfca606f96b50c31b"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:6C2nVSSeXNqfoY8t6tliZ4",
+  "uid": "6b43f52fe9d0d9c2",
+  "title": "jeans",
+  "subtitle": "2hollis",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 181258,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/c2843ab11435015c0d5d9da967fc4506878fe459"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:0LElIcqYsk9bkk8v5EHVbc",
+  "uid": "43489940ed0f8da4",
+  "title": "Throw It In",
+  "subtitle": "Lil Wayne",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 175124,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/4b022c1562fd4bd0158674800a11cc49cebee397"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:2ZCDXVmOLnKUHYVpycIq5F",
+  "uid": "ad22a77d617168b8",
+  "title": "What You Is",
+  "subtitle": "YoungBoy Never Broke Again,\u00a0Mellow Rackz",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 226115,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/11cf05d9a05fe26a8f40fa835f2a2f2a6cc1028a"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:534OFc7VpU8vB8xVgBO58d",
+  "uid": "aabcb6e67b74f2cf",
+  "title": "Coolin",
+  "subtitle": "Tay-K",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 75493,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/022b1eb35a44391856093371bddc358fb357e0ea"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:4W4hhnxvRE0rRUK1vaGlsk",
+  "uid": "c83637bef93577ca",
+  "title": "Sevan",
+  "subtitle": "PlaqueBoyMax",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 161412,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/7a24f0f0863f05f932cb79a533e17a18207a8414"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:5hv95Anv6MWYDjVbdJZB7U",
+  "uid": "b82c8a90857aeda5",
+  "title": "Victory Lap",
+  "subtitle": "Fred again..,\u00a0Skepta,\u00a0PlaqueBoyMax",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 165857,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/e4a517954fb4c6c5996b1d5cae53f1db42a7617b"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:5ogwhGSfeA3c82k4P6zriQ",
+  "uid": "376b0eebd1a1790d",
+  "title": "TURN UP",
+  "subtitle": "PlaqueBoyMax,\u00a0Rakai,\u00a0BunnaB",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 153655,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/c045ea9ab1ead823df7d5c06a61a1161c6182485"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:369I51M6XDujuwDlj3GW6R",
+  "uid": "c31b9e53f821c5a3",
+  "title": "Head Shot / Gas In The Truck",
+  "subtitle": "IShowSpeed",
+  "isExplicit": false,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": []
+  },
+  "duration": 237413,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/8720cb533282b16b2fcc74e889739607bdc7a8ca"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:69TzPRfWMOoGywNFxNLCRJ",
+  "uid": "323b17a974c56c10",
+  "title": "GET NAKED",
+  "subtitle": "DC THE DON",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 126933,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/0fa70b967ec10d10e1c2694119d047d44845aadd"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:5o7QnDznQZOHvtPZ2he6wE",
+  "uid": "01691f2f723776c8",
+  "title": "Turbo",
+  "subtitle": "Glokk40Spaz",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 120369,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/9ad6ee45c5ee167cf4d675027fc6bebd73da6c7a"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:5XXIxpBSlDq3r8VyZGyDUZ",
+  "uid": "3a1fe114c622fc56",
+  "title": "Nun 4 No Schmuck",
+  "subtitle": "Glokk40Spaz",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 150858,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/4d8945fc2f8d860a2a5e1e7e03006c4d6e6628ce"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:7iKZ4otNgJxqlM6Ljxg586",
+  "uid": "10e67c2350e5bbcd",
+  "title": "Backdoor",
+  "subtitle": "Glokk40Spaz",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 145454,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/55d5e293647829f132f0d259dd28277df6a10371"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:22Rbhv8ws7ZCxWaX9KPeW2",
+  "uid": "e7c9f33a504a3f1e",
+  "title": "Mind Blown",
+  "subtitle": "Glokk40Spaz",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 161979,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/18178463626cc0abdc06f272892d93aabf5b8e52"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:0nViXgBAlIggGekvSgiDsX",
+  "uid": "b02ffe4abdf37d90",
+  "title": "Thug's In My House",
+  "subtitle": "Glokk40Spaz",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 151578,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/3124ed99c37511aecb439298bfaf94126abd76a5"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:0fgi9PDiNmJ4Mdz5myYsIy",
+  "uid": "e05e108e74e01ae1",
+  "title": "Who\u2019s The Flyest",
+  "subtitle": "Lil Tony Official",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 107390,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/3902a466d363283214b844cd66fcfcf234f80a42"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:41zfQ7zCfewpZqAtcGlfEa",
+  "uid": "8000cf135092a267",
+  "title": "2 Sides To Every Story",
+  "subtitle": "Lil Tony Official,\u00a0Who\u2019s Casper",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 126316,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/1dbeaf780e61b99e80063d866b1dfd634ba59861"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:7IzutleLK1419FM8rUpYmq",
+  "uid": "b6c581c2f67ae86d",
+  "title": "Blakk Rokkstar",
+  "subtitle": "Ken Carson",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 230923,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/ab4ae16811f942115ab78425813ab94a23637e38"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:6DJFJDAkJ08Xs0NSqSOeUw",
+  "uid": "2b34c665a6a4b284",
+  "title": "Aye Rage",
+  "subtitle": "Benji Blue Bills,\u00a0BNYX\u00ae,\u00a0YourRAGE",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 113968,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/b55f6e8b1fd81fc17706493d5108c2f0668b2077"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:32ioWMgkyA6mFcXJMggBoz",
+  "uid": "d1c0ff8a22e01d09",
+  "title": "GEEK TIM\u00cb",
+  "subtitle": "Yeat",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 170187,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/a099593d4e1c47c288d4d25db763189c6b3c2f49"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:3VdooJLOy4tLxKpnn46SMP",
+  "uid": "aec4b6e173445b89",
+  "title": "CRUSH (with Travis Scott)",
+  "subtitle": "Playboi Carti,\u00a0Travis Scott",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 173320,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/cb8f40da8a2a1ef381dc57c0573c6cac484b3ce3"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:4evMMKc2HD6fV9slMfgkMx",
+  "uid": "0f90c1612d7fef78",
+  "title": "TOXIC (with Skepta)",
+  "subtitle": "Playboi Carti,\u00a0Skepta",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 135275,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/fb7441a4c6926521aa793b49ff41376a3c4d1e27"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:4XcZp2xqbiD8YsnPboNUDo",
+  "uid": "1c806a6157272fb0",
+  "title": "WE NEED ALL DA VIBES (with Young Thug & Ty Dolla $ign)",
+  "subtitle": "Playboi Carti,\u00a0Young Thug,\u00a0Ty Dolla $ign",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 181626,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/7ecd3f49681b19289376d96db6762c037f3f9236"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:4uoADk7q83CHvXHW3k1etM",
+  "uid": "e021d666a7138e89",
+  "title": "OLYMPIAN",
+  "subtitle": "Playboi Carti",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 174733,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/2b679bdb15b15f71f9ea15f0a5d1fc0b6e7e03ca"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:76yJsfb1CUy5Um8nFL7jKQ",
+  "uid": "9491be1761950be0",
+  "title": "OPM BABI",
+  "subtitle": "Playboi Carti",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 173076,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/626e94cdf462a3c332680ed1127691aa7338aac7"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:4tMhjP02FRQ0KIUUEJ2oGK",
+  "uid": "2c2b5948e79458cb",
+  "title": "DIS 1 GOT IT",
+  "subtitle": "Playboi Carti",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 123870,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/d7d5f496edd6f5b3f63c3d78e8f2fae50ce3a237"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:4zK082ykqJzJGzC64NXjp1",
+  "uid": "cee53f6c408551bc",
+  "title": "LIKE WEEZY",
+  "subtitle": "Playboi Carti",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 115600,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/a9c859d970f203a79e3f6b2df5c339e04675fc90"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:6q2PbvM9UEig4r8xku7VIb",
+  "uid": "b8064a37acffa25b",
+  "title": "HBA",
+  "subtitle": "Playboi Carti",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 212598,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/fcce8cd6e7e4de19ff13a2e392664ddd8bbba86f"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:7cHhlnawdN87aZbjO6LMRN",
+  "uid": "5225a6938ddce1df",
+  "title": "SOUTH ATLANTA BABY",
+  "subtitle": "Playboi Carti",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 133259,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/781f0ae71b3851597b68b06f1e1620c20a8f89d3"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:6iycYUk3oB0NPMdaDUrN1w",
+  "uid": "a20b0c7e057d6bd8",
+  "title": "EVIL J0RDAN",
+  "subtitle": "Playboi Carti",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 183928,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/793379cd675c6f47be2bcad2334aa9d2c98f99e8"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:3lAEHk0eZzMKtCUFLXz8Ln",
+  "uid": "b2dff5ecdf6a37d5",
+  "title": "RADAR",
+  "subtitle": "Playboi Carti",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 107933,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/c3f1435d3f681039ff93df3ff984022f8fe83885"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:68qeaZhtMZ6abrJCYt6nQn",
+  "uid": "e8812c02016dca4b",
+  "title": "RATHER LIE (with The Weeknd)",
+  "subtitle": "Playboi Carti,\u00a0The Weeknd",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 209680,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/1b432933057dcac2c9acc53ec52bdee8b37a8b6f"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:0rNgWFQJtfttOYIHfDOHCg",
+  "uid": "3d070635a8794a53",
+  "title": "BACKD00R (feat. Kendrick Lamar & Jhen\u00e9 Aiko)",
+  "subtitle": "Playboi Carti,\u00a0Kendrick Lamar,\u00a0Jhen\u00e9 Aiko",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 190053,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/7605db1336cc8fdf1ef03aaaad84ec3af346d0e7"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:7xAvtuHf8nGi5OtXVPYgb3",
+  "uid": "3c35b0a992e2784f",
+  "title": "CRANK",
+  "subtitle": "Playboi Carti",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 147692,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/9650915ca8763184c48ecc2a6cc00ba87ac965aa"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:4rXxjHSAglOynjIF8Z34dx",
+  "uid": "526214158649721e",
+  "title": "COCAINE NOSE",
+  "subtitle": "Playboi Carti",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 151160,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/a9d4b882db2ac771eec1f5a435e1934ccffd6d02"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:0k2ek0bG7XmU07j3jUK4L2",
+  "uid": "b4f0483de87e69d5",
+  "title": "Slimretta",
+  "subtitle": "YoungBoy Never Broke Again",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 137950,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/0ec02be15a859c1e26be960a33bab35ca27a9a83"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:7fvYtFKKso6WnPnj8rSXZ4",
+  "uid": "c0b67803345de602",
+  "title": "Wine & Dine",
+  "subtitle": "YoungBoy Never Broke Again",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 121690,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/f57a83ae5d611fa15ebbb920e48b00f74337c978"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:4n4tC4qO2LeWQRM9Gbbtop",
+  "uid": "23e29a46eff8a942",
+  "title": "Shot Callin",
+  "subtitle": "YoungBoy Never Broke Again",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 225185,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/e38221965b8a4fc306471e7ad7903548b7b821d4"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:3nIPOhwkGAeWc35uDWHFpz",
+  "uid": "3d3b5dc8eccdb2f6",
+  "title": "CRANK UP",
+  "subtitle": "Baby Kia,\u00a0BAK Jay",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 154160,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/1f711d8d4649d73edae444c29b4e791c52e4d12d"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:0dzuaqx6JwgbSyZE93rLy8",
+  "uid": "aa74972be4a3610a",
+  "title": "GLOVES & DRACS (BLACK AF1s)",
+  "subtitle": "Baby Kia",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 179413,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/32c11fe20492319f2998c5452ebc29db57ad7585"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:69carayN8BzuWX1WszasXm",
+  "uid": "a0bfe3e566c67ce6",
+  "title": "Rino Hercules",
+  "subtitle": "Summrs,\u00a0PlaqueBoyMax",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 189984,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/84707298b5595411de0feb71433c7180a2482e9a"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:2Y98lEkMVALCXni7o2g28b",
+  "uid": "07e6a2c3eccb229f",
+  "title": "Off The Meter (with Playboi Carti & Destroy Lonely)",
+  "subtitle": "Ken Carson,\u00a0Playboi Carti,\u00a0Destroy Lonely",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 219428,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/8ab68e01af6e07fb9011896f3fa777be6a9a7edd"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:50iqDXGnORhaJlicOYW751",
+  "uid": "824078d5106616e3",
+  "title": "Green Room",
+  "subtitle": "Ken Carson",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 188701,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/1646f3b9c5c0f15ee84b5f28e999da0c337c634f"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:722NAIXkI6WRNvu9O7JkdH",
+  "uid": "64023156a9a7444e",
+  "title": "overseas",
+  "subtitle": "Ken Carson",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 141031,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/85208fc74e97d695c889ef0076151fe2b03d0dba"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:555oowE8kujtS6bR2GOOPD",
+  "uid": "213f2e94de8906ec",
+  "title": "Oh Ok - xxl freestyle",
+  "subtitle": "ian",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 127578,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/870c123005009d8ccb720e04a9f28f01977a3b1c"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:4UFj2SLrRhYDPedJWO5bwk",
+  "uid": "b30c078ea930c1d0",
+  "title": "What they say",
+  "subtitle": "Nettspend",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 92019,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/8ae8f434b62c5ee71b1bd6d92994c39a6e2695df"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:4V9iVvsPL5cEQCxSYGBM88",
+  "uid": "cffe178de2a4d969",
+  "title": "We not like you",
+  "subtitle": "Nettspend",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 65332,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/cbe35390bed975b767cdc22e5eb7b02365c7c168"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:0825Ia6TYZl2BY13fyO6rJ",
+  "uid": "ea0d1d3a1a6b890b",
+  "title": "shine n peace",
+  "subtitle": "Nettspend",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 91393,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/f7fa2baa9c1d76d2527795e0b01a1e7da9a5a0bb"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:6Zvctcw0Yuw3GOg1ISUwv1",
+  "uid": "104bc2fea2e8bd6c",
+  "title": "U Fancy ?",
+  "subtitle": "Nine Vicious",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 133067,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/e5fec88938a64f27dc1cb77548a61649c6df4bcf"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:79IgD1wf3xltQdDK3l5Why",
+  "uid": "898458c8e97d9d52",
+  "title": "In My Room",
+  "subtitle": "Julia Wolf",
+  "isExplicit": false,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": []
+  },
+  "duration": 163874,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/388d5f9988818899728b5823a69ae546d72fb604"
+  },
+  "entityType": "track"
+ },
+ {
+  "uri": "spotify:track:7oK2oiwaLzB9IE9wdSRsoJ",
+  "uid": "def412c75040d2bd",
+  "title": "Sexual Fantasies",
+  "subtitle": "maxon,\u00a0Percaso",
+  "isExplicit": true,
+  "isNineteenPlus": false,
+  "contentRatings": {
+   "labels": [
+    "EXPLICIT"
+   ]
+  },
+  "duration": 138877,
+  "isPlayable": true,
+  "playabilityReason": "PLAYABLE",
+  "audioPreview": {
+   "format": "MP3_96",
+   "url": "https://p.scdn.co/mp3-preview/4a27ada1b2ca922f0c6fc9ae0cd230ffd11cafe1"
+  },
+  "entityType": "track"
+ }
+]

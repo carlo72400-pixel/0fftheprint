@@ -1,0 +1,65 @@
+{
+ "checked": "2026-10-11",
+ "drops": [
+  {
+   "date": "2026-10-16",
+   "artist": "Taking Back Sunday",
+   "title": "Louder Now (20th Anniversary Edition)",
+   "type": "reissue",
+   "label": "Craft Recordings",
+   "spotify": null,
+   "source": "https://craftrecordings.com/blogs/news/twenty-years-later-still-louder",
+   "fact": "LP and CD edition adding the B-sides 'Brooklyn (If You See Something, Say Something)' and 'Sleep'."
+  },
+  {
+   "date": "2026-10-23",
+   "artist": "My Chemical Romance",
+   "title": "The Black Parade (20th Anniversary Deluxe Edition)",
+   "type": "reissue",
+   "label": "Reprise",
+   "spotify": null,
+   "source": "https://music.apple.com/us/album/the-black-parade-20th-anniversary-deluxe-edition/6801672993",
+   "fact": "Adds three B-sides and three live recordings from a Hoboken show."
+  },
+  {
+   "date": "2026-10-30",
+   "artist": "Ken Carson & Destroy Lonely",
+   "title": "00TWINZ",
+   "type": "mixtape",
+   "label": "Opium/Interscope",
+   "spotify": null,
+   "source": "https://www.complex.com/music/a/dimassanfiorenzo/ken-carson-interview-cover-story-2026",
+   "fact": "Ken Carson confirmed the Oct. 30 date to Complex; no pre-save or tracklist yet."
+  },
+  {
+   "date": "2026-11-06",
+   "artist": "Evanescence",
+   "title": "The Open Door (Deluxe Edition)",
+   "type": "reissue",
+   "label": "Craft Recordings",
+   "spotify": null,
+   "source": "https://music.apple.com/us/album/the-open-door-deluxe-edition/6805191987",
+   "fact": "20th anniversary remaster with three era rarities and an unreleased 'Good Enough' demo."
+  },
+  {
+   "date": "2026-11-11",
+   "artist": "2hollis",
+   "title": "Pirouette",
+   "type": "album",
+   "label": "Interscope",
+   "spotify": "https://open.spotify.com/prerelease/2MGfvsMt9RJJYkCsO2sis2",
+   "source": "https://music.apple.com/us/album/pirouette/6812861964",
+   "fact": "16 tracks; cover art hand-drawn by Yoshitaka Amano."
+  },
+  {
+   "date": "2026-11-13",
+   "artist": "Danny Brown",
+   "title": "Atrocity Exhibition (10 Year Anniversary Edition)",
+   "type": "reissue",
+   "label": "Warp",
+   "spotify": null,
+   "source": "https://music.apple.com/us/album/atrocity-exhibition-10-year-anniversary-edition/6812308137",
+   "fact": "Brown plays the album front to back at Austin's Mohawk on Dec. 3."
+  }
+ ]
+}

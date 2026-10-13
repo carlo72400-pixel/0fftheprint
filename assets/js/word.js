@@ -3,13 +3,21 @@
    additive: if this file, the CDN, or the backend is missing, the committed
    article renders exactly as it did when the page was pure static HTML.
 
-   Two jobs:
+   Three jobs:
    1. If the desk saved a body override (story_pages), repaint the article from
       its markdown — UNLESS the override's stamp no longer matches the page's
       data-stamp, which means the override was already baked back to git and
       would otherwise SHADOW newer committed content forever.
    2. Render the wall (approved member entries) and, for a logged-in approved
-      member, the entry box. Entries are pre-moderated: they go to the desk. */
+      member, the entry box. Entries are pre-moderated: they go to the desk.
+      A line of yours that is up gets Take mine down (045).
+   3. The board's fix to this story (045, site_overrides section 'desk', key
+      word/<slug>/): a new title, dek or kicker repaints the page, and a pulled
+      story reads "Pulled" to everybody but the desk until the next bake turns
+      the file itself into a stub. The desk gets its own way back to the board.
+
+   Every network read here is raced and nothing waits on it: the committed page
+   paints first, whatever the CDN or the database is doing. */
 (function () {
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g,
     c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -100,10 +108,30 @@
     }).filter(Boolean).join('\n');
   }
 
+  // Two taps for anything that takes something down: the first swaps the label
+  // and marks the button .sure for four seconds, the second runs fn with the
+  // button held. fn says its own errors; a throw only lets the button go again.
+  function twoTap(btn, sure, fn) {
+    const was = btn.textContent;
+    let t = null;
+    const reset = () => { clearTimeout(t); btn.classList.remove('sure'); btn.textContent = was; };
+    btn.addEventListener('click', async () => {
+      if (btn.disabled) return;
+      if (!btn.classList.contains('sure')) {
+        btn.classList.add('sure'); btn.textContent = sure;
+        t = setTimeout(reset, 4000);
+        return;
+      }
+      clearTimeout(t); btn.disabled = true;
+      try { await fn(); } catch (e) { console.warn(e); }
+      if (btn.isConnected) { btn.disabled = false; reset(); }
+    });
+  }
+
   // Shared renderer: /word/new/ (preview) and /word/live/ (member stories)
   // consume the SAME implementation, so there is exactly one markdown in the
   // house and the byte-parity contract with newstory.py holds everywhere.
-  window.OTPWord = { esc, inline, mdToHtml };
+  window.OTPWord = { esc, inline, mdToHtml, twoTap };
 
   const article = document.querySelector('article');
   const wallEl = document.getElementById('wall');
@@ -113,6 +141,24 @@
   const race = p => Promise.race([
     p, new Promise(r => setTimeout(() => r(null), 1800)),
   ]).catch(() => null);
+
+  // The baked pages' CSS (newstory.py's template, 31 pages and counting) has no
+  // rules for what jobs 2 and 3 add, so they carry their own, once, here.
+  // Same type and colours as the template; the pulled line is bake.py's stub.
+  const css = document.createElement('style');
+  css.id = 'otpw-css';
+  css.textContent = [
+    'html.otpw-down .wrap>:not(.back):not(.otpw-pulled){display:none!important}',
+    ".otpw-said{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;text-transform:uppercase;font-size:clamp(30px,6vw,46px);line-height:1}",
+    '.otpw-pulled .foot{margin-top:30px;padding-top:8px}.otpw-pulled .foot a{display:inline-flex;align-items:center;min-height:44px}',
+    ".otpw-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 14px;margin:22px 0 0;padding:4px 14px;background:#b3122a;color:#fff;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em}",
+    '.otpw-bar a{color:#fff;font-weight:600;display:inline-flex;align-items:center;min-height:44px}',
+    ".otpw-desk{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;margin:-18px 0 18px}",
+    '.otpw-desk a{color:var(--pink);text-decoration:none;display:inline-flex;align-items:center;min-height:44px}',
+    '.wall-entry .we-row{margin-top:4px}.wall-entry .we-msg{margin-top:0}',
+    '.we-row button.sure{border-color:#ff6a7e;color:#ff6a7e}',
+  ].join('\n');
+  document.head.appendChild(css);
 
   // ---- 1. the body override -------------------------------------------------
   (async () => {
@@ -151,6 +197,12 @@
     if (!entries.length && !canPost) return;   // nothing to show, stay hidden
     wallEl.hidden = false;
 
+    // 045: your own lines. One that is up gets Take mine down; one still on the
+    // desk keeps Withdraw in the box below. (A writer who is no longer a card
+    // holder has no lines on this wall: word_wall shows card holders only.)
+    const mine = canPost ? ((await race(OTP.myEntries(slug))) || []) : [];
+    const mineUp = new Set(mine.filter(x => x.published).map(x => String(x.id)));
+
     // The name goes to their card page. c/?s= answers before bake.py has made
     // c/<slug>/. Inline style: the baked pages' CSS has no rule for it.
     const who = e => {
@@ -159,15 +211,28 @@
         ? `<a href="../../c/?s=${encodeURIComponent(e.card_slug)}" style="color:inherit;text-decoration:none">${n}</a>`
         : n;
     };
-    list.innerHTML = entries.map(e => `
-      <div class="wall-entry">
+    list.innerHTML = entries.map((e, i) => `
+      <div class="wall-entry" data-i="${i}">
         <div class="we-by">${who(e)}</div>
         <div class="we-text">${esc(e.text)}</div>
+        ${mineUp.has(String(e.id)) ? `<div class="we-row"><span class="we-msg"></span>
+          <button type="button" class="we-down">Take mine down</button></div>` : ''}
       </div>`).join('') ||
       '<div class="we-none">Nothing on the wall yet. First card holder in gets the top slot.</div>';
+    list.querySelectorAll('.we-down').forEach(btn => {
+      const row = btn.closest('.wall-entry');
+      const e = entries[Number(row.dataset.i)];
+      twoTap(btn, 'Tap again to take it down', async () => {
+        try {
+          await OTP.withdrawEntry(e.id);
+          row.innerHTML = '<div class="we-pending">Taken down.</div>';
+        } catch (err) {
+          row.querySelector('.we-msg').textContent = (err && err.message) || 'That did not go through. Try again.';
+        }
+      });
+    });
 
     if (!canPost) return;
-    const mine = (await race(OTP.myEntries(slug))) || [];
     const pending = mine.find(x => !x.published);
 
     if (pending) {
@@ -202,6 +267,86 @@
           compose.innerHTML = '<div class="we-pending">On the desk. It shows up here when it clears.</div>';
         } catch (err) { msg.textContent = err.message; }
       });
+    }
+  })();
+
+  // ---- 3. the board's fix to this story (045) -------------------------------
+  // One site_overrides row per story, section 'desk', key 'word/<slug>/'
+  // (site_overrides_desk_shape): patch {title, dek, kicker, shelf} and hidden.
+  // bake.py folds it into git: the patch into the page head and desk.json, a
+  // pull into a stub file. Until that bake, this is what readers see. The
+  // shelf only moves the Stories tab, so it has nothing to repaint here.
+  (async () => {
+    if (!/^[a-z0-9][a-z0-9-]{0,90}$/.test(slug)) return;
+    const key = 'word/' + slug + '/';
+    const board = '../../board/?story=' + key;
+    const wrap = document.querySelector('.wrap');
+    // the story's own head, found before anything below adds a .kicker of its own
+    const h1 = document.querySelector('h1');
+    const dek = document.querySelector('.dek');
+    const kicker = document.querySelector('.kicker');
+    const byline = document.querySelector('.byline');
+    const meta = (sel, v) => { const m = document.querySelector(sel); if (m) m.setAttribute('content', v); };
+    const said = v => typeof v === 'string' && v.trim() ? v.trim() : '';
+
+    const rows = await race(OTP.siteOverrides('desk'));
+    const ov = (Array.isArray(rows) ? rows : []).find(r => r && r.item_key === key) || null;
+    const patch = ov && ov.patch && typeof ov.patch === 'object' && !Array.isArray(ov.patch) ? ov.patch : {};
+    let title = (h1 && h1.textContent.trim()) || '';
+
+    const t = said(patch.title), d = said(patch.dek), k = said(patch.kicker);
+    if (t && h1) {
+      h1.textContent = t; title = t;
+      document.title = t + ' · 0FF THE PRINT';
+      meta('meta[property="og:title"]', t);
+    }
+    if (d && dek) {
+      dek.textContent = d;
+      meta('meta[name="description"]', d);
+      meta('meta[property="og:description"]', d);
+    }
+    if (k && kicker) kicker.textContent = k;
+
+    // Pulled: everybody sees bake.py's stub at once, the desk included, until
+    // me() says who is looking. A crawler that runs the page reads noindex.
+    let pulled = null;
+    if (ov && ov.hidden && wrap) {
+      let robots = document.querySelector('meta[name="robots"]');
+      if (!robots) {
+        robots = document.createElement('meta');
+        robots.setAttribute('name', 'robots');
+        document.head.appendChild(robots);
+      }
+      robots.setAttribute('content', 'noindex');
+      pulled = document.createElement('div');
+      pulled.className = 'otpw-pulled';
+      pulled.innerHTML = '<div class="kicker">0FF THE PRINT</div>' +
+        '<p class="otpw-said">Pulled. The desk took this story down.</p>' +
+        '<div class="foot"><a href="../../#stories">Back to the stories &rarr;</a></div>';
+      wrap.appendChild(pulled);
+      document.documentElement.classList.add('otpw-down');
+      document.title = 'Pulled · 0FF THE PRINT';
+    }
+
+    const me = await OTP.me().catch(() => null);
+    if (!(me && me.profile && me.profile.is_admin)) return;
+
+    // THE DESK: the story stays readable for him, with the way back to the board
+    if (pulled) {
+      pulled.remove();
+      document.documentElement.classList.remove('otpw-down');
+      document.title = (title || 'The Word') + ' · 0FF THE PRINT';
+      const bar = document.createElement('div');
+      bar.className = 'otpw-bar';
+      bar.innerHTML = '<span>PULLED · only you see this</span><a href="' + esc(board) + '">Put it back</a>';
+      if (kicker && kicker.parentNode === wrap) wrap.insertBefore(bar, kicker);
+      else if (wrap) wrap.insertBefore(bar, wrap.firstElementChild ? wrap.firstElementChild.nextSibling : null);
+    }
+    if (byline) {
+      const fix = document.createElement('div');
+      fix.className = 'otpw-desk';
+      fix.innerHTML = '<a href="' + esc(board) + '">Desk: fix this story</a>';
+      byline.insertAdjacentElement('afterend', fix);
     }
   })();
 })();

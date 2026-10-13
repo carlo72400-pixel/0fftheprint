@@ -28,41 +28,80 @@
     text-transform:uppercase;color:var(--pink-glow);border-left:3px solid var(--pink-glow);padding-left:14px;margin:22px 0}
   #pv a{color:var(--pink-glow)}
   #pv figure{margin:18px 0}#pv img{max-width:100%}
-  .mine-row{display:flex;justify-content:space-between;align-items:center;gap:8px;border-top:1px solid var(--line);padding:10px 0}
-  .mine-row .st{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase}
+  .mine-row{border-top:1px solid var(--line);padding:10px 0}
+  .mine-row .mr-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .mine-row .mr-top a{color:var(--ink);text-decoration:none;font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .mine-row .st{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;flex:0 0 auto}
+  .mine-row .mr-act{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .mine-row .mr-said{font-family:var(--f-mono);font-size:11px;color:var(--muted);margin-top:6px;line-height:1.6}
+  .mine-row .mr-said.err{color:#ffb3c4}
+  .mine-row .mr-said:empty{display:none}
+  /* every take-down and fix button is a full 44px tap on a phone */
+  .acts{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+  .mr-act .btn,.pulled .btn{min-height:44px}
+  .btn.sure{border-color:rgba(255,93,126,.6);color:var(--bad)}
+  /* a story the desk pulled (045): fix it or take it down first */
+  .pulled{border:1px solid rgba(255,93,126,.4);background:rgba(255,93,126,.08);border-radius:12px;padding:14px 16px;margin-top:16px}
+  .pulled p{font-size:14px;line-height:1.6}
+  .pulled .row{margin-top:12px}
+  /* the desk's house block (045) */
+  .house{border:1px solid var(--line);border-radius:12px;padding:4px 14px 14px;margin-top:16px}
+  label.tick{display:flex;align-items:center;gap:10px;min-height:44px;margin:6px 0 0;cursor:pointer;
+    font-family:var(--f-body);font-size:15px;letter-spacing:0;text-transform:none;color:var(--ink)}
+  label.tick input{width:22px;height:22px;flex:0 0 auto;margin:0;padding:0;accent-color:var(--pink-deep)}
+  #kickother{margin-top:8px}
 </style>
 </head>
 <body>
 <div class="leopard-bar"></div>
 <div class="wrap">
-  <a class="back" href="../../compose/">&larr; New Post</a>
-  <h1>Write a story</h1>
+  <a class="back" href="../../my/">&larr; Your account</a>
+  <h1 id="head">Write a story</h1>
   <div class="sub">the serious surface &nbsp;·&nbsp; yours &nbsp;·&nbsp; live when you send it</div>
 
   <div class="card" id="panel"><div class="empty">checking your card…</div></div>
 </div>
 
 <script src="../../supabase-config.js?v=f1348482"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="../../assets/js/desk.js?v=c10b36ef" defer></script>
-<script src="../../assets/js/word.js?v=1fb66209" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" integrity="sha384-Rj26LVGvoeRVR6+mwQmFfcR3QOBEwT+ZmuCWpuiqeTzJpCs0ER4ITAWGb4Hiy3Ok" crossorigin="anonymous"></script>
+<script src="../../assets/js/desk.js?v=12f3e9e0" defer></script>
+<script src="../../assets/js/word.js?v=e212ba37" defer></script>
 <script defer>
 document.addEventListener('DOMContentLoaded', async () => {
   const $ = id => document.getElementById(id);
   const panel = $('panel');
-  const esc = s => OTPWord.esc(s);
 
-  if (!window.OTP || !OTP.configured) {
+  if (!window.OTP || !OTP.configured || !window.OTPWord) {
     panel.innerHTML = '<div class="empty">The backend is not switched on yet.</div>'; return;
   }
+  const esc = s => OTPWord.esc(s);
   const me = await OTP.me().catch(() => null);
   // next=write brings them back here after the login (join's allowlist)
   if (!me) { location.href = '../../join/?next=write'; return; }
-  if (!me.profile || !me.profile.approved) {
-    panel.innerHTML = '<div class="empty">' + esc(await OTP.doorLine(me.profile)) + '</div>'; return;
+  // The desk writes here too (045): his own story, or a house story.
+  const desk = !!(me.profile && me.profile.is_admin);
+  if (!me.profile || !(me.profile.approved || desk)) {
+    panel.innerHTML = '<div class="empty">' + esc(me.failed
+      ? 'Could not check your card. Try again in a minute.'
+      : await OTP.doorLine(me.profile)) + '</div>';
+    return;
   }
 
-  let coverUrl = null, pendingRow = null;
+  // ?id=<story id> opens one of yours to fix (045: yours until it is in the
+  // catalog). ?house=1 is the board's WRITE ONE: the house box comes ticked.
+  const Q = new URLSearchParams(location.search);
+  let fixId = /^[1-9][0-9]{0,18}$/.test(Q.get('id') || '') ? Q.get('id') : null;
+  const houseAsked = Q.get('house') === '1';
+  const forget = () => { fixId = null; try { history.replaceState(null, '', location.pathname); } catch (e) {} };
+
+  // A house story's kicker: the ones the catalog already shelves, or the desk's
+  // own. The shape is member_stories_kicker_ok's; dashes read as hyphens.
+  const KICKERS = ['THE NIGHT', 'THE CRAFT', 'THE RUN', 'THE RECORD', 'THE FILM', 'THE INTERVIEW', 'THE LOOK', 'THE COUNTDOWN'];
+  const KICKER_OK = /^[A-Z0-9][A-Z0-9 &'.!?-]{1,23}$/;
+  const DASHES = new RegExp('[' + String.fromCharCode(8211, 8212) + ']', 'g');
+  const SHELF_NAME = { nights: 'Nights', guides: 'Guides', dates: 'Dates', culture: 'Culture', interviews: 'Interviews' };
+
+  let coverUrl = null;
   // Covers uploaded on THIS visit. A file is public the moment it lands, so one
   // that gets replaced or removed before a save comes down again. A cover
   // that was saved with a story is never deleted from here.
@@ -77,21 +116,62 @@ document.addEventListener('DOMContentLoaded', async () => {
   const chars = s => [...String(s || '')].length;
 
   async function paint(note) {
-    const mine = await OTP.myStories().catch(() => []);
-    pendingRow = mine.find(s => !s.published) || null;
-    const mineHtml = mine.length ? `
-      <label style="margin-top:22px">Your stories</label>
-      ${mine.map(s => `
-        <div class="mine-row">
-          <a href="../live/?s=${esc(s.slug)}" style="color:var(--ink);text-decoration:none;font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(s.title)}</a>
-          <span class="st" style="color:${s.baked ? 'var(--foil-2,#f7d046)' : s.published ? 'var(--pink-glow)' : 'var(--muted)'}">
-            ${s.baked ? 'IN THE CATALOG' : s.published ? 'LIVE' : 'ON THE DESK'}</span>
-        </div>`).join('')}` : '';
+    const mine = await OTP.myStories().catch(() => null);
+    const list = mine || [];
+    const fixing = fixId ? list.find(s => String(s.id) === fixId) || null : null;
+    // 045: a story goes up when it is sent, so one that is not up was pulled by
+    // the desk. A member deals with that one before writing another. The desk
+    // is never held up by his own pull.
+    const pulled = !fixId && !desk ? list.find(s => !s.published && !s.baked) || null : null;
+    const editing = fixing && !fixing.baked ? fixing : null;
+    // ?id= that cannot be fixed here: say why, never fall through to a new story
+    const lost = fixId && !editing ? (!mine ? 'Could not load your stories. Try again in a minute.'
+      : fixing ? 'That one is in the catalog now. The desk fixes it from here.'
+      : 'That story is not one of yours to fix, or it is gone.') : '';
 
-    panel.innerHTML = `
-      <div class="who">writing as <b>${esc(me.profile.display_name)}</b></div>
-      ${pendingRow ? `<div class="note">You have one on the desk ("${esc(pendingRow.title)}").
-        Editing it below; it goes back to the desk when you save.</div>` : ''}
+    $('head').textContent = editing ? 'Fixing "' + editing.title + '"' : 'Write a story';
+
+    const status = s => s.baked ? ['IN THE CATALOG', 'var(--foil-2,#f7d046)']
+      : s.published ? ['LIVE', 'var(--pink-glow)'] : ['PULLED BY THE DESK', 'var(--bad)'];
+    const mineHtml = list.length ? `
+      <label style="margin-top:22px">Your stories</label>
+      <div class="hint" style="margin:0 0 6px">Yours to fix or take down until it goes in the catalog.</div>
+      ${list.map(s => {
+        const [st, col] = status(s);
+        return `
+        <div class="mine-row">
+          <div class="mr-top">
+            <a href="../live/?s=${esc(encodeURIComponent(s.slug))}">${esc(s.title)}</a>
+            <span class="st" style="color:${col}">${st}${s.house ? ' &middot; HOUSE' : ''}</span>
+          </div>
+          ${s.baked ? '<div class="mr-said">The desk fixes this one.</div>' : `
+          <div class="mr-act">
+            <a class="btn ghost sm" href="?id=${esc(encodeURIComponent(s.id))}">Fix it</a>
+            <button class="btn ghost sm" type="button" data-down="${esc(s.id)}">Take it down</button>
+          </div>
+          <div class="mr-said" data-said="${esc(s.id)}"></div>`}
+        </div>`;
+      }).join('')}` : '';
+
+    const houseHtml = desk && !editing && !pulled ? `
+      <div class="house">
+        <label class="tick"><input type="checkbox" id="house"${houseAsked ? ' checked' : ''}> File it as a house story</label>
+        <div class="hint" style="margin-top:0">It runs under 0FF THE PRINT with a house kicker, not under your card.</div>
+        <div id="housebits"${houseAsked ? '' : ' hidden'}>
+          <label for="kick">Kicker</label>
+          <select id="kick">${KICKERS.map(k => `<option>${k}</option>`).join('')}<option value="">Other</option></select>
+          <input id="kickother" type="text" maxlength="24" autocapitalize="characters" placeholder="YOUR OWN KICKER" hidden>
+          <label for="shelf">Shelf</label>
+          <select id="shelf"><option value="">Follows the kicker</option>${OTP.SHELVES.map(s => `<option value="${s}">${SHELF_NAME[s] || s}</option>`).join('')}</select>
+          <div class="hint">A new kicker lands on Culture unless you pick a shelf.</div>
+        </div>
+      </div>` : '';
+
+    const formHtml = `
+      <div class="who">writing as <b id="writer"></b></div>
+      ${houseHtml}
+      ${editing && !editing.published ? '<div class="note">The desk pulled this one. Your fixes save, and it stays down until the desk puts it back.</div>' : ''}
+      ${editing && editing.house ? '<div class="note">A house story. The kicker and shelf change <a href="../../board/?mstory=' + esc(encodeURIComponent(editing.slug)) + '">on the board</a>.</div>' : ''}
       <label for="title">Title</label>
       <input id="title" type="text" maxlength="80" placeholder="say it like a headline">
       <label for="dek">The dek, one line under the title</label>
@@ -102,29 +182,67 @@ document.addEventListener('DOMContentLoaded', async () => {
       <div class="drop" id="cdrop">Tap to add a cover photo (optional)</div>
       <input type="file" id="cfile" accept="image/*" hidden>
       <div class="cprev" id="cprev"><img id="cimg" alt=""><button id="crm" type="button">&times;</button></div>
-      <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
-        <button class="btn" id="send" type="button">${pendingRow ? 'Save it' : 'Put it up'}</button>
+      <div class="acts">
+        <button class="btn" id="send" type="button">${editing ? 'Save changes' : 'Put it up'}</button>
         <button class="btn ghost" id="pvbtn" type="button">Preview</button>
-        ${pendingRow ? '<button class="btn ghost" id="wd" type="button">Withdraw it</button>' : ''}
+        ${editing ? `<button class="btn ghost" id="down" type="button">Take it down</button>
+        <a class="btn ghost" href="./">Start a new one</a>` : ''}
       </div>
-      <div id="pv"></div>
+      <div id="pv"></div>`;
+
+    panel.innerHTML = `
+      ${lost ? `<div class="note">${lost}</div>
+        <a class="btn ghost" href="./">Start a new one</a>` : ''}
+      ${pulled ? `<div class="pulled">
+        <p>The desk pulled "${esc(pulled.title)}". Fix it or take it down before you put up another one.</p>
+        <div class="row">
+          <a class="btn sm" href="?id=${esc(encodeURIComponent(pulled.id))}">Fix it</a>
+          <button class="btn ghost sm" type="button" id="pdown">Take it down</button>
+        </div></div>` : ''}
+      ${!lost && !pulled ? formHtml : ''}
       <div class="msg" id="msg"></div>
       ${mineHtml}`;
 
+    const msg = (t, k) => { const m = $('msg'); m.textContent = t; m.className = 'msg show ' + (k || ''); };
+    // the story is gone (taken down here or from a row): back to a new one
+    const after = (id, line) => { if (fixId && String(id) === fixId) forget(); paint([line, 'good']); };
+    const takeDown = async (id, said) => {
+      try { await OTP.withdrawStory(id); after(id, 'Taken down.'); }
+      catch (err) { said(err.message || 'That did not go through. Try again.'); }
+    };
+
+    panel.querySelectorAll('[data-down]').forEach(btn => {
+      const id = btn.dataset.down;
+      const said = panel.querySelector('[data-said="' + id + '"]');
+      OTPWord.twoTap(btn, 'Tap again to take it down', () => takeDown(id, t => { said.textContent = t; said.className = 'mr-said err'; }));
+    });
+    if ($('pdown')) OTPWord.twoTap($('pdown'), 'Tap again to take it down', () => takeDown(pulled.id, t => msg(t, 'err')));
+
     // A new story starts with no cover. Without this the last story's cover
     // rode along, unseen, on the next one sent from the same visit. Anything
-    // still in `fresh` here was never saved (a withdraw, say), so it goes.
+    // still in `fresh` here was never saved (a take-down, say), so it goes.
     [...fresh].forEach(dropFresh);
     coverUrl = null;
-    if (pendingRow) {
-      $('title').value = pendingRow.title;
-      $('dek').value = pendingRow.dek;
-      $('body').value = pendingRow.body_md;
-      coverUrl = pendingRow.cover_url || null;
-      if (coverUrl) { $('cimg').src = coverUrl; $('cprev').style.display = 'block'; }
+    if (note) msg(note[0], note[1]);
+    if (lost || pulled) return;
+
+    const writer = () => {
+      const h = $('house');
+      $('writer').textContent = (h && h.checked) || (editing && editing.house) ? '0FF THE PRINT' : me.profile.display_name || '';
+    };
+    writer();
+    if ($('house')) {
+      $('house').onchange = () => { $('housebits').hidden = !$('house').checked; writer(); };
+      $('kick').onchange = () => { $('kickother').hidden = $('kick').value !== ''; if (!$('kickother').hidden) $('kickother').focus(); };
     }
 
-    const msg = (t, k) => { const m = $('msg'); m.textContent = t; m.className = 'msg show ' + (k || ''); };
+    if (editing) {
+      $('title').value = editing.title;
+      $('dek').value = editing.dek;
+      $('body').value = editing.body_md;
+      coverUrl = editing.cover_url || null;
+      if (coverUrl) { $('cimg').src = coverUrl; $('cprev').style.display = 'block'; }
+    }
 
     $('cdrop').onclick = () => $('cfile').click();
     $('cfile').onchange = async e => {
@@ -154,6 +272,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       $('pvbtn').textContent = 'Close preview';
     };
 
+    if ($('down')) OTPWord.twoTap($('down'), 'Tap again to take it down', () => takeDown(editing.id, t => msg(t, 'err')));
+
     $('send').onclick = async () => {
       const t = $('title').value.trim(), d = $('dek').value.trim(), b = $('body').value;
       const bad = chars(t) < 3 ? 'Give it a headline, three letters at least.'
@@ -161,21 +281,32 @@ document.addEventListener('DOMContentLoaded', async () => {
         : chars(b.trim()) < 30 ? 'The story needs at least a couple of sentences.'
         : chars(b) > 20000 ? 'That runs past 20,000 characters. Cut it down or split it in two.' : '';
       if (bad) { msg(bad, 'err'); return; }
+      // a house story (the desk only): the kicker reads the way the database keeps it
+      const house = !editing && !!($('house') && $('house').checked);
+      let kicker = null, shelf = null;
+      if (house) {
+        kicker = String($('kick').value || $('kickother').value || '').replace(DASHES, '-').trim().toUpperCase();
+        if (!kicker) { msg('Write the kicker, or pick one off the list.', 'err'); return; }
+        if (!KICKER_OK.test(kicker)) { msg('A kicker is 2 to 24 capital letters, numbers and spaces.', 'err'); return; }
+        shelf = $('shelf').value || null;
+      }
       $('send').disabled = true;
       try {
         let done;
-        if (pendingRow) {
-          await OTP.updateMyStory(pendingRow.id, {
+        if (editing) {
+          await OTP.updateMyStory(editing.id, {
             title: $('title').value, dek: $('dek').value,
             body: $('body').value, coverUrl,
           });
-          done = 'Saved. Back on the desk.';
+          done = editing.published ? 'Saved. It is live with your changes.' : 'Saved. It stays down until the desk puts it back.';
         } else {
           const slug = await OTP.submitStory({
             title: $('title').value, dek: $('dek').value,
-            body: $('body').value, coverUrl,
+            body: $('body').value, coverUrl, house, kicker, shelf,
           });
-          done = 'Up. It is live at word/live/?s=' + slug;
+          // the database puts a writer's own story up itself (045)
+          done = house ? 'Up. It is live on the Stories tab as a house story. The laptop gives it a number on the next bake.'
+            : 'Up. It is live at word/live/?s=' + slug;
         }
         fresh.delete(coverUrl);   // saved with the story now
         // paint() rebuilds the panel, message box and all, so the line goes
@@ -183,13 +314,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         paint([done, 'good']);
       } catch (err) { msg(err.message || 'That did not go through.', 'err'); $('send').disabled = false; }
     };
-
-    if ($('wd')) $('wd').onclick = async () => {
-      if (!confirm('Pull it off the desk? The text is gone with it.')) return;
-      try { await OTP.withdrawStory(pendingRow.id); paint(); }
-      catch (err) { msg(err.message, 'err'); }
-    };
-    if (note) msg(note[0], note[1]);
   }
   paint();
 });
