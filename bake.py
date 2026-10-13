@@ -16,23 +16,441 @@ newly committed body. That makes this script safe to run at any time.
 
 Reads with the PUBLISHABLE key (story_pages is public-select); never needs a
 secret.
+
+Wave 2 (10/11) adds THE DESK FOLD, the board's story sheet coming home. A
+site_overrides row in section 'desk' is keyed by a story's link (word/<slug>/):
+  - hidden: the card leaves content/desk.json and word/<slug>/index.html becomes
+    a pulled stub (noindex, no words), so view-source and crawlers lose it too,
+    not just the browser. source.md, the editor's copy of the words, goes blank.
+  - cleared again (no hidden row while the page is a stub): the page, source.md
+    and the card come back from git, the newest revision that is not a stub.
+  - title, dek, kicker, shelf: written into the card and into the page's head
+    and header. Baked = REDUNDANT, so it gets cleared on the board.
+House stories written from the phone (member_stories.house) bake under the
+house byline with their own kicker and shelf.
+
+    /usr/bin/python3 bake.py --seed-songs           # after the one-profile merge:
+    /usr/bin/python3 bake.py --seed-songs --write   # roster seeds the database now holds
 """
 import json
 import os
 import re
+import subprocess
 import sys
+import urllib.error
 import urllib.request
 import zlib
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 WORD = os.path.join(HERE, "word")
 
+# the repo has no .gitignore and the closing hint is git add -A, so importing newstory (and
+# issue, derive) must not leave a __pycache__/ behind to be committed with the bake
+sys.dont_write_bytecode = True
 sys.path.insert(0, HERE)
-from newstory import md_to_html, no_dash  # noqa: E402  (same renderer, no drift)
+from newstory import md_to_html, no_dash, slugify, SHELVES, STORY_META, STORY_ID, NUM_META  # noqa: E402  (same renderer, no drift)
 
 cfg = open(os.path.join(HERE, "supabase-config.js")).read()
 URL = re.search(r'url:\s*"([^"]+)"', cfg).group(1)
 KEY = re.search(r'anonKey:\s*"([^"]+)"', cfg).group(1)
+CONTENT = os.path.join(HERE, "content")
+DESK_JSON = os.path.join(CONTENT, "desk.json")
+
+
+def esc_html(v):
+    """Meta tag values are attribute content, so quotes and angles have to go."""
+    return (str(v or "").replace("&", "&amp;").replace("<", "&lt;")
+            .replace(">", "&gt;").replace('"', "&quot;"))
+
+
+def save_json(path, doc):
+    json.dump(doc, open(path, "w"), indent=2, ensure_ascii=False)
+    open(path, "a").write("\n")
+
+
+# ============================================================================
+# THE SEED SONGS (Wave 2, owner step 6). roster.json carried a theme_song for the
+# house seats because the database had none. The one-profile merge (face_merge)
+# copies those seeds into profiles, and peopleMerge then plays the database song
+# ALWAYS, so a seed left in git is a second copy that can only drift. This drops
+# theme_song/theme_start from a roster item ONLY when the anon cards view already
+# shows a song for that card_slug. Before the merge the view shows none, so this
+# does nothing; run it after STEP 2, dry first.
+# ⛔ JOSH FUEGO KEEPS HIS, whatever the view says (the owner's call).
+# ============================================================================
+SEED_KEEP = {"josh-fuego"}
+
+
+def seed_songs(write):
+    req = urllib.request.Request(
+        f"{URL}/rest/v1/cards?select=card_slug,theme_song",
+        headers={"apikey": KEY, "Authorization": f"Bearer {KEY}"})
+    try:
+        rows = json.load(urllib.request.urlopen(req))
+    except Exception as e:
+        print(f"  cards view not reachable ({e}); roster.json left alone")
+        return 1
+    shown = {r.get("card_slug"): r.get("theme_song") for r in rows
+             if r.get("card_slug") and r.get("theme_song")}
+    path = os.path.join(CONTENT, "roster.json")
+    doc = json.load(open(path))
+    gone = []
+    for it in doc.get("items", []):
+        slug = it.get("card_slug") or slugify(str(it.get("name") or ""))
+        if "theme_song" not in it and "theme_start" not in it:
+            continue
+        if slug in SEED_KEEP:
+            print(f"  kept   {slug}: keeps the roster song (his call)")
+            continue
+        if slug not in shown:
+            print(f"  kept   {slug}: the database shows no song for this card yet")
+            continue
+        it.pop("theme_song", None)
+        it.pop("theme_start", None)
+        gone.append(slug)
+        print(f"  {'dropped' if write else 'drops '} {slug}: the card plays {shown[slug]} from the database")
+    if gone and write:
+        save_json(path, doc)
+        print(f"  roster.json: {len(gone)} seed song(s) out. Rerun oneprofile_seeds.py, then commit.")
+    elif gone:
+        print(f"  dry run: {len(gone)} seed song(s) would go. Add --write to write roster.json.")
+    else:
+        print("  nothing to drop: no roster seed is in the database yet")
+    return 0
+
+
+# ⛔ A plain run WRITES (pages, content/*.json, card backs), so anything it does not know, --help included, stops
+#    here instead of falling through to a full bake.
+_args = sys.argv[1:]
+if any(a in ("-h", "--help") for a in _args):
+    print(__doc__)
+    sys.exit(0)
+if [a for a in _args if a not in ("--seed-songs", "--write")]:
+    print("bake.py: unknown argument(s) " + " ".join(a for a in _args if a not in ("--seed-songs", "--write"))
+          + ". Nothing baked. Run it with no arguments, or --seed-songs [--write]. --help prints the notes.")
+    sys.exit(2)
+if "--seed-songs" in _args:
+    sys.exit(seed_songs("--write" in _args))
+
+# ============================================================================
+# THE BOARD'S OVERLAY, read ONCE and FIRST. The desk fold right below needs the
+# desk's pulls before the story fold touches any page (a pulled page is a stub
+# and takes no body), and the site fold further down needs every row.
+# ============================================================================
+sreq2 = urllib.request.Request(
+    f"{URL}/rest/v1/site_overrides?select=section,item_key,patch,hidden,sort",
+    headers={"apikey": KEY, "Authorization": f"Bearer {KEY}"})
+try:
+    site_ovs = json.load(urllib.request.urlopen(sreq2))
+    site_ok = True
+except Exception:
+    site_ovs = []
+    site_ok = False
+    print("  (site_overrides not reachable; migration 014 not run yet?)")
+
+redundant = []
+
+# ============================================================================
+# THE DESK FOLD (Wave 2, call 12): the board's story sheet (Pull it, retitle,
+# reshelve) folded into content/desk.json and the page files.
+#
+# ⛔ A PULL HAS TO LEAVE THE FILE, NOT JUST THE BROWSER. word.js hides a pulled
+#    story on load, but the words stay in word/<slug>/index.html, so view-source,
+#    a crawler or a cached copy still reads them. So the bake rewrites the page to
+#    a stub and blanks source.md (served right next to it). Nothing is deleted:
+#    git holds every earlier version, and clearing the row brings them back. That
+#    only holds for what is committed, so a folder with uncommitted changes waits.
+#    The pictures beside the page stay served; the pull run names them.
+# ⛔ THE STUB KEEPS THE NUMBER (NUM_META), so newstory.next_num never hands a
+#    pulled story's 0TP number to the next one.
+# ⛔ THE UN-PULL READS GIT, so it only runs when the overlay read worked. With the
+#    database unreachable every stub would look un-pulled and come back at once.
+# ============================================================================
+PULLED_MARK = '<meta name="otp-pulled" content="1">'
+PULLED_MD = "Pulled. The desk took this story down.\n"
+PULLED_PAGE = """<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex">
+""" + PULLED_MARK + """
+<title>Pulled &middot; 0FF THE PRINT</title>
+<meta name="theme-color" content="#0a0a0d">
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#f2eef5;--muted:#8d8798;--line:rgba(255,255,255,.1);--pink:#ff79c6;--bg:#0a0a0d}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif}
+  .leopard-bar{height:7px;background:linear-gradient(90deg,#ff79c6,#caa9ff,#2f6bff,#ff79c6);background-size:300% 100%}
+  .wrap{max-width:720px;margin:0 auto;padding:34px 20px 90px}
+  a.back{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--muted);text-decoration:none}
+  a.back:hover{color:var(--pink)}
+  .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.3em;
+    text-transform:uppercase;color:var(--pink);margin:34px 0 10px}
+  .said{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
+    text-transform:uppercase;font-size:clamp(30px,6vw,46px);line-height:1}
+  .foot{margin-top:30px;padding-top:20px;border-top:1px solid var(--line);
+    font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted)}
+  .foot a{color:var(--pink);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="leopard-bar"></div>
+<div class="wrap">
+  <a class="back" href="../../#stories">&larr; The Stories &middot; 0FF THE PRINT</a>
+  <div class="kicker">0FF THE PRINT</div>
+  <p class="said">Pulled. The desk took this story down.</p>
+  <div class="foot"><a href="../../#stories">Back to the stories &rarr;</a></div>
+</div>
+</body>
+</html>
+"""
+DOT = chr(0xB7)
+# what a pulled story leaves served next to its stub (bake never deletes them)
+PICTURE = re.compile(r"\.(jpe?g|png|webp|gif|avif|svg|mp4|mov|webm)$", re.I)
+
+
+def pulled_page(num):
+    """The stub, holding the story's 0TP number (NUM_META) when it has one: newstory.next_num
+    counts it, so the number stays taken while the story is down and comes back with it."""
+    if not re.fullmatch(r"0TP-\d+", str(num or "")):
+        return PULLED_PAGE
+    return PULLED_PAGE.replace(PULLED_MARK, PULLED_MARK + "\n" + NUM_META.format(num), 1)
+
+
+def word_slug(link):
+    m = re.fullmatch(r"word/([a-z0-9][a-z0-9-]{0,90})/", str(link or ""))
+    return m.group(1) if m else None
+
+
+def _git(*args):
+    return subprocess.run(["git", "-C", HERE] + list(args), capture_output=True)
+
+
+def from_git(rel, ok):
+    """(rev, text) of the newest of the last 30 revisions of rel that passes ok(), or (None, None)."""
+    r = _git("log", "-n", "30", "--format=%H", "--", rel)
+    if r.returncode != 0:
+        return None, None
+    for rev in r.stdout.decode().split():
+        s = _git("show", f"{rev}:./{rel}")
+        if s.returncode != 0:            # the file did not exist in that revision
+            continue
+        text = s.stdout.decode("utf-8", errors="replace")
+        if ok(text):
+            return rev, text
+    return None, None
+
+
+def card_from_git(link):
+    """The desk.json card that linked here, from the newest revision that still had it."""
+    r = _git("log", "-n", "30", "--format=%H", "--", "content/desk.json")
+    if r.returncode != 0:
+        return None, None
+    for rev in r.stdout.decode().split():
+        s = _git("show", f"{rev}:./content/desk.json")
+        if s.returncode != 0:
+            continue
+        try:
+            doc = json.loads(s.stdout.decode("utf-8"))
+        except ValueError:
+            continue
+        hit = next((it for it in doc.get("items", []) if it.get("link") == link), None)
+        if hit:
+            return rev, hit
+    return None, None
+
+
+def _num(it):
+    m = re.match(r"0TP-(\d+)", str(it.get("num") or ""))
+    return int(m.group(1)) if m else -1
+
+
+def put_card_back(items, card):
+    """Newest number first, the order newstory.py keeps."""
+    n = _num(card)
+    at = next((i for i, it in enumerate(items) if _num(it) < n), len(items))
+    items.insert(at, card)
+
+
+def rehead(page, want):
+    """The page's head and header block for the fields in want, through esc_html + no_dash."""
+    if "title" in want:
+        t = esc_html(want["title"])
+        page = re.sub(r"<title>.*?</title>", lambda m: f"<title>{t} {DOT} 0FF THE PRINT</title>",
+                      page, count=1, flags=re.S)
+        for prop in ('property="og:title"', 'name="twitter:title"'):
+            page = re.sub(r'(<meta %s content=")[^"]*(")' % re.escape(prop),
+                          lambda m: m.group(1) + t + m.group(2), page, count=1)
+        page = re.sub(r"(<h1[^>]*>).*?(</h1>)", lambda m: m.group(1) + t + m.group(2),
+                      page, count=1, flags=re.S)
+    if "dek" in want:
+        d = esc_html(want["dek"])
+        for prop in ('name="description"', 'property="og:description"', 'name="twitter:description"'):
+            page = re.sub(r'(<meta %s content=")[^"]*(")' % re.escape(prop),
+                          lambda m: m.group(1) + d + m.group(2), page, count=1)
+        page = re.sub(r'(<div class="dek">).*?(</div>)', lambda m: m.group(1) + d + m.group(2),
+                      page, count=1, flags=re.S)
+    if "kicker" in want:
+        k = esc_html(want["kicker"])
+        page = re.sub(r'(<div class="kicker">).*?(</div>)', lambda m: m.group(1) + k + m.group(2),
+                      page, count=1, flags=re.S)
+    return page
+
+
+desk_rows = [o for o in site_ovs if o.get("section") == "desk" and o.get("item_key")]
+desk_doc = None
+desk_changed = False
+pulled_nums = []
+if site_ok:
+    desk_doc = json.load(open(DESK_JSON))
+    ditems = desk_doc.get("items", [])
+    held = {word_slug(o["item_key"]) for o in desk_rows if o.get("hidden")}
+
+    # 1. PUT BACK FIRST: a stub with no hidden row was cleared on the board. Its card and
+    #    page come back before the rows below run, so a retitle saved with the un-pull
+    #    lands on the restored page instead of reading as "matches no story".
+    if os.path.isdir(WORD):
+        for slug in sorted(os.listdir(WORD)):
+            page_path = os.path.join(WORD, slug, "index.html")
+            if slug in held or not os.path.exists(page_path):
+                continue
+            if PULLED_MARK not in open(page_path).read():
+                continue
+            rev, text = from_git(f"word/{slug}/index.html", lambda t: PULLED_MARK not in t)
+            if text is None:
+                print(f"  ⛔ word/{slug}/ is still a pulled stub: git holds no earlier page "
+                      f"in its last 30 revisions. Rebuild it with newstory.py.")
+                continue
+            open(page_path, "w").write(text)
+            md_path = os.path.join(WORD, slug, "source.md")
+            if os.path.exists(md_path) and open(md_path).read() == PULLED_MD:
+                _, md = from_git(f"word/{slug}/source.md", lambda t: t != PULLED_MD)
+                if md is not None:
+                    open(md_path, "w").write(md)
+            link = f"word/{slug}/"
+            said = ""
+            if not any(it.get("link") == link for it in ditems):
+                crev, card = card_from_git(link)
+                if card:
+                    put_card_back(ditems, card)
+                    desk_changed = True
+                    said = f", card {card.get('num') or ''} back on the Stories tab"
+                else:
+                    said = ", but git has no card for it: add one by hand or it stays off the Stories tab"
+            print(f"  put back word/{slug}/: the page is back from {rev[:7]}{said}")
+
+    # 2. THE ROWS
+    for o in desk_rows:
+        key = o["item_key"]
+        slug = word_slug(key)
+        if not slug:
+            redundant.append(("desk", key + "  (not a story link)"))
+            continue
+        page_path = os.path.join(WORD, slug, "index.html")
+        card = next((it for it in ditems if it.get("link") == key), None)
+        if o.get("hidden"):
+            # ⛔ NEVER REDUNDANT while the page is there: the row IS the pull. Cleared, the
+            #    next bake puts the story back (step 1).
+            if card is None and not os.path.exists(page_path):
+                redundant.append(("desk", key + "  (matches no story)"))
+                continue
+            num = (card or {}).get("num")
+            if card is not None:
+                ditems.remove(card)
+                desk_changed = True
+                if card.get("num"):
+                    pulled_nums.append(card["num"])
+                print(f"  desk dropped: {key} ({card.get('num') or 'no number'})")
+            page = open(page_path).read() if os.path.exists(page_path) else None
+            if page is not None and PULLED_MARK not in page:
+                # ⛔ THE UN-PULL BRINGS BACK WHAT GIT HOLDS, NOTHING NEWER. A story newstory.py
+                #    wrote, or a phone edit an earlier bake folded in, that is not committed yet
+                #    would be gone for good under the stub. So a folder with changes git does not
+                #    hold keeps its words this run; the card is off the Stories tab already.
+                dirty = _git("status", "--porcelain", "--", f"word/{slug}/")
+                if dirty.returncode != 0 or dirty.stdout.strip():
+                    print(f"  ⛔ word/{slug}/ has changes git does not hold: commit, then bake again "
+                          f"to pull it. Its words stay on the page until then.")
+                    continue
+                if not num:
+                    m = re.search(r"This one is (0TP-\d+)\.", page)
+                    num = m.group(1) if m else None
+                open(page_path, "w").write(pulled_page(num))
+                md_path = os.path.join(WORD, slug, "source.md")
+                if os.path.exists(md_path):
+                    open(md_path, "w").write(PULLED_MD)
+                print(f"  pulled word/{slug}/: the words are off the page now; "
+                      f"clear the row on the board to put it back")
+                # only the words leave: the pictures next to the page are still served at their old
+                # links. Nothing is deleted here; say which, in case a photo is the reason for the pull.
+                pics = sorted(f for f in os.listdir(os.path.join(WORD, slug)) if PICTURE.search(f))
+                if pics:
+                    print(f"    still served at word/{slug}/: {', '.join(pics)}. Take them out by hand "
+                          f"if a photo is the problem.")
+            elif card is None:
+                # baked in an earlier run: the card is off desk.json, so the board's catalog
+                # (built from desk.json) may not list it. Say where the pull still lives.
+                print(f"  still pulled: word/{slug}/ (its row on the board keeps it down; "
+                      f"clear that row and bake to put it back)")
+            continue
+        if card is None:
+            redundant.append(("desk", key + "  (matches no story)"))
+            continue
+        patch = o.get("patch") or {}
+        want = {}
+        for k in ("title", "dek", "kicker"):
+            v = patch.get(k)
+            if isinstance(v, str) and v.strip():
+                want[k] = no_dash(v).strip().upper() if k == "kicker" else no_dash(v).strip()
+        moved = []
+        for k, v in want.items():
+            if card.get(k) != v:
+                card[k] = v
+                moved.append(k)
+        if "shelf" in patch:
+            s = str(patch.get("shelf") or "")
+            if s == "" and "shelf" in card:
+                card.pop("shelf")
+                moved.append("shelf")
+            elif s in SHELVES and card.get("shelf") != s:
+                card["shelf"] = s
+                moved.append("shelf")
+        if os.path.exists(page_path) and want:
+            page = open(page_path).read()
+            if PULLED_MARK not in page:
+                new = rehead(page, want)
+                if new != page:
+                    open(page_path, "w").write(new)
+                    moved.append("page")
+        if moved:
+            desk_changed = desk_changed or any(m != "page" for m in moved)
+            print(f"  desk patched: {key} ({', '.join(sorted(set(moved)))})")
+        elif patch:
+            redundant.append(("desk", key))
+
+    if desk_changed:
+        save_json(DESK_JSON, desk_doc)
+        print("  desk.json updated")
+
+    # 3. THE ISSUE. A pulled number left in an issue's running order points at nothing,
+    #    and issue.py close refuses on it. Its own check says so here instead of at close.
+    if pulled_nums:
+        try:
+            import issue as _issue
+            iss_doc = _issue.load(_issue.ISSUES, {"items": []})
+            desk_now = _issue.load(_issue.DESK, {"items": []})
+            for iss in iss_doc.get("items", []):
+                for e in _issue.validate(iss, desk_now):
+                    if any(n in e for n in pulled_nums):
+                        print(f"  ⛔ issue {iss.get('id')}: {e}. "
+                              f"issue.py remove {iss.get('id')} <number>, or put the story back.")
+        except Exception as e:
+            print(f"  (issue check skipped: {e})")
 
 req = urllib.request.Request(
     f"{URL}/rest/v1/story_pages?select=slug,body_md,stamp,updated_at",
@@ -60,6 +478,11 @@ for row in rows:
         continue
 
     page = open(page_path).read()
+    # a pulled story is a stub with no <article>, and this fold would write the words straight
+    # back into source.md next to it. The edit waits; it bakes once the story is put back.
+    if PULLED_MARK in page:
+        print(f"  SKIP {slug}: pulled by the desk. The edit bakes once the story is put back.")
+        continue
     cur_stamp_m = re.search(r'<article data-stamp="([a-f0-9]{8})">', page)
     cur_stamp = cur_stamp_m.group(1) if cur_stamp_m else None
     if row.get("stamp") and cur_stamp and row["stamp"] != cur_stamp:
@@ -95,11 +518,11 @@ print(f"\n{baked} page(s) rewritten.")
 # MEMBER STORIES (migration 010): promote published, unbaked stories into real
 # static catalog pages. Each one gets the next 0TP number, a cover, a thumb,
 # and a desk.json card via newstory.py, with the member's name on the byline.
+# Wave 2 (045): a HOUSE row (the desk's WRITE ONE from the phone) bakes under the
+# house byline with its own kicker (THE WORD when it has none) and its shelf.
 # ============================================================================
 import html as _html
-import subprocess
 import tempfile
-from newstory import slugify  # noqa: E402
 
 # ⛔ THE FOLDER IS THE DATABASE SLUG, NEVER THE TITLE. The desk can retitle a member
 #    story (desk/, board.js) and the slug stays pinned (migration 010's guard), while
@@ -109,45 +532,71 @@ from newstory import slugify  # noqa: E402
 #    missing and promoted the same story again under a second 0TP number.
 NEWSTORY = os.path.join(HERE, "newstory.py")
 TAKES_SLUG = '"--slug"' in open(NEWSTORY).read()
+# member_stories.id (a bigint, so a JSON number: str() it), the shape newstory.py --story-id takes
+STORY_ID_OK = re.compile(STORY_ID)
 
-sreq = urllib.request.Request(
-    f"{URL}/rest/v1/word_stories?select=slug,title,dek,body_md,cover_url,display_name,baked&baked=eq.false",
-    headers={"apikey": KEY, "Authorization": f"Bearer {KEY}"})
+
+def _word_stories(cols):
+    return json.load(urllib.request.urlopen(urllib.request.Request(
+        f"{URL}/rest/v1/word_stories?select={cols}&baked=eq.false",
+        headers={"apikey": KEY, "Authorization": f"Bearer {KEY}"})))
+
+
 try:
-    stories = json.load(urllib.request.urlopen(sreq))
+    stories = _word_stories("id,slug,title,dek,body_md,cover_url,display_name,baked,house,kicker,shelf")
+except urllib.error.HTTPError:
+    # before migration 045 the view has no house/kicker/shelf, and asking for them is a 400
+    try:
+        stories = _word_stories("id,slug,title,dek,body_md,cover_url,display_name,baked")
+    except Exception:
+        stories = []
+        print("  (word_stories view not reachable; migration 010 not run yet?)")
 except Exception:
     stories = []
     print("  (word_stories view not reachable; migration 010 not run yet?)")
 promoted = []
 for st in stories:
     slug = st["slug"]
-    here = os.path.join(WORD, slug)
-    if os.path.exists(here):
-        # Two very different reasons a folder is already there. Either an earlier run
-        # promoted this very story and nobody tapped BAKED yet (its page carries the
-        # FROM THE FLOOR kicker and the writer's byline), or a HOUSE story owns that
-        # slug, since member slugs are only unique among member stories.
-        page_path = os.path.join(here, "index.html")
-        page = open(page_path).read() if os.path.exists(page_path) else ""
+    house = bool(st.get("house"))
+    kicker = no_dash(st.get("kicker") or "THE WORD").upper() if house else "FROM THE FLOOR"
+    shelf = st.get("shelf") if st.get("shelf") in SHELVES else None
+    link = f"word/{slug}/"
+    page_path = os.path.join(WORD, slug, "index.html")
+    try:
+        card = next((it for it in json.load(open(DESK_JSON))["items"] if it.get("link") == link), None)
+    except Exception:
+        card = None
+    # ALREADY PROMOTED = desk.json already carries a card for word/<slug>/ AND it is this
+    # row's: an earlier run baked this story and nobody tapped BAKED yet.
+    # ⛔ Member slugs are unique only among member stories, so a card there can also be a
+    #    HOUSE story that owned the slug first. A member row tells them apart by kicker (no
+    #    git story carries FROM THE FLOOR). A HOUSE row cannot: a git story can carry the
+    #    same kicker, and calling that "already promoted" put the row on the Baked list
+    #    while it never reached the catalog. So a house row needs the page to carry its
+    #    story id (STORY_META, written by newstory.py --story-id at promotion). That holds
+    #    through a desk retitle and a phone edit. Anything else is a SKIP.
+    if card is not None:
         who = _html.escape(no_dash(st.get("display_name") or "a card holder"))
-        # display_name comes live from profiles, so a name changed since the earlier
-        # bake misses the byline. The desk.json card newstory.py wrote (link + kicker)
-        # is the second proof. No house story carries the FROM THE FLOOR kicker.
-        try:
-            carded = any(it.get("link") == f"word/{slug}/" and it.get("kicker") == "FROM THE FLOOR"
-                         for it in json.load(open(os.path.join(HERE, "content", "desk.json")))["items"])
-        except Exception:
-            carded = False
-        if '<div class="kicker">FROM THE FLOOR</div>' in page and (f"<b>{who}</b>" in page or carded):
+        page = open(page_path).read() if os.path.exists(page_path) else ""
+        sid = str(st.get("id") or "")
+        by_id = bool(STORY_ID_OK.fullmatch(sid)) and STORY_META.format(sid) in page
+        if by_id or (not house and (card.get("kicker") == kicker or (
+                f"<b>{who}</b>" in page and '<div class="kicker">FROM THE FLOOR</div>' in page))):
             promoted.append(slug)
             print(f"  story {slug}: already in the catalog from an earlier bake (tap BAKED for it)")
         else:
-            print(f"  ⛔ SKIP story {slug}: a HOUSE story already lives at word/{slug}/. "
-                  f"This member story cannot bake under that name, so it stays live at "
+            print(f"  \u26d4 SKIP story {slug}: another story already holds word/{slug}/ "
+                  f"({card.get('num') or 'no number'}, {card.get('kicker') or 'no kicker'}). "
+                  f"This one cannot bake under that name, so it stays live at "
                   f"word/live/?s={slug} and unbaked.")
         continue
+    if os.path.exists(page_path):
+        # a page with no card: a pulled story's stub, or a house page off the Stories tab
+        print(f"  \u26d4 SKIP story {slug}: a page already lives at word/{slug}/ with no card "
+              f"(a pulled story?). This one stays live at word/live/?s={slug} and unbaked.")
+        continue
     if not TAKES_SLUG and slugify(st["title"]) != slug:
-        print(f"  ⛔ SKIP story {slug}: retitled at the desk ({st['title']!r}), and this "
+        print(f"  \u26d4 SKIP story {slug}: retitled at the desk ({st['title']!r}), and this "
               f"newstory.py has no --slug, so it would land at word/{slugify(st['title'])}/ "
               f"while the writer's card page links word/{slug}/. Give newstory.py --slug first.")
         continue
@@ -165,18 +614,21 @@ for st in stories:
         if not cover:
             # house plate when the member skipped the cover
             cover = os.path.join(HERE, "assets", "take-01-manifesto.jpg")
+        # a house row takes newstory's own byline (0FF THE PRINT), so no --author
         r = subprocess.run(
             [sys.executable, NEWSTORY, draft,
              "--title", st["title"], "--dek", st["dek"], "--cover", cover,
-             "--kicker", "FROM THE FLOOR",
-             "--author", st.get("display_name") or "a card holder"]
+             "--kicker", kicker]
+            + ([] if house else ["--author", st.get("display_name") or "a card holder"])
+            + (["--shelf", shelf] if shelf else [])
+            + (["--story-id", str(st["id"])] if STORY_ID_OK.fullmatch(str(st.get("id") or "")) else [])
             + (["--slug", slug] if TAKES_SLUG else []),
             capture_output=True, text=True)
         if r.returncode != 0:
             print(f"  FAILED story {slug}: {r.stderr.strip().splitlines()[-1] if r.stderr else r.stdout}")
             continue
     promoted.append(slug)
-    print(f"  promoted story {slug} into the catalog")
+    print(f"  promoted {'house ' if house else ''}story {slug} into the catalog")
 
 # ============================================================================
 # SEED OVERRIDES (migration 011): fold the desk's seed edits/hides into
@@ -233,13 +685,9 @@ if ovs:
 #
 # bake.py reads with the publishable key and site_overrides is admin-write, so
 # it cannot delete the rows itself. Printing them is the whole mechanism.
+# The rows (site_ovs) and the redundant list were read at the top, with the
+# desk fold; esc_html lives up there too.
 # ============================================================================
-CONTENT = os.path.join(HERE, "content")
-
-def esc_html(v):
-    """Meta tag values are attribute content, so quotes and angles have to go."""
-    return (str(v or "").replace("&", "&amp;").replace("<", "&lt;")
-            .replace(">", "&gt;").replace('"', "&quot;"))
 
 
 def _base(p):
@@ -247,16 +695,6 @@ def _base(p):
     assets/grid/work/x.jpg. The basename is the only key both agree on."""
     return str(p or "").split("/")[-1]
 
-sreq2 = urllib.request.Request(
-    f"{URL}/rest/v1/site_overrides?select=section,item_key,patch,hidden,sort",
-    headers={"apikey": KEY, "Authorization": f"Bearer {KEY}"})
-try:
-    site_ovs = json.load(urllib.request.urlopen(sreq2))
-except Exception:
-    site_ovs = []
-    print("  (site_overrides not reachable; migration 014 not run yet?)")
-
-redundant = []
 
 # ============================================================================
 # A FRAME ADDED FROM THE PHONE (board.js ADD A FRAME) is a row whose patch.src is
@@ -309,8 +747,10 @@ def localize_work(patch, item=None):
     return out
 
 
-def bake_list(section, filename, key_of, allow_add=False, localize=None):
-    """Apply the section's overrides to a {"items":[...]} content file."""
+def bake_list(section, filename, key_of, allow_add=None, localize=None):
+    """Apply the section's overrides to a {"items":[...]} content file.
+    allow_add: a predicate on a row's patch; a row that matches no item and
+    passes it is an ADDITION made from a phone (see below)."""
     rows = [o for o in site_ovs if o.get("section") == section]
     if not rows:
         return 0
@@ -350,16 +790,18 @@ def bake_list(section, filename, key_of, allow_add=False, localize=None):
     # rewrites its own link, so the key moves), or the item is gone from the
     # file. It can never apply again, and left alone it sits on the desk looking
     # like a live edit forever.
-    # ⛔ OPT IN, and only THE WORK passes it. A row that matches nothing is
-    # normally inert, but for work a row carrying its own src is an ADDITION
-    # made from a phone, and folding it in is the whole point of the bake.
+    # ⛔ OPT IN, and only THE WORK and THE ROTATION pass it, each with its own
+    # test. A row that matches nothing is normally inert, but a work row carrying
+    # its own src (ADD A FRAME) or a rotation row whose link is a Spotify track
+    # (ADD A TRACK) is an ADDITION made from a phone, and folding it in is the
+    # whole point of the bake. The page's applyList takes the same two tests.
     if allow_add:
         for o in rows:
             k = o["item_key"]
             if k in matched or o.get("hidden"):
                 continue
             patch = o.get("patch") or {}
-            if not patch.get("src"):
+            if not allow_add(patch):
                 continue
             if localize:
                 patch = localize(patch)
@@ -386,8 +828,8 @@ def bake_list(section, filename, key_of, allow_add=False, localize=None):
     return changed
 
 if site_ovs:
-    bake_list("work", "work.json", lambda it: _base(it.get("src")), allow_add=True,
-              localize=localize_work)
+    bake_list("work", "work.json", lambda it: _base(it.get("src")),
+              allow_add=lambda p: bool(p.get("src")), localize=localize_work)
     if fetched:
         # the grid and /work/ paint assets/grid/work/<name>, not the 1600px file
         try:
@@ -406,7 +848,17 @@ if site_ovs:
     def _sp(link):
         m = re.search(r"(?:track/|spotify:track:)([A-Za-z0-9]{22})", str(link or ""))
         return m.group(1) if m else ""
-    bake_list("rotation", "rotation.json", lambda it: _sp(it.get("link")))
+    # ADD A TRACK on the board writes a row keyed on the new track's id that matches
+    # nothing yet, so the rotation passes the add test too: the link has to parse to
+    # a Spotify track. A patched item keeps every key the row does not name, so a
+    # winner's `won` object (build_music.py close) survives a bake.
+    # ⛔ The page's seed check (index.html seedIds): a row whose track is ALREADY on
+    # rotation.json is not a new track. A swap row an earlier bake folded keeps the
+    # old seed as its key and the folded seed as its link, so without this it came
+    # back as a second tile of the same song.
+    _seed_ids = {_sp(it.get("link")) for it in json.load(open(os.path.join(CONTENT, "rotation.json"))).get("items", [])} - {""}
+    bake_list("rotation", "rotation.json", lambda it: _sp(it.get("link")),
+              allow_add=lambda p: bool(_sp(p.get("link"))) and _sp(p.get("link")) not in _seed_ids)
 
     # site.json is flat key/value, not a list of items: item_key IS the field
     # name and patch.value is the new value. ticker_headlines is stored
@@ -451,7 +903,7 @@ if site_ovs:
                 continue
             # ⛔ Same list as index.html's applier. Both split, or the baked
             # file gets a string where the page expects an array.
-            if k in ("ticker_headlines", "why.bullets"):
+            if k in ("ticker_headlines", "why.bullets", "rooms_box"):
                 v = [x.strip() for x in str(v).split("|") if x.strip()]
             if _get(sdoc2, k) == v:
                 redundant.append(("site", k))
@@ -619,11 +1071,12 @@ print("     its og: tags AND its inline stylesheet all freeze at bake time.")
 print("     Renaming somebody leaves the OLD name in every link preview, and")
 print("     new CSS simply never reaches the seven baked pages, until a re-bake.")
 if redundant:
-    print("\n  ⛔ CLEAR THESE AT THE DESK, they now match the committed file and")
+    print("\n  ⛔ CLEAR THESE ON THE BOARD, they now match the committed file and")
     print("     would silently re-apply on top of a later git edit:")
     for section, key in redundant:
         print(f"    - {section} / {key or '(whole section)'}")
-print("  then at /desk/: tap Clear override for edited stories, and tap BAKED on each of:")
+print("  then tap Clear override for edited stories at /desk/word/, and on /board/ (THE WORD)")
+print("  tick 'Baked into git' on each of:")
 for slug in promoted:
     print(f"    - {slug}")
 if not promoted:

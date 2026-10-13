@@ -2,6 +2,7 @@
   "items": [
     {
       "name": "KAV-MAN",
+      "card_slug": "kav-man",
       "type": "voice",
       "type_label": "WAR CHANT",
       "hp": 200,
@@ -26,14 +27,13 @@
       ],
       "platform": "SATX",
       "link": "#roster",
-      "theme_song": "https://open.spotify.com/track/0KJIm3Ukd82n0d7VOCQWWI",
       "lore": "Artist. San Antonio. Calling him a rapper undersells it, he does all of it and the credit list keeps getting longer.\n\nFirst on the roster. Not a subject, a member: the desk shoots every frame of what comes next.\n\nWhat he's loading stays off the page until it drops. When it drops, it drops with our footage on it.\n\nTexas first. Then everywhere else.",
-      "theme_start": 123,
       "cost_orb": 7,
       "power": 9000
     },
     {
       "name": "VIRGOSGATEWAY",
+      "card_slug": "virgosgateway",
       "type": "signal",
       "type_label": "THE SIGNAL",
       "hp": "???",
@@ -58,11 +58,11 @@
       ],
       "platform": "IG",
       "link": "https://instagram.com/virgosgateway",
-      "theme_song": "https://open.spotify.com/track/0sKUd3PxqITdWs8NqzpCBV",
       "lore": "Rapper. San Antonio. Punk on the surface, trap in the bones, anarchy on the hook.\n\nSecond artist on the roster. Sessions are closed, and what's coming out of them is classified until it isn't.\n\nWhen the file opens, the desk has the frames."
     },
     {
       "name": "WRATHFOL",
+      "card_slug": "wrathfol",
       "type": "board",
       "type_label": "HEAVY HITTER",
       "hp": 220,
@@ -94,6 +94,7 @@
     },
     {
       "name": "The Ink",
+      "card_slug": "theink",
       "type": "ink",
       "type_label": "THE INK · 002",
       "hp": 110,
@@ -123,6 +124,7 @@
     },
     {
       "name": "KURLYTOP",
+      "card_slug": "kurlytop",
       "type": "sermon",
       "type_label": "THE SERMON",
       "hp": 170,
@@ -152,6 +154,7 @@
     },
     {
       "name": "WUN MOR",
+      "card_slug": "wunmor",
       "type": "void",
       "type_label": "THE HAND",
       "hp": 140,
@@ -181,6 +184,7 @@
     },
     {
       "name": "JOSH FUEGO",
+      "card_slug": "josh-fuego",
       "type": "label",
       "type_label": "THE OUTPUT",
       "hp": 180,
@@ -211,6 +215,7 @@
     },
     {
       "name": "VAMPPSYCH",
+      "card_slug": "vamppsych",
       "type": "lens",
       "type_label": "THE LENS",
       "hp": 220,
@@ -235,7 +240,6 @@
       ],
       "platform": "SATX",
       "link": "https://instagram.com/vamppsych",
-      "theme_song": "https://open.spotify.com/track/0sKUd3PxqITdWs8NqzpCBV",
       "lore": "Gianni. FX6, Insta360, Full Sail Digital Cinematography, and a card in his own house because he shoots it every week like everybody else on this list.\n\nZenhouse Fridays, The Mix on the Strip, Paper Tiger, the raves, Legion Ink after hours. Directed VOLUME. Cuts gothic essays as Vamppsych.\n\nRuns the desk, which is why this card sits at the end of the roster and not the front of it.",
       "card_label": "THE LENS",
       "variants": [
@@ -263,8 +267,7 @@
           "photo": "assets/card-vamp-sir.jpg",
           "rarity": "gold-rare"
         }
-      ],
-      "theme_start": 0
+      ]
     }
   ],
   "_archived_unfilled_seats": [

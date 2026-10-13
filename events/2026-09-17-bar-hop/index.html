@@ -17,7 +17,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/css/sealed.css?v=6a42fd60">
 <link rel="stylesheet" href="../../assets/css/pack.css?v=3c0b0f68">
-<link rel="stylesheet" href="../../assets/css/binder.css?v=00f24508">
+<link rel="stylesheet" href="../../assets/css/binder.css?v=f47d0aee">
 <style>
 :root{--bg:#0a0a0d;--panel:#121218;--line:#23222b;--ink:#f4eef2;--muted:#9a93a3;
 --pink:#f7b9dd;--pink-deep:#f48fc8;--pink-glow:#ff79c6;--dye-blue:#2f6bff;
@@ -145,10 +145,14 @@ function show(i){
   if(v.full){dl.href=v.full;dl.style.display='';}else{dl.style.display='none';}
   // Take it down: the same email the Photos tab form writes, this frame filled in.
   // OTPNight is set on the last line of this script, before anyone can tap a tile.
+  // Photo is the file name (media/017_t.jpg -> 017): the frame number shifts when an
+  // earlier photo comes down, the name never does, and takedown.py --stem takes it as is.
   const nt=window.OTPNight||{}, fr=cur+1, dot=' '+String.fromCharCode(183)+' ';
+  const stem=String(m.thumb||'').split('/').pop().replace('_t.jpg','');
   document.getElementById('lbtd').href='mailto:offtheprintcollective@gmail.com?subject='+
     encodeURIComponent('TAKE IT DOWN'+dot+(nt.title||'')+dot+'frame '+fr)+'&body='+
     encodeURIComponent(['TAKE IT DOWN','','Night: '+(nt.title||'')+' ('+(nt.slug||'')+')','Frame: '+fr,
+      'Photo: '+stem,
       'Link: https://0fftheprint.com/events/'+(nt.slug||'')+'/#f'+fr,'Reach me: ','',
       '(sent from 0fftheprint.com, the night page)'].join(String.fromCharCode(10)));
   const multi = m.looks && m.looks.length>1;
@@ -175,7 +179,7 @@ document.addEventListener('keydown',e=>{
    looks. If it never loads, the grid above is the page and always was. */
 window.OTPNight = Object.assign({media:MEDIA, show:show}, {"slug": "2026-09-17-bar-hop", "title": "Bar Hop", "venue": "Club 212 \u00b7 Bar House", "dateShort": "09.17.26", "looks": ["PULP FICTION", "NATURAL"]});
 </script>
-<script src="../../assets/js/binder.js?v=e63104e6" defer></script>
-<script src="../../assets/js/sealed.js?v=810220c7" defer></script>
+<script src="../../assets/js/binder.js?v=12b7dbe1" defer></script>
+<script src="../../assets/js/sealed.js?v=3985d712" defer></script>
 </body>
 </html>

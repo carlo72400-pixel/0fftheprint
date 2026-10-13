@@ -55,6 +55,9 @@ except ImportError:
     sys.exit("needs Pillow:  /usr/bin/python3 -m pip install --user Pillow")
 
 Image.MAX_IMAGE_PIXELS = None
+# the repo has no .gitignore and the closing hint is git add -A, so importing stamp, makepack
+# and framewall must not leave a __pycache__/ behind to be committed with the night
+sys.dont_write_bytecode = True
 ROOT = os.path.dirname(os.path.abspath(__file__))
 EVENTS = os.path.join(ROOT, "events")
 PHOTO_EXT = {".jpg", ".jpeg", ".png", ".heic", ".HEIC", ".webp"}
@@ -687,10 +690,14 @@ function show(i){
   if(v.full){dl.href=v.full;dl.style.display='';}else{dl.style.display='none';}
   // Take it down: the same email the Photos tab form writes, this frame filled in.
   // OTPNight is set on the last line of this script, before anyone can tap a tile.
+  // Photo is the file name (media/017_t.jpg -> 017): the frame number shifts when an
+  // earlier photo comes down, the name never does, and takedown.py --stem takes it as is.
   const nt=window.OTPNight||{}, fr=cur+1, dot=' '+String.fromCharCode(183)+' ';
+  const stem=String(m.thumb||'').split('/').pop().replace('_t.jpg','');
   document.getElementById('lbtd').href='mailto:offtheprintcollective@gmail.com?subject='+
     encodeURIComponent('TAKE IT DOWN'+dot+(nt.title||'')+dot+'frame '+fr)+'&body='+
     encodeURIComponent(['TAKE IT DOWN','','Night: '+(nt.title||'')+' ('+(nt.slug||'')+')','Frame: '+fr,
+      'Photo: '+stem,
       'Link: https://0fftheprint.com/events/'+(nt.slug||'')+'/#f'+fr,'Reach me: ','',
       '(sent from 0fftheprint.com, the night page)'].join(String.fromCharCode(10)));
   const multi = m.looks && m.looks.length>1;
@@ -782,6 +789,54 @@ def ImageFontTruetype(path, size):
     return ImageFont.truetype(path, size)
 
 
+def rebuild_warning(out, slug):
+    """Loud when events/<slug>/ already holds a night. Returns how many frames it had, or None
+    when the slug is new. Never stops the run: rebuilding a night on purpose is allowed."""
+    dj = os.path.join(out, "data.json")
+    if not (os.path.exists(dj) or os.path.exists(os.path.join(out, "index.html"))):
+        return None
+    try:
+        had = len(json.load(open(dj, encoding="utf-8")).get("media") or [])
+    except Exception:
+        had = 0
+    bar = "  " + "⛔" * 3
+    print(f"\n{bar} events/{slug}/ IS ALREADY A NIGHT ({had} frames). THIS RUN REBUILDS IT. {bar.strip()}")
+    print("     It replaces the page, data.json, the thumbs and its row in events.json, and it deletes")
+    print("     the release and uploads it again. A photo taken down since (takedown.py or the board)")
+    print("     comes back if it is still in the source folder. Members' tags follow file names, so a")
+    print("     photo whose file name changes loses its tags.")
+    print("     A different night with the same name and date? Stop now (ctrl-C) and pass --slug.\n")
+    return had
+
+
+def run_acts(slug, acts):
+    """Who Played goes through the Music build script, in its own process, never a direct write to
+    content/music.json (that file is rebuilt from the script's inputs, so a hand write is lost on the
+    next build). Decoration: a failure here never fails the night."""
+    script = os.path.join(ROOT, "_build", "music", "build_music.py")
+    if not os.path.exists(script):
+        print("  ⚠️  who played NOT added: _build/music/build_music.py is not in this repo yet. Later:")
+        print("     /usr/bin/python3 _build/music/build_music.py night " + slug + " "
+              + " ".join("--act " + json.dumps(x) for x in acts) + " --write")
+        return False
+    cmd = [sys.executable, script, "night", slug]
+    for x in acts:
+        cmd += ["--act", x]
+    cmd.append("--write")
+    try:
+        r = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True)
+    except Exception as e:
+        print(f"  who played not added ({e}); run build_music.py night {slug} by hand")
+        return False
+    tail = ((r.stdout or "").strip().splitlines() or [""])[-1]
+    if r.returncode == 0:
+        print(f"  who played: {len(acts)} act(s) handed to build_music.py" + (f" ({tail})" if tail else ""))
+        return True
+    err = ((r.stderr or r.stdout or "").strip().splitlines() or ["no output"])[-1]
+    print(f"  ⚠️  who played NOT added, build_music.py said: {err}")
+    return False
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("source", nargs="?", help="folder of photos (omit when using --look)")
@@ -811,6 +866,10 @@ def main():
                                  "(default: the first horizontal frame)")
     ap.add_argument("--no-upload", action="store_true",
                     help="build everything but skip the release upload (dry run)")
+    ap.add_argument("--acts", nargs="+", action="append", default=[], metavar="'NAME|dj|SPOTIFY|OTHER'",
+                    help="who played, for the Music tab's Who Played. Each one goes to "
+                         "_build/music/build_music.py night <slug> --act ... --write, in its own "
+                         "process; this script never writes content/music.json itself")
     a = ap.parse_args()
 
     title = a.title or a.venue
@@ -819,6 +878,12 @@ def main():
     dateshort = dt.strftime("%m.%d.%y")
     slug = a.slug or f"{a.date}-{slugify(title)}"
     out = os.path.join(EVENTS, slug)
+    # ⛔ A SLUG THAT IS ALREADY A NIGHT GETS REBUILT, NOT ADDED. Same title, same date, and the
+    #    run quietly replaces a live night: its page, data.json, thumbs, events.json row, and its
+    #    release (publish_release deletes the tag and makes it again). A photo taken down since
+    #    comes straight back if it is still in the source folder. Said loudly here, before ten
+    #    minutes of encoding, and again at the end.
+    existing = rebuild_warning(out, slug)
     media_dir = os.path.join(out, "media")
     os.makedirs(media_dir, exist_ok=True)
     # Staging sits OUTSIDE the repo on purpose. Nothing in here is ever committed;
@@ -956,6 +1021,10 @@ def main():
                 print(f"  ⚠️  no map pin for {seg}: add it to content/rooms.json (name, key, aliases, lat, lng)")
     except Exception as e:
         print(f"  map pins not checked ({e})")
+    # WHO PLAYED (Music tab): only through the Music build script, never a write into music.json here
+    acts = [x for grp in (a.acts or []) for x in grp if str(x).strip()]
+    if acts:
+        run_acts(slug, acts)
 
     size = dir_size(out)
     print(f"\n  {out}")
@@ -990,6 +1059,20 @@ def main():
         print(f"  `/usr/bin/python3 makepack.py {slug}` draws one.")
     else:
         print(f"\n  pack drawn. Want a different photo on the front? /usr/bin/python3 makepack.py {slug} --frames N[,M]")
+
+    # THE FRAME MAP (migration 043): frame_positions lists every night's photos by position for the
+    # old tag door. A night it does not know makes the next migration's map check stop, so the map is
+    # regenerated before anything else is pasted. A rebuilt night's positions moved too. The WHOLE 043 file is
+    # the paste unit: its block alone would skip the line that keeps a night with a takedown off the map.
+    if existing is None:
+        print("\n  Run framekeys.py, then paste the whole migration-043 file again (safe to run twice)")
+    else:
+        print("\n  Run framekeys.py, then paste the whole migration-043 file again (safe to run twice; this night's positions moved)")
+        print(f"  \u26d4 REBUILT events/{slug}/: {existing} frames before, {len(items)} now. "
+              f"Check the page before the push.")
+    if not acts and os.path.exists(os.path.join(ROOT, "_build", "music", "build_music.py")):
+        print("  Who played? /usr/bin/python3 _build/music/build_music.py night " + slug
+              + " --act 'NAME|dj|SPOTIFY|' --write  (or newevent.py ... --acts next time)")
 
     print(f"\n  live at /0fftheprint/events/{slug}/ once pushed")
     print("  git add -A && git commit -m 'event: " + slug + "' && git push\n")

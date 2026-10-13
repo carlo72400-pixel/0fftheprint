@@ -26,6 +26,15 @@ Then: git add -A && git commit && git push.
 story's database slug. A slug that is already a story is refused, never
 overwritten.
 
+--shelf puts the card on one Stories tab shelf (nights, guides, dates, culture,
+interviews) whatever its kicker says. Leave it off and the kicker picks the
+shelf, which is the usual case. bake.py passes it for a house story filed from
+the phone with a shelf picked.
+
+--story-id writes the phone story's id into the page head (STORY_META). bake.py
+passes it when it promotes a story from the phone, and reads it back on the next
+run to know the page is that story's and not a git story under the same slug.
+
 Markdown understood (deliberately small): blank-line paragraphs, "## " section
 heads, "> " pull quotes, "![alt](img.jpg)" figures (local images are copied in
 next to the page; any lines right under the image, same block, become its
@@ -49,13 +58,59 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 DESK = os.path.join(ROOT, "content", "desk.json")
 WORD = os.path.join(ROOT, "word")
 
+# THE SHELVES on the Stories tab (index.html SHELVES). A card's own "shelf" wins
+# over its kicker; the database holds the same five (member_stories_shelf_ok).
+SHELVES = ("nights", "guides", "dates", "culture", "interviews")
+
+# ⛔ supabase-js is PINNED with SRI on every page since Wave 2. The floating @2
+#    let jsdelivr swap the library under every story with no commit (it served
+#    2.117.3 while the site was tested on 2.117.2). stamp.py's PIN step writes the
+#    same three attributes into every other page; keep the two in step.
+SUPABASE_JS = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js"
+SUPABASE_SRI = "sha384-Rj26LVGvoeRVR6+mwQmFfcR3QOBEwT+ZmuCWpuiqeTzJpCs0ER4ITAWGb4Hiy3Ok"
+
+# A story promoted from the phone carries its member_stories.id here, so bake.py can
+# tell its own page from a git story that holds the same slug (a house row has no
+# member byline to prove it). Git stories have no such line.
+# ⛔ member_stories.id is a BIGINT (migration 010, generated always as identity), so
+#    PostgREST sends it as a number (41), never a uuid. A uuid pattern here matched no
+#    real row, and every promoted house story read as a SKIP on the next bake.
+STORY_META = '<meta name="otp-story" content="{}">'
+STORY_ID = r"[1-9][0-9]{0,18}"
+
+# A story the desk pulled (bake.py) is a stub with no words, so its "This one is
+# 0TP-NNN" line is gone. The stub keeps the number in this line instead, and
+# next_num() counts it, so a pulled number is never handed to a new story.
+NUM_META = '<meta name="otp-num" content="{}">'
+HELD_NUM = re.compile(r'<meta name="otp-num" content="0TP-(\d+)">|This one is 0TP-(\d+)\.')
+
 def slugify(t):
     s = re.sub(r"[^a-z0-9]+", "-", t.lower()).strip("-")
     return s[:60] or "story"
 
+def held_nums():
+    """Every 0TP number a page under word/ still holds: a pulled stub's NUM_META, or a
+    page's own 'This one is 0TP-NNN' (a page whose card is off desk.json keeps it too)."""
+    out = []
+    try:
+        names = os.listdir(WORD)
+    except OSError:
+        return out
+    for s in names:
+        try:
+            with open(os.path.join(WORD, s, "index.html"), encoding="utf-8", errors="ignore") as f:
+                t = f.read()
+        except OSError:
+            continue
+        out += [int(a or b) for a, b in HELD_NUM.findall(t)]
+    return out
+
 def next_num(items):
+    # ⛔ NOT ONLY desk.json. Pulling the newest story takes its card off desk.json,
+    #    and max()+1 then handed its number to the next story: two pages printed the
+    #    same 0TP number for good once the pull was cleared and the card came back.
     ns = [int(m.group(1)) for it in items
-          if (m := re.match(r"0TP-(\d+)", str(it.get("num", ""))))]
+          if (m := re.match(r"0TP-(\d+)", str(it.get("num", ""))))] + held_nums()
     return f"0TP-{(max(ns) + 1) if ns else 1:03d}"
 
 def no_dash(s):
@@ -148,7 +203,7 @@ PAGE = """<!DOCTYPE html>
 <meta property="og:description" content="{dek}">
 <meta property="og:image" content="https://0fftheprint.com/word/{slug}/cover.jpg">
 <meta property="og:type" content="article">
-<meta name="theme-color" content="#0a0a0d">
+<meta name="theme-color" content="#0a0a0d">{story_meta}
 <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -232,7 +287,7 @@ PAGE = """<!DOCTYPE html>
   <div class="foot">Every drop gets a number. This one is {num}. <a href="../../#desk">Back to The Word &rarr;</a></div>
 </div>
 <script src="../../supabase-config.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="{supabase_js}" integrity="{supabase_sri}" crossorigin="anonymous"></script>
 <script src="../../assets/js/desk.js" defer></script>
 <script src="../../assets/js/word.js" defer></script>
 </body>
@@ -326,11 +381,19 @@ def main():
     ap.add_argument("--slug", help="folder under word/ (default: from the title). "
                     "bake.py passes a member story's database slug, which a desk "
                     "retitle never changes, so the page lands where its links point")
+    ap.add_argument("--shelf", choices=SHELVES,
+                    help="the Stories tab shelf, whatever the kicker says "
+                         "(default: the kicker picks it)")
+    ap.add_argument("--story-id", dest="story_id",
+                    help="the phone story's id (member_stories.id, a number); bake.py "
+                         "passes it so the next bake knows this page is that story's")
     a = ap.parse_args()
     if not a.draft and not a.link:
         sys.exit("either a markdown draft or --link, one of the two")
     if a.slug and not re.fullmatch(r"[a-z0-9][a-z0-9-]{2,59}", a.slug):
         sys.exit(f"--slug must be 3 to 60 of a-z, 0-9 and -, starting with a letter or digit: {a.slug}")
+    if a.story_id and not re.fullmatch(STORY_ID, a.story_id):
+        sys.exit(f"--story-id is a member story's id (a number): {a.story_id}")
 
     with open(DESK) as f:
         desk = json.load(f)
@@ -395,7 +458,9 @@ def main():
                            title=html.escape(no_dash(a.title)), dek=html.escape(no_dash(a.dek)),
                            kicker=html.escape(no_dash(a.kicker).upper()), num=num,
                            datestr=datestr, body=body, slug=slug, stamp=stamp,
-                           author=html.escape(no_dash(a.author)))
+                           author=html.escape(no_dash(a.author)),
+                           supabase_js=SUPABASE_JS, supabase_sri=SUPABASE_SRI,
+                           story_meta=("\n" + STORY_META.format(a.story_id)) if a.story_id else "")
         with open(os.path.join(story_dir, "index.html"), "w") as f:
             f.write(page)
         # source.md is the editor's base text: the phone editor seeds from it,
@@ -404,7 +469,7 @@ def main():
             f.write(md_clean if md_clean.endswith("\n") else md_clean + "\n")
         link = f"word/{slug}/"
 
-    desk["items"].insert(0, {
+    card = {
         "title": no_dash(a.title),
         "kicker": no_dash(a.kicker).upper(),
         "dek": no_dash(a.dek),
@@ -415,7 +480,11 @@ def main():
         "thumb": f"word/{slug}/thumb.jpg",
         "link": link,
         "num": num,
-    })
+    }
+    # only when picked: a card without one follows its kicker (index.html shelfOf)
+    if a.shelf:
+        card["shelf"] = a.shelf
+    desk["items"].insert(0, card)
     with open(DESK, "w") as f:
         # indent 2 to match bake.py and every other content/*.json, or every
         # story run rewrites the whole file and buries its own one line change
