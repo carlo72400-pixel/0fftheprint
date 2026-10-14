@@ -10,8 +10,7 @@
  *                bucket, an hour's cache, not a year), a card holder's through uploadImage. Same rules as the
  *                timeline (a line is optional, 12 a day for a casual member). The page reloads onto #roll so the
  *                new post lands through one render path. 'Your posts' is compose/, every post you made.
- *   THIS WEEK    a circle for everyone who posted in the last 7 days, ring in their accent, tap = their
- *                newest post. Fewer than three? Faces of members with pages (wall_here) fill the row.
+ *   (THIS WEEK, the row of member faces, came off 10/13, his call: it put the other members on show.)
  *   THE ROLL     the photo posts off roll_feed(60, photos): members only, the photo leads. A post made in Home's
  *                box shows here too and says On Home (everyone can see that one). Plus one card per night the
  *                house shot (events/events.json), newest first. Hearts, fire, skull, eye and comments are the
@@ -287,34 +286,6 @@
     ta.focus();
   }
 
-  /* ---------- THIS WEEK ---------- */
-  function week(rows, people, box) {
-    box.className = 'rl-week';
-    var cut = Date.now() - 7 * 864e5, seen = {}, list = [];
-    rows.forEach(function (r) { if (new Date(r.created_at).getTime() < cut) return; var p = people[r.id]; if (!p || seen[p.key]) return; seen[p.key] = 1; if (p.sid) seen['h:' + p.sid] = 1; list.push({ p: p, pid: r.id }); });
-    function circle(p, href, sub, onTap) {
-      var a = el('a', 'rl-wk'); a.href = href || '#roll';
-      a.appendChild(avatar(p, 'big'));
-      a.appendChild(el('span', 'rl-wk-n', esc(p.name.length > 12 ? p.name.slice(0, 11) + '…' : p.name)));
-      if (sub) a.appendChild(el('span', 'rl-wk-s', esc(sub)));
-      if (onTap) a.addEventListener('click', function (ev) { ev.preventDefault(); onTap(); });
-      return a;
-    }
-    box.appendChild(el('div', 'rl-wk-h', '<b>This week</b><span>' + (list.length ? (list.length === 1 ? 'one person posted' : list.length + ' people posted') : 'nobody has posted yet, be the one') + '</span>'));
-    var rail = el('div', 'rl-wk-rail');
-    list.forEach(function (x) { rail.appendChild(circle(x.p, x.p.link, 'posted', function () { jumpTo(x.pid); })); });
-    box.appendChild(rail);
-    if (list.length < 3 && w.OTP && OTP.configured && OTP.sb) {
-      Promise.resolve(OTP.sb().rpc('wall_here')).then(function (r) {
-        if (!r || r.error || !Array.isArray(r.data)) return;
-        r.data.slice(0, 12).forEach(function (h) {
-          var p = { key: 'h:' + h.sid, name: h.name || 'Member', photo: safe(h.pic) ? (/^https?:/.test(h.pic) ? h.pic : av(h.pic)) : '', accent: '' };
-          if (seen[p.key]) return;
-          rail.appendChild(circle(p, h.sid ? 'wall/#s-' + h.sid : 'wall/', h.mood_e ? h.mood_e : 'their page'));
-        });
-      }).catch(function () {});
-    }
-  }
   function jumpTo(pid) {
     var c = mount.querySelector('.rl-card[data-pid="' + pid + '"]'); if (!c) return;
     try { c.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch (e) { c.scrollIntoView(); }
@@ -454,7 +425,7 @@
   async function roll() {
     if (RENDERED === 'in') return; RENDERED = 'in';
     mount.innerHTML = '<p class="rl-note">Loading the roll…</p>';
-    var post = el('div'), wk = el('div'), feed = el('div', 'rl-feed'), clips = el('div'), fr = el('div');
+    var post = el('div'), feed = el('div', 'rl-feed'), clips = el('div'), fr = el('div');
     var results = await Promise.all([
       // the one list (044): roster.json with the cards and the dark seats folded in; its own 3 s cap, roster.json is the floor
       (w.OTP && OTP.people) ? OTP.people().catch(function () { return []; }) : getJSON('content/roster.json').then(function (j) { return (j && j.items) || []; }),
@@ -475,7 +446,6 @@
     if (me && !canPost && w.OTP && OTP.canTake) { try { canPost = await OTP.canTake(); } catch (e) {} }
     mount.innerHTML = '';
     if (me) { composer(me, canPost, !approved, post); mount.appendChild(post); }
-    week(rows, people, wk); mount.appendChild(wk);
     // photos and nights together, newest first
     var items = rows.filter(function (r) { return !isVideo(r.image_url); }).map(function (r) { return { t: new Date(r.created_at).getTime() || 0, r: r }; })
       .concat(nights.map(function (n) { var dt = ymd(n.date); return { t: dt ? dt.getTime() + 23 * 36e5 : 0, n: n }; }))

@@ -55,16 +55,6 @@
 .rl-wk-h span{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);}
 .rl-feed-h{max-width:540px;margin:18px auto 10px;}
 
-/* ---- THIS WEEK ---- */
-.rl-week{margin:0 0 6px;}
-.rl-wk-rail{display:flex;gap:14px;overflow-x:auto;padding:4px 2px 10px;scrollbar-width:thin;scrollbar-color:var(--pink-deep) transparent;}
-.rl-wk-rail::-webkit-scrollbar{height:6px;}
-.rl-wk-rail::-webkit-scrollbar-thumb{background:var(--pink-deep);border-radius:999px;}
-.rl-wk{flex:none;display:flex;flex-direction:column;align-items:center;gap:6px;width:76px;text-decoration:none;color:inherit;}
-.rl-wk-n{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.06em;color:var(--ink);white-space:nowrap;max-width:76px;overflow:hidden;text-overflow:ellipsis;}
-.rl-wk-s{font-family:var(--f-mono);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--pink-glow);}
-.rl-wk:hover .rl-av{transform:translateY(-2px);}
-
 /* ---- the cards ---- */
 .rl-feed{display:grid;gap:18px;max-width:540px;margin:0 auto;}
 .rl-card{--ring:var(--pink-glow);border:1px solid var(--line);border-radius:14px;background:var(--panel);overflow:hidden;transition:box-shadow .3s;}
