@@ -83,10 +83,10 @@ a.btn{text-decoration:none}
   // Every page with a "Log in" gate has a key, so logging in from /my/, /card/
   // or /packs/ lands back there and not on whatever a login defaults to.
   // The Crypt's own links carry where they were (a night, a page, the calendar)
-  // as ?h=, and only those three shapes ride along; anything else is dropped.
+  // as ?h=, and only those four shapes ride along (ig- = a pasted Instagram post, 10/14); anything else is dropped.
   const NEXT_KEY = Q.get('next');
   const H = Q.get('h') || '';
-  const HASH = /^(e-[a-z0-9]{1,40}|s-[0-9a-f]{10}|cal)$/i.test(H) ? '#' + H : '';
+  const HASH = /^(e-[a-z0-9]{1,40}|s-[0-9a-f]{10}|cal|ig-[A-Za-z0-9_-]{5,40})$/i.test(H) ? '#' + H : '';
   const NEXT = {
     wall: '../wall/' + HASH, home: '../#take', packs: '../packs/',
     my: '../my/', account: '../my/#account', card: '../card/', compose: '../compose/', write: '../word/new/', dates: '../dates/',
