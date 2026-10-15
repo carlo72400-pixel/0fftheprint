@@ -1,6 +1,6 @@
 /* GET THE SHOT offline worker (10/15): the page, the engine, every sprite, room and UI piece cached on install so the
    game plays with no signal. Bump BUILD when anything changes; old caches go on activate. */
-const BUILD = 'gts-20261015b';
+const BUILD = 'gts-20261015c';
 const OCS = ['rin', 'lena', 'nyx', 'kuro', 'mars', 'cinder', 'bala', 'putty'], ROOMS = ['pit', 'booth', 'lot', 'dark', 'roof', 'lounge'];
 const FILES = ['./', './index.html', './game.js?v=20261015b', './manifest.webmanifest', './icon-192.png', './icon-512.png', './art/meta.json', '../assets/cathedral/mark.webp',
   './art/ui/shutter.webp', './art/ui/life.webp', './art/ui/frame.webp']
