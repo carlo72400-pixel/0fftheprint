@@ -48,7 +48,7 @@
 <script src="assets/js/composer.js?v=f7ec8eea" defer></script>
 <script src="assets/js/edit.js?v=46763485" defer></script>
 <script src="assets/js/binder.js?v=12b7dbe1" defer></script>
-<script src="assets/js/cathedral.js?v=6abfcaa0" defer></script>
+<script src="assets/js/cathedral.js?v=11d631b2" defer></script>
 <script src="assets/js/lounge.js?v=5a3b6868" defer></script>
 <script src="assets/js/music.js?v=ce46d8f9" defer></script>
 <script src="assets/js/people.js?v=51b5d5d0" defer></script>
@@ -2544,6 +2544,33 @@
     background:rgba(10,10,13,.6);transform:rotate(-1.2deg);}
   .slate-marquee:hover{border-color:var(--pink-glow);}
 
+  /* 10/15 THE FRONT PAGE: the cover as a tabloid front, the columnist leaning on it, the number stamped */
+  .slate-marquee.front{min-height:460px;padding:14px 16px 16px;justify-content:flex-end;border-color:rgba(255,255,255,.18);
+    box-shadow:0 0 0 1px #000,0 18px 40px rgba(0,0,0,.6);}
+  .slate-marquee.front::before{background:linear-gradient(180deg,rgba(10,10,13,.45) 0%,rgba(10,10,13,.1) 22%,rgba(10,10,13,.35) 50%,rgba(10,10,13,.97) 100%);}
+  .slate-mast{position:absolute;left:0;right:0;top:0;z-index:2;display:flex;justify-content:space-between;gap:8px;padding:9px 14px;
+    font-family:var(--f-mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#fff;
+    background:linear-gradient(180deg,rgba(10,10,13,.85),rgba(10,10,13,.4));border-bottom:1px solid rgba(255,255,255,.18);}
+  .slate-mast span:first-child{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:13px;letter-spacing:.02em;}
+  .slate-stamp{position:absolute;right:14px;top:44px;z-index:2;padding:7px 10px;border:2px solid var(--pink-glow);border-radius:3px;
+    font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;color:var(--pink-glow);background:rgba(10,10,13,.55);transform:rotate(6deg);
+    box-shadow:0 0 14px rgba(255,121,198,.35);}
+  .slate-oc{position:absolute;right:-6px;bottom:0;z-index:1;height:78%;max-height:420px;width:auto;object-fit:contain;object-position:bottom right;
+    filter:drop-shadow(-8px 10px 14px rgba(0,0,0,.7));pointer-events:none;}
+  .slate-marquee.front .slate-kicker{font-size:12px;letter-spacing:.32em;background:var(--pink-glow);color:#0a0a0d;text-shadow:none;transform:rotate(-1.5deg);}
+  .slate-marquee.front .slate-title{font-size:clamp(46px,11vw,96px);max-width:72%;}
+  .slate-marquee.front .slate-line{max-width:68%;font-size:13.5px;}
+  .slate-foot{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;}
+  .slate-marquee.front .slate-status{margin-top:0;}
+  .slate-by{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#d9d3e0;text-shadow:0 1px 3px #000;}
+  .slate-by b{color:#fff;}
+  .slate-go{margin-left:auto;font-family:var(--f-display);font-style:italic;font-weight:900;font-size:18px;text-transform:uppercase;color:var(--pink-glow);text-shadow:0 1px 3px #000;}
+  @media (max-width:560px){.slate-marquee.front{min-height:420px;}.slate-marquee.front .slate-title{max-width:70%;font-size:clamp(40px,12vw,64px);}.slate-oc{height:70%;right:-16px;}.slate-marquee.front .slate-line{max-width:72%;font-size:12.5px;}}
+  /* the columnist chip: the cutout's head in a circle */
+  .col{display:inline-block;width:40px;height:40px;border-radius:50%;overflow:hidden;background:#1a1921;border:2px solid var(--pink-glow);flex:0 0 auto;
+    box-shadow:0 0 10px rgba(255,121,198,.35);position:relative;}
+  .col img{position:absolute;top:-6%;left:calc(50% - var(--hx,.5) * 260%);width:260%;height:auto;}
+  .shelf-head{align-items:center;}
   .desk-play{background:rgba(255,121,198,.2);border-color:rgba(255,121,198,.6);color:#ffd7ee;}
   /* THE WORD is a rail, same grammar as the drops, the run and the tape. It was
      the one section on this page still laid out as a wall of tiles, which made
@@ -2584,6 +2611,31 @@
   .desk-grid.one .shelf.on .shelf-rail{grid-auto-flow:row;grid-template-columns:repeat(auto-fill,minmax(196px,1fr));
     overflow:visible;padding-bottom:0;}
   @media (max-width:720px){.desk-grid.one .shelf.on .shelf-rail{grid-template-columns:repeat(2,minmax(0,1fr));}}
+  /* 10/15 THE RACK: each rail is a steel newsstand bar, each cover hangs from a clip */
+  .desk-grid .shelf-rail{padding-top:14px;padding-bottom:12px;background:
+    linear-gradient(180deg,transparent 0,transparent 6px,#3b3844 6px,#5a5665 8px,#2c2933 11px,transparent 11px),
+    linear-gradient(180deg,transparent calc(100% - 10px),#2c2933 calc(100% - 10px),#5a5665 calc(100% - 8px),#3b3844 calc(100% - 4px),transparent 100%);}
+  .shelf-rail .desk-item{position:relative;margin-top:8px;box-shadow:0 10px 24px rgba(0,0,0,.6);}
+  .shelf-rail .desk-item::before{content:"";position:absolute;left:50%;top:0;width:24px;height:16px;margin-left:-12px;z-index:3;border-radius:0 0 3px 3px;
+    background:linear-gradient(180deg,#9a97a4,#5a5665 55%,#2c2933);box-shadow:0 2px 5px rgba(0,0,0,.7),inset 0 -1px 0 rgba(255,255,255,.18);pointer-events:none;}
+  .shelf-rail .desk-item::after{content:"";position:absolute;left:50%;top:3px;width:6px;height:6px;margin-left:-3px;z-index:4;border-radius:50%;background:#0b0a0e;box-shadow:inset 0 1px 1px rgba(255,255,255,.25);pointer-events:none;}
+  /* 10/15 THE SPINE WALL: the catalog's rows stand as magazine spines on a shelf */
+  .cat-month .cat-rows{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;padding:8px 6px 14px;align-items:flex-end;
+    background:linear-gradient(180deg,transparent calc(100% - 8px),#5a5665 calc(100% - 8px),#2c2933 100%);}
+  .cat-month .cat-rows::-webkit-scrollbar{display:none;}
+  .cat-month .cat{flex:0 0 auto;display:grid;grid-template-columns:none;grid-template-rows:auto 1fr auto;gap:8px;width:44px;height:210px;padding:8px 0 10px;margin:0;border:0;border-radius:3px 3px 0 0;
+    writing-mode:vertical-rl;text-orientation:mixed;background:linear-gradient(90deg,#2a2731,#1c1a22 50%,#141218);box-shadow:inset 1px 0 0 rgba(255,255,255,.08),inset -1px 0 0 rgba(0,0,0,.6),0 6px 10px rgba(0,0,0,.5);
+    text-decoration:none;color:var(--ink);transition:transform .12s;}
+  .cat-month .cat:nth-child(3n){background:linear-gradient(90deg,#3a1226,#24101a 50%,#140a10);}
+  .cat-month .cat:nth-child(5n){background:linear-gradient(90deg,#2a2731,#3b3844 50%,#1c1a22);}
+  .cat-month .cat:hover{transform:translateY(-8px);}
+  .cat-month .cat .no{font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;color:var(--pink-glow);transform:rotate(180deg);}
+  .cat-month .cat .ti{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:14px;line-height:1;margin:0;min-width:0;max-height:140px;text-transform:uppercase;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transform:rotate(180deg);}
+  .cat-month .cat .k{display:block;font-family:var(--f-mono);font-size:8px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;white-space:nowrap;transform:rotate(180deg);}
+  .cat-month .cat .kind,.cat-month .cat .ln{display:none;}
+  .cat-month .cat[data-kind="FILM"]{background:linear-gradient(90deg,#1a2a3a,#101a24 50%,#0a1218);}
+
+  @media (max-width:720px){.cat-month .cat{grid-template-columns:none;padding:8px 0 10px;} .cat-month .cat .k{display:block;} .cat-month .cat .ti{font-size:14px;}}
   .filter-pill .pc{margin-left:6px;opacity:.6;letter-spacing:.08em;}
   /* The card at the end of each rail: what comes next. Same 4:5 box as a story. */
   .shelf-next{position:relative;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;
@@ -3921,7 +3973,7 @@
 <!-- THE CATHEDRAL (10/3): the homepage skin. Scoped under html.cath, loaded last on purpose. -->
 <link rel="stylesheet" href="assets/css/pack.css?v=3c0b0f68">
 <link rel="stylesheet" href="assets/css/binder.css?v=f47d0aee">
-<link rel="stylesheet" href="assets/css/cathedral.css?v=600271dc">
+<link rel="stylesheet" href="assets/css/cathedral.css?v=a88ce4fd">
 <link rel="stylesheet" href="assets/css/lounge.css?v=2d07e1fc">
 <link rel="stylesheet" href="assets/css/music.css?v=815cfdc9">
 <link rel="stylesheet" href="assets/css/people.css?v=85ce71bf">
@@ -5143,6 +5195,29 @@
   const MON3 = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
   const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   const DOW3 = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  // THE COLUMNISTS (10/15, his pick): the stories are in the house voice, so each shelf gets a face that says them.
+  // The roster cutouts the game already carries (play/art/v2/oc/<oc>_idle.webp, steel edge). The head sits in the
+  // top slice of the cutout at headx (the game's meta), so the chip crops there.
+  const COLUMNIST = {
+    nights:     { oc: 'bala',  name: 'Bala',  desk: 'THE NIGHT desk',   hx: .40 },
+    guides:     { oc: 'rin',   name: 'Rin',   desk: 'THE CRAFT desk',   hx: .70 },
+    dates:      { oc: 'putty', name: 'Putty', desk: 'THE RUN desk',     hx: .61 },
+    culture:    { oc: 'nyx',   name: 'Nyx',   desk: 'the CULTURE desk', hx: .47 },
+    interviews: { oc: 'kuro',  name: 'Kuro',  desk: 'the INTERVIEW desk', hx: .50 },
+  };
+  const SHELF_KICKERS = {
+    nights: ['THE NIGHT', 'SEEN', 'THE HOUR AFTER'], guides: ['THE CRAFT'],
+    dates: ['THE RUN', 'THE COUNTDOWN', 'THE CALENDAR', 'THE FESTIVAL', 'THE ARENA'], interviews: ['THE INTERVIEW', 'THE INK'], floor: ['FROM THE FLOOR'],
+  };
+  const shelfKeyOf = it => {
+    const own = String(it.shelf || '').toLowerCase(); if (COLUMNIST[own] || own === 'floor') return own;
+    const k = String(it.kicker || '').trim().toUpperCase(), dp = String(it.dept || '').toLowerCase();
+    if (dp === 'seen' || dp === 'hourafter') return 'nights';
+    const hit = Object.keys(SHELF_KICKERS).find(key => SHELF_KICKERS[key].includes(k));
+    return hit || 'culture';
+  };
+  const colChip = (key, big) => { const c = COLUMNIST[key]; if (!c) return '';
+    return `<span class="col${big ? ' big' : ''}" title="filed by ${esc(c.name)}"><img src="play/art/v2/oc/${c.oc}_idle.webp" alt="" loading="lazy" decoding="async" style="--hx:${c.hx}"></span>`; };
 
   // ---- THE CATALOG, filed by month ----
   // One spine for everything the house puts out. Films come from slate.releases,
@@ -5265,11 +5340,16 @@
         tryWide();
         try { mq.addEventListener('change', tryWide); } catch (e) {}
       }
+      const ck = top.film ? 'interviews' : shelfKeyOf(s), col = COLUMNIST[ck];
+      smq.classList.add('front');
       smq.innerHTML = `
-      <div class="slate-kicker">${esc(s.kicker || 'THE WORD')} &nbsp;·&nbsp; ${esc(s.num || '')}</div>
+      <div class="slate-mast"><span>0FF THE PRINT</span><span>THE WORD · FRONT PAGE</span><span>${d ? DOW3[d.getDay()].toUpperCase() + ' ' + MON3[d.getMonth()] + ' ' + d.getDate() : ''}</span></div>
+      <div class="slate-stamp">${esc(s.num || '')}</div>
+      ${col ? `<img class="slate-oc" src="play/art/v2/oc/${col.oc}_idle.webp" alt="" loading="lazy" decoding="async">` : ''}
+      <div class="slate-kicker">${esc(s.kicker || 'THE WORD')}</div>
       <div class="slate-title">${esc(s.title || '')}</div>
       <div class="slate-line">${esc((top.film ? s.line : s.dek) || '')}</div>
-      <div class="slate-status">${d ? 'OUT ' + MON3[d.getMonth()] + ' ' + d.getDate() : 'OUT NOW'}</div>`;
+      <div class="slate-foot"><span class="slate-status">${d ? 'OUT ' + MON3[d.getMonth()] + ' ' + d.getDate() : 'OUT NOW'}</span>${col ? `<span class="slate-by">filed by <b>${esc(col.name)}</b> · ${esc(col.desk)}</span>` : ''}<span class="slate-go">Read it &rarr;</span></div>`;
     } else { smq.closest('section').remove(); }
   }
 
@@ -6195,6 +6275,17 @@
 
     dMount.innerHTML = '';
     const present = [];
+    // CLIPPED (10/15): the stories this phone clipped from a story page (word.js, otp-clips), first on the tab
+    try {
+      const clips = JSON.parse(localStorage.getItem('otp-clips') || '[]');
+      const have = clips.map(c => desk.concat(films).find(it => String(it.link || '').replace(/\/$/, '') === String(c.link || '').replace(/\/$/, ''))).filter(Boolean);
+      if (have.length) {
+        present.push({ key: 'clips', label: 'Clipped', n: have.length });
+        const box = document.createElement('div'); box.className = 'shelf on'; box.dataset.shelf = 'clips';
+        box.innerHTML = `<div class="shelf-head"><h3>Clipped</h3><span class="n">${have.length}</span><span class="s">saved on this phone · read later</span></div>`;
+        const rail = document.createElement('div'); rail.className = 'shelf-rail'; have.forEach((it, i) => rail.appendChild(card(it, i))); box.appendChild(rail); dMount.appendChild(box);
+      }
+    } catch (e) {}
     SHELVES.forEach(sh => {
       const list = byShelf.get(sh.key);
       if (!list.length) return;
@@ -6202,7 +6293,8 @@
       const box = document.createElement('div');
       box.className = 'shelf on';
       box.dataset.shelf = sh.key;
-      box.innerHTML = `<div class="shelf-head"><h3>${esc(sh.label)}</h3><span class="n">${list.length}</span><span class="s">${esc(sh.sub)}</span></div>`;
+      const col = COLUMNIST[sh.key];
+      box.innerHTML = `<div class="shelf-head">${colChip(sh.key)}<h3>${esc(sh.label)}</h3><span class="n">${list.length}</span><span class="s">${col ? 'filed by ' + esc(col.name) + ' · ' : ''}${esc(sh.sub)}</span></div>`;
       const rail = document.createElement('div');
       rail.className = 'shelf-rail';
       list.forEach((it, i) => rail.appendChild(card(it, i)));

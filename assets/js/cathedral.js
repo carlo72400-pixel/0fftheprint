@@ -284,16 +284,28 @@
       main.appendChild(row); a.appendChild(main);
       return a;
     }
+    // TEAR-OUTS (10/15): a story on the timeline is a page torn out of the magazine, at a tilt: the cover, the
+    // kicker as a sticker, the dek as the hook, the number, a NEW stamp for its first three days.
+    var TEAR_NEW_MS = 3 * 864e5;
     function storyCard(list, dt) {
       var box = el('div', 'hx stories');
       box.appendChild(avatar());
       var main = el('div', 'hx-main'); main.appendChild(label(list.length === 1 ? 'new story' : list.length + ' new stories', dt));
-      list.slice(0, 3).forEach(function (x) {
-        var a = el('a', 'hx-st'); a.href = x.link;
-        if (STHUMB.test(x.thumb || '')) { var im = el('img'); im.alt = ''; im.loading = 'lazy'; im.decoding = 'async'; im.width = 64; im.height = 64;
-          im.addEventListener('error', function () { im.remove(); }, { once: true }); im.src = x.thumb; a.appendChild(im); }
-        var t = el('span'); t.appendChild(el('b', '', x.title)); if (x.num) t.appendChild(el('small', '', String(x.num).slice(0, 12) + (x.kicker ? ' · ' + String(x.kicker).slice(0, 24) : '')));
-        a.appendChild(t); main.appendChild(a);
+      var fresh = (Date.now() - dt.getTime()) < TEAR_NEW_MS;
+      list.slice(0, 3).forEach(function (x, i) {
+        var a = el('a', 'tear' + (i % 2 ? ' r' : '')); a.href = x.link;
+        var pic = el('span', 'tear-pic');
+        if (STHUMB.test(x.thumb || '')) { var im = el('img'); im.alt = ''; im.loading = 'lazy'; im.decoding = 'async'; im.width = 120; im.height = 150;
+          im.addEventListener('error', function () { im.remove(); }, { once: true }); im.src = x.thumb; pic.appendChild(im); }
+        a.appendChild(pic);
+        var tx = el('span', 'tear-tx');
+        if (x.kicker) tx.appendChild(el('i', 'tear-k', String(x.kicker).slice(0, 24)));
+        tx.appendChild(el('b', '', x.title));
+        if (x.dek) tx.appendChild(el('span', 'tear-dek', String(x.dek).slice(0, 150) + (String(x.dek).length > 150 ? '…' : '')));
+        var meta = el('small', 'tear-m', [x.num ? String(x.num).slice(0, 12) : '', 'read it →'].filter(Boolean).join(' · '));
+        tx.appendChild(meta); a.appendChild(tx);
+        if (fresh) a.appendChild(el('em', 'tear-new', 'NEW'));
+        main.appendChild(a);
       });
       box.appendChild(main);
       return box;

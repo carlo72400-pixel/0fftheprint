@@ -350,3 +350,91 @@
     }
   })();
 })();
+
+/* ---------- READING MODE (10/15, his "reading that feels like print") ----------
+   Additive, like everything above: paper by default (a Dark key flips it back and the phone remembers), a drop cap,
+   the number as a stamp, a progress line, "continue where you left", Clip it (otp-clips, the Stories tab shows a
+   Clipped shelf), and Read to me on the phone's own voice. No page is rebuilt for this: the 31 story pages load
+   this file already. */
+(function () {
+  if (!/\/word\/[a-z0-9-]+\/?$/.test(location.pathname) || !document.querySelector('article')) return;
+  const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+  const slug = (location.pathname.match(/\/word\/([a-z0-9-]+)/) || [])[1] || '';
+  const link = 'word/' + slug + '/';
+  const load = (k, d) => { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } };
+  const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+  const css = document.createElement('style');
+  css.textContent = `
+  .otp-prog{position:fixed;left:0;top:0;height:3px;width:0;background:#ff79c6;box-shadow:0 0 8px #ff79c6;z-index:50;transition:width .1s}
+  .otp-keys{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 22px}
+  .otp-key{min-height:40px;padding:0 14px;border:0;border-radius:5px;background:linear-gradient(180deg,#3f3b48,#27242e);color:#f1ecf5;font:700 10.5px/1 'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;
+    box-shadow:0 1px 0 rgba(255,255,255,.16),0 3px 0 #0b0a0e,0 5px 8px rgba(0,0,0,.6);transition:transform .06s,box-shadow .06s}
+  .otp-key:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(255,255,255,.16),0 1px 0 #0b0a0e}
+  .otp-key.on{background:linear-gradient(180deg,#ff9fd6,#f068b6 55%,#d9479b);color:#2a0a1e;box-shadow:0 1px 0 rgba(255,255,255,.35),0 3px 0 #6d1f4b,0 5px 8px rgba(0,0,0,.6)}
+  .otp-stamp{display:inline-block;margin:14px 0 0;padding:6px 10px;border:2px solid #ff79c6;border-radius:3px;font:700 12px/1 'JetBrains Mono',monospace;letter-spacing:.16em;color:#ff79c6;transform:rotate(-3deg)}
+  .otp-cont{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:50;min-height:44px;padding:0 18px;border:0;border-radius:22px;background:#ff79c6;color:#0a0a0d;font:800 13px/1 Inter,sans-serif;box-shadow:0 8px 20px rgba(0,0,0,.6);cursor:pointer}
+  .otp-reading{background:rgba(255,121,198,.18);box-shadow:0 0 0 6px rgba(255,121,198,.18);border-radius:4px}
+  /* paper */
+  body.otp-print{background:#1c1a22}
+  body.otp-print .wrap{background:#f3ede2;color:#1a1921;border-radius:4px;margin-top:18px;margin-bottom:30px;padding-top:28px;box-shadow:0 0 0 1px rgba(0,0,0,.6),0 20px 50px rgba(0,0,0,.6);
+    background-image:radial-gradient(rgba(0,0,0,.035) 1px,transparent 1.2px);background-size:5px 5px}
+  body.otp-print h1,body.otp-print article,body.otp-print .dek,body.otp-print .byline b{color:#1a1921}
+  body.otp-print .dek,body.otp-print .byline,body.otp-print .cover-credit,body.otp-print .foot,body.otp-print a.back{color:#5a5365}
+  body.otp-print .byline,body.otp-print .foot{border-color:rgba(0,0,0,.15)}
+  body.otp-print article{font-family:Georgia,'Times New Roman',serif;font-size:18px}
+  body.otp-print article a{color:#c2317f}
+  body.otp-print article blockquote{color:#c2317f;border-color:#c2317f}
+  body.otp-print article h2{color:#1a1921}
+  body.otp-print article figcaption{color:#5a5365}
+  body.otp-print .cover{border-color:rgba(0,0,0,.2)}
+  body.otp-print .wall,body.otp-print .wall h2,body.otp-print .we-text{color:#1a1921}
+  body.otp-print .wall{border-color:rgba(0,0,0,.15)}
+  body.otp-print .wall-entry{border-color:rgba(0,0,0,.15)}
+  body.otp-print .otp-key{background:linear-gradient(180deg,#3f3b48,#27242e)}
+  body.otp-print article > p:first-of-type::first-letter{float:left;font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;font-size:4.4em;line-height:.8;padding:6px 10px 0 0;color:#c2317f}
+  article > p:first-of-type::first-letter{float:left;font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;font-size:4.4em;line-height:.8;padding:6px 10px 0 0;color:#ff79c6}`;
+  document.head.appendChild(css);
+
+  // paper by default, remembered
+  const paper = load('otp-paper', 1); document.body.classList.toggle('otp-print', !!paper);
+
+  // the stamp and the keys under the byline
+  const byline = $('.byline'), h1 = $('h1'), art = $('article');
+  const num = ((byline && byline.textContent) || '').match(/0TP-\d+/);
+  if (num && h1) { const st = document.createElement('span'); st.className = 'otp-stamp'; st.textContent = num[0]; h1.insertAdjacentElement('afterend', st); }
+  const keys = document.createElement('div'); keys.className = 'otp-keys';
+  const kPaper = document.createElement('button'), kClip = document.createElement('button'), kRead = document.createElement('button');
+  [kPaper, kClip, kRead].forEach(b => { b.type = 'button'; b.className = 'otp-key'; keys.appendChild(b); });
+  const paintPaper = () => { const on = document.body.classList.contains('otp-print'); kPaper.textContent = on ? 'Dark' : 'Paper'; };
+  kPaper.addEventListener('click', () => { const on = !document.body.classList.contains('otp-print'); document.body.classList.toggle('otp-print', on); save('otp-paper', on ? 1 : 0); paintPaper(); }); paintPaper();
+  const clips = () => load('otp-clips', []);
+  const clipped = () => clips().some(c => c.link === link);
+  const paintClip = () => { kClip.textContent = clipped() ? 'Clipped ✓' : 'Clip it'; kClip.classList.toggle('on', clipped()); };
+  kClip.addEventListener('click', () => { let c = clips(); if (clipped()) c = c.filter(x => x.link !== link); else c.unshift({ link, title: h1 ? h1.textContent.trim() : slug, t: Date.now() }); save('otp-clips', c.slice(0, 40)); paintClip(); try { navigator.vibrate && navigator.vibrate(10); } catch (e) {} }); paintClip();
+  // read to me: the phone's own voice, block by block, the block it is on lit
+  let speaking = false, cur = null;
+  const stop = () => { speaking = false; try { speechSynthesis.cancel(); } catch (e) {} if (cur) cur.classList.remove('otp-reading'); cur = null; kRead.textContent = 'Read to me'; kRead.classList.remove('on'); };
+  const read = () => {
+    if (!('speechSynthesis' in window) || !art) { kRead.textContent = 'No voice here'; return; }
+    const blocks = $$('article > p, article > h2, article > blockquote').filter(b => b.textContent.trim().length > 2);
+    let i = 0; speaking = true; kRead.textContent = 'Stop'; kRead.classList.add('on');
+    const next = () => { if (!speaking || i >= blocks.length) { stop(); return; } if (cur) cur.classList.remove('otp-reading'); cur = blocks[i++]; cur.classList.add('otp-reading'); cur.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      const u = new SpeechSynthesisUtterance(cur.textContent.trim()); u.rate = .95; u.pitch = 1; const v = speechSynthesis.getVoices().find(x => /en[-_]US/i.test(x.lang) && !/compact/i.test(x.name)); if (v) u.voice = v; u.onend = next; u.onerror = next; speechSynthesis.speak(u); };
+    try { speechSynthesis.cancel(); } catch (e) {} next();
+  };
+  kRead.textContent = 'Read to me'; kRead.addEventListener('click', () => { speaking ? stop() : read(); });
+  addEventListener('pagehide', stop);
+  if (byline) byline.insertAdjacentElement('afterend', keys);
+
+  // progress, and the way back to where you left
+  const prog = document.createElement('div'); prog.className = 'otp-prog'; document.body.appendChild(prog);
+  const PK = 'otp-read:' + slug;
+  const frac = () => { const h = document.documentElement; return h.scrollHeight > innerHeight ? h.scrollTop / (h.scrollHeight - innerHeight) : 1; };
+  let tick = 0; addEventListener('scroll', () => { const f = Math.max(0, Math.min(1, frac())); prog.style.width = (f * 100).toFixed(1) + '%'; if (!tick) { tick = setTimeout(() => { tick = 0; save(PK, {f, t: Date.now()}); }, 500); } }, { passive: true });
+  const was = load(PK, null);
+  if (was && was.f > .12 && was.f < .94) {
+    const c = document.createElement('button'); c.type = 'button'; c.className = 'otp-cont'; c.textContent = 'Continue where you left · ' + Math.round(was.f * 100) + '%';
+    c.addEventListener('click', () => { const h = document.documentElement; scrollTo({ top: was.f * (h.scrollHeight - innerHeight), behavior: 'smooth' }); c.remove(); });
+    document.body.appendChild(c); setTimeout(() => { if (c.parentNode) c.remove(); }, 12000);
+  }
+})();
