@@ -202,6 +202,45 @@
     if (has) setTimeout(function () { if (!root.hasAttribute('data-door')) root.setAttribute('data-door', read()); }, 2500);
   }
 
+  /* ---------- the house strip (10/15): what a member sees first, what a stranger sees first ----------
+     door.js names the door and this file copies it onto <html data-door>. The strip follows that attribute:
+     'in' or 'wait' = the member's keys with live counts, 'out' = the three steps and what the house gives you.
+     Counts come from the same calls the Crypt makes; every one is optional, a quiet zero on any trouble. */
+  function house() {
+    var IN = d.getElementById('house-in'), OUT = d.getElementById('house-out'); if (!IN || !OUT) return;
+    var filled = false;
+    function name() { try { var c = JSON.parse(w.localStorage.getItem('otp_door') || 'null'); return (c && c.name) || ''; } catch (e) { return ''; } }
+    function badge(id, n) { var el = d.getElementById(id); if (!el) return; n = n | 0; el.textContent = n > 99 ? '99+' : String(n); el.hidden = !n; var k = el.closest('.hk'); if (k) k.classList.toggle('live', !!n); }
+    function txt(id, t) { var el = d.getElementById(id); if (el) el.textContent = t; }
+    function packs() { try { var B = w.OTPBinder, t = B && B.totals(); if (!t) return; txt('hk-packs-s', t.opened ? t.opened + (t.opened === 1 ? ' night' : ' nights') + ' \u00b7 ' + t.frames + ' frames' : 'nothing pulled yet'); } catch (e) {} }
+    function fill(st) {
+      var nm = name(); txt('hs-name', nm || 'you');
+      if (st === 'wait') txt('hs-sub', 'one more step: your Instagram at the Crypt');
+      // the binder: this phone's packs (no login needed, so a member on a new phone sees zero until they pull)
+      packs(); try { if (w.OTPBinder && !fill.sub) { fill.sub = 1; w.OTPBinder.on(packs); } } catch (e) {}
+      // Get the Shot banks pulls in localStorage; a sealed night in the Crypt spends them
+      try { var p = parseInt(w.localStorage.getItem('otp-play-pulls') || '0', 10) || 0; badge('hk-pulls', p); txt('hk-play-s', p ? p + (p === 1 ? ' pull' : ' pulls') + ' to spend' : 'shoot for pulls'); } catch (e) {}
+      if (filled || !w.OTP || !w.OTP.configured || st !== 'in') return; filled = true;
+      var c; try { c = w.OTP.sb(); } catch (e) { c = null; } if (!c) return;
+      // Messages unread, Kin asks, nights going (from today): three independent asks, none waits on another
+      try { c.rpc('dm_inbox').then(function (r) { if (r && !r.error && Array.isArray(r.data)) { var n = r.data.reduce(function (a, x) { return a + (+x.unread || 0); }, 0); badge('hk-dm-n', n); txt('hk-dm-s', n ? n + ' unread' : r.data.length ? r.data.length + (r.data.length === 1 ? ' conversation' : ' conversations') : 'members talk'); } }).catch(function () {}); } catch (e) {}
+      try { c.rpc('friend_asks').then(function (r) { if (r && !r.error && Array.isArray(r.data)) { badge('hk-kin-n', r.data.length); txt('hk-kin-s', r.data.length ? r.data.length + (r.data.length === 1 ? ' ask waiting' : ' asks waiting') : 'your people'); } }).catch(function () {}); } catch (e) {}
+      try { var dt = new Date(), day = dt.getFullYear() + '-' + ('0' + (dt.getMonth() + 1)).slice(-2) + '-' + ('0' + dt.getDate()).slice(-2);
+        c.from('wall_going').select('event_id,day').gte('day', day).then(function (r) { if (r && !r.error && Array.isArray(r.data)) { var n = r.data.length; badge('hk-going', n); txt('hk-tonight-s', n ? 'going to ' + n : 'the Crypt'); } }).catch(function () {}); } catch (e) {}
+    }
+    function show() {
+      var st = root.getAttribute('data-door');
+      if (!st) { IN.hidden = true; OUT.hidden = true; return; }
+      var inside = st === 'in' || st === 'wait';
+      IN.hidden = !inside; OUT.hidden = inside;
+      if (inside) fill(st);
+      // the plain line under the house line speaks to whoever is at the door
+      var hp = d.getElementById('hero-plain'); if (hp && inside && !hp.dataset.member) { hp.dataset.member = '1'; hp.textContent = 'Welcome back. Tonight\u2019s flyers, your people and your packs are one tap down.'; }
+    }
+    show();
+    try { new MutationObserver(show).observe(root, { attributes: true, attributeFilter: ['data-door'] }); } catch (e) {}
+  }
+
   /* ---------- the house's own news, in the timeline ----------
      Nights and stories, dated, slotted between the posts in order. A media house that shot 18 nights
      and wrote 28 stories should not have a timeline that reads as one person talking to himself.
@@ -407,7 +446,7 @@
   }
 
   function boot() {
-    housePack(); door(); lastNight(); nextUp(); friends(); tipbox(); houseFeed();
+    housePack(); door(); house(); lastNight(); nextUp(); friends(); tipbox(); houseFeed();
     w.addEventListener('otp:spotlight', friends);
     if (d.readyState === 'complete') idle(threeD); else w.addEventListener('load', function () { idle(threeD); }, { once: true });
   }

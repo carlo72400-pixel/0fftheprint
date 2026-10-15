@@ -48,7 +48,7 @@
 <script src="assets/js/composer.js?v=f7ec8eea" defer></script>
 <script src="assets/js/edit.js?v=46763485" defer></script>
 <script src="assets/js/binder.js?v=12b7dbe1" defer></script>
-<script src="assets/js/cathedral.js?v=78b267b2" defer></script>
+<script src="assets/js/cathedral.js?v=e09c984f" defer></script>
 <script src="assets/js/lounge.js?v=5a3b6868" defer></script>
 <script src="assets/js/music.js?v=ce46d8f9" defer></script>
 <script src="assets/js/people.js?v=51b5d5d0" defer></script>
@@ -3914,7 +3914,7 @@
 <!-- THE CATHEDRAL (10/3): the homepage skin. Scoped under html.cath, loaded last on purpose. -->
 <link rel="stylesheet" href="assets/css/pack.css?v=3c0b0f68">
 <link rel="stylesheet" href="assets/css/binder.css?v=f47d0aee">
-<link rel="stylesheet" href="assets/css/cathedral.css?v=5f1f71d2">
+<link rel="stylesheet" href="assets/css/cathedral.css?v=98580ad2">
 <link rel="stylesheet" href="assets/css/lounge.css?v=2d07e1fc">
 <link rel="stylesheet" href="assets/css/music.css?v=815cfdc9">
 <link rel="stylesheet" href="assets/css/people.css?v=85ce71bf">
@@ -4224,6 +4224,39 @@
            person who was AT a night: they should see theirs without scrolling. cathedral.js fills it
            from events.json (same nights() as before) and the binder says how far in this phone is.
            ⛔ Each tile is a LINK to the night's own page (#rip tears on arrival): one implementation of the tear. -->
+      <!-- THE HOUSE STRIP (10/15, his ask: "if you have a membership, what does it look like? if you don't, what does it
+           look like?"). Two blocks, one shows. cathedral.js house() reads <html data-door> (door.js names it) and fills
+           the member's counts off the same calls the Crypt makes: Messages unread (dm_inbox), Kin asks (friend_asks),
+           nights going (wall_going), the binder totals, the pulls Get the Shot banked. A stranger gets the three steps
+           and what the house gives you. ⛔ Both stay hidden until the door is known, so nobody sees the wrong one. -->
+      <div class="house" id="house-in" hidden>
+        <div class="hs-head"><b>Welcome back, <span id="hs-name">you</span></b><span id="hs-sub">tonight &middot; your people &middot; your packs</span></div>
+        <div class="hs-rail">
+          <a class="hk" href="wall/" id="hk-tonight"><img src="assets/cathedral/a/wall.webp" alt="" width="44" height="44" decoding="async"><b>Tonight</b><span id="hk-tonight-s">the Crypt</span><i class="n" id="hk-going" hidden></i></a>
+          <a class="hk" href="wall/#me" id="hk-dm"><img src="assets/cathedral/i-people.webp" alt="" width="44" height="44" decoding="async"><b>Messages</b><span id="hk-dm-s">members talk</span><i class="n" id="hk-dm-n" hidden></i></a>
+          <a class="hk" href="wall/#me" id="hk-kin"><img src="assets/cathedral/a/join.webp" alt="" width="44" height="44" decoding="async"><b>Kin</b><span id="hk-kin-s">your people</span><i class="n" id="hk-kin-n" hidden></i></a>
+          <a class="hk" href="#find" id="hk-packs"><img src="assets/cathedral/a/pack.webp" alt="" width="44" height="44" decoding="async"><b>Your packs</b><span id="hk-packs-s">nothing pulled yet</span></a>
+          <a class="hk" href="my/" id="hk-card"><img src="assets/cathedral/a/photos.webp" alt="" width="44" height="44" decoding="async"><b>Your card</b><span>your page</span></a>
+          <a class="hk" href="play/" id="hk-play"><img src="assets/cathedral/i-play.webp" alt="" width="44" height="44" decoding="async"><b>Get the Shot</b><span id="hk-play-s">shoot for pulls</span><i class="n gold" id="hk-pulls" hidden></i></a>
+        </div>
+      </div>
+      <div class="house out" id="house-out" hidden>
+        <div class="hs-steps">
+          <a href="#night-pick" class="st"><i>1</i><b>Find your night</b><span>the one you were at, right below</span></a>
+          <a href="#find" class="st"><i>2</i><b>Pull your pack</b><span>your photos, no login needed</span></a>
+          <a href="wall/" class="st"><i>3</i><b>Get in the house</b><span>join the Crypt, all it takes is an @</span></a>
+        </div>
+        <div class="hs-what">
+          <b>In the house you get</b>
+          <ul>
+            <li>Tonight&rsquo;s flyers in SA, San Marcos and Austin, and who&rsquo;s going</li>
+            <li>Messages with members and your Kin</li>
+            <li>Your card page, your packs kept on your account</li>
+            <li>Pulls from Get the Shot on sealed nights</li>
+          </ul>
+          <div class="hs-keys"><a class="hs-key primary" href="wall/">Join the Crypt</a><a class="hs-key" href="join/?next=home">Log in</a></div>
+        </div>
+      </div>
       <div class="pick" id="night-pick" hidden>
         <div class="pk-head"><b id="pk-k">Find your night</b><span id="pk-sub">tap the one you were at</span></div>
         <div class="pk-rail" id="pk-rail"></div>
