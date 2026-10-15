@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fill-a-Bag Saturday: shot plan</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Shot plan for Thrift @ The Warehouse Austin, Fill-a-Bag Saturday Oct 17. By Gianni Ortiz.">
+<meta property="og:title" content="Fill-a-Bag Saturday: the shot plan">
+<meta property="og:description" content="One morning, three kinds of content. For Thrift @ The Warehouse Austin, Sat Oct 17. By Gianni Ortiz.">
+<meta property="og:image" content="https://0fftheprint.com/portfolio/thrift/preview.jpg">
+<meta property="og:url" content="https://0fftheprint.com/portfolio/thrift/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#f4ece0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap">
+<style>
+/* Layout: a hang-tag shot plan. Phone first, one column: the short version, the morning as a
+   timeline, then each shot as a numbered tag grouped by part of the store, then deliverables,
+   specs, people, and the questions for the client. Wider screens put the tags two across. */
+:root{
+  --paper:#f4ece0; --tag:#fffaf2; --ink:#1b1417; --muted:#6b5d58; --line:#e2d5c3;
+  --pink:#e0457b; --pink-soft:#fbe1ea; --denim:#3e5a86;
+  --f-display:'Archivo Black','Arial Black',sans-serif;
+  --f-body:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --f-mono:'Space Mono',ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 var(--f-body)}
+.wrap{max-width:760px;margin:0 auto;padding:28px 16px 64px;display:grid;gap:36px}
+a{color:var(--pink)}
+.kick{font:700 12px/1 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--pink);margin:0}
+h1{font:400 clamp(44px,13vw,84px)/.92 var(--f-display);letter-spacing:-.01em;margin:10px 0 0;text-transform:uppercase}
+h1 span{color:var(--pink)}
+.by{margin:14px 0 0;font:500 14px var(--f-mono);color:var(--muted)}
+.short{font-size:clamp(18px,4.6vw,21px);line-height:1.5;margin:0;max-width:34em}
+.three{display:grid;gap:10px;margin-top:18px}
+@media(min-width:640px){.three{grid-template-columns:repeat(3,1fr)}}
+.three div{background:var(--tag);border:1.5px solid var(--ink);padding:12px 14px;min-width:0}
+.three b{display:block;font:400 18px/1.1 var(--f-display);text-transform:uppercase}
+.three small{display:block;color:var(--muted);font-size:14px;margin-top:4px}
+h2{font:400 26px/1 var(--f-display);text-transform:uppercase;margin:0 0 14px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+h2 em{font:400 13px var(--f-mono);font-style:normal;color:var(--muted);letter-spacing:0;text-transform:none}
+.tl{list-style:none;margin:0;padding:0;border-left:3px solid var(--pink)}
+.tl li{display:grid;grid-template-columns:96px 1fr;gap:12px;padding:10px 0 10px 14px;position:relative}
+.tl li::before{content:"";position:absolute;left:-8px;top:16px;width:13px;height:13px;border-radius:50%;background:var(--paper);border:3px solid var(--pink)}
+.tl time{font:700 14px var(--f-mono);font-variant-numeric:tabular-nums;padding-top:1px}
+.tl b{display:block}
+.tl small{color:var(--muted);font-size:14px}
+.group{display:grid;gap:12px}
+.group h3{font:700 13px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--denim);margin:12px 0 0}
+.tags{display:grid;gap:10px}
+@media(min-width:640px){.tags{grid-template-columns:1fr 1fr}}
+.tagc{position:relative;background:var(--tag);border:1.5px solid var(--ink);border-radius:4px 14px 14px 4px;padding:12px 14px 12px 40px;min-width:0}
+.tagc::before{content:"";position:absolute;left:12px;top:15px;width:12px;height:12px;border-radius:50%;border:1.5px solid var(--ink);background:var(--paper)}
+.tagc .n{font:700 12px var(--f-mono);color:var(--pink);letter-spacing:.06em}
+.tagc b{display:block;font-weight:700;line-height:1.3;margin-top:2px}
+.tagc small{display:block;color:var(--muted);font-size:14px;margin-top:3px}
+.tagc .gear{display:inline-block;margin-top:6px;font:400 11px var(--f-mono);letter-spacing:.04em;text-transform:uppercase;color:var(--denim);border:1px solid var(--line);padding:1px 6px}
+.del{display:grid;gap:10px}
+.del div{display:grid;grid-template-columns:110px 1fr;gap:12px;background:var(--tag);border:1.5px solid var(--ink);padding:12px 14px}
+.del .when{font:700 13px var(--f-mono);color:var(--pink);text-transform:uppercase}
+.del small{display:block;color:var(--muted);font-size:14px}
+.note{font:500 13px var(--f-mono);color:var(--muted);margin:10px 0 0}
+ul.plain{margin:0;padding-left:20px;display:grid;gap:6px}
+.ask{background:var(--pink-soft);border:1.5px solid var(--pink);padding:16px 16px 16px 18px}
+.ask h2{color:var(--ink)}
+.ask ol{margin:0;padding-left:22px;display:grid;gap:6px}
+.close{font-size:18px;margin:0;max-width:34em}
+.sig{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:baseline;border-top:1.5px solid var(--ink);padding-top:14px;font:500 14px var(--f-mono)}
+.sig b{font:400 20px var(--f-display);text-transform:uppercase}
+@media(max-width:380px){.tl li{grid-template-columns:80px 1fr}.del div{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main class="wrap">
+
+  <header>
+    <p class="kick">Shot plan · Sat Oct 17 · Austin</p>
+    <h1>Fill-a-Bag <span>Saturday</span></h1>
+    <p class="by">For Thrift @ The Warehouse Austin · by Gianni Ortiz</p>
+  </header>
+
+  <section>
+    <p class="short">Short version is one morning, three kinds of content. Stories while the sale is still on, so whoever's scrolling at noon still has till 4 to come in. A recap reel of the rush. And a library of every rack, by style, that your team can cut from for the next month.</p>
+    <div class="three">
+      <div><b>Stories</b><small>Same day, by 12:30. Posted while the sale's still going.</small></div>
+      <div><b>Recap reel</b><small>The rush, the piles, the hauls. 20 to 30 seconds.</small></div>
+      <div><b>Rack library</b><small>Every section filmed and named, ready for "new in" posts.</small></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>The morning <em>10 to 12, the rush is the story</em></h2>
+    <ol class="tl">
+      <li><time>9:40</time><div><b>Outside</b><small>The line, the storefront, people holding empty bags.</small></div></li>
+      <li><time>10:00</time><div><b>Doors</b><small>First wave in, shot from inside facing the door.</small></div></li>
+      <li><time>10:00</time><div><b>The piles</b><small>Hands in, people digging, bags filling. Till about 10:45.</small></div></li>
+      <li><time>10:45</time><div><b>Hauls</b><small>"What'd you get for $15" with whoever's down. Bag dumps, try-ons.</small></div></li>
+      <li><time>11:30</time><div><b>The store</b><small>Racks by style, the $5 section, dressing rooms, the buy counter, staff picks.</small></div></li>
+      <li><time>12:30</time><div><b>Stories delivered</b><small>First clips in your hands with three and a half hours of sale left.</small></div></li>
+    </ol>
+  </section>
+
+  <section class="group">
+    <h2>The shots <em>28 tags, cross off anything you don't need</em></h2>
+
+    <h3>The line + doors</h3>
+    <div class="tags">
+      <div class="tagc"><span class="n">01</span><b>Storefront wide with the sign</b><small>Establishing shot. Works as the reel's first frame.</small><span class="gear">gimbal</span></div>
+      <div class="tagc"><span class="n">02</span><b>Slow push down the line</b><small>Faces, fits, empty bags in hand.</small><span class="gear">gimbal</span></div>
+      <div class="tagc"><span class="n">03</span><b>Doors open, from inside</b><small>The first wave walking in at you. The hook of the recap.</small><span class="gear">360 cam</span></div>
+      <div class="tagc"><span class="n">04</span><b>First person to the pile</b><small>Follow one shopper from the door to the first find.</small><span class="gear">gimbal</span></div>
+    </div>
+
+    <h3>The piles</h3>
+    <div class="tags">
+      <div class="tagc"><span class="n">05</span><b>Overhead, looking down into the pile</b><small>Hands digging from above. Nobody can stand where this camera is.</small><span class="gear">360 cam on a pole</span></div>
+      <div class="tagc"><span class="n">06</span><b>Close-ups surfacing</b><small>A band tee graphic, a denim tag, a vintage label coming out of the pile.</small><span class="gear">gimbal, tele</span></div>
+      <div class="tagc"><span class="n">07</span><b>The "found it" moment</b><small>Somebody holding a piece up. Three of these, different people.</small><span class="gear">gimbal</span></div>
+      <div class="tagc"><span class="n">08</span><b>POV dive into the pile</b><small>Chest cam, digging like a shopper would.</small><span class="gear">action cam</span></div>
+      <div class="tagc"><span class="n">09</span><b>The whole room, time-lapse</b><small>Locked off in a corner while the rush happens.</small><span class="gear">locked off</span></div>
+    </div>
+
+    <h3>The bag</h3>
+    <div class="tags">
+      <div class="tagc"><span class="n">10</span><b>Stuffing the bag</b><small>Push in on the seams stretching.</small><span class="gear">gimbal</span></div>
+      <div class="tagc"><span class="n">11</span><b>The tie</b><small>Bags must tie. The struggle to close one is the funniest shot of the day.</small><span class="gear">gimbal</span></div>
+      <div class="tagc"><span class="n">12</span><b>The count</b><small>"How many pieces fit?" Somebody counts their bag out.</small><span class="gear">gimbal</span></div>
+    </div>
+
+    <h3>Hauls</h3>
+    <div class="tags">
+      <div class="tagc"><span class="n">13</span><b>"What'd you get for $15?"</b><small>Quick vox pops, five people, 10 seconds each. Mic'd.</small><span class="gear">gimbal + lav</span></div>
+      <div class="tagc"><span class="n">14</span><b>Bag dump, top-down</b><small>Everything out on a table, spread flat.</small><span class="gear">overhead</span></div>
+      <div class="tagc"><span class="n">15</span><b>One fit out of one bag</b><small>Dressing room before and after.</small><span class="gear">gimbal</span></div>
+      <div class="tagc"><span class="n">16</span><b>Friend-group reaction</b><small>Showing each other their finds.</small><span class="gear">gimbal</span></div>
+    </div>
+
+    <h3>The store</h3>
+    <div class="tags">
+      <div class="tagc"><span class="n">17</span><b>Every section, by style</b><small>Y2K, Western, 90s, band tees, goth, boho. One slow pass and three detail shots each, named by section.</small><span class="gear">gimbal</span></div>
+      <div class="tagc"><span class="n">18</span><b>The $5 section</b><small>The price is the caption.</small><span class="gear">gimbal</span></div>
+      <div class="tagc"><span class="n">19</span><b>The dressing rooms</b><small>Mirror shots, curtain pull.</small><span class="gear">gimbal</span></div>
+      <div class="tagc"><span class="n">20</span><b>Staff picks rack</b><small>Hero pieces, one by one.</small><span class="gear">gimbal, tele</span></div>
+      <div class="tagc"><span class="n">21</span><b>Buy, sell, trade counter</b><small>Clothes come in, cash or credit goes out. Sells the program without a word.</small><span class="gear">gimbal</span></div>
+      <div class="tagc"><span class="n">22</span><b>Restock going out</b><small>New pieces hitting the racks.</small><span class="gear">gimbal</span></div>
+    </div>
+
+    <h3>October</h3>
+    <div class="tags">
+      <div class="tagc"><span class="n">23</span><b>Costume finds</b><small>Pieces that read as a Halloween costume, styled on the rack.</small><span class="gear">gimbal</span></div>
+      <div class="tagc"><span class="n">24</span><b>Night Market teaser</b><small>A few seconds built for the Fri 10/23 Halloween Vintage Night Market post.</small><span class="gear">gimbal</span></div>
+    </div>
+
+    <h3>Photos</h3>
+    <div class="tags">
+      <div class="tagc"><span class="n">25</span><b>Storefront + the line</b><small>For the "today" post.</small><span class="gear">stills</span></div>
+      <div class="tagc"><span class="n">26</span><b>Three hauls, posed with their bags</b><small>Carousel material.</small><span class="gear">stills</span></div>
+      <div class="tagc"><span class="n">27</span><b>Rack details</b><small>Textures, tags, labels. Feed fillers for weeks.</small><span class="gear">stills</span></div>
+      <div class="tagc"><span class="n">28</span><b>The team</b><small>One group shot, plus whoever wants a portrait.</small><span class="gear">stills</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>What you get <em>proposed, tell me what works</em></h2>
+    <div class="del">
+      <div><span class="when">Sat by 12:30</span><span>8 to 10 vertical Story clips<small>Color done, no text, ready to post while the sale's still on.</small></span></div>
+      <div><span class="when">Wed 10/21</span><span>Recap reel + 15 to 20 photos<small>Reel 20 to 30 seconds, one captioned version and one clean so you can add your own.</small></span></div>
+      <div><span class="when">Fri 10/23</span><span>The rack library<small>Every section, named by style, in one folder. Lands before the Night Market.</small></span></div>
+    </div>
+    <p class="note">One Google Drive folder, sorted by section.</p>
+  </section>
+
+  <section>
+    <h2>How it's shot</h2>
+    <ul class="plain">
+      <li>Vertical 9:16 in 4K, 30 frames a second. Horizontal only where you ask for it.</li>
+      <li>Shutter matched to the store lights so nothing flickers on a phone screen.</li>
+      <li>Nothing burned in, no music on the files. Your team picks the sound.</li>
+      <li>Faces and product stay out of the top and bottom of the frame, where Instagram puts its buttons.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>People on camera</h2>
+    <ul class="plain">
+      <li>Nobody gets featured without saying yes first.</li>
+      <li>Kids stay out of the featured shots.</li>
+      <li>Anyone in a clip that runs as a paid ad signs a one-page release. If you have your own, we use yours.</li>
+    </ul>
+  </section>
+
+  <section class="ask">
+    <h2>What I need from you</h2>
+    <ol>
+      <li>Which store, and who's my contact there that morning.</li>
+      <li>Your must-have shots, if there's anything missing here.</li>
+      <li>Logo and brand colors, if you want them on the reel.</li>
+      <li>Which account it's for: the Austin page, the main page, or both.</li>
+      <li>Whether any of it runs as a paid ad.</li>
+      <li>Where you want the files, and who signs off on them.</li>
+    </ol>
+  </section>
+
+  <section>
+    <p class="close">Totally fine to cut anything that doesn't fit the day. Easier to cross shots off than to wish we had them.</p>
+  </section>
+
+  <footer class="sig">
+    <b>Gianni Ortiz</b>
+    <a href="https://www.instagram.com/vamppsych/">@vamppsych</a>
+    <span>the work lives there</span>
+  </footer>
+
+</main>
+</body>
+</html>
