@@ -1,0 +1,691 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>KIT · 0FF THE PRINT</title>
+<meta name="description" content="Filmmaker tools from the house: teleprompter, slate, take log, release, golden hour, viewfinder, exposure, screens. Works offline.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0a0a0d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="KIT">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@700;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" media="print" onload="this.media='all'">
+<style>
+/* THE KIT (10/15): eight tools for one hand in the dark. The house skin: page black, pink glow, square corners, big type.
+   Every tool is one screen; the controls live at the bottom where the thumb is. Works with no signal (sw.js). */
+:root{
+  --bg:#0a0a0d;--panel:#121218;--panel-2:#1a1921;--line:#26252f;--ink:#f4eef2;--muted:#9a93a3;--dim:#6d6775;
+  --pink:#f7b9dd;--pink-deep:#f48fc8;--glow:#ff79c6;--ok:#7ee787;--bad:#ff5d7e;--gold:#ffd479;--ice:#a0e6ff;
+  --f-display:'Saira Condensed','Arial Narrow',Impact,sans-serif;--f-body:'Inter',system-ui,-apple-system,sans-serif;--f-mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+  --sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{background:var(--bg);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 var(--f-body);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;overscroll-behavior:none}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+a{color:var(--pink)}
+:focus-visible{outline:2px solid var(--glow);outline-offset:2px}
+
+.app{max-width:680px;margin:0 auto;min-height:100vh;min-height:100dvh;padding:calc(var(--sat) + 10px) 16px calc(var(--sab) + 24px);position:relative}
+
+/* the top bar: the mark, the tool's name, back */
+.bar{display:flex;align-items:center;gap:10px;min-height:48px;margin-bottom:8px}
+.bar .back{display:none;width:44px;height:44px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:700 20px/1 var(--f-mono);align-items:center;justify-content:center;flex:0 0 auto}
+body[data-tool]:not([data-tool="home"]) .bar .back{display:flex}
+.bar .wm{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--ink);min-width:0}
+.bar .wm img{width:30px;height:30px}
+.bar .wm b{font:900 italic 22px/1 var(--f-display);text-transform:uppercase;letter-spacing:.02em}
+.bar .wm small{display:block;font:700 9.5px/1.2 var(--f-mono);letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.bar .sp{flex:1}
+.bar .ins{min-height:36px;padding:0 11px;border:1px dashed var(--line);background:none;color:var(--muted);font:700 10.5px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase}
+
+/* home: the eight doors */
+.hero{position:relative;overflow:hidden;margin:6px -16px 14px;aspect-ratio:1200/462;background:#0d0c11}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,13,0) 30%,rgba(10,10,13,.9) 100%)}
+.hero-t{position:absolute;left:16px;right:16px;bottom:12px;z-index:1;display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.hero-t h1{margin:0;font:900 italic clamp(38px,11vw,56px)/.9 var(--f-display);text-transform:uppercase;text-shadow:0 2px 14px rgba(255,121,198,.45)}
+.hero-t span{font:700 10.5px/1.3 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--pink);text-align:right}
+.doors{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.door{position:relative;display:grid;grid-template-columns:48px minmax(0,1fr);gap:4px 12px;align-items:center;min-height:86px;padding:12px 12px 12px 10px;border:1px solid var(--line);background:var(--panel);color:var(--ink);text-align:left;transition:transform .15s,border-color .2s}
+.door:active{transform:scale(.97);border-color:var(--glow)}
+.door img{grid-row:span 2;width:48px;height:48px;object-fit:contain;filter:drop-shadow(0 0 10px rgba(255,121,198,.35))}
+.door b{font:900 italic 20px/1 var(--f-display);text-transform:uppercase;letter-spacing:.01em}
+.door span{font:600 10.5px/1.3 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.door em{position:absolute;top:6px;right:8px;font:700 9px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--glow);font-style:normal}
+.foot{margin-top:28px;font:500 11px/1.6 var(--f-mono);letter-spacing:.04em;color:var(--dim);text-transform:uppercase}
+.foot a{color:var(--muted)}
+
+/* shared bits */
+.tool{display:grid;gap:12px}
+.tool h2{margin:4px 0 0;font:900 italic 32px/.95 var(--f-display);text-transform:uppercase}
+.tool .sub{margin:-6px 0 2px;font:600 11px/1.4 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.card{border:1px solid var(--line);background:var(--panel);padding:12px}
+.lbl{display:block;font:700 10.5px/1.3 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.in{width:100%;min-height:50px;padding:0 13px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:500 17px/1 var(--f-body);border-radius:0}
+textarea.in{min-height:140px;padding:12px 13px;line-height:1.45;resize:vertical}
+select.in{appearance:none;-webkit-appearance:none;background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' fill='none' stroke='%23ff79c6' stroke-width='2'/%3E%3C/svg%3E") right 13px center no-repeat;padding-right:36px}
+.row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.btn{min-height:50px;padding:0 14px;border:1px solid var(--line);background:var(--panel-2);color:var(--ink);font:700 14.5px/1.1 var(--f-body);display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;text-align:center}
+.btn.primary{background:var(--glow);border-color:var(--glow);color:var(--bg);font-weight:800}
+.btn.ghost{background:none}
+.btn.bad{color:var(--bad)}
+.btn:active{transform:translateY(1px)}
+.big{width:100%;min-height:64px;font:900 italic 24px/1 var(--f-display);text-transform:uppercase;letter-spacing:.03em}
+.seg{display:flex;border:1px solid var(--line);background:var(--panel);overflow-x:auto;scrollbar-width:none}
+.seg::-webkit-scrollbar{display:none}
+.seg button{flex:1 0 auto;min-width:0;min-height:46px;padding:0 12px;border:0;background:none;color:var(--muted);font:700 12px/1 var(--f-mono);letter-spacing:.04em;white-space:nowrap}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.slider{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;font:700 11px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.slider output{color:var(--ink);min-width:3.5em;text-align:right}
+input[type=range]{width:100%;accent-color:var(--glow);height:44px}
+.nums{display:grid;gap:8px}
+.num{display:grid;grid-template-columns:64px minmax(0,1fr) 64px;gap:0;border:1px solid var(--line);background:var(--bg)}
+.num button{border:0;background:var(--panel-2);color:var(--ink);font:700 26px/1 var(--f-mono);min-height:58px}
+.num b{display:flex;align-items:baseline;justify-content:center;gap:10px;font:900 italic 30px/1 var(--f-display)}
+.num small{font:700 10px/1 var(--f-mono);letter-spacing:.16em;color:var(--muted);text-transform:uppercase}
+.list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.empty{padding:16px;border:1px dashed var(--line);color:var(--muted);text-align:center;font-size:14px}
+.note{font:500 12.5px/1.5 var(--f-body);color:var(--muted)}
+.note b{color:var(--ink)}
+.stat{display:grid;gap:2px;padding:10px 12px;border:1px solid var(--line);background:var(--panel)}
+.stat i{font:700 9.5px/1.2 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-style:normal}
+.stat b{font:900 italic 28px/1 var(--f-display);text-transform:uppercase}
+.stat small{font:500 11.5px/1.3 var(--f-mono);color:var(--muted)}
+.stat.hot{border-color:rgba(255,121,198,.5);background:linear-gradient(180deg,rgba(255,121,198,.14),rgba(255,121,198,.02))}
+.stat.hot b{color:var(--glow)}
+.toast{position:fixed;left:50%;bottom:calc(24px + var(--sab));z-index:90;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:var(--ink);color:var(--bg);padding:11px 16px;font:600 14px/1.2 var(--f-body);transition:opacity .25s,transform .25s}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* full screens (prompter, flash, screens, viewfinder) */
+.full{position:fixed;inset:0;z-index:50;background:#000;display:none}
+.full.on{display:block}
+.full .hud{position:absolute;left:0;right:0;bottom:0;z-index:3;padding:10px 14px calc(12px + var(--sab));display:grid;gap:8px;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.85) 40%);transition:opacity .25s}
+.full .hud.hide{opacity:0;pointer-events:none}
+.full .x{position:absolute;top:calc(10px + var(--sat));right:12px;z-index:4;width:44px;height:44px;border:1px solid rgba(255,255,255,.25);background:rgba(10,10,13,.6);color:#fff;font:700 18px/1 var(--f-mono);display:grid;place-items:center}
+
+/* teleprompter */
+#pr-scroll{position:absolute;inset:0;overflow:hidden;padding:40vh 7vw 60vh}
+#pr-scroll.mirror{transform:scaleX(-1)}
+#pr-text{white-space:pre-wrap;font:700 var(--pr-size,42px)/1.3 var(--f-body);color:#fff;text-align:center;will-change:transform}
+#pr-line{position:absolute;left:0;right:0;top:40vh;height:0;border-top:2px solid rgba(255,121,198,.55);pointer-events:none;z-index:2}
+#pr-line::before{content:"";position:absolute;left:0;top:-7px;border:7px solid transparent;border-left:10px solid var(--glow)}
+#pr-state{position:absolute;top:calc(12px + var(--sat));left:14px;z-index:4;font:700 11px/1 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--glow);background:rgba(10,10,13,.6);padding:7px 9px}
+
+/* slate */
+.slate{display:grid;gap:8px;padding:14px;border:2px solid var(--ink);background:#000}
+.slate .srow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.slate .sc{display:grid;gap:2px;padding:8px 10px;border:1px solid var(--line);background:#0a0a0d}
+.slate .sc i{font:700 9px/1 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-style:normal}
+.slate .sc b{font:900 italic 40px/1 var(--f-display);text-transform:uppercase;overflow-wrap:anywhere}
+.slate .sc.t b{color:var(--glow)}
+.slate .stripe{height:14px;background:repeating-linear-gradient(135deg,#f4eef2 0 14px,#0a0a0d 14px 28px)}
+.slate .clock{font:700 14px/1 var(--f-mono);letter-spacing:.1em;color:var(--muted);display:flex;justify-content:space-between}
+.slate .clock b{color:var(--ink)}
+#flash{position:fixed;inset:0;z-index:80;background:#fff;display:none}
+#flash.on{display:block}
+.mark{min-height:88px;font-size:30px}
+.mark.tail{background:var(--gold);border-color:var(--gold)}
+
+/* take log */
+.take{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--line);background:var(--panel)}
+.take .id{font:900 italic 20px/1 var(--f-display);color:var(--glow);white-space:nowrap}
+.take .id small{display:block;font:600 9.5px/1.3 var(--f-mono);letter-spacing:.1em;color:var(--muted)}
+.take .tx{min-width:0;display:grid;gap:3px}
+.take .tx input{width:100%;border:0;border-bottom:1px dashed var(--line);background:none;padding:4px 0;font:500 14px/1.3 var(--f-body);color:var(--ink)}
+.take .tx small{font:500 11px/1.3 var(--f-mono);color:var(--muted)}
+.take .circ{width:46px;height:46px;border-radius:50%;border:2px solid var(--line);background:none;color:var(--muted);font:900 16px/1 var(--f-display)}
+.take .circ[aria-pressed="true"]{border-color:var(--ok);color:var(--ok);box-shadow:0 0 0 3px rgba(126,231,135,.2)}
+
+/* release */
+.sig{position:relative;height:160px;border:1px solid var(--line);background:#fff;touch-action:none}
+.sig canvas{display:block;width:100%;height:100%}
+.sig .hint{position:absolute;left:12px;bottom:10px;font:700 10px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:#aaa;pointer-events:none}
+.sig .line{position:absolute;left:12px;right:12px;bottom:34px;border-top:1px solid #bbb;pointer-events:none}
+.legal{max-height:150px;overflow:auto;padding:10px 12px;border:1px solid var(--line);background:var(--bg);font:400 12.5px/1.5 var(--f-body);color:var(--muted)}
+.rel{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--line);background:var(--panel)}
+.rel b{display:block;font-weight:700}
+.rel small{font:500 11px/1.4 var(--f-mono);color:var(--muted)}
+
+/* golden hour */
+.sunline{position:relative;height:84px;margin:4px 0;border:1px solid var(--line);background:linear-gradient(90deg,#0a0a0d 0%,#2a1a3a 18%,#ffb86b 24%,#ffe0a3 30%,#ffe0a3 70%,#ffb86b 76%,#2a1a3a 82%,#0a0a0d 100%);overflow:hidden}
+.sunline i{position:absolute;top:0;bottom:0;width:2px;background:var(--ink);box-shadow:0 0 8px #fff}
+.sunline i::after{content:attr(data-l);position:absolute;top:6px;left:6px;font:700 9px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink);white-space:nowrap;text-shadow:0 1px 3px #000}
+.sunline i:nth-child(even)::after{top:auto;bottom:6px}
+.sunline i.now{background:var(--glow);box-shadow:0 0 10px var(--glow)}
+.sunline i.now::after{top:auto;bottom:30px;color:var(--glow)}
+.compass{position:relative;width:140px;height:140px;margin:0 auto;border:1px solid var(--line);border-radius:50%;background:var(--panel)}
+.compass span{position:absolute;font:700 10px/1 var(--f-mono);color:var(--muted)}
+.compass .n{top:8px;left:50%;transform:translateX(-50%);color:var(--ink)}.compass .s{bottom:8px;left:50%;transform:translateX(-50%)}.compass .e{right:8px;top:50%;transform:translateY(-50%)}.compass .w{left:8px;top:50%;transform:translateY(-50%)}
+.compass .arm{position:absolute;left:50%;top:50%;width:4px;height:58px;margin-left:-2px;background:linear-gradient(180deg,var(--gold),transparent);transform-origin:50% 0;transform:rotate(0deg)}
+.compass .arm::before{content:"";position:absolute;top:-8px;left:-6px;width:16px;height:16px;border-radius:50%;background:var(--gold);box-shadow:0 0 12px var(--gold)}
+
+/* viewfinder */
+#vf video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform-origin:50% 50%}
+#vf .mask{position:absolute;inset:0;pointer-events:none}
+#vf .mask i{position:absolute;background:rgba(0,0,0,.72)}
+#vf .mask b{position:absolute;border:1px solid rgba(255,255,255,.55);box-shadow:0 0 0 1px rgba(0,0,0,.5)}
+#vf .thirds{position:absolute;pointer-events:none;background:
+  linear-gradient(90deg,transparent calc(33.33% - .5px),rgba(255,255,255,.35) calc(33.33% - .5px) calc(33.33% + .5px),transparent calc(33.33% + .5px) calc(66.66% - .5px),rgba(255,255,255,.35) calc(66.66% - .5px) calc(66.66% + .5px),transparent calc(66.66% + .5px)),
+  linear-gradient(180deg,transparent calc(33.33% - .5px),rgba(255,255,255,.35) calc(33.33% - .5px) calc(33.33% + .5px),transparent calc(33.33% + .5px) calc(66.66% - .5px),rgba(255,255,255,.35) calc(66.66% - .5px) calc(66.66% + .5px),transparent calc(66.66% + .5px))}
+#vf .tag{position:absolute;top:calc(12px + var(--sat));left:14px;z-index:4;font:700 11px/1 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:#fff;background:rgba(10,10,13,.6);padding:7px 9px}
+
+/* screens */
+#sc-full{display:none;position:fixed;inset:0;z-index:70}
+#sc-full.on{display:block}
+#sc-full .bars{position:absolute;inset:0;display:grid;grid-template-columns:repeat(7,1fr)}
+#sc-full .bars i{display:block}
+#sc-full .tip{position:absolute;left:0;right:0;bottom:calc(16px + var(--sab));text-align:center;font:700 10px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(128,128,128,.8)}
+@media (min-width:560px){.doors{grid-template-columns:repeat(4,minmax(0,1fr))}.door{grid-template-columns:1fr;justify-items:center;text-align:center;min-height:120px}.door img{grid-row:auto}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body data-tool="home">
+<div class="app">
+  <header class="bar">
+    <button type="button" class="back" data-go="home" aria-label="Back to the kit">‹</button>
+    <a class="wm" href="#home" data-go="home"><img src="../assets/cathedral/mark.webp" alt="" width="30" height="30"><span><b>KIT</b><small>0FF THE PRINT</small></span></a>
+    <span class="sp"></span>
+    <button type="button" class="ins" id="ins" hidden>Install</button>
+  </header>
+
+  <!-- ===== HOME ===== -->
+  <section id="t-home" class="tool">
+    <div class="hero"><img src="../assets/cathedral/w/stage.webp" alt="" width="1200" height="462" decoding="async"><div class="hero-t"><h1>The Kit</h1><span>eight tools · one hand · no signal needed</span></div></div>
+    <div class="doors">
+      <button type="button" class="door" data-go="prompter"><img src="../assets/cathedral/w/screen.webp" alt=""><b>Prompter</b><span>read to camera</span></button>
+      <button type="button" class="door" data-go="slate"><img src="../assets/cathedral/w/film.webp" alt=""><b>Slate</b><span>beep + flash to sync</span></button>
+      <button type="button" class="door" data-go="takes"><img src="../assets/cathedral/w/all.webp" alt=""><b>Take log</b><span>circle takes, CSV</span><em id="takes-n"></em></button>
+      <button type="button" class="door" data-go="release"><img src="../assets/cathedral/w/going.webp" alt=""><b>Release</b><span>sign on the spot</span></button>
+      <button type="button" class="door" data-go="sun"><img src="../assets/cathedral/w/tonight.webp" alt=""><b>Golden hour</b><span>SA · SMTX · ATX</span></button>
+      <button type="button" class="door" data-go="vf"><img src="../assets/cathedral/w/pin.webp" alt=""><b>Viewfinder</b><span>frame guides</span></button>
+      <button type="button" class="door" data-go="expo"><img src="../assets/cathedral/w/deal.webp" alt=""><b>Exposure</b><span>shutter · ND · depth</span></button>
+      <button type="button" class="door" data-go="screens"><img src="../assets/cathedral/w/lock.webp" alt=""><b>Screens</b><span>grey · bars · tone</span></button>
+    </div>
+    <p class="foot">Built by <a href="../">0FF THE PRINT</a> · San Antonio · add it to your home screen and it opens with no signal · <a href="../wall/">the Crypt</a></p>
+  </section>
+
+  <!-- ===== TELEPROMPTER ===== -->
+  <section id="t-prompter" class="tool" hidden>
+    <h2>Prompter</h2><p class="sub">paste the script · tap the screen to pause · it remembers</p>
+    <textarea class="in" id="pr-src" placeholder="Paste the script here. Blank lines become breaths."></textarea>
+    <div class="card" style="display:grid;gap:12px">
+      <div class="slider"><span>Speed</span><input type="range" id="pr-speed" min="10" max="160" value="55"><output id="pr-speed-o">55</output></div>
+      <div class="slider"><span>Size</span><input type="range" id="pr-size" min="24" max="80" value="42"><output id="pr-size-o">42</output></div>
+      <div class="row"><button type="button" class="btn" id="pr-mirror" aria-pressed="false">Mirror</button><button type="button" class="btn" id="pr-count" aria-pressed="true">3 2 1 lead-in</button></div>
+    </div>
+    <button type="button" class="btn primary big" id="pr-go">Roll it</button>
+    <p class="note"><b>Mirror</b> flips it for a glass rig. <b>Speed</b> is pixels a second: 55 reads like a calm sentence, 90 like a hype voiceover. Keep the phone level with the lens so your eyes stay on the glass.</p>
+  </section>
+  <div class="full" id="pr-full">
+    <div id="pr-state">Ready</div>
+    <button type="button" class="x" data-prx aria-label="Close">×</button>
+    <div id="pr-line"></div>
+    <div id="pr-scroll"><div id="pr-text"></div></div>
+    <div class="hud" id="pr-hud">
+      <div class="slider"><span>Speed</span><input type="range" id="pr-speed2" min="10" max="160" value="55"><output id="pr-speed2-o">55</output></div>
+      <div class="row3"><button type="button" class="btn" data-prback>Back 10s</button><button type="button" class="btn primary" id="pr-toggle">Pause</button><button type="button" class="btn" data-prtop>Top</button></div>
+    </div>
+  </div>
+
+  <!-- ===== SLATE ===== -->
+  <section id="t-slate" class="tool" hidden>
+    <h2>Slate</h2><p class="sub">mark = white flash + 1 kHz beep · every mark lands in the take log</p>
+    <div class="slate">
+      <div class="stripe"></div>
+      <div class="srow"><div class="sc"><i>Prod</i><b id="sl-prod">0TP</b></div><div class="sc"><i>Roll</i><b id="sl-roll">A001</b></div><div class="sc"><i>Cam</i><b id="sl-cam">FX6</b></div></div>
+      <div class="srow"><div class="sc"><i>Scene</i><b id="sl-scene">1</b></div><div class="sc"><i>Shot</i><b id="sl-shot">A</b></div><div class="sc t"><i>Take</i><b id="sl-take">1</b></div></div>
+      <div class="clock"><span id="sl-date"></span><b id="sl-clock"></b></div>
+      <div class="stripe"></div>
+    </div>
+    <div class="nums">
+      <div class="num"><button type="button" data-sl="scene" data-d="-1">−</button><b><small>Scene</small><span id="n-scene">1</span></b><button type="button" data-sl="scene" data-d="1">+</button></div>
+      <div class="num"><button type="button" data-sl="shot" data-d="-1">−</button><b><small>Shot</small><span id="n-shot">A</span></b><button type="button" data-sl="shot" data-d="1">+</button></div>
+      <div class="num"><button type="button" data-sl="take" data-d="-1">−</button><b><small>Take</small><span id="n-take">1</span></b><button type="button" data-sl="take" data-d="1">+</button></div>
+    </div>
+    <div class="row"><button type="button" class="btn primary big mark" id="sl-mark">Mark</button><button type="button" class="btn big mark tail" id="sl-tail">Tail</button></div>
+    <div class="card" style="display:grid;gap:10px">
+      <div class="row3"><label><span class="lbl">Prod</span><input class="in" id="in-prod" maxlength="12" value="0TP"></label><label><span class="lbl">Roll</span><input class="in" id="in-roll" maxlength="8" value="A001"></label><label><span class="lbl">Cam</span><input class="in" id="in-cam" maxlength="8" value="FX6"></label></div>
+      <label><span class="lbl">Note for the next take</span><input class="in" id="in-note" maxlength="120" placeholder="wide, lav on, bring the lamp in"></label>
+      <div class="row"><button type="button" class="btn" id="sl-reset">Take back to 1</button><button type="button" class="btn ghost" data-go="takes">Open the take log</button></div>
+    </div>
+    <p class="note">Tap <b>Mark</b> on the clap: the screen goes white one frame and the beep hits every mic in the room, so the FX6, the Luna and the lav line up on one spike in the edit. <b>Tail</b> is the same for a tail slate. The take number steps up after every mark.</p>
+  </section>
+  <div id="flash"></div>
+
+  <!-- ===== TAKE LOG ===== -->
+  <section id="t-takes" class="tool" hidden>
+    <h2>Take log</h2><p class="sub">tap the circle on the keeper · notes stick · share the CSV</p>
+    <div class="row"><button type="button" class="btn primary" id="tk-share">Share CSV</button><button type="button" class="btn" id="tk-copy">Copy CSV</button></div>
+    <ul class="list" id="tk-list"></ul>
+    <button type="button" class="btn ghost bad" id="tk-clear">Clear the log</button>
+    <p class="note">One row per mark: time, roll, scene, shot, take, circle, note. Drop the CSV next to the footage and the keepers are already picked when you sit down in Resolve.</p>
+  </section>
+
+  <!-- ===== RELEASE ===== -->
+  <section id="t-release" class="tool" hidden>
+    <h2>Release</h2><p class="sub">name · handle · finger signature · a PDF you both get</p>
+    <div class="card" style="display:grid;gap:10px">
+      <div class="row"><label><span class="lbl">Their name</span><input class="in" id="rl-name" autocomplete="off" placeholder="Full name"></label><label><span class="lbl">Instagram</span><input class="in" id="rl-ig" autocomplete="off" autocapitalize="none" placeholder="@handle"></label></div>
+      <div class="row"><label><span class="lbl">Their email <small style="text-transform:none;letter-spacing:0">(optional)</small></span><input class="in" id="rl-email" type="email" autocomplete="off" placeholder="so they get a copy"></label><label><span class="lbl">Shoot</span><input class="in" id="rl-proj" placeholder="Night, room, date"></label></div>
+      <div class="seg" id="rl-kind"><button type="button" data-kind="editorial" aria-pressed="true">Editorial</button><button type="button" data-kind="commercial" aria-pressed="false">Commercial</button><button type="button" data-kind="model" aria-pressed="false">Portrait</button></div>
+      <div class="legal" id="rl-legal"></div>
+      <span class="lbl">Sign here</span>
+      <div class="sig" id="rl-sigbox"><canvas id="rl-sig"></canvas><div class="line"></div><div class="hint">sign with your finger</div></div>
+      <div class="row"><button type="button" class="btn" id="rl-clear">Clear signature</button><button type="button" class="btn primary" id="rl-make">Make the PDF</button></div>
+    </div>
+    <ul class="list" id="rl-list"></ul>
+    <p class="note">The PDF carries the words above, their details, the date and the signature, and opens in the share sheet so you can mail it to the house and to them in one go. Kept on this phone until you clear it. Plain-language form, not legal advice.</p>
+  </section>
+
+  <!-- ===== GOLDEN HOUR ===== -->
+  <section id="t-sun" class="tool" hidden>
+    <h2>Golden hour</h2><p class="sub">sunrise · golden · blue · where the sun sits</p>
+    <div class="seg" id="sun-city"><button type="button" data-city="SA" aria-pressed="true">San Antonio</button><button type="button" data-city="SMTX" aria-pressed="false">San Marcos</button><button type="button" data-city="ATX" aria-pressed="false">Austin</button></div>
+    <div class="row"><label><span class="lbl">Date</span><input class="in" type="date" id="sun-date"></label><label><span class="lbl">Time for the compass</span><input class="in" type="time" id="sun-time"></label></div>
+    <div class="sunline" id="sunline"></div>
+    <div class="row" id="sun-stats"></div>
+    <div class="card" style="display:grid;gap:8px;justify-items:center">
+      <div class="compass"><span class="n">N</span><span class="s">S</span><span class="e">E</span><span class="w">W</span><div class="arm" id="sun-arm"></div></div>
+      <div class="note" id="sun-azi" style="text-align:center"></div>
+    </div>
+    <p class="note"><b>Golden hour</b> is the hour after sunrise and the hour before sunset. <b>Blue hour</b> runs from sunset to the end of civil twilight, when the sky still holds color and the signs come on. Point the compass arm at where the sun sits and put your subject's back to it for rim light.</p>
+  </section>
+
+  <!-- ===== VIEWFINDER ===== -->
+  <section id="t-vf" class="tool" hidden>
+    <h2>Viewfinder</h2><p class="sub">frame guides over the camera · a rough lens picker</p>
+    <button type="button" class="btn primary big" id="vf-open">Open the camera</button>
+    <p class="note">Pick the delivery frame (2.39, 16:9, 4:5, 9:16) and the guides mask the rest. The lens picker crops the phone's main camera to roughly what 35, 50 or 85 would see on the FX6 full frame. A rough scout tool, not a calibrated finder.</p>
+  </section>
+  <div class="full" id="vf">
+    <video id="vf-video" playsinline muted autoplay></video>
+    <div class="mask" id="vf-mask"></div>
+    <div class="thirds" id="vf-thirds" hidden></div>
+    <div class="tag" id="vf-tag">16:9 · 24mm</div>
+    <button type="button" class="x" id="vf-x" aria-label="Close">×</button>
+    <div class="hud" id="vf-hud">
+      <div class="seg" id="vf-ar"><button type="button" data-ar="2.39" aria-pressed="false">2.39</button><button type="button" data-ar="1.85" aria-pressed="false">1.85</button><button type="button" data-ar="1.7778" aria-pressed="true">16:9</button><button type="button" data-ar="1.3333" aria-pressed="false">4:3</button><button type="button" data-ar="1" aria-pressed="false">1:1</button><button type="button" data-ar="0.8" aria-pressed="false">4:5</button><button type="button" data-ar="0.5625" aria-pressed="false">9:16</button></div>
+      <div class="seg" id="vf-fl"><button type="button" data-fl="24" aria-pressed="true">24</button><button type="button" data-fl="35" aria-pressed="false">35</button><button type="button" data-fl="50" aria-pressed="false">50</button><button type="button" data-fl="85" aria-pressed="false">85</button><button type="button" data-fl="t" aria-pressed="false">Thirds</button></div>
+    </div>
+  </div>
+
+  <!-- ===== EXPOSURE ===== -->
+  <section id="t-expo" class="tool" hidden>
+    <h2>Exposure</h2><p class="sub">shutter from the frame rate · ND in stops · depth of field</p>
+    <div class="card" style="display:grid;gap:10px">
+      <span class="lbl">Shutter, 180 degree rule</span>
+      <div class="seg" id="ex-fps"><button type="button" data-fps="23.976" aria-pressed="true">24</button><button type="button" data-fps="25">25</button><button type="button" data-fps="29.97">30</button><button type="button" data-fps="50">50</button><button type="button" data-fps="59.94">60</button><button type="button" data-fps="120">120</button></div>
+      <div class="row" id="ex-shutter"></div>
+    </div>
+    <div class="card" style="display:grid;gap:10px">
+      <span class="lbl">ND: stops to cut</span>
+      <div class="slider"><span>Stops</span><input type="range" id="ex-nd" min="1" max="10" value="3"><output id="ex-nd-o">3</output></div>
+      <div class="row" id="ex-ndout"></div>
+      <p class="note">FX6 built-in ND runs 1/4 (2 stops) to 1/128 (7 stops), variable in between. Anything past 7 is a screw-on. The Luna has no ND: close down or raise the shutter.</p>
+    </div>
+    <div class="card" style="display:grid;gap:10px">
+      <span class="lbl">Depth of field</span>
+      <div class="seg" id="ex-sensor"><button type="button" data-s="ff" aria-pressed="true">FX6 full frame</button><button type="button" data-s="s35">FX6 S35</button><button type="button" data-s="1in">Luna 1-inch</button><button type="button" data-s="ace">Ace Pro 2</button></div>
+      <div class="row3"><label><span class="lbl">Focal mm</span><input class="in" type="number" id="ex-f" inputmode="decimal" value="35"></label><label><span class="lbl">f-stop</span><input class="in" type="number" id="ex-a" inputmode="decimal" step="0.1" value="2.8"></label><label><span class="lbl">Distance ft</span><input class="in" type="number" id="ex-d" inputmode="decimal" step="0.5" value="8"></label></div>
+      <div class="row" id="ex-dof"></div>
+    </div>
+  </section>
+
+  <!-- ===== SCREENS ===== -->
+  <section id="t-screens" class="tool" hidden>
+    <h2>Screens</h2><p class="sub">turn the brightness all the way up first · tap the screen to leave</p>
+    <div class="doors">
+      <button type="button" class="door" data-screen="grey"><b>18% grey</b><span>white balance card</span></button>
+      <button type="button" class="door" data-screen="white"><b>White</b><span>fill light, WB</span></button>
+      <button type="button" class="door" data-screen="bars"><b>Color bars</b><span>monitor check</span></button>
+      <button type="button" class="door" data-screen="black"><b>Black</b><span>flare check</span></button>
+      <button type="button" class="door" data-screen="red"><b>Red</b><span>a gel in a pinch</span></button>
+      <button type="button" class="door" data-screen="pink"><b>House pink</b><span>#ff79c6</span></button>
+    </div>
+    <button type="button" class="btn big" id="sc-tone" aria-pressed="false">1 kHz tone: off</button>
+    <p class="note">The grey screen is a stand-in for an 18% card: fill the frame with it, set custom white balance, move on. The tone runs at a fixed level for a quick check that a mic is live; it is not a calibrated reference.</p>
+  </section>
+  <div id="sc-full"><div class="tip">tap to leave</div></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------- the shell ---------- */
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const load = (k, d) => { try { const v = localStorage.getItem('kit-' + k); return v == null ? d : JSON.parse(v); } catch(e){ return d; } };
+const save = (k, v) => { try { localStorage.setItem('kit-' + k, JSON.stringify(v)); } catch(e){} };
+let toastT; function toast(m){ const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 2200); }
+const buzz = () => { try { navigator.vibrate && navigator.vibrate(12); } catch(e){} };
+const TOOLS = ['home','prompter','slate','takes','release','sun','vf','expo','screens'];
+const NAMES = {home:'KIT', prompter:'Prompter', slate:'Slate', takes:'Take log', release:'Release', sun:'Golden hour', vf:'Viewfinder', expo:'Exposure', screens:'Screens'};
+function go(t, push){
+  if (!TOOLS.includes(t)) t = 'home';
+  TOOLS.forEach(k => { const el = $('#t-' + k); if (el) el.hidden = k !== t; });
+  document.body.dataset.tool = t;
+  document.title = (t === 'home' ? 'KIT' : NAMES[t] + ' · KIT') + ' · 0FF THE PRINT';
+  if (push !== false) { try { history.replaceState(null, '', '#' + t); } catch(e){} }
+  window.scrollTo(0, 0);
+  if (t === 'takes') tkPaint(); if (t === 'release') rlPaint(); if (t === 'sun') sunPaint(); if (t === 'expo') exPaint(); if (t === 'slate') slPaint();
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-go]'); if (b) { e.preventDefault(); buzz(); go(b.dataset.go); }
+});
+window.addEventListener('hashchange', () => go(location.hash.replace('#', ''), false));
+
+/* install (Android shows the prompt; iPhone: Share, Add to Home Screen) */
+let deferred = null;
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferred = e; $('#ins').hidden = false; });
+$('#ins').addEventListener('click', async () => { if (!deferred) return; deferred.prompt(); await deferred.userChoice; deferred = null; $('#ins').hidden = true; });
+if (!matchMedia('(display-mode: standalone)').matches && !navigator.standalone && /iphone|ipad/i.test(navigator.userAgent) && !load('iosHint', 0)) {
+  setTimeout(() => { toast('Share → Add to Home Screen puts the kit on your phone'); save('iosHint', 1); }, 2500);
+}
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+
+/* ---------- audio: the beep and the tone ---------- */
+let AC = null; const ac = () => { if (!AC) { try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){} } if (AC && AC.state === 'suspended') AC.resume(); return AC; };
+function beep(ms, freq, gain){
+  const c = ac(); if (!c) return;
+  const o = c.createOscillator(), g = c.createGain();
+  o.type = 'sine'; o.frequency.value = freq || 1000; g.gain.value = gain || .5;
+  o.connect(g); g.connect(c.destination);
+  const t = c.currentTime; o.start(t); g.gain.setValueAtTime(gain || .5, t + (ms || 250) / 1000 - .01); g.gain.linearRampToValueAtTime(0, t + (ms || 250) / 1000); o.stop(t + (ms || 250) / 1000 + .02);
+}
+
+/* ---------- TELEPROMPTER ---------- */
+const PR = {y: 0, run: false, last: 0, speed: load('prSpeed', 55), size: load('prSize', 42), mirror: load('prMirror', false), count: load('prCount', true), raf: 0, hudT: 0, lock: null};
+$('#pr-src').value = load('prText', '');
+$('#pr-speed').value = PR.speed; $('#pr-speed-o').value = PR.speed; $('#pr-size').value = PR.size; $('#pr-size-o').value = PR.size;
+$('#pr-mirror').setAttribute('aria-pressed', String(PR.mirror)); $('#pr-count').setAttribute('aria-pressed', String(PR.count));
+$('#pr-src').addEventListener('input', () => save('prText', $('#pr-src').value));
+$('#pr-speed').addEventListener('input', e => { PR.speed = +e.target.value; $('#pr-speed-o').value = PR.speed; $('#pr-speed2').value = PR.speed; $('#pr-speed2-o').value = PR.speed; save('prSpeed', PR.speed); });
+$('#pr-speed2').addEventListener('input', e => { PR.speed = +e.target.value; $('#pr-speed2-o').value = PR.speed; $('#pr-speed').value = PR.speed; $('#pr-speed-o').value = PR.speed; save('prSpeed', PR.speed); });
+$('#pr-size').addEventListener('input', e => { PR.size = +e.target.value; $('#pr-size-o').value = PR.size; save('prSize', PR.size); });
+$('#pr-mirror').addEventListener('click', e => { PR.mirror = !PR.mirror; e.currentTarget.setAttribute('aria-pressed', String(PR.mirror)); save('prMirror', PR.mirror); });
+$('#pr-count').addEventListener('click', e => { PR.count = !PR.count; e.currentTarget.setAttribute('aria-pressed', String(PR.count)); save('prCount', PR.count); });
+function prTick(now){
+  if (!PR.run) return;
+  const dt = Math.min(50, now - PR.last) / 1000; PR.last = now;
+  PR.y += PR.speed * dt;
+  const el = $('#pr-text'), max = el.offsetHeight + innerHeight * .2;
+  if (PR.y >= max) { PR.y = max; prPause('End'); return; }
+  el.style.transform = `translateY(${-PR.y}px)`;
+  PR.raf = requestAnimationFrame(prTick);
+}
+function prPlay(){ PR.run = true; PR.last = performance.now(); $('#pr-state').textContent = 'Rolling'; $('#pr-toggle').textContent = 'Pause'; cancelAnimationFrame(PR.raf); PR.raf = requestAnimationFrame(prTick); }
+function prPause(label){ PR.run = false; cancelAnimationFrame(PR.raf); $('#pr-state').textContent = label || 'Paused'; $('#pr-toggle').textContent = label === 'End' ? 'Again' : 'Play'; }
+function prHud(){ $('#pr-hud').classList.remove('hide'); clearTimeout(PR.hudT); PR.hudT = setTimeout(() => { if (PR.run) $('#pr-hud').classList.add('hide'); }, 2600); }
+async function prOpen(){
+  const txt = $('#pr-src').value.trim(); if (!txt) { toast('Paste a script first.'); return; }
+  $('#pr-text').textContent = txt; $('#pr-text').style.setProperty('--pr-size', PR.size + 'px'); $('#pr-text').style.font = `700 ${PR.size}px/1.3 var(--f-body)`;
+  $('#pr-scroll').classList.toggle('mirror', PR.mirror);
+  PR.y = 0; $('#pr-text').style.transform = 'translateY(0)';
+  $('#pr-full').classList.add('on'); prHud();
+  try { PR.lock = await navigator.wakeLock.request('screen'); } catch(e){}
+  if (PR.count) { let n = 3; $('#pr-state').textContent = String(n); const iv = setInterval(() => { n--; if (n <= 0) { clearInterval(iv); prPlay(); } else $('#pr-state').textContent = String(n); }, 1000); }
+  else prPlay();
+}
+function prClose(){ prPause(); $('#pr-full').classList.remove('on'); try { PR.lock && PR.lock.release(); } catch(e){} PR.lock = null; }
+$('#pr-go').addEventListener('click', prOpen);
+$('#pr-full').addEventListener('click', e => {
+  if (e.target.closest('[data-prx]')) { prClose(); return; }
+  if (e.target.closest('#pr-toggle')) { if ($('#pr-toggle').textContent === 'Again') { PR.y = 0; } PR.run ? prPause() : prPlay(); prHud(); return; }
+  if (e.target.closest('[data-prback]')) { PR.y = Math.max(0, PR.y - PR.speed * 10); $('#pr-text').style.transform = `translateY(${-PR.y}px)`; prHud(); return; }
+  if (e.target.closest('[data-prtop]')) { PR.y = 0; $('#pr-text').style.transform = 'translateY(0)'; prHud(); return; }
+  if (e.target.closest('.hud')) { prHud(); return; }
+  PR.run ? prPause() : prPlay(); prHud();
+});
+
+/* ---------- SLATE + TAKE LOG ---------- */
+const SL = Object.assign({prod: '0TP', roll: 'A001', cam: 'FX6', scene: 1, shot: 'A', take: 1, note: ''}, load('slate', {}));
+let TAKES = load('takes', []);
+const LET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+function slPaint(){
+  $('#sl-prod').textContent = SL.prod || '0TP'; $('#sl-roll').textContent = SL.roll || 'A001'; $('#sl-cam').textContent = SL.cam || 'FX6';
+  $('#sl-scene').textContent = SL.scene; $('#sl-shot').textContent = SL.shot; $('#sl-take').textContent = SL.take;
+  $('#n-scene').textContent = SL.scene; $('#n-shot').textContent = SL.shot; $('#n-take').textContent = SL.take;
+  $('#in-prod').value = SL.prod; $('#in-roll').value = SL.roll; $('#in-cam').value = SL.cam; $('#in-note').value = SL.note || '';
+  $('#sl-date').textContent = new Date().toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'});
+  $('#takes-n').textContent = TAKES.length ? TAKES.length + ' takes' : '';
+}
+setInterval(() => { const d = new Date(); $('#sl-clock').textContent = d.toLocaleTimeString('en-US', {hour12:false}); }, 500);
+['prod','roll','cam','note'].forEach(k => $('#in-' + k).addEventListener('input', e => { SL[k] = e.target.value; save('slate', SL); slPaint(); }));
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-sl]'); if (!b) return;
+  const k = b.dataset.sl, d = +b.dataset.d; buzz();
+  if (k === 'shot') { const i = Math.max(0, Math.min(25, LET.indexOf(SL.shot) + d)); SL.shot = LET[i]; SL.take = 1; }
+  else if (k === 'scene') { SL.scene = Math.max(1, SL.scene + d); SL.shot = 'A'; SL.take = 1; }
+  else SL.take = Math.max(1, SL.take + d);
+  save('slate', SL); slPaint();
+});
+$('#sl-reset').addEventListener('click', () => { SL.take = 1; save('slate', SL); slPaint(); });
+function mark(tail){
+  ac();
+  const f = $('#flash'); f.classList.add('on'); setTimeout(() => f.classList.remove('on'), 120);
+  beep(tail ? 500 : 250, 1000, .6); buzz();
+  const now = new Date();
+  TAKES.push({t: now.toISOString(), roll: SL.roll, scene: SL.scene, shot: SL.shot, take: SL.take, tail: !!tail, circ: false, note: SL.note || '', cam: SL.cam, prod: SL.prod});
+  save('takes', TAKES);
+  toast(`${tail ? 'Tail ' : ''}Sc ${SL.scene} ${SL.shot} take ${SL.take} marked`);
+  SL.take += 1; SL.note = ''; save('slate', SL); slPaint();
+}
+$('#sl-mark').addEventListener('click', () => mark(false));
+$('#sl-tail').addEventListener('click', () => mark(true));
+function tkPaint(){
+  const ul = $('#tk-list');
+  if (!TAKES.length) { ul.innerHTML = '<li class="empty">No takes yet. Mark one on the Slate.</li>'; return; }
+  ul.innerHTML = TAKES.slice().reverse().map((x, i) => { const n = TAKES.length - 1 - i; const d = new Date(x.t);
+    return `<li class="take"><div class="id">${esc(x.scene)}${esc(x.shot)}<small>take ${esc(x.take)}${x.tail ? ' · tail' : ''}</small></div>
+      <div class="tx"><input value="${esc(x.note)}" placeholder="note" data-tknote="${n}" maxlength="140"><small>${esc(x.roll)} · ${esc(x.cam)} · ${d.toLocaleTimeString('en-US', {hour12:false})}</small></div>
+      <button type="button" class="circ" data-tkcirc="${n}" aria-pressed="${x.circ}" aria-label="Circle take">${x.circ ? '●' : '○'}</button></li>`; }).join('');
+}
+$('#tk-list').addEventListener('click', e => { const b = e.target.closest('[data-tkcirc]'); if (!b) return; const x = TAKES[+b.dataset.tkcirc]; x.circ = !x.circ; save('takes', TAKES); buzz(); tkPaint(); });
+$('#tk-list').addEventListener('input', e => { const i = e.target.closest('[data-tknote]'); if (!i) return; TAKES[+i.dataset.tknote].note = i.value; save('takes', TAKES); });
+const csvOf = () => ['time,prod,roll,cam,scene,shot,take,tail,circle,note'].concat(TAKES.map(x => [new Date(x.t).toLocaleString('en-US', {hour12:false}), x.prod, x.roll, x.cam, x.scene, x.shot, x.take, x.tail ? 'tail' : '', x.circ ? 'circle' : '', x.note].map(v => '"' + String(v ?? '').replace(/"/g, '""') + '"').join(','))).join('\n');
+async function shareFile(file, title, fallbackText){
+  try { if (navigator.canShare && navigator.canShare({files: [file]})) { await navigator.share({files: [file], title}); return true; } } catch(e){ if (e && e.name === 'AbortError') return true; }
+  try { const u = URL.createObjectURL(file); const a = document.createElement('a'); a.href = u; a.download = file.name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000); return true; } catch(e){}
+  if (fallbackText) { try { await navigator.clipboard.writeText(fallbackText); toast('Copied instead.'); return true; } catch(e){} }
+  return false;
+}
+$('#tk-share').addEventListener('click', async () => { if (!TAKES.length) { toast('Nothing to share yet.'); return; } const name = 'takes-' + new Date().toISOString().slice(0, 10) + '.csv'; await shareFile(new File([csvOf()], name, {type: 'text/csv'}), 'Take log', csvOf()); });
+$('#tk-copy').addEventListener('click', async () => { if (!TAKES.length) { toast('Nothing to copy yet.'); return; } try { await navigator.clipboard.writeText(csvOf()); toast('CSV copied.'); } catch(e){ toast('Could not copy here.'); } });
+$('#tk-clear').addEventListener('click', () => { if (!TAKES.length) return; if (!confirm('Clear every take on this phone?')) return; TAKES = []; save('takes', TAKES); tkPaint(); slPaint(); });
+
+/* ---------- RELEASE ---------- */
+const RL_TEXT = {
+  editorial: 'I agree that 0FF THE PRINT (Giancarlo Ortiz, San Antonio TX) may publish photos and video of me from this shoot on its website, social channels and in its own editorial work, with or without my name, and may let the artists and the room that night repost them. These pictures are not for advertising a product without a separate agreement. I can ask for a picture to come down and the house will take it down within a reasonable time. I am 18 or older, or my parent or guardian signs below.',
+  commercial: 'I grant 0FF THE PRINT (Giancarlo Ortiz, San Antonio TX) and its client for this shoot the right to use photos and video of me from this shoot in any media, including advertising and promotion, for any lawful purpose, without further payment beyond what was agreed today. I give up any claim to approve the final pictures or the copy they run with. I am 18 or older, or my parent or guardian signs below.',
+  model: 'I agree that 0FF THE PRINT (Giancarlo Ortiz, San Antonio TX) may use the portraits made of me today on its website, social channels, portfolio and printed work, and that I may use them for my own non-commercial pages with a credit. Any commercial use by either of us beyond that needs a separate written agreement. I am 18 or older, or my parent or guardian signs below.'
+};
+let RL = {kind: 'editorial'}; let RELS = load('releases', []);
+const sigC = $('#rl-sig'), sigX = sigC.getContext('2d'); let sigDrawn = false, sigPts = [];
+function sigSize(){ const r = $('#rl-sigbox').getBoundingClientRect(); const dpr = devicePixelRatio || 1; sigC.width = r.width * dpr; sigC.height = r.height * dpr; sigX.setTransform(dpr, 0, 0, dpr, 0, 0); sigX.fillStyle = '#fff'; sigX.fillRect(0, 0, r.width, r.height); sigX.lineWidth = 2.6; sigX.lineCap = 'round'; sigX.lineJoin = 'round'; sigX.strokeStyle = '#111'; sigDrawn = false; }
+let sigOn = false;
+sigC.addEventListener('pointerdown', e => { sigOn = true; sigC.setPointerCapture(e.pointerId); const r = sigC.getBoundingClientRect(); sigX.beginPath(); sigX.moveTo(e.clientX - r.left, e.clientY - r.top); });
+sigC.addEventListener('pointermove', e => { if (!sigOn) return; const r = sigC.getBoundingClientRect(); sigX.lineTo(e.clientX - r.left, e.clientY - r.top); sigX.stroke(); sigDrawn = true; $('#rl-sigbox .hint').hidden = true; });
+const sigEnd = () => { sigOn = false; }; sigC.addEventListener('pointerup', sigEnd); sigC.addEventListener('pointercancel', sigEnd);
+$('#rl-clear').addEventListener('click', () => { sigSize(); $('#rl-sigbox .hint').hidden = false; });
+$('#rl-kind').addEventListener('click', e => { const b = e.target.closest('[data-kind]'); if (!b) return; RL.kind = b.dataset.kind; $$('#rl-kind button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); $('#rl-legal').textContent = RL_TEXT[RL.kind]; });
+$('#rl-legal').textContent = RL_TEXT.editorial;
+function rlPaint(){ sigSize(); $('#rl-list').innerHTML = RELS.length ? RELS.slice().reverse().map((r, i) => `<li class="rel"><div><b>${esc(r.name)}</b><small>${esc(r.ig || '')}${r.ig ? ' · ' : ''}${esc(r.kind)} · ${esc(r.proj || '')} · ${new Date(r.t).toLocaleDateString()}</small></div><button type="button" class="btn" data-rlshare="${RELS.length - 1 - i}">Share</button></li>`).join('') : ''; }
+// a one-page PDF, written by hand: Helvetica text + the signature as a JPEG
+function pdfEscape(s){ return s.replace(/\\/g, '\\\\').replace(/\(/g, '\\(').replace(/\)/g, '\\)').replace(/[^\x20-\x7e]/g, '?'); }
+function wrap(text, max){ const out = []; text.split('\n').forEach(par => { let line = ''; par.split(' ').forEach(w => { if ((line + ' ' + w).trim().length > max) { out.push(line.trim()); line = w; } else line = (line + ' ' + w); }); out.push(line.trim()); }); return out; }
+function makePDF(rec, jpegBytes, jw, jh){
+  const enc = new TextEncoder(); const parts = []; let len = 0; const offs = [];
+  const push = s => { const b = typeof s === 'string' ? enc.encode(s) : s; parts.push(b); len += b.length; };
+  const lines = [];
+  lines.push(['H', '0FF THE PRINT · RELEASE']);
+  lines.push(['S', (rec.kind.toUpperCase()) + ' · ' + (rec.proj || 'shoot') + ' · ' + new Date(rec.t).toLocaleString('en-US')]);
+  lines.push(['G', '']);
+  wrap(RL_TEXT[rec.kind], 92).forEach(l => lines.push(['B', l]));
+  lines.push(['G', '']);
+  lines.push(['B', 'Name: ' + rec.name]); if (rec.ig) lines.push(['B', 'Instagram: ' + rec.ig]); if (rec.email) lines.push(['B', 'Email: ' + rec.email]);
+  lines.push(['B', 'Producer: Giancarlo Ortiz · 0FF THE PRINT · offtheprintcollective@gmail.com']);
+  lines.push(['G', '']); lines.push(['S', 'Signature']);
+  let y = 760; let content = '';
+  lines.forEach(([k, t]) => { const size = k === 'H' ? 20 : k === 'S' ? 10 : 11; const lead = k === 'H' ? 26 : k === 'G' ? 8 : 15; if (k !== 'G') content += `BT /F1 ${size} Tf 56 ${y} Td (${pdfEscape(t)}) Tj ET\n`; y -= lead; });
+  const sw = 240, sh = Math.round(sw * jh / jw); y -= sh + 6;
+  content += `q ${sw} 0 0 ${sh} 56 ${y} cm /Im1 Do Q\n`;
+  content += `BT /F1 9 Tf 56 ${y - 14} Td (${pdfEscape('Signed on a phone with a finger, ' + new Date(rec.t).toLocaleString('en-US') + '. Kept by the house and sent to the signer.')}) Tj ET\n`;
+  push('%PDF-1.4\n%\xe2\xe3\xcf\xd3\n');
+  const obj = (n, body) => { offs[n] = len; push(`${n} 0 obj\n`); push(body); push('\nendobj\n'); };
+  obj(1, '<< /Type /Catalog /Pages 2 0 R >>');
+  obj(2, '<< /Type /Pages /Kids [3 0 R] /Count 1 >>');
+  obj(3, '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 5 0 R >> /XObject << /Im1 6 0 R >> >> /Contents 4 0 R >>');
+  const cb = enc.encode(content); offs[4] = len; push(`4 0 obj\n<< /Length ${cb.length} >>\nstream\n`); push(cb); push('\nendstream\nendobj\n');
+  obj(5, '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>');
+  offs[6] = len; push(`6 0 obj\n<< /Type /XObject /Subtype /Image /Width ${jw} /Height ${jh} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${jpegBytes.length} >>\nstream\n`); push(jpegBytes); push('\nendstream\nendobj\n');
+  const xref = len; push(`xref\n0 7\n0000000000 65535 f \n`); for (let i = 1; i <= 6; i++) push(String(offs[i]).padStart(10, '0') + ' 00000 n \n');
+  push(`trailer\n<< /Size 7 /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF\n`);
+  const out = new Uint8Array(len); let p = 0; parts.forEach(b => { out.set(b, p); p += b.length; }); return out;
+}
+function sigJPEG(){ const d = sigC.toDataURL('image/jpeg', .85); const b64 = d.split(',')[1]; const bin = atob(b64); const u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return {bytes: u, w: sigC.width, h: sigC.height}; }
+async function rlShare(rec, jpeg){
+  const pdf = makePDF(rec, jpeg.bytes, jpeg.w, jpeg.h);
+  const name = 'release-' + rec.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') + '-' + rec.t.slice(0, 10) + '.pdf';
+  await shareFile(new File([pdf], name, {type: 'application/pdf'}), 'Release · ' + rec.name);
+}
+$('#rl-make').addEventListener('click', async () => {
+  const name = $('#rl-name').value.trim(); if (!name) { toast('Their name first.'); $('#rl-name').focus(); return; }
+  if (!sigDrawn) { toast('They need to sign.'); return; }
+  const rec = {t: new Date().toISOString(), name, ig: $('#rl-ig').value.trim(), email: $('#rl-email').value.trim(), proj: $('#rl-proj').value.trim(), kind: RL.kind};
+  const jpeg = sigJPEG(); rec.sig = sigC.toDataURL('image/jpeg', .7);
+  RELS.push(rec); if (RELS.length > 60) RELS = RELS.slice(-60); save('releases', RELS);
+  await rlShare(rec, jpeg);
+  $('#rl-name').value = ''; $('#rl-ig').value = ''; $('#rl-email').value = ''; sigSize(); $('#rl-sigbox .hint').hidden = false; rlPaint(); toast('Release made.');
+});
+$('#rl-list').addEventListener('click', async e => { const b = e.target.closest('[data-rlshare]'); if (!b) return; const rec = RELS[+b.dataset.rlshare]; if (!rec || !rec.sig) return;
+  const img = new Image(); img.onload = async () => { const c = document.createElement('canvas'); c.width = img.width; c.height = img.height; c.getContext('2d').drawImage(img, 0, 0); const d = c.toDataURL('image/jpeg', .85).split(',')[1]; const bin = atob(d); const u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); await rlShare(rec, {bytes: u, w: c.width, h: c.height}); }; img.src = rec.sig; });
+window.addEventListener('resize', () => { if (document.body.dataset.tool === 'release' && !sigDrawn) sigSize(); });
+
+/* ---------- GOLDEN HOUR (NOAA-style, good to a minute or two) ---------- */
+const CITY = {SA: [29.4241, -98.4936, 'San Antonio'], SMTX: [29.8833, -97.9414, 'San Marcos'], ATX: [30.2672, -97.7431, 'Austin']};
+let SUN = {city: load('sunCity', 'SA')};
+const rad = Math.PI / 180;
+function sunTimes(date, lat, lng, angle){
+  const jd = date.getTime() / 86400000 + 2440587.5; const n = Math.round(jd - 2451545 + .0008);
+  const Js = n - lng / 360; const M = (357.5291 + .98560028 * Js) % 360;
+  const C = 1.9148 * Math.sin(M * rad) + .02 * Math.sin(2 * M * rad) + .0003 * Math.sin(3 * M * rad);
+  const L = (M + C + 180 + 102.9372) % 360;
+  const Jt = 2451545 + Js + .0053 * Math.sin(M * rad) - .0069 * Math.sin(2 * L * rad);
+  const dec = Math.asin(Math.sin(L * rad) * Math.sin(23.44 * rad));
+  const cosw = (Math.sin(angle * rad) - Math.sin(lat * rad) * Math.sin(dec)) / (Math.cos(lat * rad) * Math.cos(dec));
+  if (cosw < -1 || cosw > 1) return null;
+  const w = Math.acos(cosw) / rad;
+  const toDate = j => new Date((j - 2440587.5) * 86400000);
+  return {rise: toDate(Jt - w / 360), set: toDate(Jt + w / 360), transit: toDate(Jt), dec};
+}
+function sunPos(date, lat, lng){
+  const s = sunTimes(date, lat, lng, -.833); if (!s) return null;
+  const H = (date.getTime() - s.transit.getTime()) / 3600000 * 15 * rad;
+  const alt = Math.asin(Math.sin(lat * rad) * Math.sin(s.dec) + Math.cos(lat * rad) * Math.cos(s.dec) * Math.cos(H));
+  let az = Math.atan2(Math.sin(H), Math.cos(H) * Math.sin(lat * rad) - Math.tan(s.dec) * Math.cos(lat * rad)) / rad + 180;
+  return {alt: alt / rad, az: (az + 360) % 360};
+}
+const hhmm = d => d.toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit'});
+const pad2 = n => String(n).padStart(2, '0');
+function sunPaint(){
+  const di = $('#sun-date'), ti = $('#sun-time'); const now = new Date();
+  if (!di.value) di.value = `${now.getFullYear()}-${pad2(now.getMonth() + 1)}-${pad2(now.getDate())}`;
+  if (!ti.value) ti.value = `${pad2(now.getHours())}:${pad2(now.getMinutes())}`;
+  $$('#sun-city button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.city === SUN.city)));
+  const [lat, lng, name] = CITY[SUN.city];
+  const [y, m, d] = di.value.split('-').map(Number); const noon = new Date(y, m - 1, d, 12, 0, 0);
+  const s = sunTimes(noon, lat, lng, -.833), c = sunTimes(noon, lat, lng, -6);
+  if (!s) { $('#sun-stats').innerHTML = '<div class="empty">No sunrise there that day.</div>'; return; }
+  const gAM = new Date(s.rise.getTime() + 3600000), gPM = new Date(s.set.getTime() - 3600000);
+  const isToday = di.value === `${now.getFullYear()}-${pad2(now.getMonth() + 1)}-${pad2(now.getDate())}`;
+  const stats = [['Sunrise', hhmm(s.rise), 'first light ' + hhmm(c.rise)], ['Golden AM', hhmm(s.rise) + ' to ' + hhmm(gAM), 'low, warm, long shadows'], ['Golden PM', hhmm(gPM) + ' to ' + hhmm(s.set), 'the one you want'], ['Sunset', hhmm(s.set), 'day length ' + Math.round((s.set - s.rise) / 60000 / 60 * 10) / 10 + ' h'], ['Blue hour', hhmm(s.set) + ' to ' + hhmm(c.set), 'sky still has color'], ['Dark', hhmm(c.set), 'street light takes over']];
+  let next = -1; if (isToday) { const marks = [s.rise, gAM, gPM, s.set, c.set]; next = marks.findIndex(x => x > now); if (next === 2) next = 2; }
+  $('#sun-stats').innerHTML = stats.map(([k, v, sub], i) => `<div class="stat${isToday && ((i === 2 && now >= gPM && now < s.set) || (i === 4 && now >= s.set && now < c.set) || (i === 1 && now >= s.rise && now < gAM)) ? ' hot' : ''}"><i>${k}</i><b>${v}</b><small>${sub}</small></div>`).join('');
+  // the line: 4am to 10pm
+  const t0 = new Date(y, m - 1, d, 4, 0), span = 18 * 3600000; const px = t => Math.max(0, Math.min(100, (t - t0) / span * 100));
+  const marks = [[c.rise, 'dawn'], [s.rise, 'rise'], [gAM, 'golden'], [gPM, 'golden'], [s.set, 'set'], [c.set, 'dark']];
+  $('#sunline').innerHTML = marks.map(([t, l]) => `<i style="left:${px(t)}%" data-l="${l}"></i>`).join('') + (isToday ? `<i class="now" style="left:${px(now)}%" data-l="now"></i>` : '');
+  const [hh, mm] = ti.value.split(':').map(Number); const at = new Date(y, m - 1, d, hh, mm);
+  const p = sunPos(at, lat, lng);
+  if (p) { $('#sun-arm').style.transform = `rotate(${p.az}deg)`; const dirs = ['N','NE','E','SE','S','SW','W','NW']; const dn = dirs[Math.round(p.az / 45) % 8];
+    $('#sun-azi').innerHTML = p.alt > 0 ? `At ${hhmm(at)} in ${name} the sun sits <b>${dn}</b> (${Math.round(p.az)}°), <b>${Math.round(p.alt)}°</b> up. Back your subject to it for a rim, face them to it for flat.` : `At ${hhmm(at)} in ${name} the sun is down (${Math.round(p.alt)}°). Street light and signs.`; }
+}
+$('#sun-city').addEventListener('click', e => { const b = e.target.closest('[data-city]'); if (!b) return; SUN.city = b.dataset.city; save('sunCity', SUN.city); sunPaint(); });
+$('#sun-date').addEventListener('change', sunPaint); $('#sun-time').addEventListener('change', sunPaint);
+
+/* ---------- VIEWFINDER ---------- */
+const VF = {ar: 1.7778, fl: 24, thirds: false, stream: null};
+function vfLayout(){
+  const W = innerWidth, H = innerHeight, m = $('#vf-mask'); let w = W, h = W / VF.ar; if (h > H) { h = H; w = H * VF.ar; }
+  const x = (W - w) / 2, y = (H - h) / 2;
+  m.innerHTML = `<i style="left:0;top:0;right:0;height:${y}px"></i><i style="left:0;bottom:0;right:0;height:${y}px"></i><i style="left:0;top:${y}px;width:${x}px;height:${h}px"></i><i style="right:0;top:${y}px;width:${x}px;height:${h}px"></i><b style="left:${x}px;top:${y}px;width:${w}px;height:${h}px"></b>`;
+  const th = $('#vf-thirds'); th.style.cssText = `left:${x}px;top:${y}px;width:${w}px;height:${h}px`; th.hidden = !VF.thirds;
+  $('#vf-video').style.transform = `scale(${VF.fl / 24})`;
+  const arName = {1.7778: '16:9', 1.3333: '4:3', 0.5625: '9:16'}[VF.ar] || String(VF.ar);
+  $('#vf-tag').textContent = `${arName} · ${VF.fl}mm`;
+}
+async function vfOpen(){
+  try { VF.stream = await navigator.mediaDevices.getUserMedia({video: {facingMode: {ideal: 'environment'}, width: {ideal: 1920}, height: {ideal: 1080}}, audio: false}); }
+  catch(e){ toast('Camera said no. Allow it in Settings and try again.'); return; }
+  $('#vf-video').srcObject = VF.stream; $('#vf').classList.add('on'); vfLayout();
+}
+function vfClose(){ $('#vf').classList.remove('on'); if (VF.stream) VF.stream.getTracks().forEach(t => t.stop()); VF.stream = null; }
+$('#vf-open').addEventListener('click', vfOpen); $('#vf-x').addEventListener('click', vfClose);
+$('#vf-ar').addEventListener('click', e => { const b = e.target.closest('[data-ar]'); if (!b) return; VF.ar = +b.dataset.ar; $$('#vf-ar button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); vfLayout(); });
+$('#vf-fl').addEventListener('click', e => { const b = e.target.closest('[data-fl]'); if (!b) return; if (b.dataset.fl === 't') { VF.thirds = !VF.thirds; b.setAttribute('aria-pressed', String(VF.thirds)); } else { VF.fl = +b.dataset.fl; $$('#vf-fl button[data-fl]:not([data-fl="t"])').forEach(x => x.setAttribute('aria-pressed', String(x === b))); } vfLayout(); });
+window.addEventListener('resize', () => { if ($('#vf').classList.contains('on')) vfLayout(); });
+
+/* ---------- EXPOSURE ---------- */
+const EX = {fps: 23.976, nd: 3, sensor: 'ff'};
+const SENS = {ff: [35.7, .029, 'FX6 full frame'], s35: [23.5, .02, 'FX6 Super 35'], '1in': [13.2, .011, 'Luna 1-inch'], ace: [9.6, .008, 'Ace Pro 2 1/1.3']};
+const FX6ND = [[2, '1/4'], [3, '1/8'], [4, '1/16'], [5, '1/32'], [6, '1/64'], [7, '1/128']];
+function frac(x){ return '1/' + Math.round(x); }
+function exPaint(){
+  const sh = 2 * EX.fps; $('#ex-shutter').innerHTML = `<div class="stat hot"><i>180°</i><b>${frac(sh)}</b><small>${EX.fps} fps · the normal look</small></div><div class="stat"><i>90° · crisper</i><b>${frac(4 * EX.fps)}</b><small>fights, sports, strobe-y</small></div><div class="stat"><i>Angle 172.8 · flicker</i><b>${frac(EX.fps * 360 / 172.8)}</b><small>under 60 Hz lights at 24</small></div><div class="stat"><i>Shutter speed on the FX6</i><b>${frac(sh)}</b><small>or shutter angle 180</small></div>`;
+  const nd = EX.nd; const factor = Math.pow(2, nd); const dens = (nd * .3).toFixed(1); const near = FX6ND.filter(x => x[0] === nd)[0];
+  $('#ex-ndout').innerHTML = `<div class="stat hot"><i>Cuts ${nd} stop${nd === 1 ? '' : 's'}</i><b>ND ${dens}</b><small>${factor}x · ND${factor}</small></div><div class="stat"><i>FX6 built-in</i><b>${near ? near[1] : nd < 2 ? 'Clear' : 'Screw-on'}</b><small>${nd >= 2 && nd <= 7 ? 'variable ND at ' + nd + ' stops' : nd < 2 ? 'close the iris one stop instead' : 'stack 1/128 + ND ' + ((nd - 7) * .3).toFixed(1)}</small></div>`;
+  const [sw, coc, sname] = SENS[EX.sensor]; const f = +$('#ex-f').value || 35, a = +$('#ex-a').value || 2.8, dft = +$('#ex-d').value || 8, d = dft * 304.8;
+  const H = f * f / (a * coc) + f; const near_ = (H * d) / (H + (d - f)); const far = d >= H ? Infinity : (H * d) / (H - (d - f));
+  const ft = mm => mm === Infinity ? 'inf' : (mm / 304.8).toFixed(mm / 304.8 < 10 ? 2 : 1) + ' ft';
+  const fov = 2 * Math.atan(sw / (2 * f)) / rad;
+  $('#ex-dof').innerHTML = `<div class="stat hot"><i>In focus</i><b>${ft(near_)} to ${ft(far)}</b><small>${far === Infinity ? 'everything past ' + ft(near_) : 'total ' + ft(far - near_)}</small></div><div class="stat"><i>Hyperfocal</i><b>${ft(H)}</b><small>focus here, sharp to infinity</small></div><div class="stat"><i>Field of view</i><b>${Math.round(fov)}°</b><small>${sname} · ${f}mm</small></div><div class="stat"><i>Full-frame equivalent</i><b>${Math.round(f * 35.7 / sw)}mm</b><small>what it feels like on the FX6</small></div>`;
+}
+$('#ex-fps').addEventListener('click', e => { const b = e.target.closest('[data-fps]'); if (!b) return; EX.fps = +b.dataset.fps; $$('#ex-fps button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); exPaint(); });
+$('#ex-nd').addEventListener('input', e => { EX.nd = +e.target.value; $('#ex-nd-o').value = EX.nd; exPaint(); });
+$('#ex-sensor').addEventListener('click', e => { const b = e.target.closest('[data-s]'); if (!b) return; EX.sensor = b.dataset.s; $$('#ex-sensor button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); exPaint(); });
+['ex-f', 'ex-a', 'ex-d'].forEach(id => $('#' + id).addEventListener('input', exPaint));
+
+/* ---------- SCREENS ---------- */
+const SCREENS = {grey: '#767676', white: '#ffffff', black: '#000000', red: '#ff0000', pink: '#ff79c6'};
+let toneOsc = null;
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-screen]'); if (!b) return;
+  const k = b.dataset.screen, f = $('#sc-full'); f.querySelectorAll('.bars').forEach(x => x.remove());
+  if (k === 'bars') { f.style.background = '#000'; const cols = ['#c0c0c0', '#c0c000', '#00c0c0', '#00c000', '#c000c0', '#c00000', '#0000c0']; const d = document.createElement('div'); d.className = 'bars'; d.innerHTML = cols.map(c => `<i style="background:${c}"></i>`).join(''); f.prepend(d); }
+  else f.style.background = SCREENS[k];
+  f.querySelector('.tip').style.color = k === 'white' || k === 'grey' ? 'rgba(0,0,0,.45)' : 'rgba(255,255,255,.5)';
+  f.classList.add('on');
+});
+$('#sc-full').addEventListener('click', () => $('#sc-full').classList.remove('on'));
+$('#sc-tone').addEventListener('click', e => {
+  if (toneOsc) { try { toneOsc.stop(); } catch(x){} toneOsc = null; e.currentTarget.textContent = '1 kHz tone: off'; e.currentTarget.setAttribute('aria-pressed', 'false'); return; }
+  const c = ac(); if (!c) { toast('No audio here.'); return; } const o = c.createOscillator(), g = c.createGain(); o.frequency.value = 1000; g.gain.value = .3; o.connect(g); g.connect(c.destination); o.start(); toneOsc = o;
+  e.currentTarget.textContent = '1 kHz tone: on'; e.currentTarget.setAttribute('aria-pressed', 'true');
+});
+document.addEventListener('visibilitychange', () => { if (document.hidden && toneOsc) $('#sc-tone').click(); });
+
+/* boot last: every tool's data above is declared by now, so a link straight into a tool paints clean */
+slPaint(); go(location.hash.replace('#', '') || 'home', false);
+</script>
+</body>
+</html>

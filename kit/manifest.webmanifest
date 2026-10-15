@@ -1,0 +1,16 @@
+{
+ "name": "KIT · 0FF THE PRINT",
+ "short_name": "KIT",
+ "id": "/kit/",
+ "start_url": "/kit/",
+ "scope": "/kit/",
+ "display": "standalone",
+ "orientation": "any",
+ "background_color": "#0a0a0d",
+ "theme_color": "#0a0a0d",
+ "description": "Filmmaker tools from the house: prompter, slate, take log, release, golden hour, viewfinder, exposure, screens.",
+ "icons": [
+  {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+  {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+ ]
+}
