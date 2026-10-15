@@ -6277,17 +6277,7 @@
 
     dMount.innerHTML = '';
     const present = [];
-    // CLIPPED (10/15): the stories this phone clipped from a story page (word.js, otp-clips), first on the tab
-    try {
-      const clips = JSON.parse(localStorage.getItem('otp-clips') || '[]');
-      const have = clips.map(c => desk.concat(films).find(it => String(it.link || '').replace(/\/$/, '') === String(c.link || '').replace(/\/$/, ''))).filter(Boolean);
-      if (have.length) {
-        present.push({ key: 'clips', label: 'Clipped', n: have.length });
-        const box = document.createElement('div'); box.className = 'shelf on'; box.dataset.shelf = 'clips';
-        box.innerHTML = `<div class="shelf-head"><h3>Clipped</h3><span class="n">${have.length}</span><span class="s">saved on this phone · read later</span></div>`;
-        const rail = document.createElement('div'); rail.className = 'shelf-rail'; have.forEach((it, i) => rail.appendChild(card(it, i))); box.appendChild(rail); dMount.appendChild(box);
-      }
-    } catch (e) {}
+    // (a Clipped shelf lived here for a night, 10/15; pulled with Clip it)
     SHELVES.forEach(sh => {
       const list = byShelf.get(sh.key);
       if (!list.length) return;

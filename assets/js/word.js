@@ -353,8 +353,8 @@
 
 /* ---------- READING MODE (10/15, his "reading that feels like print") ----------
    Additive, like everything above: paper by default (a Dark key flips it back and the phone remembers), a drop cap,
-   the number as a stamp, a progress line, "continue where you left", Clip it (otp-clips, the Stories tab shows a
-   Clipped shelf). Read to me was pulled the same night (robot voice). No page is rebuilt for this: the 31 story pages load
+   the number as a stamp, a progress line, "continue where you left", nothing else: Clip it and Read to me
+   shipped and came out the same night (his call: keep it simple, the phone voice is a robot). No page is rebuilt for this: the 31 story pages load
    this file already. */
 (function () {
   if (!/\/word\/[a-z0-9-]+\/?$/.test(location.pathname) || !document.querySelector('article')) return;
@@ -402,14 +402,11 @@
   const num = ((byline && byline.textContent) || '').match(/0TP-\d+/);
   if (num && h1) { const st = document.createElement('span'); st.className = 'otp-stamp'; st.textContent = num[0]; h1.insertAdjacentElement('afterend', st); }
   const keys = document.createElement('div'); keys.className = 'otp-keys';
-  const kPaper = document.createElement('button'), kClip = document.createElement('button');
-  [kPaper, kClip].forEach(b => { b.type = 'button'; b.className = 'otp-key'; keys.appendChild(b); });
+  const kPaper = document.createElement('button');
+  [kPaper].forEach(b => { b.type = 'button'; b.className = 'otp-key'; keys.appendChild(b); });
   const paintPaper = () => { const on = document.body.classList.contains('otp-print'); kPaper.textContent = on ? 'Dark' : 'Paper'; };
   kPaper.addEventListener('click', () => { const on = !document.body.classList.contains('otp-print'); document.body.classList.toggle('otp-print', on); save('otp-paper', on ? 1 : 0); paintPaper(); }); paintPaper();
-  const clips = () => load('otp-clips', []);
-  const clipped = () => clips().some(c => c.link === link);
-  const paintClip = () => { kClip.textContent = clipped() ? 'Clipped ✓' : 'Clip it'; kClip.classList.toggle('on', clipped()); };
-  kClip.addEventListener('click', () => { let c = clips(); if (clipped()) c = c.filter(x => x.link !== link); else c.unshift({ link, title: h1 ? h1.textContent.trim() : slug, t: Date.now() }); save('otp-clips', c.slice(0, 40)); paintClip(); try { navigator.vibrate && navigator.vibrate(10); } catch (e) {} }); paintClip();
+  // (Clip it and the Clipped shelf were here too, 10/15, and came out the same night: "it shouldn't be that crazy".)
   // (Read to me was here 10/15 and came out the same night: the phone's own voice is a robot, his call: pull it, keep Clip it.)
   if (byline) byline.insertAdjacentElement('afterend', keys);
 
