@@ -354,7 +354,7 @@
 /* ---------- READING MODE (10/15, his "reading that feels like print") ----------
    Additive, like everything above: paper by default (a Dark key flips it back and the phone remembers), a drop cap,
    the number as a stamp, a progress line, "continue where you left", Clip it (otp-clips, the Stories tab shows a
-   Clipped shelf), and Read to me on the phone's own voice. No page is rebuilt for this: the 31 story pages load
+   Clipped shelf). Read to me was pulled the same night (robot voice). No page is rebuilt for this: the 31 story pages load
    this file already. */
 (function () {
   if (!/\/word\/[a-z0-9-]+\/?$/.test(location.pathname) || !document.querySelector('article')) return;
@@ -373,7 +373,6 @@
   .otp-key.on{background:linear-gradient(180deg,#ff9fd6,#f068b6 55%,#d9479b);color:#2a0a1e;box-shadow:0 1px 0 rgba(255,255,255,.35),0 3px 0 #6d1f4b,0 5px 8px rgba(0,0,0,.6)}
   .otp-stamp{display:inline-block;margin:14px 0 0;padding:6px 10px;border:2px solid #ff79c6;border-radius:3px;font:700 12px/1 'JetBrains Mono',monospace;letter-spacing:.16em;color:#ff79c6;transform:rotate(-3deg)}
   .otp-cont{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:50;min-height:44px;padding:0 18px;border:0;border-radius:22px;background:#ff79c6;color:#0a0a0d;font:800 13px/1 Inter,sans-serif;box-shadow:0 8px 20px rgba(0,0,0,.6);cursor:pointer}
-  .otp-reading{background:rgba(255,121,198,.18);box-shadow:0 0 0 6px rgba(255,121,198,.18);border-radius:4px}
   /* paper */
   body.otp-print{background:#1c1a22}
   body.otp-print .wrap{background:#f3ede2;color:#1a1921;border-radius:4px;margin-top:18px;margin-bottom:30px;padding-top:28px;box-shadow:0 0 0 1px rgba(0,0,0,.6),0 20px 50px rgba(0,0,0,.6);
@@ -403,27 +402,15 @@
   const num = ((byline && byline.textContent) || '').match(/0TP-\d+/);
   if (num && h1) { const st = document.createElement('span'); st.className = 'otp-stamp'; st.textContent = num[0]; h1.insertAdjacentElement('afterend', st); }
   const keys = document.createElement('div'); keys.className = 'otp-keys';
-  const kPaper = document.createElement('button'), kClip = document.createElement('button'), kRead = document.createElement('button');
-  [kPaper, kClip, kRead].forEach(b => { b.type = 'button'; b.className = 'otp-key'; keys.appendChild(b); });
+  const kPaper = document.createElement('button'), kClip = document.createElement('button');
+  [kPaper, kClip].forEach(b => { b.type = 'button'; b.className = 'otp-key'; keys.appendChild(b); });
   const paintPaper = () => { const on = document.body.classList.contains('otp-print'); kPaper.textContent = on ? 'Dark' : 'Paper'; };
   kPaper.addEventListener('click', () => { const on = !document.body.classList.contains('otp-print'); document.body.classList.toggle('otp-print', on); save('otp-paper', on ? 1 : 0); paintPaper(); }); paintPaper();
   const clips = () => load('otp-clips', []);
   const clipped = () => clips().some(c => c.link === link);
   const paintClip = () => { kClip.textContent = clipped() ? 'Clipped ✓' : 'Clip it'; kClip.classList.toggle('on', clipped()); };
   kClip.addEventListener('click', () => { let c = clips(); if (clipped()) c = c.filter(x => x.link !== link); else c.unshift({ link, title: h1 ? h1.textContent.trim() : slug, t: Date.now() }); save('otp-clips', c.slice(0, 40)); paintClip(); try { navigator.vibrate && navigator.vibrate(10); } catch (e) {} }); paintClip();
-  // read to me: the phone's own voice, block by block, the block it is on lit
-  let speaking = false, cur = null;
-  const stop = () => { speaking = false; try { speechSynthesis.cancel(); } catch (e) {} if (cur) cur.classList.remove('otp-reading'); cur = null; kRead.textContent = 'Read to me'; kRead.classList.remove('on'); };
-  const read = () => {
-    if (!('speechSynthesis' in window) || !art) { kRead.textContent = 'No voice here'; return; }
-    const blocks = $$('article > p, article > h2, article > blockquote').filter(b => b.textContent.trim().length > 2);
-    let i = 0; speaking = true; kRead.textContent = 'Stop'; kRead.classList.add('on');
-    const next = () => { if (!speaking || i >= blocks.length) { stop(); return; } if (cur) cur.classList.remove('otp-reading'); cur = blocks[i++]; cur.classList.add('otp-reading'); cur.scrollIntoView({ block: 'center', behavior: 'smooth' });
-      const u = new SpeechSynthesisUtterance(cur.textContent.trim()); u.rate = .95; u.pitch = 1; const v = speechSynthesis.getVoices().find(x => /en[-_]US/i.test(x.lang) && !/compact/i.test(x.name)); if (v) u.voice = v; u.onend = next; u.onerror = next; speechSynthesis.speak(u); };
-    try { speechSynthesis.cancel(); } catch (e) {} next();
-  };
-  kRead.textContent = 'Read to me'; kRead.addEventListener('click', () => { speaking ? stop() : read(); });
-  addEventListener('pagehide', stop);
+  // (Read to me was here 10/15 and came out the same night: the phone's own voice is a robot, his call: pull it, keep Clip it.)
   if (byline) byline.insertAdjacentElement('afterend', keys);
 
   // progress, and the way back to where you left
