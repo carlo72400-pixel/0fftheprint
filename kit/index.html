@@ -218,7 +218,9 @@ input[type=range]{width:100%;accent-color:var(--glow);height:44px}
   <!-- ===== TELEPROMPTER ===== -->
   <section id="t-prompter" class="tool" hidden>
     <h2>Prompter</h2><p class="sub">paste the script · tap the screen to pause · it remembers</p>
+    <div class="row"><select class="in" id="pr-pick" aria-label="Saved scripts"></select><div class="row" style="gap:6px"><button type="button" class="btn" id="pr-save">Save as</button><button type="button" class="btn ghost bad" id="pr-del">Delete</button></div></div>
     <textarea class="in" id="pr-src" placeholder="Paste the script here. Blank lines become breaths."></textarea>
+    <p class="note" id="pr-est"></p>
     <div class="card" style="display:grid;gap:12px">
       <div class="slider"><span>Speed</span><input type="range" id="pr-speed" min="10" max="160" value="55"><output id="pr-speed-o">55</output></div>
       <div class="slider"><span>Size</span><input type="range" id="pr-size" min="24" max="80" value="42"><output id="pr-size-o">42</output></div>
@@ -254,6 +256,7 @@ input[type=range]{width:100%;accent-color:var(--glow);height:44px}
       <div class="num"><button type="button" data-sl="take" data-d="-1">−</button><b><small>Take</small><span id="n-take">1</span></b><button type="button" data-sl="take" data-d="1">+</button></div>
     </div>
     <div class="row"><button type="button" class="btn primary big mark" id="sl-mark">Mark</button><button type="button" class="btn big mark tail" id="sl-tail">Tail</button></div>
+    <button type="button" class="btn" id="sl-full">Hold it up: the big slate</button>
     <div class="card" style="display:grid;gap:10px">
       <div class="row3"><label><span class="lbl">Prod</span><input class="in" id="in-prod" maxlength="12" value="0TP"></label><label><span class="lbl">Roll</span><input class="in" id="in-roll" maxlength="8" value="A001"></label><label><span class="lbl">Cam</span><input class="in" id="in-cam" maxlength="8" value="FX6"></label></div>
       <label><span class="lbl">Note for the next take</span><input class="in" id="in-note" maxlength="120" placeholder="wide, lav on, bring the lamp in"></label>
@@ -262,11 +265,23 @@ input[type=range]{width:100%;accent-color:var(--glow);height:44px}
     <p class="note">Tap <b>Mark</b> on the clap: the screen goes white one frame and the beep hits every mic in the room, so the FX6, the Luna and the lav line up on one spike in the edit. <b>Tail</b> is the same for a tail slate. The take number steps up after every mark.</p>
   </section>
   <div id="flash"></div>
+  <div class="full" id="sl-fullv">
+    <button type="button" class="x" id="sl-fullx" aria-label="Close">×</button>
+    <div class="slate" style="position:absolute;left:12px;right:12px;top:50%;transform:translateY(-62%);gap:12px;padding:18px">
+      <div class="stripe"></div>
+      <div class="srow"><div class="sc"><i>Prod</i><b id="f-prod"></b></div><div class="sc"><i>Roll</i><b id="f-roll"></b></div><div class="sc"><i>Cam</i><b id="f-cam"></b></div></div>
+      <div class="srow"><div class="sc"><i>Scene</i><b id="f-scene" style="font-size:64px"></b></div><div class="sc"><i>Shot</i><b id="f-shot" style="font-size:64px"></b></div><div class="sc t"><i>Take</i><b id="f-take" style="font-size:64px"></b></div></div>
+      <div class="clock"><span id="f-date"></span><b id="f-clock"></b></div>
+      <div class="stripe"></div>
+    </div>
+    <div class="hud"><div class="row"><button type="button" class="btn primary big mark" id="f-mark">Mark</button><button type="button" class="btn big mark tail" id="f-tail">Tail</button></div></div>
+  </div>
 
   <!-- ===== TAKE LOG ===== -->
   <section id="t-takes" class="tool" hidden>
     <h2>Take log</h2><p class="sub">tap the circle on the keeper · notes stick · share the CSV</p>
     <div class="row"><button type="button" class="btn primary" id="tk-share">Share CSV</button><button type="button" class="btn" id="tk-copy">Copy CSV</button></div>
+    <div class="seg"><button type="button" data-tkf="all" aria-pressed="true">Every take</button><button type="button" data-tkf="circ" aria-pressed="false">Circles only</button></div>
     <ul class="list" id="tk-list"></ul>
     <button type="button" class="btn ghost bad" id="tk-clear">Clear the log</button>
     <p class="note">One row per mark: time, roll, scene, shot, take, circle, note. Drop the CSV next to the footage and the keepers are already picked when you sit down in Resolve.</p>
@@ -275,17 +290,24 @@ input[type=range]{width:100%;accent-color:var(--glow);height:44px}
   <!-- ===== RELEASE ===== -->
   <section id="t-release" class="tool" hidden>
     <h2>Release</h2><p class="sub">name · handle · finger signature · a PDF you both get</p>
+    <div class="card" style="display:grid;gap:10px" id="rl-who">
+      <span class="lbl">Who's shooting <small style="text-transform:none;letter-spacing:0">(saved on this phone, goes on every release)</small></span>
+      <div class="row"><label><span class="lbl">Your name</span><input class="in" id="pd-name" autocomplete="off" placeholder="Your legal name"></label><label><span class="lbl">Business or handle</span><input class="in" id="pd-biz" autocomplete="off" placeholder="Studio, house, or @you"></label></div>
+      <div class="row"><label><span class="lbl">Your email</span><input class="in" id="pd-email" type="email" autocomplete="off" placeholder="where copies go"></label><label><span class="lbl">City</span><input class="in" id="pd-city" autocomplete="off" placeholder="San Antonio TX"></label></div>
+    </div>
     <div class="card" style="display:grid;gap:10px">
       <div class="row"><label><span class="lbl">Their name</span><input class="in" id="rl-name" autocomplete="off" placeholder="Full name"></label><label><span class="lbl">Instagram</span><input class="in" id="rl-ig" autocomplete="off" autocapitalize="none" placeholder="@handle"></label></div>
       <div class="row"><label><span class="lbl">Their email <small style="text-transform:none;letter-spacing:0">(optional)</small></span><input class="in" id="rl-email" type="email" autocomplete="off" placeholder="so they get a copy"></label><label><span class="lbl">Shoot</span><input class="in" id="rl-proj" placeholder="Night, room, date"></label></div>
       <div class="seg" id="rl-kind"><button type="button" data-kind="editorial" aria-pressed="true">Editorial</button><button type="button" data-kind="commercial" aria-pressed="false">Commercial</button><button type="button" data-kind="model" aria-pressed="false">Portrait</button></div>
-      <div class="legal" id="rl-legal"></div>
+      <span class="lbl">The words <small style="text-transform:none;letter-spacing:0">(edit them, they stick per type)</small></span>
+      <textarea class="in" id="rl-legal" rows="7" style="min-height:150px;font-size:13.5px;line-height:1.45"></textarea>
+      <button type="button" class="btn ghost" id="rl-reset" style="min-height:40px;font-size:12.5px">Put the house words back</button>
       <span class="lbl">Sign here</span>
       <div class="sig" id="rl-sigbox"><canvas id="rl-sig"></canvas><div class="line"></div><div class="hint">sign with your finger</div></div>
       <div class="row"><button type="button" class="btn" id="rl-clear">Clear signature</button><button type="button" class="btn primary" id="rl-make">Make the PDF</button></div>
     </div>
     <ul class="list" id="rl-list"></ul>
-    <p class="note">The PDF carries the words above, their details, the date and the signature, and opens in the share sheet so you can mail it to the house and to them in one go. Kept on this phone until you clear it. Plain-language form, not legal advice.</p>
+    <p class="note">The PDF carries your name, their details, the words, the date and the signature, and opens in the share sheet so you can mail it to yourself and to them in one go. Kept on this phone until you clear it. Plain-language form, not legal advice.</p>
   </section>
 
   <!-- ===== GOLDEN HOUR ===== -->
@@ -299,6 +321,7 @@ input[type=range]{width:100%;accent-color:var(--glow);height:44px}
       <div class="compass"><span class="n">N</span><span class="s">S</span><span class="e">E</span><span class="w">W</span><div class="arm" id="sun-arm"></div></div>
       <div class="note" id="sun-azi" style="text-align:center"></div>
     </div>
+    <div class="card"><span class="lbl">The week ahead</span><div id="sun-week" style="display:grid;gap:6px"></div></div>
     <p class="note"><b>Golden hour</b> is the hour after sunrise and the hour before sunset. <b>Blue hour</b> runs from sunset to the end of civil twilight, when the sky still holds color and the signs come on. Point the compass arm at where the sun sits and put your subject's back to it for rim light.</p>
   </section>
 
@@ -316,6 +339,7 @@ input[type=range]{width:100%;accent-color:var(--glow);height:44px}
     <button type="button" class="x" id="vf-x" aria-label="Close">×</button>
     <div class="hud" id="vf-hud">
       <div class="seg" id="vf-ar"><button type="button" data-ar="2.39" aria-pressed="false">2.39</button><button type="button" data-ar="1.85" aria-pressed="false">1.85</button><button type="button" data-ar="1.7778" aria-pressed="true">16:9</button><button type="button" data-ar="1.3333" aria-pressed="false">4:3</button><button type="button" data-ar="1" aria-pressed="false">1:1</button><button type="button" data-ar="0.8" aria-pressed="false">4:5</button><button type="button" data-ar="0.5625" aria-pressed="false">9:16</button></div>
+      <div class="row"><button type="button" class="btn" id="vf-grab">Grab this frame</button><button type="button" class="btn" id="vf-flip">Flip camera</button></div>
       <div class="seg" id="vf-fl"><button type="button" data-fl="24" aria-pressed="true">24</button><button type="button" data-fl="35" aria-pressed="false">35</button><button type="button" data-fl="50" aria-pressed="false">50</button><button type="button" data-fl="85" aria-pressed="false">85</button><button type="button" data-fl="t" aria-pressed="false">Thirds</button></div>
     </div>
   </div>
@@ -327,6 +351,9 @@ input[type=range]{width:100%;accent-color:var(--glow);height:44px}
       <span class="lbl">Shutter, 180 degree rule</span>
       <div class="seg" id="ex-fps"><button type="button" data-fps="23.976" aria-pressed="true">24</button><button type="button" data-fps="25">25</button><button type="button" data-fps="29.97">30</button><button type="button" data-fps="50">50</button><button type="button" data-fps="59.94">60</button><button type="button" data-fps="120">120</button></div>
       <div class="row" id="ex-shutter"></div>
+      <span class="lbl">Shutter angle</span>
+      <div class="seg" id="ex-ang"><button type="button" data-ang="180" aria-pressed="true">180°</button><button type="button" data-ang="172.8">172.8°</button><button type="button" data-ang="144">144°</button><button type="button" data-ang="90">90°</button><button type="button" data-ang="45">45°</button></div>
+      <div class="row"><div class="stat"><i>FX6 base ISO</i><b>800</b><small>daylight, the clean one</small></div><div class="stat"><i>FX6 high base</i><b>12800</b><small>the rooms, not 6400 or 3200</small></div></div>
     </div>
     <div class="card" style="display:grid;gap:10px">
       <span class="lbl">ND: stops to cut</span>
@@ -352,6 +379,8 @@ input[type=range]{width:100%;accent-color:var(--glow);height:44px}
       <button type="button" class="door" data-screen="black"><b>Black</b><span>flare check</span></button>
       <button type="button" class="door" data-screen="red"><b>Red</b><span>a gel in a pinch</span></button>
       <button type="button" class="door" data-screen="pink"><b>House pink</b><span>#ff79c6</span></button>
+      <button type="button" class="door" data-screen="star"><b>Focus star</b><span>pull focus on it</span></button>
+      <button type="button" class="door" data-screen="timer"><b>Set timer</b><span>big clock, tap to lap</span></button>
     </div>
     <button type="button" class="btn big" id="sc-tone" aria-pressed="false">1 kHz tone: off</button>
     <p class="note">The grey screen is a stand-in for an 18% card: fill the frame with it, set custom white balance, move on. The tone runs at a fixed level for a quick check that a mic is live; it is not a calibrated reference.</p>
@@ -408,7 +437,14 @@ const PR = {y: 0, run: false, last: 0, speed: load('prSpeed', 55), size: load('p
 $('#pr-src').value = load('prText', '');
 $('#pr-speed').value = PR.speed; $('#pr-speed-o').value = PR.speed; $('#pr-size').value = PR.size; $('#pr-size-o').value = PR.size;
 $('#pr-mirror').setAttribute('aria-pressed', String(PR.mirror)); $('#pr-count').setAttribute('aria-pressed', String(PR.count));
-$('#pr-src').addEventListener('input', () => save('prText', $('#pr-src').value));
+let PRL = load('prLib', {}); let PRCUR = load('prCur', '');
+function prEst(){ const w = ($('#pr-src').value.trim().match(/\S+/g) || []).length; const sec = Math.round(w / 150 * 60); $('#pr-est').innerHTML = w ? `<b>${w} words</b> · about ${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, '0')} read at a calm pace` : 'Paste a script and the read time shows here.'; }
+function prPickPaint(){ const sel = $('#pr-pick'); const names = Object.keys(PRL).sort(); sel.innerHTML = '<option value="">Scratch (not saved)</option>' + names.map(n => `<option value="${esc(n)}"${n === PRCUR ? ' selected' : ''}>${esc(n)}</option>`).join(''); }
+$('#pr-src').addEventListener('input', () => { save('prText', $('#pr-src').value); if (PRCUR && PRL[PRCUR] != null) { PRL[PRCUR] = $('#pr-src').value; save('prLib', PRL); } prEst(); });
+$('#pr-pick').addEventListener('change', e => { PRCUR = e.target.value; save('prCur', PRCUR); if (PRCUR && PRL[PRCUR] != null) { $('#pr-src').value = PRL[PRCUR]; save('prText', PRL[PRCUR]); } prEst(); });
+$('#pr-save').addEventListener('click', () => { const t = $('#pr-src').value.trim(); if (!t) { toast('Nothing to save yet.'); return; } const n = prompt('Name this script', PRCUR || t.split('\n')[0].slice(0, 30)); if (!n) return; PRL[n.trim()] = $('#pr-src').value; PRCUR = n.trim(); save('prLib', PRL); save('prCur', PRCUR); prPickPaint(); toast('Saved.'); });
+$('#pr-del').addEventListener('click', () => { if (!PRCUR || PRL[PRCUR] == null) { toast('Pick a saved script first.'); return; } if (!confirm('Delete "' + PRCUR + '"?')) return; delete PRL[PRCUR]; PRCUR = ''; save('prLib', PRL); save('prCur', ''); prPickPaint(); toast('Deleted.'); });
+prPickPaint(); prEst();
 $('#pr-speed').addEventListener('input', e => { PR.speed = +e.target.value; $('#pr-speed-o').value = PR.speed; $('#pr-speed2').value = PR.speed; $('#pr-speed2-o').value = PR.speed; save('prSpeed', PR.speed); });
 $('#pr-speed2').addEventListener('input', e => { PR.speed = +e.target.value; $('#pr-speed2-o').value = PR.speed; $('#pr-speed').value = PR.speed; $('#pr-speed-o').value = PR.speed; save('prSpeed', PR.speed); });
 $('#pr-size').addEventListener('input', e => { PR.size = +e.target.value; $('#pr-size-o').value = PR.size; save('prSize', PR.size); });
@@ -458,8 +494,12 @@ function slPaint(){
   $('#in-prod').value = SL.prod; $('#in-roll').value = SL.roll; $('#in-cam').value = SL.cam; $('#in-note').value = SL.note || '';
   $('#sl-date').textContent = new Date().toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'});
   $('#takes-n').textContent = TAKES.length ? TAKES.length + ' takes' : '';
+  ['prod', 'roll', 'cam', 'scene', 'shot', 'take', 'date'].forEach(k => { const el = $('#f-' + k); if (el) el.textContent = $('#sl-' + k).textContent; });
 }
-setInterval(() => { const d = new Date(); $('#sl-clock').textContent = d.toLocaleTimeString('en-US', {hour12:false}); }, 500);
+$('#sl-full').addEventListener('click', async () => { slPaint(); $('#sl-fullv').classList.add('on'); try { PR.lock = await navigator.wakeLock.request('screen'); } catch(e){} });
+$('#sl-fullx').addEventListener('click', () => { $('#sl-fullv').classList.remove('on'); try { PR.lock && PR.lock.release(); } catch(e){} });
+$('#f-mark').addEventListener('click', () => mark(false)); $('#f-tail').addEventListener('click', () => mark(true));
+setInterval(() => { const t = new Date().toLocaleTimeString('en-US', {hour12:false}); $('#sl-clock').textContent = t; const f = $('#f-clock'); if (f) f.textContent = t; }, 500);
 ['prod','roll','cam','note'].forEach(k => $('#in-' + k).addEventListener('input', e => { SL[k] = e.target.value; save('slate', SL); slPaint(); }));
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-sl]'); if (!b) return;
@@ -485,12 +525,16 @@ $('#sl-tail').addEventListener('click', () => mark(true));
 function tkPaint(){
   const ul = $('#tk-list');
   if (!TAKES.length) { ul.innerHTML = '<li class="empty">No takes yet. Mark one on the Slate.</li>'; return; }
-  ul.innerHTML = TAKES.slice().reverse().map((x, i) => { const n = TAKES.length - 1 - i; const d = new Date(x.t);
+  const rows = TAKES.map((x, n) => ({x, n})).filter(r => TKF === 'all' || r.x.circ).reverse();
+  if (!rows.length) { ul.innerHTML = '<li class="empty">No circled takes yet.</li>'; return; }
+  ul.innerHTML = rows.map(({x, n}) => { const d = new Date(x.t);
     return `<li class="take"><div class="id">${esc(x.scene)}${esc(x.shot)}<small>take ${esc(x.take)}${x.tail ? ' · tail' : ''}</small></div>
-      <div class="tx"><input value="${esc(x.note)}" placeholder="note" data-tknote="${n}" maxlength="140"><small>${esc(x.roll)} · ${esc(x.cam)} · ${d.toLocaleTimeString('en-US', {hour12:false})}</small></div>
+      <div class="tx"><input value="${esc(x.note)}" placeholder="note" data-tknote="${n}" maxlength="140"><small>${esc(x.roll)} · ${esc(x.cam)} · ${d.toLocaleTimeString('en-US', {hour12:false})} · <button type="button" data-tkdel="${n}" style="border:0;background:none;padding:0;color:var(--bad);font:inherit">delete</button></small></div>
       <button type="button" class="circ" data-tkcirc="${n}" aria-pressed="${x.circ}" aria-label="Circle take">${x.circ ? '●' : '○'}</button></li>`; }).join('');
 }
-$('#tk-list').addEventListener('click', e => { const b = e.target.closest('[data-tkcirc]'); if (!b) return; const x = TAKES[+b.dataset.tkcirc]; x.circ = !x.circ; save('takes', TAKES); buzz(); tkPaint(); });
+let TKF = 'all';
+$('#tk-list').addEventListener('click', e => { const d = e.target.closest('[data-tkdel]'); if (d) { TAKES.splice(+d.dataset.tkdel, 1); save('takes', TAKES); tkPaint(); slPaint(); return; } const b = e.target.closest('[data-tkcirc]'); if (!b) return; const x = TAKES[+b.dataset.tkcirc]; x.circ = !x.circ; save('takes', TAKES); buzz(); tkPaint(); });
+document.addEventListener('click', e => { const b = e.target.closest('[data-tkf]'); if (!b) return; TKF = b.dataset.tkf; $$('[data-tkf]').forEach(x => x.setAttribute('aria-pressed', String(x === b))); tkPaint(); });
 $('#tk-list').addEventListener('input', e => { const i = e.target.closest('[data-tknote]'); if (!i) return; TAKES[+i.dataset.tknote].note = i.value; save('takes', TAKES); });
 const csvOf = () => ['time,prod,roll,cam,scene,shot,take,tail,circle,note'].concat(TAKES.map(x => [new Date(x.t).toLocaleString('en-US', {hour12:false}), x.prod, x.roll, x.cam, x.scene, x.shot, x.take, x.tail ? 'tail' : '', x.circ ? 'circle' : '', x.note].map(v => '"' + String(v ?? '').replace(/"/g, '""') + '"').join(','))).join('\n');
 async function shareFile(file, title, fallbackText){
@@ -504,11 +548,17 @@ $('#tk-copy').addEventListener('click', async () => { if (!TAKES.length) { toast
 $('#tk-clear').addEventListener('click', () => { if (!TAKES.length) return; if (!confirm('Clear every take on this phone?')) return; TAKES = []; save('takes', TAKES); tkPaint(); slPaint(); });
 
 /* ---------- RELEASE ---------- */
-const RL_TEXT = {
-  editorial: 'I agree that 0FF THE PRINT (Giancarlo Ortiz, San Antonio TX) may publish photos and video of me from this shoot on its website, social channels and in its own editorial work, with or without my name, and may let the artists and the room that night repost them. These pictures are not for advertising a product without a separate agreement. I can ask for a picture to come down and the house will take it down within a reasonable time. I am 18 or older, or my parent or guardian signs below.',
-  commercial: 'I grant 0FF THE PRINT (Giancarlo Ortiz, San Antonio TX) and its client for this shoot the right to use photos and video of me from this shoot in any media, including advertising and promotion, for any lawful purpose, without further payment beyond what was agreed today. I give up any claim to approve the final pictures or the copy they run with. I am 18 or older, or my parent or guardian signs below.',
-  model: 'I agree that 0FF THE PRINT (Giancarlo Ortiz, San Antonio TX) may use the portraits made of me today on its website, social channels, portfolio and printed work, and that I may use them for my own non-commercial pages with a credit. Any commercial use by either of us beyond that needs a separate written agreement. I am 18 or older, or my parent or guardian signs below.'
+/* the words are templates: {P} = who is shooting, filled from the producer block so anybody can use this, not just the house */
+const RL_TPL = {
+  editorial: 'I agree that {P} may publish photos and video of me from this shoot on their website, social channels and in their own editorial work, with or without my name, and may let the artists and the room that night repost them. These pictures are not for advertising a product without a separate agreement. I can ask for a picture to come down and it will come down within a reasonable time. I am 18 or older, or my parent or guardian signs below.',
+  commercial: 'I grant {P} and their client for this shoot the right to use photos and video of me from this shoot in any media, including advertising and promotion, for any lawful purpose, without further payment beyond what was agreed today. I give up any claim to approve the final pictures or the copy they run with. I am 18 or older, or my parent or guardian signs below.',
+  model: 'I agree that {P} may use the portraits made of me today on their website, social channels, portfolio and printed work, and that I may use them for my own non-commercial pages with a credit. Any commercial use by either of us beyond that needs a separate written agreement. I am 18 or older, or my parent or guardian signs below.'
 };
+let PD = Object.assign({name: '', biz: '', email: '', city: ''}, load('producer', {}));
+const pdLabel = () => { const who = [PD.biz, PD.name && PD.biz ? '(' + PD.name + (PD.city ? ', ' + PD.city : '') + ')' : PD.name + (PD.city ? ', ' + PD.city : '')].filter(Boolean).join(' '); return who || 'the photographer'; };
+let RL_WORDS = load('rlWords', {});
+const rlText = kind => (RL_WORDS[kind] || RL_TPL[kind]).replace(/\{P\}/g, pdLabel());
+const RL_TEXT = new Proxy({}, {get: (_, k) => rlText(k)});
 let RL = {kind: 'editorial'}; let RELS = load('releases', []);
 const sigC = $('#rl-sig'), sigX = sigC.getContext('2d'); let sigDrawn = false, sigPts = [];
 function sigSize(){ const r = $('#rl-sigbox').getBoundingClientRect(); const dpr = devicePixelRatio || 1; sigC.width = r.width * dpr; sigC.height = r.height * dpr; sigX.setTransform(dpr, 0, 0, dpr, 0, 0); sigX.fillStyle = '#fff'; sigX.fillRect(0, 0, r.width, r.height); sigX.lineWidth = 2.6; sigX.lineCap = 'round'; sigX.lineJoin = 'round'; sigX.strokeStyle = '#111'; sigDrawn = false; }
@@ -517,8 +567,12 @@ sigC.addEventListener('pointerdown', e => { sigOn = true; sigC.setPointerCapture
 sigC.addEventListener('pointermove', e => { if (!sigOn) return; const r = sigC.getBoundingClientRect(); sigX.lineTo(e.clientX - r.left, e.clientY - r.top); sigX.stroke(); sigDrawn = true; $('#rl-sigbox .hint').hidden = true; });
 const sigEnd = () => { sigOn = false; }; sigC.addEventListener('pointerup', sigEnd); sigC.addEventListener('pointercancel', sigEnd);
 $('#rl-clear').addEventListener('click', () => { sigSize(); $('#rl-sigbox .hint').hidden = false; });
-$('#rl-kind').addEventListener('click', e => { const b = e.target.closest('[data-kind]'); if (!b) return; RL.kind = b.dataset.kind; $$('#rl-kind button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); $('#rl-legal').textContent = RL_TEXT[RL.kind]; });
-$('#rl-legal').textContent = RL_TEXT.editorial;
+['name', 'biz', 'email', 'city'].forEach(k => { $('#pd-' + k).value = PD[k] || ''; $('#pd-' + k).addEventListener('input', e => { PD[k] = e.target.value.trim(); save('producer', PD); rlWords(); }); });
+function rlWords(){ $('#rl-legal').value = RL_TEXT[RL.kind]; }
+$('#rl-kind').addEventListener('click', e => { const b = e.target.closest('[data-kind]'); if (!b) return; RL.kind = b.dataset.kind; $$('#rl-kind button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); rlWords(); });
+$('#rl-legal').addEventListener('input', e => { const t = e.target.value; RL_WORDS[RL.kind] = t.includes(pdLabel()) ? t.split(pdLabel()).join('{P}') : t; save('rlWords', RL_WORDS); });
+$('#rl-reset').addEventListener('click', () => { delete RL_WORDS[RL.kind]; save('rlWords', RL_WORDS); rlWords(); toast('House words are back.'); });
+rlWords();
 function rlPaint(){ sigSize(); $('#rl-list').innerHTML = RELS.length ? RELS.slice().reverse().map((r, i) => `<li class="rel"><div><b>${esc(r.name)}</b><small>${esc(r.ig || '')}${r.ig ? ' · ' : ''}${esc(r.kind)} · ${esc(r.proj || '')} · ${new Date(r.t).toLocaleDateString()}</small></div><button type="button" class="btn" data-rlshare="${RELS.length - 1 - i}">Share</button></li>`).join('') : ''; }
 // a one-page PDF, written by hand: Helvetica text + the signature as a JPEG
 function pdfEscape(s){ return s.replace(/\\/g, '\\\\').replace(/\(/g, '\\(').replace(/\)/g, '\\)').replace(/[^\x20-\x7e]/g, '?'); }
@@ -527,13 +581,13 @@ function makePDF(rec, jpegBytes, jw, jh){
   const enc = new TextEncoder(); const parts = []; let len = 0; const offs = [];
   const push = s => { const b = typeof s === 'string' ? enc.encode(s) : s; parts.push(b); len += b.length; };
   const lines = [];
-  lines.push(['H', '0FF THE PRINT · RELEASE']);
+  lines.push(['H', ((rec.biz || PD.biz || PD.name || 'PHOTO').toUpperCase()) + ' · RELEASE']);
   lines.push(['S', (rec.kind.toUpperCase()) + ' · ' + (rec.proj || 'shoot') + ' · ' + new Date(rec.t).toLocaleString('en-US')]);
   lines.push(['G', '']);
-  wrap(RL_TEXT[rec.kind], 92).forEach(l => lines.push(['B', l]));
+  wrap(rec.words || RL_TEXT[rec.kind], 92).forEach(l => lines.push(['B', l]));
   lines.push(['G', '']);
   lines.push(['B', 'Name: ' + rec.name]); if (rec.ig) lines.push(['B', 'Instagram: ' + rec.ig]); if (rec.email) lines.push(['B', 'Email: ' + rec.email]);
-  lines.push(['B', 'Producer: Giancarlo Ortiz · 0FF THE PRINT · offtheprintcollective@gmail.com']);
+  lines.push(['B', 'Photographer: ' + (rec.who || pdLabel()) + (rec.pemail ? ' · ' + rec.pemail : '')]);
   lines.push(['G', '']); lines.push(['S', 'Signature']);
   let y = 760; let content = '';
   lines.forEach(([k, t]) => { const size = k === 'H' ? 20 : k === 'S' ? 10 : 11; const lead = k === 'H' ? 26 : k === 'G' ? 8 : 15; if (k !== 'G') content += `BT /F1 ${size} Tf 56 ${y} Td (${pdfEscape(t)}) Tj ET\n`; y -= lead; });
@@ -560,8 +614,9 @@ async function rlShare(rec, jpeg){
 }
 $('#rl-make').addEventListener('click', async () => {
   const name = $('#rl-name').value.trim(); if (!name) { toast('Their name first.'); $('#rl-name').focus(); return; }
+  if (!PD.name && !PD.biz) { toast('Fill in who is shooting first.'); $('#pd-name').focus(); return; }
   if (!sigDrawn) { toast('They need to sign.'); return; }
-  const rec = {t: new Date().toISOString(), name, ig: $('#rl-ig').value.trim(), email: $('#rl-email').value.trim(), proj: $('#rl-proj').value.trim(), kind: RL.kind};
+  const rec = {t: new Date().toISOString(), name, ig: $('#rl-ig').value.trim(), email: $('#rl-email').value.trim(), proj: $('#rl-proj').value.trim(), kind: RL.kind, words: $('#rl-legal').value.trim(), who: pdLabel(), pemail: PD.email, biz: PD.biz || PD.name};
   const jpeg = sigJPEG(); rec.sig = sigC.toDataURL('image/jpeg', .7);
   RELS.push(rec); if (RELS.length > 60) RELS = RELS.slice(-60); save('releases', RELS);
   await rlShare(rec, jpeg);
@@ -615,6 +670,7 @@ function sunPaint(){
   const t0 = new Date(y, m - 1, d, 4, 0), span = 18 * 3600000; const px = t => Math.max(0, Math.min(100, (t - t0) / span * 100));
   const marks = [[c.rise, 'dawn'], [s.rise, 'rise'], [gAM, 'golden'], [gPM, 'golden'], [s.set, 'set'], [c.set, 'dark']];
   $('#sunline').innerHTML = marks.map(([t, l]) => `<i style="left:${px(t)}%" data-l="${l}"></i>`).join('') + (isToday ? `<i class="now" style="left:${px(now)}%" data-l="now"></i>` : '');
+  $('#sun-week').innerHTML = [...Array(7)].map((_, i) => { const dd = new Date(y, m - 1, d + i, 12); const ss = sunTimes(dd, lat, lng, -.833); if (!ss) return ''; const g = new Date(ss.set.getTime() - 3600000); return `<div style="display:grid;grid-template-columns:72px 1fr 1fr;gap:8px;font:600 12px/1.4 var(--f-mono);color:var(--muted)"><b style="color:var(--ink)">${dd.toLocaleDateString('en-US', {weekday:'short', day:'numeric'})}</b><span>golden <b style="color:var(--gold)">${hhmm(g)}</b></span><span>set <b style="color:var(--ink)">${hhmm(ss.set)}</b></span></div>`; }).join('');
   const [hh, mm] = ti.value.split(':').map(Number); const at = new Date(y, m - 1, d, hh, mm);
   const p = sunPos(at, lat, lng);
   if (p) { $('#sun-arm').style.transform = `rotate(${p.az}deg)`; const dirs = ['N','NE','E','SE','S','SW','W','NW']; const dn = dirs[Math.round(p.az / 45) % 8];
@@ -634,8 +690,9 @@ function vfLayout(){
   const arName = {1.7778: '16:9', 1.3333: '4:3', 0.5625: '9:16'}[VF.ar] || String(VF.ar);
   $('#vf-tag').textContent = `${arName} · ${VF.fl}mm`;
 }
+VF.facing = 'environment';
 async function vfOpen(){
-  try { VF.stream = await navigator.mediaDevices.getUserMedia({video: {facingMode: {ideal: 'environment'}, width: {ideal: 1920}, height: {ideal: 1080}}, audio: false}); }
+  try { VF.stream = await navigator.mediaDevices.getUserMedia({video: {facingMode: {ideal: VF.facing}, width: {ideal: 1920}, height: {ideal: 1080}}, audio: false}); }
   catch(e){ toast('Camera said no. Allow it in Settings and try again.'); return; }
   $('#vf-video').srcObject = VF.stream; $('#vf').classList.add('on'); vfLayout();
 }
@@ -644,14 +701,25 @@ $('#vf-open').addEventListener('click', vfOpen); $('#vf-x').addEventListener('cl
 $('#vf-ar').addEventListener('click', e => { const b = e.target.closest('[data-ar]'); if (!b) return; VF.ar = +b.dataset.ar; $$('#vf-ar button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); vfLayout(); });
 $('#vf-fl').addEventListener('click', e => { const b = e.target.closest('[data-fl]'); if (!b) return; if (b.dataset.fl === 't') { VF.thirds = !VF.thirds; b.setAttribute('aria-pressed', String(VF.thirds)); } else { VF.fl = +b.dataset.fl; $$('#vf-fl button[data-fl]:not([data-fl="t"])').forEach(x => x.setAttribute('aria-pressed', String(x === b))); } vfLayout(); });
 window.addEventListener('resize', () => { if ($('#vf').classList.contains('on')) vfLayout(); });
+$('#vf-flip').addEventListener('click', async () => { VF.facing = VF.facing === 'environment' ? 'user' : 'environment'; if (VF.stream) VF.stream.getTracks().forEach(t => t.stop()); await vfOpen(); });
+$('#vf-grab').addEventListener('click', async () => {
+  const v = $('#vf-video'); if (!v.videoWidth) { toast('No picture yet.'); return; }
+  const W = innerWidth, H = innerHeight, vs = Math.max(W / v.videoWidth, H / v.videoHeight) * (VF.fl / 24); const vw = v.videoWidth * vs, vh = v.videoHeight * vs, ox = (W - vw) / 2, oy = (H - vh) / 2;
+  const b = $('#vf-mask b').getBoundingClientRect(); const sx = (b.left - ox) / vs, sy = (b.top - oy) / vs, sw = b.width / vs, sh = b.height / vs;
+  const o = document.createElement('canvas'); o.width = Math.round(sw); o.height = Math.round(sh); o.getContext('2d').drawImage(v, sx, sy, sw, sh, 0, 0, o.width, o.height);
+  const blob = await new Promise(r => o.toBlob(r, 'image/jpeg', .92)); click(); flashWhite(.5);
+  await shareFile(new File([blob], 'frame-' + Date.now() + '.jpg', {type: 'image/jpeg'}), 'Frame');
+});
+function flashWhite(a){ const f = $('#flash'); f.style.opacity = a; f.classList.add('on'); setTimeout(() => { f.classList.remove('on'); f.style.opacity = ''; }, 120); }
+function click(){ const c = ac(); if (!c) return; const n = c.createBufferSource(), b = c.createBuffer(1, c.sampleRate * .05, c.sampleRate), d = b.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 3); n.buffer = b; const g = c.createGain(); g.gain.value = .4; n.connect(g); g.connect(c.destination); n.start(); }
 
 /* ---------- EXPOSURE ---------- */
-const EX = {fps: 23.976, nd: 3, sensor: 'ff'};
+const EX = {fps: 23.976, nd: 3, sensor: 'ff', ang: 180};
 const SENS = {ff: [35.7, .029, 'FX6 full frame'], s35: [23.5, .02, 'FX6 Super 35'], '1in': [13.2, .011, 'Luna 1-inch'], ace: [9.6, .008, 'Ace Pro 2 1/1.3']};
 const FX6ND = [[2, '1/4'], [3, '1/8'], [4, '1/16'], [5, '1/32'], [6, '1/64'], [7, '1/128']];
 function frac(x){ return '1/' + Math.round(x); }
 function exPaint(){
-  const sh = 2 * EX.fps; $('#ex-shutter').innerHTML = `<div class="stat hot"><i>180°</i><b>${frac(sh)}</b><small>${EX.fps} fps · the normal look</small></div><div class="stat"><i>90° · crisper</i><b>${frac(4 * EX.fps)}</b><small>fights, sports, strobe-y</small></div><div class="stat"><i>Angle 172.8 · flicker</i><b>${frac(EX.fps * 360 / 172.8)}</b><small>under 60 Hz lights at 24</small></div><div class="stat"><i>Shutter speed on the FX6</i><b>${frac(sh)}</b><small>or shutter angle 180</small></div>`;
+  const sh = EX.fps * 360 / EX.ang; $('#ex-shutter').innerHTML = `<div class="stat hot"><i>${EX.ang}° at ${EX.fps}</i><b>${frac(sh)}</b><small>${EX.ang === 180 ? 'the normal look' : EX.ang === 172.8 ? 'flicker safe under 60 Hz' : 'crisper, choppier'}</small></div><div class="stat"><i>90° · crisper</i><b>${frac(4 * EX.fps)}</b><small>fights, sports, strobe-y</small></div><div class="stat"><i>Angle 172.8 · flicker</i><b>${frac(EX.fps * 360 / 172.8)}</b><small>under 60 Hz lights at 24</small></div><div class="stat"><i>Shutter speed on the FX6</i><b>${frac(sh)}</b><small>or shutter angle 180</small></div>`;
   const nd = EX.nd; const factor = Math.pow(2, nd); const dens = (nd * .3).toFixed(1); const near = FX6ND.filter(x => x[0] === nd)[0];
   $('#ex-ndout').innerHTML = `<div class="stat hot"><i>Cuts ${nd} stop${nd === 1 ? '' : 's'}</i><b>ND ${dens}</b><small>${factor}x · ND${factor}</small></div><div class="stat"><i>FX6 built-in</i><b>${near ? near[1] : nd < 2 ? 'Clear' : 'Screw-on'}</b><small>${nd >= 2 && nd <= 7 ? 'variable ND at ' + nd + ' stops' : nd < 2 ? 'close the iris one stop instead' : 'stack 1/128 + ND ' + ((nd - 7) * .3).toFixed(1)}</small></div>`;
   const [sw, coc, sname] = SENS[EX.sensor]; const f = +$('#ex-f').value || 35, a = +$('#ex-a').value || 2.8, dft = +$('#ex-d').value || 8, d = dft * 304.8;
@@ -660,6 +728,7 @@ function exPaint(){
   const fov = 2 * Math.atan(sw / (2 * f)) / rad;
   $('#ex-dof').innerHTML = `<div class="stat hot"><i>In focus</i><b>${ft(near_)} to ${ft(far)}</b><small>${far === Infinity ? 'everything past ' + ft(near_) : 'total ' + ft(far - near_)}</small></div><div class="stat"><i>Hyperfocal</i><b>${ft(H)}</b><small>focus here, sharp to infinity</small></div><div class="stat"><i>Field of view</i><b>${Math.round(fov)}°</b><small>${sname} · ${f}mm</small></div><div class="stat"><i>Full-frame equivalent</i><b>${Math.round(f * 35.7 / sw)}mm</b><small>what it feels like on the FX6</small></div>`;
 }
+$('#ex-ang').addEventListener('click', e => { const b = e.target.closest('[data-ang]'); if (!b) return; EX.ang = +b.dataset.ang; $$('#ex-ang button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); exPaint(); });
 $('#ex-fps').addEventListener('click', e => { const b = e.target.closest('[data-fps]'); if (!b) return; EX.fps = +b.dataset.fps; $$('#ex-fps button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); exPaint(); });
 $('#ex-nd').addEventListener('input', e => { EX.nd = +e.target.value; $('#ex-nd-o').value = EX.nd; exPaint(); });
 $('#ex-sensor').addEventListener('click', e => { const b = e.target.closest('[data-s]'); if (!b) return; EX.sensor = b.dataset.s; $$('#ex-sensor button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); exPaint(); });
@@ -671,12 +740,17 @@ let toneOsc = null;
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-screen]'); if (!b) return;
   const k = b.dataset.screen, f = $('#sc-full'); f.querySelectorAll('.bars').forEach(x => x.remove());
-  if (k === 'bars') { f.style.background = '#000'; const cols = ['#c0c0c0', '#c0c000', '#00c0c0', '#00c000', '#c000c0', '#c00000', '#0000c0']; const d = document.createElement('div'); d.className = 'bars'; d.innerHTML = cols.map(c => `<i style="background:${c}"></i>`).join(''); f.prepend(d); }
+  f.querySelectorAll('.bars, .star, .bigclock').forEach(x => x.remove());
+  if (k === 'star') { f.style.background = '#fff'; const c = document.createElement('canvas'); c.className = 'star'; c.style.cssText = 'position:absolute;inset:0;width:100%;height:100%'; const s = Math.min(innerWidth, innerHeight) * devicePixelRatio; c.width = innerWidth * devicePixelRatio; c.height = innerHeight * devicePixelRatio; const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.translate(c.width / 2, c.height / 2); x.fillStyle = '#000'; for (let i = 0; i < 72; i++) { x.beginPath(); x.moveTo(0, 0); x.arc(0, 0, s * .46, i * Math.PI / 36, (i + .5) * Math.PI / 36); x.closePath(); x.fill(); } f.prepend(c); }
+  else if (k === 'timer') { f.style.background = '#000'; const d = document.createElement('div'); d.className = 'bigclock'; d.style.cssText = 'position:absolute;inset:0;display:grid;place-items:center;align-content:center;gap:8px;color:#fff;font:900 italic 22vw/1 var(--f-display);text-align:center'; d.innerHTML = '<b id="bc-t">0:00</b><small style="font:700 12px/1.4 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)" id="bc-l">tap to lap · hold to leave</small>'; f.prepend(d); SCT.t0 = Date.now(); SCT.laps = []; clearInterval(SCT.iv); SCT.iv = setInterval(() => { const s = Math.floor((Date.now() - SCT.t0) / 1000); const el = $('#bc-t'); if (el) el.textContent = Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }, 250); }
+  else if (k === 'bars') { f.style.background = '#000'; const cols = ['#c0c0c0', '#c0c000', '#00c0c0', '#00c000', '#c000c0', '#c00000', '#0000c0']; const d = document.createElement('div'); d.className = 'bars'; d.innerHTML = cols.map(c => `<i style="background:${c}"></i>`).join(''); f.prepend(d); }
   else f.style.background = SCREENS[k];
   f.querySelector('.tip').style.color = k === 'white' || k === 'grey' ? 'rgba(0,0,0,.45)' : 'rgba(255,255,255,.5)';
   f.classList.add('on');
 });
-$('#sc-full').addEventListener('click', () => $('#sc-full').classList.remove('on'));
+const SCT = {t0: 0, laps: [], iv: null, hold: null};
+$('#sc-full').addEventListener('pointerdown', () => { SCT.hold = setTimeout(() => { SCT.hold = null; clearInterval(SCT.iv); $('#sc-full').classList.remove('on'); }, 700); });
+$('#sc-full').addEventListener('pointerup', () => { if (!SCT.hold) return; clearTimeout(SCT.hold); SCT.hold = null; if ($('#sc-full .bigclock')) { const s = Math.floor((Date.now() - SCT.t0) / 1000); SCT.laps.unshift(Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0')); const l = $('#bc-l'); if (l) l.textContent = 'laps ' + SCT.laps.slice(0, 4).join(' · ') + ' · hold to leave'; buzz(); return; } clearInterval(SCT.iv); $('#sc-full').classList.remove('on'); });
 $('#sc-tone').addEventListener('click', e => {
   if (toneOsc) { try { toneOsc.stop(); } catch(x){} toneOsc = null; e.currentTarget.textContent = '1 kHz tone: off'; e.currentTarget.setAttribute('aria-pressed', 'false'); return; }
   const c = ac(); if (!c) { toast('No audio here.'); return; } const o = c.createOscillator(), g = c.createGain(); o.frequency.value = 1000; g.gain.value = .3; o.connect(g); g.connect(c.destination); o.start(); toneOsc = o;

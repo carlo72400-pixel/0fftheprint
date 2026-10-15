@@ -1,0 +1,16 @@
+{
+ "name": "GET THE SHOT · 0FF THE PRINT",
+ "short_name": "GET THE SHOT",
+ "id": "/play/",
+ "start_url": "/play/",
+ "scope": "/play/",
+ "display": "standalone",
+ "orientation": "portrait",
+ "background_color": "#0a0a0d",
+ "theme_color": "#0a0a0d",
+ "description": "A framing game from the house. Ten shots, four lives, the roster as your subjects.",
+ "icons": [
+  {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+  {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+ ]
+}

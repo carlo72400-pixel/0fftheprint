@@ -2944,6 +2944,9 @@
   .book-item{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:rgba(244,238,242,.03);}
   .book-item b{display:block;font-family:var(--f-display);font-style:italic;font-weight:900;font-size:19px;text-transform:uppercase;letter-spacing:.02em;color:var(--pink);}
   .book-item span{display:block;margin-top:4px;color:var(--muted);font-size:12.5px;line-height:1.5;}
+.navkit{font-weight:700;letter-spacing:.08em}
+  @media (max-width:820px){ nav.tabbar a{min-width:0;padding-inline:0} nav.tabbar a img{width:26px;height:26px} nav.tabbar a span{font-size:8.5px;letter-spacing:.02em} }
+  @media (max-width:360px){ nav.tabbar{overflow-x:auto;scrollbar-width:none;justify-content:flex-start} nav.tabbar a{flex:0 0 52px} }
   .pitch-btn.blue{background:linear-gradient(180deg,rgba(47,107,255,.14),rgba(47,107,255,.03));}
   .pitch-btn.blue b{color:#9db9ff;}
   .pitch-btn.blue:hover{border-color:var(--dye-blue);}
@@ -3911,7 +3914,7 @@
 <!-- THE CATHEDRAL (10/3): the homepage skin. Scoped under html.cath, loaded last on purpose. -->
 <link rel="stylesheet" href="assets/css/pack.css?v=3c0b0f68">
 <link rel="stylesheet" href="assets/css/binder.css?v=f47d0aee">
-<link rel="stylesheet" href="assets/css/cathedral.css?v=4bc3db51">
+<link rel="stylesheet" href="assets/css/cathedral.css?v=5f1f71d2">
 <link rel="stylesheet" href="assets/css/lounge.css?v=2d07e1fc">
 <link rel="stylesheet" href="assets/css/music.css?v=815cfdc9">
 <link rel="stylesheet" href="assets/css/people.css?v=85ce71bf">
@@ -3988,6 +3991,8 @@
   <a href="join/?next=home" id="nav-key" class="key" title="Members and card holders log in here.">Log in</a>
   <a href="#home" class="tablink" data-tab-link="home" title="The front door: find your night, the timeline.">Home</a>
   <a href="wall/" id="nav-wall" title="Every flyer in SA, San Marcos and Austin this week." hidden>CRYPT</a>
+  <a href="kit/" class="navkit" title="Filmmaker tools from the house. Free, works offline.">KIT</a>
+  <a href="play/" class="navkit" title="Get the Shot: the framing game. Ten frames, four lives.">PLAY</a>
   <a href="#photos" class="tablink" data-tab-link="photos" title="Every night we shot. Find your photos.">Photos</a>
   <a href="#stories" class="tablink" data-tab-link="stories" title="Stories from the house.">Stories</a>
   <a href="#music" class="tablink" data-tab-link="music" title="What the house plays. On rotation.">Music</a>
@@ -4008,6 +4013,8 @@
   <a href="#stories" data-tab-link="stories"><img src="assets/cathedral/i-stories.webp" alt="" width="30" height="30"><span>Stories</span></a>
   <a href="#music" data-tab-link="music"><img src="assets/cathedral/i-music.webp" alt="" width="30" height="30"><span>Music</span></a>
   <a href="#people" data-tab-link="people"><img src="assets/cathedral/i-people.webp" alt="" width="30" height="30"><span>Coven</span></a>
+  <a href="kit/" class="tabkit"><img src="assets/cathedral/i-kit.webp" alt="" width="30" height="30"><span>Kit</span></a>
+  <a href="play/" class="tabkit"><img src="assets/cathedral/i-play.webp" alt="" width="30" height="30"><span>Play</span></a>
   <a href="#more" data-tab-link="more"><img src="assets/cathedral/i-more.webp" alt="" width="30" height="30"><span>More</span></a>
 </nav>
 
@@ -4232,7 +4239,8 @@
         <a class="do" href="#music"><img class="di" src="assets/cathedral/a/music.webp" alt="" width="44" height="44" decoding="async"><b>Play something</b><span>on rotation</span></a>
         <a class="do" href="#desk"><img class="di" src="assets/cathedral/a/story.webp" alt="" width="44" height="44" decoding="async"><b>Read a story</b><span>from the house</span>
         <a class="do" href="#book"><img class="di" src="assets/cathedral/a/story.webp" alt="" width="44" height="44" decoding="async"><b>Book the house</b><span>events &middot; portraits &middot; artists</span></a>
-        <a class="do" href="kit/"><img class="di" src="assets/cathedral/w/film.webp" alt="" width="44" height="44" decoding="async"><b>The Kit</b><span>filmmaker tools &middot; free</span></a></a>
+        <a class="do" href="kit/"><img class="di" src="assets/cathedral/i-kit.webp" alt="" width="44" height="44" decoding="async"><b>The Kit</b><span>filmmaker tools &middot; free</span></a>
+        <a class="do" href="play/"><img class="di" src="assets/cathedral/i-play.webp" alt="" width="44" height="44" decoding="async"><b>Get the Shot</b><span>the game &middot; ten frames</span></a></a>
         <a class="do wall" id="do-join" href="wall/" hidden><img class="di" src="assets/cathedral/a/join.webp" alt="" width="44" height="44" decoding="async"><b>Join the Crypt</b><span>all it takes is an @</span></a>
       </div>
     </section>
