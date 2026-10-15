@@ -113,16 +113,24 @@ a{color:var(--pink)}
 #hint{position:absolute;left:12px;top:calc(var(--fb,60vh) + 12px);width:78px;pointer-events:auto;cursor:pointer}
 .hintbox{position:relative;width:78px;background:var(--paper);padding:4px 4px 5px;transform:rotate(-1.5deg);box-shadow:0 8px 18px rgba(0,0,0,.6);transition:transform .2s}
 .hintbox::before{content:"";position:absolute;left:50%;top:-8px;width:46px;height:15px;transform:translateX(-50%) rotate(-4deg);background:rgba(255,236,170,.6);box-shadow:0 1px 2px rgba(0,0,0,.15)}
-.hintbox canvas{display:block;width:70px;height:88px;background:#111}
+.hintbox canvas{display:block;width:70px;height:auto;background:#111}
 .hintbox p{margin:3px 0 0;font:900 italic 7.5px/1 var(--f-display);letter-spacing:.02em;text-transform:uppercase;color:#1a1921;white-space:nowrap}
 #hint-x{display:none;position:absolute;right:-12px;top:-12px;width:30px;height:30px;border:0;border-radius:50%;background:#1a1921;color:#fff;font:700 18px/30px var(--f-mono);box-shadow:0 2px 6px rgba(0,0,0,.6)}
 #hint.big{position:fixed;left:50%;top:calc(var(--ft,120px) + (var(--fb,60vh) - var(--ft,120px)) / 2);width:auto;transform:translate(-50%,-50%);z-index:7}
 #hint.big .hintbox{width:min(76vw,264px);padding:8px 8px 10px;transform:rotate(1deg);box-shadow:0 20px 40px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.1)}
-#hint.big .hintbox canvas{width:100%;height:auto;aspect-ratio:4/5}
+#hint.big .hintbox canvas{width:100%;height:auto}
 #hint.big .hintbox p{font-size:13px}
 #hint.big #hint-x{display:block}
 html.short #hint{display:none}
 html.short #checks{left:10px}
+
+/* the way out: a back key bottom-right on every door screen (the Kit's key), the shoot keeps its Door key */
+#back-fab{position:fixed;right:12px;bottom:calc(14px + var(--sab));z-index:60;width:54px;height:54px;border:0;border-radius:50%;display:none;place-items:center;color:#f1ecf5;text-decoration:none;font:900 26px/1 var(--f-mono);background:radial-gradient(circle at 50% 30%,#4b4754,#201e26 70%);box-shadow:0 0 0 3px #0b0a0e,0 0 0 5px #4b4754,0 0 0 6px #0b0a0e,0 8px 16px rgba(0,0,0,.7),inset 0 2px 2px rgba(255,255,255,.2),inset 0 -5px 8px rgba(0,0,0,.7);transition:transform .08s}
+#back-fab::after{content:"0TP";position:absolute;left:50%;bottom:-16px;transform:translateX(-50%);font:700 8.5px/1 var(--f-mono);letter-spacing:.2em;text-transform:uppercase;color:#8d8a96;white-space:nowrap}
+#back-fab:active{transform:scale(.92)}
+html.door #back-fab{display:grid}
+html.door .scr.window .ds{padding-bottom:calc(var(--sab) + 96px)}
+html.door .menu .two,html.door .stats,html.door .fine{padding-right:70px}
 
 /* the brief flash */
 #btoast{position:fixed;left:50%;top:calc(var(--ft,120px) + 40%);z-index:8;transform:translate(-50%,-50%) scale(.92);opacity:0;pointer-events:none;text-align:center;transition:opacity .25s,transform .25s;width:90vw}
@@ -300,12 +308,13 @@ html.short #checks{left:10px}
 </section>
 
 <div class="vfb" id="vfb" hidden></div>
+<a id="back-fab" href="../" aria-label="Back to 0FF THE PRINT">&lsaquo;</a>
 <div id="view" hidden>
   <div class="pol"><img alt=""><b></b><span class="stars"></span></div>
   <small></small>
   <div class="row"><button type="button" class="btn primary" id="v-share"><span>Share</span></button><button type="button" class="btn" id="v-del"><span>Delete</span></button><button type="button" class="btn" id="v-close"><span>Close</span></button></div>
 </div>
 
-<script src="game.js?v=20261015q"></script>
+<script src="game.js?v=20261015r"></script>
 </body>
 </html>

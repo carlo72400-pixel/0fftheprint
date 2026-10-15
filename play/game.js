@@ -184,8 +184,9 @@ function resize() {
   const short = H < 700; document.documentElement.classList.toggle('short', short);
   const plate = $('.plate'); const ph = inShot && plate ? plate.offsetHeight : 0;
   const top = inShot ? (ph || sat + 66) + 8 : door ? sat + 56 : sat + 24, bottom = inShot ? sab + (short ? 266 : H < 900 ? 288 : 318) : door ? 330 : 24;
-  let fw = W - (inShot ? 12 : 24), fh = fw * 1.25; const maxH = H - top - bottom; if (fh > maxH) { fh = maxH; fw = fh / 1.25; } if (door && fh < 220) { fh = 220; fw = fh / 1.25; }
-  G.frame = {x: (W - fw) / 2, y: inShot || door ? top : top + (maxH - fh) / 2, w: fw, h: fh};
+  // the glass always fills the width (his iPhone note: no black bars); the height is whatever is left, 4:5 at the tallest
+  let fw = W - (inShot ? 12 : 24), fh = Math.min(fw * 1.25, H - top - bottom); if (door && fh < 220) fh = 220;
+  G.frame = {x: (W - fw) / 2, y: inShot || door ? top : top + (H - top - bottom - fh) / 2, w: fw, h: fh};
   const vfb = $('#vfb'); if (vfb) vfb.hidden = !door;
   document.documentElement.style.setProperty('--fb', (G.frame.y + G.frame.h) + 'px'); document.documentElement.style.setProperty('--ft', G.frame.y + 'px'); document.documentElement.style.setProperty('--fl', G.frame.x + 'px'); document.documentElement.style.setProperty('--fw', G.frame.w + 'px');
 }
@@ -249,6 +250,25 @@ function measure() {
 
 /* ---------- draw ---------- */
 let lastT = 0, SPARK = [];
+/* the tin proscenium on the door screens: nine-sliced over the glass (corners at one scale, the pillars and the valances tiled),
+   so the frame is a frame and the room shows only through its opening */
+const PR = {L: 238, R: 239, T: 199, B: 150};   // the opening of v3 proscenium.webp in source px (886 x 1100)
+function frameScale(f) { return clamp(f.w * .11, 30, 64) / PR.L; }
+function opening(f) { const s = frameScale(f); return {x: f.x + PR.L * s, y: f.y + PR.T * s, w: f.w - (PR.L + PR.R) * s, h: f.h - (PR.T + PR.B) * s}; }
+function drawFrame9(c, f) {
+  const pr = ART.proscenium; if (!pr) return; const s = frameScale(f), SW = pr.width, SH = pr.height, {L, R, T, B} = PR;
+  const MW = SW - L - R, MH = SH - T - B; const x1 = f.x + f.w - R * s, y1 = f.y + f.h - B * s;
+  c.save();
+  c.drawImage(pr, 0, 0, L, T, f.x, f.y, L * s, T * s); c.drawImage(pr, SW - R, 0, R, T, x1, f.y, R * s, T * s);
+  c.drawImage(pr, 0, SH - B, L, B, f.x, y1, L * s, B * s); c.drawImage(pr, SW - R, SH - B, R, B, x1, y1, R * s, B * s);
+  // the valances tile across, the pillars tile down
+  c.save(); c.beginPath(); c.rect(f.x + L * s, f.y, f.w - (L + R) * s, f.h); c.clip();
+  for (let x = f.x + L * s; x < x1; x += MW * s) { c.drawImage(pr, L, 0, MW, T, x, f.y, MW * s + 1, T * s); c.drawImage(pr, L, SH - B, MW, B, x, y1, MW * s + 1, B * s); }
+  c.restore();
+  c.save(); c.beginPath(); c.rect(f.x, f.y + T * s, f.w, f.h - (T + B) * s); c.clip();
+  for (let y = f.y + T * s; y < y1; y += MH * s) { c.drawImage(pr, 0, T, L, MH, f.x, y, L * s, MH * s + 1); c.drawImage(pr, SW - R, T, R, MH, x1, y, R * s, MH * s + 1); }
+  c.restore(); c.restore();
+}
 /* the room, painted through whatever G.frame / G.cam / G.focusD say: the viewfinder, and the hint print from the answer camera */
 function paintRoom(c, f, room, now) {
   // the backdrop: a painted wall far back, mirrored copies either side so a truck never shows the edge
@@ -299,13 +319,16 @@ function draw(now) {
   tick(dt);
   const f = G.frame, room = ROOMS[G.room];
   cx.fillStyle = '#07060a'; cx.fillRect(0, 0, W, H);
-  cx.save(); cx.beginPath(); cx.rect(f.x, f.y, f.w, f.h); cx.clip();
+  const onDoor = G.state === 'title' || G.state === 'album' || G.state === 'how' || G.state === 'done';
+  if ((G.frames & 15) === 0) document.documentElement.classList.toggle('door', onDoor);
+  const op = onDoor ? opening(f) : f;
+  cx.save(); cx.beginPath(); cx.rect(op.x, op.y, op.w, op.h); cx.clip();
   paintRoom(cx, f, room, now);
   // the flash sparkle when the shutter went
   SPARK = SPARK.filter(s => (s.t += dt) < s.life); SPARK.forEach(s => { cx.fillStyle = `rgba(255,255,255,${1 - s.t / s.life})`; const k = 2 + 6 * s.t / s.life; cx.fillRect(s.x - k / 2, s.y - k / 2, k, k); });
   cx.restore();
   // outside the frame: the proscenium on the door screens, the frame line, the overlays
-  if (G.state === 'title' || G.state === 'album' || G.state === 'how' || G.state === 'done') { const pr = ART.proscenium; if (pr) cx.drawImage(pr, f.x - f.w * .1, f.y - f.h * .06, f.w * 1.2, f.h * 1.12); }
+  if (onDoor) drawFrame9(cx, f);
   cx.strokeStyle = 'rgba(255,255,255,.55)'; cx.lineWidth = 1; cx.strokeRect(f.x + .5, f.y + .5, f.w - 1, f.h - 1);
   if (G.state === 'shoot') {
     const br = BRIEFS[G.brief];
@@ -392,7 +415,7 @@ $('#shutter').addEventListener('click', () => { if (G.state === 'shoot') shoot()
 function snapshot(w, h) { const o = document.createElement('canvas'); o.width = w; o.height = h; const oc = o.getContext('2d'); const f = G.frame; oc.drawImage(cv, f.x * DPR, f.y * DPR, f.w * DPR, f.h * DPR, 0, 0, w, h); return o; }
 function shoot() {
   const m = G.lastM || measure(); const br = BRIEFS[G.brief]; const passed = br.checks.map(c => { try { return !!c[2](m); } catch (e) { return false; } }); const n = passed.filter(Boolean).length; const stars = n >= 3 ? 3 : n === 2 ? 2 : 1;
-  const pic = snapshot(540, 675); const data = pic.toDataURL('image/jpeg', .8);
+  const pic = snapshot(540, Math.round(540 * G.frame.h / G.frame.w)); const data = pic.toDataURL('image/jpeg', .8);
   G.state = 'grade'; click(); buzz(14);
   const w = $('#white'); w.style.transition = 'none'; w.style.opacity = .85; requestAnimationFrame(() => { w.style.transition = 'opacity .35s'; w.style.opacity = 0; });
   const f = G.frame; for (let i = 0; i < 14; i++) SPARK.push({x: f.x + Math.random() * f.w, y: f.y + Math.random() * f.h, t: 0, life: .3 + Math.random() * .4});
@@ -470,7 +493,7 @@ function answerCam(br) {
 }
 function drawHint(br) {
   // the real room, the real flats, the real subject, from the camera that makes the brief; then the grid, the eye and a pink line round them
-  const c = $('#hint canvas'), h = br.hint; const w = c.width = 300, hh = c.height = 375; const o = c.getContext('2d'); const room = ROOMS[G.room];
+  const c = $('#hint canvas'), h = br.hint; const w = c.width = 300, hh = c.height = Math.round(300 * G.frame.h / Math.max(1, G.frame.w)); const o = c.getContext('2d'); const room = ROOMS[G.room];
   const keep = {frame: G.frame, cam: G.cam, par: G.par, focusD: G.focusD, quality: G.quality}; const S = G.subj, kj = S.jump, kp = S.pose;
   G.frame = {x: 0, y: 0, w, h: hh}; G.par = {x: 0, y: 0}; G.quality = 1;
   if (h.jump) { S.jump = .5; S.pose = ART[S.oc + '_peak'] ? 'peak' : 'idle'; }

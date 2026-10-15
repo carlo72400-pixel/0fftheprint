@@ -3973,7 +3973,7 @@
 <!-- THE CATHEDRAL (10/3): the homepage skin. Scoped under html.cath, loaded last on purpose. -->
 <link rel="stylesheet" href="assets/css/pack.css?v=3c0b0f68">
 <link rel="stylesheet" href="assets/css/binder.css?v=f47d0aee">
-<link rel="stylesheet" href="assets/css/cathedral.css?v=a88ce4fd">
+<link rel="stylesheet" href="assets/css/cathedral.css?v=d8c04bc6">
 <link rel="stylesheet" href="assets/css/lounge.css?v=2d07e1fc">
 <link rel="stylesheet" href="assets/css/music.css?v=815cfdc9">
 <link rel="stylesheet" href="assets/css/people.css?v=85ce71bf">
@@ -4067,12 +4067,12 @@
 
 <!-- ========== TAB BAR (phones): the same tabs, under the thumb ========== -->
 <!-- 10/15, his notes: eight across was too busy, Kit + Play sat under the far thumb, and "make it like you can swipe it".
-     So: all eight, Kit and Play right after Home, and on a phone the bar SIDE-SCROLLS (five and a half showing, snap,
+     So: Kit right after Home, and on a phone the bar SIDE-SCROLLS. ⛔ 10/15 late: PLAY LEFT THE BAR ("I keep hitting it"), it is the
+     .playkey on Home instead. (five and a half showing, snap,
      a fade on the right edge says there is more). cathedral.js scrolls the current tab into view. -->
 <nav class="tabbar" id="tabbar" aria-label="Sections">
   <a href="#home" data-tab-link="home"><img src="assets/cathedral/i-home.webp" alt="" width="30" height="30"><span>Home</span></a>
   <a href="kit/" class="tabkit"><img src="assets/cathedral/i-kit.webp" alt="" width="30" height="30"><span>Kit</span></a>
-  <a href="play/" class="tabkit"><img src="assets/cathedral/i-play.webp" alt="" width="30" height="30"><span>Play</span></a>
   <a href="#photos" data-tab-link="photos"><img src="assets/cathedral/i-photos.webp" alt="" width="30" height="30"><span>Photos</span></a>
   <a href="#stories" data-tab-link="stories"><img src="assets/cathedral/i-stories.webp" alt="" width="30" height="30"><span>Stories</span></a>
   <a href="#music" data-tab-link="music"><img src="assets/cathedral/i-music.webp" alt="" width="30" height="30"><span>Music</span></a>
@@ -4291,6 +4291,8 @@
            the member's counts off the same calls the Crypt makes: Messages unread (dm_inbox), Kin asks (friend_asks),
            nights going (wall_going), the binder totals, the pulls Get the Shot banked. A stranger gets the three steps
            and what the house gives you. ⛔ Both stay hidden until the door is known, so nobody sees the wrong one. -->
+      <!-- GET THE SHOT: the one key for the game (10/15 late, his call: Play off the tab bar, "a special button for it on the home screen"). -->
+      <a class="playkey" href="play/"><img class="pk-gem" src="play/art/ui/shutter.webp" alt="" width="64" height="64" decoding="async"><span class="pk-t"><b>Get the Shot</b><small>the game &middot; three tin rooms &middot; shoot for pulls</small></span><i class="pk-go">play &rsaquo;</i></a>
       <div class="house" id="house-in" hidden>
         <div class="hs-head"><b>Welcome back, <span id="hs-name">you</span></b><span id="hs-sub">tonight &middot; your people &middot; your packs</span></div>
         <div class="hs-rail">
