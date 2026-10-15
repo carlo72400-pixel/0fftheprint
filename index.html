@@ -48,7 +48,7 @@
 <script src="assets/js/composer.js?v=f7ec8eea" defer></script>
 <script src="assets/js/edit.js?v=46763485" defer></script>
 <script src="assets/js/binder.js?v=12b7dbe1" defer></script>
-<script src="assets/js/cathedral.js?v=e09c984f" defer></script>
+<script src="assets/js/cathedral.js?v=6abfcaa0" defer></script>
 <script src="assets/js/lounge.js?v=5a3b6868" defer></script>
 <script src="assets/js/music.js?v=ce46d8f9" defer></script>
 <script src="assets/js/people.js?v=51b5d5d0" defer></script>
@@ -2946,7 +2946,14 @@
   .book-item span{display:block;margin-top:4px;color:var(--muted);font-size:12.5px;line-height:1.5;}
 .navkit{font-weight:700;letter-spacing:.08em}
   @media (max-width:820px){ nav.tabbar a{min-width:0;padding-inline:0} nav.tabbar a img{width:28px;height:28px} nav.tabbar a span{font-size:9px;letter-spacing:.04em} }
-  @media (max-width:360px){ nav.tabbar{overflow-x:auto;scrollbar-width:none;justify-content:flex-start} nav.tabbar a{flex:0 0 52px} }
+  /* phones: the bar swipes. Five and a half tabs showing so the cut-off one says "there is more", snap per tab, a fade on the edges. */
+  @media (max-width:820px){
+    nav.tabbar{display:flex;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;
+      -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 10px,#000 calc(100% - 34px),transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 10px,#000 calc(100% - 34px),transparent 100%)}
+    nav.tabbar::-webkit-scrollbar{display:none}
+    nav.tabbar a{flex:0 0 calc(100% / 5.5);scroll-snap-align:start}
+    nav.tabbar.at-end{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 34px,#000 100%);mask-image:linear-gradient(90deg,transparent 0,#000 34px,#000 100%)}
+  }
   .pitch-btn.blue{background:linear-gradient(180deg,rgba(47,107,255,.14),rgba(47,107,255,.03));}
   .pitch-btn.blue b{color:#9db9ff;}
   .pitch-btn.blue:hover{border-color:var(--dye-blue);}
@@ -4007,13 +4014,16 @@
 </nav>
 
 <!-- ========== TAB BAR (phones): the same tabs, under the thumb ========== -->
-<!-- 10/15, his note: eight across was too busy and Kit + Play sat under the far thumb. Six across, Kit and Play
-     right after Home. Stories and Music keep their top-nav links and hero cards and open from the More tab's shelf. -->
+<!-- 10/15, his notes: eight across was too busy, Kit + Play sat under the far thumb, and "make it like you can swipe it".
+     So: all eight, Kit and Play right after Home, and on a phone the bar SIDE-SCROLLS (five and a half showing, snap,
+     a fade on the right edge says there is more). cathedral.js scrolls the current tab into view. -->
 <nav class="tabbar" id="tabbar" aria-label="Sections">
   <a href="#home" data-tab-link="home"><img src="assets/cathedral/i-home.webp" alt="" width="30" height="30"><span>Home</span></a>
   <a href="kit/" class="tabkit"><img src="assets/cathedral/i-kit.webp" alt="" width="30" height="30"><span>Kit</span></a>
   <a href="play/" class="tabkit"><img src="assets/cathedral/i-play.webp" alt="" width="30" height="30"><span>Play</span></a>
   <a href="#photos" data-tab-link="photos"><img src="assets/cathedral/i-photos.webp" alt="" width="30" height="30"><span>Photos</span></a>
+  <a href="#stories" data-tab-link="stories"><img src="assets/cathedral/i-stories.webp" alt="" width="30" height="30"><span>Stories</span></a>
+  <a href="#music" data-tab-link="music"><img src="assets/cathedral/i-music.webp" alt="" width="30" height="30"><span>Music</span></a>
   <a href="#people" data-tab-link="people"><img src="assets/cathedral/i-people.webp" alt="" width="30" height="30"><span>Coven</span></a>
   <a href="#more" data-tab-link="more"><img src="assets/cathedral/i-more.webp" alt="" width="30" height="30"><span>More</span></a>
 </nav>
@@ -4445,14 +4455,6 @@
 
     <!-- ===== YOUR ACCOUNT (Wave 2, call 7): who is signed in, the way to /my/#account, and Log out.
          Hidden for a stranger; door.js shows it for every other state and wires the button. ===== -->
-    <section id="shelf" data-tab="more">
-      <div class="do-rail">
-        <a class="do" href="#stories" data-tab-link="stories"><img class="di" src="assets/cathedral/i-stories.webp" alt="" width="44" height="44" decoding="async"><b>Stories</b><span>from the house</span></a>
-        <a class="do" href="#music" data-tab-link="music"><img class="di" src="assets/cathedral/i-music.webp" alt="" width="44" height="44" decoding="async"><b>Music</b><span>on rotation</span></a>
-        <a class="do" href="wall/#cal" data-cal><img class="di" src="assets/cathedral/a/coming.webp" alt="" width="44" height="44" decoding="async"><b>What&rsquo;s coming</b><span>the run &middot; the calendar</span></a>
-      </div>
-    </section>
-
     <section id="acct-strip" data-tab="more" hidden>
       <p class="acct-line">Signed in as <b id="acct-name"></b>. <a href="my/#account">Your account</a> &middot; <button type="button" id="acct-out" class="linkbtn">Log out</button></p>
     </section>

@@ -202,6 +202,15 @@
     if (has) setTimeout(function () { if (!root.hasAttribute('data-door')) root.setAttribute('data-door', read()); }, 2500);
   }
 
+  /* ---------- the phone tab bar swipes (10/15): keep the current tab in view, fade the edge that still has tabs ---------- */
+  function tabSwipe() {
+    var bar = d.getElementById('tabbar'); if (!bar) return;
+    function edge() { bar.classList.toggle('at-end', bar.scrollLeft + bar.clientWidth >= bar.scrollWidth - 4); }
+    function follow() { var cur = bar.querySelector('a[aria-current="page"]'); if (cur && cur.scrollIntoView) { try { cur.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' }); } catch (e) { cur.scrollIntoView(); } } setTimeout(edge, 400); }
+    bar.addEventListener('scroll', edge, { passive: true }); edge(); follow();
+    try { new MutationObserver(follow).observe(bar, { attributes: true, attributeFilter: ['aria-current'], subtree: true }); } catch (e) {}
+  }
+
   /* ---------- the house strip (10/15): what a member sees first, what a stranger sees first ----------
      door.js names the door and this file copies it onto <html data-door>. The strip follows that attribute:
      'in' or 'wait' = the member's keys with live counts, 'out' = the three steps and what the house gives you.
@@ -446,7 +455,7 @@
   }
 
   function boot() {
-    housePack(); door(); house(); lastNight(); nextUp(); friends(); tipbox(); houseFeed();
+    housePack(); door(); house(); tabSwipe(); lastNight(); nextUp(); friends(); tipbox(); houseFeed();
     w.addEventListener('otp:spotlight', friends);
     if (d.readyState === 'complete') idle(threeD); else w.addEventListener('load', function () { idle(threeD); }, { once: true });
   }
