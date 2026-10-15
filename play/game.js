@@ -1,5 +1,5 @@
-/* GET THE SHOT v2 (10/15). A cardboard diorama you photograph.
-   The room is a toy theater: a painted backdrop, hand-painted cardboard flats standing at different depths on a stage
+/* GET THE SHOT v2 (10/15; tin since 10/15 night). A tin toy-theater diorama you photograph.
+   The room is a toy theater: a painted backdrop, enamel sheet-metal flats standing at different depths on a stage
    floor, and the roster as cutouts glued to board. The camera sits in that space with a real perspective projection,
    so trucking sideways slides the layers past each other, walking in grows the near flats faster than the far ones,
    and focus is a distance (tap a thing to focus on it, everything at another depth goes soft).
@@ -43,11 +43,14 @@ const ROOMS = {
     pool: {x: 0, z: 4.9, col: '255,200,140'},
     flats: [
       {k: 'f_ball',    x: .35,  z: 6.6, h: 1.35, top: 4.1, hang: true},
-      {k: 'f_lights',  x: -3.1, z: 5.6, h: 2.7},
+      {k: 'f_lights',  x: -3.1, z: 5.6, h: 2.6},
+      {k: 'f_smoke',   x: -2.4, z: 5.3, h: .34},
       {k: 'f_speaker', x: 2.9,  z: 5.3, h: 2.25},
       {k: 'f_booth',   x: 0,    z: 4.9, h: 1.08},
-      {k: 'f_bar',     x: 3.5,  z: 4.2, h: 2.05},
-      {k: 'f_wedge',   x: -2.5, z: 4.0, h: .62},
+      {k: 'f_bar',     x: 3.5,  z: 4.2, h: 2.0},
+      {k: 'f_stool',   x: 3.3,  z: 3.95, h: .74},
+      {k: 'f_stool',   x: 4.15, z: 3.95, h: .74},
+      {k: 'f_wedge',   x: -2.5, z: 4.0, h: .58},
       {k: 'f_table',   x: 2.7,  z: 3.3, h: 1.12},
       {k: 'f_arch',    x: -1.7, z: 2.2, h: 2.9, opening: [.2, .08, .8, .9]},
     ],
@@ -68,7 +71,8 @@ const ROOMS = {
       {k: 'c_amps',   x: -2.6, z: 5.9, h: 1.9},
       {k: 'c_lamp',   x: 3.1,  z: 5.6, h: 2.3},
       {k: 'c_couch',  x: 2.2,  z: 4.6, h: 1.3},
-      {k: 'c_keg',    x: -3.3, z: 4.0, h: 1.2},
+      {k: 'c_keg',    x: -3.3, z: 4.0, h: .95},
+      {k: 'c_cups',   x: -4.0, z: 4.5, h: .82},
       {k: 'c_merch',  x: 3.2,  z: 3.5, h: 1.25},
       {k: 'c_fan',    x: -3.0, z: 3.6, h: 1.1},
       {k: 'c_door',   x: -2.4, z: 2.2, h: 2.9, opening: [.25, .1, .75, .92]},
@@ -86,12 +90,16 @@ const ROOMS = {
     pool: {x: -2.2, z: 5.6, col: '255,160,60'},
     flats: [
       {k: 'l_pole',     x: -2.6, z: 7.2, h: 4.2},
-      {k: 'l_truck',    x: 2.6,  z: 6.6, h: 2.6},
+      {k: 'l_truck',    x: 3.4,  z: 6.8, h: 2.3},
       {k: 'l_fence',    x: -3.6, z: 5.6, h: 2.3},
       {k: 'l_car',      x: .4,   z: 5.3, h: 1.5},
       {k: 'l_dumpster', x: -2.2, z: 4.2, h: 1.4},
-      {k: 'l_cones',    x: -2.7, z: 3.5, h: .7},
-      {k: 'l_chairs',   x: 3.9,  z: 4.6, h: 1.1},
+      {k: 'l_cone',     x: -2.7, z: 3.5, h: .55},
+      {k: 'l_cone',     x: -3.4, z: 3.9, h: .55},
+      {k: 'l_cone',     x: -3.9, z: 3.2, h: .55},
+      {k: 'l_chair',    x: 3.9,  z: 4.6, h: .86},
+      {k: 'l_chair',    x: 4.8,  z: 4.3, h: .86},
+      {k: 'l_cooler',   x: 4.35, z: 4.95, h: .5},
       {k: 'l_cart',     x: 4.2,  z: 3.0, h: 1.3},
     ],
     spots: {decks: {x: 1.6, z: 4.5}, floor: {x: -.7, z: 4.4}, bar: {x: 2.4, z: 5.5}, arch: {x: -3.0, z: 4.6}, left: {x: -1.4, z: 4.8}},
@@ -146,7 +154,7 @@ const img = src => new Promise(ok => { const i = new Image(); i.onload = () => o
 async function loadArt() {
   const jobs = [];
   const flats = new Set(['proscenium']); Object.values(ROOMS).forEach(r => { flats.add(r.backdrop); r.flats.forEach(f => flats.add(f.k)); });
-  flats.forEach(k => jobs.push(img(`art/v2/flat/${k}.webp`).then(i => { ART[k] = i; })));
+  flats.forEach(k => jobs.push(img(`art/v3/flat/${k}.webp`).then(i => { ART[k] = i; })));
   try { META = await (await fetch('art/v2/oc/meta.json', {cache: 'no-cache'})).json(); } catch (e) { META = {}; }
   CAST.forEach(k => POSES.forEach(p => jobs.push(img(`art/v2/oc/${k}_${p}.webp`).then(i => { if (i) ART[k + '_' + p] = i; }))));
   await Promise.all(jobs); ARTREADY = true;
