@@ -410,7 +410,10 @@ function setBrief(k) {
   // the camera opens a step to the side of them, on the side away from the doorway flat so the first look is clear
   // open on the clear side: every room's shoot-through flat stands on the left, so the camera starts to the right of them unless they are already far right
   const side = G.subj.x > 2 ? -1 : 1;
-  Object.assign(G.want, {x: clamp(G.subj.x + side * (.8 + r() * .7), -2.6, 2.6), y: room.cam.y, z: k === 'arch' ? -1.2 : room.cam.z, zoom: 1});
+  // the doorway brief opens square on the doorway flat, so the first look already has them inside the opening
+  const af = room.flats.find(f => f.k === room.roles.frame);
+  const wx = k === 'arch' && af ? af.x + (r() - .5) * .3 : clamp(G.subj.x + side * (.8 + r() * .7), -2.6, 2.6);
+  Object.assign(G.want, {x: wx, y: room.cam.y, z: k === 'arch' ? -1.2 : room.cam.z, zoom: 1});
   G.focusWant = G.subj.z - G.want.z; G.checks = [false, false, false];
   const N = NAMES[oc]; const say = x => x.replace(/\{(\w+)\}/g, (_, w) => w === 'N' ? N : (room.words[w] || w));
   $('#b-t').textContent = room.titles[k] || br.t; $('#b-l').textContent = say(br.l); $('#lcd-room').textContent = room.name; $('#b-n').textContent = G.mode === 'daily' ? `${G.idx + 1} of ${G.set.length}` : `free · ${G.idx + 1}`;
