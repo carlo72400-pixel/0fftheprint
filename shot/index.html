@@ -79,6 +79,15 @@ h1.big{font-size:clamp(58px,19vw,112px);line-height:.86;margin-top:6px;color:#ef
 .wait p{margin-top:8px;font-size:14px;color:#e9d6dc}
 .wait small{display:block;margin-top:10px;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#b48a99}
 
+/* two nights on one date: pick yours */
+.pick{margin-top:22px;padding:14px;border-radius:6px;background:linear-gradient(180deg,#201d26,#18161d);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),inset 0 0 0 1px rgba(0,0,0,.6)}
+.pick>b{display:block;font-family:var(--f-display);font-style:italic;font-weight:900;font-size:24px;line-height:1;text-transform:uppercase;color:#f1ecf5}
+.pk-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+.pk-row button{display:grid;justify-items:center;gap:6px;padding:10px 8px 12px;border:0;border-radius:6px;background:linear-gradient(180deg,#3f3b48,#27242e);color:#f1ecf5;cursor:pointer;font:inherit;box-shadow:0 1px 0 rgba(255,255,255,.16),0 4px 0 #0b0a0e,0 7px 10px rgba(0,0,0,.6);transition:transform .06s,box-shadow .06s}
+.pk-row button:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(255,255,255,.16),0 1px 0 #0b0a0e}
+.pk-row img{width:72px;aspect-ratio:3/5;object-fit:cover;background:#000;box-shadow:0 6px 12px rgba(0,0,0,.6)}
+.pk-row b{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:17px;line-height:1;text-transform:uppercase;text-align:center}
+.pk-row span{font-family:var(--f-mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:#9b95a6;text-align:center}
 /* it's up: the pack bursts open */
 .up{position:relative;margin-top:22px;display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px;align-items:center;padding:14px;border-radius:6px;background:linear-gradient(180deg,#201d26,#18161d);box-shadow:inset 0 0 0 1px rgba(126,231,135,.5),0 0 18px rgba(126,231,135,.15);text-decoration:none;color:var(--ink);overflow:hidden}
 .up .bst{position:absolute;left:-10px;top:-20px;width:160px;opacity:.9;pointer-events:none;animation:pop .7s .2s cubic-bezier(.2,1.4,.4,1) both}
@@ -125,6 +134,7 @@ h1.big{font-size:clamp(58px,19vw,112px);line-height:.86;margin-top:6px;color:#ef
 <h1 class="big" id="h1">You got<br>shot.</h1>
 <p class="lead" id="lead">That flash was <b>0FF THE PRINT</b>. Your photos land here in a few days, cut and graded, as a pack with your name on it. Nothing goes up raw.</p>
 
+<div class="pick" id="pick" hidden><b>Two shoots that day. Which one were you at?</b><div class="pk-row" id="pick-row"></div></div>
 <a class="up" id="up" hidden><img class="bst" src="../assets/cathedral/shot/m_burst.webp" alt=""><span class="cover"><img id="up-img" alt=""></span><span><b id="up-title"></b><span class="m" id="up-meta"></span><em>Your pack is up. Pull it &rarr;</em></span></a>
 
 <div class="steps" id="steps">
@@ -176,15 +186,32 @@ h1.big{font-size:clamp(58px,19vw,112px);line-height:.86;margin-top:6px;color:#ef
   const now = new Date(); if (now.getHours() < 6) now.setDate(now.getDate() - 1);
   const today = now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate());
   const slug = (q.get('n') || '').replace(/[^a-z0-9-]/g, ''), date = /^\d{4}-\d{2}-\d{2}$/.test(q.get('d') || '') ? q.get('d') : today;
+  // ?k=thrift names the shoot when a day has more than one; it matches the night whose slug ends in it
+  const kname = (q.get('k') || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 40);
   const nice = d => { const [y, m, dd] = d.split('-').map(Number); return new Date(y, m - 1, dd).toLocaleDateString('en-US', {weekday: 'long', month: 'short', day: 'numeric'}); };
   const KEY = 'otp-shot'; let mine = []; try { mine = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) {}
   if (!slug && !mine.includes(date)) { mine.unshift(date); mine = mine.slice(0, 12); try { localStorage.setItem(KEY, JSON.stringify(mine)); } catch (e) {} }
-  $('#wait-s').textContent = 'you were shot ' + nice(date);
-  $('#kick').textContent = 'San Antonio · ' + nice(date);
+  $('#wait-s').textContent = 'you were shot ' + nice(date) + (kname ? ' at ' + kname.replace(/-/g, ' ') : '');
+  $('#kick').textContent = 'San Antonio · ' + nice(date) + (kname ? ' · ' + kname.replace(/-/g, ' ') : '');
 
   let items = [];
   try { items = ((await (await fetch('../events/events.json', {cache: 'no-cache'})).json()) || {}).items || []; } catch (e) {}
-  const night = items.find(e => e.slug === slug) || items.find(e => e.date === date) || (!slug && mine.map(d => items.find(e => e.date === d)).find(Boolean));
+  // the nights of that date: one = it's up; several = ask (and remember); a named shoot picks itself
+  let night = items.find(e => e.slug === slug) || null;
+  const picked = (() => { try { return localStorage.getItem('otp-shot-pick:' + date) || ''; } catch (e) { return ''; } })();
+  if (!night) {
+    let same = items.filter(e => e.date === date);
+    if (!same.length && !slug) { const d2 = mine.find(d => items.some(e => e.date === d)); if (d2) same = items.filter(e => e.date === d2); }
+    if (kname) { const byName = same.find(e => e.slug.endsWith('-' + kname) || e.slug.includes(kname)); if (byName) same = [byName]; }
+    if (picked) { const byPick = same.find(e => e.slug === picked); if (byPick) same = [byPick]; }
+    if (same.length === 1) night = same[0];
+    else if (same.length > 1) {
+      const row = $('#pick-row'); row.innerHTML = '';
+      same.forEach(e => { const b = document.createElement('button'); b.type = 'button'; const im = document.createElement('img'); im.alt = ''; im.src = '../events/' + e.slug + '/pack.webp'; im.onerror = () => { im.src = '../assets/cathedral/pack-house.webp'; }; const t = document.createElement('b'); t.textContent = e.title; const v = document.createElement('span'); v.textContent = (e.venue || '') + ' · ' + (e.count | 0) + ' frames'; b.append(im, t, v); b.addEventListener('click', () => { try { localStorage.setItem('otp-shot-pick:' + date, e.slug); } catch (x) {} location.href = location.pathname + '?n=' + e.slug; }); row.appendChild(b); });
+      $('#pick').hidden = false; $('#pick > b').textContent = same.length + ' shoots that day. Which one were you at?';
+      $('#wait').hidden = true; $('#h1').innerHTML = 'They&rsquo;re<br>up.'; $('#lead').innerHTML = 'Both nights from that day are live. <b>Pick the one you were at</b> and pull your pack.';
+    }
+  }
   if (night) {
     const up = $('#up'); up.href = '../events/' + night.slug + '/'; up.hidden = false;
     $('#up-img').src = '../events/' + night.slug + '/pack.webp'; $('#up-img').onerror = () => { $('#up-img').src = '../assets/cathedral/pack-house.webp'; };
