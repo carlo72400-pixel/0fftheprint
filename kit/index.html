@@ -274,7 +274,9 @@ input[type=range]::-moz-range-thumb{width:30px;height:30px;border:0;border-radiu
 .qrfull{position:fixed;inset:0;z-index:95;background:#fff;display:grid;place-items:center;padding:24px}
 .qrfull[hidden]{display:none}
 .qrbox{display:grid;justify-items:center;gap:6px;text-align:center;color:#0a0a0d}
-.qrbox img{width:min(84vw,84vh,520px);height:auto;image-rendering:pixelated}
+.qrbox .putty{position:relative;width:auto;height:min(68vh,calc(84vw * 2.5),760px);aspect-ratio:363/914}
+.qrbox .putty .who{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 10px 18px rgba(0,0,0,.25))}
+.qrbox .putty .code{position:absolute;object-fit:contain;image-rendering:pixelated;background:#fff;padding:2%;box-sizing:border-box}
 .qrbox b{font:900 italic clamp(34px,10vw,64px)/.9 var(--f-display);text-transform:uppercase;margin-top:6px}
 .qrbox span{font:600 13px/1.4 var(--f-body);color:#3a3642;max-width:32ch}
 .qrbox small{font:700 11px/1 var(--f-mono);letter-spacing:.18em;text-transform:uppercase;color:#8d8a96;margin-top:4px}
@@ -575,7 +577,7 @@ input[type=range]::-moz-range-thumb{width:30px;height:30px;border:0;border-radiu
     <p class="note">The grey screen is a stand-in for an 18% card: fill the frame with it, set custom white balance, move on. The tone runs at a fixed level for a quick check that a mic is live; it is not a calibrated reference.</p>
   </section>
   <div id="sc-full"><div class="tip">tap to leave</div></div>
-<div id="qr-full" class="qrfull" hidden><div class="qrbox"><img src="qr-shot.png" alt="QR code to 0fftheprint.com/shot"><b>You got shot.</b><span>scan it · follow · your pack drops in a few days</span><small>0fftheprint.com/shot</small></div><div class="tip">tap to leave</div></div>
+<div id="qr-full" class="qrfull" hidden><div class="qrbox"><div class="putty"><img class="who" src="../assets/cathedral/shot/putty_sign.webp" alt="" decoding="async"><img class="code" src="qr-shot.png" alt="QR code to 0fftheprint.com/shot" style="left:7.44%;top:27.13%;width:84.85%;height:26.37%"></div><b>You got shot.</b><span>scan it · follow · your pack drops in a few days</span><small>0fftheprint.com/shot</small></div><div class="tip">tap to leave</div></div>
 </div>
 <div class="toast" id="toast"></div>
 

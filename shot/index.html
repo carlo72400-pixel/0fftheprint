@@ -9,52 +9,98 @@
 <meta property="og:description" content="We shoot the night. You pull your pack. Your photos land here in a few days.">
 <meta property="og:image" content="https://0fftheprint.com/assets/cathedral/w/stage.webp">
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#0a0a0d">
+<meta name="theme-color" content="#1c1a22">
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
-<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="../assets/css/auth.css?v=57b34045">
 <style>
-/* YOU GOT SHOT (10/15). The page behind the QR he holds up at the night. One screen, one job: get the person who was
-   just shot to follow, leave an @, and come back for the pack. ?n=<slug> opens a night that is up; ?d=YYYY-MM-DD or
-   nothing = the night that just happened, waiting. The page remembers the date on this phone and flips to "it's up"
-   when events.json carries that night. */
-.wrap{padding-top:18px}
+/* YOU GOT SHOT (10/15, the visual pass). The page behind the QR he holds up at the night, built like the game: a
+   cardboard diorama up top (the booth, Bala with the camera up, the painted flash burst), the three steps as machined
+   keys with cardboard props, the wait as drying prints on a line, "It's up" as the pack bursting open. The body is the
+   same leatherette camera as the Kit and the game, and every button has travel. ?n=<slug> opens a night that is up;
+   ?d=YYYY-MM-DD or nothing = the night that just happened. The phone remembers the date and flips when the night lands. */
+:root{--body:#1c1a22;--body-2:#2a2731;--lcd:#0d1a12;--lcdink:#9ef0b0;--gold:#ffd479;--lx:50%}
 [hidden]{display:none!important}
+body{background:radial-gradient(140% 60% at var(--lx) -10%,rgba(255,255,255,.10),rgba(255,255,255,0) 60%),radial-gradient(rgba(255,255,255,.035) 1px,transparent 1.2px) 0 0/4px 4px,linear-gradient(180deg,var(--body-2),var(--body) 30%,#141218 100%);background-attachment:fixed}
+.wrap{padding-top:14px;padding-bottom:50px}
 .flash{position:fixed;inset:0;background:#fff;z-index:9;pointer-events:none;transition:opacity .9s ease-out}
-.kick{font-family:var(--f-mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--pink-glow)}
-h1.big{font-size:clamp(58px,19vw,112px);line-height:.86;margin-top:8px;background:linear-gradient(180deg,#fff 8%,var(--pink) 44%,#8f8a97 60%,var(--pink) 96%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 6px 24px rgba(255,121,198,.35))}
-.lead{margin-top:14px;font-size:16px;color:#ddd5e2;max-width:36ch}
+.back{margin-bottom:12px}
+
+/* the diorama: layers at depths, the whole thing in a bezel; the tilt or the mouse slides them */
+.stage{position:relative;isolation:isolate;aspect-ratio:4/3;overflow:hidden;border-radius:8px;background:#0a0a0d;box-shadow:inset 0 0 0 4px #0b0a0e,inset 0 0 0 6px #3b3844,inset 0 0 0 7px #121117,0 0 0 1px rgba(255,255,255,.08),0 14px 36px rgba(0,0,0,.6);--px:0;--py:0}
+.stage .ly{position:absolute;left:50%;top:50%;transform:translate(calc(-50% + var(--px) * var(--d) * 1px),calc(-50% + var(--py) * var(--d) * .6px));pointer-events:none;user-select:none;-webkit-user-drag:none}
+.stage .bg{width:130%;height:auto;--d:-6;filter:brightness(.85)}
+.stage .fl{filter:drop-shadow(5px 7px 10px rgba(0,0,0,.6))}
+.stage .lights{width:24%;left:16%;top:62%;--d:-3}
+.stage .booth{width:52%;left:50%;top:78%;--d:-2}
+.stage .speaker{width:14%;left:84%;top:66%;--d:-3}
+.stage .bala{width:46%;left:50%;top:62%;--d:4;filter:drop-shadow(6px 8px 12px rgba(0,0,0,.7))}
+.stage .burst{width:42%;left:52%;top:33%;--d:7;opacity:0;animation:burst 7s 1.1s ease-out infinite}
+@keyframes burst{0%{opacity:0}2%{opacity:1}10%{opacity:.85}18%{opacity:0}100%{opacity:0}}
+.stage .haze{position:absolute;inset:0;background:radial-gradient(60% 50% at 50% 55%,rgba(255,121,198,.18),transparent 70%),radial-gradient(100% 100% at 50% 50%,transparent 55%,rgba(0,0,0,.55) 100%);pointer-events:none}
+.stage .white{position:absolute;inset:0;background:#fff;opacity:0;animation:white 7s 1.1s ease-out infinite;pointer-events:none}
+@keyframes white{0%{opacity:0}3%{opacity:.75}12%{opacity:0}100%{opacity:0}}
+.stage .tag{position:absolute;left:12px;bottom:10px;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#fff;background:rgba(10,10,13,.6);padding:5px 8px}
+
+.kick{margin-top:16px;font-family:var(--f-mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--pink-glow);text-shadow:0 1px 0 #000}
+h1.big{font-size:clamp(58px,19vw,112px);line-height:.86;margin-top:6px;color:#efe8f3;text-shadow:0 1px 0 rgba(255,255,255,.2),0 -1px 0 #000,0 0 24px rgba(255,121,198,.35)}
+.lead{margin-top:12px;font-size:15.5px;color:#d9d4df;max-width:36ch;text-shadow:0 1px 0 rgba(0,0,0,.6)}
 .lead b{color:#fff}
-.steps{display:grid;gap:10px;margin-top:22px}
-.st{display:grid;grid-template-columns:40px minmax(0,1fr);gap:4px 14px;align-items:center;padding:14px 14px 14px 12px;border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--ink);text-decoration:none}
-.st i{grid-row:span 2;width:40px;height:40px;border-radius:50%;border:2px solid var(--pink-glow);display:grid;place-items:center;font-family:var(--f-display);font-style:italic;font-weight:900;font-size:20px;color:var(--pink-glow)}
-.st b{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:24px;line-height:1;text-transform:uppercase}
-.st span{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-.st.hot{border-color:rgba(255,121,198,.55);box-shadow:0 0 18px rgba(255,121,198,.16)}
-.st.done i{background:var(--ok);border-color:var(--ok);color:#06210b}
-.ig{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;margin-top:10px}
-.ig input{min-height:50px;padding:0 14px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:500 17px var(--f-body)}
-.ig input::placeholder{color:var(--muted)}
-.ig button{min-height:50px;padding:0 16px;border:0;border-radius:10px;background:var(--pink-glow);color:var(--bg);font:800 14px var(--f-body);cursor:pointer}
-.wait{margin-top:22px;padding:18px;border:1px dashed rgba(255,121,198,.45);border-radius:14px;background:linear-gradient(180deg,rgba(255,121,198,.08),rgba(255,121,198,.02))}
-.wait b{display:block;font-family:var(--f-display);font-style:italic;font-weight:900;font-size:28px;line-height:1;text-transform:uppercase}
-.wait p{margin-top:8px;font-size:14px;color:#ddd5e2}
-.wait small{display:block;margin-top:10px;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.up{margin-top:22px;display:grid;grid-template-columns:110px minmax(0,1fr);gap:14px;align-items:center;padding:14px;border:1px solid rgba(126,231,135,.5);border-radius:14px;background:var(--panel);text-decoration:none;color:var(--ink)}
-.up img{width:110px;aspect-ratio:3/5;object-fit:cover;border-radius:8px;background:#000}
+
+/* keys with travel, the Kit's */
+.key{display:grid;grid-template-columns:64px minmax(0,1fr);gap:2px 14px;align-items:center;width:100%;min-height:76px;margin-top:10px;padding:10px 14px 10px 8px;border:0;border-radius:6px;background:linear-gradient(180deg,#3f3b48,#27242e);color:#f1ecf5;text-decoration:none;text-align:left;cursor:pointer;font:inherit;
+  box-shadow:0 1px 0 rgba(255,255,255,.16),0 5px 0 #0b0a0e,0 9px 12px rgba(0,0,0,.6);transition:transform .06s,box-shadow .06s;position:relative}
+.key:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(255,255,255,.16),0 1px 0 #0b0a0e}
+.key.primary{background:linear-gradient(180deg,#ff9fd6,#f068b6 55%,#d9479b);color:#2a0a1e;box-shadow:0 1px 0 rgba(255,255,255,.35),0 5px 0 #6d1f4b,0 9px 12px rgba(0,0,0,.6)}
+.key.primary:active{box-shadow:0 1px 0 rgba(255,255,255,.35),0 1px 0 #6d1f4b}
+.key img{grid-row:span 2;width:64px;height:72px;object-fit:contain;filter:drop-shadow(0 4px 6px rgba(0,0,0,.6));transform:rotate(-4deg)}
+.key b{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:24px;line-height:1;text-transform:uppercase}
+.key span{font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.75}
+.key i{position:absolute;right:12px;top:10px;font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;color:currentColor;opacity:.55;font-style:normal}
+.steps{margin-top:18px}
+.panel{margin-top:10px;padding:12px 14px 14px;border-radius:6px;background:linear-gradient(180deg,#201d26,#18161d);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),inset 0 0 0 1px rgba(0,0,0,.6),0 2px 4px rgba(0,0,0,.4);position:relative}
+.panel i.n{position:absolute;right:12px;top:10px;font-family:var(--f-mono);font-size:10px;letter-spacing:.14px;color:#8d8a96;font-style:normal}
+.panel .head{display:grid;grid-template-columns:64px minmax(0,1fr);gap:2px 14px;align-items:center}
+.panel .head img{grid-row:span 2;width:64px;height:72px;object-fit:contain;filter:drop-shadow(0 4px 6px rgba(0,0,0,.6));transform:rotate(3deg)}
+.panel .head b{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:24px;line-height:1;text-transform:uppercase;color:#f1ecf5}
+.panel .head span{font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#9b95a6}
+.panel.done .head span{color:#8ef79b}
+.ig{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;margin-top:12px}
+.ig input{min-height:50px;padding:0 14px;border:0;border-radius:4px;background:linear-gradient(180deg,#0a150e,var(--lcd));color:#dffbe4;font:600 17px var(--f-mono);box-shadow:inset 0 0 0 1px #000,inset 0 2px 8px rgba(0,0,0,.8),0 1px 0 rgba(255,255,255,.1);caret-color:var(--lcdink)}
+.ig input::placeholder{color:rgba(158,240,176,.45)}
+.ig button{min-height:50px;padding:0 18px;border:0;border-radius:5px;background:linear-gradient(180deg,#ff9fd6,#f068b6 55%,#d9479b);color:#2a0a1e;font:800 14px var(--f-body);cursor:pointer;box-shadow:0 1px 0 rgba(255,255,255,.35),0 4px 0 #6d1f4b,0 7px 10px rgba(0,0,0,.6);transition:transform .06s,box-shadow .06s}
+.ig button:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(255,255,255,.35),0 1px 0 #6d1f4b}
+
+/* the wait: prints drying on the line */
+.wait{position:relative;margin-top:22px;padding:14px 14px 16px;border-radius:6px;background:linear-gradient(180deg,#2a0d14,#1a0a0e);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),inset 0 0 0 1px rgba(0,0,0,.6),0 2px 4px rgba(0,0,0,.4)}
+.wait .line{display:block;width:100%;height:auto;transform-origin:50% 0;animation:sway 6s ease-in-out infinite;filter:drop-shadow(0 6px 10px rgba(0,0,0,.6))}
+@keyframes sway{0%,100%{transform:rotate(-.6deg)}50%{transform:rotate(.6deg)}}
+.wait b{display:block;margin-top:8px;font-family:var(--f-display);font-style:italic;font-weight:900;font-size:28px;line-height:1;text-transform:uppercase;color:#ffd0e4}
+.wait p{margin-top:8px;font-size:14px;color:#e9d6dc}
+.wait small{display:block;margin-top:10px;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#b48a99}
+
+/* it's up: the pack bursts open */
+.up{position:relative;margin-top:22px;display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px;align-items:center;padding:14px;border-radius:6px;background:linear-gradient(180deg,#201d26,#18161d);box-shadow:inset 0 0 0 1px rgba(126,231,135,.5),0 0 18px rgba(126,231,135,.15);text-decoration:none;color:var(--ink);overflow:hidden}
+.up .bst{position:absolute;left:-10px;top:-20px;width:160px;opacity:.9;pointer-events:none;animation:pop .7s .2s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes pop{from{transform:scale(.4) rotate(-12deg);opacity:0}to{transform:none;opacity:.9}}
+.up .cover{position:relative;display:block;width:96px;margin-left:12px;padding:6px 6px 16px;background:#f3ede2;transform:rotate(-5deg);box-shadow:0 8px 16px rgba(0,0,0,.6)}
+.up .cover img{display:block;width:100%;aspect-ratio:3/5;object-fit:cover;background:#000}
 .up b{display:block;font-family:var(--f-display);font-style:italic;font-weight:900;font-size:26px;line-height:1;text-transform:uppercase}
-.up span{display:block;margin-top:4px;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-.up em{display:block;margin-top:10px;font-style:normal;font-weight:800;color:var(--ok)}
+.up span.m{display:block;margin-top:4px;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.up em{display:block;margin-top:10px;font-style:normal;font-weight:800;color:#8ef79b}
+
 .while{margin-top:26px}
-.while .kick{color:var(--muted)}
+.while .kick{color:#8d8a96;margin-top:0}
 .rail{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
-.rail a{display:grid;gap:3px;padding:12px 10px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink);text-decoration:none;text-align:center}
-.rail a b{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:17px;line-height:1;text-transform:uppercase}
-.rail a span{font-family:var(--f-mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.fine{margin-top:26px;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.04em;line-height:1.7;color:var(--muted);text-transform:uppercase}
+.rail a{display:grid;justify-items:center;gap:4px;padding:10px 6px 12px;border-radius:6px;background:linear-gradient(180deg,#3f3b48,#27242e);color:#f1ecf5;text-decoration:none;text-align:center;box-shadow:0 1px 0 rgba(255,255,255,.16),0 4px 0 #0b0a0e,0 7px 10px rgba(0,0,0,.6);transition:transform .06s,box-shadow .06s}
+.rail a:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(255,255,255,.16),0 1px 0 #0b0a0e}
+.rail a img{width:40px;height:40px;object-fit:contain;filter:drop-shadow(0 3px 5px rgba(0,0,0,.6))}
+.rail a b{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:16px;line-height:1;text-transform:uppercase}
+.rail a span{font-family:var(--f-mono);font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:#9b95a6}
+.save{margin-top:14px;grid-template-columns:minmax(0,1fr)}
+.fine{margin-top:24px;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.04em;line-height:1.7;color:#8d8a96;text-transform:uppercase}
 .fine a{color:var(--pink-glow)}
-.share{display:flex;gap:8px;margin-top:14px}
-.share .btn{margin-top:0}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
@@ -62,36 +108,50 @@ h1.big{font-size:clamp(58px,19vw,112px);line-height:.86;margin-top:8px;backgroun
 <div class="leopard-bar"></div>
 <div class="wrap">
 <a class="back" href="../">&larr; 0FF THE PRINT</a>
+
+<div class="stage" id="stage" aria-hidden="true">
+  <img class="ly bg" src="../play/art/v2/flat/backdrop_booth.webp" alt="" decoding="async">
+  <img class="ly fl lights" src="../play/art/v2/flat/f_lights.webp" alt="" decoding="async">
+  <img class="ly fl booth" src="../play/art/v2/flat/f_booth.webp" alt="" decoding="async">
+  <img class="ly fl speaker" src="../play/art/v2/flat/f_speaker.webp" alt="" decoding="async">
+  <div class="haze"></div>
+  <img class="ly bala" src="../assets/cathedral/shot/bala_shoot.webp" alt="" decoding="async">
+  <img class="ly burst" src="../assets/cathedral/shot/s_flash.webp" alt="" decoding="async">
+  <div class="white"></div>
+  <span class="tag" id="stage-tag">the booth · 0FF THE PRINT</span>
+</div>
+
 <div class="kick" id="kick">San Antonio · tonight</div>
 <h1 class="big" id="h1">You got<br>shot.</h1>
 <p class="lead" id="lead">That flash was <b>0FF THE PRINT</b>. Your photos land here in a few days, cut and graded, as a pack with your name on it. Nothing goes up raw.</p>
 
-<a class="up" id="up" hidden><img id="up-img" alt=""><span><b id="up-title"></b><span id="up-meta"></span><em>Your pack is up. Pull it &rarr;</em></span></a>
+<a class="up" id="up" hidden><img class="bst" src="../assets/cathedral/shot/s_burst.webp" alt=""><span class="cover"><img id="up-img" alt=""></span><span><b id="up-title"></b><span class="m" id="up-meta"></span><em>Your pack is up. Pull it &rarr;</em></span></a>
 
 <div class="steps" id="steps">
-  <a class="st hot" id="st-follow" href="https://instagram.com/vamppsych" target="_blank" rel="noopener"><i>1</i><b>Follow The Lens</b><span>@vamppsych · the drop gets called there</span></a>
-  <div class="st" id="st-ig"><i>2</i><b>Leave your @</b><span id="st-ig-s">so we tag you when it drops</span>
-    <form class="ig" id="igform" style="grid-column:1/-1"><input id="ig" type="text" inputmode="text" autocapitalize="none" autocomplete="off" spellcheck="false" maxlength="30" placeholder="@yourhandle" aria-label="Your Instagram"><button type="submit">Save</button></form>
+  <a class="key primary" id="st-follow" href="https://instagram.com/vamppsych" target="_blank" rel="noopener"><img src="../assets/cathedral/shot/s_phone.webp" alt=""><b>Follow The Lens</b><span>@vamppsych · the drop gets called there</span><i>1</i></a>
+  <div class="panel" id="st-ig"><i class="n">2</i><div class="head"><img src="../assets/cathedral/shot/s_tag.webp" alt=""><b>Leave your @</b><span id="st-ig-s">so we tag you when it drops</span></div>
+    <form class="ig" id="igform"><input id="ig" type="text" inputmode="text" autocapitalize="none" autocomplete="off" spellcheck="false" maxlength="30" placeholder="@yourhandle" aria-label="Your Instagram"><button type="submit">Save</button></form>
   </div>
-  <a class="st" id="st-pull" href="../#find"><i>3</i><b>Pull your pack</b><span>find your night, rip the frames you&rsquo;re in</span></a>
+  <a class="key" id="st-pull" href="../#find"><img src="../assets/cathedral/shot/s_pack.webp" alt=""><b>Pull your pack</b><span>find your night, rip the frames you&rsquo;re in</span><i>3</i></a>
 </div>
 
 <div class="wait" id="wait">
+  <img class="line" src="../assets/cathedral/shot/s_line.webp" alt="" decoding="async">
   <b id="wait-b">The pack drops in a few days.</b>
-  <p id="wait-p">Come back here with this page saved, or watch The Lens. When the night goes up it shows right here with a button.</p>
+  <p id="wait-p">These are yours, drying. Come back here with this page saved, or watch The Lens. When the night goes up it shows right here with a button.</p>
   <small id="wait-s">you were shot on</small>
 </div>
 
 <div class="while">
   <div class="kick">While you wait</div>
   <div class="rail">
-    <a href="../#open"><b>Open a pack</b><span>a random card</span></a>
-    <a href="../play/"><b>Get the Shot</b><span>the game</span></a>
-    <a href="../wall/"><b>The Crypt</b><span>tonight&rsquo;s flyers</span></a>
+    <a href="../#open"><img src="../assets/cathedral/pack-house.webp" alt=""><b>Open a pack</b><span>a random card</span></a>
+    <a href="../play/"><img src="../assets/cathedral/i-play.webp" alt=""><b>Get the Shot</b><span>the game</span></a>
+    <a href="../wall/"><img src="../assets/cathedral/a/wall.webp" alt=""><b>The Crypt</b><span>tonight&rsquo;s flyers</span></a>
   </div>
 </div>
 
-<div class="share"><button type="button" class="btn ghost" id="share">Save this page</button></div>
+<button type="button" class="key save" id="share"><b>Save this page</b><span>share it to yourself · add it to your home screen</span></button>
 <p class="fine">Not in the pack? Some frames don&rsquo;t make the cut. <a href="https://instagram.com/vamppsych" target="_blank" rel="noopener">DM The Lens</a> and ask. Want a frame gone? Same DM, it comes down. <a href="../">0fftheprint.com</a> · we shoot the night, you pull your pack.</p>
 </div>
 
@@ -102,7 +162,14 @@ h1.big{font-size:clamp(58px,19vw,112px);line-height:.86;margin-top:8px;backgroun
 (async () => {
   const $ = s => document.querySelector(s);
   // the flash: the page opens white like the strobe did, then clears
-  requestAnimationFrame(() => { const f = $('#flash'); f.style.opacity = '0'; setTimeout(() => f.remove(), 1000); });
+  setTimeout(() => { const f = $('#flash'); if (!f) return; f.style.opacity = '0'; setTimeout(() => f.remove(), 1000); }, 140);
+  // the diorama slides with the tilt (or the mouse); the body highlight follows
+  const stage = $('#stage'); let px = 0, py = 0, tx = 0, ty = 0;
+  const run = () => { px += (tx - px) * .08; py += (ty - py) * .08; stage.style.setProperty('--px', px.toFixed(2)); stage.style.setProperty('--py', py.toFixed(2)); document.documentElement.style.setProperty('--lx', (50 + px * 3).toFixed(1) + '%'); requestAnimationFrame(run); }; run();
+  addEventListener('deviceorientation', e => { if (e.gamma == null) return; tx = Math.max(-10, Math.min(10, e.gamma / 3)); ty = Math.max(-6, Math.min(6, ((e.beta || 45) - 45) / 5)); });
+  addEventListener('mousemove', e => { if ('ontouchstart' in window) return; tx = (e.clientX / innerWidth - .5) * 16; ty = (e.clientY / innerHeight - .5) * 8; });
+  stage.addEventListener('click', () => { if (window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission === 'function') DeviceOrientationEvent.requestPermission().catch(() => {}); });
+
   const q = new URLSearchParams(location.search);
   const pad = n => String(n).padStart(2, '0');
   // the night that just happened: a party that runs past midnight still belongs to the evening it started
@@ -110,7 +177,6 @@ h1.big{font-size:clamp(58px,19vw,112px);line-height:.86;margin-top:8px;backgroun
   const today = now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate());
   const slug = (q.get('n') || '').replace(/[^a-z0-9-]/g, ''), date = /^\d{4}-\d{2}-\d{2}$/.test(q.get('d') || '') ? q.get('d') : today;
   const nice = d => { const [y, m, dd] = d.split('-').map(Number); return new Date(y, m - 1, dd).toLocaleDateString('en-US', {weekday: 'long', month: 'short', day: 'numeric'}); };
-  // this phone remembers every night it was shot on
   const KEY = 'otp-shot'; let mine = []; try { mine = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) {}
   if (!slug && !mine.includes(date)) { mine.unshift(date); mine = mine.slice(0, 12); try { localStorage.setItem(KEY, JSON.stringify(mine)); } catch (e) {} }
   $('#wait-s').textContent = 'you were shot ' + nice(date);
@@ -124,8 +190,8 @@ h1.big{font-size:clamp(58px,19vw,112px);line-height:.86;margin-top:8px;backgroun
     $('#up-img').src = '../events/' + night.slug + '/pack.webp'; $('#up-img').onerror = () => { $('#up-img').src = '../assets/cathedral/pack-house.webp'; };
     $('#up-title').textContent = night.title; $('#up-meta').textContent = [night.venue, night.date_short, (night.count | 0) + ' frames'].filter(Boolean).join(' · ');
     $('#h1').innerHTML = 'It&rsquo;s<br>up.'; $('#lead').innerHTML = 'The night you were shot at is live. <b>Pull your pack:</b> tear the frames you&rsquo;re in, keep them, share them. Nothing goes up raw.';
-    $('#wait').hidden = true; $('#st-pull').href = '../events/' + night.slug + '/'; $('#st-pull').classList.add('hot'); $('#st-follow').classList.remove('hot');
-    $('#kick').textContent = 'San Antonio · ' + nice(night.date);
+    $('#wait').hidden = true; $('#st-pull').href = '../events/' + night.slug + '/'; $('#st-pull').classList.add('primary'); $('#st-follow').classList.remove('primary');
+    $('#kick').textContent = 'San Antonio · ' + nice(night.date); $('#stage-tag').textContent = night.title.toLowerCase() + ' · ' + (night.venue || '').toLowerCase();
   }
 
   // the @: kept on this phone, and handed to the desk when the database has a door for it (shot_list_add); a quiet no is fine
@@ -136,12 +202,13 @@ h1.big{font-size:clamp(58px,19vw,112px);line-height:.86;margin-top:8px;backgroun
     if (!/^[A-Za-z0-9._]{1,30}$/.test(h)) { $('#st-ig-s').textContent = 'letters, numbers, dots and underscores'; return; }
     try { localStorage.setItem('otp-shot-ig', h); } catch (e2) {}
     $('#st-ig').classList.add('done'); $('#st-ig-s').textContent = 'saved · we tag you when it drops'; $('#ig').value = h;
+    try { navigator.vibrate && navigator.vibrate(12); } catch (e4) {}
     try { if (window.OTP && OTP.configured && OTP.sb) await OTP.sb().rpc('shot_list_add', {p_ig: h, p_day: night ? night.date : date, p_slug: night ? night.slug : null}); } catch (e3) {}
   });
   $('#share').addEventListener('click', async () => {
     const url = location.origin + location.pathname + (night ? '?n=' + night.slug : '?d=' + date);
     try { if (navigator.share) { await navigator.share({title: 'You got shot · 0FF THE PRINT', url}); return; } } catch (e) { if (e && e.name === 'AbortError') return; }
-    try { await navigator.clipboard.writeText(url); $('#share').textContent = 'Link copied · add it to your home screen'; } catch (e) { $('#share').textContent = url; }
+    try { await navigator.clipboard.writeText(url); $('#share b').textContent = 'Link copied'; $('#share span').textContent = 'add it to your home screen'; } catch (e) { $('#share span').textContent = url; }
   });
 })();
 </script>
