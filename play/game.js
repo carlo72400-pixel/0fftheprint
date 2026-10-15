@@ -47,13 +47,13 @@ const ROOMS = {
       {k: 'f_speaker', x: 2.9,  z: 5.3, h: 2.25},
       {k: 'f_booth',   x: 0,    z: 4.9, h: 1.08},
       {k: 'f_bar',     x: 3.5,  z: 4.2, h: 2.05},
-      {k: 'f_wedge',   x: -1.1, z: 3.7, h: .62},
-      {k: 'f_table',   x: 1.9,  z: 3.1, h: 1.12},
+      {k: 'f_wedge',   x: -2.5, z: 4.0, h: .62},
+      {k: 'f_table',   x: 2.7,  z: 3.3, h: 1.12},
       {k: 'f_arch',    x: -1.7, z: 2.2, h: 2.9, opening: [.2, .08, .8, .9]},
     ],
-    spots: {decks: {x: .25, z: 5.35}, floor: {x: .7, z: 3.6}, bar: {x: 2.5, z: 3.9}, arch: {x: -1.5, z: 3.4}, left: {x: -2.0, z: 4.3}},
+    spots: {decks: {x: .25, z: 5.35}, floor: {x: .5, z: 4.3}, bar: {x: 2.4, z: 4.1}, arch: {x: -1.5, z: 3.4}, left: {x: -2.0, z: 4.5}},
     // the rest of the roster hanging out in the room, cutouts like Mars, each with its own idle clock
-    extras: [{x: 3.7, z: 3.6, face: 1, h: 1.72, pair: 1}, {x: 4.5, z: 3.6, face: -1, h: 1.78, pair: 1}, {x: 2.3, z: 6.0, face: 1, h: 1.76}, {x: -3.6, z: 6.2, face: 1, h: 1.86}, {x: -1.6, z: 6.5, face: 1, h: 1.74}],
+    extras: [{x: 2.3, z: 5.9, face: 1, h: 1.72, pair: 1}, {x: 3.1, z: 5.9, face: -1, h: 1.78, pair: 1}, {x: -2.2, z: 6.3, face: 1, h: 1.76}, {x: -1.0, z: 7.0, face: 1, h: 1.86}, {x: 1.4, z: 7.2, face: -1, h: 1.74}],
     lights: [{x: -3.0, y: 2.55, z: 5.55, col: '255,121,198', to: {x: -.6, z: 4.6}}, {x: -2.75, y: 2.55, z: 5.55, col: '255,190,90', to: {x: 1.2, z: 4.4}}],
     cam: {x: 0, y: 1.45, z: 0, zoom: 1},
   },
@@ -69,12 +69,12 @@ const ROOMS = {
       {k: 'c_lamp',   x: 3.1,  z: 5.6, h: 2.3},
       {k: 'c_couch',  x: 2.2,  z: 4.6, h: 1.3},
       {k: 'c_keg',    x: -3.3, z: 4.0, h: 1.2},
-      {k: 'c_merch',  x: 3.4,  z: 3.3, h: 1.25},
-      {k: 'c_fan',    x: -1.6, z: 3.2, h: 1.1},
+      {k: 'c_merch',  x: 3.2,  z: 3.5, h: 1.25},
+      {k: 'c_fan',    x: -3.0, z: 3.6, h: 1.1},
       {k: 'c_door',   x: -2.4, z: 2.2, h: 2.9, opening: [.25, .1, .75, .92]},
     ],
-    spots: {decks: {x: -.3, z: 5.5}, floor: {x: .6, z: 3.7}, bar: {x: -2.6, z: 3.7}, arch: {x: -2.1, z: 3.4}, left: {x: -1.8, z: 4.6}},
-    extras: [{x: -4.1, z: 3.6, face: 1, h: 1.74, pair: 1}, {x: -3.3, z: 3.6, face: -1, h: 1.78, pair: 1}, {x: 3.4, z: 5.0, face: -1, h: 1.72}, {x: 1.8, z: 6.6, face: -1, h: 1.76}, {x: -2.2, z: 6.9, face: 1, h: 1.7}],
+    spots: {decks: {x: -.3, z: 5.5}, floor: {x: .5, z: 4.3}, bar: {x: -2.5, z: 4.2}, arch: {x: -2.1, z: 3.4}, left: {x: -1.8, z: 4.7}},
+    extras: [{x: -3.1, z: 5.4, face: 1, h: 1.74, pair: 1}, {x: -2.3, z: 5.4, face: -1, h: 1.78, pair: 1}, {x: 3.3, z: 6.2, face: -1, h: 1.72}, {x: 1.5, z: 6.9, face: -1, h: 1.76}, {x: -1.2, z: 7.1, face: 1, h: 1.7}],
     lights: [{x: -2.5, y: 2.6, z: 5.85, col: '150,255,120', to: {x: -.4, z: 5.0}}, {x: 3.0, y: 2.5, z: 5.55, col: '255,190,90', to: {x: 1.5, z: 4.4}}],
     cam: {x: 0, y: 1.45, z: 0, zoom: 1},
   },
@@ -90,12 +90,12 @@ const ROOMS = {
       {k: 'l_fence',    x: -3.6, z: 5.6, h: 2.3},
       {k: 'l_car',      x: .4,   z: 5.3, h: 1.5},
       {k: 'l_dumpster', x: -2.2, z: 4.2, h: 1.4},
-      {k: 'l_cones',    x: 2.4,  z: 3.3, h: .7},
-      {k: 'l_chairs',   x: 1.0,  z: 3.1, h: 1.1},
-      {k: 'l_cart',     x: 3.6,  z: 2.6, h: 1.3},
+      {k: 'l_cones',    x: -2.7, z: 3.5, h: .7},
+      {k: 'l_chairs',   x: 3.9,  z: 4.6, h: 1.1},
+      {k: 'l_cart',     x: 4.2,  z: 3.0, h: 1.3},
     ],
-    spots: {decks: {x: 1.6, z: 4.5}, floor: {x: -1.0, z: 3.9}, bar: {x: 2.4, z: 5.5}, arch: {x: -3.0, z: 4.6}, left: {x: -1.4, z: 4.7}},
-    extras: [{x: -4.2, z: 3.7, face: 1, h: 1.78, pair: 1}, {x: -3.4, z: 3.7, face: -1, h: 1.74, pair: 1}, {x: 4.4, z: 5.2, face: -1, h: 1.8}, {x: -0.6, z: 6.9, face: 1, h: 1.76}, {x: 3.2, z: 7.2, face: -1, h: 1.86}],
+    spots: {decks: {x: 1.6, z: 4.5}, floor: {x: -.7, z: 4.4}, bar: {x: 2.4, z: 5.5}, arch: {x: -3.0, z: 4.6}, left: {x: -1.4, z: 4.8}},
+    extras: [{x: -3.3, z: 5.1, face: 1, h: 1.78, pair: 1}, {x: -2.5, z: 5.1, face: -1, h: 1.74, pair: 1}, {x: 3.7, z: 5.9, face: -1, h: 1.8}, {x: -0.5, z: 7.0, face: 1, h: 1.76}, {x: 1.9, z: 7.4, face: -1, h: 1.86}],
     lights: [{x: -2.55, y: 4.0, z: 7.15, col: '255,150,40', to: {x: -1.2, z: 5.0}}, {x: 2.6, y: 1.9, z: 6.5, col: '255,210,120', to: {x: 2.2, z: 5.2}}],
     cam: {x: 0, y: 1.45, z: 0, zoom: 1},
   },
@@ -170,10 +170,12 @@ const G = {
 let W = 0, H = 0, DPR = 1;
 function resize() {
   DPR = Math.min(2, devicePixelRatio || 1); W = innerWidth; H = innerHeight; cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR); cx.setTransform(DPR, 0, 0, DPR, 0, 0);
-  const sat = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sat')) || 0;
+  const cs = getComputedStyle(document.documentElement); const sat = parseFloat(cs.getPropertyValue('--sat')) || 0, sab = parseFloat(cs.getPropertyValue('--sab')) || 0;
   const inShot = G.state === 'shoot' || G.state === 'grade';
   const door = G.state === 'title' || G.state === 'done';
-  const top = sat + (inShot ? 66 : door ? 56 : 24), bottom = inShot ? 214 : door ? 330 : 24;
+  // in the shoot the print and the three lamps live UNDER the glass, so the bottom reserve holds them plus the dials; a short phone trims the print row
+  const short = H < 700; document.documentElement.classList.toggle('short', short);
+  const top = sat + (inShot ? 66 : door ? 56 : 24), bottom = inShot ? sab + (short ? 300 : 346) : door ? 330 : 24;
   let fw = W - (inShot ? 12 : 24), fh = fw * 1.25; const maxH = H - top - bottom; if (fh > maxH) { fh = maxH; fw = fh / 1.25; } if (door && fh < 220) { fh = 220; fw = fh / 1.25; }
   G.frame = {x: (W - fw) / 2, y: inShot || door ? top : top + (maxH - fh) / 2, w: fw, h: fh};
   const vfb = $('#vfb'); if (vfb) vfb.hidden = !door;
@@ -210,7 +212,8 @@ function extraPose(ex, i, oc, t) {
 function extraRect(ex, i, now) {
   const oc = G.crowd[i]; if (!oc) return null;
   // never between the camera and the subject: closer than them and lined up with them on screen
-  if (ex.z < G.subj.z - .2) { const sp = proj(G.subj.x, 0, G.subj.z), ep = proj(ex.x, 0, ex.z); if (sp && ep && Math.abs(sp.x - ep.x) < G.frame.w * .34) return null; } const t = now / 1000; const pose = extraPose(ex, i, oc, t); const im = ART[oc + '_' + pose]; if (!im) return null;
+  if (ex.z < G.subj.z + .3 && Math.abs(ex.x - G.subj.x) < 1.6) return null;
+  if (ex.z < G.subj.z - .2) { const sp = proj(G.subj.x, 0, G.subj.z), ep = proj(ex.x, 0, ex.z); if (sp && ep && Math.abs(sp.x - ep.x) < G.frame.w * .4) return null; } const t = now / 1000; const pose = extraPose(ex, i, oc, t); const im = ART[oc + '_' + pose]; if (!im) return null;
   const w = ex.h * im.width / im.height; const p = proj(ex.x, Math.sin(t * 1.3) * .012, ex.z); if (!p) return null;
   const hpx = ex.h * p.s, wpx = w * p.s; return {x: p.x - wpx / 2, y: p.y - hpx, w: wpx, h: hpx, cx: p.x, cy: p.y - hpx / 2, d: p.d, im, face: ex.face * NAT[pose]};
 }
@@ -391,7 +394,7 @@ function develop(shot, passed) {
   const br = BRIEFS[G.brief]; const d = $('#dev'); d.querySelector('.pol img').src = shot.d; d.querySelector('.pol b').textContent = shot.t;
   d.querySelector('.stars').innerHTML = [1, 2, 3].map(i => `<i class="${i <= shot.s ? 'on' : ''}">★</i>`).join('');
   const N = NAMES[shot.oc] || 'them', words = ROOMS[G.room].words; d.querySelector('.why').innerHTML = br.checks.map((c, i) => `<span class="${passed[i] ? 'ok' : ''}">${passed[i] ? '✓' : '·'} ${c[1].replace(/\{(\w+)\}/g, (_, w) => w === 'N' ? N : (words[w] || w))}</span>`).join('');
-  d.querySelector('.tip').textContent = shot.s === 3 ? 'All three. That one goes on the wall.' : shot.s === 2 ? 'Two of three. A keeper, one thing to fix.' : 'It is a photo. Open the hint and shoot it again, or move on.';
+  d.querySelector('.tip').textContent = shot.s === 3 ? 'All three. That one goes on the wall.' : shot.s === 2 ? 'Two of three. A keeper, one thing to fix.' : 'It is a photo. Tap the print, shoot it again, or move on.';
   d.hidden = false; requestAnimationFrame(() => d.classList.add('on')); setTimeout(() => sfxStar(shot.s), 500);
   $('#dev-again').onclick = () => { d.classList.remove('on'); setTimeout(() => { d.hidden = true; G.state = 'shoot'; }, 200); };
   $('#dev-next').onclick = () => { d.classList.remove('on'); setTimeout(() => { d.hidden = true; nextBrief(); }, 200); };
@@ -415,7 +418,8 @@ function setBrief(k) {
   $$('.hgt').forEach(x => x.setAttribute('aria-pressed', String(+x.dataset.y === room.cam.y)));
   drawHint(br); paintDials(); drawAvatar(oc); G.ready = false; $('#shutter').classList.remove('ready');
   const bt = $('#btoast'); bt.querySelector('b').textContent = br.t; bt.querySelector('span').textContent = N + ' · ' + say(br.l); bt.classList.add('on'); clearTimeout(G.toastT); G.toastT = setTimeout(() => bt.classList.remove('on'), 1500);
-  const first = !G.tut[k]; $('#hint').classList.toggle('open', first || !!load('hintopen', 1)); G.tut[k] = 1; save('tut', G.tut);
+  // the print lifts up big once, the first shot ever; after that it sits under the glass and a tap brings it up
+  const first = !G.tut.any; $('#hint').classList.toggle('big', first); G.tut.any = 1; G.tut[k] = 1; save('tut', G.tut);
   G.state = 'shoot'; resize();
 }
 function drawAvatar(oc) { // the subject's head in the brief chip
@@ -466,7 +470,8 @@ function nextBrief() {
 }
 $('#skip').addEventListener('click', () => { if (G.state === 'shoot') nextBrief(); });
 $('#coach-ok').addEventListener('click', () => { $('#coach').hidden = true; save('coach', 1); G.state = 'shoot'; });
-$('#hint-tab').addEventListener('click', () => { const h = $('#hint'); h.classList.toggle('open'); save('hintopen', h.classList.contains('open') ? 1 : 0); });
+$('#hint').addEventListener('click', () => { $('#hint').classList.toggle('big'); });
+$('#hint-x').addEventListener('click', e => { e.stopPropagation(); $('#hint').classList.remove('big'); });
 
 /* ---------- a session ---------- */
 function start(mode) {

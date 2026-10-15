@@ -69,9 +69,9 @@ a{color:var(--pink)}
 .lcd span{display:-webkit-box;margin-top:3px;font:600 11px/1.3 var(--f-mono);letter-spacing:.02em;color:#b9f0c4;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 
 /* the checks: three LEDs set in the body under the viewfinder, embossed labels */
-#checks{position:absolute;left:10px;right:10px;top:calc(var(--fb,60vh) + 10px);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
-.ck{display:flex;align-items:flex-start;gap:7px;font:700 9.5px/1.25 var(--f-mono);letter-spacing:.04em;text-transform:uppercase;color:#7c7786;text-shadow:0 1px 0 rgba(0,0,0,.8),0 -1px 0 rgba(255,255,255,.06);padding:4px 0;transition:color .2s}
-.ck i{width:12px;height:12px;border-radius:50%;margin-top:1px;background:radial-gradient(circle at 35% 35%,#3a3842,#17161c);box-shadow:inset 0 1px 2px rgba(0,0,0,.9),0 1px 0 rgba(255,255,255,.1);transition:background .2s,box-shadow .2s;flex:none}
+#checks{position:absolute;left:124px;right:10px;top:calc(var(--fb,60vh) + 14px);display:grid;gap:4px;align-content:start}
+.ck{display:flex;align-items:flex-start;gap:8px;font:700 10.5px/1.3 var(--f-mono);letter-spacing:.04em;text-transform:uppercase;color:#7c7786;text-shadow:0 1px 0 rgba(0,0,0,.8),0 -1px 0 rgba(255,255,255,.06);padding:4px 0;transition:color .2s}
+.ck i{width:13px;height:13px;border-radius:50%;margin-top:0;background:radial-gradient(circle at 35% 35%,#3a3842,#17161c);box-shadow:inset 0 1px 2px rgba(0,0,0,.9),0 1px 0 rgba(255,255,255,.1);transition:background .2s,box-shadow .2s;flex:none}
 .ck.ok{color:#cfeed3}
 .ck.ok i{background:radial-gradient(circle at 35% 35%,#d6ffd9,var(--ok) 50%,#2f9a4a);box-shadow:0 0 10px var(--ok),0 0 2px #fff,inset 0 1px 1px rgba(255,255,255,.6)}
 
@@ -109,14 +109,20 @@ a{color:var(--pink)}
 .ghost{min-height:32px;padding:0 10px;border:0;border-radius:4px;background:linear-gradient(180deg,#3a3642,#25222b);color:#e9e3ee;font:700 10px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;box-shadow:0 1px 0 rgba(255,255,255,.15),0 3px 0 #0b0a0e,0 5px 8px rgba(0,0,0,.6)}
 .ghost:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(255,255,255,.15),0 1px 0 #0b0a0e}
 
-/* the hint: a little print taped to the body, folds out from the right edge of the viewfinder */
-#hint{position:absolute;right:0;top:calc(var(--ft,120px) + 6px);width:166px;transform:translateX(140px);transition:transform .25s;pointer-events:auto;display:flex;align-items:flex-start}
-#hint.open{transform:none}
-#hint-tab{width:26px;height:70px;border:0;background:linear-gradient(90deg,#ffe29a,var(--gold));color:#3a2a00;font:900 10px/1 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;writing-mode:vertical-rl;transform:rotate(180deg);padding:0;border-radius:0 3px 3px 0;box-shadow:0 2px 6px rgba(0,0,0,.6)}
-.hintbox{position:relative;width:140px;background:var(--paper);padding:6px 6px 8px;transform:rotate(1.5deg);box-shadow:0 10px 24px rgba(0,0,0,.6)}
-.hintbox::before{content:"";position:absolute;left:50%;top:-9px;width:56px;height:18px;transform:translateX(-50%) rotate(-4deg);background:rgba(255,236,170,.6);box-shadow:0 1px 2px rgba(0,0,0,.15)}
-.hintbox canvas{display:block;width:128px;height:160px;background:#111}
-.hintbox p{margin:5px 0 0;font:900 italic 12px/1 var(--f-display);letter-spacing:.02em;text-transform:uppercase;color:#1a1921}
+/* the hint: a print taped to the body under the glass, beside the lamps; tap it and it lifts up big over the viewfinder */
+#hint{position:absolute;left:12px;top:calc(var(--fb,60vh) + 14px);width:100px;pointer-events:auto;cursor:pointer}
+.hintbox{position:relative;width:100px;background:var(--paper);padding:5px 5px 7px;transform:rotate(-1.5deg);box-shadow:0 8px 18px rgba(0,0,0,.6);transition:transform .2s}
+.hintbox::before{content:"";position:absolute;left:50%;top:-8px;width:46px;height:15px;transform:translateX(-50%) rotate(-4deg);background:rgba(255,236,170,.6);box-shadow:0 1px 2px rgba(0,0,0,.15)}
+.hintbox canvas{display:block;width:90px;height:112px;background:#111}
+.hintbox p{margin:4px 0 0;font:900 italic 9.5px/1 var(--f-display);letter-spacing:.02em;text-transform:uppercase;color:#1a1921;white-space:nowrap}
+#hint-x{display:none;position:absolute;right:-12px;top:-12px;width:30px;height:30px;border:0;border-radius:50%;background:#1a1921;color:#fff;font:700 18px/30px var(--f-mono);box-shadow:0 2px 6px rgba(0,0,0,.6)}
+#hint.big{position:fixed;left:50%;top:calc(var(--ft,120px) + (var(--fb,60vh) - var(--ft,120px)) / 2);width:auto;transform:translate(-50%,-50%);z-index:7}
+#hint.big .hintbox{width:min(76vw,264px);padding:8px 8px 10px;transform:rotate(1deg);box-shadow:0 20px 40px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.1)}
+#hint.big .hintbox canvas{width:100%;height:auto;aspect-ratio:4/5}
+#hint.big .hintbox p{font-size:13px}
+#hint.big #hint-x{display:block}
+html.short #hint{display:none}
+html.short #checks{left:10px}
 
 /* the brief flash */
 #btoast{position:fixed;left:50%;top:calc(var(--ft,120px) + 40%);z-index:8;transform:translate(-50%,-50%) scale(.92);opacity:0;pointer-events:none;text-align:center;transition:opacity .25s,transform .25s;width:90vw}
@@ -233,7 +239,7 @@ a{color:var(--pink)}
   <div id="bezel"></div>
   <div class="plate"><canvas id="b-av" width="88" height="88"></canvas><div class="lcd"><b id="b-t"></b><em id="b-n"></em><span id="b-l"></span></div></div>
   <div id="checks"></div>
-  <div id="hint"><button type="button" id="hint-tab">Hint</button><div class="hintbox"><canvas width="240" height="300"></canvas><p>The shot you're after</p></div></div>
+  <div id="hint" role="button" aria-label="The shot you are after, tap for a bigger look"><div class="hintbox"><canvas width="240" height="300"></canvas><p>The shot you're after</p><button type="button" id="hint-x" aria-label="Close">&times;</button></div></div>
   <div class="edge" id="walker" data-label="walk"><i></i><small id="walkt">door</small></div>
   <div class="edge" id="zoomer" data-label="zoom"><i></i><small id="zoomt">24mm</small></div>
   <div class="readout"><span>focus <b id="lcd-f">4m</b></span><span><b id="lcd-ap">f/1.4</b></span><span><b id="lcd-room"></b></span></div>
@@ -300,6 +306,6 @@ a{color:var(--pink)}
   <div class="row"><button type="button" class="btn primary" id="v-share"><span>Share</span></button><button type="button" class="btn" id="v-del"><span>Delete</span></button><button type="button" class="btn" id="v-close"><span>Close</span></button></div>
 </div>
 
-<script src="game.js?v=20261015k"></script>
+<script src="game.js?v=20261015m"></script>
 </body>
 </html>
