@@ -48,7 +48,7 @@
 <script src="assets/js/composer.js?v=f7ec8eea" defer></script>
 <script src="assets/js/edit.js?v=46763485" defer></script>
 <script src="assets/js/binder.js?v=12b7dbe1" defer></script>
-<script src="assets/js/cathedral.js?v=a2494309" defer></script>
+<script src="assets/js/cathedral.js?v=78b267b2" defer></script>
 <script src="assets/js/lounge.js?v=5a3b6868" defer></script>
 <script src="assets/js/music.js?v=ce46d8f9" defer></script>
 <script src="assets/js/people.js?v=51b5d5d0" defer></script>
@@ -2940,6 +2940,10 @@
   .pitch-btn:hover{transform:translateY(-2px);border-color:var(--pink-deep);}
   .pitch-btn b{font-family:var(--f-display);font-style:italic;font-weight:900;letter-spacing:.04em;font-size:20px;color:var(--pink);text-transform:uppercase;}
   .pitch-btn span{color:var(--muted);font-size:12.5px;font-family:var(--f-mono);}
+  .book-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:14px;}
+  .book-item{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:rgba(244,238,242,.03);}
+  .book-item b{display:block;font-family:var(--f-display);font-style:italic;font-weight:900;font-size:19px;text-transform:uppercase;letter-spacing:.02em;color:var(--pink);}
+  .book-item span{display:block;margin-top:4px;color:var(--muted);font-size:12.5px;line-height:1.5;}
   .pitch-btn.blue{background:linear-gradient(180deg,rgba(47,107,255,.14),rgba(47,107,255,.03));}
   .pitch-btn.blue b{color:#9db9ff;}
   .pitch-btn.blue:hover{border-color:var(--dye-blue);}
@@ -3907,7 +3911,7 @@
 <!-- THE CATHEDRAL (10/3): the homepage skin. Scoped under html.cath, loaded last on purpose. -->
 <link rel="stylesheet" href="assets/css/pack.css?v=3c0b0f68">
 <link rel="stylesheet" href="assets/css/binder.css?v=f47d0aee">
-<link rel="stylesheet" href="assets/css/cathedral.css?v=a8c3c33f">
+<link rel="stylesheet" href="assets/css/cathedral.css?v=4bc3db51">
 <link rel="stylesheet" href="assets/css/lounge.css?v=2d07e1fc">
 <link rel="stylesheet" href="assets/css/music.css?v=815cfdc9">
 <link rel="stylesheet" href="assets/css/people.css?v=85ce71bf">
@@ -3982,13 +3986,13 @@
 <nav class="site">
   <a href="#home" class="wm" aria-label="0FF THE PRINT, home"><img src="assets/cathedral/mark.webp" alt="" width="240" height="228"><span>FF THE PRINT</span></a>
   <a href="join/?next=home" id="nav-key" class="key" title="Members and card holders log in here.">Log in</a>
-  <a href="#home" class="tablink" data-tab-link="home">Home</a>
+  <a href="#home" class="tablink" data-tab-link="home" title="The front door: find your night, the timeline.">Home</a>
   <a href="wall/" id="nav-wall" title="Every flyer in SA, San Marcos and Austin this week." hidden>CRYPT</a>
-  <a href="#photos" class="tablink" data-tab-link="photos">Photos</a>
-  <a href="#stories" class="tablink" data-tab-link="stories">Stories</a>
-  <a href="#music" class="tablink" data-tab-link="music">Music</a>
-  <a href="#people" class="tablink" data-tab-link="people">Coven</a>
-  <a href="#more" class="tablink" data-tab-link="more">More</a>
+  <a href="#photos" class="tablink" data-tab-link="photos" title="Every night we shot. Find your photos.">Photos</a>
+  <a href="#stories" class="tablink" data-tab-link="stories" title="Stories from the house.">Stories</a>
+  <a href="#music" class="tablink" data-tab-link="music" title="What the house plays. On rotation.">Music</a>
+  <a href="#people" class="tablink" data-tab-link="people" title="Coven: the people in the house.">Coven</a>
+  <a href="#more" class="tablink" data-tab-link="more" title="Book the house, what’s coming, the desk.">More</a>
 
   <span class="spacer"></span>
   <!-- the binder chip (10/4): binder.js swaps this for the button. Without it, nothing shows. -->
@@ -4019,15 +4023,18 @@
   <a class="hero-beacon" id="hero-beacon" href="events/" hidden><i></i><span><b>The window lights for the last night</b><strong id="hb-title"></strong><small id="hb-meta"></small><em id="hb-go">tear it open &rarr;</em></span></a>
   <div class="hero-say">
     <div class="pulse-kick">MEDIA HOUSE · SAN ANTONIO TX · SINCE WE FELT LIKE IT</div>
-    <h1 class="pulse-line">THE CITY GOES DARK.<br><span class="blue">WE CLOCK IN.</span></h1>
+    <h1 class="pulse-line">WE SHOOT THE NIGHT.<br><span class="blue">YOU PULL YOUR PACK.</span></h1>
+    <!-- THE PLAIN LINE (10/14, his mom's note: the first screen has to say what this is).
+         The house line above is the voice; this one is the translation. site.json plain_line paints over it. -->
+    <p class="hero-plain" id="hero-plain">Were you there? Find your night below, pull your photos, get in the house.</p>
   </div>
   <nav class="hero-hand" id="hero-hand" aria-label="Sections, as cards">
-    <a class="hcard" href="#home" data-tab-link="home"><img src="assets/cathedral/i-home.webp" alt="" width="360" height="236"><u>Home</u></a>
-    <a class="hcard" href="#photos" data-tab-link="photos"><img src="assets/cathedral/i-photos.webp" alt="" width="360" height="233"><u>Photos</u></a>
-    <a class="hcard" href="#stories" data-tab-link="stories"><img src="assets/cathedral/i-stories.webp" alt="" width="360" height="326"><u>Stories</u></a>
-    <a class="hcard" href="#music" data-tab-link="music"><img src="assets/cathedral/i-music.webp" alt="" width="360" height="228"><u>Music</u></a>
-    <a class="hcard" href="#people" data-tab-link="people"><img src="assets/cathedral/i-people.webp" alt="" width="360" height="281"><u>Coven</u></a>
-    <a class="hcard" href="#more" data-tab-link="more"><img src="assets/cathedral/i-more.webp" alt="" width="325" height="360"><u>More</u></a>
+    <a class="hcard" href="#home" data-tab-link="home"><img src="assets/cathedral/i-home.webp" alt="" width="360" height="236"><u>Home<small>the front door</small></u></a>
+    <a class="hcard" href="#photos" data-tab-link="photos"><img src="assets/cathedral/i-photos.webp" alt="" width="360" height="233"><u>Photos<small>every night we shot</small></u></a>
+    <a class="hcard" href="#stories" data-tab-link="stories"><img src="assets/cathedral/i-stories.webp" alt="" width="360" height="326"><u>Stories<small>from the house</small></u></a>
+    <a class="hcard" href="#music" data-tab-link="music"><img src="assets/cathedral/i-music.webp" alt="" width="360" height="228"><u>Music<small>on rotation</small></u></a>
+    <a class="hcard" href="#people" data-tab-link="people"><img src="assets/cathedral/i-people.webp" alt="" width="360" height="281"><u>Coven<small>the people in the house</small></u></a>
+    <a class="hcard" href="#more" data-tab-link="more"><img src="assets/cathedral/i-more.webp" alt="" width="325" height="360"><u>More<small>book us · what’s coming</small></u></a>
   </nav>
 </header>
 <!-- ========== MAIN GRID ========== -->
@@ -4205,25 +4212,26 @@
            Now it is the one thing a stranger can do with no login: open the night they were at.
            cathedral.js fills it from events.json and the binder says how far in this phone is.
            ⛔ Still a LINK to the night's own page (#rip tears on arrival): one implementation of the tear. -->
-      <a class="dock" id="night-dock" href="events/" hidden>
-        <span class="dk-pack"><span class="pp"><img class="pp-w" id="dk-w" alt="" width="520" height="878" decoding="async"><span class="pp-t" id="dk-t"></span><span class="pp-d" id="dk-d"></span></span></span>
-        <span class="dk-tx">
-          <i id="dk-k">New night is up</i>
-          <b id="dk-title"></b>
-          <span id="dk-line"></span>
-          <em id="dk-go">Tear it open</em>
-        </span>
-      </a>
+      <!-- THE NIGHT PICKER (10/14). The last three nights as packs, newest first, plus the shelf.
+           It replaced the dock (one night) because the stranger this screen is built for is the
+           person who was AT a night: they should see theirs without scrolling. cathedral.js fills it
+           from events.json (same nights() as before) and the binder says how far in this phone is.
+           ⛔ Each tile is a LINK to the night's own page (#rip tears on arrival): one implementation of the tear. -->
+      <div class="pick" id="night-pick" hidden>
+        <div class="pk-head"><b id="pk-k">Find your night</b><span id="pk-sub">tap the one you were at</span></div>
+        <div class="pk-rail" id="pk-rail"></div>
+      </div>
       <!-- The tiles (10/4 order). What a stranger can do comes first; the door with a code on it comes last.
            The What's coming tile opens the Run: dates/ for a stranger, the Crypt's calendar for a member (door.js sets every
            a[data-cal], Wave 2 call 6), and reads the house's next date off the database once it answers (cathedral.js). -->
       <div class="do-rail" id="do-rail">
         <a class="do wall" id="do-wall" href="wall/" hidden><img class="di" src="assets/cathedral/a/wall.webp" alt="" width="44" height="44" decoding="async"><b>CRYPT</b><span>tonight&rsquo;s flyers</span></a>
-        <a class="do" href="#find"><img class="di" src="assets/cathedral/a/photos.webp" alt="" width="44" height="44" decoding="async"><b>Find your photos</b><span>every night we shot</span></a>
+        <a class="do" href="#find"><img class="di" src="assets/cathedral/a/photos.webp" alt="" width="44" height="44" decoding="async"><b>Find your photos</b><span>every night, by date</span></a>
         <a class="do" href="dates/" id="do-next" data-cal><img class="di" src="assets/cathedral/a/coming.webp" alt="" width="44" height="44" decoding="async"><b>What&rsquo;s coming</b><span>what the house has coming</span></a>
-        <a class="do" href="#open"><img class="di" src="assets/cathedral/a/pack.webp" alt="" width="44" height="44" decoding="async"><b>Open a pack</b><span>one random card</span></a>
+        <a class="do" href="#open"><img class="di" src="assets/cathedral/a/pack.webp" alt="" width="44" height="44" decoding="async"><b>Open a pack</b><span>a random card from the house</span></a>
         <a class="do" href="#music"><img class="di" src="assets/cathedral/a/music.webp" alt="" width="44" height="44" decoding="async"><b>Play something</b><span>on rotation</span></a>
-        <a class="do" href="#desk"><img class="di" src="assets/cathedral/a/story.webp" alt="" width="44" height="44" decoding="async"><b>Read a story</b><span>from the house</span></a>
+        <a class="do" href="#desk"><img class="di" src="assets/cathedral/a/story.webp" alt="" width="44" height="44" decoding="async"><b>Read a story</b><span>from the house</span>
+        <a class="do" href="#book"><img class="di" src="assets/cathedral/a/story.webp" alt="" width="44" height="44" decoding="async"><b>Book the house</b><span>events &middot; portraits &middot; artists</span></a></a>
         <a class="do wall" id="do-join" href="wall/" hidden><img class="di" src="assets/cathedral/a/join.webp" alt="" width="44" height="44" decoding="async"><b>Join the Crypt</b><span>all it takes is an @</span></a>
       </div>
     </section>
@@ -4397,6 +4405,28 @@
          Hidden for a stranger; door.js shows it for every other state and wires the button. ===== -->
     <section id="acct-strip" data-tab="more" hidden>
       <p class="acct-line">Signed in as <b id="acct-name"></b>. <a href="my/#account">Your account</a> &middot; <button type="button" id="acct-out" class="linkbtn">Log out</button></p>
+    </section>
+
+    <!-- ===== BOOK THE HOUSE (10/14). The quiet door for the money lane: events, portraits,
+         artist packages, under the 0TP name. One tap from the front tiles, never on the hero. ===== -->
+    <section id="book" data-tab="more">
+      <div class="section-head">
+        <h2>Book the House <span class="accent">we shoot yours too</span></h2>
+        <div class="sub">events &nbsp;&middot;&nbsp; portraits &nbsp;&middot;&nbsp; artist packages</div>
+      </div>
+      <div class="pitch-dm book-dm">
+        <p class="pitch-lead">The same eyes that shoot the nights. One price agreed before the shoot, you see the cut first, your photos land on a page like the ones above.</p>
+        <div class="book-grid">
+          <div class="book-item"><b>Events</b><span>birthdays, quinces, openings, the party after. Photos, video, or both.</span></div>
+          <div class="book-item"><b>Portraits</b><span>you, your crew, your brand. In the rooms or on location.</span></div>
+          <div class="book-item"><b>Artist packages</b><span>the shoot, your card page, a story from the house, your own pack.</span></div>
+        </div>
+        <div class="pitch-actions">
+          <a class="pitch-btn blue" href="mailto:offtheprintcollective@gmail.com?subject=Booking"><b>Email the desk</b><span>offtheprintcollective@gmail.com &middot; dates &middot; quotes</span></a>
+          <a class="pitch-btn" href="https://instagram.com/vamppsych" target="_blank" rel="noopener"><b>DM The Lens</b><span>@vamppsych &middot; quick questions</span></a>
+        </div>
+        <p class="pitch-fine">Say the date, the place and what it is. We answer it ourselves.</p>
+      </div>
     </section>
 
     <!-- ===== PITCH US ===== -->
@@ -5204,6 +5234,8 @@
   // The HTML stays as the floor, so an empty field renders exactly as before.
   const pk = document.querySelector('.pulse-kick');
   if (pk && site.kicker) pk.textContent = site.kicker;
+  const hp = document.querySelector('.hero-plain');
+  if (hp && site.plain_line) hp.textContent = site.plain_line;
   const pl = document.querySelector('.pulse-line');
   if (pl && (site.pulse_line_1 || site.pulse_line_2))
     pl.innerHTML = esc(site.pulse_line_1 || '') +

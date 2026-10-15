@@ -84,9 +84,9 @@
 
   /* ---------- the last night: the beacon by the window, and the dock under the lounge ---------- */
   function lastNight() {
-    var beacon = d.getElementById('hero-beacon'), dock = d.getElementById('night-dock');
+    var beacon = d.getElementById('hero-beacon'), pick = d.getElementById('night-pick');
     var seen = d.getElementById('bc-seen'), count = d.getElementById('bc-count');
-    if (!beacon && !dock && !seen && !count) return;
+    if (!beacon && !pick && !seen && !count) return;
     nights().then(function (items) {
         var e = items[0]; if (!e) return;
         var href = 'events/' + e.slug + '/';
@@ -108,38 +108,50 @@
           if (m) m.textContent = where + ' · ' + (e.count | 0) + ' frames';
           beacon.hidden = false;
         }
-        if (dock) {
-          var title = String(e.title || '');
-          var pw = d.getElementById('dk-w'), pt = d.getElementById('dk-t'), pd = d.getElementById('dk-d');
-          if (pw) {
-            pw.addEventListener('error', function () { pw.src = 'assets/cathedral/pack-house.webp'; }, { once: true });
-            pw.src = href + 'pack.webp';
-          }
-          if (pt) { pt.textContent = title; pt.className = 'pp-t' + (title.length <= 7 ? ' short' : title.length > 16 ? ' long' : ''); }
-          if (pd) pd.textContent = e.date_short || '';
-          var dt = ymd(e.date), kick = d.getElementById('dk-k');
+        if (pick) {
+          /* THE NIGHT PICKER (10/14): the last three nights as packs, newest first, then the shelf.
+             The dock (one night) lived here before. Same data, same tear (#rip on the night's page). */
+          var rail = d.getElementById('pk-rail'); if (!rail) return;
+          var top = items.slice(0, 3);
+          var tiles = top.map(function (n) {
+            var h = 'events/' + n.slug + '/', tt = String(n.title || '');
+            var a = el('a', 'pk'); a.href = h + '#rip';
+            var pp = el('span', 'pp');
+            var im = el('img', 'pp-w'); im.alt = ''; im.width = 520; im.height = 878; im.decoding = 'async';
+            im.addEventListener('error', function () { im.src = 'assets/cathedral/pack-house.webp'; }, { once: true });
+            im.src = h + 'pack.webp';
+            var t = el('span', 'pp-t' + (tt.length <= 7 ? ' short' : tt.length > 16 ? ' long' : ''), tt);
+            var dd = el('span', 'pp-d', n.date_short || '');
+            pp.appendChild(im); pp.appendChild(t); pp.appendChild(dd);
+            a.appendChild(pp);
+            a.appendChild(el('b', '', tt));
+            a.appendChild(el('span', '', [n.venue, n.date_short].filter(Boolean).join(' · ')));
+            var line = el('em', '', (n.count | 0) + ' frames, sealed'); a.appendChild(line);
+            var meter = el('span', 'pk-meter'); var bar = el('i'); meter.appendChild(bar); a.appendChild(meter);
+            a._paint = function () {
+              var B = binder(), st = null; try { st = B ? B.night(n.slug) : null; } catch (err) {}
+              var c = n.count | 0;
+              if (st && st.opened && st.done) { line.textContent = 'All ' + c + ' in your binder'; a.href = h; bar.style.width = '100%'; }
+              else if (st && st.opened) { line.textContent = st.have + ' of ' + c + ' pulled' + (st.hit ? ', hit found' : ''); a.href = h + '#rip'; bar.style.width = (c ? Math.round(100 * st.have / c) : 0) + '%'; }
+              else { line.textContent = c + ' frames, sealed. Tear it open'; a.href = h + '#rip'; bar.style.width = '0'; }
+            };
+            return a;
+          });
+          var all = el('a', 'pk all'); all.href = '#find'; all.setAttribute('data-tab-link', 'photos');
+          all.appendChild(el('b', '', 'Every night'));
+          var frames = items.reduce(function (acc, x) { return acc + (x.count | 0); }, 0);
+          all.appendChild(el('span', '', items.length + ' nights · ' + frames + ' frames'));
+          all.appendChild(el('em', '', 'Not up there? Find it by date'));
+          tiles.push(all);
+          rail.textContent = '';
+          tiles.forEach(function (t) { rail.appendChild(t); });
+          var paintAll = function () { tiles.forEach(function (t) { if (t._paint) t._paint(); }); };
+          paintAll();
+          try { if (binder()) binder().on(paintAll); } catch (err) {}
+          var kick = d.getElementById('pk-k'), dt = ymd(e.date);
           var days = dt ? Math.floor((Date.now() - dt.getTime()) / 864e5) : 99;
-          if (kick) kick.textContent = (days <= 1 ? 'Last night is up' : 'New night is up') + (dt ? ' · ' + MON[dt.getMonth()] + ' ' + dt.getDate() : '');
-          var tt = d.getElementById('dk-title'); if (tt) tt.textContent = title + (e.venue ? ' @ ' + e.venue : '');
-          // where this phone stands on it, when there is a binder; a stranger gets the plain pitch
-          var paintDock = function () {
-            var line = d.getElementById('dk-line'), go = d.getElementById('dk-go'), B = binder(), st = null;
-            try { st = B ? B.night(e.slug) : null; } catch (err) {}
-            var n = e.count | 0;
-            if (st && st.opened && st.done) {
-              if (line) line.textContent = 'All ' + n + ' frames are in your binder.';
-              if (go) go.textContent = 'See the night'; dock.href = href;
-            } else if (st && st.opened) {
-              if (line) line.textContent = st.have + ' of ' + n + ' pulled. ' + (st.hit ? 'You found the hit.' : 'The hit is still in there.');
-              if (go) go.textContent = 'Rip another'; dock.href = href + '#rip';
-            } else {
-              if (line) line.textContent = n + ' frames, sealed. Were you there? Who did you see?';
-              if (go) go.textContent = 'Tear it open'; dock.href = href + '#rip';
-            }
-          };
-          paintDock();
-          try { if (binder()) binder().on(paintDock); } catch (err) {}
-          dock.hidden = false;
+          if (kick && days <= 1) kick.textContent = 'Last night is up';
+          pick.hidden = false;
         }
       }).catch(function () {});
   }
