@@ -14,7 +14,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="../assets/css/auth.css?v=57b34045">
 <style>
-/* YOU GOT SHOT (10/15, the visual pass). The page behind the QR he holds up at the night, built like the game: a
+/* YOU GOT SHOT (10/15, the visual pass; the props went METAL the same night: his "I just don't like the brown, it makes it look cheap", so m_* = enamel on sheet metal, s_* = the cardboard set kept on disk). The page behind the QR he holds up at the night, built like the game: a
    cardboard diorama up top (the booth, Bala with the camera up, the painted flash burst), the three steps as machined
    keys with cardboard props, the wait as drying prints on a line, "It's up" as the pack bursting open. The body is the
    same leatherette camera as the Kit and the game, and every button has travel. ?n=<slug> opens a night that is up;
@@ -73,8 +73,8 @@ h1.big{font-size:clamp(58px,19vw,112px);line-height:.86;margin-top:6px;color:#ef
 
 /* the wait: prints drying on the line */
 .wait{position:relative;margin-top:22px;padding:14px 14px 16px;border-radius:6px;background:linear-gradient(180deg,#2a0d14,#1a0a0e);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),inset 0 0 0 1px rgba(0,0,0,.6),0 2px 4px rgba(0,0,0,.4)}
-.wait .line{display:block;width:100%;height:auto;transform-origin:50% 0;animation:sway 6s ease-in-out infinite;filter:drop-shadow(0 6px 10px rgba(0,0,0,.6))}
-@keyframes sway{0%,100%{transform:rotate(-.6deg)}50%{transform:rotate(.6deg)}}
+.wait .line{display:block;position:relative;width:100%;height:auto;animation:bob 6s ease-in-out infinite;filter:drop-shadow(0 6px 10px rgba(0,0,0,.6))}
+@keyframes bob{0%,100%{top:0}50%{top:4px}}
 .wait b{display:block;margin-top:8px;font-family:var(--f-display);font-style:italic;font-weight:900;font-size:28px;line-height:1;text-transform:uppercase;color:#ffd0e4}
 .wait p{margin-top:8px;font-size:14px;color:#e9d6dc}
 .wait small{display:block;margin-top:10px;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#b48a99}
@@ -116,7 +116,7 @@ h1.big{font-size:clamp(58px,19vw,112px);line-height:.86;margin-top:6px;color:#ef
   <img class="ly fl speaker" src="../play/art/v2/flat/f_speaker.webp" alt="" decoding="async">
   <div class="haze"></div>
   <img class="ly bala" src="../assets/cathedral/shot/bala_shoot.webp" alt="" decoding="async">
-  <img class="ly burst" src="../assets/cathedral/shot/s_flash.webp" alt="" decoding="async">
+  <img class="ly burst" src="../assets/cathedral/shot/m_flash.webp" alt="" decoding="async">
   <div class="white"></div>
   <span class="tag" id="stage-tag">the booth · 0FF THE PRINT</span>
 </div>
@@ -125,18 +125,18 @@ h1.big{font-size:clamp(58px,19vw,112px);line-height:.86;margin-top:6px;color:#ef
 <h1 class="big" id="h1">You got<br>shot.</h1>
 <p class="lead" id="lead">That flash was <b>0FF THE PRINT</b>. Your photos land here in a few days, cut and graded, as a pack with your name on it. Nothing goes up raw.</p>
 
-<a class="up" id="up" hidden><img class="bst" src="../assets/cathedral/shot/s_burst.webp" alt=""><span class="cover"><img id="up-img" alt=""></span><span><b id="up-title"></b><span class="m" id="up-meta"></span><em>Your pack is up. Pull it &rarr;</em></span></a>
+<a class="up" id="up" hidden><img class="bst" src="../assets/cathedral/shot/m_burst.webp" alt=""><span class="cover"><img id="up-img" alt=""></span><span><b id="up-title"></b><span class="m" id="up-meta"></span><em>Your pack is up. Pull it &rarr;</em></span></a>
 
 <div class="steps" id="steps">
-  <a class="key primary" id="st-follow" href="https://instagram.com/vamppsych" target="_blank" rel="noopener"><img src="../assets/cathedral/shot/s_phone.webp" alt=""><b>Follow The Lens</b><span>@vamppsych · the drop gets called there</span><i>1</i></a>
-  <div class="panel" id="st-ig"><i class="n">2</i><div class="head"><img src="../assets/cathedral/shot/s_tag.webp" alt=""><b>Leave your @</b><span id="st-ig-s">so we tag you when it drops</span></div>
+  <a class="key primary" id="st-follow" href="https://instagram.com/vamppsych" target="_blank" rel="noopener"><img src="../assets/cathedral/shot/m_phone.webp" alt=""><b>Follow The Lens</b><span>@vamppsych · the drop gets called there</span><i>1</i></a>
+  <div class="panel" id="st-ig"><i class="n">2</i><div class="head"><img src="../assets/cathedral/shot/m_tag.webp" alt=""><b>Leave your @</b><span id="st-ig-s">so we tag you when it drops</span></div>
     <form class="ig" id="igform"><input id="ig" type="text" inputmode="text" autocapitalize="none" autocomplete="off" spellcheck="false" maxlength="30" placeholder="@yourhandle" aria-label="Your Instagram"><button type="submit">Save</button></form>
   </div>
-  <a class="key" id="st-pull" href="../#find"><img src="../assets/cathedral/shot/s_pack.webp" alt=""><b>Pull your pack</b><span>find your night, rip the frames you&rsquo;re in</span><i>3</i></a>
+  <a class="key" id="st-pull" href="../#find"><img src="../assets/cathedral/shot/m_pack.webp" alt=""><b>Pull your pack</b><span>find your night, rip the frames you&rsquo;re in</span><i>3</i></a>
 </div>
 
 <div class="wait" id="wait">
-  <img class="line" src="../assets/cathedral/shot/s_line.webp" alt="" decoding="async">
+  <img class="line" src="../assets/cathedral/shot/m_line.webp" alt="" decoding="async">
   <b id="wait-b">The pack drops in a few days.</b>
   <p id="wait-p">These are yours, drying. Come back here with this page saved, or watch The Lens. When the night goes up it shows right here with a button.</p>
   <small id="wait-s">you were shot on</small>
