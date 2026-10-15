@@ -7,15 +7,26 @@
 <meta name="description" content="Filmmaker tools from the house: teleprompter, slate, take log, release, golden hour, viewfinder, exposure, screens. Works offline.">
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#0a0a0d">
+<meta name="color-scheme" content="dark">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="KIT">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" href="icon-192.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@700;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" media="print" onload="this.media='all'">
+<style>
+/* the house fonts, self-hosted (10/15): Samsung's custom font and an offline open used to swap them out */
+@font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:url(../assets/fonts/inter-400.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:500;font-display:swap;src:url(../assets/fonts/inter-500.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:600;font-display:swap;src:url(../assets/fonts/inter-600.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:700;font-display:swap;src:url(../assets/fonts/inter-700.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:800;font-display:swap;src:url(../assets/fonts/inter-800.woff2) format('woff2')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400;font-display:swap;src:url(../assets/fonts/jetbrains-mono-400.woff2) format('woff2')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:500;font-display:swap;src:url(../assets/fonts/jetbrains-mono-500.woff2) format('woff2')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:700;font-display:swap;src:url(../assets/fonts/jetbrains-mono-700.woff2) format('woff2')}
+@font-face{font-family:'Saira Condensed';font-style:normal;font-weight:700;font-display:swap;src:url(../assets/fonts/saira-condensed-700.woff2) format('woff2')}
+@font-face{font-family:'Saira Condensed';font-style:normal;font-weight:900;font-display:swap;src:url(../assets/fonts/saira-condensed-900.woff2) format('woff2')}
+</style>
 <style>
 /* THE KIT (10/15): eight tools for one hand in the dark. The house skin: page black, pink glow, square corners, big type.
    Every tool is one screen; the controls live at the bottom where the thumb is. Works with no signal (sw.js). */
@@ -267,6 +278,19 @@ input[type=range]::-moz-range-thumb{width:30px;height:30px;border:0;border-radiu
 .slate{border-radius:6px;box-shadow:0 0 0 4px #0b0a0e,0 0 0 6px #3b3844,0 10px 30px rgba(0,0,0,.6)}
 .toast{border-radius:4px;background:linear-gradient(180deg,#0a150e,var(--lcd));color:var(--lcdink);box-shadow:inset 0 0 0 1px #000,0 6px 16px rgba(0,0,0,.6);text-shadow:0 0 6px rgba(158,240,176,.5);font-family:var(--f-mono)}
 
+/* ---------- the sky (10/15): the sun's day as a picture ---------- */
+.skybox{position:relative;border-radius:6px;overflow:hidden;box-shadow:inset 0 0 0 4px #0b0a0e,inset 0 0 0 6px #3b3844,inset 0 0 0 7px #121117,0 0 0 1px rgba(255,255,255,.08),0 10px 24px rgba(0,0,0,.6)}
+.sky{display:block;width:100%;height:auto}
+.skyread{position:absolute;left:10px;top:10px;padding:6px 9px;border-radius:3px;background:linear-gradient(180deg,#0a150e,var(--lcd));color:var(--lcdink);font:700 10.5px/1.4 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;box-shadow:inset 0 0 0 1px #000,inset 0 2px 6px rgba(0,0,0,.8);text-shadow:0 0 6px rgba(158,240,176,.5)}
+.skyread b{color:#dffbe4}
+/* ---------- the back key (10/15, his right thumb), the dark-mode guard on the full screens ---------- */
+#back-fab{position:fixed;right:14px;bottom:calc(16px + var(--sab));z-index:60;width:60px;height:60px;border:0;border-radius:50%;display:none;place-items:center;color:#f1ecf5;font:900 26px/1 var(--f-mono);background:radial-gradient(circle at 50% 30%,#4b4754,#201e26 70%);box-shadow:0 0 0 3px #0b0a0e,0 0 0 5px #4b4754,0 0 0 6px #0b0a0e,0 8px 16px rgba(0,0,0,.7),inset 0 2px 2px rgba(255,255,255,.2),inset 0 -5px 8px rgba(0,0,0,.7);transition:transform .08s}
+#back-fab::after{content:"back";position:absolute;left:50%;bottom:-16px;transform:translateX(-50%);font:700 8.5px/1 var(--f-mono);letter-spacing:.2em;text-transform:uppercase;color:#8d8a96}
+#back-fab:active{transform:scale(.92)}
+body[data-tool]:not([data-tool="home"]) #back-fab{display:grid}
+body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 110px)}
+.full,#sc-full,.qrfull,#flash{color-scheme:light;forced-color-adjust:none}
+@media (prefers-color-scheme:dark){:root{--pcs:1}}
 /* ---------- the QR key and its full screen (10/15) ---------- */
 .qrkey{display:grid;grid-template-columns:44px minmax(0,1fr);gap:0 12px;align-items:center;text-align:left;margin:0 0 14px;padding:10px 14px;min-height:64px;font-size:20px}
 .qrkey img{width:44px;height:44px;border-radius:4px;background:#fff;padding:2px}
@@ -462,7 +486,9 @@ input[type=range]::-moz-range-thumb{width:30px;height:30px;border:0;border-radiu
   <section id="t-sun" class="tool" hidden>
     <h2>Golden hour</h2><p class="sub">sunrise · golden · blue · where the sun sits</p>
     <div class="seg" id="sun-city"><button type="button" data-city="SA" aria-pressed="true">San Antonio</button><button type="button" data-city="SMTX" aria-pressed="false">San Marcos</button><button type="button" data-city="ATX" aria-pressed="false">Austin</button></div>
-    <div class="row"><label><span class="lbl">Date</span><input class="in" type="date" id="sun-date"></label><label><span class="lbl">Time for the compass</span><input class="in" type="time" id="sun-time"></label></div>
+    <div class="row"><label><span class="lbl">Date</span><input class="in" type="date" id="sun-date"></label><label><span class="lbl">Time</span><input class="in" type="time" id="sun-time"></label></div>
+    <div class="skybox"><canvas class="sky" id="sky" width="800" height="400"></canvas><div class="skyread" id="skyread"></div></div>
+    <div class="slider"><span>Scrub</span><input type="range" id="sun-t" min="0" max="1439" step="5" value="720"><output id="sun-t-o">12:00</output></div>
     <div class="sunline" id="sunline"></div>
     <div class="row" id="sun-stats"></div>
     <div class="card" style="display:grid;gap:8px;justify-items:center">
@@ -576,8 +602,10 @@ input[type=range]::-moz-range-thumb{width:30px;height:30px;border:0;border-radiu
     </div>
     <button type="button" class="btn big" id="sc-tone" aria-pressed="false">1 kHz tone: off</button>
     <p class="note">The grey screen is a stand-in for an 18% card: fill the frame with it, set custom white balance, move on. The tone runs at a fixed level for a quick check that a mic is live; it is not a calibrated reference.</p>
+<p class="note"><b>White coming out grey or black?</b> That is the phone's browser painting the page dark, not the Kit. Samsung Internet: the menu, Settings, Appearance, turn <b>Dark mode</b> off for this. Chrome: Settings, Theme, turn off <b>Darken websites</b>. The Kit tells the browser these screens are light; most honor it, Samsung's sometimes does not.</p>
   </section>
   <div id="sc-full"><div class="tip">tap to leave</div></div>
+<button type="button" id="back-fab" aria-label="Back to the kit">&lsaquo;</button>
 <div id="qr-full" class="qrfull" hidden><div class="qrbox"><div class="putty"><img class="who" src="../assets/cathedral/shot/putty_sign.webp" alt="" decoding="async"><img class="code" src="qr-shot.png" alt="QR code to 0fftheprint.com/shot" style="left:7.44%;top:27.13%;width:84.85%;height:26.37%"></div><b>You got shot.</b><span>scan it · follow · your pack drops in a few days</span><small>0fftheprint.com/shot</small></div><div class="tip">tap to leave</div></div>
 </div>
 <div class="toast" id="toast"></div>
@@ -604,6 +632,7 @@ function go(t, push){
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-go]'); if (b) { e.preventDefault(); buzz(); go(b.dataset.go); }
 });
+$('#back-fab').addEventListener('click', () => { buzz(); go('home'); });
 window.addEventListener('hashchange', () => go(location.hash.replace('#', ''), false));
 
 /* install (Android shows the prompt; iPhone: Share, Add to Home Screen) */
@@ -845,10 +874,39 @@ function sunPos(date, lat, lng){
 }
 const hhmm = d => d.toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit'});
 const pad2 = n => String(n).padStart(2, '0');
+// the sky: a canvas of the whole day. The arc is the sun's real path (altitude by time), the bands along it are the
+// golden hours (amber) and the blue hours (blue), the disc sits where the sun is at the picked time, and the light pours
+// down from it onto the ground. The sky color itself follows the sun's height.
+function skyPaint(at, s, c, gAM, gPM, lat, lng, y, m, d, name){
+  const cv = $('#sky'); if (!cv) return; const x = cv.getContext('2d'); const W = cv.width, H = cv.height, HZ = H * .72;
+  const t0 = new Date(y, m - 1, d, 4, 0).getTime(), span = 18 * 3600000; const px = t => 40 + Math.max(0, Math.min(1, (t - t0) / span)) * (W - 80);
+  const py = alt => HZ - Math.max(-18, Math.min(80, alt)) / 80 * (HZ - 40);
+  const p = sunPos(at, lat, lng) || {alt: -30, az: 0}; const alt = p.alt;
+  const top = alt < -6 ? '#070812' : alt < 2 ? '#1a1f4a' : alt < 12 ? '#5a3a6a' : '#3b7bd6', mid = alt < -6 ? '#0d1024' : alt < 2 ? '#3a3f7a' : alt < 12 ? '#e0804a' : '#8dbdf0', low = alt < -6 ? '#1a1430' : alt < 2 ? '#6a4a6a' : alt < 12 ? '#ffc06a' : '#d8ecff';
+  const g = x.createLinearGradient(0, 0, 0, HZ); g.addColorStop(0, top); g.addColorStop(.6, mid); g.addColorStop(1, low); x.fillStyle = g; x.fillRect(0, 0, W, HZ);
+  x.fillStyle = '#0d0c11'; x.fillRect(0, HZ, W, H - HZ);
+  x.fillStyle = '#17161c'; [[60, 40, 70], [140, 24, 110], [230, 60, 40], [330, 30, 90], [420, 90, 60], [540, 36, 130], [600, 18, 180], [640, 50, 70], [720, 70, 50]].forEach(([bx, bw, bh]) => x.fillRect(bx, HZ - bh, bw, bh));
+  x.fillStyle = '#f7b9dd'; x.fillRect(606, HZ - 184, 6, 10);
+  x.lineWidth = 4; let prev = null;
+  for (let t = t0; t <= t0 + span; t += 600000) { const q = sunPos(new Date(t), lat, lng); if (!q) continue; const X = px(t), Y = py(q.alt);
+    if (prev) { const tt = new Date(t); const gold = (tt >= s.rise && tt < gAM) || (tt >= gPM && tt < s.set); const blue = (tt >= c.rise && tt < s.rise) || (tt >= s.set && tt < c.set);
+      x.strokeStyle = gold ? '#ffb347' : blue ? '#5b8cff' : q.alt > 0 ? 'rgba(255,255,255,.7)' : 'rgba(255,255,255,.18)'; x.beginPath(); x.moveTo(prev[0], prev[1]); x.lineTo(X, Y); x.stroke(); }
+    prev = [X, Y]; }
+  x.font = '700 19px JetBrains Mono, monospace'; x.textAlign = 'center';
+  [[c.rise, 'dawn', '#5b8cff', 0], [s.rise, 'rise ' + hhmm(s.rise), '#ffb347', 1], [gAM, 'golden to ' + hhmm(gAM), '#ffb347', 2], [gPM, 'golden from ' + hhmm(gPM), '#ffb347', 2], [s.set, 'set ' + hhmm(s.set), '#ffb347', 1], [c.set, 'dark ' + hhmm(c.set), '#5b8cff', 0]].forEach(([t, l, col, row]) => { const X = px(t.getTime()); x.fillStyle = col; x.fillRect(X - 1, HZ - 8, 2, 16); x.textAlign = X < 120 ? 'left' : X > W - 120 ? 'right' : 'center'; x.fillText(l, X, HZ + 34 + row * 24); });
+  const SX = px(at.getTime()), SY = py(alt);
+  if (alt > -18) {
+    const glow = x.createRadialGradient(SX, SY, 0, SX, SY, 90); glow.addColorStop(0, alt > 6 ? 'rgba(255,240,200,.9)' : 'rgba(255,170,90,.9)'); glow.addColorStop(1, 'rgba(255,170,90,0)'); x.fillStyle = glow; x.beginPath(); x.arc(SX, SY, 90, 0, 7); x.fill();
+    if (alt > 0) { const cone = x.createLinearGradient(SX, SY, SX, HZ); cone.addColorStop(0, alt > 6 ? 'rgba(255,240,200,.35)' : 'rgba(255,180,90,.5)'); cone.addColorStop(1, 'rgba(255,200,120,0)'); x.fillStyle = cone; x.beginPath(); x.moveTo(SX, SY); x.lineTo(SX - 160 - (90 - alt) * 2, HZ); x.lineTo(SX + 160 + (90 - alt) * 2, HZ); x.closePath(); x.fill(); }
+    x.fillStyle = alt > 6 ? '#fff4d6' : '#ffb347'; x.beginPath(); x.arc(SX, SY, 18, 0, 7); x.fill();
+  }
+  x.fillStyle = 'rgba(255,255,255,.5)'; x.fillRect(0, HZ - 1, W, 2);
+  $('#skyread').innerHTML = alt > 0 ? `<b>${hhmm(at)}</b> · sun <b>${Math.round(alt)}°</b> up · ${name}<br>${(at >= gPM && at < s.set) || (at >= s.rise && at < gAM) ? '<b>golden</b>, shoot now' : alt > 50 ? 'high and hard, find shade' : 'day light'}` : `<b>${hhmm(at)}</b> · sun down · ${name}<br>${(at >= s.set && at < c.set) || (at >= c.rise && at < s.rise) ? '<b>blue hour</b>, signs on' : 'night'}`;
+}
 function sunPaint(){
   const di = $('#sun-date'), ti = $('#sun-time'); const now = new Date();
   if (!di.value) di.value = `${now.getFullYear()}-${pad2(now.getMonth() + 1)}-${pad2(now.getDate())}`;
-  if (!ti.value) ti.value = `${pad2(now.getHours())}:${pad2(now.getMinutes())}`;
+  if (!ti.value) { ti.value = `${pad2(now.getHours())}:${pad2(now.getMinutes())}`; const r = $('#sun-t'); if (r) r.value = now.getHours() * 60 + now.getMinutes(); }
   $$('#sun-city button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.city === SUN.city)));
   const [lat, lng, name] = CITY[SUN.city];
   const [y, m, d] = di.value.split('-').map(Number); const noon = new Date(y, m - 1, d, 12, 0, 0);
@@ -866,11 +924,13 @@ function sunPaint(){
   $('#sun-week').innerHTML = [...Array(7)].map((_, i) => { const dd = new Date(y, m - 1, d + i, 12); const ss = sunTimes(dd, lat, lng, -.833); if (!ss) return ''; const g = new Date(ss.set.getTime() - 3600000); return `<div style="display:grid;grid-template-columns:72px 1fr 1fr;gap:8px;font:600 12px/1.4 var(--f-mono);color:var(--muted)"><b style="color:var(--ink)">${dd.toLocaleDateString('en-US', {weekday:'short', day:'numeric'})}</b><span>golden <b style="color:var(--gold)">${hhmm(g)}</b></span><span>set <b style="color:var(--ink)">${hhmm(ss.set)}</b></span></div>`; }).join('');
   const [hh, mm] = ti.value.split(':').map(Number); const at = new Date(y, m - 1, d, hh, mm);
   const p = sunPos(at, lat, lng);
+  skyPaint(at, s, c, gAM, gPM, lat, lng, y, m, d, name); const ro = $('#sun-t-o'); if (ro) ro.value = hhmm(at);
   if (p) { $('#sun-arm').style.transform = `rotate(${p.az}deg)`; const dirs = ['N','NE','E','SE','S','SW','W','NW']; const dn = dirs[Math.round(p.az / 45) % 8];
     $('#sun-azi').innerHTML = p.alt > 0 ? `At ${hhmm(at)} in ${name} the sun sits <b>${dn}</b> (${Math.round(p.az)}°), <b>${Math.round(p.alt)}°</b> up. Back your subject to it for a rim, face them to it for flat.` : `At ${hhmm(at)} in ${name} the sun is down (${Math.round(p.alt)}°). Street light and signs.`; }
 }
 $('#sun-city').addEventListener('click', e => { const b = e.target.closest('[data-city]'); if (!b) return; SUN.city = b.dataset.city; save('sunCity', SUN.city); sunPaint(); });
-$('#sun-date').addEventListener('change', sunPaint); $('#sun-time').addEventListener('change', sunPaint);
+$('#sun-date').addEventListener('change', sunPaint); $('#sun-time').addEventListener('change', () => { const [h, mi] = $('#sun-time').value.split(':').map(Number); $('#sun-t').value = h * 60 + mi; sunPaint(); });
+$('#sun-t').addEventListener('input', e => { const v = +e.target.value; $('#sun-time').value = `${pad2(Math.floor(v / 60))}:${pad2(v % 60)}`; sunPaint(); });
 
 /* ---------- VIEWFINDER ---------- */
 const VF = {ar: 1.7778, fl: 24, thirds: false, stream: null};
@@ -1014,6 +1074,7 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden && SW
 /* ---------- THE QR ---------- */
 $('#qr-show').addEventListener('click', () => { $('#qr-full').hidden = false; buzz(); try { if ('wakeLock' in navigator) navigator.wakeLock.request('screen').then(l => { $('#qr-full').dataset.lock = '1'; $('#qr-full').addEventListener('click', () => l.release(), { once: true }); }).catch(() => {}); } catch(e){} });
 $('#qr-full').addEventListener('click', () => { $('#qr-full').hidden = true; });
+addEventListener('deviceorientation', e => { const f = $('#qr-full'); if (!f || f.hidden || e.gamma == null) return; const g = Math.max(-25, Math.min(25, e.gamma)); f.style.backgroundPosition = `calc(50% + ${(-g * 1.2).toFixed(1)}px) center`; const p = f.querySelector('.putty'); if (p) p.style.transform = `translateX(${(g * .6).toFixed(1)}px)`; });
 
 /* ---------- SCREENS ---------- */
 const SCREENS = {grey: '#767676', white: '#ffffff', black: '#000000', red: '#ff0000', pink: '#ff79c6'};

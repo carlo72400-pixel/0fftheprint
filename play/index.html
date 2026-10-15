@@ -7,15 +7,26 @@
 <meta name="description" content="A photo game from the house. Three cardboard rooms, the roster as cutouts, a brief per shot. Frame it, shoot it, keep it in the album. Works offline.">
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#0a0a0d">
+<meta name="color-scheme" content="dark">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="GET THE SHOT">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" href="icon-192.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@700;900&family=Inter:wght@500;700;800&family=JetBrains+Mono:wght@500;700&display=swap" media="print" onload="this.media='all'">
+<style>
+/* the house fonts, self-hosted (10/15): Samsung's custom font and an offline open used to swap them out */
+@font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:url(../assets/fonts/inter-400.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:500;font-display:swap;src:url(../assets/fonts/inter-500.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:600;font-display:swap;src:url(../assets/fonts/inter-600.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:700;font-display:swap;src:url(../assets/fonts/inter-700.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:800;font-display:swap;src:url(../assets/fonts/inter-800.woff2) format('woff2')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400;font-display:swap;src:url(../assets/fonts/jetbrains-mono-400.woff2) format('woff2')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:500;font-display:swap;src:url(../assets/fonts/jetbrains-mono-500.woff2) format('woff2')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:700;font-display:swap;src:url(../assets/fonts/jetbrains-mono-700.woff2) format('woff2')}
+@font-face{font-family:'Saira Condensed';font-style:normal;font-weight:700;font-display:swap;src:url(../assets/fonts/saira-condensed-700.woff2) format('woff2')}
+@font-face{font-family:'Saira Condensed';font-style:normal;font-weight:900;font-display:swap;src:url(../assets/fonts/saira-condensed-900.woff2) format('woff2')}
+</style>
 <style>
 /* GET THE SHOT v2 (10/15). A cardboard diorama you photograph, held in a camera.
    The shoot screen is a camera body: a brushed top plate with an LCD, the viewfinder recessed in a bezel, three LEDs
