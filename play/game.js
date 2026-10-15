@@ -172,9 +172,11 @@ function resize() {
   DPR = Math.min(2, devicePixelRatio || 1); W = innerWidth; H = innerHeight; cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR); cx.setTransform(DPR, 0, 0, DPR, 0, 0);
   const sat = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sat')) || 0;
   const inShot = G.state === 'shoot' || G.state === 'grade';
-  const top = sat + (inShot ? 72 : 24), bottom = inShot ? 236 : 24;
-  let fw = W - 24, fh = fw * 1.25; const maxH = H - top - bottom; if (fh > maxH) { fh = maxH; fw = fh / 1.25; }
-  G.frame = {x: (W - fw) / 2, y: inShot ? top : top + (maxH - fh) / 2, w: fw, h: fh};
+  const door = G.state === 'title' || G.state === 'done';
+  const top = sat + (inShot ? 72 : door ? 56 : 24), bottom = inShot ? 236 : door ? 330 : 24;
+  let fw = W - 24, fh = fw * 1.25; const maxH = H - top - bottom; if (fh > maxH) { fh = maxH; fw = fh / 1.25; } if (door && fh < 220) { fh = 220; fw = fh / 1.25; }
+  G.frame = {x: (W - fw) / 2, y: inShot || door ? top : top + (maxH - fh) / 2, w: fw, h: fh};
+  const vfb = $('#vfb'); if (vfb) vfb.hidden = !door;
   document.documentElement.style.setProperty('--fb', (G.frame.y + G.frame.h) + 'px'); document.documentElement.style.setProperty('--ft', G.frame.y + 'px');
 }
 addEventListener('resize', resize); resize();
@@ -481,7 +483,7 @@ function endDaily() {
   $('#d-grid').innerHTML = G.set.map(k => `<div><b>${BRIEFS[k].t}</b><span>${'★'.repeat(rec[k] || 0)}<i>${'★'.repeat(3 - (rec[k] || 0))}</i></span></div>`).join('');
   $('#hud').hidden = true; $('#s-done').hidden = false; G.state = 'done'; resize();
 }
-function toTitle() { $$('.scr').forEach(s => s.hidden = true); $('#hud').hidden = true; $('#s-title').hidden = false; G.state = 'title'; paintTitle(); resize(); }
+function toTitle() { $$('.scr').forEach(s => s.hidden = true); $('#hud').hidden = true; $('#s-title').hidden = false; G.state = 'title'; paintTitle(); resize(); $('#s-title').scrollTop = 0; }
 function paintTitle() {
   const album = load('album', []); $('#t-shots').textContent = album.length; $('#t-stars').textContent = load('stars', 0); $('#t-pulls').textContent = load('pulls', 0);
   const dd = load('daily', {}), rec = dd[dayKey()]; const got = rec ? Object.values(rec).reduce((a, b) => a + b, 0) : 0;

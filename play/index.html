@@ -121,34 +121,50 @@ a{color:var(--pink)}
 #coach p i{font-style:normal;font-size:20px;text-align:center;color:var(--gold)}
 #coach .btn{margin-top:16px}
 
-/* ---------- door screens over the live diorama ---------- */
-.scr{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;padding:calc(var(--sat) + 16px) 18px calc(var(--sab) + 18px);background:linear-gradient(180deg,rgba(10,10,13,.55),rgba(10,10,13,.2) 30%,rgba(10,10,13,.2) 55%,rgba(10,10,13,.92) 78%)}
-.scr.solid{background:rgba(10,10,13,.9);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);overflow:auto;touch-action:pan-y}
-.wm{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--ink)}
-.wm img{width:28px;height:28px}
+/* ---------- the door screens: the back of the camera ---------- */
+.scr{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;padding:calc(var(--sat) + 12px) 16px calc(var(--sab) + 16px);overflow:auto;touch-action:pan-y;
+  background:radial-gradient(140% 60% at var(--lx) -10%,rgba(255,255,255,.10),rgba(255,255,255,0) 60%),radial-gradient(rgba(255,255,255,.035) 1px,transparent 1.2px) 0 0/4px 4px,linear-gradient(180deg,var(--body-2),var(--body) 30%,#141218 100%)}
+/* the screens that keep the diorama in view punch the viewfinder out of the body and seat it in a bezel */
+.scr.window{-webkit-mask:linear-gradient(#000 0 0) 0 0/100% calc(var(--ft,120px) - 8px) no-repeat,linear-gradient(#000 0 0) 0 100%/100% calc(100% - var(--fb,60vh) - 8px) no-repeat,linear-gradient(#000 0 0) 0 var(--ft,120px)/6px 100% no-repeat,linear-gradient(#000 0 0) 100% var(--ft,120px)/6px 100% no-repeat;
+  mask:linear-gradient(#000 0 0) 0 0/100% calc(var(--ft,120px) - 8px) no-repeat,linear-gradient(#000 0 0) 0 100%/100% calc(100% - var(--fb,60vh) - 8px) no-repeat,linear-gradient(#000 0 0) 0 var(--ft,120px)/6px 100% no-repeat,linear-gradient(#000 0 0) 100% var(--ft,120px)/6px 100% no-repeat}
+.vfb{position:fixed;left:0;right:0;top:calc(var(--ft,120px) - 8px);height:calc(var(--fb,60vh) - var(--ft,120px) + 16px);z-index:11;pointer-events:none;border-radius:8px;box-shadow:inset 0 0 0 4px #0b0a0e,inset 0 0 0 6px #3b3844,inset 0 0 0 7px #121117,0 0 0 1px rgba(255,255,255,.08)}
+.vfb::before{content:"";position:absolute;left:8px;right:8px;top:8px;bottom:8px;box-shadow:inset 0 2px 10px rgba(0,0,0,.9);border-radius:3px}
+.vfsp{flex:none;height:calc(var(--fb,60vh) - var(--sat) - 12px - 36px)}
+.wm{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--ink);height:36px;flex:none}
+.wm img{width:26px;height:26px;filter:drop-shadow(0 1px 0 rgba(255,255,255,.2))}
 .wm span{display:flex;flex-direction:column;gap:2px}
-.wm small{font:700 9.5px/1.2 var(--f-mono);letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
-.title{margin:auto 0 0;font:900 italic clamp(44px,13vw,80px)/.84 var(--f-display);text-transform:uppercase;letter-spacing:-.01em;background:linear-gradient(180deg,#fff 8%,var(--pink) 44%,#8f8a97 60%,var(--pink) 96%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 6px 24px rgba(255,121,198,.35))}
-.title b{display:block;color:var(--ink);-webkit-text-fill-color:var(--ink);font-size:.5em;letter-spacing:.02em}
-.tag{margin:8px 0 0;font:700 11px/1.5 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--pink)}
-.lead{margin:8px 0 0;max-width:40ch;color:#ddd5e2;font-size:14px}
-.menu{display:grid;gap:8px;margin-top:14px}
-.btn{min-height:52px;padding:0 16px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:800 15px/1.1 var(--f-body);display:flex;align-items:center;justify-content:space-between;gap:10px;text-decoration:none;text-align:left}
-.btn small{font:600 10.5px/1.3 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:right}
-.btn.primary{background:var(--glow);border-color:var(--glow);color:var(--bg)}
-.btn.primary small{color:rgba(10,10,13,.7)}
-.btn:active{transform:translateY(1px)}
+.wm b{color:#d9d4df;text-shadow:0 1px 0 rgba(255,255,255,.12),0 -1px 0 #000}
+.wm small{font:700 9px/1.2 var(--f-mono);letter-spacing:.2em;text-transform:uppercase;color:#8d8a96;text-shadow:0 1px 0 rgba(0,0,0,.8)}
+/* the nameplate: brushed, the title engraved */
+.plate2{margin-top:10px;padding:10px 12px 9px;border-radius:4px;background:repeating-linear-gradient(180deg,rgba(255,255,255,.035) 0 1px,transparent 1px 3px),linear-gradient(180deg,#4a4654,#2d2a35 60%,#221f28);box-shadow:0 1px 0 rgba(255,255,255,.12),0 2px 0 #0b0a0e,0 6px 12px rgba(0,0,0,.5)}
+.title{margin:0;font:900 italic clamp(34px,10.5vw,62px)/.86 var(--f-display);text-transform:uppercase;letter-spacing:.005em;color:#efe8f3;text-shadow:0 1px 0 rgba(255,255,255,.2),0 -1px 0 #000,0 0 18px rgba(255,121,198,.35)}
+.title b{display:block;margin-top:4px;color:#8d8a96;font:700 9px/1.4 var(--f-mono);letter-spacing:.18em;text-transform:uppercase;text-shadow:0 1px 0 rgba(0,0,0,.8)}
+.tag{margin:8px 0 0;font:700 10px/1.5 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--pink);text-shadow:0 1px 0 #000}
+.lead{margin:6px 0 0;max-width:42ch;color:#b9b3c0;font-size:12.5px;line-height:1.4;text-shadow:0 1px 0 rgba(0,0,0,.6)}
+.menu{display:grid;gap:8px;margin-top:12px}
+/* keys: machined buttons with a travel */
+.btn{min-height:50px;padding:0 14px;border:0;border-radius:5px;background:linear-gradient(180deg,#3f3b48,#27242e);color:#f1ecf5;font:800 14px/1.1 var(--f-body);display:flex;align-items:center;justify-content:space-between;gap:10px;text-decoration:none;text-align:left;
+  box-shadow:0 1px 0 rgba(255,255,255,.16),0 4px 0 #0b0a0e,0 7px 10px rgba(0,0,0,.6);transition:transform .06s,box-shadow .06s;margin-bottom:4px}
+.btn small{font:600 9.5px/1.3 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:#9b95a6;text-align:right}
+.btn.primary{background:linear-gradient(180deg,#ff9fd6,#f068b6 55%,#d9479b);color:#2a0a1e;box-shadow:0 1px 0 rgba(255,255,255,.35),0 4px 0 #6d1f4b,0 7px 10px rgba(0,0,0,.6)}
+.btn.primary small{color:rgba(42,10,30,.75)}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(255,255,255,.16),0 1px 0 #0b0a0e}
+.btn.primary:active{box-shadow:0 1px 0 rgba(255,255,255,.35),0 1px 0 #6d1f4b}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.rooms{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.rooms i{font:700 9px/1 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-style:normal;margin-right:2px}
-.roomchip{min-height:34px;padding:0 12px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:700 11px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase}
-.roomchip[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:var(--bg)}
-.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
-.stat{padding:8px 10px;border:1px solid var(--line);background:var(--panel)}
-.stat i{display:block;font:700 9px/1.3 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-style:normal}
-.stat b{font:900 italic 22px/1 var(--f-display)}
-.fine{margin:12px 0 0;font:500 10.5px/1.6 var(--f-mono);letter-spacing:.04em;color:var(--dim);text-transform:uppercase}
-.fine a{color:var(--muted)}
+/* the room selector: a 3-way switch set in the body */
+.rooms{display:flex;align-items:center;gap:8px;margin-top:4px}
+.rooms i{font:700 8.5px/1.2 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:#8d8a96;font-style:normal;max-width:52px}
+.rooms .sw{display:flex;flex:1;padding:2px;border-radius:4px;background:#0b0a0e;box-shadow:inset 0 1px 3px rgba(0,0,0,.9),0 1px 0 rgba(255,255,255,.1)}
+.roomchip{flex:1;min-height:32px;padding:0 6px;border:0;border-radius:3px;background:transparent;color:#8d8a96;font:700 9.5px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase}
+.roomchip[aria-pressed="true"]{background:linear-gradient(180deg,#5a5665,#3a3642);color:var(--gold);box-shadow:0 1px 0 rgba(255,255,255,.2),0 2px 4px rgba(0,0,0,.7)}
+/* the counter: an LCD strip */
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin-top:10px;padding:6px 8px;border-radius:4px;background:linear-gradient(180deg,#0a150e,var(--lcd));box-shadow:inset 0 0 0 1px #000,inset 0 2px 8px rgba(0,0,0,.8),0 1px 0 rgba(255,255,255,.12)}
+.stat{padding:2px 4px;border-right:1px solid rgba(158,240,176,.18)}
+.stat:last-child{border-right:0}
+.stat i{display:block;font:700 8px/1.3 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:rgba(158,240,176,.7);font-style:normal}
+.stat b{font:700 20px/1.1 var(--f-mono);color:#dffbe4;text-shadow:0 0 6px rgba(158,240,176,.5)}
+.fine{margin:10px 0 0;font:500 9.5px/1.6 var(--f-mono);letter-spacing:.04em;color:#7c7786;text-transform:uppercase;text-shadow:0 1px 0 rgba(0,0,0,.8)}
+.fine a{color:#a9a3b3}
 
 /* the developing polaroid */
 #dev{position:fixed;inset:0;z-index:12;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px;background:rgba(10,10,13,.88);opacity:0;transition:opacity .25s}
@@ -181,17 +197,17 @@ a{color:var(--pink)}
 #view .row{display:flex;gap:8px;width:min(84vw,360px)}
 #view .row .btn{flex:1;min-height:46px;justify-content:center;text-align:center}
 .how{display:grid;gap:8px;margin-top:14px}
-.how div{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding:8px 10px;border:1px solid var(--line);background:var(--panel)}
+.how div{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding:8px 10px;border-radius:4px;background:linear-gradient(180deg,#2a2731,#1c1a22);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 2px 4px rgba(0,0,0,.5)}
 .how b{font:900 italic 18px/1 var(--f-display);text-transform:uppercase;color:var(--glow)}
 .how span{font-size:13px;color:#ddd5e2}
 .dgrid{display:grid;gap:6px;margin-top:12px}
-.dgrid div{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border:1px solid var(--line);background:var(--panel)}
+.dgrid div{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-radius:4px;background:linear-gradient(180deg,#2a2731,#1c1a22);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 2px 4px rgba(0,0,0,.5)}
 .dgrid b{font:900 italic 16px/1 var(--f-display);text-transform:uppercase}
 .dgrid span{color:var(--gold);letter-spacing:.1em}.dgrid span i{color:#3a3842;font-style:normal}
-.big{display:flex;align-items:baseline;gap:10px;margin-top:auto}
+.big{display:flex;align-items:baseline;gap:10px;margin-top:12px}
 .big b{font:900 italic clamp(64px,22vw,110px)/.85 var(--f-display);color:var(--gold)}
 .big span{font:700 11px/1.5 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
-@media (min-width:700px){.scr{padding-inline:max(18px,calc(50% - 320px))}.album{grid-template-columns:repeat(4,minmax(0,1fr))}.plate{padding-inline:max(12px,calc(50% - 240px))}#checks{left:max(14px,calc(50% - 236px));right:max(14px,calc(50% - 236px))}#walker{left:max(14px,calc(50% - 236px))}#zoomer{right:max(14px,calc(50% - 236px))}.bottom{padding-inline:max(14px,calc(50% - 236px))}}
+@media (min-width:700px){.scr{padding-inline:max(16px,calc(50% - 240px))}.album{grid-template-columns:repeat(4,minmax(0,1fr))}.plate{padding-inline:max(12px,calc(50% - 240px))}#checks{left:max(14px,calc(50% - 236px));right:max(14px,calc(50% - 236px))}#walker{left:max(14px,calc(50% - 236px))}#zoomer{right:max(14px,calc(50% - 236px))}.bottom{padding-inline:max(14px,calc(50% - 236px))}}
 @media (max-height:720px){.edge{width:74px;height:74px;bottom:calc(var(--sab) + 64px)}#shutter{width:80px;height:80px}.seat{bottom:calc(var(--sab) + 58px)}.readout{bottom:calc(var(--sab) + 150px)}.ck{padding:2px 0}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -226,15 +242,16 @@ a{color:var(--pink)}
   <div class="menu two"><button type="button" class="btn" id="dev-again"><span>Shoot it again</span></button><button type="button" class="btn primary" id="dev-next"><span>Next shot</span></button></div>
 </div>
 
-<section class="scr" id="s-title">
-  <a class="wm" href="../"><img src="../assets/cathedral/mark.webp" alt=""><span><b style="font:900 italic 18px/1 var(--f-display)">0FF THE PRINT</b><small>a game from the house</small></span></a>
-  <h1 class="title">Get the shot<b>three cardboard rooms · a brief per shot · your album</b></h1>
+<section class="scr window" id="s-title">
+  <a class="wm" href="../"><img src="../assets/cathedral/mark.webp" alt=""><span><b style="font:900 italic 16px/1 var(--f-display)">0FF THE PRINT</b><small>a game from the house</small></span></a>
+  <div class="vfsp"></div>
+  <div class="plate2"><h1 class="title">Get the shot<b>three cardboard rooms · a brief per shot · your album</b></h1></div>
   <p class="tag" id="daily-tag">The booth</p>
-  <p class="lead">You're the house photographer. The booth, the co-op and the lot are toy theaters and the roster is in them. Drag to move, the dials walk and zoom, tap to focus, the gem shoots. Three lamps a shot, every photo in your album.</p>
+  <p class="lead">You're the house photographer. The booth, the co-op and the lot are toy theaters and the roster is in them. Drag to move, the dials walk and zoom, tap to focus, the gem shoots.</p>
   <div class="menu">
     <button type="button" class="btn primary" data-mode="daily"><span>Today's six</span><small id="daily-sub">the same six for everyone today</small></button>
     <div class="two"><button type="button" class="btn" data-mode="free"><span>Free shoot</span><small>any brief, forever</small></button><button type="button" class="btn" data-album><span>Album</span><small id="album-n">your photos</small></button></div>
-    <div class="rooms"><i>Free shoot in</i><button type="button" class="roomchip" data-room="booth" aria-pressed="true">The booth</button><button type="button" class="roomchip" data-room="coop">The co-op</button><button type="button" class="roomchip" data-room="lot">The lot</button></div>
+    <div class="rooms"><i>Free shoot in</i><div class="sw"><button type="button" class="roomchip" data-room="booth" aria-pressed="true">The booth</button><button type="button" class="roomchip" data-room="coop">The co-op</button><button type="button" class="roomchip" data-room="lot">The lot</button></div></div>
     <button type="button" class="btn" id="howbtn"><span>The briefs</span><small>what each shot wants</small></button>
   </div>
   <div class="stats"><div class="stat"><i>Photos</i><b id="t-shots">0</b></div><div class="stat"><i>Stars</i><b id="t-stars">0</b></div><div class="stat"><i>Pulls earned</i><b id="t-pulls">0</b></div></div>
@@ -242,30 +259,32 @@ a{color:var(--pink)}
 </section>
 
 <section class="scr solid" id="s-how" hidden>
-  <a class="wm" href="#" data-back><img src="../assets/cathedral/mark.webp" alt=""><span><b style="font:900 italic 18px/1 var(--f-display)">The briefs</b><small>what each shot wants</small></span></a>
+  <a class="wm" href="#" data-back><img src="../assets/cathedral/mark.webp" alt=""><span><b style="font:900 italic 16px/1 var(--f-display)">The briefs</b><small>what each shot wants</small></span></a>
   <div class="how" id="how"></div>
   <div class="menu"><button type="button" class="btn primary" data-back><span>Got it</span></button></div>
 </section>
 
 <section class="scr solid" id="s-album" hidden>
-  <a class="wm" href="#" data-back><img src="../assets/cathedral/mark.webp" alt=""><span><b style="font:900 italic 18px/1 var(--f-display)">Album</b><small id="album-sub">your photos</small></span></a>
+  <a class="wm" href="#" data-back><img src="../assets/cathedral/mark.webp" alt=""><span><b style="font:900 italic 16px/1 var(--f-display)">Album</b><small id="album-sub">your photos</small></span></a>
   <div class="album" id="album"></div>
   <div class="menu"><button type="button" class="btn primary" data-mode="free"><span>Shoot more</span></button><button type="button" class="btn" data-back><span>Back to the door</span></button></div>
 </section>
 
-<section class="scr" id="s-done" hidden>
-  <a class="wm" href="#" data-back><img src="../assets/cathedral/mark.webp" alt=""><span><b style="font:900 italic 18px/1 var(--f-display)">Today's six</b><small>done</small></span></a>
+<section class="scr window" id="s-done" hidden>
+  <a class="wm" href="#" data-back><img src="../assets/cathedral/mark.webp" alt=""><span><b style="font:900 italic 16px/1 var(--f-display)">Today's six</b><small>done</small></span></a>
+  <div class="vfsp"></div>
   <div class="big"><b id="d-stars">0</b><span id="d-line">of 18 stars today</span></div>
   <div class="dgrid" id="d-grid"></div>
   <div class="menu"><button type="button" class="btn primary" data-album><span>Open the album</span></button><button type="button" class="btn" data-mode="free"><span>Keep shooting</span><small>free shoot</small></button><button type="button" class="btn" data-back><span>Back to the door</span></button></div>
 </section>
 
+<div class="vfb" id="vfb" hidden></div>
 <div id="view" hidden>
   <div class="pol"><img alt=""><b></b><span class="stars"></span></div>
   <small></small>
   <div class="row"><button type="button" class="btn primary" id="v-share"><span>Share</span></button><button type="button" class="btn" id="v-del"><span>Delete</span></button><button type="button" class="btn" id="v-close"><span>Close</span></button></div>
 </div>
 
-<script src="game.js?v=20261015h"></script>
+<script src="game.js?v=20261015i"></script>
 </body>
 </html>

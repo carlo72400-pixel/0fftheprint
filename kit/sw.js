@@ -1,6 +1,6 @@
 /* THE KIT offline worker (10/15): the page, its icons and the house art it uses are cached on install, so the kit opens with no
    signal. Bump BUILD when the page changes; the old cache is dropped on activate. Same-origin only; fonts just fall back. */
-const BUILD = 'kit-20261015b';
+const BUILD = 'kit-20261015c';
 const FILES = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png',
   '../assets/cathedral/mark.webp', '../assets/cathedral/w/stage.webp', '../assets/cathedral/w/screen.webp', '../assets/cathedral/w/film.webp',
   '../assets/cathedral/w/all.webp', '../assets/cathedral/w/going.webp', '../assets/cathedral/w/tonight.webp', '../assets/cathedral/w/pin.webp',
