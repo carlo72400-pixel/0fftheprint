@@ -50,13 +50,13 @@ const ROOMS = {
       {k: 'f_bar',     x: 3.5,  z: 4.2, h: 2.0},
       {k: 'f_stool',   x: 3.3,  z: 3.95, h: .74},
       {k: 'f_stool',   x: 4.15, z: 3.95, h: .74},
-      {k: 'f_wedge',   x: -2.5, z: 4.0, h: .58},
-      {k: 'f_table',   x: 2.7,  z: 3.3, h: 1.12},
-      {k: 'f_arch',    x: -1.7, z: 2.2, h: 2.9, opening: [.2, .08, .8, .9]},
+      {k: 'f_wedge',   x: -3.0, z: 4.0, h: .58},
+      {k: 'f_table',   x: -4.2, z: 3.6, h: 1.12},
+      {k: 'f_arch',    x: -2.6, z: 2.2, h: 2.9, opening: [.2, .08, .8, .9]},
     ],
-    spots: {decks: {x: .25, z: 5.35}, floor: {x: .5, z: 4.3}, bar: {x: 2.4, z: 4.1}, arch: {x: -1.5, z: 3.4}, left: {x: -2.0, z: 4.5}},
+    spots: {decks: {x: .25, z: 5.35}, floor: {x: .5, z: 4.3}, bar: {x: 2.4, z: 4.1}, arch: {x: -2.6, z: 3.4}, left: {x: -1.7, z: 4.5}},
     // the rest of the roster hanging out in the room, cutouts like Mars, each with its own idle clock
-    extras: [{x: 2.3, z: 5.9, face: 1, h: 1.72, pair: 1}, {x: 3.1, z: 5.9, face: -1, h: 1.78, pair: 1}, {x: -2.2, z: 6.3, face: 1, h: 1.76}, {x: -1.0, z: 7.0, face: 1, h: 1.86}, {x: 1.4, z: 7.2, face: -1, h: 1.74}],
+    extras: [{x: 1.4, z: 6.0, face: 1, h: 1.72, pair: 1}, {x: 2.1, z: 6.0, face: -1, h: 1.78, pair: 1}, {x: -1.9, z: 6.3, face: 1, h: 1.76}, {x: -1.0, z: 7.0, face: 1, h: 1.86}, {x: -.2, z: 7.1, face: -1, h: 1.74}],
     lights: [{x: -3.0, y: 2.55, z: 5.55, col: '255,121,198', to: {x: -.6, z: 4.6}}, {x: -2.75, y: 2.55, z: 5.55, col: '255,190,90', to: {x: 1.2, z: 4.4}}],
     cam: {x: 0, y: 1.45, z: 0, zoom: 1},
   },
@@ -71,14 +71,14 @@ const ROOMS = {
       {k: 'c_amps',   x: -2.6, z: 5.9, h: 1.9},
       {k: 'c_lamp',   x: 3.1,  z: 5.6, h: 2.3},
       {k: 'c_couch',  x: 2.2,  z: 4.6, h: 1.3},
-      {k: 'c_keg',    x: -3.3, z: 4.0, h: .95},
-      {k: 'c_cups',   x: -4.0, z: 4.5, h: .82},
+      {k: 'c_keg',    x: -3.0, z: 4.1, h: .95},
+      {k: 'c_cups',   x: -1.6, z: 4.8, h: .82},
       {k: 'c_merch',  x: 3.2,  z: 3.5, h: 1.25},
-      {k: 'c_fan',    x: -3.0, z: 3.6, h: 1.1},
-      {k: 'c_door',   x: -2.4, z: 2.2, h: 2.9, opening: [.25, .1, .75, .92]},
+      {k: 'c_fan',    x: -3.6, z: 3.5, h: 1.1},
+      {k: 'c_door',   x: -3.6, z: 2.2, h: 2.9, opening: [.25, .1, .75, .92]},
     ],
-    spots: {decks: {x: -.3, z: 5.5}, floor: {x: .5, z: 4.3}, bar: {x: -2.5, z: 4.2}, arch: {x: -2.1, z: 3.4}, left: {x: -1.8, z: 4.7}},
-    extras: [{x: -3.1, z: 5.4, face: 1, h: 1.74, pair: 1}, {x: -2.3, z: 5.4, face: -1, h: 1.78, pair: 1}, {x: 3.3, z: 6.2, face: -1, h: 1.72}, {x: 1.5, z: 6.9, face: -1, h: 1.76}, {x: -1.2, z: 7.1, face: 1, h: 1.7}],
+    spots: {decks: {x: -.3, z: 5.5}, floor: {x: .5, z: 4.3}, bar: {x: -2.3, z: 4.2}, arch: {x: -3.6, z: 3.4}, left: {x: -1.8, z: 4.7}},
+    extras: [{x: -3.3, z: 5.6, face: 1, h: 1.74, pair: 1}, {x: -2.5, z: 5.6, face: -1, h: 1.78, pair: 1}, {x: 1.6, z: 6.4, face: -1, h: 1.72}, {x: .9, z: 7.0, face: -1, h: 1.76}, {x: -1.6, z: 7.1, face: 1, h: 1.7}],
     lights: [{x: -2.5, y: 2.6, z: 5.85, col: '150,255,120', to: {x: -.4, z: 5.0}}, {x: 3.0, y: 2.5, z: 5.55, col: '255,190,90', to: {x: 1.5, z: 4.4}}],
     cam: {x: 0, y: 1.45, z: 0, zoom: 1},
   },
@@ -91,19 +91,18 @@ const ROOMS = {
     flats: [
       {k: 'l_pole',     x: -2.6, z: 7.2, h: 4.2},
       {k: 'l_truck',    x: 3.4,  z: 6.8, h: 2.3},
-      {k: 'l_fence',    x: -3.6, z: 5.6, h: 2.3},
+      {k: 'l_fence',    x: -3.3, z: 3.4, h: 2.3, see: true, opening: [.08, .08, .92, .96]},
       {k: 'l_car',      x: .4,   z: 5.3, h: 1.5},
-      {k: 'l_dumpster', x: -2.2, z: 4.2, h: 1.4},
-      {k: 'l_cone',     x: -2.7, z: 3.5, h: .55},
-      {k: 'l_cone',     x: -3.4, z: 3.9, h: .55},
-      {k: 'l_cone',     x: -3.9, z: 3.2, h: .55},
-      {k: 'l_chair',    x: 3.9,  z: 4.6, h: .86},
-      {k: 'l_chair',    x: 4.8,  z: 4.3, h: .86},
-      {k: 'l_cooler',   x: 4.35, z: 4.95, h: .5},
-      {k: 'l_cart',     x: 4.2,  z: 3.0, h: 1.3},
+      {k: 'l_dumpster', x: -2.3, z: 4.3, h: 1.4},
+      {k: 'l_cone',     x: 3.3,  z: 3.3, h: .55},
+      {k: 'l_cone',     x: 5.1,  z: 3.2, h: .55},
+      {k: 'l_chair',    x: 3.8,  z: 4.5, h: .86},
+      {k: 'l_chair',    x: 4.5,  z: 5.0, h: .86},
+      {k: 'l_cooler',   x: 4.15, z: 5.3, h: .5},
+      {k: 'l_cart',     x: 6.0,  z: 3.0, h: 1.3},
     ],
-    spots: {decks: {x: 1.6, z: 4.5}, floor: {x: -.7, z: 4.4}, bar: {x: 2.4, z: 5.5}, arch: {x: -3.0, z: 4.6}, left: {x: -1.4, z: 4.8}},
-    extras: [{x: -3.3, z: 5.1, face: 1, h: 1.78, pair: 1}, {x: -2.5, z: 5.1, face: -1, h: 1.74, pair: 1}, {x: 3.7, z: 5.9, face: -1, h: 1.8}, {x: -0.5, z: 7.0, face: 1, h: 1.76}, {x: 1.9, z: 7.4, face: -1, h: 1.86}],
+    spots: {decks: {x: 1.6, z: 4.5}, floor: {x: -.7, z: 4.4}, bar: {x: 2.4, z: 5.5}, arch: {x: -3.3, z: 5.0}, left: {x: -1.0, z: 5.0}},
+    extras: [{x: -1.6, z: 6.3, face: 1, h: 1.78, pair: 1}, {x: -.8, z: 6.3, face: -1, h: 1.74, pair: 1}, {x: 3.2, z: 5.9, face: -1, h: 1.8}, {x: -2.6, z: 7.0, face: 1, h: 1.76}, {x: .6, z: 7.5, face: -1, h: 1.86}],
     lights: [{x: -2.55, y: 4.0, z: 7.15, col: '255,150,40', to: {x: -1.2, z: 5.0}}, {x: 2.6, y: 1.9, z: 6.5, col: '255,210,120', to: {x: 2.2, z: 5.2}}],
     cam: {x: 0, y: 1.45, z: 0, zoom: 1},
   },
@@ -183,11 +182,12 @@ function resize() {
   const door = G.state === 'title' || G.state === 'done';
   // in the shoot the print and the three lamps live UNDER the glass, so the bottom reserve holds them plus the dials; a short phone trims the print row
   const short = H < 700; document.documentElement.classList.toggle('short', short);
-  const top = sat + (inShot ? 66 : door ? 56 : 24), bottom = inShot ? sab + (short ? 300 : 346) : door ? 330 : 24;
+  const plate = $('.plate'); const ph = inShot && plate ? plate.offsetHeight : 0;
+  const top = inShot ? (ph || sat + 66) + 8 : door ? sat + 56 : sat + 24, bottom = inShot ? sab + (short ? 266 : H < 900 ? 288 : 318) : door ? 330 : 24;
   let fw = W - (inShot ? 12 : 24), fh = fw * 1.25; const maxH = H - top - bottom; if (fh > maxH) { fh = maxH; fw = fh / 1.25; } if (door && fh < 220) { fh = 220; fw = fh / 1.25; }
   G.frame = {x: (W - fw) / 2, y: inShot || door ? top : top + (maxH - fh) / 2, w: fw, h: fh};
   const vfb = $('#vfb'); if (vfb) vfb.hidden = !door;
-  document.documentElement.style.setProperty('--fb', (G.frame.y + G.frame.h) + 'px'); document.documentElement.style.setProperty('--ft', G.frame.y + 'px');
+  document.documentElement.style.setProperty('--fb', (G.frame.y + G.frame.h) + 'px'); document.documentElement.style.setProperty('--ft', G.frame.y + 'px'); document.documentElement.style.setProperty('--fl', G.frame.x + 'px'); document.documentElement.style.setProperty('--fw', G.frame.w + 'px');
 }
 addEventListener('resize', resize); resize();
 
@@ -221,6 +221,8 @@ function extraRect(ex, i, now) {
   const oc = G.crowd[i]; if (!oc) return null;
   // never between the camera and the subject: closer than them and lined up with them on screen
   if (ex.z < G.subj.z + .3 && Math.abs(ex.x - G.subj.x) < 1.6) return null;
+  // nobody stands behind a tall flat (a see-through one, like the fence, is fine)
+  if (ROOMS[G.room].flats.some(fl => !fl.hang && !fl.see && fl.h > .9 && fl.z < ex.z - .3 && Math.abs(fl.x - ex.x) < halfW(fl) + .25)) return null;
   if (ex.z < G.subj.z - .2) { const sp = proj(G.subj.x, 0, G.subj.z), ep = proj(ex.x, 0, ex.z); if (sp && ep && Math.abs(sp.x - ep.x) < G.frame.w * .4) return null; } const t = now / 1000; const pose = extraPose(ex, i, oc, t); const im = ART[oc + '_' + pose]; if (!im) return null;
   const w = ex.h * im.width / im.height; const p = proj(ex.x, Math.sin(t * 1.3) * .012, ex.z); if (!p) return null;
   const hpx = ex.h * p.s, wpx = w * p.s; return {x: p.x - wpx / 2, y: p.y - hpx, w: wpx, h: hpx, cx: p.x, cy: p.y - hpx / 2, d: p.d, im, face: ex.face * NAT[pose]};
@@ -247,30 +249,23 @@ function measure() {
 
 /* ---------- draw ---------- */
 let lastT = 0, SPARK = [];
-function draw(now) {
-  requestAnimationFrame(draw);
-  const dt = Math.min(.05, (now - lastT) / 1000 || 0); lastT = now; G.frames++;
-  if (now - G.lastQ > 1000) { G.fps = G.frames; G.frames = 0; G.lastQ = now; if (G.fps < 24 && G.quality > 0) G.quality--; }
-  if (!ARTREADY) return;
-  tick(dt);
-  const f = G.frame, room = ROOMS[G.room];
-  cx.save(); cx.fillStyle = '#07060a'; cx.fillRect(0, 0, W, H);
-  cx.beginPath(); cx.rect(f.x, f.y, f.w, f.h); cx.clip();
+/* the room, painted through whatever G.frame / G.cam / G.focusD say: the viewfinder, and the hint print from the answer camera */
+function paintRoom(c, f, room, now) {
   // the backdrop: a painted wall far back, mirrored copies either side so a truck never shows the edge
   const bd = ART[room.backdrop]; const bp = proj(0, 0, room.bz);
   if (bd && bp) {
     const bh = room.bh * bp.s, bw = bh * bd.width / bd.height, bx = bp.x - bw / 2, by = bp.y - bh;
-    cx.drawImage(bd, bx, by, bw, bh);
-    cx.save(); cx.translate(bx, 0); cx.scale(-1, 1); cx.drawImage(bd, 0, by, bw, bh); cx.restore();
-    cx.save(); cx.translate(bx + 2 * bw, 0); cx.scale(-1, 1); cx.drawImage(bd, 0, by, bw, bh); cx.restore();
+    c.drawImage(bd, bx, by, bw, bh);
+    c.save(); c.translate(bx, 0); c.scale(-1, 1); c.drawImage(bd, 0, by, bw, bh); c.restore();
+    c.save(); c.translate(bx + 2 * bw, 0); c.scale(-1, 1); c.drawImage(bd, 0, by, bw, bh); c.restore();
     // the mirror ball's dots drift over the back wall (the booth only)
-    if (room.ball) { cx.save(); cx.globalCompositeOperation = 'screen'; const t = now / 1000;
-    for (let i = 0; i < 30; i++) { const a = i * 2.399 + t * .22; const x = bp.x + Math.cos(a) * bw * .42 * (.3 + (i % 5) / 5), y = by + bh * (.2 + .45 * (.5 + .5 * Math.sin(a * 1.31 + i))); const k = Math.max(2, bp.s * .05); cx.fillStyle = `rgba(255,170,215,${.22 + .2 * Math.sin(t * 3 + i)})`; cx.fillRect(x, y, k, k); }
-    cx.restore(); }
+    if (room.ball) { c.save(); c.globalCompositeOperation = 'screen'; const t = now / 1000;
+    for (let i = 0; i < 30; i++) { const a = i * 2.399 + t * .22; const x = bp.x + Math.cos(a) * bw * .42 * (.3 + (i % 5) / 5), y = by + bh * (.2 + .45 * (.5 + .5 * Math.sin(a * 1.31 + i))); const k = Math.max(2, bp.s * .05); c.fillStyle = `rgba(255,170,215,${.22 + .2 * Math.sin(t * 3 + i)})`; c.fillRect(x, y, k, k); }
+    c.restore(); }
   }
   drawFloor(room);
   // haze between the wall and the room
-  cx.fillStyle = `rgba(${room.haze},${.10 + .04 * Math.sin(now / 1700)})`; cx.fillRect(f.x, f.y, f.w, f.h);
+  c.fillStyle = `rgba(${room.haze},${.10 + .04 * Math.sin(now / 1700)})`; c.fillRect(f.x, f.y, f.w, f.h);
   // everything standing in the room, far to near, with the subject slotted in by depth
   const sr = subjRect(); const items = room.flats.map(fl => ({fl, r: flatRect(fl)})).filter(i => i.r);
   if (sr) items.push({subj: true, r: sr});
@@ -279,22 +274,33 @@ function draw(now) {
   let hazeDone = false;
   items.forEach(it => {
     const r = it.r; if (r.x > f.x + f.w + 40 || r.x + r.w < f.x - 40 || r.y > f.y + f.h + 40) return;
-    if (!hazeDone && r.d < 4.6) { hazeDone = true; cx.fillStyle = `rgba(${room.haze},.045)`; cx.fillRect(f.x, f.y, f.w, f.h); }
+    if (!hazeDone && r.d < 4.6) { hazeDone = true; c.fillStyle = `rgba(${room.haze},.045)`; c.fillRect(f.x, f.y, f.w, f.h); }
     const b = blurFor(r.d), blurOn = HAS_FILTER && G.quality > 0 && b > .4;
     // the floor shadow at the foot
-    if (!(it.fl && it.fl.hang)) { const fy = r.y + r.h - 1; cx.save(); cx.translate(r.cx, fy); cx.scale(1, .22); const g = cx.createRadialGradient(0, 0, 0, 0, 0, r.w * .62); g.addColorStop(0, 'rgba(0,0,0,.4)'); g.addColorStop(1, 'rgba(0,0,0,0)'); cx.fillStyle = g; cx.beginPath(); cx.arc(0, 0, r.w * .62, 0, 7); cx.fill(); cx.restore(); }
-    cx.save();
-    if (blurOn) cx.filter = `blur(${b.toFixed(1)}px)`;
+    if (!(it.fl && it.fl.hang)) { const fy = r.y + r.h - 1; c.save(); c.translate(r.cx, fy); c.scale(1, .22); const g = c.createRadialGradient(0, 0, 0, 0, 0, r.w * .62); g.addColorStop(0, 'rgba(0,0,0,.4)'); g.addColorStop(1, 'rgba(0,0,0,0)'); c.fillStyle = g; c.beginPath(); c.arc(0, 0, r.w * .62, 0, 7); c.fill(); c.restore(); }
+    c.save();
+    if (blurOn) c.filter = `blur(${b.toFixed(1)}px)`;
     // the cut edge throws a soft shadow on whatever stands behind it
-    if (G.quality > 1) { cx.shadowColor = 'rgba(0,0,0,.55)'; cx.shadowBlur = 10 + 8 / Math.max(.5, r.d / 3); cx.shadowOffsetX = 5; cx.shadowOffsetY = 7; }
-    if (it.subj) { cx.translate(r.cx, r.y); cx.scale(it.face || (G.subj.face * NAT[G.subj.pose]), 1); cx.drawImage(r.im, -r.w / 2, 0, r.w, r.h); }
-    else cx.drawImage(r.im, r.x, r.y, r.w, r.h);
-    cx.restore();
+    if (G.quality > 1) { c.shadowColor = 'rgba(0,0,0,.55)'; c.shadowBlur = 10 + 8 / Math.max(.5, r.d / 3); c.shadowOffsetX = 5; c.shadowOffsetY = 7; }
+    if (it.subj) { c.translate(r.cx, r.y); c.scale(it.face || (G.subj.face * NAT[G.subj.pose]), 1); c.drawImage(r.im, -r.w / 2, 0, r.w, r.h); }
+    else c.drawImage(r.im, r.x, r.y, r.w, r.h);
+    c.restore();
   });
   // the gels: two cones of colored light from the light tree, screened over everything
-  room.lights.forEach(L => { const a = proj(L.x, L.y, L.z), b = proj(L.to.x, 0, L.to.z); if (!a || !b) return; cx.save(); cx.globalCompositeOperation = 'screen'; const g = cx.createLinearGradient(a.x, a.y, b.x, b.y); g.addColorStop(0, `rgba(${L.col},.30)`); g.addColorStop(1, `rgba(${L.col},0)`); cx.fillStyle = g; const spread = 1.1 * b.s; cx.beginPath(); cx.moveTo(a.x, a.y); cx.lineTo(b.x - spread, b.y + 6); cx.lineTo(b.x + spread, b.y + 6); cx.closePath(); cx.fill(); cx.restore(); });
+  room.lights.forEach(L => { const a = proj(L.x, L.y, L.z), b = proj(L.to.x, 0, L.to.z); if (!a || !b) return; c.save(); c.globalCompositeOperation = 'screen'; const g = c.createLinearGradient(a.x, a.y, b.x, b.y); g.addColorStop(0, `rgba(${L.col},.30)`); g.addColorStop(1, `rgba(${L.col},0)`); c.fillStyle = g; const spread = 1.1 * b.s; c.beginPath(); c.moveTo(a.x, a.y); c.lineTo(b.x - spread, b.y + 6); c.lineTo(b.x + spread, b.y + 6); c.closePath(); c.fill(); c.restore(); });
   // the vignette
-  const vg = cx.createRadialGradient(f.x + f.w / 2, f.y + f.h / 2, f.h * .35, f.x + f.w / 2, f.y + f.h / 2, f.h * .9); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.42)'); cx.fillStyle = vg; cx.fillRect(f.x, f.y, f.w, f.h);
+  const vg = c.createRadialGradient(f.x + f.w / 2, f.y + f.h / 2, f.h * .35, f.x + f.w / 2, f.y + f.h / 2, f.h * .9); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.42)'); c.fillStyle = vg; c.fillRect(f.x, f.y, f.w, f.h);
+}
+function draw(now) {
+  requestAnimationFrame(draw);
+  const dt = Math.min(.05, (now - lastT) / 1000 || 0); lastT = now; G.frames++;
+  if (now - G.lastQ > 1000) { G.fps = G.frames; G.frames = 0; G.lastQ = now; if (G.fps < 24 && G.quality > 0) G.quality--; }
+  if (!ARTREADY) return;
+  tick(dt);
+  const f = G.frame, room = ROOMS[G.room];
+  cx.fillStyle = '#07060a'; cx.fillRect(0, 0, W, H);
+  cx.save(); cx.beginPath(); cx.rect(f.x, f.y, f.w, f.h); cx.clip();
+  paintRoom(cx, f, room, now);
   // the flash sparkle when the shutter went
   SPARK = SPARK.filter(s => (s.t += dt) < s.life); SPARK.forEach(s => { cx.fillStyle = `rgba(255,255,255,${1 - s.t / s.life})`; const k = 2 + 6 * s.t / s.life; cx.fillRect(s.x - k / 2, s.y - k / 2, k, k); });
   cx.restore();
@@ -351,7 +357,7 @@ cv.addEventListener('pointerdown', e => { if (G.state !== 'shoot') return; ptr =
 cv.addEventListener('pointermove', e => {
   if (!ptr || G.state !== 'shoot') return; const dx = e.clientX - ptr.x, dy = e.clientY - ptr.y; if (Math.hypot(dx, dy) > 6) moved = true;
   const F = focal(); const d = Math.max(1.2, G.subj.z - G.cam.z); // a drag moves the world under the thumb at the subject's depth
-  G.want.x = clamp(ptr.cx - dx * d / F, -2.6, 2.6); G.want.y = clamp(ptr.cy + dy * d / F, .3, 3.0);
+  G.want.x = clamp(ptr.cx - dx * d / F, -4.2, 4.2); G.want.y = clamp(ptr.cy + dy * d / F, .3, 3.0);
 });
 const ptrEnd = e => { if (ptr && !moved && G.state === 'shoot') focusAt(e.clientX, e.clientY); ptr = null; }; cv.addEventListener('pointerup', ptrEnd); cv.addEventListener('pointercancel', () => { ptr = null; });
 function focusAt(x, y) {
@@ -409,12 +415,25 @@ function develop(shot, passed) {
 }
 
 /* ---------- briefs ---------- */
+// slide the subject sideways until no flat nearer than them covers them (the doorway flat is the one exception, for the doorway brief)
+function halfW(fl) { const im = ART[fl.k]; return im ? fl.h * im.width / im.height / 2 : .5; }
+function clearSpawn(room, k) {
+  // the doorway flat (doorway brief) and the decks (the DJ stands behind them on purpose) are the two exceptions
+  const S = G.subj, br = BRIEFS[k]; const near = room.flats.filter(fl => !fl.hang && !fl.see && fl.z < S.z - .05 && !(k === 'arch' && fl.k === room.roles.frame) && !(br && br.spot === 'decks' && fl.k === room.roles.decks));
+  for (let pass = 0; pass < 3; pass++) {
+    const hit = near.find(fl => Math.abs(fl.x - S.x) < halfW(fl) + .5); if (!hit) return;
+    const right = hit.x + halfW(hit) + .5, left = hit.x - halfW(hit) - .5;
+    S.x = (Math.abs(right - S.x) <= Math.abs(left - S.x) ? right : left);
+    S.x = clamp(S.x, -4.2, 4.2);
+  }
+}
 function setBrief(k) {
   G.brief = k; G.briefT = performance.now(); const br = BRIEFS[k], room = ROOMS[G.room], r = G.rnd;
   // a different subject each brief: the roster shuffled into a queue, the other seven fill the room
   if (!G.castQ.length) { G.castQ = CAST.slice(); for (let i = G.castQ.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [G.castQ[i], G.castQ[j]] = [G.castQ[j], G.castQ[i]]; } }
   const oc = G.castQ.shift(); G.crowd = CAST.filter(x => x !== oc);
   const sp = room.spots[br.spot]; Object.assign(G.subj, {oc, x: sp.x + (r() - .5) * .3, z: sp.z, face: br.face || (r() < .5 ? 1 : -1), pose: 'idle', jumpT: -1.2, jump: 0, t: 0});
+  clearSpawn(room, k);
   // the camera opens a step to the side of them, on the side away from the doorway flat so the first look is clear
   // open on the clear side: every room's shoot-through flat stands on the left, so the camera starts to the right of them unless they are already far right
   const side = G.subj.x > 2 ? -1 : 1;
@@ -437,23 +456,35 @@ function drawAvatar(oc) { // the subject's head in the brief chip
   const c = $('#b-av'), o = c.getContext('2d'), im = ART[oc + '_idle']; o.clearRect(0, 0, 88, 88); if (!im) return; const hx = HEADX[oc + '_idle'] || .5;
   const side = im.height * .3; const sx = clamp(im.width * hx - side / 2, 0, Math.max(0, im.width - side)); o.fillStyle = '#1a1921'; o.fillRect(0, 0, 88, 88); o.drawImage(im, sx, 0, side, side, 0, 0, 88, 88);
 }
+// where the camera would stand to make the brief: the print is the room seen from there
+function answerCam(br) {
+  const S = G.subj, room = ROOMS[G.room], h = br.hint, f = G.frame;
+  const pos = br.face === 0 ? (S.face > 0 ? 'l' : 'r') : h.pos;
+  const cam = {x: 0, y: h.low ? .55 : 1.45, z: (h.sil === 'wide' || G.brief === 'arch') ? -1.2 : 0, zoom: h.long ? 2.4 : h.ballTop ? .95 : ({wide: .85, mid: 1.25, tight: 2.3}[h.sil] || 1.2)};
+  const F = f.h * 1.1 * cam.zoom, d = S.z - cam.z;
+  const tx = f.x + f.w * (pos === 'l' ? 1 / 3 : pos === 'r' ? 2 / 3 : .5);
+  cam.x = (S.x + S.face * .08) - (tx - (f.x + f.w / 2)) * d / F;
+  if (G.brief === 'arch') { const af = room.flats.find(x => x.k === room.roles.frame); if (af) cam.x = af.x; }
+  if (!h.low) { const ty = f.y + f.h * (h.sil === 'tight' ? .3 : h.sil === 'wide' ? .45 : h.ballTop ? .62 : 1 / 3); const ey = 1.66 + (h.jump ? .6 : 0); cam.y = clamp(ey + (ty - (f.y + f.h / 2)) * d / F, .5, 2.6); }
+  return cam;
+}
 function drawHint(br) {
-  // a tiny photo of the shot you are after: the real backdrop, the real flats for the parts named, the subject's own cutout
-  const c = $('#hint canvas'), h = br.hint; const w = c.width = 240, hh = c.height = 300; const o = c.getContext('2d'); const room = ROOMS[G.room];
-  const bd = ART[room.backdrop]; if (bd) { const bw = hh * bd.width / bd.height * .9, bh = hh * .9; o.drawImage(bd, w / 2 - bw / 2, -hh * .1, bw, bh); } else { o.fillStyle = '#1a1921'; o.fillRect(0, 0, w, hh); }
-  const fg = o.createLinearGradient(0, hh * .55, 0, hh); fg.addColorStop(0, room.floor[0]); fg.addColorStop(1, room.floor[2]); o.fillStyle = fg; o.fillRect(0, hh * .62, w, hh * .38);
-  o.fillStyle = `rgba(${room.haze},.18)`; o.fillRect(0, 0, w, hh);
-  // the parts the brief names, as their own flats
-  const pb = {decks: [w * .5, hh * .9, .32], top: [w * .5, hh * .26, .26], big: [w * .86, hh * .85, .38], lights: [w * .14, hh * .82, .5], bar: [w * .2, hh * .88, .42], frame: [w * .5, hh * 1.02, 1.08]};
-  (h.props || []).forEach(p => { const fl = ART[room.roles[p]], b = pb[p]; if (!fl || !b) return; const fh = hh * b[2], fw = fh * fl.width / fl.height; o.save(); o.shadowColor = 'rgba(0,0,0,.5)'; o.shadowBlur = 8; o.shadowOffsetY = 4; if (p === 'top') o.drawImage(fl, b[0] - fw / 2, b[1] - fh * .5, fw, fh); else o.drawImage(fl, b[0] - fw / 2, b[1] - fh, fw, fh); o.restore(); });
-  // the subject, their own cutout, glowing pink where the brief wants them
-  const size = {wide: .3, mid: .62, tight: 1.1}[h.sil]; const ph = hh * size; const px = {l: w * .34, c: w * .5, r: w * .66}[h.pos]; let py = hh * .92 - ph + (h.sil === 'tight' ? ph * .32 : 0); if (h.ballTop) py = hh * .5 - ph * .25; if (h.jump) py -= hh * .14;
-  const im = ART[G.subj.oc + '_idle']; if (im) { const pw = ph * im.width / im.height; o.save(); o.shadowColor = '#ff79c6'; o.shadowBlur = 16; o.translate(px, py); if (h.pos === 'l') o.scale(-1, 1); o.drawImage(im, -pw / 2, 0, pw, ph); o.restore(); }
-  if (h.grid) { o.strokeStyle = 'rgba(255,212,121,.55)'; o.lineWidth = 1; for (let i = 1; i < 3; i++) { o.beginPath(); o.moveTo(w * i / 3, 0); o.lineTo(w * i / 3, hh); o.stroke(); o.beginPath(); o.moveTo(0, hh * i / 3); o.lineTo(w, hh * i / 3); o.stroke(); } const key = G.subj.oc + '_idle'; const hx = HEADX[key] || .5; if (im) { const pw = ph * im.width / im.height; const ex = px + (h.pos === 'l' ? -(hx - .5) : (hx - .5)) * pw, ey = py + ph * .1; o.fillStyle = '#ffd479'; o.beginPath(); o.arc(ex, ey, 5, 0, 7); o.fill(); o.strokeStyle = '#ffd479'; o.lineWidth = 2; o.beginPath(); o.arc(ex, ey, 10, 0, 7); o.stroke(); } }
-  if (h.pos === 'l' && !h.low) { o.strokeStyle = '#ffd479'; o.lineWidth = 3; o.beginPath(); o.moveTo(w * .55, hh * .42); o.lineTo(w * .9, hh * .42); o.lineTo(w * .82, hh * .36); o.moveTo(w * .9, hh * .42); o.lineTo(w * .82, hh * .48); o.stroke(); }
-  const note = h.low ? 'CAMERA LOW, SHOOT UP' : h.long ? 'ZOOM PAST 50MM' : h.jump ? 'SHOOT THE TOP OF THE JUMP' : h.pos === 'l' ? 'ROOM ON THE SIDE THEY FACE' : h.sil === 'wide' ? 'PULL BACK, THEM SMALL' : h.sil === 'tight' ? 'WALK IN, FILL THE FRAME' : h.ballTop ? (room.words.top + ' UP TOP').toUpperCase() : (h.props && h.props[0] ? ('WITH ' + room.words[h.props[0]]).toUpperCase() : 'EYES ON A THIRD');
-  o.fillStyle = 'rgba(10,10,13,.82)'; o.fillRect(0, hh - 26, w, 26); o.fillStyle = '#ffd479'; o.font = '700 11px JetBrains Mono, monospace'; o.textAlign = 'center'; o.fillText(note, w / 2, hh - 9);
+  // the real room, the real flats, the real subject, from the camera that makes the brief; then the grid, the eye and a pink line round them
+  const c = $('#hint canvas'), h = br.hint; const w = c.width = 300, hh = c.height = 375; const o = c.getContext('2d'); const room = ROOMS[G.room];
+  const keep = {frame: G.frame, cam: G.cam, par: G.par, focusD: G.focusD, quality: G.quality}; const S = G.subj, kj = S.jump, kp = S.pose;
+  G.frame = {x: 0, y: 0, w, h: hh}; G.par = {x: 0, y: 0}; G.quality = 1;
+  if (h.jump) { S.jump = .5; S.pose = ART[S.oc + '_peak'] ? 'peak' : 'idle'; }
+  G.cam = answerCam(br); G.focusD = S.z - G.cam.z;
+  o.save(); o.beginPath(); o.rect(0, 0, w, hh); o.clip(); try { paintRoom(o, G.frame, room, performance.now()); } catch (e) {} o.restore();
+  const sr = subjRect();
+  if (h.grid) { o.strokeStyle = 'rgba(255,212,121,.55)'; o.lineWidth = 1; for (let i = 1; i < 3; i++) { o.beginPath(); o.moveTo(w * i / 3, 0); o.lineTo(w * i / 3, hh); o.stroke(); o.beginPath(); o.moveTo(0, hh * i / 3); o.lineTo(w, hh * i / 3); o.stroke(); } }
+  if (sr) { o.save(); o.strokeStyle = '#ff79c6'; o.lineWidth = 3; o.shadowColor = '#ff79c6'; o.shadowBlur = 12; o.beginPath(); if (o.roundRect) o.roundRect(sr.x - 6, sr.y - 6, sr.w + 12, sr.h + 12, 8); else o.rect(sr.x - 6, sr.y - 6, sr.w + 12, sr.h + 12); o.stroke(); o.restore();
+    if (h.grid) { o.fillStyle = '#ffd479'; o.beginPath(); o.arc(sr.eye.x, sr.eye.y, 5, 0, 7); o.fill(); o.strokeStyle = '#ffd479'; o.lineWidth = 2; o.beginPath(); o.arc(sr.eye.x, sr.eye.y, 11, 0, 7); o.stroke(); }
+    if (br.face === 0) { const dir = S.face > 0 ? 1 : -1; const ax = sr.cx + dir * (sr.w / 2 + 14), ay = sr.y + sr.h * .3; o.strokeStyle = '#ffd479'; o.lineWidth = 3; o.beginPath(); o.moveTo(ax, ay); o.lineTo(ax + dir * 70, ay); o.lineTo(ax + dir * 56, ay - 12); o.moveTo(ax + dir * 70, ay); o.lineTo(ax + dir * 56, ay + 12); o.stroke(); } }
+  const note = h.low ? 'CAMERA LOW, SHOOT UP' : h.long ? 'ZOOM PAST 50MM' : h.jump ? 'SHOOT THE TOP OF THE JUMP' : br.face === 0 ? 'ROOM ON THE SIDE THEY FACE' : h.sil === 'wide' ? 'PULL BACK, THEM SMALL' : h.sil === 'tight' ? 'WALK IN, FILL THE FRAME' : h.ballTop ? (room.words.top + ' UP TOP').toUpperCase() : (h.props && h.props[0] ? ('WITH ' + room.words[h.props[0]]).toUpperCase() : 'EYES ON A THIRD');
+  o.fillStyle = 'rgba(10,10,13,.82)'; o.fillRect(0, hh - 30, w, 30); o.fillStyle = '#ffd479'; o.font = '700 13px JetBrains Mono, monospace'; o.textAlign = 'center'; o.fillText(note, w / 2, hh - 10);
   o.strokeStyle = 'rgba(255,255,255,.5)'; o.lineWidth = 2; o.strokeRect(1, 1, w - 2, hh - 2);
+  Object.assign(G, keep); S.jump = kj; S.pose = kp;
 }
 function drawHintOld(br) {
   const c = $('#hint canvas'), h = br.hint; const w = c.width = 120, hh = c.height = 150; const o = c.getContext('2d');
