@@ -53,7 +53,7 @@ const ROOMS = {
     ],
     spots: {decks: {x: .25, z: 5.35}, floor: {x: .7, z: 3.6}, bar: {x: 2.5, z: 3.9}, arch: {x: -1.5, z: 3.4}, left: {x: -2.0, z: 4.3}},
     // the rest of the roster hanging out in the room, cutouts like Mars, each with its own idle clock
-    extras: [{x: 3.6, z: 3.5, face: 1, h: 1.72, pair: 1}, {x: 4.45, z: 3.5, face: -1, h: 1.78, pair: 1}, {x: 2.1, z: 5.7, face: 1, h: 1.76}, {x: -3.55, z: 4.6, face: 1, h: 1.86, pair: 1}, {x: -2.7, z: 4.6, face: -1, h: 1.8, pair: 1}, {x: -1.3, z: 6.3, face: 1, h: 1.74}, {x: 1.55, z: 4.45, face: -1, h: 1.7}],
+    extras: [{x: 3.7, z: 3.6, face: 1, h: 1.72, pair: 1}, {x: 4.5, z: 3.6, face: -1, h: 1.78, pair: 1}, {x: 2.3, z: 6.0, face: 1, h: 1.76}, {x: -3.6, z: 6.2, face: 1, h: 1.86}, {x: -1.6, z: 6.5, face: 1, h: 1.74}],
     lights: [{x: -3.0, y: 2.55, z: 5.55, col: '255,121,198', to: {x: -.6, z: 4.6}}, {x: -2.75, y: 2.55, z: 5.55, col: '255,190,90', to: {x: 1.2, z: 4.4}}],
     cam: {x: 0, y: 1.45, z: 0, zoom: 1},
   },
@@ -74,7 +74,7 @@ const ROOMS = {
       {k: 'c_door',   x: -2.4, z: 2.2, h: 2.9, opening: [.25, .1, .75, .92]},
     ],
     spots: {decks: {x: -.3, z: 5.5}, floor: {x: .6, z: 3.7}, bar: {x: -2.6, z: 3.7}, arch: {x: -2.1, z: 3.4}, left: {x: -1.8, z: 4.6}},
-    extras: [{x: -3.95, z: 3.4, face: 1, h: 1.74, pair: 1}, {x: -3.1, z: 3.4, face: -1, h: 1.78, pair: 1}, {x: 2.6, z: 4.3, face: 1, h: 1.72, pair: 1}, {x: 3.45, z: 4.3, face: -1, h: 1.8, pair: 1}, {x: 1.6, z: 6.1, face: -1, h: 1.76}, {x: -1.7, z: 6.3, face: 1, h: 1.7}, {x: 1.9, z: 2.9, face: -1, h: 1.86}],
+    extras: [{x: -4.1, z: 3.6, face: 1, h: 1.74, pair: 1}, {x: -3.3, z: 3.6, face: -1, h: 1.78, pair: 1}, {x: 3.4, z: 5.0, face: -1, h: 1.72}, {x: 1.8, z: 6.6, face: -1, h: 1.76}, {x: -2.2, z: 6.9, face: 1, h: 1.7}],
     lights: [{x: -2.5, y: 2.6, z: 5.85, col: '150,255,120', to: {x: -.4, z: 5.0}}, {x: 3.0, y: 2.5, z: 5.55, col: '255,190,90', to: {x: 1.5, z: 4.4}}],
     cam: {x: 0, y: 1.45, z: 0, zoom: 1},
   },
@@ -95,7 +95,7 @@ const ROOMS = {
       {k: 'l_cart',     x: 3.6,  z: 2.6, h: 1.3},
     ],
     spots: {decks: {x: 1.6, z: 4.5}, floor: {x: -1.0, z: 3.9}, bar: {x: 2.4, z: 5.5}, arch: {x: -3.0, z: 4.6}, left: {x: -1.4, z: 4.7}},
-    extras: [{x: -3.95, z: 3.4, face: 1, h: 1.78, pair: 1}, {x: -3.1, z: 3.4, face: -1, h: 1.74, pair: 1}, {x: 2.95, z: 2.9, face: 1, h: 1.72, pair: 1}, {x: 3.8, z: 2.9, face: -1, h: 1.7, pair: 1}, {x: -.6, z: 6.3, face: 1, h: 1.8}, {x: 4.3, z: 4.7, face: -1, h: 1.76}, {x: -1.7, z: 5.9, face: 1, h: 1.86}],
+    extras: [{x: -4.2, z: 3.7, face: 1, h: 1.78, pair: 1}, {x: -3.4, z: 3.7, face: -1, h: 1.74, pair: 1}, {x: 4.4, z: 5.2, face: -1, h: 1.8}, {x: -0.6, z: 6.9, face: 1, h: 1.76}, {x: 3.2, z: 7.2, face: -1, h: 1.86}],
     lights: [{x: -2.55, y: 4.0, z: 7.15, col: '255,150,40', to: {x: -1.2, z: 5.0}}, {x: 2.6, y: 1.9, z: 6.5, col: '255,210,120', to: {x: 2.2, z: 5.2}}],
     cam: {x: 0, y: 1.45, z: 0, zoom: 1},
   },
@@ -173,8 +173,8 @@ function resize() {
   const sat = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sat')) || 0;
   const inShot = G.state === 'shoot' || G.state === 'grade';
   const door = G.state === 'title' || G.state === 'done';
-  const top = sat + (inShot ? 72 : door ? 56 : 24), bottom = inShot ? 236 : door ? 330 : 24;
-  let fw = W - 24, fh = fw * 1.25; const maxH = H - top - bottom; if (fh > maxH) { fh = maxH; fw = fh / 1.25; } if (door && fh < 220) { fh = 220; fw = fh / 1.25; }
+  const top = sat + (inShot ? 66 : door ? 56 : 24), bottom = inShot ? 214 : door ? 330 : 24;
+  let fw = W - (inShot ? 12 : 24), fh = fw * 1.25; const maxH = H - top - bottom; if (fh > maxH) { fh = maxH; fw = fh / 1.25; } if (door && fh < 220) { fh = 220; fw = fh / 1.25; }
   G.frame = {x: (W - fw) / 2, y: inShot || door ? top : top + (maxH - fh) / 2, w: fw, h: fh};
   const vfb = $('#vfb'); if (vfb) vfb.hidden = !door;
   document.documentElement.style.setProperty('--fb', (G.frame.y + G.frame.h) + 'px'); document.documentElement.style.setProperty('--ft', G.frame.y + 'px');
@@ -208,7 +208,9 @@ function extraPose(ex, i, oc, t) {
   return ART[oc + '_' + pose] ? pose : 'idle';
 }
 function extraRect(ex, i, now) {
-  const oc = G.crowd[i]; if (!oc) return null; const t = now / 1000; const pose = extraPose(ex, i, oc, t); const im = ART[oc + '_' + pose]; if (!im) return null;
+  const oc = G.crowd[i]; if (!oc) return null;
+  // never between the camera and the subject: closer than them and lined up with them on screen
+  if (ex.z < G.subj.z - .2) { const sp = proj(G.subj.x, 0, G.subj.z), ep = proj(ex.x, 0, ex.z); if (sp && ep && Math.abs(sp.x - ep.x) < G.frame.w * .34) return null; } const t = now / 1000; const pose = extraPose(ex, i, oc, t); const im = ART[oc + '_' + pose]; if (!im) return null;
   const w = ex.h * im.width / im.height; const p = proj(ex.x, Math.sin(t * 1.3) * .012, ex.z); if (!p) return null;
   const hpx = ex.h * p.s, wpx = w * p.s; return {x: p.x - wpx / 2, y: p.y - hpx, w: wpx, h: hpx, cx: p.x, cy: p.y - hpx / 2, d: p.d, im, face: ex.face * NAT[pose]};
 }
@@ -403,7 +405,8 @@ function setBrief(k) {
   const oc = G.castQ.shift(); G.crowd = CAST.filter(x => x !== oc);
   const sp = room.spots[br.spot]; Object.assign(G.subj, {oc, x: sp.x + (r() - .5) * .3, z: sp.z, face: br.face || (r() < .5 ? 1 : -1), pose: 'idle', jumpT: -1.2, jump: 0, t: 0});
   // the camera opens a step to the side of them, on the side away from the doorway flat so the first look is clear
-  const side = G.subj.x < -.6 ? 1 : G.subj.x > 2 ? -1 : (r() < .5 ? -1 : 1);
+  // open on the clear side: every room's shoot-through flat stands on the left, so the camera starts to the right of them unless they are already far right
+  const side = G.subj.x > 2 ? -1 : 1;
   Object.assign(G.want, {x: clamp(G.subj.x + side * (.8 + r() * .7), -2.6, 2.6), y: room.cam.y, z: k === 'arch' ? -1.2 : room.cam.z, zoom: 1});
   G.focusWant = G.subj.z - G.want.z; G.checks = [false, false, false];
   const N = NAMES[oc]; const say = x => x.replace(/\{(\w+)\}/g, (_, w) => w === 'N' ? N : (room.words[w] || w));
@@ -483,7 +486,7 @@ function endDaily() {
   $('#d-grid').innerHTML = G.set.map(k => `<div><b>${BRIEFS[k].t}</b><span>${'★'.repeat(rec[k] || 0)}<i>${'★'.repeat(3 - (rec[k] || 0))}</i></span></div>`).join('');
   $('#hud').hidden = true; $('#s-done').hidden = false; G.state = 'done'; resize();
 }
-function toTitle() { $$('.scr').forEach(s => s.hidden = true); $('#hud').hidden = true; $('#s-title').hidden = false; G.state = 'title'; paintTitle(); resize(); $('#s-title').scrollTop = 0; }
+function toTitle() { $$('.scr').forEach(s => s.hidden = true); $('#hud').hidden = true; $('#s-title').hidden = false; G.state = 'title'; paintTitle(); resize(); const ds = $('#s-title .ds'); if (ds) ds.scrollTop = 0; }
 function paintTitle() {
   const album = load('album', []); $('#t-shots').textContent = album.length; $('#t-stars').textContent = load('stars', 0); $('#t-pulls').textContent = load('pulls', 0);
   const dd = load('daily', {}), rec = dd[dayKey()]; const got = rec ? Object.values(rec).reduce((a, b) => a + b, 0) : 0;
@@ -527,6 +530,7 @@ document.addEventListener('click', e => {
   if (e.target.closest('#howbtn')) { const w = ROOMS.booth.words; $('#how').innerHTML = BRIEF_ORDER.map(k => `<div><b>${BRIEFS[k].t}</b><span>${BRIEFS[k].l.replace(/\{(\w+)\}/g, (_, x) => x === 'N' ? 'the subject' : (w[x] || x))}</span></div>`).join(''); $$('.scr').forEach(s => s.hidden = true); $('#s-how').hidden = false; G.state = 'how'; resize(); return; }
   if (e.target.closest('[data-back]')) { e.preventDefault(); toTitle(); return; }
   if (e.target.closest('#quit')) { toTitle(); return; }
+  if (e.target.closest('#leave')) { e.preventDefault(); try { if (document.referrer && new URL(document.referrer).origin === location.origin && history.length > 1) { history.back(); return; } } catch (x) {} location.href = '../'; return; }
 });
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
 loadArt().then(() => { toTitle(); requestAnimationFrame(draw); });

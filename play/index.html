@@ -69,14 +69,14 @@ a{color:var(--pink)}
 .lcd span{display:-webkit-box;margin-top:3px;font:600 11px/1.3 var(--f-mono);letter-spacing:.02em;color:#b9f0c4;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 
 /* the checks: three LEDs set in the body under the viewfinder, embossed labels */
-#checks{position:absolute;left:14px;right:14px;top:calc(var(--fb,60vh) + 14px);display:grid;gap:5px}
-.ck{display:flex;align-items:center;gap:10px;font:700 10.5px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:#7c7786;text-shadow:0 1px 0 rgba(0,0,0,.8),0 -1px 0 rgba(255,255,255,.06);padding:4px 0;transition:color .2s}
-.ck i{width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#3a3842,#17161c);box-shadow:inset 0 1px 2px rgba(0,0,0,.9),0 1px 0 rgba(255,255,255,.1);transition:background .2s,box-shadow .2s;flex:none}
+#checks{position:absolute;left:10px;right:10px;top:calc(var(--fb,60vh) + 10px);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.ck{display:flex;align-items:flex-start;gap:7px;font:700 9.5px/1.25 var(--f-mono);letter-spacing:.04em;text-transform:uppercase;color:#7c7786;text-shadow:0 1px 0 rgba(0,0,0,.8),0 -1px 0 rgba(255,255,255,.06);padding:4px 0;transition:color .2s}
+.ck i{width:12px;height:12px;border-radius:50%;margin-top:1px;background:radial-gradient(circle at 35% 35%,#3a3842,#17161c);box-shadow:inset 0 1px 2px rgba(0,0,0,.9),0 1px 0 rgba(255,255,255,.1);transition:background .2s,box-shadow .2s;flex:none}
 .ck.ok{color:#cfeed3}
 .ck.ok i{background:radial-gradient(circle at 35% 35%,#d6ffd9,var(--ok) 50%,#2f9a4a);box-shadow:0 0 10px var(--ok),0 0 2px #fff,inset 0 1px 1px rgba(255,255,255,.6)}
 
 /* the dials: a knurled knob you turn; the pointer (i) rotates, the readout sits under */
-.edge{position:absolute;bottom:calc(var(--sab) + 70px);width:88px;height:88px;pointer-events:auto;border-radius:50%;
+.edge{position:absolute;bottom:calc(var(--sab) + 66px);width:78px;height:78px;pointer-events:auto;border-radius:50%;
   background:repeating-conic-gradient(from 0deg,#5a5665 0 3deg,#2c2933 3deg 6deg);box-shadow:0 8px 16px rgba(0,0,0,.6),0 1px 0 rgba(255,255,255,.18),inset 0 -2px 4px rgba(0,0,0,.6)}
 .edge::after{content:"";position:absolute;inset:11px;border-radius:50%;background:radial-gradient(circle at var(--lx) 25%,#6a6676,#38353f 55%,#1f1d25);box-shadow:inset 0 2px 3px rgba(255,255,255,.18),inset 0 -4px 8px rgba(0,0,0,.6),0 2px 4px rgba(0,0,0,.6)}
 .edge::before{content:attr(data-label);position:absolute;top:-16px;left:4px;text-align:left;font:700 8.5px/1 var(--f-mono);letter-spacing:.2em;text-transform:uppercase;color:#8d8a96;text-shadow:0 1px 0 rgba(0,0,0,.8)}
@@ -89,8 +89,8 @@ a{color:var(--pink)}
 /* the shutter: the gem seated in a machined ring, "SHOOT" engraved under it; glows at three of three */
 .bottom{position:absolute;left:0;right:0;bottom:0;padding:0 12px calc(var(--sab) + 10px);display:flex;align-items:center;justify-content:space-between;gap:6px;pointer-events:none}
 .bottom>*{pointer-events:auto}
-.seat{position:absolute;left:50%;bottom:calc(var(--sab) + 62px);transform:translateX(-50%);pointer-events:auto}
-#shutter{width:96px;height:96px;border:0;border-radius:50%;position:relative;background:url(art/ui/shutter.webp) center/78% no-repeat,radial-gradient(circle at 50% 30%,#4b4754,#201e26 70%);
+.seat{position:absolute;left:50%;bottom:calc(var(--sab) + 58px);transform:translateX(-50%);pointer-events:auto}
+#shutter{width:88px;height:88px;border:0;border-radius:50%;position:relative;background:url(art/ui/shutter.webp) center/78% no-repeat,radial-gradient(circle at 50% 30%,#4b4754,#201e26 70%);
   box-shadow:0 0 0 3px #0b0a0e,0 0 0 5px #4b4754,0 0 0 6px #0b0a0e,0 10px 20px rgba(0,0,0,.7),inset 0 2px 2px rgba(255,255,255,.2),inset 0 -6px 10px rgba(0,0,0,.7);transition:transform .08s,box-shadow .25s}
 #shutter::after{content:"shoot";position:absolute;left:50%;bottom:-18px;transform:translateX(-50%);font:700 9px/1 var(--f-mono);letter-spacing:.24em;text-transform:uppercase;color:#8d8a96;text-shadow:0 1px 0 #000;transition:color .25s;white-space:nowrap}
 #shutter.ready{box-shadow:0 0 0 3px #0b0a0e,0 0 0 5px var(--gold),0 0 0 6px #0b0a0e,0 0 28px rgba(255,212,121,.8),0 10px 20px rgba(0,0,0,.7),inset 0 2px 2px rgba(255,255,255,.2);animation:ready 1.1s ease-in-out infinite}
@@ -98,7 +98,7 @@ a{color:var(--pink)}
 @keyframes ready{50%{transform:scale(1.05)}}
 #shutter:active{transform:scale(.93)}
 /* the readout strip over the shutter */
-.readout{position:absolute;left:50%;bottom:calc(var(--sab) + 172px);transform:translateX(-50%);display:flex;gap:10px;padding:5px 10px;border-radius:3px;background:linear-gradient(180deg,#0a150e,var(--lcd));box-shadow:inset 0 0 0 1px #000,inset 0 2px 6px rgba(0,0,0,.8),0 1px 0 rgba(255,255,255,.1);font:700 10.5px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--lcdink);text-shadow:0 0 6px rgba(158,240,176,.5);white-space:nowrap}
+.readout{position:absolute;left:50%;bottom:calc(var(--sab) + 160px);transform:translateX(-50%);display:flex;gap:10px;padding:5px 10px;border-radius:3px;background:linear-gradient(180deg,#0a150e,var(--lcd));box-shadow:inset 0 0 0 1px #000,inset 0 2px 6px rgba(0,0,0,.8),0 1px 0 rgba(255,255,255,.1);font:700 10.5px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--lcdink);text-shadow:0 0 6px rgba(158,240,176,.5);white-space:nowrap}
 .readout b{color:#dffbe4}
 /* the side keys: a 3-way height switch, the door, the album, next */
 .lefts,.rights{display:flex;align-items:center;gap:6px}
@@ -136,11 +136,12 @@ a{color:var(--pink)}
 .scr{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;padding:calc(var(--sat) + 12px) 16px calc(var(--sab) + 16px);overflow:auto;touch-action:pan-y;
   background:radial-gradient(140% 60% at var(--lx) -10%,rgba(255,255,255,.10),rgba(255,255,255,0) 60%),radial-gradient(rgba(255,255,255,.035) 1px,transparent 1.2px) 0 0/4px 4px,linear-gradient(180deg,var(--body-2),var(--body) 30%,#141218 100%)}
 /* the screens that keep the diorama in view punch the viewfinder out of the body and seat it in a bezel */
-.scr.window{-webkit-mask:linear-gradient(#000 0 0) 0 0/100% calc(var(--ft,120px) - 8px) no-repeat,linear-gradient(#000 0 0) 0 100%/100% calc(100% - var(--fb,60vh) - 8px) no-repeat,linear-gradient(#000 0 0) 0 var(--ft,120px)/6px 100% no-repeat,linear-gradient(#000 0 0) 100% var(--ft,120px)/6px 100% no-repeat;
+.scr.window{overflow:hidden;-webkit-mask:linear-gradient(#000 0 0) 0 0/100% calc(var(--ft,120px) - 8px) no-repeat,linear-gradient(#000 0 0) 0 100%/100% calc(100% - var(--fb,60vh) - 8px) no-repeat,linear-gradient(#000 0 0) 0 var(--ft,120px)/6px 100% no-repeat,linear-gradient(#000 0 0) 100% var(--ft,120px)/6px 100% no-repeat;
   mask:linear-gradient(#000 0 0) 0 0/100% calc(var(--ft,120px) - 8px) no-repeat,linear-gradient(#000 0 0) 0 100%/100% calc(100% - var(--fb,60vh) - 8px) no-repeat,linear-gradient(#000 0 0) 0 var(--ft,120px)/6px 100% no-repeat,linear-gradient(#000 0 0) 100% var(--ft,120px)/6px 100% no-repeat}
 .vfb{position:fixed;left:0;right:0;top:calc(var(--ft,120px) - 8px);height:calc(var(--fb,60vh) - var(--ft,120px) + 16px);z-index:11;pointer-events:none;border-radius:8px;box-shadow:inset 0 0 0 4px #0b0a0e,inset 0 0 0 6px #3b3844,inset 0 0 0 7px #121117,0 0 0 1px rgba(255,255,255,.08)}
 .vfb::before{content:"";position:absolute;left:8px;right:8px;top:8px;bottom:8px;box-shadow:inset 0 2px 10px rgba(0,0,0,.9);border-radius:3px}
-.vfsp{flex:none;height:calc(var(--fb,60vh) - var(--sat) - 12px - 36px)}
+.vfsp{display:none}
+.scr.window .ds{position:absolute;left:0;right:0;top:calc(var(--fb,60vh) + 10px);bottom:0;overflow:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;padding:0 16px calc(var(--sab) + 16px)}
 .wm{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--ink);height:36px;flex:none}
 .wm img{width:26px;height:26px;filter:drop-shadow(0 1px 0 rgba(255,255,255,.2))}
 .wm span{display:flex;flex-direction:column;gap:2px}
@@ -237,7 +238,7 @@ a{color:var(--pink)}
   <div class="edge" id="zoomer" data-label="zoom"><i></i><small id="zoomt">24mm</small></div>
   <div class="readout"><span>focus <b id="lcd-f">4m</b></span><span><b id="lcd-ap">f/1.4</b></span><span><b id="lcd-room"></b></span></div>
   <div class="bottom">
-    <div class="lefts"><div class="hgts"><button type="button" class="hgt" data-y="0.55">Low</button><button type="button" class="hgt" data-y="1.45" aria-pressed="true">Eye</button><button type="button" class="hgt" data-y="2.5">High</button></div><button type="button" class="ghost" id="quit">Door</button></div>
+    <div class="lefts"><div class="hgts"><button type="button" class="hgt" data-y="0.55">Low</button><button type="button" class="hgt" data-y="1.45" aria-pressed="true">Eye</button><button type="button" class="hgt" data-y="2.5">High</button></div><button type="button" class="ghost" id="quit">&lsaquo; Door</button></div>
     <div class="seat"><button type="button" id="shutter" aria-label="Shoot"></button></div>
     <div class="rights"><button type="button" class="ghost" data-album>Album</button><button type="button" class="ghost" id="skip">Next</button></div>
   </div>
@@ -255,7 +256,7 @@ a{color:var(--pink)}
 
 <section class="scr window" id="s-title">
   <a class="wm" href="../"><img src="../assets/cathedral/mark.webp" alt=""><span><b style="font:900 italic 16px/1 var(--f-display)">0FF THE PRINT</b><small>a game from the house</small></span></a>
-  <div class="vfsp"></div>
+  <div class="ds">
   <div class="plate2"><h1 class="title">Get the shot<b>three cardboard rooms · a brief per shot · your album</b></h1></div>
   <p class="tag" id="daily-tag">The booth</p>
   <p class="lead">You're the house photographer. The booth, the co-op and the lot are toy theaters and the roster is in them. Drag to move, the dials walk and zoom, tap to focus, the gem shoots.</p>
@@ -264,9 +265,11 @@ a{color:var(--pink)}
     <div class="two"><button type="button" class="btn" data-mode="free"><span>Free shoot</span><small>any brief, forever</small></button><button type="button" class="btn" data-album><span>Album</span><small id="album-n">your photos</small></button></div>
     <div class="rooms"><i>Free shoot in</i><div class="sw"><button type="button" class="roomchip" data-room="booth" aria-pressed="true">The booth</button><button type="button" class="roomchip" data-room="coop">The co-op</button><button type="button" class="roomchip" data-room="lot">The lot</button></div></div>
     <button type="button" class="btn" id="howbtn"><span>The briefs</span><small>what each shot wants</small></button>
+    <a class="btn" id="leave" href="../"><span>&lsaquo; Back to 0FF THE PRINT</span><small>the site</small></a>
   </div>
   <div class="stats"><div class="stat"><i>Photos</i><b id="t-shots">0</b></div><div class="stat"><i>Stars</i><b id="t-stars">0</b></div><div class="stat"><i>Pulls earned</i><b id="t-pulls">0</b></div></div>
   <p class="fine">Ten stars = one pull on a sealed night in <a href="../wall/">the Crypt</a> · add to your home screen and it plays with no signal · <a href="../kit/">the Kit</a></p>
+  </div>
 </section>
 
 <section class="scr solid" id="s-how" hidden>
@@ -283,10 +286,11 @@ a{color:var(--pink)}
 
 <section class="scr window" id="s-done" hidden>
   <a class="wm" href="#" data-back><img src="../assets/cathedral/mark.webp" alt=""><span><b style="font:900 italic 16px/1 var(--f-display)">Today's six</b><small>done</small></span></a>
-  <div class="vfsp"></div>
+  <div class="ds">
   <div class="big"><b id="d-stars">0</b><span id="d-line">of 18 stars today</span></div>
   <div class="dgrid" id="d-grid"></div>
   <div class="menu"><button type="button" class="btn primary" data-album><span>Open the album</span></button><button type="button" class="btn" data-mode="free"><span>Keep shooting</span><small>free shoot</small></button><button type="button" class="btn" data-back><span>Back to the door</span></button></div>
+  </div>
 </section>
 
 <div class="vfb" id="vfb" hidden></div>
@@ -296,6 +300,6 @@ a{color:var(--pink)}
   <div class="row"><button type="button" class="btn primary" id="v-share"><span>Share</span></button><button type="button" class="btn" id="v-del"><span>Delete</span></button><button type="button" class="btn" id="v-close"><span>Close</span></button></div>
 </div>
 
-<script src="game.js?v=20261015i"></script>
+<script src="game.js?v=20261015k"></script>
 </body>
 </html>
