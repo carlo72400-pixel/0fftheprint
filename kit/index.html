@@ -267,6 +267,18 @@ input[type=range]::-moz-range-thumb{width:30px;height:30px;border:0;border-radiu
 .slate{border-radius:6px;box-shadow:0 0 0 4px #0b0a0e,0 0 0 6px #3b3844,0 10px 30px rgba(0,0,0,.6)}
 .toast{border-radius:4px;background:linear-gradient(180deg,#0a150e,var(--lcd));color:var(--lcdink);box-shadow:inset 0 0 0 1px #000,0 6px 16px rgba(0,0,0,.6);text-shadow:0 0 6px rgba(158,240,176,.5);font-family:var(--f-mono)}
 
+/* ---------- the QR key and its full screen (10/15) ---------- */
+.qrkey{display:grid;grid-template-columns:44px minmax(0,1fr);gap:0 12px;align-items:center;text-align:left;margin:0 0 14px;padding:10px 14px;min-height:64px;font-size:20px}
+.qrkey img{width:44px;height:44px;border-radius:4px;background:#fff;padding:2px}
+.qrkey small{display:block;font:700 9.5px/1.3 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(42,10,30,.7)}
+.qrfull{position:fixed;inset:0;z-index:95;background:#fff;display:grid;place-items:center;padding:24px}
+.qrfull[hidden]{display:none}
+.qrbox{display:grid;justify-items:center;gap:6px;text-align:center;color:#0a0a0d}
+.qrbox img{width:min(84vw,84vh,520px);height:auto;image-rendering:pixelated}
+.qrbox b{font:900 italic clamp(34px,10vw,64px)/.9 var(--f-display);text-transform:uppercase;margin-top:6px}
+.qrbox span{font:600 13px/1.4 var(--f-body);color:#3a3642;max-width:32ch}
+.qrbox small{font:700 11px/1 var(--f-mono);letter-spacing:.18em;text-transform:uppercase;color:#8d8a96;margin-top:4px}
+.qrfull .tip{position:absolute;left:0;right:0;bottom:calc(16px + var(--sab));text-align:center;font:700 10px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:#8d8a96}
 /* ---------- exposure visuals, slow-mo, the stopwatch (10/15) ---------- */
 .drag{display:grid;gap:8px;padding:10px;border-radius:4px;background:#0f0e13;box-shadow:inset 0 0 0 1px #000,inset 0 2px 8px rgba(0,0,0,.6)}
 .drag .lane{position:relative;height:44px;border-radius:3px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 1px,transparent 1px 10%);overflow:hidden}
@@ -330,6 +342,9 @@ input[type=range]::-moz-range-thumb{width:30px;height:30px;border:0;border-radiu
   <!-- ===== HOME ===== -->
   <section id="t-home" class="tool">
     <div class="hero"><img src="../assets/cathedral/w/stage.webp" alt="" width="1200" height="462" decoding="async"><div class="hero-t"><h1>The Kit</h1><span>ten tools · one hand · no signal needed</span></div></div>
+    <!-- THE QR (10/15): the thing he holds up after the flash. Full screen, white, the code to /shot/ (the "you got shot"
+         page: follow, leave your @, wait for the pack). The PNG is in the worker, so it shows with no signal. -->
+    <button type="button" class="btn primary big qrkey" id="qr-show"><img src="qr-shot.png" alt="" width="44" height="44"><span>Show the QR<small>you got shot · 0fftheprint.com/shot</small></span></button>
     <div class="doors">
       <button type="button" class="door" data-go="prompter"><img src="../assets/cathedral/w/screen.webp" alt=""><b>Prompter</b><span>read to camera</span></button>
       <button type="button" class="door" data-go="slate"><img src="../assets/cathedral/w/film.webp" alt=""><b>Slate</b><span>beep + flash to sync</span></button>
@@ -560,6 +575,7 @@ input[type=range]::-moz-range-thumb{width:30px;height:30px;border:0;border-radiu
     <p class="note">The grey screen is a stand-in for an 18% card: fill the frame with it, set custom white balance, move on. The tone runs at a fixed level for a quick check that a mic is live; it is not a calibrated reference.</p>
   </section>
   <div id="sc-full"><div class="tip">tap to leave</div></div>
+<div id="qr-full" class="qrfull" hidden><div class="qrbox"><img src="qr-shot.png" alt="QR code to 0fftheprint.com/shot"><b>You got shot.</b><span>scan it · follow · your pack drops in a few days</span><small>0fftheprint.com/shot</small></div><div class="tip">tap to leave</div></div>
 </div>
 <div class="toast" id="toast"></div>
 
@@ -991,6 +1007,10 @@ $('#sw-crown').addEventListener('click', () => { if (SW.run) { SW.acc = swNow();
 $('#sw-push').addEventListener('click', () => { if (SW.run) { const t = swNow(); const last = SW.laps.length ? SW.laps[0].t : 0; SW.laps.unshift({t, d: t - last}); if (SW.laps.length > 40) SW.laps.length = 40; } else { SW.acc = 0; SW.laps = []; } save('watch', SW); buzz(); swPaint(); });
 function tick(){ const c = ac(); if (!c) return; const o = c.createOscillator(), g = c.createGain(); o.type = 'square'; o.frequency.value = 2200; g.gain.value = .04; o.connect(g); g.connect(c.destination); o.start(); g.gain.linearRampToValueAtTime(0, c.currentTime + .03); o.stop(c.currentTime + .04); }
 document.addEventListener('visibilitychange', () => { if (!document.hidden && SW.run) { swLockOn(); swPaint(); } });
+
+/* ---------- THE QR ---------- */
+$('#qr-show').addEventListener('click', () => { $('#qr-full').hidden = false; buzz(); try { if ('wakeLock' in navigator) navigator.wakeLock.request('screen').then(l => { $('#qr-full').dataset.lock = '1'; $('#qr-full').addEventListener('click', () => l.release(), { once: true }); }).catch(() => {}); } catch(e){} });
+$('#qr-full').addEventListener('click', () => { $('#qr-full').hidden = true; });
 
 /* ---------- SCREENS ---------- */
 const SCREENS = {grey: '#767676', white: '#ffffff', black: '#000000', red: '#ff0000', pink: '#ff79c6'};

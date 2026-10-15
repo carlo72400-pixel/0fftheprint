@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>You got shot · 0FF THE PRINT</title>
+<meta name="description" content="0FF THE PRINT shot you tonight. Your photos land here in a few days. Follow The Lens, leave your @, pull your pack.">
+<meta property="og:title" content="You got shot · 0FF THE PRINT">
+<meta property="og:description" content="We shoot the night. You pull your pack. Your photos land here in a few days.">
+<meta property="og:image" content="https://0fftheprint.com/assets/cathedral/w/stage.webp">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0a0a0d">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/auth.css?v=57b34045">
+<style>
+/* YOU GOT SHOT (10/15). The page behind the QR he holds up at the night. One screen, one job: get the person who was
+   just shot to follow, leave an @, and come back for the pack. ?n=<slug> opens a night that is up; ?d=YYYY-MM-DD or
+   nothing = the night that just happened, waiting. The page remembers the date on this phone and flips to "it's up"
+   when events.json carries that night. */
+.wrap{padding-top:18px}
+[hidden]{display:none!important}
+.flash{position:fixed;inset:0;background:#fff;z-index:9;pointer-events:none;transition:opacity .9s ease-out}
+.kick{font-family:var(--f-mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--pink-glow)}
+h1.big{font-size:clamp(58px,19vw,112px);line-height:.86;margin-top:8px;background:linear-gradient(180deg,#fff 8%,var(--pink) 44%,#8f8a97 60%,var(--pink) 96%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 6px 24px rgba(255,121,198,.35))}
+.lead{margin-top:14px;font-size:16px;color:#ddd5e2;max-width:36ch}
+.lead b{color:#fff}
+.steps{display:grid;gap:10px;margin-top:22px}
+.st{display:grid;grid-template-columns:40px minmax(0,1fr);gap:4px 14px;align-items:center;padding:14px 14px 14px 12px;border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--ink);text-decoration:none}
+.st i{grid-row:span 2;width:40px;height:40px;border-radius:50%;border:2px solid var(--pink-glow);display:grid;place-items:center;font-family:var(--f-display);font-style:italic;font-weight:900;font-size:20px;color:var(--pink-glow)}
+.st b{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:24px;line-height:1;text-transform:uppercase}
+.st span{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.st.hot{border-color:rgba(255,121,198,.55);box-shadow:0 0 18px rgba(255,121,198,.16)}
+.st.done i{background:var(--ok);border-color:var(--ok);color:#06210b}
+.ig{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;margin-top:10px}
+.ig input{min-height:50px;padding:0 14px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:500 17px var(--f-body)}
+.ig input::placeholder{color:var(--muted)}
+.ig button{min-height:50px;padding:0 16px;border:0;border-radius:10px;background:var(--pink-glow);color:var(--bg);font:800 14px var(--f-body);cursor:pointer}
+.wait{margin-top:22px;padding:18px;border:1px dashed rgba(255,121,198,.45);border-radius:14px;background:linear-gradient(180deg,rgba(255,121,198,.08),rgba(255,121,198,.02))}
+.wait b{display:block;font-family:var(--f-display);font-style:italic;font-weight:900;font-size:28px;line-height:1;text-transform:uppercase}
+.wait p{margin-top:8px;font-size:14px;color:#ddd5e2}
+.wait small{display:block;margin-top:10px;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.up{margin-top:22px;display:grid;grid-template-columns:110px minmax(0,1fr);gap:14px;align-items:center;padding:14px;border:1px solid rgba(126,231,135,.5);border-radius:14px;background:var(--panel);text-decoration:none;color:var(--ink)}
+.up img{width:110px;aspect-ratio:3/5;object-fit:cover;border-radius:8px;background:#000}
+.up b{display:block;font-family:var(--f-display);font-style:italic;font-weight:900;font-size:26px;line-height:1;text-transform:uppercase}
+.up span{display:block;margin-top:4px;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.up em{display:block;margin-top:10px;font-style:normal;font-weight:800;color:var(--ok)}
+.while{margin-top:26px}
+.while .kick{color:var(--muted)}
+.rail{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
+.rail a{display:grid;gap:3px;padding:12px 10px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink);text-decoration:none;text-align:center}
+.rail a b{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:17px;line-height:1;text-transform:uppercase}
+.rail a span{font-family:var(--f-mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.fine{margin-top:26px;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.04em;line-height:1.7;color:var(--muted);text-transform:uppercase}
+.fine a{color:var(--pink-glow)}
+.share{display:flex;gap:8px;margin-top:14px}
+.share .btn{margin-top:0}
+</style>
+</head>
+<body>
+<div class="flash" id="flash" aria-hidden="true"></div>
+<div class="leopard-bar"></div>
+<div class="wrap">
+<a class="back" href="../">&larr; 0FF THE PRINT</a>
+<div class="kick" id="kick">San Antonio · tonight</div>
+<h1 class="big" id="h1">You got<br>shot.</h1>
+<p class="lead" id="lead">That flash was <b>0FF THE PRINT</b>. Your photos land here in a few days, cut and graded, as a pack with your name on it. Nothing goes up raw.</p>
+
+<a class="up" id="up" hidden><img id="up-img" alt=""><span><b id="up-title"></b><span id="up-meta"></span><em>Your pack is up. Pull it &rarr;</em></span></a>
+
+<div class="steps" id="steps">
+  <a class="st hot" id="st-follow" href="https://instagram.com/vamppsych" target="_blank" rel="noopener"><i>1</i><b>Follow The Lens</b><span>@vamppsych · the drop gets called there</span></a>
+  <div class="st" id="st-ig"><i>2</i><b>Leave your @</b><span id="st-ig-s">so we tag you when it drops</span>
+    <form class="ig" id="igform" style="grid-column:1/-1"><input id="ig" type="text" inputmode="text" autocapitalize="none" autocomplete="off" spellcheck="false" maxlength="30" placeholder="@yourhandle" aria-label="Your Instagram"><button type="submit">Save</button></form>
+  </div>
+  <a class="st" id="st-pull" href="../#find"><i>3</i><b>Pull your pack</b><span>find your night, rip the frames you&rsquo;re in</span></a>
+</div>
+
+<div class="wait" id="wait">
+  <b id="wait-b">The pack drops in a few days.</b>
+  <p id="wait-p">Come back here with this page saved, or watch The Lens. When the night goes up it shows right here with a button.</p>
+  <small id="wait-s">you were shot on</small>
+</div>
+
+<div class="while">
+  <div class="kick">While you wait</div>
+  <div class="rail">
+    <a href="../#open"><b>Open a pack</b><span>a random card</span></a>
+    <a href="../play/"><b>Get the Shot</b><span>the game</span></a>
+    <a href="../wall/"><b>The Crypt</b><span>tonight&rsquo;s flyers</span></a>
+  </div>
+</div>
+
+<div class="share"><button type="button" class="btn ghost" id="share">Save this page</button></div>
+<p class="fine">Not in the pack? Some frames don&rsquo;t make the cut. <a href="https://instagram.com/vamppsych" target="_blank" rel="noopener">DM The Lens</a> and ask. Want a frame gone? Same DM, it comes down. <a href="../">0fftheprint.com</a> · we shoot the night, you pull your pack.</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" integrity="sha384-Rj26LVGvoeRVR6+mwQmFfcR3QOBEwT+ZmuCWpuiqeTzJpCs0ER4ITAWGb4Hiy3Ok" crossorigin="anonymous" defer></script>
+<script src="../supabase-config.js?v=f1348482" defer></script>
+<script src="../assets/js/desk.js?v=12f3e9e0" defer></script>
+<script>
+(async () => {
+  const $ = s => document.querySelector(s);
+  // the flash: the page opens white like the strobe did, then clears
+  requestAnimationFrame(() => { const f = $('#flash'); f.style.opacity = '0'; setTimeout(() => f.remove(), 1000); });
+  const q = new URLSearchParams(location.search);
+  const pad = n => String(n).padStart(2, '0');
+  // the night that just happened: a party that runs past midnight still belongs to the evening it started
+  const now = new Date(); if (now.getHours() < 6) now.setDate(now.getDate() - 1);
+  const today = now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate());
+  const slug = (q.get('n') || '').replace(/[^a-z0-9-]/g, ''), date = /^\d{4}-\d{2}-\d{2}$/.test(q.get('d') || '') ? q.get('d') : today;
+  const nice = d => { const [y, m, dd] = d.split('-').map(Number); return new Date(y, m - 1, dd).toLocaleDateString('en-US', {weekday: 'long', month: 'short', day: 'numeric'}); };
+  // this phone remembers every night it was shot on
+  const KEY = 'otp-shot'; let mine = []; try { mine = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) {}
+  if (!slug && !mine.includes(date)) { mine.unshift(date); mine = mine.slice(0, 12); try { localStorage.setItem(KEY, JSON.stringify(mine)); } catch (e) {} }
+  $('#wait-s').textContent = 'you were shot ' + nice(date);
+  $('#kick').textContent = 'San Antonio · ' + nice(date);
+
+  let items = [];
+  try { items = ((await (await fetch('../events/events.json', {cache: 'no-cache'})).json()) || {}).items || []; } catch (e) {}
+  const night = items.find(e => e.slug === slug) || items.find(e => e.date === date) || (!slug && mine.map(d => items.find(e => e.date === d)).find(Boolean));
+  if (night) {
+    const up = $('#up'); up.href = '../events/' + night.slug + '/'; up.hidden = false;
+    $('#up-img').src = '../events/' + night.slug + '/pack.webp'; $('#up-img').onerror = () => { $('#up-img').src = '../assets/cathedral/pack-house.webp'; };
+    $('#up-title').textContent = night.title; $('#up-meta').textContent = [night.venue, night.date_short, (night.count | 0) + ' frames'].filter(Boolean).join(' · ');
+    $('#h1').innerHTML = 'It&rsquo;s<br>up.'; $('#lead').innerHTML = 'The night you were shot at is live. <b>Pull your pack:</b> tear the frames you&rsquo;re in, keep them, share them. Nothing goes up raw.';
+    $('#wait').hidden = true; $('#st-pull').href = '../events/' + night.slug + '/'; $('#st-pull').classList.add('hot'); $('#st-follow').classList.remove('hot');
+    $('#kick').textContent = 'San Antonio · ' + nice(night.date);
+  }
+
+  // the @: kept on this phone, and handed to the desk when the database has a door for it (shot_list_add); a quiet no is fine
+  const saved = (() => { try { return localStorage.getItem('otp-shot-ig') || ''; } catch (e) { return ''; } })();
+  if (saved) { $('#ig').value = saved; $('#st-ig').classList.add('done'); $('#st-ig-s').textContent = 'saved · we tag you when it drops'; }
+  $('#igform').addEventListener('submit', async e => {
+    e.preventDefault(); const h = $('#ig').value.trim().replace(/^@/, '').slice(0, 30);
+    if (!/^[A-Za-z0-9._]{1,30}$/.test(h)) { $('#st-ig-s').textContent = 'letters, numbers, dots and underscores'; return; }
+    try { localStorage.setItem('otp-shot-ig', h); } catch (e2) {}
+    $('#st-ig').classList.add('done'); $('#st-ig-s').textContent = 'saved · we tag you when it drops'; $('#ig').value = h;
+    try { if (window.OTP && OTP.configured && OTP.sb) await OTP.sb().rpc('shot_list_add', {p_ig: h, p_day: night ? night.date : date, p_slug: night ? night.slug : null}); } catch (e3) {}
+  });
+  $('#share').addEventListener('click', async () => {
+    const url = location.origin + location.pathname + (night ? '?n=' + night.slug : '?d=' + date);
+    try { if (navigator.share) { await navigator.share({title: 'You got shot · 0FF THE PRINT', url}); return; } } catch (e) { if (e && e.name === 'AbortError') return; }
+    try { await navigator.clipboard.writeText(url); $('#share').textContent = 'Link copied · add it to your home screen'; } catch (e) { $('#share').textContent = url; }
+  });
+})();
+</script>
+</body>
+</html>
