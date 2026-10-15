@@ -10,6 +10,7 @@ All of these are cropped, so all of them say "Cropped."
 
 | № | Story | Image | Source | Licence |
 |---|---|---|---|---|
+| 0TP-038 | Seven Seats At The Back Of The List | Slayr performing at Rolling Loud Orlando, May 2026 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Slayr_rollingloud_tristanstlws.jpg) · Tristanstlws | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
 | 0TP-037 | And Then Nothing Happened | Trey Parker and Matt Stone at the South Park panel, San Diego Comic-Con, Jul 2016 (tile: Parker alone) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Trey_Parker_and_Matt_Stone_by_Gage_Skidmore.jpg) · Gage Skidmore | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) |
 | 0TP-036 | What The Director Whispered | Richard Linklater at the 2026 Sundance Film Festival | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Richard_Linklater_Sundance_Film_Festival_Everyone_Has_a_Story.jpg) · Colleen Sturtevant (WikiPortraits) | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
 | 0TP-035 | It Was Never One Take | Wes Anderson at the 2025 Cannes Film Festival | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Wes_Anderson-7541.jpg) · Harald Krichel | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
@@ -67,9 +68,9 @@ in the 9/2 pass: a Ken Carson live shot tagged "License review needed" (an unrev
 frame), and an Elizabeth Bathory painting claiming CC BY-SA as "own work", which does not hold up
 for a historical portrait. Neither shipped.
 
-**SHARE-ALIKE.** 0TP-032, 0TP-029, 0TP-018, 0TP-008 and 0TP-006 are CC BY-SA. Our cropped version of those five
-images carries the same licence, meaning somebody else may reuse those five covers
-under BY-SA. It stops at those five images. It does not touch the writing, the rest
+**SHARE-ALIKE.** 0TP-038, 0TP-032, 0TP-029, 0TP-018, 0TP-008 and 0TP-006 are CC BY-SA. Our cropped version of those six
+images carries the same licence, meaning somebody else may reuse those six covers
+under BY-SA. It stops at those six images. It does not touch the writing, the rest
 of the site, or anything else in this repo.
 
 **PERSONALITY RIGHTS.** The Kane Parsons, Young Thug and Aaron Taylor-Johnson files carry a personality-rights notice on
