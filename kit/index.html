@@ -143,7 +143,7 @@ input[type=range]{width:100%;accent-color:var(--glow);height:44px}
 .slate .stripe{height:14px;background:repeating-linear-gradient(135deg,#f4eef2 0 14px,#0a0a0d 14px 28px)}
 .slate .clock{font:700 14px/1 var(--f-mono);letter-spacing:.1em;color:var(--muted);display:flex;justify-content:space-between}
 .slate .clock b{color:var(--ink)}
-#flash{position:fixed;inset:0;z-index:80;background:#fff;display:none}
+#flash{position:fixed;inset:0;z-index:80;background:#fff url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=") 0 0/100% 100% no-repeat;display:none}
 #flash.on{display:block}
 .mark{min-height:88px;font-size:30px}
 .mark.tail{background:var(--gold);border-color:var(--gold)}
@@ -602,7 +602,7 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
     </div>
     <button type="button" class="btn big" id="sc-tone" aria-pressed="false">1 kHz tone: off</button>
     <p class="note">The grey screen is a stand-in for an 18% card: fill the frame with it, set custom white balance, move on. The tone runs at a fixed level for a quick check that a mic is live; it is not a calibrated reference.</p>
-<p class="note"><b>White coming out grey or black?</b> That is the phone's browser painting the page dark, not the Kit. Samsung Internet: the menu, Settings, Appearance, turn <b>Dark mode</b> off for this. Chrome: Settings, Theme, turn off <b>Darken websites</b>. The Kit tells the browser these screens are light; most honor it, Samsung's sometimes does not.</p>
+<p class="note"><b>Dark mode on the phone.</b> Every screen here is painted as an image, which a browser's forced dark mode leaves alone. If a white still comes up dark, the browser is repainting the page: Samsung Internet, the menu, Settings, Appearance, Dark mode, turn on <b>Use website dark theme</b> (or turn Dark mode off while you shoot). Chrome: Settings, Theme, turn off <b>Darken websites</b>.</p>
   </section>
   <div id="sc-full"><div class="tip">tap to leave</div></div>
 <button type="button" id="back-fab" aria-label="Back to the kit">&lsaquo;</button>
@@ -1079,13 +1079,16 @@ addEventListener('deviceorientation', e => { const f = $('#qr-full'); if (!f || 
 /* ---------- SCREENS ---------- */
 const SCREENS = {grey: '#767676', white: '#ffffff', black: '#000000', red: '#ff0000', pink: '#ff79c6'};
 let toneOsc = null;
+// Samsung Internet and Chrome's forced dark modes repaint CSS colors (his Samsung turned the white screen dark, 10/15)
+// but they leave image pixels alone, so every screen is PAINTED onto a canvas, never set as a background.
+function scCanvas(f){ let c = f.querySelector('canvas.scc'); if (!c) { c = document.createElement('canvas'); c.className = 'scc'; c.style.cssText = 'position:absolute;inset:0;width:100%;height:100%'; f.prepend(c); } c.width = Math.round(innerWidth * devicePixelRatio); c.height = Math.round(innerHeight * devicePixelRatio); return c; }
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-screen]'); if (!b) return;
   const k = b.dataset.screen, f = $('#sc-full'); f.querySelectorAll('.bars').forEach(x => x.remove());
-  f.querySelectorAll('.bars, .star, .bigclock').forEach(x => x.remove());
+  f.querySelectorAll('.bars, .star, .bigclock, canvas.scc').forEach(x => x.remove());
   if (k === 'star') { f.style.background = '#fff'; const c = document.createElement('canvas'); c.className = 'star'; c.style.cssText = 'position:absolute;inset:0;width:100%;height:100%'; const s = Math.min(innerWidth, innerHeight) * devicePixelRatio; c.width = innerWidth * devicePixelRatio; c.height = innerHeight * devicePixelRatio; const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.translate(c.width / 2, c.height / 2); x.fillStyle = '#000'; for (let i = 0; i < 72; i++) { x.beginPath(); x.moveTo(0, 0); x.arc(0, 0, s * .46, i * Math.PI / 36, (i + .5) * Math.PI / 36); x.closePath(); x.fill(); } f.prepend(c); }
-  else if (k === 'bars') { f.style.background = '#000'; const cols = ['#c0c0c0', '#c0c000', '#00c0c0', '#00c000', '#c000c0', '#c00000', '#0000c0']; const d = document.createElement('div'); d.className = 'bars'; d.innerHTML = cols.map(c => `<i style="background:${c}"></i>`).join(''); f.prepend(d); }
-  else f.style.background = SCREENS[k];
+  else if (k === 'bars') { f.style.background = '#000'; const c = scCanvas(f), x = c.getContext('2d'); const cols = ['#c0c0c0', '#c0c000', '#00c0c0', '#00c000', '#c000c0', '#c00000', '#0000c0']; const w = c.width / cols.length; cols.forEach((col, i) => { x.fillStyle = col; x.fillRect(Math.floor(i * w), 0, Math.ceil(w) + 1, c.height); }); }
+  else { f.style.background = SCREENS[k]; const c = scCanvas(f), x = c.getContext('2d'); x.fillStyle = SCREENS[k]; x.fillRect(0, 0, c.width, c.height); }
   f.querySelector('.tip').style.color = k === 'white' || k === 'grey' ? 'rgba(0,0,0,.45)' : 'rgba(255,255,255,.5)';
   f.classList.add('on');
 });
