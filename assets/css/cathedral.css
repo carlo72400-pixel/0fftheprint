@@ -469,7 +469,7 @@ html.cath .pk:focus-visible{outline:2px solid var(--pink-glow);outline-offset:4p
 }
 
 /* KIT + PLAY in the phone tab bar (10/15): eight across, so the icons and labels shrink a step */
-@media (max-width:820px){ html.cath .tabbar a img{width:26px;height:26px} html.cath .tabbar a{padding-top:5px;gap:2px} html.cath .tabbar a span{font-size:8.5px;letter-spacing:.02em} }
+@media (max-width:820px){ html.cath .tabbar a img{width:28px;height:28px} html.cath .tabbar a{padding-top:6px;gap:3px} html.cath .tabbar a span{font-size:9px;letter-spacing:.04em} }
 
 /* ---- THE HOUSE STRIP (10/15): what a member sees first, what a stranger sees first ---- */
 html.cath .house{margin:16px 0 18px;}
