@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <title>GET THE SHOT · 0FF THE PRINT</title>
-<meta name="description" content="A framing game from the house. Ten shots, four lives, the roster as your subjects. Thirds, headroom, the moment, focus, the meter. Works offline.">
+<meta name="description" content="A photo game from the house. A cardboard diorama of the booth, the roster as cutouts, a brief per shot. Frame it, shoot it, keep it in the album. Works offline.">
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#0a0a0d">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -17,9 +17,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@700;900&family=Inter:wght@500;700;800&family=JetBrains+Mono:wght@500;700&display=swap" media="print" onload="this.media='all'">
 <style>
-/* GET THE SHOT (10/15). One thumb. Drag to move the camera, the right edge zooms (or pulls focus), the shutter shoots.
-   The house skin: page black, pink glow, square corners. Everything the thumb touches sits at the bottom. */
-:root{--bg:#0a0a0d;--panel:#121218;--panel-2:#1a1921;--line:#26252f;--ink:#f4eef2;--muted:#9a93a3;--dim:#6d6775;--pink:#f7b9dd;--glow:#ff79c6;--ok:#7ee787;--bad:#ff5d7e;--gold:#ffd479;
+/* GET THE SHOT v2 (10/15). A cardboard diorama you photograph. One thumb: drag to truck and crane, the left edge walks,
+   the right edge zooms, tap to focus, the gem shoots. The brief sits up top, the hint folds out on the right. */
+:root{--bg:#0a0a0d;--panel:#121218;--panel-2:#1a1921;--line:#26252f;--ink:#f4eef2;--muted:#9a93a3;--dim:#6d6775;--pink:#f7b9dd;--glow:#ff79c6;--ok:#7ee787;--bad:#ff5d7e;--gold:#ffd479;--paper:#f3ede2;
   --f-display:'Saira Condensed','Arial Narrow',Impact,sans-serif;--f-body:'Inter',system-ui,-apple-system,sans-serif;--f-mono:'JetBrains Mono',ui-monospace,Menlo,monospace;--sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);color-scheme:dark}
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;background:var(--bg);color:var(--ink);font:500 16px/1.45 var(--f-body);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;overscroll-behavior:none;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none}
@@ -28,91 +28,112 @@ button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:tra
 a{color:var(--pink)}
 #stage{position:fixed;inset:0;background:#000}
 #cv{position:absolute;inset:0;width:100%;height:100%;display:block}
+#white{position:fixed;inset:0;z-index:9;background:#fff;opacity:0;pointer-events:none}
 
-/* screens */
-.scr{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;padding:calc(var(--sat) + 18px) 18px calc(var(--sab) + 20px);background:rgba(10,10,13,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
-.scr[hidden]{display:none!important}
+/* door screens sit over the live diorama */
+.scr{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;padding:calc(var(--sat) + 16px) 18px calc(var(--sab) + 18px);background:linear-gradient(180deg,rgba(10,10,13,.55),rgba(10,10,13,.2) 30%,rgba(10,10,13,.2) 55%,rgba(10,10,13,.92) 78%)}
+.scr.solid{background:rgba(10,10,13,.9);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);overflow:auto;touch-action:pan-y}
 .wm{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--ink)}
 .wm img{width:28px;height:28px}
+.wm span{display:flex;flex-direction:column;gap:2px}
 .wm small{font:700 9.5px/1.2 var(--f-mono);letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
-.title{margin:auto 0 0;font:900 italic clamp(58px,19vw,104px)/.84 var(--f-display);text-transform:uppercase;letter-spacing:-.01em;background:linear-gradient(180deg,#fff 8%,var(--pink) 44%,#8f8a97 60%,var(--pink) 96%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 6px 24px rgba(255,121,198,.35))}
-.title b{display:block;color:var(--ink);-webkit-text-fill-color:var(--ink);font-size:.52em;letter-spacing:.02em}
-.tag{margin:10px 0 0;font:700 11px/1.5 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--pink)}
-.lead{margin:12px 0 0;max-width:40ch;color:#ddd5e2;font-size:15px}
-.menu{display:grid;gap:10px;margin-top:18px}
-.btn{min-height:54px;padding:0 16px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:800 15px/1.1 var(--f-body);display:flex;align-items:center;justify-content:space-between;gap:10px;text-decoration:none;text-align:left}
-.btn small{font:600 10.5px/1.3 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.title{margin:auto 0 0;font:900 italic clamp(44px,13vw,80px)/.84 var(--f-display);text-transform:uppercase;letter-spacing:-.01em;background:linear-gradient(180deg,#fff 8%,var(--pink) 44%,#8f8a97 60%,var(--pink) 96%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 6px 24px rgba(255,121,198,.35))}
+.title b{display:block;color:var(--ink);-webkit-text-fill-color:var(--ink);font-size:.5em;letter-spacing:.02em}
+.tag{margin:8px 0 0;font:700 11px/1.5 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--pink)}
+.lead{margin:8px 0 0;max-width:40ch;color:#ddd5e2;font-size:14px}
+.menu{display:grid;gap:8px;margin-top:14px}
+.btn{min-height:52px;padding:0 16px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:800 15px/1.1 var(--f-body);display:flex;align-items:center;justify-content:space-between;gap:10px;text-decoration:none;text-align:left}
+.btn small{font:600 10.5px/1.3 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:right}
 .btn.primary{background:var(--glow);border-color:var(--glow);color:var(--bg)}
 .btn.primary small{color:rgba(10,10,13,.7)}
 .btn:active{transform:translateY(1px)}
-.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:14px}
-.stat{padding:9px 10px;border:1px solid var(--line);background:var(--panel)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
+.stat{padding:8px 10px;border:1px solid var(--line);background:var(--panel)}
 .stat i{display:block;font:700 9px/1.3 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-style:normal}
-.stat b{font:900 italic 24px/1 var(--f-display)}
-.fine{margin:14px 0 0;font:500 10.5px/1.6 var(--f-mono);letter-spacing:.04em;color:var(--dim);text-transform:uppercase}
+.stat b{font:900 italic 22px/1 var(--f-display)}
+.fine{margin:12px 0 0;font:500 10.5px/1.6 var(--f-mono);letter-spacing:.04em;color:var(--dim);text-transform:uppercase}
 .fine a{color:var(--muted)}
 
-/* HUD */
+/* the HUD while shooting */
 #hud{position:fixed;inset:0;z-index:5;pointer-events:none}
-#hud[hidden]{display:none!important}
-.top{position:absolute;left:0;right:0;top:0;padding:calc(var(--sat) + 10px) 14px 0;display:flex;align-items:center;justify-content:space-between;gap:10px}
-.lives{display:flex;gap:4px}
-.lives img{width:26px;height:26px;object-fit:contain;filter:drop-shadow(0 0 6px rgba(255,121,198,.5))}
-.lives img.lost{filter:grayscale(1) brightness(.4)}
-.count{font:700 11px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink);background:rgba(10,10,13,.6);padding:7px 9px}
-.count b{color:var(--glow)}
-.timer{position:absolute;left:14px;right:14px;top:calc(var(--sat) + 48px);height:4px;background:rgba(255,255,255,.14)}
-.timer i{display:block;height:100%;width:100%;background:var(--glow);box-shadow:0 0 10px var(--glow);transform-origin:left;transition:transform .1s linear}
-.timer.hot i{background:var(--bad);box-shadow:0 0 10px var(--bad)}
-.rule{position:absolute;left:14px;right:14px;top:calc(var(--sat) + 62px);display:flex;align-items:baseline;gap:10px;pointer-events:none}
-.rule b{font:900 italic 30px/1 var(--f-display);text-transform:uppercase;color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.8)}
-.rule span{font:700 10.5px/1.3 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--pink);text-shadow:0 1px 4px #000}
-.bottom{position:absolute;left:0;right:0;bottom:0;padding:0 14px calc(var(--sab) + 14px);display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:10px;pointer-events:none}
+.brief{position:absolute;left:12px;right:12px;top:calc(var(--sat) + 8px);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;align-items:start}
+.brief b{font:900 italic 24px/1 var(--f-display);text-transform:uppercase;color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.8)}
+.brief span{grid-column:1/-1;font:600 11.5px/1.3 var(--f-body);color:#ddd5e2;text-shadow:0 1px 4px #000;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.brief em{grid-column:2;grid-row:1;font:700 10px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--pink);font-style:normal;background:rgba(10,10,13,.6);padding:6px 8px}
+#checks{position:absolute;left:12px;right:12px;top:calc(var(--fb,60vh) + 8px);display:grid;gap:4px}
+.ck{display:flex;align-items:center;gap:8px;font:700 10.5px/1 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:rgba(18,18,24,.9);border:1px solid var(--line);padding:6px 9px;transition:color .2s,border-color .2s}
+.ck.ok{border-color:rgba(126,231,135,.45)}
+.ck i{width:8px;height:8px;border-radius:50%;background:#3a3842;transition:background .2s,box-shadow .2s}
+.ck.ok{color:var(--ok)}.ck.ok i{background:var(--ok);box-shadow:0 0 8px var(--ok)}
+.edge{position:absolute;top:calc(var(--ft,120px) + 60px);height:calc(var(--fb,60vh) - var(--ft,120px) - 120px);width:46px;pointer-events:auto}
+.edge::after{content:"";position:absolute;top:0;bottom:0;width:3px;background:rgba(255,255,255,.2)}
+#zoomer{right:0}#zoomer::after{right:8px}
+#walker{left:0}#walker::after{left:8px}
+.edge i{position:absolute;width:16px;height:16px;border-radius:50%;background:var(--glow);box-shadow:0 0 10px var(--glow);transform:translateY(-50%);transition:transform .1s}
+#zoomer i{right:1.5px}#walker i{left:1.5px}
+.edge.live i{transform:translateY(-50%) scale(1.35)}
+.edge small{position:absolute;bottom:-20px;font:700 9px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:#fff;text-shadow:0 1px 3px #000}
+#zoomer small{right:4px}#walker small{left:4px}
+.bottom{position:absolute;left:0;right:0;bottom:0;padding:0 14px calc(var(--sab) + 12px);display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:10px;pointer-events:none}
 .bottom>*{pointer-events:auto}
-#shutter{width:92px;height:92px;border:0;background:url(art/ui/shutter.webp) center/contain no-repeat;filter:drop-shadow(0 6px 18px rgba(255,121,198,.45));transition:transform .08s}
+#shutter{width:88px;height:88px;border:0;background:url(art/ui/shutter.webp) center/contain no-repeat;filter:drop-shadow(0 6px 18px rgba(255,121,198,.45));transition:transform .08s}
 #shutter:active{transform:scale(.9)}
-#flashbtn{justify-self:start;min-height:44px;padding:0 12px;border:1px solid rgba(255,255,255,.3);background:rgba(10,10,13,.6);color:#fff;font:700 11px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase}
-#flashbtn[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:var(--bg)}
-.zoomtag{justify-self:end;font:700 11px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:#fff;background:rgba(10,10,13,.6);padding:8px 9px;text-align:right}
-.zoomtag small{display:block;font-size:9px;color:var(--muted);margin-top:3px}
-#edge{position:absolute;right:0;top:20%;bottom:28%;width:18%;pointer-events:auto}
-#edge::after{content:"";position:absolute;right:6px;top:0;bottom:0;width:3px;background:rgba(255,255,255,.18)}
-#edge i{position:absolute;right:0;width:15px;height:15px;border-radius:50%;background:var(--glow);box-shadow:0 0 10px var(--glow);transform:translateY(-50%)}
-.toast{position:fixed;left:50%;top:38%;z-index:12;transform:translate(-50%,0) scale(.9);opacity:0;pointer-events:none;text-align:center;transition:opacity .2s,transform .2s}
-.toast.on{opacity:1;transform:translate(-50%,0) scale(1)}
-.toast b{display:block;font:900 italic clamp(44px,14vw,80px)/.9 var(--f-display);text-transform:uppercase;color:#fff;text-shadow:0 4px 22px rgba(0,0,0,.9)}
-.toast.good b{color:var(--ok)}.toast.bad b{color:var(--bad)}.toast.gold b{color:var(--gold)}
-.toast span{display:block;margin-top:6px;font:700 12px/1.3 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--pink);text-shadow:0 1px 4px #000}
-#white{position:fixed;inset:0;z-index:9;background:#fff;opacity:0;pointer-events:none;transition:opacity .25s}
-.card{position:fixed;left:14px;right:14px;top:50%;z-index:11;transform:translateY(-50%);padding:18px 16px;border:1px solid rgba(255,121,198,.5);background:rgba(10,10,13,.9);text-align:center;pointer-events:none;transition:opacity .2s;opacity:0}
-.card.on{opacity:1}
-.card b{display:block;font:900 italic 44px/.95 var(--f-display);text-transform:uppercase}
-.card span{display:block;margin-top:6px;font:600 14px/1.4 var(--f-body);color:#ddd5e2}
-.card img{width:64px;height:64px;object-fit:contain;margin-bottom:6px}
+.lefts{justify-self:start;display:grid;gap:6px}
+.rights{justify-self:end;display:grid;gap:6px;justify-items:end}
+.hgts{display:flex;gap:4px}
+.hgt,.ghost{min-height:38px;padding:0 10px;border:1px solid rgba(255,255,255,.25);background:rgba(10,10,13,.65);color:#fff;font:700 10px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase}
+.hgt[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:var(--bg)}
+#hint{position:absolute;right:0;top:calc(var(--ft,120px) + 10px);width:150px;transform:translateX(130px);transition:transform .25s;pointer-events:auto;display:flex;align-items:flex-start}
+#hint.open{transform:none}
+#hint-tab{width:30px;height:64px;border:0;border-right:0;background:var(--gold);color:var(--bg);font:900 10px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;writing-mode:vertical-rl;transform:rotate(180deg);padding:0}
+.hintbox{width:120px;background:var(--panel-2);border:1px solid var(--line);border-right:0;padding:6px}
+.hintbox canvas{display:block;width:106px;height:132px;image-rendering:auto}
+.hintbox p{margin:5px 0 0;font:700 8.5px/1.3 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 
-/* contact sheet */
-.sheet{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin-top:14px}
-.fr{position:relative;aspect-ratio:4/5;background:#000;border:1px solid var(--line);overflow:hidden}
-.fr canvas,.fr img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.fr.keep{border-color:var(--ok);box-shadow:inset 0 0 0 1px var(--ok)}
-.fr.miss{opacity:.6}
-.fr i{position:absolute;left:3px;bottom:3px;font:700 8.5px/1.2 var(--f-mono);letter-spacing:.04em;text-transform:uppercase;color:#fff;background:rgba(10,10,13,.75);padding:2px 4px;font-style:normal;max-width:calc(100% - 6px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.fr.keep i{color:var(--ok)}
-.fr.miss i{color:var(--bad)}
-.fr em{position:absolute;right:3px;top:3px;width:16px;height:16px;border-radius:50%;border:2px solid var(--ok);font-style:normal}
-.grade{display:flex;align-items:baseline;gap:12px;margin-top:auto}
-.grade b{font:900 italic clamp(64px,22vw,110px)/.85 var(--f-display);color:var(--glow)}
-.grade span{font:700 11px/1.5 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
-.grade span b{display:block;font-size:28px;color:var(--ink);line-height:1}
-.burst{position:fixed;left:14px;right:14px;bottom:calc(var(--sab) + 120px);z-index:12;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;pointer-events:auto}
-.burst button{aspect-ratio:4/5;border:2px solid rgba(255,255,255,.4);background:#000;padding:0;overflow:hidden}
-.burst button canvas{width:100%;height:100%;display:block}
-.how{display:grid;gap:8px;margin-top:14px;overflow:auto}
-.how div{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;align-items:start;padding:8px 10px;border:1px solid var(--line);background:var(--panel)}
+/* the developing polaroid */
+#dev{position:fixed;inset:0;z-index:12;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px;background:rgba(10,10,13,.88);opacity:0;transition:opacity .25s}
+#dev.on{opacity:1}
+.pol{background:var(--paper);padding:10px 10px 14px;box-shadow:0 18px 50px rgba(0,0,0,.6);transform:rotate(var(--r,-2deg));width:min(72vw,300px);border:0;color:#1a1921;text-align:left;position:relative}
+.pol img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;background:#111;filter:sepia(.9) contrast(.5) brightness(.45);animation:develop 1.6s .2s cubic-bezier(.3,.7,.2,1) forwards}
+@keyframes develop{to{filter:none}}
+.pol b{display:block;margin-top:8px;font:900 italic 20px/1 var(--f-display);text-transform:uppercase;color:#1a1921}
+.pol span{font:700 13px/1 var(--f-body);color:var(--glow)}
+.pol::before{content:"";position:absolute;left:50%;top:-10px;width:70px;height:22px;transform:translateX(-50%) rotate(-3deg);background:rgba(255,236,170,.55);box-shadow:0 1px 2px rgba(0,0,0,.15)}
+.stars{margin-top:14px;font:700 34px/1 var(--f-body);letter-spacing:.1em;color:#3a3842}
+.stars i{font-style:normal;transition:color .2s,text-shadow .2s;color:#3a3842}
+.stars i.on{color:var(--gold);text-shadow:0 0 14px rgba(255,212,121,.6)}
+.why{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:8px;max-width:340px}
+.why span{font:700 10px/1 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--panel);padding:6px 8px;border:1px solid var(--line)}
+.why span.ok{color:var(--ok);border-color:rgba(126,231,135,.4)}
+.tip{margin:10px 0 0;max-width:36ch;text-align:center;font-size:13px;color:#ddd5e2}
+#dev .menu{width:min(92vw,360px)}
+
+/* the album */
+.album{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 14px;padding:16px 6px 30px}
+.album .pol{width:auto;padding:7px 7px 9px;transform:rotate(var(--r));cursor:pointer}
+.album .pol img{animation:none;filter:none}
+.album .pol b{font-size:15px}.album .pol span{font-size:11px}
+.empty{grid-column:1/-1;color:var(--muted);font-size:14px;text-align:center;padding:40px 10px}
+#view{position:fixed;inset:0;z-index:14;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:18px;background:rgba(10,10,13,.92)}
+#view .pol{width:min(84vw,360px);--r:0deg}
+#view .pol img{animation:none;filter:none}
+#view small{font:700 10px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+#view .row{display:flex;gap:8px;width:min(84vw,360px)}
+#view .row .btn{flex:1;min-height:46px;justify-content:center;text-align:center}
+.how{display:grid;gap:8px;margin-top:14px}
+.how div{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding:8px 10px;border:1px solid var(--line);background:var(--panel)}
 .how b{font:900 italic 18px/1 var(--f-display);text-transform:uppercase;color:var(--glow)}
 .how span{font-size:13px;color:#ddd5e2}
-@media (min-width:700px){.scr{padding-inline:max(18px,calc(50% - 320px))}}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.dgrid{display:grid;gap:6px;margin-top:12px}
+.dgrid div{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border:1px solid var(--line);background:var(--panel)}
+.dgrid b{font:900 italic 16px/1 var(--f-display);text-transform:uppercase}
+.dgrid span{color:var(--gold);letter-spacing:.1em}.dgrid span i{color:#3a3842;font-style:normal}
+.big{display:flex;align-items:baseline;gap:10px;margin-top:auto}
+.big b{font:900 italic clamp(64px,22vw,110px)/.85 var(--f-display);color:var(--gold)}
+.big span{font:700 11px/1.5 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+@media (min-width:700px){.scr{padding-inline:max(18px,calc(50% - 320px))}.album{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
@@ -120,46 +141,65 @@ a{color:var(--pink)}
 <div id="white"></div>
 
 <div id="hud" hidden>
-  <div class="top"><div class="lives" id="lives"></div><div class="count">Shot <b id="shotn">1</b>/10 · <span id="score">0</span></div></div>
-  <div class="timer" id="timer"><i></i></div>
-  <div class="rule"><b id="rule-b"></b><span id="rule-s"></span></div>
-  <div id="edge"><i></i></div>
+  <div class="brief"><b id="b-t"></b><em id="b-n"></em><span id="b-l"></span></div>
+  <div id="checks"></div>
+  <div id="hint"><button type="button" id="hint-tab">Hint</button><div class="hintbox"><canvas width="120" height="150"></canvas><p>How to frame it</p></div></div>
+  <div class="edge" id="walker"><i></i><small id="walkt">walk</small></div>
+  <div class="edge" id="zoomer"><i></i><small id="zoomt">24mm</small></div>
   <div class="bottom">
-    <button type="button" id="flashbtn" aria-pressed="false" hidden>⚡ Flash on</button>
+    <div class="lefts"><div class="hgts"><button type="button" class="hgt" data-y="0.55">Low</button><button type="button" class="hgt" data-y="1.45" aria-pressed="true">Eye</button><button type="button" class="hgt" data-y="2.5">High</button></div><button type="button" class="ghost" id="quit">Door</button></div>
     <button type="button" id="shutter" aria-label="Shoot"></button>
-    <div class="zoomtag"><span id="zoomt">24mm</span><small id="zoomh">drag the edge to zoom</small></div>
+    <div class="rights"><button type="button" class="ghost" data-album>Album</button><button type="button" class="ghost" id="skip">Next shot</button></div>
   </div>
 </div>
-<div class="card" id="card"></div>
-<div class="toast" id="toast"><b></b><span></span></div>
+
+<div id="dev" hidden>
+  <div class="pol"><img alt=""><b></b></div>
+  <div class="stars"></div>
+  <div class="why"></div>
+  <p class="tip"></p>
+  <div class="menu two"><button type="button" class="btn" id="dev-again"><span>Shoot it again</span></button><button type="button" class="btn primary" id="dev-next"><span>Next shot</span></button></div>
+</div>
 
 <section class="scr" id="s-title">
   <a class="wm" href="../"><img src="../assets/cathedral/mark.webp" alt=""><span><b style="font:900 italic 18px/1 var(--f-display)">0FF THE PRINT</b><small>a game from the house</small></span></a>
-  <h1 class="title">Get<br>the<br>shot<b>ten frames · four lives · one thumb</b></h1>
-  <p class="tag" id="daily-tag">Daily room</p>
-  <p class="lead">You're the house photographer. The roster is in the room. Drag to move the camera, the right edge zooms, the gem shoots. Every shot has one rule. Make it or lose a life.</p>
+  <h1 class="title">Get the shot<b>a cardboard booth · a brief per shot · your album</b></h1>
+  <p class="tag" id="daily-tag">The booth</p>
+  <p class="lead">You're the house photographer. The booth is a toy theater and Mars is in it. Drag to move, the edges walk and zoom, tap to focus, the gem shoots. Three checks a shot, every photo in your album.</p>
   <div class="menu">
-    <button type="button" class="btn primary" data-mode="daily"><span>Play today's room</span><small id="daily-best">same room for everyone today</small></button>
-    <button type="button" class="btn" data-mode="free"><span>Free play</span><small>random rooms, speeds up</small></button>
-    <button type="button" class="btn" id="howbtn"><span>How to shoot</span><small>the ten rules</small></button>
+    <button type="button" class="btn primary" data-mode="daily"><span>Today's six</span><small id="daily-sub">the same six for everyone today</small></button>
+    <div class="two"><button type="button" class="btn" data-mode="free"><span>Free shoot</span><small>any brief, forever</small></button><button type="button" class="btn" data-album><span>Album</span><small id="album-n">your photos</small></button></div>
+    <button type="button" class="btn" id="howbtn"><span>The briefs</span><small>what each shot wants</small></button>
   </div>
-  <div class="stats"><div class="stat"><i>Best</i><b id="best">0</b></div><div class="stat"><i>Pulls earned</i><b id="pulls">0</b></div><div class="stat"><i>Rolls shot</i><b id="rolls">0</b></div></div>
-  <p class="fine">1,000 points = one pull on a sealed night in <a href="../wall/">the Crypt</a> · add to your home screen and it plays with no signal · <a href="../kit/">the Kit</a></p>
+  <div class="stats"><div class="stat"><i>Photos</i><b id="t-shots">0</b></div><div class="stat"><i>Stars</i><b id="t-stars">0</b></div><div class="stat"><i>Pulls earned</i><b id="t-pulls">0</b></div></div>
+  <p class="fine">Ten stars = one pull on a sealed night in <a href="../wall/">the Crypt</a> · add to your home screen and it plays with no signal · <a href="../kit/">the Kit</a></p>
 </section>
 
-<section class="scr" id="s-how" hidden>
-  <a class="wm" href="#" data-back><img src="../assets/cathedral/mark.webp" alt=""><span><b style="font:900 italic 18px/1 var(--f-display)">How to shoot</b><small>the ten rules</small></span></a>
+<section class="scr solid" id="s-how" hidden>
+  <a class="wm" href="#" data-back><img src="../assets/cathedral/mark.webp" alt=""><span><b style="font:900 italic 18px/1 var(--f-display)">The briefs</b><small>what each shot wants</small></span></a>
   <div class="how" id="how"></div>
   <div class="menu"><button type="button" class="btn primary" data-back><span>Got it</span></button></div>
 </section>
 
-<section class="scr" id="s-sheet" hidden>
-  <a class="wm" href="#" data-back><img src="../assets/cathedral/mark.webp" alt=""><span><b style="font:900 italic 18px/1 var(--f-display)">Contact sheet</b><small id="sheet-sub">your roll</small></span></a>
-  <div class="sheet" id="sheet"></div>
-  <div class="grade"><b id="g-score">0</b><span><b id="g-grade">C</b><span id="g-line">keepers 0 of 10</span></span></div>
-  <div class="menu"><button type="button" class="btn primary" id="again"><span>Shoot another roll</span><small id="again-sub"></small></button><button type="button" class="btn" id="share"><span>Share the sheet</span><small>a picture of your roll</small></button><button type="button" class="btn" data-back><span>Back to the door</span></button></div>
+<section class="scr solid" id="s-album" hidden>
+  <a class="wm" href="#" data-back><img src="../assets/cathedral/mark.webp" alt=""><span><b style="font:900 italic 18px/1 var(--f-display)">Album</b><small id="album-sub">your photos</small></span></a>
+  <div class="album" id="album"></div>
+  <div class="menu"><button type="button" class="btn primary" data-mode="free"><span>Shoot more</span></button><button type="button" class="btn" data-back><span>Back to the door</span></button></div>
 </section>
 
-<script src="game.js?v=20261015b"></script>
+<section class="scr" id="s-done" hidden>
+  <a class="wm" href="#" data-back><img src="../assets/cathedral/mark.webp" alt=""><span><b style="font:900 italic 18px/1 var(--f-display)">Today's six</b><small>done</small></span></a>
+  <div class="big"><b id="d-stars">0</b><span id="d-line">of 18 stars today</span></div>
+  <div class="dgrid" id="d-grid"></div>
+  <div class="menu"><button type="button" class="btn primary" data-album><span>Open the album</span></button><button type="button" class="btn" data-mode="free"><span>Keep shooting</span><small>free shoot</small></button><button type="button" class="btn" data-back><span>Back to the door</span></button></div>
+</section>
+
+<div id="view" hidden>
+  <div class="pol"><img alt=""><b></b><span class="stars"></span></div>
+  <small></small>
+  <div class="row"><button type="button" class="btn primary" id="v-share"><span>Share</span></button><button type="button" class="btn" id="v-del"><span>Delete</span></button><button type="button" class="btn" id="v-close"><span>Close</span></button></div>
+</div>
+
+<script src="game.js?v=20261015d"></script>
 </body>
 </html>

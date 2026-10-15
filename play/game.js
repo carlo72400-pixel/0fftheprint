@@ -1,320 +1,415 @@
-/* GET THE SHOT (10/15). The engine.
-   A room (a wide illustration) and a subject (a roster sprite) sit in world space. The camera has a pan and a zoom; the
-   delivery frame is a fixed 4:5 window in the middle of the screen. Each shot is a micro-game with one rule; the rule
-   grades the frame at the moment the shutter fires. Ten shots a roll, four lives, the contact sheet at the end.
-   Everything here is plain canvas and pointer events, so it runs offline from the home screen. */
+/* GET THE SHOT v2 (10/15). A cardboard diorama you photograph.
+   The room is a toy theater: a painted backdrop, hand-painted cardboard flats standing at different depths on a stage
+   floor, and the roster as cutouts glued to board. The camera sits in that space with a real perspective projection,
+   so trucking sideways slides the layers past each other, walking in grows the near flats faster than the far ones,
+   and focus is a distance (tap a thing to focus on it, everything at another depth goes soft).
+   Each brief is a shot to make. The side hint sketches it and the three checks light up live as you frame. The shutter
+   grades 1 to 3 stars, the photo develops and goes in the album. No timer, no lives, no fail: every shot is a photo.
+   Plain canvas + pointer events, offline from the home screen. */
 (function () {
 'use strict';
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
-const cv = $('#cv'), cx = cv.getContext('2d');
-const load = (k, d) => { try { const v = localStorage.getItem('gts-' + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } };
-const save = (k, v) => { try { localStorage.setItem('gts-' + k, JSON.stringify(v)); } catch (e) {} };
+const cv = $('#cv'), cx = cv.getContext('2d', {alpha: false});
+const load = (k, d) => { try { const v = localStorage.getItem('gts2-' + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } };
+const save = (k, v) => { try { localStorage.setItem('gts2-' + k, JSON.stringify(v)); return true; } catch (e) { return false; } };
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const lerp = (a, b, t) => a + (b - a) * t;
 const buzz = ms => { try { navigator.vibrate && navigator.vibrate(ms || 10); } catch (e) {} };
+const HAS_FILTER = (() => { try { const c = document.createElement('canvas').getContext('2d'); return 'filter' in c; } catch (e) { return false; } })();
 
-/* ---------- the deck: who, where, which rule ---------- */
-const OCS = ['rin', 'lena', 'nyx', 'kuro', 'mars', 'cinder', 'bala', 'putty'];
-const NAMES = {rin: 'Rin', lena: 'Lena', nyx: 'Nyx', kuro: 'Kuro', mars: 'Mars', cinder: 'Cinder', bala: 'Bala', putty: 'Putty'};
-const ROOMS = ['pit', 'booth', 'lot', 'dark', 'roof'];
-const ROOMN = {pit: 'the co-op', booth: 'the booth', lot: 'the lot', dark: 'the studio', roof: 'the roof', lounge: 'the lounge'};
-const RULES = {
-  thirds:   {b: 'Thirds',    s: 'put their eyes on a cross',          how: 'Eyes on one of the four crossings of the thirds grid. The grid shows for a beat after you shoot.'},
-  headroom: {b: 'Headroom',  s: 'a little air above the head',        how: 'Keep the head in the frame with a little air above it. Cut the head or leave a mile of ceiling and it is a miss.'},
-  lead:     {b: 'Lead room', s: 'space where they are looking',       how: 'They are looking one way. Give them room on that side. Cramming them against the edge they face is a miss.'},
-  moment:   {b: 'The moment',s: 'shoot at the top of the jump',       how: 'They jump. Shoot at the very top. Early is a miss, late is a miss.'},
-  focus:    {b: 'Focus',     s: 'drag the edge until it snaps sharp', how: 'The frame is soft. The right edge pulls focus. Shoot when it snaps.'},
-  meter:    {b: 'Meter',     s: 'shoot when the needle hits zero',    how: 'The needle swings. Shoot at zero. Too far left is dark, too far right is blown out.'},
-  level:    {b: 'Level',     s: 'drag sideways until the room sits flat', how: 'The room is crooked. Drag sideways (or tilt the phone) until the horizon is flat, then shoot.'},
-  find:     {b: 'Find them', s: 'zoom in on the one in color',        how: 'The pit is packed. One person is in color. Zoom in until they fill the frame and shoot.'},
-  noflash:  {b: 'No flash',  s: 'kill the flash first, then frame',   how: 'This room says no flash. The flash button is on. Turn it off before you shoot, then frame them on a third.'},
-  burst:    {b: 'Burst',     s: 'hold the gem, then pick the sharp one', how: 'Hold the shutter for a burst of three while they move. Then pick the sharp frame off the strip.'},
-};
-const ORDER = ['thirds', 'headroom', 'moment', 'lead', 'meter', 'focus', 'find', 'level', 'noflash', 'burst'];
-
-/* ---------- a seeded random so the daily room is the same for everyone ---------- */
+/* ---------- seeded random so the daily set is the same for everyone ---------- */
 function rng(seed) { let s = seed >>> 0 || 1; return () => { s ^= s << 13; s >>>= 0; s ^= s >>> 17; s ^= s << 5; s >>>= 0; return s / 4294967296; }; }
 const dayKey = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
 const hash = s => { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; };
 
+/* ---------- the roster ---------- */
+const NAMES = {rin: 'Rin', lena: 'Lena', nyx: 'Nyx', kuro: 'Kuro', mars: 'Mars', cinder: 'Cinder', bala: 'Bala', putty: 'Putty'};
+const CAST = ['mars']; // cutouts that exist in v2 so far; the rest of the roster joins as they get cut
+const HEADX = {mars_idle: .40, mars_peak: .66}; // where the head sits across the cutout, 0..1 from the left (facing right)
+
+/* ---------- the rooms: flats at depths. x sideways, z away from the door, y up; the floor is y = 0 ---------- */
+const ROOMS = {
+  booth: {
+    name: 'the booth', backdrop: 'backdrop_booth', bz: 9.2, bh: 6.2,
+    flats: [
+      {k: 'f_ball',    x: .35,  z: 6.6, h: 1.35, top: 4.1, hang: true},
+      {k: 'f_lights',  x: -3.1, z: 5.6, h: 2.7},
+      {k: 'f_speaker', x: 2.9,  z: 5.3, h: 2.25},
+      {k: 'f_booth',   x: 0,    z: 4.9, h: 1.08},
+      {k: 'f_bar',     x: 3.5,  z: 4.2, h: 2.05},
+      {k: 'f_wedge',   x: -1.1, z: 3.7, h: .62},
+      {k: 'f_table',   x: 1.9,  z: 3.1, h: 1.12},
+      {k: 'f_arch',    x: -1.7, z: 2.2, h: 2.9, opening: [.2, .08, .8, .9]},
+    ],
+    spots: {decks: {x: .25, z: 5.35}, floor: {x: .7, z: 3.6}, bar: {x: 2.5, z: 3.9}, arch: {x: -1.5, z: 3.4}, left: {x: -2.0, z: 4.3}},
+    lights: [{x: -3.0, y: 2.55, z: 5.55, col: '255,121,198', to: {x: -.6, z: 4.6}}, {x: -2.75, y: 2.55, z: 5.55, col: '255,190,90', to: {x: 1.2, z: 4.4}}],
+    cam: {x: 0, y: 1.45, z: 0, zoom: 1},
+  },
+};
+
+/* ---------- the briefs: what to shoot, the hint, the three checks ---------- */
+// hint: sil = how big the person is in the sketch (wide / mid / tight), pos = left / center / right, props = little labels
+const BRIEFS = {
+  decks: {t: 'On the decks', l: 'Mars behind the booth, eyes on a third, the decks in the shot.', spot: 'decks', face: 1,
+    hint: {sil: 'mid', pos: 'r', grid: 1, props: ['decks']},
+    checks: [['third', 'eyes on a third', m => m.inFrame && m.thirds < .16], ['decks', 'the decks in frame', m => m.vis.f_booth > .5], ['sharp', 'sharp on Mars', m => m.inFrame && m.sharp]]},
+  wide: {t: 'The whole room', l: 'Pull back. Small in the frame, the room around them.', spot: 'decks', face: -1,
+    hint: {sil: 'wide', pos: 'c', grid: 0, props: ['ball', 'speaker', 'lights']},
+    checks: [['small', 'Mars small, under 40%', m => m.inFrame && m.fill < .4], ['room', 'two of ball, speaker, lights', m => [m.vis.f_ball > .5, m.vis.f_speaker > .5, m.vis.f_lights > .5].filter(Boolean).length >= 2], ['sharp', 'sharp on Mars', m => m.inFrame && m.sharp]]},
+  tight: {t: 'Tight portrait', l: 'Walk in or zoom. Fill the frame with them, a little air above the head.', spot: 'floor', face: 1,
+    hint: {sil: 'tight', pos: 'c', grid: 1, props: []},
+    checks: [['fill', 'fills the frame, over 70%', m => m.inFrame && m.fill > .7], ['air', 'a little headroom', m => m.inFrame && m.air > .01 && m.air < .2], ['sharp', 'sharp on Mars', m => m.inFrame && m.sharp]]},
+  arch: {t: 'Through the doorway', l: 'Stand back by the door. Frame them inside the arch, focus past it.', spot: 'arch', face: 1,
+    hint: {sil: 'mid', pos: 'c', grid: 0, props: ['arch']},
+    checks: [['inside', 'eyes inside the arch', m => m.inFrame && m.inArch], ['arch', 'the arch fills half the frame', m => m.vis.f_arch > .45], ['focus', 'sharp on Mars, arch soft', m => m.inFrame && m.sharp && m.blur.f_arch > 1.8]]},
+  lead: {t: 'Lead room', l: 'They look one way. Give them space on that side.', spot: 'floor', face: 0,
+    hint: {sil: 'mid', pos: 'l', grid: 1, props: []},
+    checks: [['front', 'space where they look', m => m.inFrame && m.front > .5], ['size', 'a third to two thirds tall', m => m.inFrame && m.fill > .33 && m.fill < .8], ['sharp', 'sharp on Mars', m => m.inFrame && m.sharp]]},
+  low: {t: 'Low angle', l: 'Crane down. Shoot up at them with the lights in the shot.', spot: 'left', face: 1,
+    hint: {sil: 'mid', pos: 'r', grid: 1, props: ['lights'], low: 1},
+    checks: [['low', 'camera low, under knee height', m => m.cam.y < .85], ['lights', 'the lights in frame', m => m.vis.f_lights > .4], ['third', 'eyes on a third', m => m.inFrame && m.thirds < .18]]},
+  ball: {t: 'Under the ball', l: 'The mirror ball up top, Mars below it.', spot: 'floor', face: -1,
+    hint: {sil: 'mid', pos: 'c', grid: 1, props: ['ball'], ballTop: 1},
+    checks: [['ball', 'the ball in the top third', m => m.vis.f_ball > .6 && m.rect.f_ball && m.rect.f_ball.cy < m.f.y + m.f.h * .36], ['under', 'Mars under it', m => m.inFrame && m.rect.f_ball && Math.abs(m.eye.x - m.rect.f_ball.cx) < m.f.w * .3], ['sharp', 'sharp on Mars', m => m.inFrame && m.sharp]]},
+  bar: {t: 'At the bar', l: 'Mars by the bottles. Both in the shot, eyes on a third.', spot: 'bar', face: -1,
+    hint: {sil: 'mid', pos: 'l', grid: 1, props: ['bar']},
+    checks: [['bar', 'the bar in frame', m => m.vis.f_bar > .35], ['third', 'eyes on a third', m => m.inFrame && m.thirds < .16], ['sharp', 'sharp on Mars', m => m.inFrame && m.sharp]]},
+  moment: {t: 'The jump', l: 'They jump every few seconds. Shoot at the very top.', spot: 'floor', face: 1, jump: 1,
+    hint: {sil: 'mid', pos: 'c', grid: 0, props: [], jump: 1},
+    checks: [['top', 'at the top of the jump', m => m.jumpT > .36 && m.jumpT < .64], ['in', 'all of them in frame', m => m.inFrame && m.whole], ['sharp', 'sharp on Mars', m => m.inFrame && m.sharp]]},
+  long: {t: 'Long lens', l: 'Zoom past 50mm. Mars sharp, the booth behind gone soft.', spot: 'floor', face: -1,
+    hint: {sil: 'mid', pos: 'r', grid: 1, props: ['decks'], long: 1},
+    checks: [['lens', 'over 50mm', m => m.cam.zoom >= 2.05], ['sharp', 'sharp on Mars', m => m.inFrame && m.sharp], ['soft', 'the decks gone soft', m => m.blur.f_booth > 1.8 && m.vis.f_booth > .15]]},
+};
+const BRIEF_ORDER = ['decks', 'wide', 'tight', 'arch', 'lead', 'low', 'ball', 'bar', 'moment', 'long'];
+
 /* ---------- art ---------- */
-const ART = {oc: {}, room: {}, ui: {}, meta: null};
+const ART = {}; let ARTREADY = false;
 const img = src => new Promise(ok => { const i = new Image(); i.onload = () => ok(i); i.onerror = () => ok(null); i.src = src; });
 async function loadArt() {
-  try { ART.meta = await (await fetch('art/meta.json', {cache: 'no-cache'})).json(); } catch (e) { ART.meta = {}; }
   const jobs = [];
-  OCS.forEach(k => ['idle', 'peak'].forEach(p => jobs.push(img(`art/oc/${k}_${p}.webp`).then(i => { ART.oc[k + '_' + p] = i; }))));
-  ROOMS.concat(['lounge']).forEach(k => jobs.push(img(`art/room/${k}.webp`).then(i => { ART.room[k] = i; })));
-  ['shutter', 'life', 'frame'].forEach(k => jobs.push(img(`art/ui/${k}.webp`).then(i => { ART.ui[k] = i; })));
-  await Promise.all(jobs);
+  const flats = new Set(['proscenium']); Object.values(ROOMS).forEach(r => { flats.add(r.backdrop); r.flats.forEach(f => flats.add(f.k)); });
+  flats.forEach(k => jobs.push(img(`art/v2/flat/${k}.webp`).then(i => { ART[k] = i; })));
+  CAST.forEach(k => ['idle', 'peak'].forEach(p => jobs.push(img(`art/v2/oc/${k}_${p}.webp`).then(i => { ART[k + '_' + p] = i; }))));
+  await Promise.all(jobs); ARTREADY = true;
 }
 
-/* ---------- audio: the shutter, the chime, the buzz ---------- */
+/* ---------- audio ---------- */
 let AC = null; const ac = () => { if (!AC) { try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {} } if (AC && AC.state === 'suspended') AC.resume(); return AC; };
-function click() { const c = ac(); if (!c) return; const n = c.createBufferSource(), b = c.createBuffer(1, c.sampleRate * .06, c.sampleRate), d = b.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 3); n.buffer = b; const g = c.createGain(); g.gain.value = .5; n.connect(g); g.connect(c.destination); n.start(); }
-function tone(f, ms, type) { const c = ac(); if (!c) return; const o = c.createOscillator(), g = c.createGain(); o.type = type || 'sine'; o.frequency.value = f; g.gain.value = .18; o.connect(g); g.connect(c.destination); const t = c.currentTime; o.start(t); g.gain.linearRampToValueAtTime(0, t + ms / 1000); o.stop(t + ms / 1000 + .02); }
-const sfxGood = () => { tone(880, 120); setTimeout(() => tone(1320, 160), 90); };
-const sfxGold = () => { tone(880, 100); setTimeout(() => tone(1320, 100), 80); setTimeout(() => tone(1760, 220), 160); };
-const sfxBad = () => tone(160, 260, 'square');
+function click() { const c = ac(); if (!c) return; const n = c.createBufferSource(), b = c.createBuffer(1, c.sampleRate * .07, c.sampleRate), d = b.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 3) * (i < 300 ? 1 : .5); n.buffer = b; const g = c.createGain(); g.gain.value = .5; n.connect(g); g.connect(c.destination); n.start(); }
+function tone(f, ms, type, vol) { const c = ac(); if (!c) return; const o = c.createOscillator(), g = c.createGain(); o.type = type || 'sine'; o.frequency.value = f; g.gain.value = vol || .14; o.connect(g); g.connect(c.destination); const t = c.currentTime; o.start(t); g.gain.linearRampToValueAtTime(0, t + ms / 1000); o.stop(t + ms / 1000 + .02); }
+const sfxStar = n => { tone(660, 90); if (n > 1) setTimeout(() => tone(880, 90), 110); if (n > 2) setTimeout(() => tone(1320, 220), 220); };
+const sfxTick = () => tone(1760, 40, 'sine', .06);
 
 /* ---------- state ---------- */
 const G = {
-  mode: 'daily', seed: 0, rnd: Math.random, shot: 0, lives: 4, score: 0, roll: [], state: 'title',
-  room: 'pit', oc: 'rin', rule: 'thirds', t0: 0, limit: 7, timer: null, raf: 0,
-  cam: {x: 0, y: 0, z: 1, rot: 0}, world: {w: 1600, h: 900}, frame: {x: 0, y: 0, w: 0, h: 0},
-  subj: {x: 0, y: 0, s: 1, face: 1, pose: 'idle', jumpT: 0, jumping: false, vx: 0}, extras: [],
-  focus: 0, focusT: 0, meter: 0, flash: false, burstFrames: [], holding: false, holdT: 0, tutorial: load('tut', {}), tilt: null,
+  state: 'load', mode: 'daily', seed: 0, rnd: Math.random, room: 'booth', brief: 'decks', set: [], idx: 0, day: dayKey(),
+  cam: {x: 0, y: 1.45, z: 0, zoom: 1}, want: {x: 0, y: 1.45, z: 0, zoom: 1}, par: {x: 0, y: 0}, parWant: {x: 0, y: 0},
+  focusD: 4.5, focusWant: 4.5, focusFlash: 0, focusPt: null,
+  subj: {oc: 'mars', x: 0, z: 5, face: 1, pose: 'idle', t: 0, jump: 0, jumpT: -1, bob: 0},
+  frame: {x: 0, y: 0, w: 0, h: 0}, checks: [false, false, false], lastM: null, tut: load('tut', {}), quality: 2, fps: 60, frames: 0, lastQ: 0,
 };
 let W = 0, H = 0, DPR = 1;
 function resize() {
-  DPR = Math.min(2, devicePixelRatio || 1); W = innerWidth; H = innerHeight; cv.width = W * DPR; cv.height = H * DPR; cx.setTransform(DPR, 0, 0, DPR, 0, 0);
-  // the delivery frame: 4:5, nearly full width, sitting a little above center so the thumb has room below
-  const top = (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sat')) || 0) + 96;
-  const bottom = 150; let fw = W - 28, fh = fw * 1.25; const maxH = H - top - bottom; if (fh > maxH) { fh = maxH; fw = fh / 1.25; }
-  G.frame = {x: (W - fw) / 2, y: top + (maxH - fh) / 2, w: fw, h: fh};
+  DPR = Math.min(2, devicePixelRatio || 1); W = innerWidth; H = innerHeight; cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR); cx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  const sat = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sat')) || 0;
+  const inShot = G.state === 'shoot' || G.state === 'grade';
+  const top = sat + (inShot ? 72 : 24), bottom = inShot ? 236 : 24;
+  let fw = W - 24, fh = fw * 1.25; const maxH = H - top - bottom; if (fh > maxH) { fh = maxH; fw = fh / 1.25; }
+  G.frame = {x: (W - fw) / 2, y: inShot ? top : top + (maxH - fh) / 2, w: fw, h: fh};
+  document.documentElement.style.setProperty('--fb', (G.frame.y + G.frame.h) + 'px'); document.documentElement.style.setProperty('--ft', G.frame.y + 'px');
 }
 addEventListener('resize', resize); resize();
 
-/* ---------- world <-> screen ---------- */
-// the room is drawn so its height covers the frame height times a base scale; zoom multiplies; pan moves the camera center
-function viewScale() { const base = G.frame.h / G.world.h * 1.35; return base * G.cam.z; }
-function toScreen(wx, wy) { const s = viewScale(); const cxp = G.frame.x + G.frame.w / 2, cyp = G.frame.y + G.frame.h / 2; let dx = (wx - G.cam.x) * s, dy = (wy - G.cam.y) * s; const r = G.cam.rot; if (r) { const c = Math.cos(r), sn = Math.sin(r); const nx = dx * c - dy * sn, ny = dx * sn + dy * c; dx = nx; dy = ny; } return {x: cxp + dx, y: cyp + dy}; }
-function subjectBox() { // the subject's rectangle on screen, plus the eye point
-  const sp = ART.oc[G.oc + '_' + G.subj.pose]; if (!sp) return null;
-  const s = viewScale() * G.subj.s; const w = sp.width * s, h = sp.height * s; const p = toScreen(G.subj.x, G.subj.y);
-  const m = (ART.meta || {})[G.oc + '_' + G.subj.pose] || {headx: .5}; const hx = G.subj.face < 0 ? 1 - m.headx : m.headx;
-  return {x: p.x - w / 2, y: p.y - h, w, h, eye: {x: p.x - w / 2 + w * hx, y: p.y - h + h * .11}, feet: p};
+/* ---------- projection ---------- */
+// focal length in px: at zoom 1 a thing 1 unit tall, 1 unit away, covers 1.1 frame heights (so a person 4 units away is half the frame)
+const focal = () => G.frame.h * 1.1 * G.cam.zoom;
+const camX = () => G.cam.x + G.par.x, camY = () => G.cam.y + G.par.y;
+function proj(x, y, z) { const d = z - G.cam.z; if (d < .15) return null; const F = focal(), f = G.frame; return {x: f.x + f.w / 2 + (x - camX()) * F / d, y: f.y + f.h / 2 - (y - camY()) * F / d, s: F / d, d}; }
+// a flat's rectangle on screen (bottom-center anchored on the floor, or top-anchored when it hangs)
+function flatRect(fl) {
+  const im = ART[fl.k]; if (!im) return null;
+  const w = fl.h * im.width / im.height; const yb = fl.hang ? fl.top - fl.h : 0;
+  const p = proj(fl.x, yb, fl.z); if (!p) return null;
+  const hpx = fl.h * p.s, wpx = w * p.s; return {x: p.x - wpx / 2, y: p.y - hpx, w: wpx, h: hpx, cx: p.x, cy: p.y - hpx / 2, d: p.d, im};
 }
+function subjRect() {
+  const S = G.subj, im = ART[S.oc + '_' + S.pose]; if (!im) return null;
+  const h = 1.84, w = h * im.width / im.height; const lift = S.jump > 0 ? Math.sin(S.jump * Math.PI) * .75 : 0;
+  const p = proj(S.x, lift + S.bob, S.z); if (!p) return null;
+  const hpx = h * p.s, wpx = w * p.s; const hx = HEADX[S.oc + '_' + S.pose] || .5; const ex = S.face > 0 ? hx : 1 - hx;
+  return {x: p.x - wpx / 2, y: p.y - hpx, w: wpx, h: hpx, cx: p.x, cy: p.y - hpx / 2, d: p.d, im, eye: {x: p.x - wpx / 2 + wpx * ex, y: p.y - hpx + hpx * .1}, feet: {x: p.x, y: p.y}};
+}
+// how much of a rect sits inside the frame, 0..1 of the rect's own area
+function cover(r) { const f = G.frame; if (!r) return 0; const ix = Math.max(0, Math.min(r.x + r.w, f.x + f.w) - Math.max(r.x, f.x)), iy = Math.max(0, Math.min(r.y + r.h, f.y + f.h) - Math.max(r.y, f.y)); return r.w * r.h ? ix * iy / (r.w * r.h) : 0; }
+// blur radius for a thing at distance d, from the focus distance: longer lens and closer focus = thinner slice
+function blurFor(d) { const fd = G.focusD; const coc = Math.abs(1 / fd - 1 / d) * 7.5 * G.cam.zoom * G.cam.zoom; return clamp(coc * 6 - .6, 0, 12); }
 
-/* ---------- a shot: set the stage ---------- */
-function setupShot() {
-  const r = G.rnd;
-  G.rule = G.mode === 'daily' ? ORDER[G.shot] : ORDER[Math.floor(r() * ORDER.length)];
-  G.room = G.rule === 'find' ? 'pit' : ROOMS[Math.floor(r() * ROOMS.length)];
-  G.oc = OCS[Math.floor(r() * OCS.length)];
-  const rm = ART.room[G.room]; G.world = rm ? {w: rm.width, h: rm.height} : {w: 1600, h: 900};
-  const speed = G.mode === 'free' ? Math.max(.55, 1 - G.shot * .05) : Math.max(.7, 1 - G.shot * .03);
-  G.limit = Math.round({thirds: 7, headroom: 6, lead: 6, moment: 8, focus: 6, meter: 7, level: 6, find: 9, noflash: 7, burst: 8}[G.rule] * speed * 10) / 10;
-  Object.assign(G.subj, {x: G.world.w * (.3 + r() * .4), y: G.world.h * (.86 + r() * .1), s: .6, face: r() < .5 ? 1 : -1, pose: 'idle', jumpT: 0, jumping: false, vx: 0});
-  // the camera opens near them but off: the first drag is a framing choice, not a search
-  G.cam = {x: clamp(G.subj.x + (r() < .5 ? -1 : 1) * G.world.w * (.1 + r() * .1), 0, G.world.w), y: G.subj.y - G.world.h * .3, z: 1, rot: 0};
-  G.extras = []; G.focus = 0; G.meter = 0; G.flash = false; G.burstFrames = []; G.holding = false; G.tilt = null;
-  $('#flashbtn').hidden = true; $('#zoomh').textContent = 'drag the edge to zoom';
-  if (G.rule === 'find') {
-    G.cam.z = 1; G.subj.s = .5;
-    for (let i = 0; i < 26; i++) G.extras.push({oc: OCS[Math.floor(r() * OCS.length)], x: G.world.w * (.08 + r() * .84), y: G.world.h * (.8 + r() * .18), s: .42 + r() * .16, face: r() < .5 ? 1 : -1, dim: true});
-    G.extras.sort((a, b) => a.y - b.y);
-    G.subj.x = G.world.w * (.12 + r() * .76); G.subj.y = G.world.h * (.84 + r() * .12); G.cam = {x: G.world.w / 2, y: G.world.h * .62, z: 1, rot: 0};
+/* ---------- measure the frame (for the live checks and the grade) ---------- */
+function measure() {
+  const f = G.frame, room = ROOMS[G.room], sr = subjRect(); const m = {f, cam: G.cam, vis: {}, rect: {}, blur: {}, inFrame: false, fill: 0, thirds: 9, air: 0, front: 0, sharp: false, whole: false, inArch: false, jumpT: G.subj.jump, eye: null};
+  room.flats.forEach(fl => { const r = flatRect(fl); m.rect[fl.k] = r; m.vis[fl.k] = cover(r); m.blur[fl.k] = r ? blurFor(r.d) : 99; });
+  if (sr) {
+    m.eye = sr.eye; m.inFrame = sr.eye.x > f.x && sr.eye.x < f.x + f.w && sr.eye.y > f.y && sr.eye.y < f.y + f.h;
+    m.fill = sr.h / f.h; m.whole = sr.y >= f.y - 2 && sr.y + sr.h <= f.y + f.h + 2 && sr.x >= f.x - 2 && sr.x + sr.w <= f.x + f.w + 2;
+    let best = 9; for (let i = 1; i < 3; i++) for (let j = 1; j < 3; j++) best = Math.min(best, Math.hypot(sr.eye.x - (f.x + f.w * i / 3), sr.eye.y - (f.y + f.h * j / 3)) / f.w); m.thirds = best;
+    m.air = (sr.y - f.y) / f.h; m.front = G.subj.face > 0 ? (f.x + f.w - sr.eye.x) / f.w : (sr.eye.x - f.x) / f.w;
+    m.sharp = blurFor(sr.d) < 1.2;
+    const a = m.rect.f_arch, fl = room.flats.find(x => x.k === 'f_arch'); if (a && fl && fl.opening) { const o = fl.opening; m.inArch = sr.eye.x > a.x + a.w * o[0] && sr.eye.x < a.x + a.w * o[2] && sr.eye.y > a.y + a.h * o[1] && sr.eye.y < a.y + a.h * o[3] && sr.d > a.d; }
   }
-  if (G.rule === 'focus') { G.focus = (r() < .5 ? -1 : 1) * (.45 + r() * .4); G.focusT = 0; $('#zoomh').textContent = 'drag the edge to pull focus'; }
-  if (G.rule === 'level') { G.cam.rot = (r() < .5 ? -1 : 1) * (.18 + r() * .22); $('#zoomh').textContent = 'drag sideways to level'; }
-  if (G.rule === 'noflash') { G.flash = true; $('#flashbtn').hidden = false; $('#flashbtn').setAttribute('aria-pressed', 'true'); $('#flashbtn').textContent = '⚡ Flash on'; }
-  if (G.rule === 'moment') { G.subj.jumpT = -1.2 - r() * 1.2; G.subj.jumping = true; }
-  if (G.rule === 'burst') { G.subj.vx = (r() < .5 ? -1 : 1) * 90; G.subj.face = G.subj.vx > 0 ? 1 : -1; $('#zoomh').textContent = 'hold the gem'; }
-  $('#rule-b').textContent = RULES[G.rule].b; $('#rule-s').textContent = RULES[G.rule].s;
-  $('#shotn').textContent = G.shot + 1; $('#score').textContent = G.score; paintLives(); paintZoom();
+  return m;
 }
-function paintLives() { $('#lives').innerHTML = [0, 1, 2, 3].map(i => `<img src="art/ui/life.webp" alt="" class="${i < G.lives ? '' : 'lost'}">`).join(''); }
-function paintZoom() { $('#zoomt').textContent = Math.round(24 * G.cam.z) + 'mm'; const e = $('#edge i'); if (e) e.style.top = (100 - (G.rule === 'focus' ? (G.focusT + 1) / 2 : (G.cam.z - 1) / 2.2) * 100) + '%'; }
-
-/* ---------- the timer ---------- */
-function startTimer() { G.t0 = performance.now(); $('#timer').classList.remove('hot'); }
-function timeLeft() { return Math.max(0, G.limit - (performance.now() - G.t0) / 1000); }
 
 /* ---------- draw ---------- */
-let lastT = 0;
+let lastT = 0, SPARK = [];
 function draw(now) {
-  G.raf = requestAnimationFrame(draw);
-  const dt = Math.min(.05, (now - lastT) / 1000 || 0); lastT = now;
-  if (G.state === 'shoot') tick(dt);
-  cx.save(); cx.fillStyle = '#000'; cx.fillRect(0, 0, W, H);
-  // the room, panned and zoomed around the frame center, blurred when the focus is off
-  const s = viewScale(), f = G.frame, c = {x: f.x + f.w / 2, y: f.y + f.h / 2};
-  cx.save(); cx.translate(c.x, c.y); if (G.cam.rot) cx.rotate(G.cam.rot); cx.scale(s, s); cx.translate(-G.cam.x, -G.cam.y);
-  const blurPx = G.rule === 'focus' ? Math.abs(G.focus - G.focusT) * 14 : 0;
-  if (blurPx > .3 && 'filter' in cx) cx.filter = `blur(${blurPx}px)`;
-  const rm = ART.room[G.room] || ART.room.lounge; if (rm) cx.drawImage(rm, 0, 0, G.world.w, G.world.h); else { cx.fillStyle = '#1a1021'; cx.fillRect(0, 0, G.world.w, G.world.h); }
-  // extras (the crowd on Find them)
-  G.extras.forEach(e => { const sp = ART.oc[e.oc + '_idle']; if (!sp) return; cx.save(); cx.translate(e.x, e.y); cx.scale(e.face * e.s, e.s); if (e.dim) cx.filter = (blurPx > .3 ? `blur(${blurPx}px) ` : '') + 'brightness(.22) saturate(0)'; cx.drawImage(sp, -sp.width / 2, -sp.height); cx.restore(); });
-  // the subject
-  const sp = ART.oc[G.oc + '_' + G.subj.pose];
-  if (sp) { let lift = 0; if (G.subj.jumping && G.subj.jumpT > 0 && G.subj.jumpT < 1) lift = Math.sin(G.subj.jumpT * Math.PI) * sp.height * .42; cx.save(); cx.translate(G.subj.x, G.subj.y - lift); cx.scale(G.subj.face * G.subj.s, G.subj.s); if (G.rule === 'burst' && Math.abs(G.subj.vx) > 10) cx.filter = (blurPx > .3 ? `blur(${blurPx}px) ` : '') + `blur(${G.holding ? 0 : 2}px)`; cx.drawImage(sp, -sp.width / 2, -sp.height); cx.restore(); }
-  cx.restore();
-  // the mask outside the frame
-  cx.fillStyle = 'rgba(0,0,0,.78)'; cx.fillRect(0, 0, W, f.y); cx.fillRect(0, f.y + f.h, W, H - f.y - f.h); cx.fillRect(0, f.y, f.x, f.h); cx.fillRect(f.x + f.w, f.y, W - f.x - f.w, f.h);
-  // the frame line and corners
-  cx.strokeStyle = 'rgba(255,255,255,.75)'; cx.lineWidth = 1; cx.strokeRect(f.x + .5, f.y + .5, f.w - 1, f.h - 1);
-  cx.strokeStyle = '#ff79c6'; cx.lineWidth = 3; const L = 22; [[f.x, f.y, 1, 1], [f.x + f.w, f.y, -1, 1], [f.x, f.y + f.h, 1, -1], [f.x + f.w, f.y + f.h, -1, -1]].forEach(([x, y, dx, dy]) => { cx.beginPath(); cx.moveTo(x, y + dy * L); cx.lineTo(x, y); cx.lineTo(x + dx * L, y); cx.stroke(); });
-  // helpers per rule
-  if (G.state === 'shoot' || G.state === 'flashgrid') {
-    if (G.rule === 'thirds' || G.rule === 'noflash' || G.state === 'flashgrid') { cx.strokeStyle = 'rgba(255,255,255,.28)'; cx.lineWidth = 1; for (let i = 1; i < 3; i++) { cx.beginPath(); cx.moveTo(f.x + f.w * i / 3, f.y); cx.lineTo(f.x + f.w * i / 3, f.y + f.h); cx.stroke(); cx.beginPath(); cx.moveTo(f.x, f.y + f.h * i / 3); cx.lineTo(f.x + f.w, f.y + f.h * i / 3); cx.stroke(); } for (let i = 1; i < 3; i++) for (let j = 1; j < 3; j++) { cx.fillStyle = '#ff79c6'; cx.beginPath(); cx.arc(f.x + f.w * i / 3, f.y + f.h * j / 3, 4, 0, 7); cx.fill(); } }
-    if (G.rule === 'meter') { const mx = f.x + f.w / 2, my = f.y + f.h - 26, mw = f.w * .7; cx.fillStyle = 'rgba(10,10,13,.7)'; cx.fillRect(mx - mw / 2 - 10, my - 18, mw + 20, 36); cx.strokeStyle = 'rgba(255,255,255,.5)'; cx.beginPath(); cx.moveTo(mx - mw / 2, my); cx.lineTo(mx + mw / 2, my); cx.stroke(); for (let i = -3; i <= 3; i++) { cx.beginPath(); cx.moveTo(mx + i * mw / 6, my - (i ? 5 : 10)); cx.lineTo(mx + i * mw / 6, my + (i ? 5 : 10)); cx.stroke(); } cx.fillStyle = '#ffd479'; cx.beginPath(); cx.moveTo(mx + G.meter * mw / 2, my - 14); cx.lineTo(mx + G.meter * mw / 2 - 6, my + 10); cx.lineTo(mx + G.meter * mw / 2 + 6, my + 10); cx.fill(); cx.fillStyle = '#fff'; cx.font = '700 10px JetBrains Mono, monospace'; cx.textAlign = 'center'; cx.fillText('-3', mx - mw / 2, my + 24); cx.fillText('0', mx, my + 24); cx.fillText('+3', mx + mw / 2, my + 24); }
-    if (G.rule === 'level') { cx.strokeStyle = 'rgba(255,255,255,.35)'; cx.setLineDash([6, 6]); cx.beginPath(); cx.moveTo(f.x, f.y + f.h / 2); cx.lineTo(f.x + f.w, f.y + f.h / 2); cx.stroke(); cx.setLineDash([]); }
-    if (G.rule === 'noflash') { cx.fillStyle = 'rgba(255,212,121,.95)'; cx.font = '900 italic 20px Saira Condensed, Impact, sans-serif'; cx.textAlign = 'center'; cx.fillText('NO FLASH', f.x + f.w / 2, f.y + 30); }
-    if (G.rule === 'find') { const sb = subjectBox(); if (sb && G.cam.z < 1.3) { cx.strokeStyle = 'rgba(255,121,198,.9)'; cx.lineWidth = 2; cx.setLineDash([4, 4]); cx.strokeRect(sb.x - 6, sb.y - 6, sb.w + 12, sb.h + 12); cx.setLineDash([]); } }
+  requestAnimationFrame(draw);
+  const dt = Math.min(.05, (now - lastT) / 1000 || 0); lastT = now; G.frames++;
+  if (now - G.lastQ > 1000) { G.fps = G.frames; G.frames = 0; G.lastQ = now; if (G.fps < 24 && G.quality > 0) G.quality--; }
+  if (!ARTREADY) return;
+  tick(dt);
+  const f = G.frame, room = ROOMS[G.room];
+  cx.save(); cx.fillStyle = '#07060a'; cx.fillRect(0, 0, W, H);
+  cx.beginPath(); cx.rect(f.x, f.y, f.w, f.h); cx.clip();
+  // the backdrop: a painted wall far back, mirrored copies either side so a truck never shows the edge
+  const bd = ART[room.backdrop]; const bp = proj(0, 0, room.bz);
+  if (bd && bp) {
+    const bh = room.bh * bp.s, bw = bh * bd.width / bd.height, bx = bp.x - bw / 2, by = bp.y - bh;
+    cx.drawImage(bd, bx, by, bw, bh);
+    cx.save(); cx.translate(bx, 0); cx.scale(-1, 1); cx.drawImage(bd, 0, by, bw, bh); cx.restore();
+    cx.save(); cx.translate(bx + 2 * bw, 0); cx.scale(-1, 1); cx.drawImage(bd, 0, by, bw, bh); cx.restore();
+    // the mirror ball's dots drift over the back wall
+    cx.save(); cx.globalCompositeOperation = 'screen'; const t = now / 1000;
+    for (let i = 0; i < 30; i++) { const a = i * 2.399 + t * .22; const x = bp.x + Math.cos(a) * bw * .42 * (.3 + (i % 5) / 5), y = by + bh * (.2 + .45 * (.5 + .5 * Math.sin(a * 1.31 + i))); const k = Math.max(2, bp.s * .05); cx.fillStyle = `rgba(255,170,215,${.22 + .2 * Math.sin(t * 3 + i)})`; cx.fillRect(x, y, k, k); }
+    cx.restore();
   }
-  // the timer bar
-  if (G.state === 'shoot') { const tl = timeLeft() / G.limit; const bar = $('#timer i'); if (bar) bar.style.transform = `scaleX(${tl})`; $('#timer').classList.toggle('hot', tl < .3); if (tl <= 0) shoot(true); }
+  drawFloor(room);
+  // haze between the wall and the room
+  cx.fillStyle = `rgba(255,150,190,${.10 + .04 * Math.sin(now / 1700)})`; cx.fillRect(f.x, f.y, f.w, f.h);
+  // everything standing in the room, far to near, with the subject slotted in by depth
+  const sr = subjRect(); const items = room.flats.map(fl => ({fl, r: flatRect(fl)})).filter(i => i.r);
+  if (sr) items.push({subj: true, r: sr}); items.sort((a, b) => b.r.d - a.r.d);
+  let hazeDone = false;
+  items.forEach(it => {
+    const r = it.r; if (r.x > f.x + f.w + 40 || r.x + r.w < f.x - 40 || r.y > f.y + f.h + 40) return;
+    if (!hazeDone && r.d < 4.6) { hazeDone = true; cx.fillStyle = 'rgba(255,160,200,.045)'; cx.fillRect(f.x, f.y, f.w, f.h); }
+    const b = blurFor(r.d), blurOn = HAS_FILTER && G.quality > 0 && b > .4;
+    // the floor shadow at the foot
+    if (!(it.fl && it.fl.hang)) { const fy = r.y + r.h - 1; cx.save(); cx.translate(r.cx, fy); cx.scale(1, .22); const g = cx.createRadialGradient(0, 0, 0, 0, 0, r.w * .62); g.addColorStop(0, 'rgba(0,0,0,.4)'); g.addColorStop(1, 'rgba(0,0,0,0)'); cx.fillStyle = g; cx.beginPath(); cx.arc(0, 0, r.w * .62, 0, 7); cx.fill(); cx.restore(); }
+    cx.save();
+    if (blurOn) cx.filter = `blur(${b.toFixed(1)}px)`;
+    // the cut edge throws a soft shadow on whatever stands behind it
+    if (G.quality > 1) { cx.shadowColor = 'rgba(0,0,0,.55)'; cx.shadowBlur = 10 + 8 / Math.max(.5, r.d / 3); cx.shadowOffsetX = 5; cx.shadowOffsetY = 7; }
+    if (it.subj) { cx.translate(r.cx, r.y); cx.scale(G.subj.face, 1); cx.drawImage(r.im, -r.w / 2, 0, r.w, r.h); }
+    else cx.drawImage(r.im, r.x, r.y, r.w, r.h);
+    cx.restore();
+  });
+  // the gels: two cones of colored light from the light tree, screened over everything
+  room.lights.forEach(L => { const a = proj(L.x, L.y, L.z), b = proj(L.to.x, 0, L.to.z); if (!a || !b) return; cx.save(); cx.globalCompositeOperation = 'screen'; const g = cx.createLinearGradient(a.x, a.y, b.x, b.y); g.addColorStop(0, `rgba(${L.col},.30)`); g.addColorStop(1, `rgba(${L.col},0)`); cx.fillStyle = g; const spread = 1.1 * b.s; cx.beginPath(); cx.moveTo(a.x, a.y); cx.lineTo(b.x - spread, b.y + 6); cx.lineTo(b.x + spread, b.y + 6); cx.closePath(); cx.fill(); cx.restore(); });
+  // the vignette
+  const vg = cx.createRadialGradient(f.x + f.w / 2, f.y + f.h / 2, f.h * .35, f.x + f.w / 2, f.y + f.h / 2, f.h * .9); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.42)'); cx.fillStyle = vg; cx.fillRect(f.x, f.y, f.w, f.h);
+  // the flash sparkle when the shutter went
+  SPARK = SPARK.filter(s => (s.t += dt) < s.life); SPARK.forEach(s => { cx.fillStyle = `rgba(255,255,255,${1 - s.t / s.life})`; const k = 2 + 6 * s.t / s.life; cx.fillRect(s.x - k / 2, s.y - k / 2, k, k); });
   cx.restore();
+  // outside the frame: the proscenium on the door screens, the frame line, the overlays
+  if (G.state === 'title' || G.state === 'album' || G.state === 'how' || G.state === 'done') { const pr = ART.proscenium; if (pr) cx.drawImage(pr, f.x - f.w * .1, f.y - f.h * .06, f.w * 1.2, f.h * 1.12); }
+  cx.strokeStyle = 'rgba(255,255,255,.55)'; cx.lineWidth = 1; cx.strokeRect(f.x + .5, f.y + .5, f.w - 1, f.h - 1);
+  if (G.state === 'shoot') {
+    const br = BRIEFS[G.brief];
+    if (br.hint.grid) { cx.strokeStyle = 'rgba(255,255,255,.22)'; for (let i = 1; i < 3; i++) { cx.beginPath(); cx.moveTo(f.x + f.w * i / 3, f.y); cx.lineTo(f.x + f.w * i / 3, f.y + f.h); cx.stroke(); cx.beginPath(); cx.moveTo(f.x, f.y + f.h * i / 3); cx.lineTo(f.x + f.w, f.y + f.h * i / 3); cx.stroke(); } }
+    if (G.focusFlash > 0) { G.focusFlash -= dt; const p = G.focusPt; if (p) { const a = clamp(G.focusFlash * 2, 0, 1); cx.strokeStyle = `rgba(255,212,121,${a})`; cx.lineWidth = 2; const k = 26 + (1 - a) * 10; cx.strokeRect(p.x - k, p.y - k, k * 2, k * 2); } }
+    cx.strokeStyle = '#ff79c6'; cx.lineWidth = 3; const L = 20; [[f.x, f.y, 1, 1], [f.x + f.w, f.y, -1, 1], [f.x, f.y + f.h, 1, -1], [f.x + f.w, f.y + f.h, -1, -1]].forEach(([x, y, dx, dy]) => { cx.beginPath(); cx.moveTo(x, y + dy * L); cx.lineTo(x, y); cx.lineTo(x + dx * L, y); cx.stroke(); });
+    liveChecks();
+  }
+}
+function drawFloor(room) {
+  const f = G.frame, F = focal(), cy = camY();
+  // the floor meets the far wall at the wall's foot; it runs forward to just in front of the camera
+  const yAt = d => f.y + f.h / 2 + cy * F / d; const far = yAt(room.bz - G.cam.z), near = f.y + f.h;
+  if (far < near) {
+    const g = cx.createLinearGradient(0, far, 0, near); g.addColorStop(0, '#5a4330'); g.addColorStop(.5, '#7b5b3d'); g.addColorStop(1, '#3a2a1e');
+    cx.fillStyle = g; cx.fillRect(f.x, far, f.w, near - far);
+    // planks: seams across at whole depths, converging seams along z
+    cx.strokeStyle = 'rgba(0,0,0,.16)'; cx.lineWidth = 1;
+    for (let z = Math.ceil(G.cam.z + .3); z <= room.bz; z += 1) { const y = yAt(z - G.cam.z); if (y < far) continue; cx.beginPath(); cx.moveTo(f.x, y); cx.lineTo(f.x + f.w, y); cx.stroke(); }
+    for (let x = -8; x <= 8; x += 1) { const a = proj(x, 0, room.bz), b = proj(x, 0, G.cam.z + .3); if (!a || !b) continue; cx.beginPath(); cx.moveTo(a.x, a.y); cx.lineTo(b.x, b.y); cx.stroke(); }
+    // the warm pool under the booth and the two gel pools
+    const pools = [{x: 0, z: 4.9, col: '255,200,140', r: 2.6}].concat(room.lights.map(L => ({x: L.to.x, z: L.to.z, col: L.col, r: 1.4})));
+    cx.save(); cx.globalCompositeOperation = 'screen';
+    pools.forEach(p => { const c = proj(p.x, 0, p.z); if (!c) return; const rx = p.r * c.s; cx.save(); cx.translate(c.x, c.y); cx.scale(1, .28); const gr = cx.createRadialGradient(0, 0, 0, 0, 0, rx); gr.addColorStop(0, `rgba(${p.col},.26)`); gr.addColorStop(1, `rgba(${p.col},0)`); cx.fillStyle = gr; cx.beginPath(); cx.arc(0, 0, rx, 0, 7); cx.fill(); cx.restore(); });
+    cx.restore();
+    cx.fillStyle = 'rgba(0,0,0,.35)'; cx.fillRect(f.x, far - 1, f.w, 2);
+  }
 }
 function tick(dt) {
-  if (G.subj.jumping) { G.subj.jumpT += dt / 1.1; if (G.subj.jumpT > 1.6) G.subj.jumpT = -0.8; G.subj.pose = (G.subj.jumpT > .22 && G.subj.jumpT < .82) ? 'peak' : 'idle'; }
-  if (G.rule === 'meter') G.meter = Math.sin(performance.now() / (520 - Math.min(G.shot, 9) * 25)) * .98;
-  if (G.rule === 'burst') { G.subj.x += G.subj.vx * dt; if (G.subj.x < G.world.w * .15 || G.subj.x > G.world.w * .85) { G.subj.vx *= -1; G.subj.face = G.subj.vx > 0 ? 1 : -1; } }
-  if (G.rule === 'level' && G.tilt != null) G.cam.rot = lerp(G.cam.rot, G.tilt, .2);
+  const k = 1 - Math.pow(.001, dt);
+  G.cam.x = lerp(G.cam.x, G.want.x, k); G.cam.y = lerp(G.cam.y, G.want.y, k); G.cam.z = lerp(G.cam.z, G.want.z, k); G.cam.zoom = lerp(G.cam.zoom, G.want.zoom, k);
+  G.par.x = lerp(G.par.x, G.parWant.x, k * .6); G.par.y = lerp(G.par.y, G.parWant.y, k * .6);
+  G.focusD = lerp(G.focusD, G.focusWant, k);
+  const S = G.subj; S.t += dt; S.bob = Math.sin(S.t * 1.7) * .012;
+  if (BRIEFS[G.brief] && BRIEFS[G.brief].jump && G.state === 'shoot') { S.jumpT += dt / 1.0; if (S.jumpT > 1.9) S.jumpT = -1.3; S.jump = S.jumpT > 0 && S.jumpT < 1 ? S.jumpT : 0; S.pose = S.jumpT > .2 && S.jumpT < .8 ? 'peak' : 'idle'; }
+  else { S.jump = 0; S.jumpT = 0; S.pose = (S.t % 7) > 5.8 ? 'peak' : 'idle'; }
+  if (G.state === 'title' || G.state === 'how' || G.state === 'done') { const t = S.t; G.want.x = Math.sin(t * .17) * .9; G.want.y = 1.4 + Math.sin(t * .11) * .25; G.want.z = -.4 + Math.sin(t * .07) * .5; G.want.zoom = 1.05; }
+}
+function liveChecks() {
+  const m = measure(); G.lastM = m; const br = BRIEFS[G.brief];
+  br.checks.forEach((c, i) => { let ok = false; try { ok = !!c[2](m); } catch (e) {} if (ok !== G.checks[i]) { G.checks[i] = ok; const el = $$('#checks .ck')[i]; if (el) { el.classList.toggle('ok', ok); if (ok) sfxTick(); } } });
 }
 
-/* ---------- input: drag pans, the right edge zooms or focuses, sideways levels ---------- */
-let ptr = null;
-cv.addEventListener('pointerdown', e => { if (G.state !== 'shoot') return; ptr = {x: e.clientX, y: e.clientY, cx: G.cam.x, cy: G.cam.y, rot: G.cam.rot, id: e.pointerId}; cv.setPointerCapture(e.pointerId); });
+/* ---------- input: drag trucks and cranes, the edges walk and zoom, a tap pulls focus, the phone tilts the diorama ---------- */
+let ptr = null, moved = false;
+cv.addEventListener('pointerdown', e => { if (G.state !== 'shoot') return; ptr = {x: e.clientX, y: e.clientY, cx: G.want.x, cy: G.want.y, id: e.pointerId}; moved = false; cv.setPointerCapture(e.pointerId); });
 cv.addEventListener('pointermove', e => {
-  if (!ptr || G.state !== 'shoot') return; const dx = e.clientX - ptr.x, dy = e.clientY - ptr.y; const s = viewScale();
-  if (G.rule === 'level') { G.tilt = null; G.cam.rot = clamp(ptr.rot - dx / 260, -.6, .6); return; }
-  G.cam.x = clamp(ptr.cx - dx / s, 0, G.world.w); G.cam.y = clamp(ptr.cy - dy / s, 0, G.world.h);
+  if (!ptr || G.state !== 'shoot') return; const dx = e.clientX - ptr.x, dy = e.clientY - ptr.y; if (Math.hypot(dx, dy) > 6) moved = true;
+  const F = focal(); const d = Math.max(1.2, G.subj.z - G.cam.z); // a drag moves the world under the thumb at the subject's depth
+  G.want.x = clamp(ptr.cx - dx * d / F, -2.6, 2.6); G.want.y = clamp(ptr.cy + dy * d / F, .3, 3.0);
 });
-const ptrEnd = () => { ptr = null; }; cv.addEventListener('pointerup', ptrEnd); cv.addEventListener('pointercancel', ptrEnd);
-let edge = null; const edgeEl = $('#edge');
-edgeEl.addEventListener('pointerdown', e => { if (G.state !== 'shoot') return; edge = {y: e.clientY, z: G.cam.z, f: G.focusT}; edgeEl.setPointerCapture(e.pointerId); });
-edgeEl.addEventListener('pointermove', e => { if (!edge) return; const dy = (edge.y - e.clientY) / (H * .55); if (G.rule === 'focus') G.focusT = clamp(edge.f + dy * 2, -1, 1); else G.cam.z = clamp(edge.z + dy * 2.2, 1, 3.2); paintZoom(); });
-const edgeEnd = () => { edge = null; }; edgeEl.addEventListener('pointerup', edgeEnd); edgeEl.addEventListener('pointercancel', edgeEnd);
-addEventListener('deviceorientation', e => { if (G.state === 'shoot' && G.rule === 'level' && e.gamma != null && !ptr) G.tilt = clamp(-e.gamma / 180 * Math.PI * 1.4 + (G.levelBias || 0), -.6, .6); });
-$('#flashbtn').addEventListener('click', () => { G.flash = !G.flash; $('#flashbtn').setAttribute('aria-pressed', String(G.flash)); $('#flashbtn').textContent = G.flash ? '⚡ Flash on' : 'Flash off'; buzz(); });
+const ptrEnd = e => { if (ptr && !moved && G.state === 'shoot') focusAt(e.clientX, e.clientY); ptr = null; }; cv.addEventListener('pointerup', ptrEnd); cv.addEventListener('pointercancel', () => { ptr = null; });
+function focusAt(x, y) {
+  const f = G.frame; if (x < f.x || x > f.x + f.w || y < f.y || y > f.y + f.h) return;
+  const room = ROOMS[G.room]; let hit = null;
+  const sr = subjRect(); if (sr && x > sr.x && x < sr.x + sr.w && y > sr.y && y < sr.y + sr.h) hit = sr;
+  room.flats.forEach(fl => { const r = flatRect(fl); if (r && x > r.x && x < r.x + r.w && y > r.y && y < r.y + r.h && (!hit || r.d < hit.d)) hit = r; });
+  G.focusWant = hit ? hit.d : (G.subj.z - G.cam.z); G.focusPt = {x, y}; G.focusFlash = .5; buzz(8);
+}
+function slider(el, get, set) {
+  let st = null;
+  el.addEventListener('pointerdown', e => { if (G.state !== 'shoot') return; st = {y: e.clientY, v: get()}; el.setPointerCapture(e.pointerId); el.classList.add('live'); });
+  el.addEventListener('pointermove', e => { if (!st) return; set((st.y - e.clientY) / (H * .5), st.v); paintDials(); });
+  const end = () => { st = null; el.classList.remove('live'); }; el.addEventListener('pointerup', end); el.addEventListener('pointercancel', end);
+}
+slider($('#zoomer'), () => G.want.zoom, (dy, v) => { G.want.zoom = clamp(v + dy * 2.4, 1, 2.6); });
+slider($('#walker'), () => G.want.z, (dy, v) => { G.want.z = clamp(v + dy * 4, -1.6, 2.4); });
+function paintDials() { $('#zoomt').textContent = Math.round(24 * G.want.zoom) + 'mm'; $('#zoomer i').style.top = (100 - (G.want.zoom - 1) / 1.6 * 100) + '%'; $('#walker i').style.top = (100 - (G.want.z + 1.6) / 4 * 100) + '%'; $('#walkt').textContent = G.want.z > 1.2 ? 'close' : G.want.z < -.8 ? 'back' : 'walk'; }
+addEventListener('deviceorientation', e => { if (e.gamma == null) return; const g = clamp(e.gamma, -30, 30) / 30, b = clamp((e.beta || 45) - 45, -30, 30) / 30; G.parWant.x = g * .22; G.parWant.y = -b * .12; });
+addEventListener('mousemove', e => { if (ptr || 'ontouchstart' in window) return; G.parWant.x = (e.clientX / W - .5) * .3; G.parWant.y = -(e.clientY / H - .5) * .16; });
+$$('.hgt').forEach(b => b.addEventListener('click', () => { G.want.y = +b.dataset.y; $$('.hgt').forEach(x => x.setAttribute('aria-pressed', String(x === b))); buzz(8); }));
 
-/* ---------- the shutter ---------- */
-const sh = $('#shutter');
-sh.addEventListener('pointerdown', e => { if (G.state !== 'shoot') return; e.preventDefault(); if (G.rule === 'burst') { G.holding = true; G.holdT = performance.now(); burstRun(); } });
-sh.addEventListener('pointerup', e => { if (G.state !== 'shoot') return; e.preventDefault(); if (G.rule === 'burst') { G.holding = false; return; } shoot(false); });
-function snapshot(wp) { // the frame as a small picture for the sheet
-  const o = document.createElement('canvas'); o.width = 180; o.height = 225; const oc = o.getContext('2d'); const f = G.frame;
-  oc.drawImage(cv, f.x * DPR, f.y * DPR, f.w * DPR, f.h * DPR, 0, 0, 180, 225);
-  return o;
+/* ---------- the shot ---------- */
+$('#shutter').addEventListener('click', () => { if (G.state === 'shoot') shoot(); });
+function snapshot(w, h) { const o = document.createElement('canvas'); o.width = w; o.height = h; const oc = o.getContext('2d'); const f = G.frame; oc.drawImage(cv, f.x * DPR, f.y * DPR, f.w * DPR, f.h * DPR, 0, 0, w, h); return o; }
+function shoot() {
+  const m = G.lastM || measure(); const br = BRIEFS[G.brief]; const passed = br.checks.map(c => { try { return !!c[2](m); } catch (e) { return false; } }); const n = passed.filter(Boolean).length; const stars = n >= 3 ? 3 : n === 2 ? 2 : 1;
+  const pic = snapshot(540, 675); const data = pic.toDataURL('image/jpeg', .8);
+  G.state = 'grade'; click(); buzz(14);
+  const w = $('#white'); w.style.transition = 'none'; w.style.opacity = .85; requestAnimationFrame(() => { w.style.transition = 'opacity .35s'; w.style.opacity = 0; });
+  const f = G.frame; for (let i = 0; i < 14; i++) SPARK.push({x: f.x + Math.random() * f.w, y: f.y + Math.random() * f.h, t: 0, life: .3 + Math.random() * .4});
+  const shot = {d: data, t: br.t, s: stars, when: Date.now(), room: G.room, oc: G.subj.oc, day: G.day, mode: G.mode, ok: passed};
+  const album = load('album', []); album.push(shot); while (album.length > 60) { const i = album.findIndex(x => x.s < 3); album.splice(i < 0 ? 0 : i, 1); } if (!save('album', album)) { album.splice(0, 10); save('album', album); }
+  // the books: stars bank toward pulls in the Crypt (ten stars = a pull)
+  const bank = load('bank', 0) + stars; save('bank', bank % 10); if (Math.floor(bank / 10)) { save('pulls', load('pulls', 0) + 1); try { localStorage.setItem('otp-play-pulls', JSON.stringify((JSON.parse(localStorage.getItem('otp-play-pulls') || '0') | 0) + 1)); } catch (e) {} }
+  save('shots', load('shots', 0) + 1); save('stars', load('stars', 0) + stars);
+  if (G.mode === 'daily') { const dd = load('daily', {}); const rec = dd[G.day] || {}; rec[G.brief] = Math.max(rec[G.brief] || 0, stars); dd[G.day] = rec; save('daily', dd); }
+  setTimeout(() => develop(shot, passed), 380);
 }
-function burstRun() {
-  const frames = [];
-  const take = i => { if (!G.holding && i > 0) { finishBurst(frames); return; } const blurred = !(i === G.burstSharp); click(); flashWhite(.35);
-    const o = snapshot(); if (blurred) { const o2 = document.createElement('canvas'); o2.width = 180; o2.height = 225; const c2 = o2.getContext('2d'); c2.filter = 'blur(3px)'; c2.drawImage(o, 0, 0); frames.push({c: o2, sharp: false}); } else frames.push({c: o, sharp: true});
-    if (i < 2) setTimeout(() => take(i + 1), 380); else finishBurst(frames); };
-  G.burstSharp = Math.floor(G.rnd() * 3); take(0);
-}
-function finishBurst(frames) {
-  if (G.state !== 'shoot') return; G.state = 'pick'; G.holding = false;
-  const b = document.createElement('div'); b.className = 'burst'; b.id = 'burstpick';
-  frames.forEach((fr, i) => { const btn = document.createElement('button'); btn.type = 'button'; btn.appendChild(fr.c); btn.addEventListener('click', () => { b.remove(); grade(fr.sharp ? 100 : 25, fr.sharp ? 'sharp' : 'soft one', fr.c); }); b.appendChild(btn); });
-  document.body.appendChild(b); $('#rule-s').textContent = 'tap the sharp one';
-}
-function flashWhite(a) { const w = $('#white'); w.style.transition = 'none'; w.style.opacity = a; requestAnimationFrame(() => { w.style.transition = 'opacity .3s'; w.style.opacity = 0; }); }
-function shoot(timeout) {
-  if (G.state !== 'shoot') return;
-  click(); flashWhite(G.flash ? .9 : .5); buzz(14);
-  const pic = snapshot();
-  if (timeout) { grade(0, 'too slow', pic); return; }
-  const f = G.frame, sb = subjectBox(); let sc = 0, why = '';
-  const inFrame = sb && sb.eye.x > f.x && sb.eye.x < f.x + f.w && sb.eye.y > f.y && sb.eye.y < f.y + f.h;
-  switch (G.rule) {
-    case 'thirds': case 'noflash': {
-      if (G.rule === 'noflash' && G.flash) { sc = 0; why = 'flash'; break; }
-      if (!sb || !inFrame) { sc = 0; why = 'lost them'; break; }
-      let best = 1e9; for (let i = 1; i < 3; i++) for (let j = 1; j < 3; j++) best = Math.min(best, Math.hypot(sb.eye.x - (f.x + f.w * i / 3), sb.eye.y - (f.y + f.h * j / 3)));
-      const tol = f.w * .16; sc = clamp(100 - best / tol * 100, 0, 100); why = sc < 40 ? 'off the cross' : ''; break; }
-    case 'headroom': {
-      if (!sb || sb.eye.x < f.x || sb.eye.x > f.x + f.w) { sc = 0; why = 'lost them'; break; }
-      const headTop = sb.y; const air = (headTop - f.y) / f.h;
-      if (air < 0) { sc = 0; why = 'cut the head'; } else if (air > .3) { sc = clamp(100 - (air - .3) * 300, 0, 60); why = 'too much ceiling'; } else { const ideal = .09; sc = clamp(100 - Math.abs(air - ideal) / .12 * 100, 0, 100); if (sc < 40) why = air > ideal ? 'too much ceiling' : 'tight on top'; }
-      if (sb.feet.y < f.y + f.h * .4) { sc = Math.min(sc, 30); why = 'they are tiny'; } break; }
-    case 'lead': {
-      if (!sb || !inFrame) { sc = 0; why = 'lost them'; break; }
-      const front = G.subj.face > 0 ? (f.x + f.w - sb.eye.x) / f.w : (sb.eye.x - f.x) / f.w;
-      sc = clamp((front - .35) / .3 * 100, 0, 100); if (front < .5) why = 'wrong side'; if (front > .9) { sc = 55; why = 'too far back'; } break; }
-    case 'moment': {
-      const t = G.subj.jumpT; if (!sb || !inFrame) { sc = 0; why = 'lost them'; break; }
-      if (t < 0 || t > 1) { sc = 0; why = t < 0 ? 'early' : 'late'; break; }
-      sc = clamp(100 - Math.abs(t - .5) / .22 * 100, 0, 100); why = sc < 40 ? (t < .5 ? 'early' : 'late') : ''; break; }
-    case 'focus': { const d = Math.abs(G.focus - G.focusT); sc = clamp(100 - d / .22 * 100, 0, 100); why = sc < 40 ? 'soft' : ''; if (!sb || !inFrame) { sc = Math.min(sc, 50); why = why || 'lost them'; } break; }
-    case 'meter': { const m = Math.abs(G.meter); sc = clamp(100 - m / .3 * 100, 0, 100); why = sc < 40 ? (G.meter < 0 ? 'too dark' : 'blown out') : ''; break; }
-    case 'level': { const a = Math.abs(G.cam.rot); sc = clamp(100 - a / .14 * 100, 0, 100); why = sc < 40 ? 'crooked' : ''; break; }
-    case 'find': {
-      if (!sb || !inFrame) { sc = 0; why = 'lost them'; break; }
-      const fill = sb.h / f.h; const center = Math.hypot(sb.eye.x - (f.x + f.w / 2), (sb.y + sb.h / 2) - (f.y + f.h / 2)) / f.w;
-      sc = clamp((fill - .35) / .5 * 70, 0, 70) + clamp(30 - center * 90, 0, 30); why = sc < 40 ? (fill < .5 ? 'zoom in' : 'center them') : ''; break; }
-  }
-  grade(Math.round(sc), why, pic);
-}
-function grade(sc, why, pic) {
-  G.state = 'grade';
-  const keep = sc >= 70, miss = sc < 40; const word = sc >= 95 ? 'Perfect' : keep ? 'Keeper' : miss ? 'Miss' : 'Close';
-  const pts = Math.round(sc * (1 + G.shot * .08)) * (sc >= 95 ? 2 : 1);
-  G.score += pts; $('#score').textContent = G.score;
-  if (miss) { G.lives -= 1; paintLives(); sfxBad(); buzz([30, 40, 30]); } else if (sc >= 95) { sfxGold(); } else if (keep) sfxGood();
-  G.roll.push({sc, why, pic, rule: G.rule, oc: G.oc, pts});
-  const t = $('#toast'); t.className = 'toast on ' + (sc >= 95 ? 'gold' : keep ? 'good' : miss ? 'bad' : ''); t.querySelector('b').textContent = word; t.querySelector('span').textContent = (why || (keep ? '+' + pts : 'close, +' + pts)) + (why && pts ? ' · +' + pts : '');
-  if (G.rule === 'thirds' || G.rule === 'noflash' || G.rule === 'headroom') G.state = 'flashgrid';
-  setTimeout(() => { t.classList.remove('on'); nextShot(); }, 1150);
-}
-function nextShot() {
-  G.shot += 1;
-  if (G.lives <= 0 || G.shot >= 10) { endRoll(); return; }
-  setupShot(); showCard();
-}
-function showCard() {
-  const first = !G.tutorial[G.rule]; const c = $('#card');
-  c.innerHTML = `<b>${RULES[G.rule].b}</b><span>${first ? RULES[G.rule].how : RULES[G.rule].s}</span>`;
-  c.classList.add('on'); G.state = 'card';
-  setTimeout(() => { c.classList.remove('on'); G.tutorial[G.rule] = 1; save('tut', G.tutorial); G.state = 'shoot'; startTimer(); }, first ? 2200 : 900);
+function develop(shot, passed) {
+  const br = BRIEFS[G.brief]; const d = $('#dev'); d.querySelector('.pol img').src = shot.d; d.querySelector('.pol b').textContent = shot.t;
+  d.querySelector('.stars').innerHTML = [1, 2, 3].map(i => `<i class="${i <= shot.s ? 'on' : ''}">★</i>`).join('');
+  d.querySelector('.why').innerHTML = br.checks.map((c, i) => `<span class="${passed[i] ? 'ok' : ''}">${passed[i] ? '✓' : '·'} ${c[1]}</span>`).join('');
+  d.querySelector('.tip').textContent = shot.s === 3 ? 'All three. That one goes on the wall.' : shot.s === 2 ? 'Two of three. A keeper, one thing to fix.' : 'It is a photo. Open the hint and shoot it again, or move on.';
+  d.hidden = false; requestAnimationFrame(() => d.classList.add('on')); setTimeout(() => sfxStar(shot.s), 500);
+  $('#dev-again').onclick = () => { d.classList.remove('on'); setTimeout(() => { d.hidden = true; G.state = 'shoot'; }, 200); };
+  $('#dev-next').onclick = () => { d.classList.remove('on'); setTimeout(() => { d.hidden = true; nextBrief(); }, 200); };
 }
 
-/* ---------- a roll ---------- */
-function startRoll(mode) {
-  G.mode = mode; G.seed = mode === 'daily' ? hash(dayKey()) : (Math.random() * 1e9) >>> 0; G.rnd = rng(G.seed);
-  G.shot = 0; G.lives = 4; G.score = 0; G.roll = []; G.levelBias = 0;
+/* ---------- briefs ---------- */
+function setBrief(k) {
+  G.brief = k; const br = BRIEFS[k], room = ROOMS[G.room], r = G.rnd;
+  const sp = room.spots[br.spot]; Object.assign(G.subj, {x: sp.x + (r() - .5) * .3, z: sp.z, face: br.face || (r() < .5 ? 1 : -1), pose: 'idle', jumpT: -1.2, jump: 0, t: 0});
+  Object.assign(G.want, {x: clamp(G.subj.x + (r() < .5 ? -1 : 1) * (.8 + r() * .8), -2.6, 2.6), y: room.cam.y, z: k === 'arch' ? -1.2 : room.cam.z, zoom: 1});
+  G.focusWant = G.subj.z - G.want.z; G.checks = [false, false, false];
+  $('#b-t').textContent = br.t; $('#b-l').textContent = br.l; $('#b-n').textContent = G.mode === 'daily' ? `${G.idx + 1} of ${G.set.length}` : `free · ${G.idx + 1}`;
+  $('#checks').innerHTML = br.checks.map(c => `<span class="ck"><i></i>${c[1]}</span>`).join('');
+  $$('.hgt').forEach(x => x.setAttribute('aria-pressed', String(+x.dataset.y === room.cam.y)));
+  drawHint(br); paintDials();
+  const first = !G.tut[k]; $('#hint').classList.toggle('open', first || !!load('hintopen', 1)); G.tut[k] = 1; save('tut', G.tut);
+  G.state = 'shoot'; resize();
+}
+function drawHint(br) {
+  const c = $('#hint canvas'), h = br.hint; const w = c.width = 120, hh = c.height = 150; const o = c.getContext('2d');
+  o.fillStyle = '#1a1921'; o.fillRect(0, 0, w, hh); o.strokeStyle = '#6d6775'; o.strokeRect(.5, .5, w - 1, hh - 1);
+  if (h.grid) { o.strokeStyle = 'rgba(255,255,255,.25)'; for (let i = 1; i < 3; i++) { o.beginPath(); o.moveTo(w * i / 3, 0); o.lineTo(w * i / 3, hh); o.stroke(); o.beginPath(); o.moveTo(0, hh * i / 3); o.lineTo(w, hh * i / 3); o.stroke(); } }
+  // props as blocks with labels
+  o.font = '700 8px JetBrains Mono, monospace'; o.textAlign = 'center';
+  const pb = {decks: [18, 86, 84, 30], ball: [42, 8, 36, 36], speaker: [90, 50, 22, 60], lights: [8, 30, 26, 80], bar: [4, 56, 50, 64], arch: [10, 6, 100, 138]};
+  (h.props || []).forEach(p => { const b = pb[p]; if (!b) return; if (p === 'arch') { o.lineWidth = 7; o.strokeStyle = '#b86a4a'; o.strokeRect(b[0], b[1], b[2], b[3]); o.lineWidth = 1; } else { o.fillStyle = 'rgba(255,255,255,.12)'; o.fillRect(b[0], b[1], b[2], b[3]); o.strokeStyle = 'rgba(255,255,255,.45)'; o.strokeRect(b[0] + .5, b[1] + .5, b[2], b[3]); } o.fillStyle = '#ddd5e2'; o.fillText(p.toUpperCase(), b[0] + b[2] / 2, p === 'arch' ? 16 : b[1] + b[3] / 2 + 3); });
+  // the person: a pink silhouette, sized and placed by the brief
+  const size = {wide: .3, mid: .62, tight: 1.05}[h.sil]; const ph = hh * size, pw = ph * .36; const px = {l: w * .3, c: w * .5, r: w * .68}[h.pos]; let py = hh - 8 - ph + (h.sil === 'tight' ? ph * .3 : 0); if (h.ballTop) py = hh * .5 - ph * .3; if (h.jump) py -= 22;
+  o.fillStyle = '#ff79c6'; o.beginPath(); o.arc(px, py + ph * .1, ph * .1, 0, 7); o.fill(); o.beginPath(); if (o.roundRect) o.roundRect(px - pw / 2, py + ph * .2, pw, ph * .8, 4); else o.rect(px - pw / 2, py + ph * .2, pw, ph * .8); o.fill();
+  if (h.grid) { o.fillStyle = '#ffd479'; o.beginPath(); o.arc(px, py + ph * .1, 3, 0, 7); o.fill(); }
+  o.fillStyle = '#ffd479';
+  if (h.low) o.fillText('CAMERA LOW', w / 2, hh - 4);
+  if (h.long) o.fillText('ZOOM 50mm+', w / 2, hh - 4);
+  if (h.jump) o.fillText('TOP OF THE JUMP', w / 2, hh - 4);
+  if (h.pos === 'l' && !h.low) { o.fillText('SPACE THIS WAY', w * .68, hh * .3); }
+}
+function nextBrief() {
+  G.idx += 1;
+  if (G.idx >= G.set.length) { if (G.mode === 'daily') { endDaily(); return; } G.set.push(BRIEF_ORDER[Math.floor(G.rnd() * BRIEF_ORDER.length)]); }
+  setBrief(G.set[G.idx]);
+}
+$('#skip').addEventListener('click', () => { if (G.state === 'shoot') nextBrief(); });
+$('#hint-tab').addEventListener('click', () => { const h = $('#hint'); h.classList.toggle('open'); save('hintopen', h.classList.contains('open') ? 1 : 0); });
+
+/* ---------- a session ---------- */
+function start(mode) {
+  G.mode = mode; G.day = dayKey(); G.seed = mode === 'daily' ? hash('v2' + G.day) : (Math.random() * 1e9) >>> 0; G.rnd = rng(G.seed);
+  G.room = 'booth'; G.idx = 0;
+  // the daily opens on the decks (the easy one), then five drawn from the rest; free play draws one at a time
+  const pool = BRIEF_ORDER.slice(1); const pick = mode === 'daily' ? ['decks'] : []; while (pick.length < (mode === 'daily' ? 6 : 1)) pick.push(pool.splice(Math.floor(G.rnd() * pool.length), 1)[0]); G.set = pick;
   $$('.scr').forEach(s => s.hidden = true); $('#hud').hidden = false; ac();
-  if (window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission === 'function') { DeviceOrientationEvent.requestPermission().catch(() => {}); }
-  setupShot(); showCard();
+  if (window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission === 'function') DeviceOrientationEvent.requestPermission().catch(() => {});
+  Object.assign(G.cam, ROOMS.booth.cam); G.par = {x: 0, y: 0};
+  setBrief(G.set[0]);
 }
-function endRoll() {
-  G.state = 'sheet'; $('#hud').hidden = true; const r = G.roll;
-  const keepers = r.filter(x => x.sc >= 70).length, perfect = r.filter(x => x.sc >= 95).length;
-  const gradeL = G.score >= 1600 ? 'S' : G.score >= 1100 ? 'A' : G.score >= 700 ? 'B' : G.score >= 350 ? 'C' : 'D';
-  $('#sheet').innerHTML = r.map(x => `<div class="fr ${x.sc >= 70 ? 'keep' : x.sc < 40 ? 'miss' : ''}"><i>${x.sc >= 70 ? (x.sc >= 95 ? 'perfect' : RULES[x.rule].b) : (x.why || 'close')}</i>${x.sc >= 70 ? '<em></em>' : ''}</div>`).join('');
-  $$('#sheet .fr').forEach((el, i) => { if (r[i].pic) el.prepend(r[i].pic); });
-  $('#g-score').textContent = G.score; $('#g-grade').textContent = gradeL; $('#g-line').textContent = `keepers ${keepers} of ${r.length}${perfect ? ' · ' + perfect + ' perfect' : ''}${G.lives <= 0 ? ' · out of lives' : ''}`;
-  $('#sheet-sub').textContent = (G.mode === 'daily' ? 'today\'s room · ' : 'free play · ') + dayKey();
-  // the books: best, rolls, pulls (1,000 points = one pull token for the Crypt)
-  const best = load('best', 0); if (G.score > best) save('best', G.score);
-  if (G.mode === 'daily') { const dd = load('daily', {}); dd[dayKey()] = Math.max(dd[dayKey()] || 0, G.score); save('daily', dd); }
-  save('rolls', load('rolls', 0) + 1);
-  const bank = load('bank', 0) + G.score, pulls = Math.floor(bank / 1000); save('bank', bank % 1000); if (pulls) { save('pulls', load('pulls', 0) + pulls); try { const b = JSON.parse(localStorage.getItem('otp-play-pulls') || '0') + pulls; localStorage.setItem('otp-play-pulls', JSON.stringify(b)); } catch (e) {} }
-  $('#again-sub').textContent = pulls ? `+${pulls} pull${pulls > 1 ? 's' : ''} earned` : `${1000 - bank % 1000} points to the next pull`;
-  $('#s-sheet').hidden = false; paintTitle();
+function endDaily() {
+  const dd = load('daily', {}), rec = dd[G.day] || {}; const total = G.set.reduce((a, k) => a + (rec[k] || 0), 0);
+  $('#d-stars').textContent = total; $('#d-line').textContent = `of ${G.set.length * 3} stars today`;
+  $('#d-grid').innerHTML = G.set.map(k => `<div><b>${BRIEFS[k].t}</b><span>${'★'.repeat(rec[k] || 0)}<i>${'★'.repeat(3 - (rec[k] || 0))}</i></span></div>`).join('');
+  $('#hud').hidden = true; $('#s-done').hidden = false; G.state = 'done'; resize();
 }
+function toTitle() { $$('.scr').forEach(s => s.hidden = true); $('#hud').hidden = true; $('#s-title').hidden = false; G.state = 'title'; paintTitle(); resize(); }
 function paintTitle() {
-  $('#best').textContent = load('best', 0); $('#pulls').textContent = load('pulls', 0); $('#rolls').textContent = load('rolls', 0);
-  const dd = load('daily', {}); const t = dd[dayKey()]; $('#daily-best').textContent = t ? `today's best ${t} · same room for everyone` : 'same room for everyone today'; $('#daily-tag').textContent = 'Daily room · ' + new Date().toLocaleDateString('en-US', {weekday: 'short', month: 'short', day: 'numeric'});
-  G.room = 'lounge'; const rm = ART.room.lounge; if (rm) { G.world = {w: rm.width, h: rm.height}; G.cam = {x: rm.width / 2, y: rm.height * .6, z: 1, rot: 0}; }
+  const album = load('album', []); $('#t-shots').textContent = album.length; $('#t-stars').textContent = load('stars', 0); $('#t-pulls').textContent = load('pulls', 0);
+  const dd = load('daily', {}), rec = dd[dayKey()]; const got = rec ? Object.values(rec).reduce((a, b) => a + b, 0) : 0;
+  $('#daily-sub').textContent = rec ? `today ${got} stars so far · the same six for everyone` : 'six shots, the same six for everyone today';
+  $('#daily-tag').textContent = 'The booth · ' + new Date().toLocaleDateString('en-US', {weekday: 'short', month: 'short', day: 'numeric'});
+  Object.assign(G.subj, {x: .25, z: 5.35, face: 1}); G.focusWant = 5.6;
 }
-async function shareSheet() {
+
+/* ---------- the album: a scrapbook of polaroids ---------- */
+function openAlbum() {
+  const album = load('album', []).slice().reverse(); const g = $('#album');
+  g.innerHTML = album.length ? album.map((s, i) => `<button type="button" class="pol" data-i="${i}" style="--r:${((i * 7) % 9 - 4) * .8}deg"><img src="${s.d}" alt=""><b>${s.t}</b><span>${'★'.repeat(s.s)}</span></button>`).join('') : '<p class="empty">Nothing developed yet. Shoot the booth and your photos land here.</p>';
+  $('#album-sub').textContent = album.length ? `${album.length} photo${album.length > 1 ? 's' : ''} · ${load('stars', 0)} stars` : 'your photos';
+  $$('.scr').forEach(s => s.hidden = true); $('#s-album').hidden = false; G.state = 'album'; resize();
+  g.onclick = e => { const b = e.target.closest('.pol'); if (!b) return; viewShot(album[+b.dataset.i], album.length - 1 - +b.dataset.i); };
+}
+function viewShot(s, realIdx) {
+  const v = $('#view'); v.querySelector('img').src = s.d; v.querySelector('b').textContent = s.t; v.querySelector('.stars').innerHTML = [1, 2, 3].map(i => `<i class="${i <= s.s ? 'on' : ''}">★</i>`).join('');
+  v.querySelector('small').textContent = `${NAMES[s.oc] || 'Mars'} · ${ROOMS[s.room] ? ROOMS[s.room].name : s.room} · ${new Date(s.when).toLocaleDateString('en-US', {month: 'short', day: 'numeric'})}`;
+  v.hidden = false;
+  $('#v-share').onclick = () => sharePhoto(s); $('#v-del').onclick = () => { const a = load('album', []); a.splice(realIdx, 1); save('album', a); v.hidden = true; openAlbum(); }; $('#v-close').onclick = () => { v.hidden = true; };
+}
+async function sharePhoto(s) {
   const o = document.createElement('canvas'); o.width = 1080; o.height = 1350; const c = o.getContext('2d');
-  c.fillStyle = '#0a0a0d'; c.fillRect(0, 0, 1080, 1350);
-  c.fillStyle = '#ff79c6'; c.font = '900 italic 96px Saira Condensed, Impact, sans-serif'; c.fillText('GET THE SHOT', 60, 130);
-  c.fillStyle = '#9a93a3'; c.font = '700 26px JetBrains Mono, monospace'; c.fillText((G.mode === 'daily' ? 'DAILY ROOM · ' : 'FREE PLAY · ') + dayKey().toUpperCase() + ' · 0FFTHEPRINT.COM/PLAY', 60, 176);
-  const cols = 5, cw = 184, ch = 230, gap = 10, x0 = 60, y0 = 230;
-  G.roll.forEach((x, i) => { const px = x0 + (i % cols) * (cw + gap), py = y0 + Math.floor(i / cols) * (ch + gap); c.fillStyle = '#000'; c.fillRect(px, py, cw, ch); if (x.pic) c.drawImage(x.pic, px, py, cw, ch); c.strokeStyle = x.sc >= 70 ? '#7ee787' : x.sc < 40 ? '#ff5d7e' : '#26252f'; c.lineWidth = 4; c.strokeRect(px + 2, py + 2, cw - 4, ch - 4); c.fillStyle = 'rgba(10,10,13,.8)'; c.fillRect(px + 6, py + ch - 34, cw - 12, 26); c.fillStyle = x.sc >= 70 ? '#7ee787' : '#fff'; c.font = '700 16px JetBrains Mono, monospace'; c.fillText((x.sc >= 70 ? RULES[x.rule].b : x.why || 'close').toUpperCase().slice(0, 16), px + 12, py + ch - 15); });
-  c.fillStyle = '#ff79c6'; c.font = '900 italic 200px Saira Condensed, Impact, sans-serif'; c.fillText(String(G.score), 60, 1000);
-  c.fillStyle = '#f4eef2'; c.font = '900 italic 72px Saira Condensed, Impact, sans-serif'; c.fillText($('#g-grade').textContent, 60, 1090);
-  c.fillStyle = '#9a93a3'; c.font = '700 28px JetBrains Mono, monospace'; c.fillText($('#g-line').textContent.toUpperCase(), 60, 1150);
-  c.fillStyle = '#6d6775'; c.font = '700 24px JetBrains Mono, monospace'; c.fillText('A GAME FROM 0FF THE PRINT · SAN ANTONIO', 60, 1290);
-  const blob = await new Promise(r => o.toBlob(r, 'image/png')); const file = new File([blob], 'get-the-shot-' + dayKey() + '.png', {type: 'image/png'});
-  try { if (navigator.canShare && navigator.canShare({files: [file]})) { await navigator.share({files: [file], title: 'Get the Shot'}); return; } } catch (e) { if (e && e.name === 'AbortError') return; }
+  c.fillStyle = '#f3ede2'; c.fillRect(0, 0, 1080, 1350);
+  const im = await img(s.d); if (im) c.drawImage(im, 60, 60, 960, 1200);
+  c.fillStyle = '#1a1921'; c.font = '900 italic 60px Saira Condensed, Impact, sans-serif'; c.fillText(s.t.toUpperCase(), 60, 1318);
+  c.fillStyle = '#ff79c6'; c.font = '700 44px Inter, sans-serif'; c.textAlign = 'right'; c.fillText('★'.repeat(s.s), 1020, 1316);
+  const blob = await new Promise(r => o.toBlob(r, 'image/jpeg', .9)); const file = new File([blob], 'get-the-shot-' + s.t.toLowerCase().replace(/\W+/g, '-') + '.jpg', {type: 'image/jpeg'});
+  try { if (navigator.canShare && navigator.canShare({files: [file]})) { await navigator.share({files: [file], title: 'Get the Shot', text: s.t + ' · 0fftheprint.com/play'}); return; } } catch (e) { if (e && e.name === 'AbortError') return; }
   const u = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = u; a.download = file.name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000);
 }
 
 /* ---------- wiring ---------- */
 document.addEventListener('click', e => {
-  const m = e.target.closest('[data-mode]'); if (m) { startRoll(m.dataset.mode); return; }
-  if (e.target.closest('#howbtn')) { $('#how').innerHTML = ORDER.map(k => `<div><b>${RULES[k].b}</b><span>${RULES[k].how}</span></div>`).join(''); $('#s-title').hidden = true; $('#s-how').hidden = false; return; }
-  if (e.target.closest('[data-back]')) { e.preventDefault(); $$('.scr').forEach(s => s.hidden = true); $('#s-title').hidden = false; paintTitle(); G.state = 'title'; return; }
-  if (e.target.closest('#again')) { startRoll(G.mode); return; }
-  if (e.target.closest('#share')) { shareSheet(); return; }
+  const m = e.target.closest('[data-mode]'); if (m) { start(m.dataset.mode); return; }
+  if (e.target.closest('[data-album]')) { openAlbum(); return; }
+  if (e.target.closest('#howbtn')) { $('#how').innerHTML = BRIEF_ORDER.map(k => `<div><b>${BRIEFS[k].t}</b><span>${BRIEFS[k].l}</span></div>`).join(''); $$('.scr').forEach(s => s.hidden = true); $('#s-how').hidden = false; G.state = 'how'; resize(); return; }
+  if (e.target.closest('[data-back]')) { e.preventDefault(); toTitle(); return; }
+  if (e.target.closest('#quit')) { toTitle(); return; }
 });
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
-loadArt().then(() => { paintTitle(); G.state = 'title'; requestAnimationFrame(draw); });
+loadArt().then(() => { toTitle(); requestAnimationFrame(draw); });
 })();
