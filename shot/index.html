@@ -29,7 +29,7 @@
 <style>
 /* YOU GOT SHOT (10/15, the visual pass; the props went METAL the same night: his "I just don't like the brown, it makes it look cheap", so m_* = enamel on sheet metal, s_* = the cardboard set kept on disk). The page behind the QR he holds up at the night, built like the game: a
    tin diorama up top (the game's v3 sheet-metal flats since 10/15 night) (the booth, Bala with the camera up, the painted flash burst), the three steps as machined
-   keys with cardboard props, the wait as drying prints on a line, "It's up" as the pack bursting open. The body is the
+   keys with props in his TALON & LACE hand cut from tin (t_*, 10/15 late), the wait as drying prints on a line, "It's up" as the pack bursting open. The body is the
    same leatherette camera as the Kit and the game, and every button has travel. ?n=<slug> opens a night that is up;
    ?d=YYYY-MM-DD or nothing = the night that just happened. The phone remembers the date and flips when the night lands. */
 :root{--body:#1c1a22;--body-2:#2a2731;--lcd:#0d1a12;--lcdink:#9ef0b0;--gold:#ffd479;--lx:50%}
@@ -44,9 +44,9 @@ body{background:radial-gradient(140% 60% at var(--lx) -10%,rgba(255,255,255,.10)
 .stage .ly{position:absolute;left:50%;top:50%;transform:translate(calc(-50% + var(--px) * var(--d) * 1px),calc(-50% + var(--py) * var(--d) * .6px));pointer-events:none;user-select:none;-webkit-user-drag:none}
 .stage .bg{width:130%;height:auto;--d:-6;filter:brightness(.85)}
 .stage .fl{filter:drop-shadow(5px 7px 10px rgba(0,0,0,.6))}
-.stage .lights{width:24%;left:16%;top:62%;--d:-3}
-.stage .booth{width:52%;left:50%;top:78%;--d:-2}
-.stage .speaker{width:14%;left:84%;top:66%;--d:-3}
+.stage .lights{width:22%;left:15%;top:60%;--d:-3}
+.stage .booth{width:56%;left:50%;top:80%;--d:-2}
+.stage .speaker{width:15%;left:85%;top:64%;--d:-3}
 .stage .bala{width:46%;left:50%;top:62%;--d:4;filter:drop-shadow(6px 8px 12px rgba(0,0,0,.7))}
 .stage .burst{width:42%;left:52%;top:33%;--d:7;opacity:0;animation:burst 7s 1.1s ease-out infinite}
 @keyframes burst{0%{opacity:0}2%{opacity:1}10%{opacity:.85}18%{opacity:0}100%{opacity:0}}
@@ -70,6 +70,17 @@ h1.big{font-size:clamp(58px,19vw,112px);line-height:.86;margin-top:6px;color:#ef
 .key b{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:24px;line-height:1;text-transform:uppercase}
 .key span{font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.75}
 .key i{position:absolute;right:12px;top:10px;font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;color:currentColor;opacity:.55;font-style:normal}
+/* the Instagram preview under Follow: a phone screen in a bezel, the whole card is the link (built by shot/ig_refresh.py) */
+.igp{display:block;margin-top:8px;padding:8px;border-radius:8px;background:#0a0a0d;color:#f1ecf5;text-decoration:none;box-shadow:inset 0 0 0 1px #3b3844,inset 0 0 0 2px #121117,0 1px 0 rgba(255,255,255,.08),0 8px 18px rgba(0,0,0,.6)}
+.igp-h{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:0 10px;align-items:center;padding:4px 4px 10px}
+.igp-h .av{width:44px;height:44px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px #0a0a0d,0 0 0 4px #cfd3d8,0 0 0 5px #000}
+.igp-h b{display:block;font:800 15px/1.1 var(--f-body);color:#fff}
+.igp-h small{display:block;margin-top:3px;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:#9b95a6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.igp-h em{font:800 12px var(--f-body);font-style:normal;color:#2a0a1e;background:linear-gradient(180deg,#ff9fd6,#f068b6 55%,#d9479b);padding:7px 12px;border-radius:5px;box-shadow:0 1px 0 rgba(255,255,255,.35),0 3px 0 #6d1f4b}
+.igp-g{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;border-radius:4px;overflow:hidden}
+.igp-g span{display:block;aspect-ratio:1;background:#1a1720}
+.igp-g img{display:block;width:100%;height:100%;object-fit:cover}
+.igp-f{display:block;padding:9px 4px 2px;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#8d8a96;text-align:center}
 .steps{margin-top:18px}
 .panel{margin-top:10px;padding:12px 14px 14px;border-radius:6px;background:linear-gradient(180deg,#201d26,#18161d);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),inset 0 0 0 1px rgba(0,0,0,.6),0 2px 4px rgba(0,0,0,.4);position:relative}
 .panel i.n{position:absolute;right:12px;top:10px;font-family:var(--f-mono);font-size:10px;letter-spacing:.14px;color:#8d8a96;font-style:normal}
@@ -132,13 +143,13 @@ h1.big{font-size:clamp(58px,19vw,112px);line-height:.86;margin-top:6px;color:#ef
 <a class="back" href="../">&larr; 0FF THE PRINT</a>
 
 <div class="stage" id="stage" aria-hidden="true">
-  <img class="ly bg" src="../play/art/v3/flat/backdrop_booth.webp" alt="" decoding="async">
-  <img class="ly fl lights" src="../play/art/v3/flat/f_lights.webp" alt="" decoding="async">
-  <img class="ly fl booth" src="../play/art/v3/flat/f_booth.webp" alt="" decoding="async">
-  <img class="ly fl speaker" src="../play/art/v3/flat/f_speaker.webp" alt="" decoding="async">
+  <img class="ly bg" src="../assets/cathedral/shot/t_bg.webp" alt="" decoding="async">
+  <img class="ly fl lights" src="../assets/cathedral/shot/t_lights.webp" alt="" decoding="async">
+  <img class="ly fl booth" src="../assets/cathedral/shot/t_booth.webp" alt="" decoding="async">
+  <img class="ly fl speaker" src="../assets/cathedral/shot/t_speaker.webp" alt="" decoding="async">
   <div class="haze"></div>
   <img class="ly bala" src="../assets/cathedral/shot/bala_shoot.webp" alt="" decoding="async">
-  <img class="ly burst" src="../assets/cathedral/shot/m_flash.webp" alt="" decoding="async">
+  <img class="ly burst" src="../assets/cathedral/shot/t_flash.webp" alt="" decoding="async">
   <div class="white"></div>
   <span class="tag" id="stage-tag">the booth · 0FF THE PRINT</span>
 </div>
@@ -148,18 +159,21 @@ h1.big{font-size:clamp(58px,19vw,112px);line-height:.86;margin-top:6px;color:#ef
 <p class="lead" id="lead">That flash was <b>0FF THE PRINT</b>. Your photos land here in a few days, cut and graded, as a pack with your name on it. Nothing goes up raw.</p>
 
 <div class="pick" id="pick" hidden><b>Two shoots that day. Which one were you at?</b><div class="pk-row" id="pick-row"></div></div>
-<a class="up" id="up" hidden><img class="bst" src="../assets/cathedral/shot/m_burst.webp" alt=""><span class="cover"><img id="up-img" alt=""></span><span><b id="up-title"></b><span class="m" id="up-meta"></span><em>Your pack is up. Pull it &rarr;</em></span></a>
+<a class="up" id="up" hidden><img class="bst" src="../assets/cathedral/shot/t_burst.webp" alt=""><span class="cover"><img id="up-img" alt=""></span><span><b id="up-title"></b><span class="m" id="up-meta"></span><em>Your pack is up. Pull it &rarr;</em></span></a>
 
 <div class="steps" id="steps">
-  <a class="key primary" id="st-follow" href="https://instagram.com/vamppsych" target="_blank" rel="noopener"><img src="../assets/cathedral/shot/m_phone.webp" alt=""><b>Follow The Lens</b><span>@vamppsych · the drop gets called there</span><i>1</i></a>
-  <div class="panel" id="st-ig"><i class="n">2</i><div class="head"><img src="../assets/cathedral/shot/m_tag.webp" alt=""><b>Leave your @</b><span id="st-ig-s">so we tag you when it drops</span></div>
+  <a class="key primary" id="st-follow" href="https://instagram.com/vamppsych" target="_blank" rel="noopener"><img src="../assets/cathedral/shot/t_phone.webp" alt=""><b>Follow The Lens</b><span>@vamppsych · the drop gets called there</span><i>1</i></a>
+<!-- ig:start (written by shot/ig_refresh.py, do not hand-edit) -->
+<a class="igp" id="igp" href="https://instagram.com/vamppsych" target="_blank" rel="noopener" aria-label="@vamppsych on Instagram"><span class="igp-h"><img class="av" src="../assets/cathedral/shot/ig/avatar.webp" alt=""><span><b>@vamppsych</b><small>film director · photos + videos · san antonio</small></span><em>Follow</em></span><span class="igp-g"><span><img src="../assets/cathedral/shot/ig/1.webp" alt="" loading="lazy" decoding="async"></span><span><img src="../assets/cathedral/shot/ig/2.webp" alt="" loading="lazy" decoding="async"></span><span><img src="../assets/cathedral/shot/ig/3.webp" alt="" loading="lazy" decoding="async"></span><span><img src="../assets/cathedral/shot/ig/4.webp" alt="" loading="lazy" decoding="async"></span><span><img src="../assets/cathedral/shot/ig/5.webp" alt="" loading="lazy" decoding="async"></span><span><img src="../assets/cathedral/shot/ig/6.webp" alt="" loading="lazy" decoding="async"></span><span><img src="../assets/cathedral/shot/ig/7.webp" alt="" loading="lazy" decoding="async"></span><span><img src="../assets/cathedral/shot/ig/8.webp" alt="" loading="lazy" decoding="async"></span><span><img src="../assets/cathedral/shot/ig/9.webp" alt="" loading="lazy" decoding="async"></span></span><span class="igp-f">The Lens &middot; tap to open</span></a>
+<!-- ig:end -->
+  <div class="panel" id="st-ig"><i class="n">2</i><div class="head"><img src="../assets/cathedral/shot/t_tag.webp" alt=""><b>Leave your @</b><span id="st-ig-s">so we tag you when it drops</span></div>
     <form class="ig" id="igform"><input id="ig" type="text" inputmode="text" autocapitalize="none" autocomplete="off" spellcheck="false" maxlength="30" placeholder="@yourhandle" aria-label="Your Instagram"><button type="submit">Save</button></form>
   </div>
-  <a class="key" id="st-pull" href="../#find"><img src="../assets/cathedral/shot/m_pack.webp" alt=""><b>Pull your pack</b><span>find your night, rip the frames you&rsquo;re in</span><i>3</i></a>
+  <a class="key" id="st-pull" href="../#find"><img src="../assets/cathedral/shot/t_pack.webp" alt=""><b>Pull your pack</b><span>find your night, rip the frames you&rsquo;re in</span><i>3</i></a>
 </div>
 
 <div class="wait" id="wait">
-  <img class="line" src="../assets/cathedral/shot/m_line.webp" alt="" decoding="async">
+  <img class="line" src="../assets/cathedral/shot/t_line.webp" alt="" decoding="async">
   <b id="wait-b">The pack drops in a few days.</b>
   <p id="wait-p">These are yours, drying. Come back here with this page saved, or watch The Lens. When the night goes up it shows right here with a button.</p>
   <small id="wait-s">you were shot on</small>
