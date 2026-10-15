@@ -266,6 +266,56 @@ input[type=range]::-moz-range-thumb{width:30px;height:30px;border:0;border-radiu
 .compass span{color:#cfc9d6;text-shadow:0 1px 0 #000}
 .slate{border-radius:6px;box-shadow:0 0 0 4px #0b0a0e,0 0 0 6px #3b3844,0 10px 30px rgba(0,0,0,.6)}
 .toast{border-radius:4px;background:linear-gradient(180deg,#0a150e,var(--lcd));color:var(--lcdink);box-shadow:inset 0 0 0 1px #000,0 6px 16px rgba(0,0,0,.6);text-shadow:0 0 6px rgba(158,240,176,.5);font-family:var(--f-mono)}
+
+/* ---------- exposure visuals, slow-mo, the stopwatch (10/15) ---------- */
+.drag{display:grid;gap:8px;padding:10px;border-radius:4px;background:#0f0e13;box-shadow:inset 0 0 0 1px #000,inset 0 2px 8px rgba(0,0,0,.6)}
+.drag .lane{position:relative;height:44px;border-radius:3px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 1px,transparent 1px 10%);overflow:hidden}
+.drag .lane .tag{position:absolute;left:8px;bottom:4px;font:700 8.5px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:#8d8a96}
+/* the ball crosses the lane once a second; its smear is the shutter: the open fraction of one frame at 24, stretched so a phone can see it */
+.drag .ball{position:absolute;top:8px;left:-24px;width:20px;height:20px;border-radius:50%;background:var(--glow);box-shadow:0 0 10px var(--glow);animation:cross 1.6s linear infinite;filter:blur(0)}
+.drag .ball::before{content:"";position:absolute;top:0;right:100%;height:20px;width:calc(var(--smear,.5) * 160px);border-radius:10px 0 0 10px;background:linear-gradient(90deg,rgba(255,121,198,0),rgba(255,121,198,.75));filter:blur(1px)}
+.drag .lane.ref .ball::before{width:calc(var(--ref,.5) * 160px)}
+.drag .lane.slow .ball{animation-duration:calc(1.6s * var(--k,1))}
+.drag .lane.slow .ball::before{width:calc(80px / var(--k,1))}
+@keyframes cross{from{left:-24px}to{left:calc(100% + 24px)}}
+.lamps .stat b,#ex-camcard .row3 .stat b,#sm-out2 .stat b{font-size:19px;line-height:1.1}
+#ex-dof .stat b,#ex-shutter .stat b,#ex-ndout .stat b,#sm-out1 .stat b{font-size:21px;line-height:1.1}
+#ex-camcard .row3 .stat i,.lamps .stat i{font-size:8.5px}
+.ndstrip{display:flex;align-items:center;gap:4px;padding:8px;border-radius:4px;background:#0f0e13;box-shadow:inset 0 0 0 1px #000}
+.ndstrip i{flex:1;display:grid;place-items:center;height:34px;border-radius:3px;background:#ffe9a8;color:#2a1a00;font:700 11px/1 var(--f-mono);font-style:normal;opacity:1;transition:opacity .2s,background .2s}
+.ndstrip i.on{background:#3a3642;color:#8d8a96;opacity:calc(1 - var(--k) * .07)}
+.ndstrip span{font:700 9px/1.2 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--lcdink);text-align:right;min-width:52px}
+.dofmap{display:block;width:100%;height:auto;border-radius:4px;background:#0f0e13;box-shadow:inset 0 0 0 1px #000,inset 0 2px 8px rgba(0,0,0,.6)}
+.smtab{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:8px}
+.smtab div{display:grid;gap:2px;padding:8px 6px;border-radius:4px;background:linear-gradient(180deg,#201d26,#18161d);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),inset 0 0 0 1px rgba(0,0,0,.6);text-align:center;cursor:pointer}
+.smtab div.on{box-shadow:inset 0 0 0 1px var(--glow),0 0 12px rgba(255,121,198,.3)}
+.smtab b{font:900 italic 22px/1 var(--f-display);color:#f1ecf5}
+.smtab span{font:700 10px/1.2 var(--f-mono);color:var(--lcdink)}
+.smtab small{font:600 8.5px/1.2 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:#8d8a96}
+/* the stopwatch: a knurled bezel, a cream dial, a sweep hand, a 30-minute sub-dial, an LCD window, the crown and a pusher */
+.watch{position:relative;width:min(84vw,330px);margin:26px auto 10px;padding-top:34px}
+.watch .crown{position:absolute;left:50%;top:0;transform:translateX(-50%);width:84px;height:46px;border:0;border-radius:8px 8px 2px 2px;background:repeating-linear-gradient(90deg,#5a5665 0 3px,#2c2933 3px 6px);color:#f1ecf5;font:900 11px/1 var(--f-mono);letter-spacing:.2em;box-shadow:0 2px 0 rgba(255,255,255,.15) inset,0 -4px 8px rgba(0,0,0,.5) inset,0 6px 10px rgba(0,0,0,.6);z-index:2}
+.watch .crown:active{transform:translate(-50%,3px)}
+.watch .pusher{position:absolute;right:8%;top:14px;transform:rotate(32deg);width:58px;height:34px;border:0;border-radius:6px 6px 2px 2px;background:repeating-linear-gradient(90deg,#5a5665 0 3px,#2c2933 3px 6px);color:#f1ecf5;font:900 9.5px/1 var(--f-mono);letter-spacing:.16em;box-shadow:0 2px 0 rgba(255,255,255,.15) inset,0 6px 10px rgba(0,0,0,.6);z-index:2}
+.watch .pusher:active{transform:rotate(32deg) translateY(3px)}
+.watch .face{position:relative;width:100%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 50% 40%,#fbf6ea,#e9e1cf 70%,#cfc6b1);box-shadow:0 0 0 10px #2c2933,0 0 0 13px #0b0a0e,0 0 0 22px #3a3642,0 0 0 24px #0b0a0e,0 18px 40px rgba(0,0,0,.7),inset 0 6px 14px rgba(0,0,0,.25)}
+.watch .face::before{content:"";position:absolute;inset:-22px;border-radius:50%;background:repeating-conic-gradient(from 0deg,#5a5665 0 2deg,#2c2933 2deg 4deg);z-index:-1}
+.watch .ticks{position:absolute;inset:8px;border-radius:50%;background:repeating-conic-gradient(from -0.5deg,#1a1921 0 1deg,transparent 1deg 6deg);-webkit-mask:radial-gradient(circle,transparent 0 calc(50% - 16px),#000 calc(50% - 16px));mask:radial-gradient(circle,transparent 0 calc(50% - 16px),#000 calc(50% - 16px))}
+.watch .ticks::after{content:"";position:absolute;inset:0;border-radius:50%;background:repeating-conic-gradient(from -1deg,#1a1921 0 2deg,transparent 2deg 30deg);-webkit-mask:radial-gradient(circle,transparent 0 calc(50% - 26px),#000 calc(50% - 26px));mask:radial-gradient(circle,transparent 0 calc(50% - 26px),#000 calc(50% - 26px))}
+.watch .nums i{position:absolute;left:50%;top:50%;width:30px;height:30px;margin:-15px 0 0 -15px;transform:rotate(calc(var(--a) * 1deg)) translateY(calc(-50% * 2 * 0.5 - 0px)) ;display:grid;place-items:center;font:900 italic 16px/1 var(--f-display);color:#1a1921;font-style:normal}
+.watch .nums i{transform:rotate(calc(var(--a) * 1deg)) translateY(-108px) rotate(calc(var(--a) * -1deg))}
+@media (max-width:380px){.watch .nums i{transform:rotate(calc(var(--a) * 1deg)) translateY(-96px) rotate(calc(var(--a) * -1deg))}}
+.watch .sub{position:absolute;left:50%;top:26%;width:26%;aspect-ratio:1;transform:translateX(-50%);border-radius:50%;background:#efe7d6;box-shadow:inset 0 2px 6px rgba(0,0,0,.25),0 0 0 1px rgba(0,0,0,.2)}
+.watch .sub span{position:absolute;left:50%;top:4px;transform:translateX(-50%);font:700 9px/1 var(--f-mono);color:#1a1921}
+.watch .subticks{position:absolute;inset:3px;border-radius:50%;background:repeating-conic-gradient(from -1deg,#1a1921 0 2deg,transparent 2deg 12deg);-webkit-mask:radial-gradient(circle,transparent 0 calc(50% - 6px),#000 calc(50% - 6px));mask:radial-gradient(circle,transparent 0 calc(50% - 6px),#000 calc(50% - 6px))}
+.watch .hand{position:absolute;left:50%;bottom:50%;transform-origin:50% 100%;border-radius:2px}
+.watch .hand.sec{width:4px;height:44%;margin-left:-2px;background:linear-gradient(180deg,var(--glow) 0 70%,#1a1921 70%);box-shadow:0 0 6px rgba(255,121,198,.6);transition:none}
+.watch .hand.sec::after{content:"";position:absolute;left:50%;bottom:-18px;width:12px;height:30px;margin-left:-6px;border-radius:6px;background:#1a1921}
+.watch .hand.min{width:3px;height:42%;margin-left:-1.5px;background:#1a1921}
+.watch .cap{position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#7a7686,#2c2933);box-shadow:0 1px 3px rgba(0,0,0,.6)}
+.watch .lcd{position:absolute;left:50%;top:62%;transform:translateX(-50%);padding:6px 12px;border-radius:4px;background:linear-gradient(180deg,#0a150e,var(--lcd));color:#dffbe4;font:700 26px/1 var(--f-mono);letter-spacing:.04em;box-shadow:inset 0 0 0 1px #000,inset 0 2px 6px rgba(0,0,0,.8),0 1px 0 rgba(255,255,255,.3);text-shadow:0 0 8px rgba(158,240,176,.5);white-space:nowrap}
+.watch .lcd small{font-size:14px;color:var(--lcdink)}
+#t-watch .list{margin-top:14px}
 </style>
 </head>
 <body data-tool="home">
@@ -279,7 +329,7 @@ input[type=range]::-moz-range-thumb{width:30px;height:30px;border:0;border-radiu
 
   <!-- ===== HOME ===== -->
   <section id="t-home" class="tool">
-    <div class="hero"><img src="../assets/cathedral/w/stage.webp" alt="" width="1200" height="462" decoding="async"><div class="hero-t"><h1>The Kit</h1><span>eight tools · one hand · no signal needed</span></div></div>
+    <div class="hero"><img src="../assets/cathedral/w/stage.webp" alt="" width="1200" height="462" decoding="async"><div class="hero-t"><h1>The Kit</h1><span>ten tools · one hand · no signal needed</span></div></div>
     <div class="doors">
       <button type="button" class="door" data-go="prompter"><img src="../assets/cathedral/w/screen.webp" alt=""><b>Prompter</b><span>read to camera</span></button>
       <button type="button" class="door" data-go="slate"><img src="../assets/cathedral/w/film.webp" alt=""><b>Slate</b><span>beep + flash to sync</span></button>
@@ -287,7 +337,9 @@ input[type=range]::-moz-range-thumb{width:30px;height:30px;border:0;border-radiu
       <button type="button" class="door" data-go="release"><img src="../assets/cathedral/w/going.webp" alt=""><b>Release</b><span>sign on the spot</span></button>
       <button type="button" class="door" data-go="sun"><img src="../assets/cathedral/w/tonight.webp" alt=""><b>Golden hour</b><span>SA · SMTX · ATX</span></button>
       <button type="button" class="door" data-go="vf"><img src="../assets/cathedral/w/pin.webp" alt=""><b>Viewfinder</b><span>frame guides</span></button>
-      <button type="button" class="door" data-go="expo"><img src="../assets/cathedral/w/deal.webp" alt=""><b>Exposure</b><span>shutter · ND · depth</span></button>
+      <button type="button" class="door" data-go="expo"><img src="../assets/cathedral/w/deal.webp" alt=""><b>Exposure</b><span>FX6 · Luna · shutter · ND · depth</span></button>
+      <button type="button" class="door" data-go="slowmo"><img src="../assets/cathedral/w/fest.webp" alt=""><b>Slow-mo</b><span>rates · shutter · how slow</span></button>
+      <button type="button" class="door" data-go="watch"><img src="../assets/cathedral/a/coming.webp" alt=""><b>Stopwatch</b><span>start · lap · it keeps going</span></button>
       <button type="button" class="door" data-go="screens"><img src="../assets/cathedral/w/lock.webp" alt=""><b>Screens</b><span>grey · bars · tone</span></button>
     </div>
     <p class="foot">Built by <a href="../">0FF THE PRINT</a> · San Antonio · add it to your home screen and it opens with no signal · <a href="../wall/">the Crypt</a></p>
@@ -424,32 +476,77 @@ input[type=range]::-moz-range-thumb{width:30px;height:30px;border:0;border-radiu
 
   <!-- ===== EXPOSURE ===== -->
   <section id="t-expo" class="tool" hidden>
-    <h2>Exposure</h2><p class="sub">shutter from the frame rate · ND in stops · depth of field</p>
+    <h2>Exposure</h2><p class="sub">pick the camera first · shutter · ND · depth · what each body can and cannot do</p>
+    <div class="seg" id="ex-cam"><button type="button" data-cam="fx6" aria-pressed="true">FX6</button><button type="button" data-cam="luna">Luna Ultra</button></div>
+    <div class="card" id="ex-camcard"></div>
+
     <div class="card" style="display:grid;gap:10px">
       <span class="lbl">Shutter, 180 degree rule</span>
       <div class="seg" id="ex-fps"><button type="button" data-fps="23.976" aria-pressed="true">24</button><button type="button" data-fps="25">25</button><button type="button" data-fps="29.97">30</button><button type="button" data-fps="50">50</button><button type="button" data-fps="59.94">60</button><button type="button" data-fps="120">120</button></div>
       <div class="row" id="ex-shutter"></div>
-      <span class="lbl">Shutter angle</span>
-      <div class="seg" id="ex-ang"><button type="button" data-ang="180" aria-pressed="true">180°</button><button type="button" data-ang="172.8">172.8°</button><button type="button" data-ang="144">144°</button><button type="button" data-ang="90">90°</button><button type="button" data-ang="45">45°</button></div>
-      <div class="row"><div class="stat"><i>FX6 base ISO</i><b>800</b><small>daylight, the clean one</small></div><div class="stat"><i>FX6 high base</i><b>12800</b><small>the rooms, not 6400 or 3200</small></div></div>
+      <span class="lbl">Shutter angle: how much the motion smears</span>
+      <div class="seg" id="ex-ang"><button type="button" data-ang="45">45°</button><button type="button" data-ang="90">90°</button><button type="button" data-ang="172.8">172.8°</button><button type="button" data-ang="180" aria-pressed="true">180°</button><button type="button" data-ang="270">270°</button><button type="button" data-ang="360">360°</button></div>
+      <div class="drag" id="ex-drag"><div class="lane"><i class="ball"></i><span class="tag">a hand crossing the frame in one second</span></div><div class="lane ref"><i class="ball"></i><span class="tag">180° for reference</span></div></div>
+      <p class="note" id="ex-angnote"></p>
+      <div class="row3 lamps"><div class="stat"><i>Lights hum at 60 Hz</i><b>1/60 · 1/120</b><small>flicker-safe shutters in the US</small></div><div class="stat"><i>At 24 fps</i><b>172.8°</b><small>= 1/50, the flicker-safe angle</small></div><div class="stat"><i>LED walls, strobes</i><b>test it</b><small>roll 10 s, scrub for banding</small></div></div>
     </div>
-    <div class="card" style="display:grid;gap:10px">
+
+    <div class="card" style="display:grid;gap:10px" id="ex-ndcard">
       <span class="lbl">ND: stops to cut</span>
       <div class="slider"><span>Stops</span><input type="range" id="ex-nd" min="1" max="10" value="3"><output id="ex-nd-o">3</output></div>
+      <div class="ndstrip" id="ex-ndstrip"></div>
       <div class="row" id="ex-ndout"></div>
-      <p class="note">FX6 built-in ND runs 1/4 (2 stops) to 1/128 (7 stops), variable in between. Anything past 7 is a screw-on. The Luna has no ND: close down or raise the shutter.</p>
+      <p class="note" id="ex-ndnote"></p>
     </div>
+
     <div class="card" style="display:grid;gap:10px">
       <span class="lbl">Depth of field</span>
-      <div class="seg" id="ex-sensor"><button type="button" data-s="ff" aria-pressed="true">FX6 full frame</button><button type="button" data-s="s35">FX6 S35</button><button type="button" data-s="1in">Luna 1-inch</button><button type="button" data-s="ace">Ace Pro 2</button></div>
+      <div class="seg" id="ex-sensor"><button type="button" data-s="ff" aria-pressed="true">FX6 full frame</button><button type="button" data-s="s35">FX6 S35</button><button type="button" data-s="luna1">Luna 1x</button><button type="button" data-s="luna3">Luna 3x</button></div>
       <div class="row3"><label><span class="lbl">Focal mm</span><input class="in" type="number" id="ex-f" inputmode="decimal" value="35"></label><label><span class="lbl">f-stop</span><input class="in" type="number" id="ex-a" inputmode="decimal" step="0.1" value="2.8"></label><label><span class="lbl">Distance ft</span><input class="in" type="number" id="ex-d" inputmode="decimal" step="0.5" value="8"></label></div>
+      <canvas class="dofmap" id="ex-dofmap" width="800" height="220"></canvas>
       <div class="row" id="ex-dof"></div>
+      <p class="note" id="ex-dofnote"></p>
     </div>
+  </section>
+
+  <!-- ===== SLOW-MO ===== -->
+  <section id="t-slowmo" class="tool" hidden>
+    <h2>Slow-mo</h2><p class="sub">how slow it plays · the shutter at that rate · what it costs in light and in pixels</p>
+    <div class="seg" id="sm-cam"><button type="button" data-cam="fx6" aria-pressed="true">FX6</button><button type="button" data-cam="luna">Luna Ultra</button></div>
+    <div class="card" style="display:grid;gap:10px">
+      <span class="lbl">Shoot at</span>
+      <div class="seg" id="sm-rate"></div>
+      <span class="lbl">Deliver at</span>
+      <div class="seg" id="sm-out"><button type="button" data-out="24" aria-pressed="true">24</button><button type="button" data-out="25">25</button><button type="button" data-out="30">30</button><button type="button" data-out="60">60</button></div>
+      <div class="row" id="sm-out1"></div>
+      <div class="drag" id="sm-drag"><div class="lane"><i class="ball"></i><span class="tag">real time: the same move</span></div><div class="lane slow"><i class="ball"></i><span class="tag" id="sm-tag">slowed</span></div></div>
+      <div class="row" id="sm-out2"></div>
+      <p class="note" id="sm-note"></p>
+    </div>
+    <div class="card" id="sm-table"></div>
+  </section>
+
+  <!-- ===== STOPWATCH ===== -->
+  <section id="t-watch" class="tool" hidden>
+    <h2>Stopwatch</h2><p class="sub">the crown starts and stops · the pusher laps, or resets when stopped · it keeps counting when you leave</p>
+    <div class="watch">
+      <button type="button" class="crown" id="sw-crown" aria-label="Start or stop">START</button>
+      <button type="button" class="pusher" id="sw-push" aria-label="Lap or reset">LAP</button>
+      <div class="face">
+        <div class="ticks"></div>
+        <div class="nums"><i style="--a:0">60</i><i style="--a:30">5</i><i style="--a:60">10</i><i style="--a:90">15</i><i style="--a:120">20</i><i style="--a:150">25</i><i style="--a:180">30</i><i style="--a:210">35</i><i style="--a:240">40</i><i style="--a:270">45</i><i style="--a:300">50</i><i style="--a:330">55</i></div>
+        <div class="sub"><div class="subticks"></div><b class="hand min" id="sw-min"></b><span>30</span></div>
+        <div class="lcd" id="sw-lcd">00:00<small>.00</small></div>
+        <b class="hand sec" id="sw-sec"></b>
+        <i class="cap"></i>
+      </div>
+    </div>
+    <div class="list" id="sw-laps"></div>
   </section>
 
   <!-- ===== SCREENS ===== -->
   <section id="t-screens" class="tool" hidden>
-    <h2>Screens</h2><p class="sub">turn the brightness all the way up first · tap the screen to leave</p>
+    <h2>Screens</h2><p class="sub">turn the brightness all the way up first · tap the screen to leave · the stopwatch has its own door now</p>
     <div class="doors">
       <button type="button" class="door" data-screen="grey"><b>18% grey</b><span>white balance card</span></button>
       <button type="button" class="door" data-screen="white"><b>White</b><span>fill light, WB</span></button>
@@ -458,7 +555,6 @@ input[type=range]::-moz-range-thumb{width:30px;height:30px;border:0;border-radiu
       <button type="button" class="door" data-screen="red"><b>Red</b><span>a gel in a pinch</span></button>
       <button type="button" class="door" data-screen="pink"><b>House pink</b><span>#ff79c6</span></button>
       <button type="button" class="door" data-screen="star"><b>Focus star</b><span>pull focus on it</span></button>
-      <button type="button" class="door" data-screen="timer"><b>Set timer</b><span>big clock, tap to lap</span></button>
     </div>
     <button type="button" class="btn big" id="sc-tone" aria-pressed="false">1 kHz tone: off</button>
     <p class="note">The grey screen is a stand-in for an 18% card: fill the frame with it, set custom white balance, move on. The tone runs at a fixed level for a quick check that a mic is live; it is not a calibrated reference.</p>
@@ -475,8 +571,8 @@ const load = (k, d) => { try { const v = localStorage.getItem('kit-' + k); retur
 const save = (k, v) => { try { localStorage.setItem('kit-' + k, JSON.stringify(v)); } catch(e){} };
 let toastT; function toast(m){ const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 2200); }
 const buzz = () => { try { navigator.vibrate && navigator.vibrate(12); } catch(e){} };
-const TOOLS = ['home','prompter','slate','takes','release','sun','vf','expo','screens'];
-const NAMES = {home:'KIT', prompter:'Prompter', slate:'Slate', takes:'Take log', release:'Release', sun:'Golden hour', vf:'Viewfinder', expo:'Exposure', screens:'Screens'};
+const TOOLS = ['home','prompter','slate','takes','release','sun','vf','expo','slowmo','watch','screens'];
+const NAMES = {home:'KIT', prompter:'Prompter', slate:'Slate', takes:'Take log', release:'Release', sun:'Golden hour', vf:'Viewfinder', expo:'Exposure', slowmo:'Slow-mo', watch:'Stopwatch', screens:'Screens'};
 function go(t, push){
   if (!TOOLS.includes(t)) t = 'home';
   TOOLS.forEach(k => { const el = $('#t-' + k); if (el) el.hidden = k !== t; });
@@ -484,7 +580,7 @@ function go(t, push){
   document.title = (t === 'home' ? 'KIT' : NAMES[t] + ' · KIT') + ' · 0FF THE PRINT';
   if (push !== false) { try { history.replaceState(null, '', '#' + t); } catch(e){} }
   window.scrollTo(0, 0);
-  if (t === 'takes') tkPaint(); if (t === 'release') rlPaint(); if (t === 'sun') sunPaint(); if (t === 'expo') exPaint(); if (t === 'slate') slPaint();
+  if (t === 'takes') tkPaint(); if (t === 'release') rlPaint(); if (t === 'sun') sunPaint(); if (t === 'expo') exPaint(); if (t === 'slowmo') smPaint(); if (t === 'watch') swPaint(); if (t === 'slate') slPaint();
 }
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-go]'); if (b) { e.preventDefault(); buzz(); go(b.dataset.go); }
@@ -792,25 +888,109 @@ function flashWhite(a){ const f = $('#flash'); f.style.opacity = a; f.classList.
 function click(){ const c = ac(); if (!c) return; const n = c.createBufferSource(), b = c.createBuffer(1, c.sampleRate * .05, c.sampleRate), d = b.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 3); n.buffer = b; const g = c.createGain(); g.gain.value = .4; n.connect(g); g.connect(c.destination); n.start(); }
 
 /* ---------- EXPOSURE ---------- */
-const EX = {fps: 23.976, nd: 3, sensor: 'ff', ang: 180};
-const SENS = {ff: [35.7, .029, 'FX6 full frame'], s35: [23.5, .02, 'FX6 Super 35'], '1in': [13.2, .011, 'Luna 1-inch'], ace: [9.6, .008, 'Ace Pro 2 1/1.3']};
+const EX = {cam: 'fx6', fps: 23.976, nd: 3, sensor: 'ff', ang: 180};
+// sensor width mm, circle of confusion mm, name, and for the Luna's fixed lenses: the full-frame feel (focal equiv, f-stop equiv)
+const SENS = {ff: [35.7, .029, 'FX6 full frame'], s35: [23.5, .02, 'FX6 Super 35'], luna1: [35.7, .029, 'Luna 1x, the 1-inch', 20, 4.9], luna3: [35.7, .029, 'Luna 3x, the tele', 60, 7.4]};
 const FX6ND = [[2, '1/4'], [3, '1/8'], [4, '1/16'], [5, '1/32'], [6, '1/64'], [7, '1/128']];
+const CAMS = {
+  fx6: {name: 'FX6', card: `<span class="lbl">The FX6 in one card</span><div class="row"><div class="stat"><i>Base ISO</i><b>800</b><small>daylight, the clean one</small></div><div class="stat hot"><i>High base</i><b>12800</b><small>the rooms, not 6400 or 3200</small></div></div><div class="row3"><div class="stat"><i>Built-in ND</i><b>2 to 7 stops</b><small>presets 2 · 4 · 6, variable between</small></div><div class="stat"><i>Expose with</i><b>white card</b><small>zebra 2 on the card, then shoot</small></div><div class="stat"><i>Grading?</i><b>Cine EI</b><small>S-Log3, the look in post</small></div></div><p class="note">Full frame or S35 crop. Shutter as speed (64F to 1/8000) or angle (5.6° to 360° when Variable; frames 2F to 64F are the slow shutter, smear below the frame rate). 100 and 120 are UHD only, 200 and 240 are HD and full frame only. <b>Never in a crowd.</b></p>`},
+  luna: {name: 'Luna Ultra', card: `<span class="lbl">The Luna Ultra in one card</span><div class="row"><div class="stat hot"><i>Aperture</i><b>fixed</b><small>F1.8 on 1x, F2.0 on 3x. No iris anywhere</small></div><div class="stat"><i>ISO</i><b>100 to 6400</b><small>lock it by hand, every shot</small></div></div><div class="row3"><div class="stat"><i>Video shutter</i><b>1/8000 to 1/5</b><small>per the spec sheet; the older manual read a 1/24 floor. Test a drag on the body before a job</small></div><div class="stat"><i>ND</i><b>magnetic set</b><small>Insta360 ND4 · 16 · 64 = 2 · 4 · 6 stops. Not in the box</small></div><div class="stat hot"><i>Expose</i><b>to the right</b><small>4 to 5 stops of latitude, a wash sits at 85 to 95%</small></div></div><p class="note"><b>Auto ISO is the most destructive setting on the body:</b> at the cap it adds digital gain and scrubs it with noise reduction. Manual ISO, shutter at 180°, read the phone app's histogram (the body has none in I-Log). PureVideo kills I-Log, so in a dark room it is one or the other. 24p is true 24.000: shoot 25 or 30 for long takes, or conform on purpose. The detachable screen dies at about 40 minutes and stops the recording: two batteries, charged.</p>`},
+};
 function frac(x){ return '1/' + Math.round(x); }
 function exPaint(){
-  const sh = EX.fps * 360 / EX.ang; $('#ex-shutter').innerHTML = `<div class="stat hot"><i>${EX.ang}° at ${EX.fps}</i><b>${frac(sh)}</b><small>${EX.ang === 180 ? 'the normal look' : EX.ang === 172.8 ? 'flicker safe under 60 Hz' : 'crisper, choppier'}</small></div><div class="stat"><i>90° · crisper</i><b>${frac(4 * EX.fps)}</b><small>fights, sports, strobe-y</small></div><div class="stat"><i>Angle 172.8 · flicker</i><b>${frac(EX.fps * 360 / 172.8)}</b><small>under 60 Hz lights at 24</small></div><div class="stat"><i>Shutter speed on the FX6</i><b>${frac(sh)}</b><small>or shutter angle 180</small></div>`;
+  const cam = CAMS[EX.cam]; $('#ex-camcard').innerHTML = cam.card;
+  const sh = EX.fps * 360 / EX.ang;
+  const floor = EX.cam === 'luna' && sh < 24;
+  $('#ex-shutter').innerHTML = `<div class="stat hot"><i>${EX.ang}° at ${EX.fps}</i><b>${floor ? '1/24' : frac(sh)}</b><small>${floor ? 'below the Luna\u2019s rate: the body blends frames, test it' : EX.ang === 180 ? 'the normal look' : EX.ang === 172.8 ? 'flicker safe under 60 Hz' : EX.ang < 180 ? 'crisper, choppier' : 'dreamy, smeared'}</small></div><div class="stat"><i>90° · crisper</i><b>${frac(4 * EX.fps)}</b><small>fights, sports, strobe-y</small></div><div class="stat"><i>172.8° · flicker</i><b>${frac(EX.fps * 360 / 172.8)}</b><small>under 60 Hz lights at 24</small></div><div class="stat"><i>Light vs 180°</i><b>${EX.ang === 180 ? '0' : (Math.log2(EX.ang / 180) > 0 ? '+' : '') + Math.log2(EX.ang / 180).toFixed(1)} stop${Math.abs(Math.log2(EX.ang / 180)) === 1 ? '' : 's'}</b><small>${EX.ang > 180 ? 'brighter, more smear' : EX.ang < 180 ? 'darker, less smear' : 'the baseline'}</small></div>`;
+  // the drag visual: the smear is the fraction of a frame the shutter stays open, so a 1 s crossing at 24 fps smears 1/24 of the lane at 180°, half that at 90°
+  const smear = EX.ang / 360; $('#ex-drag').style.setProperty('--smear', smear.toFixed(3)); $('#ex-drag').style.setProperty('--ref', '0.5');
+  $('#ex-angnote').innerHTML = {45: '<b>45°:</b> every frame a still. Reads jittery on a pan; right for a fight, a strobe, a punchline you want frozen.', 90: '<b>90°:</b> crisp, a little staccato. Sports, action, anything you will slow down later.', 172.8: '<b>172.8°:</b> 180° nudged so 60 Hz lights do not roll. Use it at 24 in any room with cheap LEDs.', 180: '<b>180°:</b> the look eyes expect. Shutter = twice the frame rate. Default everything here.', 270: '<b>270°:</b> softer motion, 0.6 stop brighter. A dark room on the FX6 when you would rather smear than push ISO.', 360: '<b>360°:</b> one full frame of smear, a stop brighter than 180°. Dreamy, drunk, the after-hours look. On the Luna only at 24 fps.'}[EX.ang];
   const nd = EX.nd; const factor = Math.pow(2, nd); const dens = (nd * .3).toFixed(1); const near = FX6ND.filter(x => x[0] === nd)[0];
-  $('#ex-ndout').innerHTML = `<div class="stat hot"><i>Cuts ${nd} stop${nd === 1 ? '' : 's'}</i><b>ND ${dens}</b><small>${factor}x · ND${factor}</small></div><div class="stat"><i>FX6 built-in</i><b>${near ? near[1] : nd < 2 ? 'Clear' : 'Screw-on'}</b><small>${nd >= 2 && nd <= 7 ? 'variable ND at ' + nd + ' stops' : nd < 2 ? 'close the iris one stop instead' : 'stack 1/128 + ND ' + ((nd - 7) * .3).toFixed(1)}</small></div>`;
-  const [sw, coc, sname] = SENS[EX.sensor]; const f = +$('#ex-f').value || 35, a = +$('#ex-a').value || 2.8, dft = +$('#ex-d').value || 8, d = dft * 304.8;
+  $('#ex-ndstrip').innerHTML = Array.from({length: 10}, (_, i) => `<i class="${i < nd ? 'on' : ''}" style="--k:${i}"><b>${i + 1}</b></i>`).join('') + `<span>${factor}x less light</span>`;
+  if (EX.cam === 'fx6') {
+    $('#ex-ndout').innerHTML = `<div class="stat hot"><i>Cuts ${nd} stop${nd === 1 ? '' : 's'}</i><b>ND ${dens}</b><small>${factor}x · ND${factor}</small></div><div class="stat"><i>FX6 built-in</i><b>${near ? near[1] : nd < 2 ? 'Clear' : 'Screw-on'}</b><small>${nd >= 2 && nd <= 7 ? 'variable ND at ' + nd + ' stops' : nd < 2 ? 'close the iris one stop instead' : 'stack 1/128 + ND ' + ((nd - 7) * .3).toFixed(1)}</small></div>`;
+    $('#ex-ndnote').textContent = 'Built-in ND runs 1/4 (2 stops) to 1/128 (7 stops), presets at 2, 4 and 6. Past 7 is a screw-on. Reach for ND before closing past f/8: diffraction softens the sensor.';
+  } else {
+    const alt = Math.round(48 * factor);
+    $('#ex-ndout').innerHTML = `<div class="stat hot"><i>Cuts ${nd} stop${nd === 1 ? '' : 's'}</i><b>ND ${dens}</b><small>${factor}x · ${nd === 2 ? 'the ND4 in the set' : nd === 4 ? 'the ND16 in the set' : nd === 6 ? 'the ND64 in the set' : nd === 5 ? 'Freewell ND32' : nd === 3 ? 'PolarPro ND8' : nd === 7 ? 'PolarPro ND128' : 'stack two'}</small></div><div class="stat"><i>Without ND, same light</i><b>1/${alt}</b><small>at 24 fps instead of 1/48: ${nd > 2 ? 'choppy' : 'a little crisp'}</small></div>`;
+    $('#ex-ndnote').textContent = 'The Luna has no iris and no built-in ND. Bright daylight means a faster shutter (less smear) or a magnetic ND: Insta360 sells ND4, ND16 and ND64 (2, 4, 6 stops); Tilta, Freewell and PolarPro make sets too. Cheap variable NDs put a color cast on it (the blues go grey). The 3x is the darker lens: F2.0 and a smaller sensor.';
+  }
+  const S = SENS[EX.sensor]; const lunaLens = S.length > 3; const fIn = $('#ex-f'), aIn = $('#ex-a');
+  if (lunaLens) { fIn.value = S[3]; aIn.value = S[4]; } fIn.disabled = lunaLens; aIn.disabled = lunaLens;
+  const [sw, coc, sname] = S; const f = +fIn.value || 35, a = +aIn.value || 2.8, dft = +$('#ex-d').value || 8, d = dft * 304.8;
   const H = f * f / (a * coc) + f; const near_ = (H * d) / (H + (d - f)); const far = d >= H ? Infinity : (H * d) / (H - (d - f));
   const ft = mm => mm === Infinity ? 'inf' : (mm / 304.8).toFixed(mm / 304.8 < 10 ? 2 : 1) + ' ft';
   const fov = 2 * Math.atan(sw / (2 * f)) / rad;
-  $('#ex-dof').innerHTML = `<div class="stat hot"><i>In focus</i><b>${ft(near_)} to ${ft(far)}</b><small>${far === Infinity ? 'everything past ' + ft(near_) : 'total ' + ft(far - near_)}</small></div><div class="stat"><i>Hyperfocal</i><b>${ft(H)}</b><small>focus here, sharp to infinity</small></div><div class="stat"><i>Field of view</i><b>${Math.round(fov)}°</b><small>${sname} · ${f}mm</small></div><div class="stat"><i>Full-frame equivalent</i><b>${Math.round(f * 35.7 / sw)}mm</b><small>what it feels like on the FX6</small></div>`;
+  $('#ex-dof').innerHTML = `<div class="stat hot"><i>In focus</i><b>${ft(near_)} to ${ft(far)}</b><small>${far === Infinity ? 'everything past ' + ft(near_) : 'total ' + ft(far - near_)}</small></div><div class="stat"><i>Hyperfocal</i><b>${ft(H)}</b><small>focus here, sharp to infinity</small></div><div class="stat"><i>Field of view</i><b>${Math.round(fov)}°</b><small>${sname} · ${lunaLens ? f + 'mm equiv' : f + 'mm'}</small></div><div class="stat"><i>${lunaLens ? 'Feels like' : 'Full-frame equivalent'}</i><b>${lunaLens ? 'f/' + a + ' on FF' : Math.round(f * 35.7 / sw) + 'mm'}</b><small>${lunaLens ? 'the real glass is ' + (EX.sensor === 'luna1' ? 'F1.8' : 'F2.0') + ', the small sensor deepens it' : 'what it feels like on the FX6'}</small></div>`;
+  $('#ex-dofnote').textContent = lunaLens ? 'The Luna cannot open up or close down, so depth is set by distance and the lens you pick. Autofocus is its weakest system: tap-focus on the phone app and lock it.' : 'Near limit, the subject, far limit, to scale. Drag the numbers: a wider lens or a smaller stop pushes the far limit to infinity fast.';
+  dofMap(near_ / 304.8, dft, far === Infinity ? Infinity : far / 304.8, H / 304.8);
 }
+function dofMap(nearFt, subjFt, farFt, hFt){
+  const c = $('#ex-dofmap'); if (!c) return; const x = c.getContext('2d'); const W = c.width, Hh = c.height; x.clearRect(0, 0, W, Hh);
+  const maxFt = Math.max(Math.min(farFt === Infinity ? subjFt * 2.5 : farFt * 1.15, 200), subjFt * 1.6, 12); const px = ft => 90 + Math.min(ft, maxFt) / maxFt * (W - 130);
+  // the floor line and the ft ticks
+  x.strokeStyle = 'rgba(255,255,255,.25)'; x.lineWidth = 2; x.beginPath(); x.moveTo(60, 150); x.lineTo(W - 20, 150); x.stroke();
+  x.fillStyle = 'rgba(255,255,255,.55)'; x.font = '700 22px JetBrains Mono, monospace'; x.textAlign = 'center';
+  const step = maxFt > 100 ? 25 : maxFt > 40 ? 10 : maxFt > 16 ? 5 : 2; for (let t = 0; t <= maxFt; t += step) { x.fillRect(px(t) - 1, 144, 2, 12); x.fillText(t + (t ? '' : ' ft'), px(t), 182); }
+  // the in-focus band
+  const nx = px(nearFt), fx = farFt === Infinity ? W - 20 : px(farFt);
+  const g = x.createLinearGradient(nx, 0, fx, 0); g.addColorStop(0, 'rgba(126,231,135,.15)'); g.addColorStop(.5, 'rgba(126,231,135,.45)'); g.addColorStop(1, farFt === Infinity ? 'rgba(126,231,135,.45)' : 'rgba(126,231,135,.15)'); x.fillStyle = g; x.fillRect(nx, 60, fx - nx, 90);
+  x.fillStyle = '#7ee787'; x.fillRect(nx - 1, 56, 2, 98); if (farFt !== Infinity) x.fillRect(fx - 1, 56, 2, 98);
+  x.font = '700 22px JetBrains Mono, monospace'; x.fillStyle = '#7ee787'; x.textAlign = 'left'; x.fillText('sharp from ' + nearFt.toFixed(1), Math.min(nx + 6, W - 260), 50); x.textAlign = 'right'; x.fillText(farFt === Infinity ? 'to infinity →' : 'to ' + farFt.toFixed(1), fx - 6, 50);
+  // the camera and the subject
+  x.fillStyle = '#ff79c6'; x.fillRect(px(0) - 26, 100, 30, 42); x.fillRect(px(0) + 4, 112, 12, 18); x.fillStyle = '#0a0a0d'; x.beginPath(); x.arc(px(0) - 11, 121, 10, 0, 7); x.fill();
+  const sx = px(subjFt); x.fillStyle = '#f4eef2'; x.beginPath(); x.arc(sx, 84, 12, 0, 7); x.fill(); x.fillRect(sx - 9, 98, 18, 44);
+  x.fillStyle = '#f4eef2'; x.font = '900 italic 26px Saira Condensed, Impact, sans-serif'; x.textAlign = 'center'; x.fillText('them · ' + subjFt + ' ft', sx, 212);
+  x.fillStyle = 'rgba(255,212,121,.9)'; x.font = '700 20px JetBrains Mono, monospace'; x.textAlign = 'center'; if (hFt < maxFt) { x.fillRect(px(hFt) - 1, 60, 2, 90); x.fillText('hyperfocal ' + hFt.toFixed(0), Math.max(90, Math.min(px(hFt), W - 90)), 26); }
+}
+$('#ex-cam').addEventListener('click', e => { const b = e.target.closest('[data-cam]'); if (!b) return; EX.cam = b.dataset.cam; $$('#ex-cam button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); if (EX.cam === 'luna' && !/luna/.test(EX.sensor)) { EX.sensor = 'luna1'; $$('#ex-sensor button').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.s === 'luna1'))); } if (EX.cam === 'fx6' && /luna/.test(EX.sensor)) { EX.sensor = 'ff'; $$('#ex-sensor button').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.s === 'ff'))); } exPaint(); });
 $('#ex-ang').addEventListener('click', e => { const b = e.target.closest('[data-ang]'); if (!b) return; EX.ang = +b.dataset.ang; $$('#ex-ang button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); exPaint(); });
 $('#ex-fps').addEventListener('click', e => { const b = e.target.closest('[data-fps]'); if (!b) return; EX.fps = +b.dataset.fps; $$('#ex-fps button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); exPaint(); });
 $('#ex-nd').addEventListener('input', e => { EX.nd = +e.target.value; $('#ex-nd-o').value = EX.nd; exPaint(); });
 $('#ex-sensor').addEventListener('click', e => { const b = e.target.closest('[data-s]'); if (!b) return; EX.sensor = b.dataset.s; $$('#ex-sensor button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); exPaint(); });
 ['ex-f', 'ex-a', 'ex-d'].forEach(id => $('#' + id).addEventListener('input', exPaint));
+
+/* ---------- SLOW-MO ---------- */
+// every rate each body shoots, with the ceiling it costs: the FX6 does 4K to 120 and HD to 240 (S&Q); the Luna does 4K to 120
+// and 1080p at 240, and its 8K has no slow-mo at all. Thermal: the Luna at 4K120 shuts down around 44 minutes.
+const SM = {cam: 'fx6', rate: 60, out: 24};
+const RATES = {fx6: [[24, '4K'], [25, '4K'], [30, '4K'], [50, '4K'], [60, '4K'], [100, 'UHD, not DCI'], [120, 'UHD, not DCI'], [200, 'HD, full frame'], [240, 'HD, full frame']], luna: [[24, '8K · 4K'], [25, '8K · 4K'], [30, '8K · 4K'], [48, '4K'], [60, '4K'], [100, '4K · 2.7K'], [120, '4K · 44 min'], [200, '1080p only'], [240, '1080p only']]};
+function smRates(){ $('#sm-rate').innerHTML = RATES[SM.cam].map(r => `<button type="button" data-rate="${r[0]}" aria-pressed="${r[0] === SM.rate}">${r[0]}</button>`).join(''); }
+function smPaint(){
+  const rates = RATES[SM.cam]; if (!rates.some(r => r[0] === SM.rate)) SM.rate = 60; smRates();
+  const r = rates.filter(x => x[0] === SM.rate)[0]; const k = SM.rate / SM.out; const sh = SM.rate * 2; const stops = Math.log2(SM.rate / 24);
+  const slow = k > 1.01;
+  $('#sm-out1').innerHTML = `<div class="stat hot"><i>${SM.rate} shot, ${SM.out} played</i><b>${slow ? k.toFixed(k < 3 ? 2 : 1) + 'x slower' : k < .99 ? (1 / k).toFixed(1) + 'x faster' : 'real time'}</b><small>${slow ? 'one second takes ' + k.toFixed(1) + ' s' : slow ? '' : 'no slow-mo at this pair'}</small></div><div class="stat"><i>Shutter at 180°</i><b>1/${sh}</b><small>${SM.cam === 'luna' ? 'within the Luna\\u2019s 1/24 to 1/8000' : 'or shutter angle 180 in S&Q'}</small></div>`;
+  $('#sm-drag').style.setProperty('--k', String(Math.max(1, k))); $('#sm-tag').textContent = slow ? 'the same move at ' + k.toFixed(1) + 'x slower' : 'the same move, real time';
+  $('#sm-out2').innerHTML = `<div class="stat"><i>Light</i><b>${stops <= 0 ? 'same as 24' : '-' + stops.toFixed(1) + ' stop' + (stops === 1 ? '' : 's')}</b><small>${stops > 0 ? 'the shutter is ' + Math.round(SM.rate / 24) + 'x shorter than at 24' : 'nothing to pay'}</small></div><div class="stat"><i>Resolution</i><b>${r[1]}</b><small>${SM.rate >= 200 ? (SM.cam === 'fx6' ? 'HD only, and full frame only, not S35' : '1080p only, a real quality hit') : SM.rate >= 100 && SM.cam === 'luna' ? '1x and 3x only, no continuous zoom · 4K120 shuts down near 44 min' : SM.rate >= 100 ? 'UHD only: DCI 4K stops at 60' : 'full quality'}</small></div>`;
+  $('#sm-note').innerHTML = SM.cam === 'luna' ? 'Luna: Slow-Mo is its own mode on the body (4K and 2.7K at 120/100, 1080p at 240/200/120/100), not a timeline trick. At 4K120 the zoom is 1x or 3x, nothing in between. ISO climbs fast at 120 and 240 in a club (the shutter is 1/240 and 1/480): lock ISO by hand, expose to the right on the phone histogram, and expect PureVideo to turn I-Log off when it gets dark. 8K has no high rates and no in-camera filters.' : 'FX6: S&Q Motion with the project at ' + SM.out + ' and the shooting rate at ' + SM.rate + '. Shutter angle stays at 180 and the camera does the math (angle runs 5.6° to 360° in S&Q). Audio does not record in S&Q: slate it, or shoot the sound separately. Autofocus holds to 100 on a 25 base and 120 on a 29.97 base. Base ISO 12800 is the move when the shutter gets short.';
+  $('#sm-table').innerHTML = `<span class="lbl">Every rate on the ${CAMS[SM.cam].name}, delivered at ${SM.out}</span><div class="smtab">` + rates.map(x => { const kk = x[0] / SM.out; return `<div class="${x[0] === SM.rate ? 'on' : ''}" data-rate="${x[0]}"><b>${x[0]}</b><span>${kk > 1.01 ? kk.toFixed(kk < 3 ? 2 : 1) + 'x' : kk < .99 ? 'speeds up' : 'real'}</span><span>1/${x[0] * 2}</span><small>${x[1]}</small></div>`; }).join('') + '</div>';
+}
+$('#sm-cam').addEventListener('click', e => { const b = e.target.closest('[data-cam]'); if (!b) return; SM.cam = b.dataset.cam; $$('#sm-cam button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); smPaint(); });
+$('#sm-rate').addEventListener('click', e => { const b = e.target.closest('[data-rate]'); if (!b) return; SM.rate = +b.dataset.rate; smPaint(); });
+$('#sm-table').addEventListener('click', e => { const b = e.target.closest('[data-rate]'); if (!b) return; SM.rate = +b.dataset.rate; smPaint(); });
+$('#sm-out').addEventListener('click', e => { const b = e.target.closest('[data-out]'); if (!b) return; SM.out = +b.dataset.out; $$('#sm-out button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); smPaint(); });
+
+/* ---------- STOPWATCH ---------- */
+// a real stopwatch: the crown starts and stops, the pusher laps while running and resets when stopped. The clock is wall time,
+// so leaving the tool, the app or the phone does not lose it (kit-watch keeps the start and the laps).
+const SW = Object.assign({run: false, t0: 0, acc: 0, laps: []}, load('watch', {}));
+let swLock = null;
+function swNow(){ return SW.acc + (SW.run ? Date.now() - SW.t0 : 0); }
+function swFmt(ms){ const t = Math.max(0, ms); const m = Math.floor(t / 60000), s = Math.floor(t / 1000) % 60, c = Math.floor(t / 10) % 100; return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0') + '<small>.' + String(c).padStart(2, '0') + '</small>'; }
+function swPaint(){
+  const t = swNow(); $('#sw-lcd').innerHTML = swFmt(t);
+  $('#sw-sec').style.transform = 'rotate(' + ((t % 60000) / 60000 * 360) + 'deg)'; $('#sw-min').style.transform = 'rotate(' + ((t / 60000) % 30 / 30 * 360) + 'deg)';
+  $('#sw-crown').textContent = SW.run ? 'STOP' : 'START'; $('#sw-push').textContent = SW.run ? 'LAP' : (SW.acc ? 'RESET' : 'LAP');
+  $('#sw-laps').innerHTML = SW.laps.map((l, i) => `<div class="take"><span class="id">${SW.laps.length - i}<small>lap</small></span><span class="tx"><b>${swFmt(l.t)}</b><small>split ${swFmt(l.d)}</small></span></div>`).join('');
+  if (SW.run) requestAnimationFrame(swPaint);
+}
+async function swLockOn(){ try { if ('wakeLock' in navigator && !swLock) swLock = await navigator.wakeLock.request('screen'); } catch(e){} }
+function swLockOff(){ try { if (swLock) { swLock.release(); swLock = null; } } catch(e){} }
+$('#sw-crown').addEventListener('click', () => { if (SW.run) { SW.acc = swNow(); SW.run = false; swLockOff(); } else { SW.t0 = Date.now(); SW.run = true; swLockOn(); } save('watch', SW); buzz(); tick(); swPaint(); });
+$('#sw-push').addEventListener('click', () => { if (SW.run) { const t = swNow(); const last = SW.laps.length ? SW.laps[0].t : 0; SW.laps.unshift({t, d: t - last}); if (SW.laps.length > 40) SW.laps.length = 40; } else { SW.acc = 0; SW.laps = []; } save('watch', SW); buzz(); swPaint(); });
+function tick(){ const c = ac(); if (!c) return; const o = c.createOscillator(), g = c.createGain(); o.type = 'square'; o.frequency.value = 2200; g.gain.value = .04; o.connect(g); g.connect(c.destination); o.start(); g.gain.linearRampToValueAtTime(0, c.currentTime + .03); o.stop(c.currentTime + .04); }
+document.addEventListener('visibilitychange', () => { if (!document.hidden && SW.run) { swLockOn(); swPaint(); } });
 
 /* ---------- SCREENS ---------- */
 const SCREENS = {grey: '#767676', white: '#ffffff', black: '#000000', red: '#ff0000', pink: '#ff79c6'};
@@ -820,7 +1000,6 @@ document.addEventListener('click', e => {
   const k = b.dataset.screen, f = $('#sc-full'); f.querySelectorAll('.bars').forEach(x => x.remove());
   f.querySelectorAll('.bars, .star, .bigclock').forEach(x => x.remove());
   if (k === 'star') { f.style.background = '#fff'; const c = document.createElement('canvas'); c.className = 'star'; c.style.cssText = 'position:absolute;inset:0;width:100%;height:100%'; const s = Math.min(innerWidth, innerHeight) * devicePixelRatio; c.width = innerWidth * devicePixelRatio; c.height = innerHeight * devicePixelRatio; const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.translate(c.width / 2, c.height / 2); x.fillStyle = '#000'; for (let i = 0; i < 72; i++) { x.beginPath(); x.moveTo(0, 0); x.arc(0, 0, s * .46, i * Math.PI / 36, (i + .5) * Math.PI / 36); x.closePath(); x.fill(); } f.prepend(c); }
-  else if (k === 'timer') { f.style.background = '#000'; const d = document.createElement('div'); d.className = 'bigclock'; d.style.cssText = 'position:absolute;inset:0;display:grid;place-items:center;align-content:center;gap:8px;color:#fff;font:900 italic 22vw/1 var(--f-display);text-align:center'; d.innerHTML = '<b id="bc-t">0:00</b><small style="font:700 12px/1.4 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)" id="bc-l">tap to lap · hold to leave</small>'; f.prepend(d); SCT.t0 = Date.now(); SCT.laps = []; clearInterval(SCT.iv); SCT.iv = setInterval(() => { const s = Math.floor((Date.now() - SCT.t0) / 1000); const el = $('#bc-t'); if (el) el.textContent = Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }, 250); }
   else if (k === 'bars') { f.style.background = '#000'; const cols = ['#c0c0c0', '#c0c000', '#00c0c0', '#00c000', '#c000c0', '#c00000', '#0000c0']; const d = document.createElement('div'); d.className = 'bars'; d.innerHTML = cols.map(c => `<i style="background:${c}"></i>`).join(''); f.prepend(d); }
   else f.style.background = SCREENS[k];
   f.querySelector('.tip').style.color = k === 'white' || k === 'grey' ? 'rgba(0,0,0,.45)' : 'rgba(255,255,255,.5)';
@@ -828,7 +1007,7 @@ document.addEventListener('click', e => {
 });
 const SCT = {t0: 0, laps: [], iv: null, hold: null};
 $('#sc-full').addEventListener('pointerdown', () => { SCT.hold = setTimeout(() => { SCT.hold = null; clearInterval(SCT.iv); $('#sc-full').classList.remove('on'); }, 700); });
-$('#sc-full').addEventListener('pointerup', () => { if (!SCT.hold) return; clearTimeout(SCT.hold); SCT.hold = null; if ($('#sc-full .bigclock')) { const s = Math.floor((Date.now() - SCT.t0) / 1000); SCT.laps.unshift(Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0')); const l = $('#bc-l'); if (l) l.textContent = 'laps ' + SCT.laps.slice(0, 4).join(' · ') + ' · hold to leave'; buzz(); return; } clearInterval(SCT.iv); $('#sc-full').classList.remove('on'); });
+$('#sc-full').addEventListener('pointerup', () => { if (!SCT.hold) return; clearTimeout(SCT.hold); SCT.hold = null; $('#sc-full').classList.remove('on'); });
 $('#sc-tone').addEventListener('click', e => {
   if (toneOsc) { try { toneOsc.stop(); } catch(x){} toneOsc = null; e.currentTarget.textContent = '1 kHz tone: off'; e.currentTarget.setAttribute('aria-pressed', 'false'); return; }
   const c = ac(); if (!c) { toast('No audio here.'); return; } const o = c.createOscillator(), g = c.createGain(); o.frequency.value = 1000; g.gain.value = .3; o.connect(g); g.connect(c.destination); o.start(); toneOsc = o;

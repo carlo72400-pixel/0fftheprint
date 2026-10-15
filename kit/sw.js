@@ -1,10 +1,10 @@
 /* THE KIT offline worker (10/15): the page, its icons and the house art it uses are cached on install, so the kit opens with no
    signal. Bump BUILD when the page changes; the old cache is dropped on activate. Same-origin only; fonts just fall back. */
-const BUILD = 'kit-20261015c';
+const BUILD = 'kit-20261015d';
 const FILES = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png',
   '../assets/cathedral/mark.webp', '../assets/cathedral/w/stage.webp', '../assets/cathedral/w/screen.webp', '../assets/cathedral/w/film.webp',
   '../assets/cathedral/w/all.webp', '../assets/cathedral/w/going.webp', '../assets/cathedral/w/tonight.webp', '../assets/cathedral/w/pin.webp',
-  '../assets/cathedral/w/deal.webp', '../assets/cathedral/w/lock.webp'];
+  '../assets/cathedral/w/deal.webp', '../assets/cathedral/w/lock.webp', '../assets/cathedral/w/fest.webp', '../assets/cathedral/a/coming.webp'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(BUILD).then(c => c.addAll(FILES)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== BUILD).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
 self.addEventListener('fetch', e => {
