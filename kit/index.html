@@ -335,7 +335,7 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
 .ask-h{font:900 italic clamp(30px,9.2vw,58px)/.92 var(--f-display);text-transform:uppercase;text-align:center;color:#fff;text-shadow:0 2px 0 #000,0 0 24px rgba(255,121,198,.6);max-width:11ch;margin:0 0 4px}
 .ask-who{position:relative;min-height:0;justify-self:center;align-self:end}
 .ask-who img{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 12px 20px rgba(0,0,0,.7))}
-.ask-who .board{position:absolute;display:grid;place-items:center;text-align:center;color:#0a0a0d;font:900 italic 40px/.9 var(--f-display);text-transform:uppercase;padding:4% 5% 4% 7%;box-sizing:border-box;overflow:hidden;word-break:keep-all;overflow-wrap:normal;hyphens:none}
+.ask-who .board{position:absolute;display:grid;place-items:center;text-align:center;color:#0a0a0d;font:900 italic 40px/.9 var(--f-display);text-transform:uppercase;padding:4% 5% 4% 7%;box-sizing:border-box;overflow:hidden;word-break:keep-all;overflow-wrap:normal;hyphens:none;text-wrap:balance}
 .ask-who.l,[data-o="l"] .ask-who.p{display:none}
 [data-o="l"] .ask-who.l{display:block}
 .ask-burst{position:absolute;width:28%;max-width:150px;opacity:0;pointer-events:none;animation:askburst 6s 1.4s ease-out infinite;filter:drop-shadow(0 0 18px rgba(255,255,255,.8))}
@@ -367,7 +367,7 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
 [data-o="l"] .ask-k{min-height:76px}
 [data-o="l"] .ask-k b{font-size:clamp(24px,4.2vw,32px)}
 [data-o="l"] .ask-k.yes{min-height:92px}
-[data-o="l"] .ask-burst{width:18%}
+[data-o="l"] .ask-burst{width:16%;right:auto;left:2%;top:4%}
 /* YES: the screen goes white, LOOK HERE, 3 2 1, then the QR. NO: all good. */
 .ask-go{position:fixed;inset:0;z-index:97;display:grid;place-items:center;text-align:center;background:#fff;color:#0a0a0d;color-scheme:light;forced-color-adjust:none}
 .ask-go[hidden]{display:none}
@@ -684,7 +684,7 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
   <div class="ask-stage" id="ask-stage">
     <b class="ask-h" id="ask-h">Can I get a photo?</b>
     <div class="ask-who p"><img src="../assets/cathedral/shot/ask_p.webp?v=3" alt="" decoding="async"><div class="board" id="ask-bp" style="left:2.14%;top:15.74%;width:47.50%;height:23.80%;transform:rotate(-0.95deg)"></div></div>
-    <div class="ask-who l"><img src="../assets/cathedral/shot/ask_l.webp?v=3" alt="" decoding="async"><div class="board" id="ask-bl" style="left:26.17%;top:2.52%;width:72.09%;height:88.41%;transform:rotate(-0.2deg)"></div></div>
+    <div class="ask-who l"><img src="../assets/cathedral/shot/ask_l.webp?v=4" alt="" decoding="async"><div class="board" id="ask-bl" style="left:33.62%;top:4.49%;width:64.84%;height:88.44%;transform:rotate(-0.08deg)"></div></div>
     <img class="ask-burst" id="ask-burst" src="../assets/cathedral/shot/t_flash.webp" alt="" style="right:6%;top:14%">
   </div>
   <div class="ask-body">
@@ -1184,7 +1184,7 @@ function askPaint(){
   $('#ask-lock').classList.toggle('on', AK.lock); $('#ask-lock').textContent = AK.lock ? 'locked ' + (AK.lockO === 'l' ? 'wide' : 'tall') : 'lock';
   requestAnimationFrame(() => { askSize(); askFit($('#ask-bp')); askFit($('#ask-bl')); });
 }
-const ASK_AR = {p: 849 / 1148, l: 1274 / 748};   /* the art's own width / height (ask.json) */
+const ASK_AR = {p: 849 / 1148, l: 1360 / 778};   /* the art's own width / height (ask.json) */
 function askSize(){
   const st = $('#ask-stage'), o = $('#ask-full').dataset.o, who = st.querySelector('.ask-who.' + o); if (!who) return;
   const cs = getComputedStyle(st); const W = st.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
