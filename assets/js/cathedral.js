@@ -34,7 +34,9 @@
     if (!nightsP) nightsP = fetch('events/events.json', { cache: 'no-cache' })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) {
-        var items = ((j && j.items) || []).filter(function (e) { return e && SLUG.test(e.slug || '') && (e.count | 0) > 0; });
+        // a MINI PACK (10/16, events.json `mini`) is not a night: off the counter, the picker and the new-night card.
+        // It still sits on the shelf (/events/, the Photos set list), tagged MINI.
+        var items = ((j && j.items) || []).filter(function (e) { return e && SLUG.test(e.slug || '') && (e.count | 0) > 0 && !e.mini; });
         items.sort(function (a, b) { return String(b.date).localeCompare(String(a.date)); });
         return items;
       }).catch(function () { return []; });

@@ -37,9 +37,14 @@
   var N = w.OTPNight;
   if (!N || !Array.isArray(N.media) || !N.media.length) return;
 
-  var PACK = 5;                       // frames per pack
   var media = N.media;
   var n = media.length;
+  // THE MINI PACK (10/16, his call on a small night, XBONGX: "push it as a mini pack"). newevent.py --mini sets
+  // OTPNight.mini: one rip deals all of it, the pouch is the smaller one with the MINI sticker (sealed.css), the words
+  // say mini pack. The hit, the rarity and the binder are the same as any night's.
+  var MINI = !!N.mini;
+  var PACK = MINI ? n : 5;            // frames per pack
+  var WHOLE = MINI ? 'mini pack' : 'night';
 
   /* ---------- rarity ----------
      ⛔ DETERMINISTIC, NOT RANDOM. A frame's rarity is a property OF THAT FRAME,
@@ -143,7 +148,7 @@
      The title is printed over the picture, as the pack's logo. */
   var tl = String(N.title || 'Last Night');
   seal.innerHTML =
-    '<button class="sl-pack party" id="sl-pack" type="button" aria-label="Tear the pack open">' +
+    '<button class="sl-pack party' + (MINI ? ' mini' : '') + '" id="sl-pack" type="button" aria-label="Tear the ' + (MINI ? 'mini ' : '') + 'pack open">' +
       '<span class="pk-b"><img class="pk-w" alt="" width="520" height="878"></span>' +
       '<span class="pk-top"><img class="pk-w" alt="" width="520" height="878"></span>' +
       '<span class="face">' +
@@ -154,10 +159,12 @@
     '</button>' +
     '<div class="sl-say">' +
       '<div class="big">Tear it open</div>' +
-      '<div class="sub">' + PACK + ' frames a pack. Odds of pulling yourself: decent if you were there.</div>' +
+      '<div class="sub">' + (MINI ? 'A mini pack: one rip, all ' + n + ' frames.' : PACK + ' frames a pack.') +
+        ' Odds of pulling yourself: decent if you were there.</div>' +
       '<div class="odds">In this pack: <b>1</b> hit &middot; <b>' + counts.holo + '</b> holo &middot; ' +
         '<b>' + counts.shine + '</b> shine &middot; <b>' + counts.common + '</b> common' +
-        '<br>Chance of the hit in one rip: <b>' + PACK + ' in ' + n + '</b>, about ' + pct + '%.</div>' +
+        (MINI ? '<br>One rip opens the whole mini pack, the hit included.</div>'
+              : '<br>Chance of the hit in one rip: <b>' + PACK + ' in ' + n + '</b>, about ' + pct + '%.</div>') +
       '<div class="sl-mine" id="sl-mine" hidden></div>' +
     '</div>' +
     '<div class="sl-acts" id="sl-acts"></div>' +
@@ -223,7 +230,7 @@
     a.onclick = function () { try { B.open(); } catch (e) {} };
     var t = d.createElement('span');
     t.className = st.hit ? 'got' : '';
-    t.textContent = st.have >= n ? 'The whole night is yours.'
+    t.textContent = st.have >= n ? 'The whole ' + WHOLE + ' is yours.'
       : st.hit ? (gotHit ? 'You pulled the hit.' : 'You found the hit.')
       : 'The hit is still in there.';
     mineEl.appendChild(a); mineEl.appendChild(t);
@@ -259,7 +266,7 @@
     } else {
       var done = d.createElement('div');
       done.className = 'sl-done';
-      done.textContent = 'that is the whole night, ' + n + ' of ' + n;
+      done.textContent = 'that is the whole ' + WHOLE + ', ' + n + ' of ' + n;
       actsEl.appendChild(done);
     }
     var all = d.createElement('button');
@@ -275,7 +282,7 @@
     var st = mine(); if (!st || !st.opened) return;
     var big = seal.querySelector('.sl-say .big'), sub = seal.querySelector('.sl-say .sub');
     if (st.have >= n) {
-      if (big) big.textContent = 'You have the whole night';
+      if (big) big.textContent = 'You have the whole ' + WHOLE;
       if (sub) sub.textContent = 'All ' + n + ' frames are in your binder. Tear it anyway, or open the night below.';
     } else {
       if (big) big.textContent = 'Rip another';
@@ -295,7 +302,8 @@
         var say = seal.querySelector('.sl-say .big');
         var sub = seal.querySelector('.sl-say .sub');
         if (say) say.textContent = N.title || 'The night';
-        if (sub) sub.textContent = 'Tap a frame for the full res file. Rip again for five more.';
+        if (sub) sub.textContent = MINI ? 'Tap a frame for the full res file. That is the whole mini pack.'
+                                        : 'Tap a frame for the full res file. Rip again for five more.';
         var skip = d.getElementById('sl-skip');
         if (skip) skip.remove();
         deal();

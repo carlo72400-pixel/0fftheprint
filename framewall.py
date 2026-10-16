@@ -29,6 +29,8 @@ def build(quiet=False):
         p = os.path.join(ROOT, "events", slug, "data.json")
         if not re.fullmatch(r"[a-z0-9-]{4,80}", slug) or not os.path.exists(p):
             continue
+        if ev.get("mini"):              # a MINI PACK (10/16) is not a night: it stays off the sheet and out of the totals
+            continue
         d = json.load(open(p, encoding="utf-8"))
         media = d.get("media") or []
         n = len(media)

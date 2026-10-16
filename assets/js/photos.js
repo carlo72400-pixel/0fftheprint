@@ -43,7 +43,7 @@
     rooms.sort(function (a, b) { return a.localeCompare(b); });
     bar.innerHTML = '<label>Room<select data-k="room"><option value="">Every room</option>' + rooms.map(function (r) { return '<option value="' + esc(tight(r)) + '">' + esc(r) + '</option>'; }).join('') + '</select></label>' +
       '<label>Month<select data-k="month"><option value="">Every month</option>' + months.map(function (m) { return '<option value="' + esc(m.k) + '">' + esc(m.l) + '</option>'; }).join('') + '</select></label>' +
-      '<div class="ph-chips">' + NIGHTS.slice(0, 5).map(function (n) { var dt = ymd(n.date); return '<button type="button" class="ph-chip" data-slug="' + esc(n.slug) + '">' + esc(n.title) + '<span>' + (dt ? MON[dt.getMonth()] + ' ' + dt.getDate() : '') + '</span></button>'; }).join('') + '</div>';
+      '<div class="ph-chips">' + NIGHTS.filter(function (n) { return !n.mini; }).slice(0, 5).map(function (n) { var dt = ymd(n.date); return '<button type="button" class="ph-chip" data-slug="' + esc(n.slug) + '">' + esc(n.title) + '<span>' + (dt ? MON[dt.getMonth()] + ' ' + dt.getDate() : '') + '</span></button>'; }).join('') + '</div>';
     sec.appendChild(bar);
     var line = el('p', 'ph-binder'); sec.appendChild(line);
     var grid = el('div', 'ph-set'); sec.appendChild(grid);
@@ -54,11 +54,12 @@
     function stateOf(slug) { try { return (w.OTPBinder && w.OTPBinder.night) ? w.OTPBinder.night(slug) : null; } catch (e) { return null; } }
     function tile(n) {
       var dt = ymd(n.date), st = stateOf(n.slug) || {};
-      var a = el('a', 'ph-pack' + (st.done ? ' done' : st.hit ? ' hit' : st.opened ? ' open' : ' sealed'));
+      // a MINI PACK (10/16): same tile, a smaller pouch with a MINI sticker (photos.css), "mini pack" in the line
+      var a = el('a', 'ph-pack' + (st.done ? ' done' : st.hit ? ' hit' : st.opened ? ' open' : ' sealed') + (n.mini ? ' mini' : ''));
       a.href = 'events/' + encodeURIComponent(n.slug) + '/'; a.dataset.slug = n.slug;
       var badge = st.done ? 'Complete' : st.hit ? 'Hit found · ' + st.have + ' / ' + st.total : st.opened ? 'Opened · ' + st.have + ' / ' + st.total : 'Sealed';
       a.innerHTML = '<span class="ph-pack-img"><img src="events/' + esc(n.slug) + '/pack.webp" alt="" width="520" height="878" loading="lazy" decoding="async"><span class="ph-badge">' + esc(badge) + '</span></span>' +
-        '<b>' + esc(n.title) + '</b><span>' + esc(n.venue || '') + (dt ? ' · ' + MON[dt.getMonth()] + ' ' + dt.getDate() : '') + ' · ' + (n.count | 0) + ' frames</span>';
+        '<b>' + esc(n.title) + '</b><span>' + esc(n.venue || '') + (dt ? ' · ' + MON[dt.getMonth()] + ' ' + dt.getDate() : '') + ' · ' + (n.count | 0) + ' frames' + (n.mini ? ' · mini pack' : '') + '</span>';
       return a;
     }
     function paint() {
@@ -192,7 +193,7 @@
       head(sec, 'The Map', 'every room we shot', 'tap a pin for the nights there · homes and private spaces sit on the city, not an address');
       var box = el('div', 'ph-map'); box.setAttribute('role', 'region'); box.setAttribute('aria-label', 'Map of the rooms');
       sec.appendChild(box);
-      var legend = el('p', 'ph-credit', rooms.length + ' rooms · ' + NIGHTS.length + ' nights · map by OpenStreetMap');
+      var legend = el('p', 'ph-credit', rooms.length + ' rooms · ' + NIGHTS.filter(function (n) { return !n.mini; }).length + ' nights · map by OpenStreetMap');
       sec.appendChild(legend);
       var nightsAt = function (room) {
         var keys = [room.key].concat(room.aliases || []).map(tight);

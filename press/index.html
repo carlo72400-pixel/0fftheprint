@@ -84,7 +84,7 @@
   <dl class="rec">
     <div><dt>The Word</dt><dd>Reported stories. <span data-n="word" data-cap>Thirty one</span> published, each numbered and dated. <a href="../#desk">Read the archive</a></dd></div>
     <div><dt>Events</dt><dd>Full night galleries, <span data-n="events">nineteen</span> published. <a href="../events/">See them</a></dd></div>
-    <div><dt>The Work</dt><dd><span data-n="work" data-cap>Fifty one</span> frames from nights, shops, stages, a ring and back rooms. <a href="../work/">See the archive</a></dd></div>
+    <div><dt>The Work</dt><dd><span data-n="work" data-cap>Fifty two</span> frames from nights, shops, stages, a ring and back rooms. <a href="../work/">See the archive</a></dd></div>
     <div><dt>The Tape</dt><dd>Cuts, interviews and night clips. <a href="../video/">Watch</a></dd></div>
   </dl>
   <p>Every piece carries a catalogue number in the form <b>0TP-000</b> and a publication date, so
@@ -160,7 +160,8 @@
     if (newest && el) el.textContent = MONTHS[+newest.slice(4, 6) - 1] + ' ' + (+newest.slice(6, 8)) + ', ' + newest.slice(0, 4);
   }).catch(() => {});
   items('../content/work.json').then(all => { if (all.length) put('work', all.length); }).catch(() => {});
-  items('../events/events.json').then(all => { if (all.length) put('events', all.length); }).catch(() => {});
+  // a MINI PACK (events.json `mini`) is a small night on the shelf, not a gallery: it is not counted here
+  items('../events/events.json').then(all => { const nights = all.filter(e => e && !e.mini); if (nights.length) put('events', nights.length); }).catch(() => {});
 })();
 </script>
 </body>

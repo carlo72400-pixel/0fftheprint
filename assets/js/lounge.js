@@ -49,7 +49,7 @@
   function live() {
     if (live.p) return live.p;
     live.p = Promise.all([getJSON('events/events.json'), getJSON('content/desk.json')]).then(function (r) {
-      var ev = r[0] && Array.isArray(r[0].items) && r[0].items[0];
+      var ev = r[0] && Array.isArray(r[0].items) && r[0].items.filter(function (x) { return x && !x.mini; })[0];   // a MINI PACK is not the last night
       if (ev && /^[a-z0-9-]{4,80}$/.test(ev.slug || '')) LIVE.night = { slug: ev.slug, title: String(ev.title || 'the last night'), n: ev.count | 0 };
       var st = r[1] && Array.isArray(r[1].items) && r[1].items.filter(function (x) { return /^word\/[a-z0-9-]+\/$/.test(x.link || ''); })[0];
       if (st) LIVE.story = { href: st.link, title: String(st.title || 'the new story') };

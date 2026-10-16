@@ -239,3 +239,15 @@
 }
 .tile .tag-dot{position:absolute;top:8px;left:8px;z-index:3;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:#0a0a0d;background:#ff79c6;border-radius:3px;padding:3px 6px;}
 .tile{position:relative;}
+
+/* THE MINI PACK (10/16): a small night (OTPNight.mini) tears the same way off a smaller pouch with a MINI sticker,
+   and sealed.js deals all of it in one rip. The title and the line are px here, so they step down with the pouch
+   (226 / 290 = .78). The shelf's sticker lives in pack.css. */
+.sl-pack.party.mini{width:min(226px,60vw)}
+.sl-pack.party.mini .mk{font-size:26px;-webkit-text-stroke:3.4px #16060f}
+.sl-pack.party.mini .mk.short{font-size:39px}
+.sl-pack.party.mini .mk.long{font-size:20px}
+.sl-pack.party.mini .bot{font-size:8px}
+.sl-pack.party.mini::after{content:'MINI';position:absolute;top:11%;right:-9%;z-index:4;padding:7px 10px 6px;border-radius:3px;
+  font-family:var(--f-mono,monospace);font-weight:700;font-size:13px;line-height:1;letter-spacing:.24em;
+  color:#16060f;background:#ff79c6;box-shadow:0 2px 0 #16060f,0 8px 18px rgba(0,0,0,.55);transform:rotate(9deg);pointer-events:none}

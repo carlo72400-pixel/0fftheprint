@@ -28,3 +28,10 @@ a:hover > .pp,a:focus-visible > .pp{transform:translateY(-8px) rotate(-2deg);fil
 .pp-d{position:absolute;left:4%;right:4%;bottom:7.6%;text-align:center;font-family:var(--f-mono,monospace);font-weight:500;
   font-size:8px;font-size:4.1cqw;line-height:1;letter-spacing:.2em;color:#f3ecf4;text-shadow:0 1px 3px #000,0 0 6px rgba(0,0,0,.8)}
 @media (prefers-reduced-motion:reduce){ .pp{transition:none} a:hover > .pp,a:focus-visible > .pp{transform:none} }
+/* THE MINI PACK (10/16, his call: a small night ships "as a mini pack"; events.json `mini`). A smaller pouch with a
+   MINI sticker, standing on the same line as the full packs beside it: the 37.1% top margin is the height it gave up,
+   in the tile's own width (0.22 x 878/520 = 0.371). The words over the art size off the pouch (cqw), so they shrink with it. */
+.pp.mini{width:78%;margin:37.1% auto 0}
+.pp.mini::after{content:'MINI';position:absolute;top:10%;right:-7%;z-index:2;padding:.55em .75em .5em;border-radius:3px;
+  font-family:var(--f-mono,monospace);font-weight:700;font-size:9px;font-size:7.2cqw;line-height:1;letter-spacing:.22em;
+  color:#16060f;background:#ff79c6;box-shadow:0 2px 0 #16060f,0 6px 14px rgba(0,0,0,.5);transform:rotate(9deg);pointer-events:none}

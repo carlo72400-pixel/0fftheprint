@@ -866,6 +866,12 @@ def main():
                                  "(default: the first horizontal frame)")
     ap.add_argument("--no-upload", action="store_true",
                     help="build everything but skip the release upload (dry run)")
+    # THE MINI PACK (10/16, his call on XBONGX: "theres not much content u can push it as a mini pack"). A small night
+    # keeps its own page but ships as a MINI: one rip opens all of it, a smaller pouch with a MINI sticker on every
+    # shelf, and it is NOT counted as a night (the homepage counter and picker, the contact sheet, the press count and
+    # the map legend all skip it). The flag rides on events.json, data.json and the page's OTPNight.
+    ap.add_argument("--mini", action="store_true",
+                    help="ship it as a MINI PACK (a small night: one rip opens it all, not counted as a night)")
     ap.add_argument("--acts", nargs="+", action="append", default=[], metavar="'NAME|dj|SPOTIFY|OTHER'",
                     help="who played, for the Music tab's Who Played. Each one goes to "
                          "_build/music/build_music.py night <slug> --act ... --write, in its own "
@@ -942,8 +948,10 @@ def main():
     for n in [n for n, _ in vlooks]:
         if n not in all_looks:
             all_looks.append(n)
-    night = json.dumps({"slug": slug, "title": title,
-                        "venue": a.venue, "dateShort": dateshort, "looks": all_looks})
+    night = {"slug": slug, "title": title, "venue": a.venue, "dateShort": dateshort, "looks": all_looks}
+    if a.mini:
+        night["mini"] = True
+    night = json.dumps(night)
     page = (PAGE.replace("__NIGHT__", night)
                 .replace("__MEDIA__", json.dumps(items))
                 .replace("__LOOKSLINE__", looks_line(all_looks))
@@ -960,18 +968,23 @@ def main():
     except Exception as e:
         print(f"  page not stamped ({e}); run stamp.py before the commit")
     open(os.path.join(out, "index.html"), "w", encoding="utf-8").write(page)
-    json.dump({"slug": slug, "title": title, "venue": a.venue, "date": a.date,
-               "date_short": dateshort, "count": len(items), "looks": all_looks,
-               "media": items},
-              open(os.path.join(out, "data.json"), "w"), indent=2)
+    data = {"slug": slug, "title": title, "venue": a.venue, "date": a.date,
+            "date_short": dateshort, "count": len(items), "looks": all_looks}
+    if a.mini:
+        data["mini"] = True
+    data["media"] = items
+    json.dump(data, open(os.path.join(out, "data.json"), "w"), indent=2)
 
     # update the index
     idx_path = os.path.join(EVENTS, "events.json")
     idx = json.load(open(idx_path)) if os.path.exists(idx_path) else {"items": []}
     idx["items"] = [e for e in idx["items"] if e["slug"] != slug]
-    idx["items"].append({"slug": slug, "title": title, "venue": a.venue,
-                         "date": a.date, "date_short": dateshort,
-                         "count": len(items), "cover": f"{slug}/media/001_t.jpg"})
+    row = {"slug": slug, "title": title, "venue": a.venue,
+           "date": a.date, "date_short": dateshort,
+           "count": len(items), "cover": f"{slug}/media/001_t.jpg"}
+    if a.mini:
+        row["mini"] = True
+    idx["items"].append(row)
     idx["items"].sort(key=lambda e: e["date"], reverse=True)
     json.dump(idx, open(idx_path, "w"), indent=2, ensure_ascii=False)
 

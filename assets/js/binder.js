@@ -318,7 +318,7 @@
     // hung after it lands a blank line lower than it should
     if (!box) { box = el('span', 'bn-prog'); box.appendChild(el('i')); box.appendChild(el('b')); (a.querySelector('.cap') || a).appendChild(box); }
     box.firstChild.style.setProperty('--p', (st.total ? Math.min(100, Math.round(100 * st.have / st.total)) : 0) + '%');
-    box.lastChild.textContent = st.done ? 'night complete' : st.have + ' / ' + st.total + (st.hit ? ' · hit found' : '');
+    box.lastChild.textContent = st.done ? (pp.classList.contains('mini') ? 'mini pack complete' : 'night complete') : st.have + ' / ' + st.total + (st.hit ? ' · hit found' : '');
     a.classList.add('bn-open'); a.classList.toggle('bn-done', st.done); a.classList.toggle('bn-hit', st.hit);
   }
   function paintPacks(root) {
@@ -334,7 +334,7 @@
   function packTile(e, cls) {
     var title = String(e.title || '');
     var a = el('a', cls); a.href = BASE + 'events/' + e.slug + '/';
-    var pp = el('span', 'pp');
+    var pp = el('span', 'pp' + (e.mini ? ' mini' : ''));   // a MINI PACK (10/16): the smaller pouch with the sticker (pack.css)
     var wimg = el('img', 'pp-w'); wimg.alt = ''; wimg.width = 520; wimg.height = 878; wimg.loading = 'lazy'; wimg.decoding = 'async';
     wimg.addEventListener('error', function () { wimg.src = BASE + 'assets/cathedral/pack-house.webp'; }, { once: true });
     wimg.src = BASE + 'events/' + e.slug + '/pack.webp';
@@ -344,7 +344,7 @@
     a.appendChild(pp);
     var cap = el('span', 'cap');
     cap.appendChild(el('b', '', e.venue || title));
-    cap.appendChild(el('i', '', (e.count | 0) + ' frames · sealed'));
+    cap.appendChild(el('i', '', (e.mini ? 'mini pack · ' : '') + (e.count | 0) + ' frames · sealed'));
     a.appendChild(cap);
     return a;
   }
@@ -428,7 +428,7 @@
         a.appendChild(pic);
         var tx = el('span', 'bn-tx');
         tx.appendChild(el('b', '', e.title || e.slug));
-        tx.appendChild(el('span', '', [e.venue, e.date_short].filter(Boolean).join(' · ')));
+        tx.appendChild(el('span', '', [e.venue, e.date_short, e.mini ? 'mini pack' : ''].filter(Boolean).join(' · ')));
         var meter = el('span', 'bn-meter'); var fill = el('i');
         fill.style.setProperty('--p', (st.total ? Math.min(100, Math.round(100 * st.have / st.total)) : 0) + '%');
         meter.appendChild(fill); tx.appendChild(meter);

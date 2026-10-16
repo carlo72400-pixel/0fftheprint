@@ -450,7 +450,7 @@
     var items = rows.filter(function (r) { return !isVideo(r.image_url); }).map(function (r) { return { t: new Date(r.created_at).getTime() || 0, r: r }; })
       .concat(nights.map(function (n) { var dt = ymd(n.date); return { t: dt ? dt.getTime() + 23 * 36e5 : 0, n: n }; }))
       .sort(function (a, b) { return b.t - a.t; });
-    mount.appendChild(el('div', 'rl-wk-h rl-feed-h', '<b>The roll</b><span>' + rows.length + (rows.length === 1 ? ' photo' : ' photos') + ' from the house · ' + nights.length + ' nights</span>'));
+    mount.appendChild(el('div', 'rl-wk-h rl-feed-h', '<b>The roll</b><span>' + rows.length + (rows.length === 1 ? ' photo' : ' photos') + ' from the house · ' + nights.filter(function (n) { return !n.mini; }).length + ' nights</span>'));
     items.forEach(function (x) { feed.appendChild(x.r ? postCard(x.r, people[x.r.id]) : nightCard(x.n)); });
     if (!items.length) feed.appendChild(el('p', 'rl-note', 'Nothing on the roll yet. Post the first one.'));
     mount.appendChild(feed);
