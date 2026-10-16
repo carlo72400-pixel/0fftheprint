@@ -319,9 +319,9 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
    drunk: ONE question, Bala with the camera up and the sign, TWO giant keys for THEIR thumb (YES / NOT TONIGHT), nothing else to read.
    Swipe for the other cards (you two, film, the room, Spanish). YES = white LOOK HERE 3-2-1 then the QR. Portrait = held up like a
    sign, landscape = wide for two people; the orientation follows the phone unless the lock is on. Art: ask_p / ask_l + ask.json. */
-.askfull{position:fixed;inset:0;z-index:95;background:#1a0a10 url(../assets/cathedral/shot/ask_wall_p.webp) center/cover no-repeat;display:grid;grid-template-rows:auto minmax(0,1fr) auto;padding:calc(var(--sat) + 10px) 0 0;overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:pan-y}
+.askfull{position:fixed;inset:0;z-index:95;background:#1a0a10 url(../assets/cathedral/shot/ask_wall_p.webp?v=3) center/cover no-repeat;display:grid;grid-template-rows:auto minmax(0,1fr) auto;padding:calc(var(--sat) + 10px) 0 0;overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:pan-y}
 .askfull::before{content:"";position:absolute;inset:0;background:radial-gradient(70% 55% at 50% 45%,transparent 45%,rgba(0,0,0,.45) 100%);pointer-events:none}
-[data-o="l"].askfull{background-image:url(../assets/cathedral/shot/ask_wall_l.webp)}
+[data-o="l"].askfull{background-image:url(../assets/cathedral/shot/ask_wall_l.webp?v=3)}
 .askfull[hidden]{display:none}
 .askfull>*{position:relative}
 .ask-top{display:flex;align-items:center;justify-content:space-between;padding:0 14px;min-height:34px}
@@ -442,7 +442,7 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
     <!-- THE QR (10/15): the thing he holds up after the flash. Full screen, white, the code to /shot/ (the "you got shot"
          page: follow, leave your @, wait for the pack). The PNG is in the worker, so it shows with no signal. -->
     <button type="button" class="btn primary big qrkey" id="qr-show"><img src="qr-shot.png" alt="" width="44" height="44"><span>Show the QR<small>you got shot · 0fftheprint.com/shot</small></span></button>
-    <button type="button" class="btn primary big qrkey askkey" id="ask-show"><img src="../assets/cathedral/shot/ask_p.webp" alt="" width="44" height="44" style="object-fit:contain;object-position:top;background:#2a0a1e"><span>The Ask<small>can I get a photo? · they tap YES</small></span></button>
+    <button type="button" class="btn primary big qrkey askkey" id="ask-show"><img src="../assets/cathedral/shot/ask_p.webp?v=3" alt="" width="44" height="44" style="object-fit:contain;object-position:top;background:#2a0a1e"><span>The Ask<small>can I get a photo? · they tap YES</small></span></button>
     <div class="doors">
       <button type="button" class="door" data-go="prompter"><img src="../assets/cathedral/w/screen.webp" alt=""><b>Prompter</b><span>read to camera</span></button>
       <button type="button" class="door" data-go="slate"><img src="../assets/cathedral/w/film.webp" alt=""><b>Slate</b><span>beep + flash to sync</span></button>
@@ -683,8 +683,8 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
   <div class="ask-top"><button type="button" class="x" id="ask-x">&lsaquo; leave</button><span class="dots" id="ask-dots"></span><button type="button" class="lk" id="ask-lock">lock</button></div>
   <div class="ask-stage" id="ask-stage">
     <b class="ask-h" id="ask-h">Can I get a photo?</b>
-    <div class="ask-who p"><img src="../assets/cathedral/shot/ask_p.webp" alt="" decoding="async"><div class="board" id="ask-bp" style="left:3.76%;top:44.54%;width:54%;height:26.31%"></div></div>
-    <div class="ask-who l"><img src="../assets/cathedral/shot/ask_l.webp" alt="" decoding="async"><div class="board" id="ask-bl" style="left:36.86%;top:12.06%;width:61.19%;height:75.88%"></div></div>
+    <div class="ask-who p"><img src="../assets/cathedral/shot/ask_p.webp?v=3" alt="" decoding="async"><div class="board" id="ask-bp" style="left:2.14%;top:15.74%;width:47.50%;height:23.80%;transform:rotate(-0.95deg)"></div></div>
+    <div class="ask-who l"><img src="../assets/cathedral/shot/ask_l.webp?v=3" alt="" decoding="async"><div class="board" id="ask-bl" style="left:26.17%;top:2.52%;width:72.09%;height:88.41%;transform:rotate(-0.2deg)"></div></div>
     <img class="ask-burst" id="ask-burst" src="../assets/cathedral/shot/t_flash.webp" alt="" style="right:6%;top:14%">
   </div>
   <div class="ask-body">
@@ -1184,7 +1184,7 @@ function askPaint(){
   $('#ask-lock').classList.toggle('on', AK.lock); $('#ask-lock').textContent = AK.lock ? 'locked ' + (AK.lockO === 'l' ? 'wide' : 'tall') : 'lock';
   requestAnimationFrame(() => { askSize(); askFit($('#ask-bp')); askFit($('#ask-bl')); });
 }
-const ASK_AR = {p: 824 / 1163, l: 1332 / 796};   /* the art's own width / height (ask.json) */
+const ASK_AR = {p: 849 / 1148, l: 1274 / 748};   /* the art's own width / height (ask.json) */
 function askSize(){
   const st = $('#ask-stage'), o = $('#ask-full').dataset.o, who = st.querySelector('.ask-who.' + o); if (!who) return;
   const cs = getComputedStyle(st); const W = st.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
