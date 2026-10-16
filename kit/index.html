@@ -354,6 +354,21 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
 .ask-h{text-shadow:0 2px 0 #000,-2px 0 0 rgba(255,0,80,.55),2px 0 0 rgba(0,220,255,.55),0 0 24px rgba(255,121,198,.6)}
 .ask-who .board{text-shadow:.018em .02em 0 #ff9fd6,.036em .04em 0 #f068b6,.054em .06em 0 #d9479b,.072em .08em 0 #a8306f,.09em .1em 0 #6d1f4b,.12em .14em .12em rgba(0,0,0,.35)}
 .ask-who img{filter:drop-shadow(0 12px 20px rgba(0,0,0,.7)) saturate(1.08)}
+/* stickers (10/15 late, his "add stickers to spice it up"): the six tin pins float round Bala at their own depths, never on the sign or the words */
+.ask-st{position:absolute;width:16%;max-width:96px;height:auto;pointer-events:none;filter:drop-shadow(0 8px 12px rgba(0,0,0,.6));animation:stbob 5s ease-in-out infinite;z-index:3}
+.ask-st.a{left:1%;top:46%;transform:rotate(-14deg) translateZ(55px)}
+.ask-st.b{right:1%;top:36%;transform:rotate(12deg) translateZ(85px);animation-delay:-1.3s}
+.ask-st.c{left:3%;top:66%;width:14%;transform:rotate(8deg) translateZ(30px);animation-delay:-2.6s}
+.ask-st.d{right:5%;top:62%;transform:rotate(-9deg) translateZ(95px);animation-delay:-3.4s}
+.ask-st.e{left:36%;top:80%;width:13%;transform:rotate(16deg) translateZ(110px);animation-delay:-.8s}
+.ask-st.f{right:22%;top:84%;width:12%;transform:rotate(-18deg) translateZ(20px);animation-delay:-4.1s}
+@keyframes stbob{0%,100%{margin-top:0}50%{margin-top:7px}}
+[data-o="l"] .ask-st{width:11%;max-width:72px}
+[data-o="l"] .ask-st.a{left:1%;top:16%}
+[data-o="l"] .ask-st.b{right:auto;left:21%;top:2%;width:9%}
+[data-o="l"] .ask-st.c{left:1%;top:72%;width:10%}
+[data-o="l"] .ask-st.d{right:auto;left:20%;top:80%;width:10%}
+[data-o="l"] .ask-st.e,[data-o="l"] .ask-st.f{display:none}
 /* the body: leatherette with a brushed plate, two machined keys with travel, for their thumbs */
 .ask-body{padding:12px 14px calc(var(--sab) + 14px);background:linear-gradient(180deg,#2b2832,#1a181f);box-shadow:0 -1px 0 rgba(255,255,255,.12),0 -10px 24px rgba(0,0,0,.6);display:grid;gap:10px}
 .ask-k{display:grid;grid-template-columns:64px minmax(0,1fr);align-items:center;gap:0 12px;min-height:92px;padding:10px 16px 10px 12px;border:0;border-radius:8px;text-align:left;cursor:pointer;font:inherit;color:#f1ecf5;background:linear-gradient(180deg,#45414e,#27242e);box-shadow:0 1px 0 rgba(255,255,255,.18),0 7px 0 #0b0a0e,0 12px 14px rgba(0,0,0,.6);transition:transform .06s,box-shadow .06s}
@@ -692,6 +707,7 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
     <b class="ask-h" id="ask-h">Can I get a photo?</b>
     <div class="ask-who p"><img src="../assets/cathedral/shot/ask_p.webp?v=3" alt="" decoding="async"><div class="board" id="ask-bp" style="left:2.14%;top:15.74%;width:47.50%;height:23.80%;transform:rotate(-0.95deg)"></div></div>
     <div class="ask-who l"><img src="../assets/cathedral/shot/ask_l.webp?v=4" alt="" decoding="async"><div class="board" id="ask-bl" style="left:33.62%;top:4.49%;width:64.84%;height:88.44%;transform:rotate(-0.08deg)"></div></div>
+    <img class="ask-st a" src="../assets/cathedral/shot/qp_heart.webp" alt="" decoding="async"><img class="ask-st b" src="../assets/cathedral/shot/qp_star.webp" alt="" decoding="async"><img class="ask-st c" src="../assets/cathedral/shot/qp_film.webp" alt="" decoding="async"><img class="ask-st d" src="../assets/cathedral/shot/qp_cam.webp" alt="" decoding="async"><img class="ask-st e" src="../assets/cathedral/shot/qp_bat.webp" alt="" decoding="async"><img class="ask-st f" src="../assets/cathedral/shot/qp_print.webp" alt="" decoding="async">
     <img class="ask-burst" id="ask-burst" src="../assets/cathedral/shot/t_flash.webp" alt="" style="right:6%;top:14%">
   </div>
   <div class="ask-body">
