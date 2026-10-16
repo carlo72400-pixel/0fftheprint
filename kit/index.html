@@ -24,6 +24,7 @@
 @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400;font-display:swap;src:url(../assets/fonts/jetbrains-mono-400.woff2) format('woff2')}
 @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:500;font-display:swap;src:url(../assets/fonts/jetbrains-mono-500.woff2) format('woff2')}
 @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:700;font-display:swap;src:url(../assets/fonts/jetbrains-mono-700.woff2) format('woff2')}
+@font-face{font-family:'Gloria Hallelujah';font-style:normal;font-weight:400;font-display:swap;src:url(../assets/fonts/gloria-hallelujah-400.woff2) format('woff2')}
 @font-face{font-family:'Saira Condensed';font-style:normal;font-weight:700;font-display:swap;src:url(../assets/fonts/saira-condensed-700.woff2) format('woff2')}
 @font-face{font-family:'Saira Condensed';font-style:normal;font-weight:900;font-display:swap;src:url(../assets/fonts/saira-condensed-900.woff2) format('woff2')}
 </style>
@@ -319,11 +320,16 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
    drunk: ONE question, Bala with the camera up and the sign, TWO giant keys for THEIR thumb (YES / NOT TONIGHT), nothing else to read.
    Swipe for the other cards (you two, film, the room, Spanish). YES = white LOOK HERE 3-2-1 then the QR. Portrait = held up like a
    sign, landscape = wide for two people; the orientation follows the phone unless the lock is on. Art: ask_p / ask_l + ask.json. */
-.askfull{position:fixed;inset:0;z-index:95;background:#1a0a10 url(../assets/cathedral/shot/ask_wall_p.webp?v=3) center/cover no-repeat;display:grid;grid-template-rows:auto minmax(0,1fr) auto;padding:calc(var(--sat) + 10px) 0 0;overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:pan-y}
+.askfull{position:fixed;inset:0;z-index:95;background:#1a0a10;--px:0;--py:0;perspective:900px;display:grid;grid-template-rows:auto minmax(0,1fr) auto;padding:calc(var(--sat) + 10px) 0 0;overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:pan-y}
 .askfull::before{content:"";position:absolute;inset:0;background:radial-gradient(70% 55% at 50% 45%,transparent 45%,rgba(0,0,0,.45) 100%);pointer-events:none}
-[data-o="l"].askfull{background-image:url(../assets/cathedral/shot/ask_wall_l.webp?v=3)}
+.askfull>.ask-wall{position:absolute;z-index:0;left:50%;top:50%;width:118%;height:118%;object-fit:cover;transform:translate(calc(-50% + var(--px) * -14px),calc(-50% + var(--py) * -9px)) scale(1.02);filter:saturate(1.05);pointer-events:none}
+.ask-wall.l,[data-o="l"] .ask-wall.p{display:none}
+[data-o="l"] .ask-wall.l{display:block}
+.ask-stage{transform:translate(calc(var(--px) * 10px),calc(var(--py) * 6px)) rotateY(calc(var(--px) * -4deg)) rotateX(calc(var(--py) * 3deg));transform-style:preserve-3d;transition:transform .08s linear}
+.ask-who{transform:translateZ(40px)}
+.ask-burst{transform:translate(calc(var(--px) * 18px),calc(var(--py) * 12px)) translateZ(70px)}
 .askfull[hidden]{display:none}
-.askfull>*{position:relative}
+.askfull>*{position:relative;z-index:1}
 .ask-top{display:flex;align-items:center;justify-content:space-between;padding:0 14px;min-height:34px}
 .ask-top{min-height:30px}
 .ask-top .x,.ask-top .lk{border:0;background:rgba(10,10,13,.55);color:#f1ecf5;font:700 10px/1 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;padding:9px 11px;border-radius:4px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
@@ -335,7 +341,7 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
 .ask-h{font:900 italic clamp(30px,9.2vw,58px)/.92 var(--f-display);text-transform:uppercase;text-align:center;color:#fff;text-shadow:0 2px 0 #000,0 0 24px rgba(255,121,198,.6);max-width:11ch;margin:0 0 4px}
 .ask-who{position:relative;min-height:0;justify-self:center;align-self:end}
 .ask-who img{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 12px 20px rgba(0,0,0,.7))}
-.ask-who .board{position:absolute;display:grid;place-items:center;text-align:center;color:#0a0a0d;font:900 italic 40px/.9 var(--f-display);text-transform:uppercase;padding:4% 5% 4% 7%;box-sizing:border-box;overflow:hidden;word-break:keep-all;overflow-wrap:normal;hyphens:none;text-wrap:balance}
+.ask-who .board{position:absolute;display:grid;place-items:center;text-align:center;color:#0a0a0d;font:400 40px/1.02 'Gloria Hallelujah',var(--f-display);text-transform:uppercase;padding:5% 6% 6% 8%;-webkit-text-stroke:.035em #0a0a0d;paint-order:stroke fill;box-sizing:border-box;overflow:hidden;word-break:keep-all;overflow-wrap:normal;hyphens:none;text-wrap:balance}
 .ask-who.l,[data-o="l"] .ask-who.p{display:none}
 [data-o="l"] .ask-who.l{display:block}
 .ask-burst{position:absolute;width:28%;max-width:150px;opacity:0;pointer-events:none;animation:askburst 6s 1.4s ease-out infinite;filter:drop-shadow(0 0 18px rgba(255,255,255,.8))}
@@ -346,7 +352,7 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
 @keyframes crtroll{0%{top:-20%}100%{top:110%}}
 @keyframes crtflicker{0%,100%{opacity:1}7%{opacity:.92}8%{opacity:1}41%{opacity:.96}42%{opacity:1}73%{opacity:.9}74%{opacity:1}}
 .ask-h{text-shadow:0 2px 0 #000,-2px 0 0 rgba(255,0,80,.55),2px 0 0 rgba(0,220,255,.55),0 0 24px rgba(255,121,198,.6)}
-.ask-who .board{text-shadow:-1px 0 0 rgba(255,0,80,.35),1px 0 0 rgba(0,200,255,.35)}
+.ask-who .board{text-shadow:.018em .02em 0 #ff9fd6,.036em .04em 0 #f068b6,.054em .06em 0 #d9479b,.072em .08em 0 #a8306f,.09em .1em 0 #6d1f4b,.12em .14em .12em rgba(0,0,0,.35)}
 .ask-who img{filter:drop-shadow(0 12px 20px rgba(0,0,0,.7)) saturate(1.08)}
 /* the body: leatherette with a brushed plate, two machined keys with travel, for their thumbs */
 .ask-body{padding:12px 14px calc(var(--sab) + 14px);background:linear-gradient(180deg,#2b2832,#1a181f);box-shadow:0 -1px 0 rgba(255,255,255,.12),0 -10px 24px rgba(0,0,0,.6);display:grid;gap:10px}
@@ -679,6 +685,7 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
 <button type="button" id="back-fab" aria-label="Back to the kit">&lsaquo;</button>
 <div id="qr-full" class="qrfull" hidden><img class="qp a" src="../assets/cathedral/shot/qp_heart.webp" alt="" decoding="async"><img class="qp b" src="../assets/cathedral/shot/qp_star.webp" alt="" decoding="async"><img class="qp c" src="../assets/cathedral/shot/qp_cam.webp" alt="" decoding="async"><img class="qp d" src="../assets/cathedral/shot/qp_print.webp" alt="" decoding="async"><img class="qp e" src="../assets/cathedral/shot/qp_film.webp" alt="" decoding="async"><img class="qp f" src="../assets/cathedral/shot/qp_bat.webp" alt="" decoding="async"><div class="qrbox"><div class="putty"><img class="who" src="../assets/cathedral/shot/putty_sign.webp" alt="" decoding="async"><img class="code" src="qr-shot.png" alt="QR code to 0fftheprint.com/shot" style="left:7.44%;top:27.13%;width:84.85%;height:26.37%"></div><b>You got shot.</b><span>scan it · follow · your pack drops in a few days</span><small>0fftheprint.com/shot</small></div><div class="tip">tap to leave</div></div>
 <div id="ask-full" class="askfull" data-o="p" hidden>
+  <img class="ask-wall p" src="../assets/cathedral/shot/ask_wall_p.webp?v=3" alt="" decoding="async"><img class="ask-wall l" src="../assets/cathedral/shot/ask_wall_l.webp?v=3" alt="" decoding="async">
   <div class="ask-roll" aria-hidden="true"></div>
   <div class="ask-top"><button type="button" class="x" id="ask-x">&lsaquo; leave</button><span class="dots" id="ask-dots"></span><button type="button" class="lk" id="ask-lock">lock</button></div>
   <div class="ask-stage" id="ask-stage">
@@ -1205,6 +1212,10 @@ askSt.addEventListener('touchstart', e => { askX = e.touches[0].clientX; }, {pas
 askSt.addEventListener('touchend', e => { if (askX == null) return; const d = e.changedTouches[0].clientX - askX; askX = null; if (Math.abs(d) > 40) askStep(d < 0 ? 1 : -1); }, {passive: true});
 askSt.addEventListener('click', e => { if (e.target.closest('.ask-top')) return; const r = askSt.getBoundingClientRect(); askStep(e.clientX - r.left < r.width / 2 ? -1 : 1); });
 matchMedia('(orientation: landscape)').addEventListener('change', () => { if (!$('#ask-full').hidden) askPaint(); });
+/* 2.5D: --px/--py in -1..1 from the phone's tilt (gamma = left/right, beta = forward/back around a held-up 50 degrees) or the mouse */
+function askTilt(px, py){ const f = $('#ask-full'); if (f.hidden) return; f.style.setProperty('--px', Math.max(-1, Math.min(1, px)).toFixed(3)); f.style.setProperty('--py', Math.max(-1, Math.min(1, py)).toFixed(3)); }
+addEventListener('deviceorientation', e => { if ($('#ask-full').hidden || e.gamma == null) return; const land = $('#ask-full').dataset.o === 'l'; const g = land ? (e.beta || 0) : e.gamma, b = land ? -e.gamma : ((e.beta || 50) - 50); askTilt(g / 25, b / 25); });
+addEventListener('mousemove', e => { if ($('#ask-full').hidden || matchMedia('(pointer: coarse)').matches) return; askTilt((e.clientX / innerWidth - .5) * 2, (e.clientY / innerHeight - .5) * 2); });
 try { document.fonts.ready.then(() => { if (!$('#ask-full').hidden) askPaint(); }); } catch(e){}
 document.querySelectorAll('.ask-who img').forEach(i => i.addEventListener('load', () => { if (!$('#ask-full').hidden) askPaint(); }));
 addEventListener('resize', () => { if (!$('#ask-full').hidden) askPaint(); });
