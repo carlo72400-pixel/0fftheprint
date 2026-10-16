@@ -315,6 +315,11 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
 .qrfull .qp.e{left:6%;top:42%;width:clamp(48px,13vw,84px);transform:rotate(-6deg);animation-delay:-.7s}
 .qrfull .qp.f{right:5%;top:40%;width:clamp(48px,13vw,84px);transform:rotate(10deg);animation-delay:-1.9s}
 @keyframes qpbob{0%,100%{margin-top:0}50%{margin-top:6px}}
+/* CRT on the QR screen too (10/15 late): same scanlines, band and flicker; the code sits ABOVE the overlay so it still scans */
+.qrfull::after{content:"";position:absolute;inset:0;z-index:5;pointer-events:none;background:repeating-linear-gradient(180deg,rgba(0,0,0,0) 0 2px,rgba(0,0,0,.22) 2px 3px),repeating-linear-gradient(90deg,rgba(255,0,80,.05) 0 1px,rgba(0,255,120,.04) 1px 2px,rgba(0,80,255,.05) 2px 3px),radial-gradient(120% 90% at 50% 50%,transparent 60%,rgba(0,0,0,.5) 100%);mix-blend-mode:multiply;animation:crtflicker 4s steps(1) infinite}
+.qrfull .ask-roll{z-index:6}
+.qrbox .putty .code{z-index:7}
+.qrbox b{text-shadow:0 2px 0 #000,-2px 0 0 rgba(255,0,80,.55),2px 0 0 rgba(0,220,255,.55),0 0 24px rgba(255,121,198,.6)}
 .qrfull .tip{position:absolute;left:0;right:0;bottom:calc(16px + var(--sab));text-align:center;font:700 10px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:#8d8a96}
 /* ---------- THE ASK (10/15 late): the sign he holds up instead of shouting "can I take your photo". Built for people who are
    drunk: ONE question, Bala with the camera up and the sign, TWO giant keys for THEIR thumb (YES / NOT TONIGHT), nothing else to read.
@@ -698,7 +703,7 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
   </section>
   <div id="sc-full"><div class="tip">tap to leave</div></div>
 <button type="button" id="back-fab" aria-label="Back to the kit">&lsaquo;</button>
-<div id="qr-full" class="qrfull" hidden><img class="qp a" src="../assets/cathedral/shot/qp_heart.webp" alt="" decoding="async"><img class="qp b" src="../assets/cathedral/shot/qp_star.webp" alt="" decoding="async"><img class="qp c" src="../assets/cathedral/shot/qp_cam.webp" alt="" decoding="async"><img class="qp d" src="../assets/cathedral/shot/qp_print.webp" alt="" decoding="async"><img class="qp e" src="../assets/cathedral/shot/qp_film.webp" alt="" decoding="async"><img class="qp f" src="../assets/cathedral/shot/qp_bat.webp" alt="" decoding="async"><div class="qrbox"><div class="putty"><img class="who" src="../assets/cathedral/shot/putty_sign.webp" alt="" decoding="async"><img class="code" src="qr-shot.png" alt="QR code to 0fftheprint.com/shot" style="left:7.44%;top:27.13%;width:84.85%;height:26.37%"></div><b>You got shot.</b><span>scan it · follow · your pack drops in a few days</span><small>0fftheprint.com/shot</small></div><div class="tip">tap to leave</div></div>
+<div id="qr-full" class="qrfull" hidden><div class="ask-roll" aria-hidden="true"></div><img class="qp a" src="../assets/cathedral/shot/qp_heart.webp" alt="" decoding="async"><img class="qp b" src="../assets/cathedral/shot/qp_star.webp" alt="" decoding="async"><img class="qp c" src="../assets/cathedral/shot/qp_cam.webp" alt="" decoding="async"><img class="qp d" src="../assets/cathedral/shot/qp_print.webp" alt="" decoding="async"><img class="qp e" src="../assets/cathedral/shot/qp_film.webp" alt="" decoding="async"><img class="qp f" src="../assets/cathedral/shot/qp_bat.webp" alt="" decoding="async"><div class="qrbox"><div class="putty"><img class="who" src="../assets/cathedral/shot/putty_sign.webp" alt="" decoding="async"><img class="code" src="qr-shot.png" alt="QR code to 0fftheprint.com/shot" style="left:7.44%;top:27.13%;width:84.85%;height:26.37%"></div><b>You got shot.</b><span>scan it · follow · your pack drops in a few days</span><small>0fftheprint.com/shot</small></div><div class="tip">tap to leave</div></div>
 <div id="ask-full" class="askfull" data-o="p" hidden>
   <img class="ask-wall p" src="../assets/cathedral/shot/ask_wall_p.webp?v=3" alt="" decoding="async"><img class="ask-wall l" src="../assets/cathedral/shot/ask_wall_l.webp?v=3" alt="" decoding="async">
   <div class="ask-roll" aria-hidden="true"></div>

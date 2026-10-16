@@ -36,6 +36,12 @@
 [hidden]{display:none!important}
 body{background:radial-gradient(140% 60% at var(--lx) -10%,rgba(255,255,255,.10),rgba(255,255,255,0) 60%),radial-gradient(rgba(255,255,255,.035) 1px,transparent 1.2px) 0 0/4px 4px,linear-gradient(180deg,var(--body-2),var(--body) 30%,#141218 100%);background-attachment:fixed}
 .wrap{padding-top:14px;padding-bottom:50px}
+/* CRT over the whole page (10/15 late, his ask): lighter than the Kit's so the words and the grid still read; a band rolls down, the big line fringes.
+   NO blend mode and NO opacity animation on the overlay: either one makes Chrome drop the stage's later layers from the paint
+   (the booth, the speaker, Bala vanish, laid out but unpainted; same family as the old screen burst). The band may roll. */
+.crt{position:fixed;inset:0;z-index:8;pointer-events:none;background:repeating-linear-gradient(180deg,rgba(0,0,0,0) 0 2px,rgba(0,0,0,.14) 2px 3px),repeating-linear-gradient(90deg,rgba(255,0,80,.04) 0 1px,rgba(0,255,120,.03) 1px 2px,rgba(0,80,255,.04) 2px 3px),radial-gradient(120% 90% at 50% 50%,transparent 62%,rgba(0,0,0,.45) 100%)}
+.crt-roll{position:fixed;left:0;right:0;height:16%;z-index:8;pointer-events:none;background:linear-gradient(180deg,transparent,rgba(255,255,255,.05) 45%,rgba(255,255,255,.08) 50%,rgba(255,255,255,.05) 55%,transparent);animation:crtroll 8s linear infinite}
+@keyframes crtroll{0%{top:-20%}100%{top:110%}}
 .flash{position:fixed;inset:0;background:#fff;z-index:9;pointer-events:none;transition:opacity .9s ease-out}
 .back{margin-bottom:12px}
 
@@ -56,7 +62,7 @@ body{background:radial-gradient(140% 60% at var(--lx) -10%,rgba(255,255,255,.10)
 .stage .tag{position:absolute;left:12px;bottom:10px;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#fff;background:rgba(10,10,13,.6);padding:5px 8px}
 
 .kick{margin-top:16px;font-family:var(--f-mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--pink-glow);text-shadow:0 1px 0 #000}
-h1.big{font-size:clamp(58px,19vw,112px);line-height:.86;margin-top:6px;color:#efe8f3;text-shadow:0 1px 0 rgba(255,255,255,.2),0 -1px 0 #000,0 0 24px rgba(255,121,198,.35)}
+h1.big{font-size:clamp(58px,19vw,112px);line-height:.86;margin-top:6px;color:#efe8f3;text-shadow:0 1px 0 rgba(255,255,255,.2),0 -1px 0 #000,-2px 0 0 rgba(255,0,80,.45),2px 0 0 rgba(0,220,255,.45),0 0 24px rgba(255,121,198,.35)}
 .lead{margin-top:12px;font-size:15.5px;color:#d9d4df;max-width:36ch;text-shadow:0 1px 0 rgba(0,0,0,.6)}
 .lead b{color:#fff}
 
@@ -141,6 +147,7 @@ h1.big{font-size:clamp(58px,19vw,112px);line-height:.86;margin-top:6px;color:#ef
 </head>
 <body>
 <div class="flash" id="flash" aria-hidden="true"></div>
+<div class="crt" aria-hidden="true"></div><div class="crt-roll" aria-hidden="true"></div>
 <div class="leopard-bar"></div>
 <div class="wrap">
 <a class="back" href="../">&larr; 0FF THE PRINT</a>
