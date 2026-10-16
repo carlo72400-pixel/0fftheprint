@@ -61,15 +61,15 @@ h1.big{font-size:clamp(58px,19vw,112px);line-height:.86;margin-top:6px;color:#ef
 .lead b{color:#fff}
 
 /* keys with travel, the Kit's */
-.key{display:grid;grid-template-columns:64px minmax(0,1fr);gap:2px 14px;align-items:center;width:100%;min-height:76px;margin-top:10px;padding:10px 14px 10px 8px;border:0;border-radius:6px;background:linear-gradient(180deg,#3f3b48,#27242e);color:#f1ecf5;text-decoration:none;text-align:left;cursor:pointer;font:inherit;
+.key{display:grid;grid-template-columns:72px minmax(0,1fr);gap:2px 14px;align-items:center;width:100%;min-height:96px;margin-top:12px;padding:12px 44px 12px 10px;border:0;border-radius:6px;background:linear-gradient(180deg,#3f3b48,#27242e);color:#f1ecf5;text-decoration:none;text-align:left;cursor:pointer;font:inherit;
   box-shadow:0 1px 0 rgba(255,255,255,.16),0 5px 0 #0b0a0e,0 9px 12px rgba(0,0,0,.6);transition:transform .06s,box-shadow .06s;position:relative}
 .key:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(255,255,255,.16),0 1px 0 #0b0a0e}
 .key.primary{background:linear-gradient(180deg,#ff9fd6,#f068b6 55%,#d9479b);color:#2a0a1e;box-shadow:0 1px 0 rgba(255,255,255,.35),0 5px 0 #6d1f4b,0 9px 12px rgba(0,0,0,.6)}
 .key.primary:active{box-shadow:0 1px 0 rgba(255,255,255,.35),0 1px 0 #6d1f4b}
-.key img{grid-row:span 2;width:64px;height:72px;object-fit:contain;filter:drop-shadow(0 4px 6px rgba(0,0,0,.6));transform:rotate(-4deg)}
-.key b{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:24px;line-height:1;text-transform:uppercase}
+.key img{grid-row:span 2;width:72px;height:84px;object-fit:contain;filter:drop-shadow(0 4px 6px rgba(0,0,0,.6));transform:rotate(-4deg)}
+.key b{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:30px;line-height:1;text-transform:uppercase}
 .key span{font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.75}
-.key i{position:absolute;right:12px;top:10px;font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;color:currentColor;opacity:.55;font-style:normal}
+.key i{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-family:var(--f-display);font-weight:900;font-size:34px;color:currentColor;opacity:.35;font-style:italic}
 /* the Instagram preview under Follow: a phone screen in a bezel, the whole card is the link (built by shot/ig_refresh.py) */
 .igp{display:block;margin-top:8px;padding:8px;border-radius:8px;background:#0a0a0d;color:#f1ecf5;text-decoration:none;box-shadow:inset 0 0 0 1px #3b3844,inset 0 0 0 2px #121117,0 1px 0 rgba(255,255,255,.08),0 8px 18px rgba(0,0,0,.6)}
 .igp-h{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:0 10px;align-items:center;padding:4px 4px 10px}
@@ -83,16 +83,16 @@ h1.big{font-size:clamp(58px,19vw,112px);line-height:.86;margin-top:6px;color:#ef
 .igp-f{display:block;padding:9px 4px 2px;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#8d8a96;text-align:center}
 .steps{margin-top:18px}
 .panel{margin-top:10px;padding:12px 14px 14px;border-radius:6px;background:linear-gradient(180deg,#201d26,#18161d);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),inset 0 0 0 1px rgba(0,0,0,.6),0 2px 4px rgba(0,0,0,.4);position:relative}
-.panel i.n{position:absolute;right:12px;top:10px;font-family:var(--f-mono);font-size:10px;letter-spacing:.14px;color:#8d8a96;font-style:normal}
-.panel .head{display:grid;grid-template-columns:64px minmax(0,1fr);gap:2px 14px;align-items:center}
-.panel .head img{grid-row:span 2;width:64px;height:72px;object-fit:contain;filter:drop-shadow(0 4px 6px rgba(0,0,0,.6));transform:rotate(3deg)}
-.panel .head b{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:24px;line-height:1;text-transform:uppercase;color:#f1ecf5}
+.panel i.n{position:absolute;right:12px;top:12px;font-family:var(--f-display);font-weight:900;font-size:34px;color:#8d8a96;opacity:.5;font-style:italic}
+.panel .head{display:grid;grid-template-columns:72px minmax(0,1fr);padding-right:40px;gap:2px 14px;align-items:center}
+.panel .head img{grid-row:span 2;width:72px;height:84px;object-fit:contain;filter:drop-shadow(0 4px 6px rgba(0,0,0,.6));transform:rotate(3deg)}
+.panel .head b{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:30px;line-height:1;text-transform:uppercase;color:#f1ecf5}
 .panel .head span{font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#9b95a6}
 .panel.done .head span{color:#8ef79b}
 .ig{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;margin-top:12px}
-.ig input{min-height:50px;padding:0 14px;border:0;border-radius:4px;background:linear-gradient(180deg,#0a150e,var(--lcd));color:#dffbe4;font:600 17px var(--f-mono);box-shadow:inset 0 0 0 1px #000,inset 0 2px 8px rgba(0,0,0,.8),0 1px 0 rgba(255,255,255,.1);caret-color:var(--lcdink)}
+.ig input{min-height:58px;padding:0 14px;border:0;border-radius:4px;background:linear-gradient(180deg,#0a150e,var(--lcd));color:#dffbe4;font:600 17px var(--f-mono);box-shadow:inset 0 0 0 1px #000,inset 0 2px 8px rgba(0,0,0,.8),0 1px 0 rgba(255,255,255,.1);caret-color:var(--lcdink)}
 .ig input::placeholder{color:rgba(158,240,176,.45)}
-.ig button{min-height:50px;padding:0 18px;border:0;border-radius:5px;background:linear-gradient(180deg,#ff9fd6,#f068b6 55%,#d9479b);color:#2a0a1e;font:800 14px var(--f-body);cursor:pointer;box-shadow:0 1px 0 rgba(255,255,255,.35),0 4px 0 #6d1f4b,0 7px 10px rgba(0,0,0,.6);transition:transform .06s,box-shadow .06s}
+.ig button{min-height:58px;padding:0 22px;border:0;border-radius:5px;background:linear-gradient(180deg,#ff9fd6,#f068b6 55%,#d9479b);color:#2a0a1e;font:800 14px var(--f-body);cursor:pointer;box-shadow:0 1px 0 rgba(255,255,255,.35),0 4px 0 #6d1f4b,0 7px 10px rgba(0,0,0,.6);transition:transform .06s,box-shadow .06s}
 .ig button:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(255,255,255,.35),0 1px 0 #6d1f4b}
 
 /* the wait: prints drying on the line */
@@ -156,20 +156,20 @@ h1.big{font-size:clamp(58px,19vw,112px);line-height:.86;margin-top:6px;color:#ef
 
 <div class="kick" id="kick">San Antonio · tonight</div>
 <h1 class="big" id="h1">You got<br>shot.</h1>
-<p class="lead" id="lead">That flash was <b>0FF THE PRINT</b>. Your photos land here in a few days, cut and graded, as a pack with your name on it. Nothing goes up raw.</p>
+<p class="lead" id="lead">That flash was <b>0FF THE PRINT</b>. Your photos land here in a few days. Nothing goes up raw.</p>
 
 <div class="pick" id="pick" hidden><b>Two shoots that day. Which one were you at?</b><div class="pk-row" id="pick-row"></div></div>
 <a class="up" id="up" hidden><img class="bst" src="../assets/cathedral/shot/t_burst.webp" alt=""><span class="cover"><img id="up-img" alt=""></span><span><b id="up-title"></b><span class="m" id="up-meta"></span><em>Your pack is up. Pull it &rarr;</em></span></a>
 
 <div class="steps" id="steps">
-  <a class="key primary" id="st-follow" href="https://instagram.com/vamppsych" target="_blank" rel="noopener"><img src="../assets/cathedral/shot/t_phone.webp" alt=""><b>Follow The Lens</b><span>@vamppsych · the drop gets called there</span><i>1</i></a>
+  <a class="key primary" id="st-follow" href="https://instagram.com/vamppsych" target="_blank" rel="noopener"><img src="../assets/cathedral/shot/t_phone.webp" alt=""><b>Follow The Lens</b><span>@vamppsych · that&rsquo;s where it drops</span><i>1</i></a>
 <!-- ig:start (written by shot/ig_refresh.py, do not hand-edit) -->
 <a class="igp" id="igp" href="https://instagram.com/vamppsych" target="_blank" rel="noopener" aria-label="@vamppsych on Instagram"><span class="igp-h"><img class="av" src="../assets/cathedral/shot/ig/avatar.webp" alt=""><span><b>@vamppsych</b><small>film director · photos + videos · san antonio</small></span><em>Follow</em></span><span class="igp-g"><span><img src="../assets/cathedral/shot/ig/1.webp" alt="" loading="lazy" decoding="async"></span><span><img src="../assets/cathedral/shot/ig/2.webp" alt="" loading="lazy" decoding="async"></span><span><img src="../assets/cathedral/shot/ig/3.webp" alt="" loading="lazy" decoding="async"></span><span><img src="../assets/cathedral/shot/ig/4.webp" alt="" loading="lazy" decoding="async"></span><span><img src="../assets/cathedral/shot/ig/5.webp" alt="" loading="lazy" decoding="async"></span><span><img src="../assets/cathedral/shot/ig/6.webp" alt="" loading="lazy" decoding="async"></span><span><img src="../assets/cathedral/shot/ig/7.webp" alt="" loading="lazy" decoding="async"></span><span><img src="../assets/cathedral/shot/ig/8.webp" alt="" loading="lazy" decoding="async"></span><span><img src="../assets/cathedral/shot/ig/9.webp" alt="" loading="lazy" decoding="async"></span></span><span class="igp-f">The Lens &middot; tap to open</span></a>
 <!-- ig:end -->
-  <div class="panel" id="st-ig"><i class="n">2</i><div class="head"><img src="../assets/cathedral/shot/t_tag.webp" alt=""><b>Leave your @</b><span id="st-ig-s">so we tag you when it drops</span></div>
+  <div class="panel" id="st-ig"><i class="n">2</i><div class="head"><img src="../assets/cathedral/shot/t_tag.webp" alt=""><b>Leave your @</b><span id="st-ig-s">we tag you when it drops</span></div>
     <form class="ig" id="igform"><input id="ig" type="text" inputmode="text" autocapitalize="none" autocomplete="off" spellcheck="false" maxlength="30" placeholder="@yourhandle" aria-label="Your Instagram"><button type="submit">Save</button></form>
   </div>
-  <a class="key" id="st-pull" href="../#find"><img src="../assets/cathedral/shot/t_pack.webp" alt=""><b>Pull your pack</b><span>find your night, rip the frames you&rsquo;re in</span><i>3</i></a>
+  <a class="key" id="st-pull" href="../#find"><img src="../assets/cathedral/shot/t_pack.webp" alt=""><b>Pull your pack</b><span>your night, your frames</span><i>3</i></a>
 </div>
 
 <div class="wait" id="wait">

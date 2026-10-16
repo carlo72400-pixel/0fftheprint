@@ -306,6 +306,56 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
 .qrbox span{font:600 13px/1.4 var(--f-body);color:#f1ecf5;max-width:32ch;text-shadow:0 1px 3px #000}
 .qrbox small{font:700 11px/1 var(--f-mono);letter-spacing:.18em;text-transform:uppercase;color:#ffd0e4;margin-top:4px;text-shadow:0 1px 3px #000}
 .qrfull .tip{position:absolute;left:0;right:0;bottom:calc(16px + var(--sab));text-align:center;font:700 10px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:#8d8a96}
+/* ---------- THE ASK (10/15 late): the sign he holds up instead of shouting "can I take your photo". Built for people who are
+   drunk: ONE question, Bala with the camera up and the sign, TWO giant keys for THEIR thumb (YES / NOT TONIGHT), nothing else to read.
+   Swipe for the other cards (you two, film, the room, Spanish). YES = white LOOK HERE 3-2-1 then the QR. Portrait = held up like a
+   sign, landscape = wide for two people; the orientation follows the phone unless the lock is on. Art: ask_p / ask_l + ask.json. */
+.askfull{position:fixed;inset:0;z-index:95;background:#0a0a0d url(../assets/cathedral/shot/qr_wall.webp) center/cover no-repeat;display:grid;grid-template-rows:auto minmax(0,1fr) auto;padding:calc(var(--sat) + 10px) 0 0;overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:pan-y}
+.askfull::before{content:"";position:absolute;inset:0;background:radial-gradient(70% 55% at 50% 45%,transparent 35%,rgba(0,0,0,.6) 100%);pointer-events:none}
+.askfull[hidden]{display:none}
+.askfull>*{position:relative}
+.ask-top{display:flex;align-items:center;justify-content:space-between;padding:0 14px;min-height:34px}
+.ask-top .x,.ask-top .lk{border:0;background:rgba(10,10,13,.55);color:#f1ecf5;font:700 10px/1 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;padding:9px 11px;border-radius:4px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+.ask-top .lk.on{background:var(--glow);color:#2a0a1e}
+.ask-top .dots{display:flex;gap:6px}
+.ask-top .dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.3)}
+.ask-top .dots i.on{background:#ff79c6;box-shadow:0 0 8px #ff79c6}
+.ask-stage{position:relative;display:grid;grid-template-rows:auto minmax(0,1fr);justify-items:center;padding:4px 12px 0;min-height:0}
+.ask-h{font:900 italic clamp(30px,9.2vw,58px)/.92 var(--f-display);text-transform:uppercase;text-align:center;color:#fff;text-shadow:0 2px 0 #000,0 0 24px rgba(255,121,198,.6);max-width:11ch;margin:0 0 4px}
+.ask-who{position:relative;height:100%;max-height:100%;min-height:0}
+.ask-who img{display:block;height:100%;width:auto;max-width:100%;object-fit:contain;filter:drop-shadow(0 12px 20px rgba(0,0,0,.7))}
+.ask-who .board{position:absolute;display:grid;place-items:center;text-align:center;color:#0a0a0d;font:900 italic 40px/.9 var(--f-display);text-transform:uppercase;padding:3% 4%;box-sizing:border-box;overflow:hidden;word-break:keep-all;overflow-wrap:normal;hyphens:none}
+.ask-who.l,[data-o="l"] .ask-who.p{display:none}
+[data-o="l"] .ask-who.l{display:block}
+.ask-burst{position:absolute;width:28%;max-width:150px;opacity:0;pointer-events:none;animation:askburst 6s 1.4s ease-out infinite;filter:drop-shadow(0 0 18px rgba(255,255,255,.8))}
+@keyframes askburst{0%{opacity:0}3%{opacity:1}12%{opacity:.8}20%{opacity:0}100%{opacity:0}}
+/* the body: leatherette with a brushed plate, two machined keys with travel, for their thumbs */
+.ask-body{padding:12px 14px calc(var(--sab) + 14px);background:linear-gradient(180deg,#2b2832,#1a181f);box-shadow:0 -1px 0 rgba(255,255,255,.12),0 -10px 24px rgba(0,0,0,.6);display:grid;gap:10px}
+.ask-k{display:grid;grid-template-columns:64px minmax(0,1fr);align-items:center;gap:0 12px;min-height:92px;padding:10px 16px 10px 12px;border:0;border-radius:8px;text-align:left;cursor:pointer;font:inherit;color:#f1ecf5;background:linear-gradient(180deg,#45414e,#27242e);box-shadow:0 1px 0 rgba(255,255,255,.18),0 7px 0 #0b0a0e,0 12px 14px rgba(0,0,0,.6);transition:transform .06s,box-shadow .06s}
+.ask-k:active{transform:translateY(6px);box-shadow:0 1px 0 rgba(255,255,255,.18),0 1px 0 #0b0a0e}
+.ask-k.yes{min-height:112px;background:linear-gradient(180deg,#ff9fd6,#f068b6 55%,#d9479b);color:#2a0a1e;box-shadow:0 1px 0 rgba(255,255,255,.4),0 8px 0 #6d1f4b,0 14px 16px rgba(0,0,0,.6)}
+.ask-k.yes:active{box-shadow:0 1px 0 rgba(255,255,255,.4),0 1px 0 #6d1f4b}
+.ask-k i{display:grid;place-items:center;width:64px;height:64px;border-radius:50%;font:900 40px/1 var(--f-display);font-style:normal;background:rgba(0,0,0,.22);box-shadow:inset 0 2px 4px rgba(0,0,0,.5),0 1px 0 rgba(255,255,255,.2)}
+.ask-k.yes i{background:#2a0a1e;color:#ff9fd6}
+.ask-k b{display:block;font:900 italic clamp(28px,8vw,40px)/.95 var(--f-display);text-transform:uppercase}
+.ask-k span{display:block;margin-top:3px;font:700 10.5px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;opacity:.7}
+/* landscape: Bala + the wide board on the left, the two keys stacked on the right */
+[data-o="l"].askfull{grid-template-rows:auto minmax(0,1fr);grid-template-columns:minmax(0,1fr) 44%;padding-top:calc(var(--sat) + 6px)}
+[data-o="l"] .ask-top{grid-column:1/-1}
+[data-o="l"] .ask-stage{grid-template-rows:minmax(0,1fr);padding:0 0 0 10px}
+[data-o="l"] .ask-h{display:none}
+[data-o="l"] .ask-body{padding:8px 12px calc(var(--sab) + 10px);background:linear-gradient(90deg,#2b2832,#1a181f);box-shadow:-1px 0 0 rgba(255,255,255,.12),-10px 0 24px rgba(0,0,0,.6);align-content:center}
+[data-o="l"] .ask-k{min-height:76px}
+[data-o="l"] .ask-k.yes{min-height:92px}
+[data-o="l"] .ask-burst{width:18%}
+/* YES: the screen goes white, LOOK HERE, 3 2 1, then the QR. NO: all good. */
+.ask-go{position:fixed;inset:0;z-index:97;display:grid;place-items:center;text-align:center;background:#fff;color:#0a0a0d;color-scheme:light;forced-color-adjust:none}
+.ask-go[hidden]{display:none}
+.ask-go b{display:block;font:900 italic clamp(44px,14vw,110px)/.9 var(--f-display);text-transform:uppercase}
+.ask-go em{display:block;font:900 clamp(120px,40vw,300px)/1 var(--f-display);font-style:normal;color:#f068b6}
+.ask-go.no{background:#0a0a0d;color:#fff}
+.ask-go.no b{color:#fff;text-shadow:0 0 24px rgba(255,121,198,.6)}
+.ask-go.no span{display:block;margin-top:8px;font:600 16px var(--f-body);color:#9b95a6}
 /* ---------- exposure visuals, slow-mo, the stopwatch (10/15) ---------- */
 .drag{display:grid;gap:8px;padding:10px;border-radius:4px;background:#0f0e13;box-shadow:inset 0 0 0 1px #000,inset 0 2px 8px rgba(0,0,0,.6)}
 .drag .lane{position:relative;height:44px;border-radius:3px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 1px,transparent 1px 10%);overflow:hidden}
@@ -372,6 +422,7 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
     <!-- THE QR (10/15): the thing he holds up after the flash. Full screen, white, the code to /shot/ (the "you got shot"
          page: follow, leave your @, wait for the pack). The PNG is in the worker, so it shows with no signal. -->
     <button type="button" class="btn primary big qrkey" id="qr-show"><img src="qr-shot.png" alt="" width="44" height="44"><span>Show the QR<small>you got shot · 0fftheprint.com/shot</small></span></button>
+    <button type="button" class="btn primary big qrkey askkey" id="ask-show"><img src="../assets/cathedral/shot/ask_p.webp" alt="" width="44" height="44" style="object-fit:contain;object-position:top;background:#2a0a1e"><span>The Ask<small>can I get a photo? · they tap YES</small></span></button>
     <div class="doors">
       <button type="button" class="door" data-go="prompter"><img src="../assets/cathedral/w/screen.webp" alt=""><b>Prompter</b><span>read to camera</span></button>
       <button type="button" class="door" data-go="slate"><img src="../assets/cathedral/w/film.webp" alt=""><b>Slate</b><span>beep + flash to sync</span></button>
@@ -607,6 +658,20 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
   <div id="sc-full"><div class="tip">tap to leave</div></div>
 <button type="button" id="back-fab" aria-label="Back to the kit">&lsaquo;</button>
 <div id="qr-full" class="qrfull" hidden><div class="qrbox"><div class="putty"><img class="who" src="../assets/cathedral/shot/putty_sign.webp" alt="" decoding="async"><img class="code" src="qr-shot.png" alt="QR code to 0fftheprint.com/shot" style="left:7.44%;top:27.13%;width:84.85%;height:26.37%"></div><b>You got shot.</b><span>scan it · follow · your pack drops in a few days</span><small>0fftheprint.com/shot</small></div><div class="tip">tap to leave</div></div>
+<div id="ask-full" class="askfull" data-o="p" hidden>
+  <div class="ask-top"><button type="button" class="x" id="ask-x">&lsaquo; leave</button><span class="dots" id="ask-dots"></span><button type="button" class="lk" id="ask-lock">lock</button></div>
+  <div class="ask-stage" id="ask-stage">
+    <b class="ask-h" id="ask-h">Can I get a photo?</b>
+    <div class="ask-who p"><img src="../assets/cathedral/shot/ask_p.webp" alt="" decoding="async"><div class="board" id="ask-bp" style="left:5.89%;top:40.94%;width:41.74%;height:39.23%"></div></div>
+    <div class="ask-who l"><img src="../assets/cathedral/shot/ask_l.webp" alt="" decoding="async"><div class="board" id="ask-bl" style="left:35.46%;top:33.79%;width:62.71%;height:59.3%"></div></div>
+    <img class="ask-burst" id="ask-burst" src="../assets/cathedral/shot/t_flash.webp" alt="" style="right:6%;top:14%">
+  </div>
+  <div class="ask-body">
+    <button type="button" class="ask-k yes" id="ask-yes"><i>&#10003;</i><span class="t"><b id="ask-yes-b">Yes</b><span id="ask-yes-s">shoot me</span></span></button>
+    <button type="button" class="ask-k" id="ask-no"><i>&times;</i><span class="t"><b id="ask-no-b">Not tonight</b><span id="ask-no-s">all good</span></span></button>
+  </div>
+</div>
+<div id="ask-go" class="ask-go" hidden><div><b id="ask-go-b">Look here</b><em id="ask-go-n">3</em></div></div>
 </div>
 <div class="toast" id="toast"></div>
 
@@ -1075,6 +1140,54 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden && SW
 $('#qr-show').addEventListener('click', () => { $('#qr-full').hidden = false; buzz(); try { if ('wakeLock' in navigator) navigator.wakeLock.request('screen').then(l => { $('#qr-full').dataset.lock = '1'; $('#qr-full').addEventListener('click', () => l.release(), { once: true }); }).catch(() => {}); } catch(e){} });
 $('#qr-full').addEventListener('click', () => { $('#qr-full').hidden = true; });
 addEventListener('deviceorientation', e => { const f = $('#qr-full'); if (!f || f.hidden || e.gamma == null) return; const g = Math.max(-25, Math.min(25, e.gamma)); f.style.backgroundPosition = `calc(50% + ${(-g * 1.2).toFixed(1)}px) center`; const p = f.querySelector('.putty'); if (p) p.style.transform = `translateX(${(g * .6).toFixed(1)}px)`; });
+
+/* ---------- THE ASK ---------- */
+const ASK = [
+  {h:'Can I get a photo?',      b:'Photo?',    yes:'Yes',  ys:'shoot me',  no:'Not tonight', ns:'all good'},
+  {h:'You two, photo?',        b:'You two?',  yes:'Yes',  ys:'shoot us',  no:'Not tonight', ns:'all good'},
+  {h:'Can I film this?',        b:'Film?',     yes:'Yes',  ys:'roll it',   no:'Not tonight', ns:'all good'},
+  {h:'Mind if I shoot the room?', b:'The room?', yes:'Go',  ys:'shoot it',  no:'Not now',     ns:'all good'},
+  {h:'\u00bfTe tomo una foto?', b:'\u00bfFoto?', yes:'S\u00ed', ys:'dale', no:'Hoy no',      ns:'todo bien'}
+];
+const AK = {i: Math.min(load('ask', 0) || 0, ASK.length - 1), lock: false, lockO: 'p', lockHold: null};
+function askFit(el){ /* biggest size whose text fits the board */
+  let lo = 12, hi = 220; el.style.fontSize = hi + 'px';
+  while (hi - lo > 1) { const m = (lo + hi) >> 1; el.style.fontSize = m + 'px'; (el.scrollWidth <= el.clientWidth + 1 && el.scrollHeight <= el.clientHeight + 1) ? lo = m : hi = m; }
+  el.style.fontSize = lo + 'px';
+}
+function askPaint(){
+  const c = ASK[AK.i]; $('#ask-h').textContent = c.h; $('#ask-bp').textContent = c.b; $('#ask-bl').textContent = c.h;
+  $('#ask-yes-b').textContent = c.yes; $('#ask-yes-s').textContent = c.ys; $('#ask-no-b').textContent = c.no; $('#ask-no-s').textContent = c.ns;
+  $('#ask-dots').innerHTML = ASK.map((_, k) => '<i' + (k === AK.i ? ' class="on"' : '') + '></i>').join('');
+  const f = $('#ask-full'); f.dataset.o = AK.lock ? AK.lockO : (matchMedia('(orientation: landscape)').matches ? 'l' : 'p');
+  $('#ask-lock').classList.toggle('on', AK.lock); $('#ask-lock').textContent = AK.lock ? 'locked ' + (AK.lockO === 'l' ? 'wide' : 'tall') : 'lock';
+  requestAnimationFrame(() => { askFit($('#ask-bp')); askFit($('#ask-bl')); });
+}
+function askOpen(){ $('#ask-full').hidden = false; buzz(); askPaint(); try { if ('wakeLock' in navigator) navigator.wakeLock.request('screen').then(l => { AK.lockHold = l; }).catch(() => {}); } catch(e){} }
+function askClose(){ $('#ask-full').hidden = true; try { AK.lockHold && AK.lockHold.release(); } catch(e){} AK.lockHold = null; }
+$('#ask-show').addEventListener('click', askOpen);
+$('#ask-x').addEventListener('click', () => { buzz(); askClose(); });
+$('#ask-lock').addEventListener('click', () => { buzz(); AK.lock = !AK.lock; AK.lockO = $('#ask-full').dataset.o; askPaint(); });
+function askStep(d){ AK.i = (AK.i + d + ASK.length) % ASK.length; save('ask', AK.i); buzz(); askPaint(); }
+/* swipe anywhere on the stage for the other cards; the keys are left alone */
+let askX = null; const askSt = $('#ask-stage');
+askSt.addEventListener('touchstart', e => { askX = e.touches[0].clientX; }, {passive: true});
+askSt.addEventListener('touchend', e => { if (askX == null) return; const d = e.changedTouches[0].clientX - askX; askX = null; if (Math.abs(d) > 40) askStep(d < 0 ? 1 : -1); }, {passive: true});
+askSt.addEventListener('click', e => { if (e.target.closest('.ask-top')) return; const r = askSt.getBoundingClientRect(); askStep(e.clientX - r.left < r.width / 2 ? -1 : 1); });
+matchMedia('(orientation: landscape)').addEventListener('change', () => { if (!$('#ask-full').hidden) askPaint(); });
+addEventListener('resize', () => { if (!$('#ask-full').hidden) askPaint(); });
+/* YES: buzz, white screen, LOOK HERE 3 2 1 with the slate tick, then the QR takes over. NO: all good, back out. */
+$('#ask-yes').addEventListener('click', () => {
+  try { navigator.vibrate && navigator.vibrate([20, 40, 20]); } catch(e){}
+  const g = $('#ask-go'); g.classList.remove('no'); $('#ask-go-b').textContent = ASK[AK.i].h.startsWith('\u00bf') ? 'Mira aqu\u00ed' : 'Look here'; g.hidden = false;
+  let n = 3; const el = $('#ask-go-n'); el.textContent = n; try { tick(); } catch(e){}
+  const iv = setInterval(() => { n--; if (n > 0) { el.textContent = n; try { tick(); } catch(e){} return; } clearInterval(iv); el.textContent = '\u2605';
+    setTimeout(() => { g.hidden = true; askClose(); $('#qr-full').hidden = false; }, 700); }, 800);
+});
+$('#ask-no').addEventListener('click', () => {
+  buzz(); const g = $('#ask-go'); g.classList.add('no'); $('#ask-go-b').textContent = ASK[AK.i].no === 'Hoy no' ? 'Todo bien.' : 'All good.'; $('#ask-go-n').textContent = ''; g.hidden = false;
+  setTimeout(() => { g.hidden = true; askClose(); }, 1400);
+});
 
 /* ---------- SCREENS ---------- */
 const SCREENS = {grey: '#767676', white: '#ffffff', black: '#000000', red: '#ff0000', pink: '#ff79c6'};
