@@ -17,6 +17,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap">
+<script>
+/* #shoot opens shoot mode, #plan opens the plan; otherwise this phone's last choice */
+(function(){var m='plan';try{m=localStorage.getItem('fab-mode')||'plan'}catch(e){}
+if(location.hash==='#shoot')m='shoot';if(location.hash==='#plan')m='plan';
+document.documentElement.setAttribute('data-mode',m);})();
+</script>
 <style>
 /* Layout: a hang-tag shot plan. Phone first, one column: the short version, what their page already
    proves, the morning as a timeline, then each shot as a numbered tag grouped by store, then deliverables,
@@ -82,15 +88,118 @@ ul.plain{margin:0;padding-left:20px;display:grid;gap:6px}
 .sig{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:baseline;border-top:1.5px solid var(--ink);padding-top:14px;font:500 14px var(--f-mono)}
 .sig b{font:400 20px var(--f-display);text-transform:uppercase}
 @media(max-width:380px){.tl li{grid-template-columns:80px 1fr}.del div{grid-template-columns:1fr}.proof div{grid-template-columns:80px 1fr}}
+
+/* SHOOT MODE (10/16): the same shots as a one-hand, tap-through checklist for the day.
+   Sticky store switch + clock, the NEXT shot as one big tag with a DONE key, then that store's tags by phase. */
+:root{--ok:#2e6b3c;--ok-soft:#e2efe3}
+html[data-mode="shoot"] .plan{display:none}
+html:not([data-mode="shoot"]) #shoot{display:none}
+.modekey{display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap;margin-top:18px}
+.modekey button{min-height:56px;padding:0 22px;border:2px solid var(--ink);border-radius:10px;background:var(--pink);color:var(--tag);font:400 20px/1 var(--f-display);text-transform:uppercase;box-shadow:0 4px 0 var(--ink);cursor:pointer}
+.modekey button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.modekey span{font:500 14px var(--f-mono);color:var(--muted)}
+#shoot button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+#shoot :focus-visible{outline:3px solid var(--denim);outline-offset:2px}
+.sm-gut{max-width:560px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.sm-top{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:2px solid var(--ink);padding-top:env(safe-area-inset-top,0px)}
+.sm-top .sm-gut{padding-block:10px;display:grid;gap:8px}
+.sm-row1{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.sm-kick{font:700 12px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--pink)}
+.sm-right{display:flex;align-items:center;gap:10px}
+.sm-clock{font:400 24px/1 var(--f-display);font-variant-numeric:tabular-nums}
+.sm-plan{min-height:36px;padding:0 10px;border:1.5px solid var(--ink);border-radius:8px;background:transparent;font:700 12px/1 var(--f-mono)!important;text-transform:uppercase;letter-spacing:.06em}
+.sm-stores{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.sm-store{display:grid;gap:3px;padding:9px 12px;border:2px solid var(--ink);border-radius:6px 16px 16px 6px;background:var(--tag);text-align:left;min-width:0}
+.sm-store b{font:400 18px/1 var(--f-display);text-transform:uppercase}
+.sm-store small{font:700 12px/1.2 var(--f-mono);color:var(--muted);font-variant-numeric:tabular-nums}
+#shoot .sm-store[aria-pressed="true"]{background:var(--ink);color:var(--tag)}
+.sm-store[aria-pressed="true"] small{color:var(--tag);opacity:.8}
+.sm-status{margin:0;font-weight:700;font-size:15px;line-height:1.3}
+.sm-status em{font-style:normal;color:var(--pink)}
+.sm-main{padding-block:16px 120px;display:grid;gap:18px}
+.sm-next{position:relative;background:var(--tag);border:2px solid var(--ink);border-radius:8px 26px 26px 8px;padding:14px 16px 16px 46px;display:grid;gap:12px}
+.sm-next::before{content:"";position:absolute;left:16px;top:20px;width:16px;height:16px;border-radius:50%;border:2px solid var(--ink);background:var(--paper)}
+.sm-nxtop{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.sm-lbl{font:700 12px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.sm-must{font:700 11px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--pink);background:var(--pink-soft);padding:4px 7px;border-radius:4px}
+.sm-cam{font:700 11px/1 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--denim);border:1.5px solid var(--denim);padding:3px 7px;border-radius:4px;white-space:nowrap}
+.sm-nxmain{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:start}
+.sm-num{font:400 58px/.86 var(--f-display);color:var(--pink);font-variant-numeric:tabular-nums}
+.sm-nxmain h2{margin:0;font:700 21px/1.2 var(--f-body);text-transform:none;display:block;text-wrap:balance}
+.sm-nxmain p{margin:5px 0 0;color:var(--muted);font-size:15px}
+.sm-keys{display:grid;grid-template-columns:2fr 1fr;gap:10px}
+.sm-key{min-height:68px;border:2px solid var(--ink);border-radius:10px;font:400 24px/1 var(--f-display)!important;text-transform:uppercase;box-shadow:0 5px 0 var(--ink);transition:transform .06s ease,box-shadow .06s ease;background:var(--tag)}
+.sm-key:active{transform:translateY(4px);box-shadow:0 1px 0 var(--ink)}
+.sm-key.done{background:var(--pink);color:var(--tag)!important}
+.sm-key.skip{font-size:18px!important}
+.sm-alldone{display:grid;gap:6px}
+.sm-alldone h2{margin:0;font:400 26px/1.05 var(--f-display);text-transform:uppercase;display:block}
+.sm-alldone p{margin:0;color:var(--muted)}
+.sm-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--tag);border:1.5px solid var(--ink);border-radius:6px;padding:10px 12px;flex-wrap:wrap}
+.sm-bar .t{display:grid;gap:2px;min-width:0}
+.sm-bar .t b{font-weight:700}
+.sm-bar .t small{color:var(--muted);font-size:13px}
+.sm-step{display:flex;align-items:center;gap:8px}
+.sm-mini{min-width:48px;min-height:48px;border:2px solid var(--ink);border-radius:8px;background:var(--tag);font:400 22px/1 var(--f-display)!important;box-shadow:0 3px 0 var(--ink)}
+.sm-mini:active{transform:translateY(2px);box-shadow:0 1px 0 var(--ink)}
+.sm-count{font:400 28px/1 var(--f-display);min-width:58px;text-align:center;font-variant-numeric:tabular-nums}
+.sm-count i{font-style:normal;font-size:16px;color:var(--muted)}
+.sm-stamps{display:flex;gap:8px;flex-wrap:wrap}
+.sm-stamp{min-height:48px;padding:0 12px;border:2px solid var(--ink);border-radius:8px;background:var(--tag);display:grid;align-content:center;gap:2px;text-align:left;box-shadow:0 3px 0 var(--ink);min-width:104px}
+.sm-stamp:active{transform:translateY(2px);box-shadow:0 1px 0 var(--ink)}
+.sm-stamp small{font:700 11px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.sm-stamp b{font:400 18px/1 var(--f-display);font-variant-numeric:tabular-nums}
+.sm-stamp.set{background:var(--ok-soft);border-color:var(--ok);box-shadow:0 3px 0 var(--ok)}
+.sm-filter{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.sm-chip{min-height:40px;padding:0 12px;border:1.5px solid var(--ink);border-radius:999px;background:transparent;font:700 13px/1 var(--f-mono)!important;text-transform:uppercase;letter-spacing:.04em}
+.sm-chip[aria-pressed="true"]{background:var(--ink);color:var(--tag)!important}
+.sm-list{display:grid;gap:16px}
+.sm-phase{display:grid;gap:8px}
+.sm-phase h3{margin:4px 0 0;font:700 13px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--denim);display:flex;gap:10px;align-items:baseline}
+.sm-phase h3 span{color:var(--ink)}
+.sm-tag{width:100%;display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:10px;align-items:start;text-align:left;background:var(--tag);border:1.5px solid var(--ink);border-radius:5px 16px 16px 5px;padding:11px 12px 11px 10px}
+.sm-tag .hole{width:24px;height:24px;margin-top:1px;border-radius:50%;border:2px solid var(--ink);background:var(--paper);display:grid;place-items:center;font:700 14px/1 var(--f-body);color:transparent}
+.sm-tag .tx{display:grid;gap:3px;min-width:0}
+.sm-tag .nm{font-weight:700;line-height:1.3}
+.sm-tag .nm i{font-style:normal;font:700 13px var(--f-mono);color:var(--pink);margin-right:6px}
+.sm-tag .hw{color:var(--muted);font-size:14px;line-height:1.35}
+.sm-tag .side{display:grid;justify-items:end;gap:6px}
+.sm-tag.is-done{background:transparent;border-color:var(--line)}
+.sm-tag.is-done .hole{background:var(--ok);border-color:var(--ok);color:var(--tag)}
+.sm-tag.is-done .nm{text-decoration:line-through;text-decoration-thickness:2px;color:var(--muted)}
+.sm-tag.is-done .hw,.sm-tag.is-done .sm-cam{opacity:.55}
+.sm-tag.is-skip,.sm-tag.is-skip .hole{border-style:dashed}
+.sm-flag{font:700 10px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border:1px dashed var(--muted);padding:3px 5px;border-radius:4px}
+.sm-tag.is-next{border-width:2.5px;border-color:var(--pink)}
+.sm-box{background:var(--tag);border:1.5px solid var(--ink);border-radius:6px;padding:12px 14px;display:grid;gap:8px}
+.sm-box h3{margin:0;font:400 18px/1.1 var(--f-display);text-transform:uppercase}
+.sm-ask{width:100%;display:grid;grid-template-columns:26px minmax(0,1fr);gap:10px;align-items:start;text-align:left;background:none;border:0;padding:6px 0;border-top:1px solid var(--line)}
+.sm-ask:first-child{border-top:0}
+.sm-ask .bx{width:22px;height:22px;border:2px solid var(--ink);border-radius:5px;display:grid;place-items:center;color:transparent;font:700 13px/1 var(--f-body);margin-top:1px}
+.sm-ask[aria-pressed="true"] .bx{background:var(--ok);border-color:var(--ok);color:var(--tag)}
+.sm-ask[aria-pressed="true"] > span:last-child{color:var(--muted);text-decoration:line-through}
+.sm-box ul{margin:0;padding-left:18px;display:grid;gap:5px}
+.sm-tot{font:400 22px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.sm-foot{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;font:500 13px var(--f-mono);color:var(--muted)}
+.sm-wake{min-height:44px;padding:0 14px;border:2px solid var(--ink);border-radius:8px;background:var(--tag);font:700 13px/1 var(--f-mono)!important;text-transform:uppercase;letter-spacing:.04em}
+.sm-wake[aria-pressed="true"]{background:var(--ink);color:var(--tag)!important}
+.sm-reset{min-height:44px;padding:0 14px;border:1.5px solid var(--pink);border-radius:8px;background:transparent;color:var(--pink)!important;font:700 13px/1 var(--f-mono)!important;text-transform:uppercase;letter-spacing:.04em}
+.sm-confirm{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.sm-toast{position:fixed;left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:9;margin:0 auto;max-width:520px;display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--ink);color:var(--tag);border-radius:12px;padding:10px 10px 10px 16px;font-weight:600;transform:translateY(160%);transition:transform .2s ease}
+.sm-toast.on{transform:none}
+.sm-toast button{min-height:44px;padding:0 16px;border-radius:8px;border:1.5px solid var(--tag);background:transparent;color:var(--tag);font:700 14px/1 var(--f-mono);text-transform:uppercase;cursor:pointer}
+@media (prefers-reduced-motion:reduce){.sm-toast,.sm-key{transition:none}}
 </style>
 </head>
 <body>
+<div class="plan">
 <main class="wrap">
 
   <header>
     <p class="kick">Shot plan · Sat Oct 17 · Austin · both stores</p>
     <h1>Fill-a-Bag <span>Saturday</span></h1>
     <p class="by">For Thrift @ The Warehouse Austin · by Gianni Ortiz</p>
+    <div class="modekey"><button type="button" id="go-shoot">Shoot mode</button><span>Tap through the shots on the day</span></div>
   </header>
 
   <section>
@@ -133,6 +242,7 @@ ul.plain{margin:0;padding-left:20px;display:grid;gap:6px}
     <div class="tags">
       <div class="tagc"><span class="n">01<i>★</i></span><b>Storefront wide, the sign and the piles waiting</b><small>Held for five seconds. The first frame of the next promo.</small><span class="gear">gimbal</span></div>
       <div class="tagc"><span class="n">02</span><b>Slow push down the line</b><small>Fits, faces, bags in hand.</small><span class="gear">gimbal</span></div>
+      <div class="tagc"><span class="n">06</span><b>The whole dig, time-lapse</b><small>Second camera set on the piles before the doors open. It runs half an hour.</small><span class="gear">locked off</span></div>
     </div>
 
     <h3>The dig</h3>
@@ -140,7 +250,6 @@ ul.plain{margin:0;padding-left:20px;display:grid;gap:6px}
       <div class="tagc"><span class="n">03<i>★</i></span><b>The first wave hits the piles</b><small>High and wide, so you see the whole rush.</small><span class="gear">360 cam, high</span></div>
       <div class="tagc"><span class="n">04<i>★</i></span><b>Straight down into the pile</b><small>Hands digging from above. Nobody can stand where this camera is.</small><span class="gear">360 cam on a pole</span></div>
       <div class="tagc"><span class="n">05<i>★</i></span><b>"Found it"</b><small>Three different people pulling a piece up and holding it out.</small><span class="gear">gimbal, close</span></div>
-      <div class="tagc"><span class="n">06</span><b>The whole dig, time-lapse</b><small>Second camera locked off on the piles for half an hour.</small><span class="gear">locked off</span></div>
     </div>
 
     <h3>The bag</h3>
@@ -234,5 +343,289 @@ ul.plain{margin:0;padding-left:20px;display:grid;gap:6px}
   </footer>
 
 </main>
+</div>
+
+<div id="shoot">
+<header class="sm-top"><div class="sm-gut">
+  <div class="sm-row1"><span class="sm-kick">Fill-a-Bag · Sat 10/17</span><span class="sm-right"><span class="sm-clock" id="sm-clock">9:40</span><button class="sm-plan" type="button" id="go-plan">Plan</button></span></div>
+  <div class="sm-stores" role="group" aria-label="Store">
+    <button class="sm-store" type="button" id="st-campus" data-store="campus" aria-pressed="true"><b>Campus</b><small id="sc-campus">0/11</small></button>
+    <button class="sm-store" type="button" id="st-soco" data-store="soco" aria-pressed="false"><b>SoCo</b><small id="sc-soco">0/8</small></button>
+  </div>
+  <p class="sm-status" id="sm-status">Be outside Campus by 9:40.</p>
+</div></header>
+
+<main class="sm-gut sm-main">
+  <section class="sm-next" id="sm-next" aria-live="polite"></section>
+
+  <div class="sm-bar">
+    <div class="t"><b>Story clips sent</b><small>3 or 4 from this store, while the sale's on</small></div>
+    <div class="sm-step"><button class="sm-mini" type="button" id="s-minus" aria-label="One fewer Story clip">−</button><span class="sm-count" id="s-count">0<i>/4</i></span><button class="sm-mini" type="button" id="s-plus" aria-label="One more Story clip">+</button></div>
+  </div>
+
+  <div class="sm-bar">
+    <div class="t"><b>On the clock here</b><small>Tap when you get there and when you leave</small></div>
+    <div class="sm-stamps"><button class="sm-stamp" type="button" id="t-in"><small>Arrived</small><b>Tap</b></button><button class="sm-stamp" type="button" id="t-out"><small>Left</small><b>Tap</b></button></div>
+  </div>
+
+  <div class="sm-filter" role="group" aria-label="Camera in your hand"><span class="sm-lbl">In your hand</span>
+    <button class="sm-chip" type="button" data-cam="all" aria-pressed="true">All</button>
+    <button class="sm-chip" type="button" data-cam="L1" aria-pressed="false">Luna 1</button>
+    <button class="sm-chip" type="button" data-cam="L2" aria-pressed="false">Luna 2</button>
+    <button class="sm-chip" type="button" data-cam="X6" aria-pressed="false">X6</button>
+  </div>
+
+  <div id="sm-list" class="sm-list"></div>
+
+  <section class="sm-box">
+    <h3>Ask on site</h3>
+    <div id="sm-asks"></div>
+  </section>
+
+  <section class="sm-box">
+    <h3>Settings check</h3>
+    <ul>
+      <li><b>Inside:</b> 1/60 shutter at 30fps, white balance locked, both Lunas set the same.</li>
+      <li><b>Outside:</b> full sun, keep it behind you or to the side.</li>
+      <li><b>Story clips</b> in normal color. Everything else I-Log.</li>
+      <li><b>Lav</b> with the furry windscreen, gusts to 30.</li>
+      <li><b>Luna 1's screen</b> dies around 40 min: swap to Luna 2.</li>
+    </ul>
+  </section>
+
+  <section class="sm-box">
+    <h3>The day</h3>
+    <div class="sm-tot" id="sm-total">Not on the clock yet</div>
+    <div class="sm-foot"><button class="sm-wake" type="button" id="sm-wake" aria-pressed="false">Keep screen on</button><span id="sm-wake-msg"></span></div>
+    <div class="sm-foot"><span>Ticks save on this phone.</span></div>
+    <div id="sm-reset-wrap"><button class="sm-reset" type="button" id="sm-reset">Clear the day</button></div>
+  </section>
+</main>
+</div>
+
+<div class="sm-toast" id="sm-toast" role="status"><span id="sm-toast-msg"></span><button type="button" id="sm-undo">Undo</button></div>
+
+<script>
+(function(){
+  var DAY = '2026-10-17';
+  var CAMS = {L1:'Luna 1', L2:'Luna 2', X6:'X6'};
+  var SHOTS = {
+    '01':{must:1, cam:'L1', name:'Storefront wide, the sign + the piles waiting', how:'Hold 5 seconds. The first frame of the next promo.'},
+    '02':{cam:'L1', name:'Slow push down the line', how:'Fits, faces, bags. Ask before you feature anyone.'},
+    '03':{must:1, cam:'X6', name:'First wave hits the piles', how:'Stick held high and wide, the whole rush.'},
+    '04':{must:1, cam:'X6', name:'Straight down into the pile', how:'Hands digging from above.'},
+    '05':{must:1, cam:'L1', name:'"Found it" three times', how:'Three different people pulling a piece up and holding it out.'},
+    '06':{cam:'L2', name:'Set the dig time-lapse', how:'Locked off on the piles before doors. Let it run 30 min.'},
+    '07':{must:1, cam:'L1', name:'Stuffing a bag, then the tie', how:'Bags must tie. The struggle is the funny one.'},
+    '08':{cam:'L1', name:'"What\'d you get for $15?"', how:'3 vox pops, 10 seconds each. Lav on, out of the wind.'},
+    '09':{must:1, cam:'L1', name:'The Campus walk-in', how:'Door, racks by style, dressing rooms in one smooth take. Then 4 close details.'},
+    '10':{cam:'L1', name:'Staff picks + new pieces going out', how:'For their "200 new items a day" posts.'},
+    '11':{cam:'L1', name:'The Night Market spot', how:'A few seconds for the Fri 10/23 Halloween market post.'},
+    '12':{must:1, cam:'L1', name:'Storefront wide, the sign + the piles', how:'Midday crowd, full sun.'},
+    '13':{must:1, cam:'X6', name:'Overheads + found-it moments', how:'Same as 04 and 05, new crowd. Luna 1 for the close ones.'},
+    '14':{must:1, cam:'L2', name:'The bag dump, top-down', how:'Somebody empties a full bag on a table, spread flat.'},
+    '15':{cam:'L1', name:'One fit out of one bag', how:'Dressing room, before and after.'},
+    '16':{must:1, cam:'L1', name:'The SoCo walk-in', how:'Same as 09. Lean on the western section.'},
+    '17':{cam:'L1', name:'Buy, sell, trade counter', how:'"What we bought in today." Clothes in, cash or credit out.'},
+    '18':{cam:'L1', name:'Staff playing dress up', how:'Their "come play dress up with us" series, if they\'re down.'},
+    '19':{cam:'L1', name:'Halloween costume finds rack', how:'Pieces that read as a costume, styled on the rack.'},
+    'P' :{cam:'L1', name:'Photos, if there\'s time', how:'Both storefronts with the piles, 2 hauls posed with their bags.', extra:1}
+  };
+  var STORES = {
+    campus:{name:'Campus', start:580, leave:660, groups:[
+      {at:'9:40', label:'Before the doors', ids:['06','01','02']},
+      {at:'10:00', label:'The dig', ids:['03','04','05']},
+      {at:'10:30', label:'The bag', ids:['07','08']},
+      {at:'10:45', label:'Inside', ids:['09','10','11']}]},
+    soco:{name:'SoCo', start:680, leave:750, groups:[
+      {at:'11:20', label:'The dig, round two', ids:['12','13','14','15']},
+      {at:'11:50', label:'Inside', ids:['16','17','18','19','P']}]}
+  };
+  var ASKS = [
+    ['who','Who my contact is at each store'],
+    ['stories','Who gets the Story clips during the sale'],
+    ['files','Raw clips or edited reels, and where the files go'],
+    ['acct','Which page each clip is for','Campus, SoCo, or both.'],
+    ['musts','Any must-have shots that aren\'t on here'],
+    ['post','Can I post some on my page with credit'],
+    ['market','Offer to shoot the 10/23 Night Market','Halloween Vintage Night Market at Campus, 6 to 11 PM.']
+  ];
+
+  var LS = 'fab-shoot-1017', LSUI = 'fab-shoot-1017-ui';
+  function fresh(){ return {v:1, t:0, done:{}, skip:{}, stories:{campus:0, soco:0}, asks:{}, log:{}}; }
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+  var state = fresh();
+  try { var s0 = JSON.parse(localStorage.getItem(LS) || 'null'); if (s0 && s0.v === 1) state = s0; } catch(e) {}
+  var ui = {store:'campus', cam:'all'};
+  try { var u0 = JSON.parse(localStorage.getItem(LSUI) || 'null'); if (u0 && u0.cam) ui.cam = u0.cam; } catch(e) {}
+
+  function $(id){ return document.getElementById(id); }
+  function order(store){ var a = []; STORES[store].groups.forEach(function(g){ a = a.concat(g.ids); }); return a; }
+  function nowCT(){
+    var p = {};
+    try {
+      new Intl.DateTimeFormat('en-US',{timeZone:'America/Chicago',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false})
+        .formatToParts(new Date()).forEach(function(x){ p[x.type] = x.value; });
+      return {date: p.year + '-' + p.month + '-' + p.day, m: (parseInt(p.hour,10) % 24) * 60 + parseInt(p.minute,10)};
+    } catch(e) { var d = new Date(); return {date: d.toISOString().slice(0,10), m: d.getHours()*60 + d.getMinutes()}; }
+  }
+  function hm(m){ var h = Math.floor(m/60) % 24, mm = m % 60; return (((h + 11) % 12) + 1) + ':' + (mm < 10 ? '0' : '') + mm; }
+  function dur(m){ if (m < 60) return m + ' min'; var h = Math.floor(m/60), r = m % 60; return h + ' h' + (r ? ' ' + r + ' min' : ''); }
+  function buzz(){ try { if (navigator.vibrate && navigator.userActivation && navigator.userActivation.isActive) navigator.vibrate(12); } catch(e) {} }
+  (function(){ var n = nowCT(); ui.store = (n.date === DAY && n.m >= 665) || n.date > DAY ? 'soco' : 'campus'; })();
+
+  function counts(store){
+    var ids = order(store).filter(function(id){ return !SHOTS[id].extra; });
+    return {done: ids.filter(function(id){ return state.done[id]; }).length, total: ids.length,
+            mustLeft: ids.filter(function(id){ return SHOTS[id].must && !state.done[id]; }).length};
+  }
+  function nextId(store){
+    var ids = order(store);
+    for (var i = 0; i < ids.length; i++) {
+      var id = ids[i];
+      if (state.done[id] || state.skip[id]) continue;
+      if (ui.cam !== 'all' && SHOTS[id].cam !== ui.cam) continue;
+      return id;
+    }
+    return null;
+  }
+  function statusLine(){
+    var n = nowCT(), st = STORES[ui.store], c = counts(ui.store);
+    var must = c.mustLeft ? ' <em>' + c.mustLeft + ' must-get' + (c.mustLeft > 1 ? 's' : '') + ' left.</em>' : '';
+    if (n.date < DAY) return ui.store === 'campus' ? 'Saturday: be outside Campus by 9:40. Doors at 10.' : 'Saturday: SoCo from 11:20 to 12:30.';
+    if (n.date > DAY) return 'Shoot day is done. Log your hours.';
+    if (ui.store === 'campus') {
+      if (n.m < st.start) return 'Be outside by 9:40: ' + dur(st.start - n.m) + '.' + must;
+      if (n.m < st.leave) return 'Leave for SoCo at 11:00: ' + dur(st.leave - n.m) + ' left.' + must;
+      return 'Head to SoCo, about 20 min.' + must;
+    }
+    if (n.m < st.start) return 'SoCo from 11:20: ' + dur(st.start - n.m) + '.' + must;
+    if (n.m < st.leave) return 'Wrap at 12:30: ' + dur(st.leave - n.m) + ' left.' + must;
+    return 'Wrap: send the last Story clips, log your hours.' + must;
+  }
+  function label(id){ return id === 'P' ? 'PH' : id; }
+  function tagHTML(id, isNext){
+    var s = SHOTS[id], d = !!state.done[id], k = !d && !!state.skip[id];
+    return '<button type="button" class="sm-tag' + (d ? ' is-done' : '') + (k ? ' is-skip' : '') + (isNext ? ' is-next' : '') + '" data-id="' + id + '" aria-pressed="' + d + '">' +
+      '<span class="hole" aria-hidden="true">✓</span>' +
+      '<span class="tx"><span class="nm"><i>' + label(id) + (s.must ? ' ★' : '') + '</i>' + s.name + '</span><span class="hw">' + s.how + '</span></span>' +
+      '<span class="side"><span class="sm-cam">' + CAMS[s.cam] + '</span>' + (k ? '<span class="sm-flag">Skipped</span>' : '') + '</span></button>';
+  }
+  function paintStamp(btn, name, m){
+    btn.className = 'sm-stamp' + (m != null ? ' set' : '');
+    btn.innerHTML = '<small>' + name + '</small><b>' + (m != null ? hm(m) : 'Tap') + '</b>';
+    btn.setAttribute('aria-label', name + (m != null ? ' at ' + hm(m) + ', tap to clear' : ', tap to stamp the time'));
+  }
+  function tick(){ $('sm-clock').textContent = hm(nowCT().m); $('sm-status').innerHTML = statusLine(); }
+  function render(){
+    tick();
+    ['campus','soco'].forEach(function(k){
+      var c = counts(k);
+      $('st-' + k).setAttribute('aria-pressed', String(ui.store === k));
+      $('sc-' + k).textContent = c.done + '/' + c.total + (c.mustLeft ? ' · ★' + c.mustLeft : ' · all ★');
+    });
+    var nid = nextId(ui.store), box = $('sm-next');
+    if (nid) {
+      var s = SHOTS[nid];
+      box.innerHTML = '<div class="sm-nxtop"><span class="sm-lbl">Next up</span>' + (s.must ? '<span class="sm-must">★ Must-get</span>' : '') + '<span class="sm-cam">' + CAMS[s.cam] + '</span></div>' +
+        '<div class="sm-nxmain"><b class="sm-num">' + label(nid) + '</b><div><h2>' + s.name + '</h2><p>' + s.how + '</p></div></div>' +
+        '<div class="sm-keys"><button class="sm-key done" type="button" id="k-done" data-id="' + nid + '">Done</button><button class="sm-key skip" type="button" id="k-skip" data-id="' + nid + '">Skip</button></div>';
+    } else {
+      var skipped = order(ui.store).filter(function(id){ return state.skip[id] && !state.done[id]; }).length;
+      var msg = ui.cam !== 'all' ? 'Nothing left for ' + CAMS[ui.cam] + ' here. Switch cameras below.' :
+        (ui.store === 'campus' ? 'Send your Story clips, tap Left, and head to SoCo.' : 'Send the last Story clips and tap Left. You\'re wrapped.');
+      box.innerHTML = '<div class="sm-alldone"><span class="sm-lbl">' + STORES[ui.store].name + '</span><h2>All shots done here</h2><p>' + msg + '</p>' +
+        (skipped ? '<p>' + skipped + ' skipped. Tap one in the list if you circle back.</p>' : '') + '</div>';
+    }
+    $('s-count').innerHTML = (state.stories[ui.store] || 0) + '<i>/4</i>';
+    var lg = state.log[ui.store] || {};
+    paintStamp($('t-in'), 'Arrived', lg['in']);
+    paintStamp($('t-out'), 'Left', lg.out);
+    [].forEach.call(document.querySelectorAll('#shoot [data-cam]'), function(b){ b.setAttribute('aria-pressed', String(b.getAttribute('data-cam') === ui.cam)); });
+    var html = '';
+    STORES[ui.store].groups.forEach(function(g){
+      var ids = g.ids.filter(function(id){ return ui.cam === 'all' || SHOTS[id].cam === ui.cam; });
+      if (!ids.length) return;
+      html += '<section class="sm-phase"><h3>' + g.at + ' <span>' + g.label + '</span></h3>' + ids.map(function(id){ return tagHTML(id, id === nid); }).join('') + '</section>';
+    });
+    $('sm-list').innerHTML = html || '<p class="sm-lbl">No shots for this camera at this store.</p>';
+    $('sm-asks').innerHTML = ASKS.map(function(a){
+      return '<button type="button" class="sm-ask" data-ask="' + a[0] + '" aria-pressed="' + !!state.asks[a[0]] + '"><span class="bx" aria-hidden="true">✓</span><span>' + a[1] + (a[2] ? '<small style="display:block;color:var(--muted);font-size:13px">' + a[2] + '</small>' : '') + '</span></button>';
+    }).join('');
+    var c1 = state.log.campus || {}, c2 = state.log.soco || {};
+    var start = c1['in'] != null ? c1['in'] : c2['in'];
+    var end = c2.out != null ? c2.out : (c1.out != null && c2['in'] == null ? c1.out : null);
+    $('sm-total').textContent = start == null ? 'Not on the clock yet' : (end == null ? 'On the clock since ' + hm(start) : hm(start) + ' to ' + hm(end) + ': ' + dur(Math.max(0, end - start)));
+  }
+
+  function saveLocal(){ try { localStorage.setItem(LS, JSON.stringify(state)); } catch(e) {} }
+  var undoState = null, toastTimer = 0;
+  function toast(msg, before){
+    undoState = before; $('sm-toast-msg').textContent = msg; $('sm-toast').classList.add('on');
+    clearTimeout(toastTimer); toastTimer = setTimeout(function(){ $('sm-toast').classList.remove('on'); undoState = null; }, 4500);
+  }
+  function commit(undoMsg, before){
+    state.t = Date.now(); saveLocal(); render(); buzz();
+    // Undo only ever reverses the last tap, so any other change retires it
+    if (undoMsg) toast(undoMsg, before); else { undoState = null; $('sm-toast').classList.remove('on'); }
+  }
+  $('sm-undo').addEventListener('click', function(ev){ ev.stopPropagation(); if (!undoState) return; state = undoState; commit(); });
+
+  function setMode(m){
+    document.documentElement.setAttribute('data-mode', m);
+    try { localStorage.setItem('fab-mode', m); } catch(e) {}
+    try { history.replaceState(null, '', m === 'shoot' ? '#shoot' : location.pathname); } catch(e) {}
+    if (m === 'shoot') render();
+    window.scrollTo(0, 0);
+  }
+  $('go-shoot').addEventListener('click', function(){ setMode('shoot'); });
+
+  document.addEventListener('click', function(ev){
+    var el = ev.target.closest('#shoot button');
+    if (!el) return;
+    var before = clone(state), id = el.getAttribute('data-id'), lab = id === 'P' ? 'Photos' : 'Shot ' + id;
+    if (el.id === 'go-plan') { setMode('plan'); return; }
+    if (el.id === 'k-done') { state.done[id] = Date.now(); delete state.skip[id]; commit(lab + ' done', before); return; }
+    if (el.id === 'k-skip') { state.skip[id] = 1; commit(lab + ' skipped', before); return; }
+    if (el.classList.contains('sm-tag')) {
+      if (state.done[id]) { delete state.done[id]; commit(lab + ' back on the list', before); }
+      else { state.done[id] = Date.now(); delete state.skip[id]; commit(lab + ' done', before); }
+      return;
+    }
+    if (el.hasAttribute('data-store')) { ui.store = el.getAttribute('data-store'); render(); window.scrollTo(0, 0); return; }
+    if (el.hasAttribute('data-cam')) { ui.cam = el.getAttribute('data-cam'); try { localStorage.setItem(LSUI, JSON.stringify({cam: ui.cam})); } catch(e) {} render(); return; }
+    if (el.hasAttribute('data-ask')) { var a = el.getAttribute('data-ask'); if (state.asks[a]) delete state.asks[a]; else state.asks[a] = 1; commit(); return; }
+    if (el.id === 's-plus' || el.id === 's-minus') { state.stories[ui.store] = Math.max(0, Math.min(20, (state.stories[ui.store] || 0) + (el.id === 's-plus' ? 1 : -1))); commit(); return; }
+    if (el.id === 't-in' || el.id === 't-out') {
+      var key = el.id === 't-in' ? 'in' : 'out', lg = state.log[ui.store] = state.log[ui.store] || {};
+      if (lg[key] != null) { delete lg[key]; commit((key === 'in' ? 'Arrived' : 'Left') + ' cleared', before); }
+      else { lg[key] = nowCT().m; commit(); }
+      return;
+    }
+    if (el.id === 'sm-wake') { setWake(el.getAttribute('aria-pressed') !== 'true'); return; }
+    if (el.id === 'sm-reset') { $('sm-reset-wrap').innerHTML = '<div class="sm-confirm"><b>Clear every tick, count and time?</b><button class="sm-reset" type="button" id="sm-reset-yes">Clear</button><button class="sm-wake" type="button" id="sm-reset-no">Keep</button></div>'; return; }
+    if (el.id === 'sm-reset-yes') { state = fresh(); $('sm-reset-wrap').innerHTML = '<button class="sm-reset" type="button" id="sm-reset">Clear the day</button>'; commit('Day cleared', before); return; }
+    if (el.id === 'sm-reset-no') { $('sm-reset-wrap').innerHTML = '<button class="sm-reset" type="button" id="sm-reset">Clear the day</button>'; return; }
+  });
+
+  // keep the screen on while shooting
+  var lock = null, wantWake = false;
+  function paintWake(msg){ $('sm-wake').setAttribute('aria-pressed', String(!!lock)); $('sm-wake-msg').textContent = msg || (lock ? 'Screen stays on' : ''); }
+  function setWake(on){
+    wantWake = on;
+    if (!on) { if (lock) lock.release().catch(function(){}); lock = null; paintWake(); return; }
+    if (!('wakeLock' in navigator)) { wantWake = false; paintWake('This browser won\'t allow it'); return; }
+    navigator.wakeLock.request('screen').then(function(l){ lock = l; paintWake(); l.addEventListener('release', function(){ lock = null; paintWake(); }); },
+      function(){ wantWake = false; lock = null; paintWake('This browser won\'t allow it'); });
+  }
+  document.addEventListener('visibilitychange', function(){
+    if (document.visibilityState === 'visible') { tick(); if (wantWake && !lock) setWake(true); }
+  });
+
+  render();
+  setInterval(tick, 30000);
+})();
+</script>
+
 </body>
 </html>
