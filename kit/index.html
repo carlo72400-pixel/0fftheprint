@@ -299,12 +299,21 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
 .qrfull::before{content:"";position:absolute;inset:0;background:radial-gradient(70% 55% at 50% 60%,transparent 40%,rgba(0,0,0,.55) 100%)}
 .qrfull[hidden]{display:none}
 .qrbox{position:relative;display:grid;justify-items:center;gap:6px;text-align:center;color:#fff}
-.qrbox .putty{position:relative;width:auto;height:min(68vh,calc(84vw * 2.5),760px);aspect-ratio:363/914}
+.qrbox .putty{position:relative;width:auto;height:min(76vh,calc(96vw * 2.52),900px);aspect-ratio:363/914}
 .qrbox .putty .who{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 14px 22px rgba(0,0,0,.7))}
 .qrbox .putty .code{position:absolute;object-fit:contain;image-rendering:pixelated;background:#fff;padding:2%;box-sizing:border-box;box-shadow:0 0 0 3px #fff,0 0 28px rgba(255,255,255,.55)}
-.qrbox b{font:900 italic clamp(34px,10vw,64px)/.9 var(--f-display);text-transform:uppercase;margin-top:6px;color:#fff;text-shadow:0 2px 0 #000,0 0 24px rgba(255,121,198,.6)}
+.qrbox b{font:900 italic clamp(30px,9vw,56px)/.9 var(--f-display);text-transform:uppercase;margin-top:2px;color:#fff;text-shadow:0 2px 0 #000,0 0 24px rgba(255,121,198,.6)}
 .qrbox span{font:600 13px/1.4 var(--f-body);color:#f1ecf5;max-width:32ch;text-shadow:0 1px 3px #000}
 .qrbox small{font:700 11px/1 var(--f-mono);letter-spacing:.18em;text-transform:uppercase;color:#ffd0e4;margin-top:4px;text-shadow:0 1px 3px #000}
+/* tin pins round Putty (10/15 late): six claymation enamel pins at the corners, parallax with the tilt, never over the code */
+.qrfull .qp{position:absolute;width:clamp(64px,19vw,120px);height:auto;pointer-events:none;filter:drop-shadow(0 8px 12px rgba(0,0,0,.7));animation:qpbob 5s ease-in-out infinite}
+.qrfull .qp.a{left:4%;top:9%;transform:rotate(-14deg)}
+.qrfull .qp.b{right:4%;top:11%;transform:rotate(12deg);animation-delay:-1.2s}
+.qrfull .qp.c{left:2%;bottom:24%;transform:rotate(8deg);animation-delay:-2.4s}
+.qrfull .qp.d{right:3%;bottom:26%;transform:rotate(-10deg);animation-delay:-3.1s}
+.qrfull .qp.e{left:6%;top:42%;width:clamp(48px,13vw,84px);transform:rotate(-6deg);animation-delay:-.7s}
+.qrfull .qp.f{right:5%;top:40%;width:clamp(48px,13vw,84px);transform:rotate(10deg);animation-delay:-1.9s}
+@keyframes qpbob{0%,100%{margin-top:0}50%{margin-top:6px}}
 .qrfull .tip{position:absolute;left:0;right:0;bottom:calc(16px + var(--sab));text-align:center;font:700 10px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:#8d8a96}
 /* ---------- THE ASK (10/15 late): the sign he holds up instead of shouting "can I take your photo". Built for people who are
    drunk: ONE question, Bala with the camera up and the sign, TWO giant keys for THEIR thumb (YES / NOT TONIGHT), nothing else to read.
@@ -324,8 +333,8 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
 .ask-top .dots i.on{background:#ff79c6;box-shadow:0 0 8px #ff79c6}
 .ask-stage{position:relative;display:grid;grid-template-rows:auto minmax(0,1fr);justify-items:center;padding:4px 12px 0;min-height:0}
 .ask-h{font:900 italic clamp(30px,9.2vw,58px)/.92 var(--f-display);text-transform:uppercase;text-align:center;color:#fff;text-shadow:0 2px 0 #000,0 0 24px rgba(255,121,198,.6);max-width:11ch;margin:0 0 4px}
-.ask-who{position:relative;height:100%;max-height:100%;min-height:0}
-.ask-who img{display:block;height:100%;width:auto;max-width:100%;object-fit:contain;filter:drop-shadow(0 12px 20px rgba(0,0,0,.7))}
+.ask-who{position:relative;min-height:0;justify-self:center;align-self:end}
+.ask-who img{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 12px 20px rgba(0,0,0,.7))}
 .ask-who .board{position:absolute;display:grid;place-items:center;text-align:center;color:#0a0a0d;font:900 italic 40px/.9 var(--f-display);text-transform:uppercase;padding:4% 5% 4% 7%;box-sizing:border-box;overflow:hidden;word-break:keep-all;overflow-wrap:normal;hyphens:none}
 .ask-who.l,[data-o="l"] .ask-who.p{display:none}
 [data-o="l"] .ask-who.l{display:block}
@@ -352,9 +361,7 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
 /* landscape: Bala + the wide board on the left, the two keys stacked on the right */
 [data-o="l"].askfull{grid-template-rows:auto minmax(0,1fr);grid-template-columns:minmax(0,1fr) 38%;padding-top:calc(var(--sat) + 4px)}
 [data-o="l"] .ask-top{grid-column:1/-1}
-[data-o="l"] .ask-stage{grid-template-rows:minmax(0,1fr);padding:0 6px 4px 6px;align-items:end}
-[data-o="l"] .ask-who{width:100%;height:auto;max-height:100%;display:grid;align-items:end}
-[data-o="l"] .ask-who img{width:100%;height:auto;max-height:100%;object-fit:contain;object-position:bottom}
+[data-o="l"] .ask-stage{grid-template-rows:minmax(0,1fr);padding:0 6px 4px 6px}
 [data-o="l"] .ask-h{display:none}
 [data-o="l"] .ask-body{padding:8px 12px calc(var(--sab) + 10px);background:linear-gradient(90deg,#2b2832,#1a181f);box-shadow:-1px 0 0 rgba(255,255,255,.12),-10px 0 24px rgba(0,0,0,.6);align-content:center}
 [data-o="l"] .ask-k{min-height:76px}
@@ -670,7 +677,7 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
   </section>
   <div id="sc-full"><div class="tip">tap to leave</div></div>
 <button type="button" id="back-fab" aria-label="Back to the kit">&lsaquo;</button>
-<div id="qr-full" class="qrfull" hidden><div class="qrbox"><div class="putty"><img class="who" src="../assets/cathedral/shot/putty_sign.webp" alt="" decoding="async"><img class="code" src="qr-shot.png" alt="QR code to 0fftheprint.com/shot" style="left:7.44%;top:27.13%;width:84.85%;height:26.37%"></div><b>You got shot.</b><span>scan it · follow · your pack drops in a few days</span><small>0fftheprint.com/shot</small></div><div class="tip">tap to leave</div></div>
+<div id="qr-full" class="qrfull" hidden><img class="qp a" src="../assets/cathedral/shot/qp_heart.webp" alt="" decoding="async"><img class="qp b" src="../assets/cathedral/shot/qp_star.webp" alt="" decoding="async"><img class="qp c" src="../assets/cathedral/shot/qp_cam.webp" alt="" decoding="async"><img class="qp d" src="../assets/cathedral/shot/qp_print.webp" alt="" decoding="async"><img class="qp e" src="../assets/cathedral/shot/qp_film.webp" alt="" decoding="async"><img class="qp f" src="../assets/cathedral/shot/qp_bat.webp" alt="" decoding="async"><div class="qrbox"><div class="putty"><img class="who" src="../assets/cathedral/shot/putty_sign.webp" alt="" decoding="async"><img class="code" src="qr-shot.png" alt="QR code to 0fftheprint.com/shot" style="left:7.44%;top:27.13%;width:84.85%;height:26.37%"></div><b>You got shot.</b><span>scan it · follow · your pack drops in a few days</span><small>0fftheprint.com/shot</small></div><div class="tip">tap to leave</div></div>
 <div id="ask-full" class="askfull" data-o="p" hidden>
   <div class="ask-roll" aria-hidden="true"></div>
   <div class="ask-top"><button type="button" class="x" id="ask-x">&lsaquo; leave</button><span class="dots" id="ask-dots"></span><button type="button" class="lk" id="ask-lock">lock</button></div>
@@ -1153,7 +1160,7 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden && SW
 /* ---------- THE QR ---------- */
 $('#qr-show').addEventListener('click', () => { $('#qr-full').hidden = false; buzz(); try { if ('wakeLock' in navigator) navigator.wakeLock.request('screen').then(l => { $('#qr-full').dataset.lock = '1'; $('#qr-full').addEventListener('click', () => l.release(), { once: true }); }).catch(() => {}); } catch(e){} });
 $('#qr-full').addEventListener('click', () => { $('#qr-full').hidden = true; });
-addEventListener('deviceorientation', e => { const f = $('#qr-full'); if (!f || f.hidden || e.gamma == null) return; const g = Math.max(-25, Math.min(25, e.gamma)); f.style.backgroundPosition = `calc(50% + ${(-g * 1.2).toFixed(1)}px) center`; const p = f.querySelector('.putty'); if (p) p.style.transform = `translateX(${(g * .6).toFixed(1)}px)`; });
+addEventListener('deviceorientation', e => { const f = $('#qr-full'); if (!f || f.hidden || e.gamma == null) return; const g = Math.max(-25, Math.min(25, e.gamma)); f.style.backgroundPosition = `calc(50% + ${(-g * 1.2).toFixed(1)}px) center`; const p = f.querySelector('.putty'); if (p) p.style.transform = `translateX(${(g * .6).toFixed(1)}px)`; f.querySelectorAll('.qp').forEach(q => { q.style.marginLeft = (-g * 1.4).toFixed(1) + 'px'; }); });
 
 /* ---------- THE ASK ---------- */
 const ASK = [
@@ -1175,7 +1182,16 @@ function askPaint(){
   $('#ask-dots').innerHTML = ASK.map((_, k) => '<i' + (k === AK.i ? ' class="on"' : '') + '></i>').join('');
   const f = $('#ask-full'); f.dataset.o = AK.lock ? AK.lockO : (matchMedia('(orientation: landscape)').matches ? 'l' : 'p');
   $('#ask-lock').classList.toggle('on', AK.lock); $('#ask-lock').textContent = AK.lock ? 'locked ' + (AK.lockO === 'l' ? 'wide' : 'tall') : 'lock';
-  requestAnimationFrame(() => { askFit($('#ask-bp')); askFit($('#ask-bl')); });
+  requestAnimationFrame(() => { askSize(); askFit($('#ask-bp')); askFit($('#ask-bl')); });
+}
+const ASK_AR = {p: 824 / 1163, l: 1332 / 796};   /* the art's own width / height (ask.json) */
+function askSize(){
+  const st = $('#ask-stage'), o = $('#ask-full').dataset.o, who = st.querySelector('.ask-who.' + o); if (!who) return;
+  const cs = getComputedStyle(st); const W = st.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+  const head = o === 'p' ? $('#ask-h').offsetHeight + 4 : 0;
+  const H = st.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - head;
+  const ar = ASK_AR[o]; let w = W, h = w / ar; if (h > H) { h = H; w = h * ar; }
+  who.style.width = Math.floor(w) + 'px'; who.style.height = Math.floor(h) + 'px';
 }
 function askOpen(){ $('#ask-full').hidden = false; buzz(); askPaint(); try { if ('wakeLock' in navigator) navigator.wakeLock.request('screen').then(l => { AK.lockHold = l; }).catch(() => {}); } catch(e){} }
 function askClose(){ $('#ask-full').hidden = true; try { AK.lockHold && AK.lockHold.release(); } catch(e){} AK.lockHold = null; }
