@@ -81,7 +81,7 @@ window.DAYPLAN = {
   acts: [{ n: 'AFI', st: 'blue', s: '16:10', e: '16:50' }],// 24h times; past midnight = 24:30 style
   logistics: [{ m: 360, day: 'sat', b: 'Leave SA', s: 'I-35 north...' }],  // m = minutes after midnight, can be negative (day before)
   days: { fri: 'Fri 10/23', sat: 'Sat 10/24', sun: 'Sun 10/25' },
-  presets: [{ label: "Use the host's picks", picks: { 'afi': 2 } }],      // ids = slugged names
+  presets: [{ label: "Use suggested picks", picks: { 'afi': 2 } }],       // ids = slugged names
   packKey: 'snw-family-pack-v1',
   shared: { event: 'snw' },   // optional: one shared plan per group (a-z, 0-9, dashes); leave it out for per-phone only
   text: { beforeDoors: 'Gates at 11', doorsNote: '...', after: ["That's the night", '...', '...'],
