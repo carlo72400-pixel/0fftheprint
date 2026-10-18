@@ -440,7 +440,7 @@
     var isNew = !c;
     c = c || { when: MAIN, m: Math.max(S0, Math.min(S1 - 60, Math.ceil(nowMin() / 15) * 15)), b: '', s: '', st: '' };
     if (isNew && (c.m < S0 || c.m > S1)) c.m = S0 + 360;
-    var f = fld('fB', 'What', txt('fB', c.b, 'Meet at the merch tent', 60)) +
+    var f = fld('fB', 'What', txt('fB', c.b, TXT.stopPlaceholder || 'Meet at the entrance', 60)) +
       '<div class="fld-row">' + fld('fW', 'Day', sel('fW', dayChoices(), c.when)) + fld('fT', 'Time', tim('fT', hhmm(c.m))) + '</div>' +
       (ORDER.length > 1 ? fld('fSt', 'Where', sel('fSt', stageOpts('Nowhere in particular'), c.st || '')) : '') +
       fld('fS', 'Note', area('fS', c.s, 'Optional')) +
@@ -696,7 +696,7 @@
           eye = 'Free time';
           big = wk ? 'Leave at ' + nb(fmt(leave)) : (mins <= 60 ? 'Next in ' + mins + ' min' : 'Free till ' + nb(fmt(nx.m0)));
           act = '<b>' + esc(nx.act.n) + '</b><small>' + fmt(nx.m0) + ' on ' + esc(sname(nx.st)) + (wk ? ', about a ' + wk + ' min walk' : '') + '</small>';
-          next = esc(TXT.freeTime || 'Till then: water, food, merch.');
+          next = esc(TXT.freeTime || 'Till then: water, food, a break.');
         }
       } else {
         var any = cov.length || !PICKABLE;
@@ -889,7 +889,7 @@
     if (!box || !SHARE) return;
     // never redraw under a thumb that's typing; the status line updates on its own (paintSyncLine)
     if (document.activeElement && document.activeElement.id === 'shName' && box.contains(document.activeElement)) { paintSyncLine(); return; }
-    var nameField = '<label class="namebox" for="shName">Your name<input type="text" id="shName" maxlength="40" placeholder="Mom, Sis, Gianni" autocomplete="given-name" value="' + esc(myName) + '"></label>';
+    var nameField = '<label class="namebox" for="shName">Your name<input type="text" id="shName" maxlength="40" placeholder="' + esc(TXT.namePlaceholder || 'Type your name') + '" autocomplete="given-name" value="' + esc(myName) + '"></label>';
     var html = '';
     if (invite && (!SH || SH.code !== invite.code)) {
       html = '<p class="sh-big">' + (invite.from ? '<b>' + esc(invite.from) + '</b> invited you' : 'You\'re invited') + ' to the shared plan.</p>' +
