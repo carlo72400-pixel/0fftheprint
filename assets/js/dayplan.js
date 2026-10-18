@@ -5,6 +5,9 @@
    and the SHARED PLAN: one secret invite link, and everybody on it sees the same plan
    (stops, time fixes, added sets, everybody's Want/Must votes) synced through the
    site's database (migration 047). Works offline from the copy on the phone.
+   On a shared plan there's also WHERE'S EVERYBODY: each person's own plan side by side
+   (built from their own picks), the sets they'll catch together, and an "I'm here" ping
+   per person, tapped from a list of spots or straight off the event map (cfg.zones, cfg.map).
    How to make a new event page: see DAYPLAN.md at the repo root.
    Times are minutes after midnight on cfg.date, in the event's own timezone (cfg.tz). */
 (function () {
@@ -26,6 +29,10 @@
   var OFFS = cfg.dayOffsets || {};
   if (OFFS[MAIN] === undefined) OFFS[MAIN] = 0;
   var SHARE = cfg.shared || null;
+  // spots people can say they're at; x/y = percent across/down cfg.map's image (no x/y = listed, not pinned)
+  var ZONES = cfg.zones || [], ZONE = {};
+  ZONES.forEach(function (z) { ZONE[z.id] = z; });
+  var FRESH = 90, STALE = 480;   // an "I'm here" is current for 90 minutes, shown greyed out up to 8 hours, then dropped
 
   function walk(a, b) {
     var A = STAGE[a].area || a, B = STAGE[b].area || b;
@@ -61,15 +68,17 @@
   // the shared plan on this phone: { code, rev, rows: { 'kind|item': { d, b, x, r } }, pending: [rows], syncs }
   var SH = SHARE ? load(KEY + '-sh-v1', null) : null;
   function saveSH() { if (SH) save(KEY + '-sh-v1', SH); }
+  // on a shared plan, this phone's plan comes from 'me' (my picks, the default) or 'all' (everybody's picks added up)
+  var planMode = load(KEY + '-planmode-v1', 'me') === 'all' ? 'all' : 'me';
 
   // the working state the page draws from (the local plan, or the shared one)
-  var picks, full, actEdits, extraActs, custom, logiEdits, votes = {}, members = {};
+  var picks, full, actEdits, extraActs, custom, logiEdits, votes = {}, members = {}, pings = {};
   function useLocal() {
     picks = L.picks; full = L.full; actEdits = L.actEdits; extraActs = L.extraActs; custom = L.custom; logiEdits = L.logiEdits;
-    votes = {}; members = {};
+    votes = {}; members = {}; pings = {};
   }
   function applyShared() {
-    actEdits = {}; extraActs = []; custom = []; logiEdits = {}; votes = {}; members = {}; full = false;
+    actEdits = {}; extraActs = []; custom = []; logiEdits = {}; votes = {}; members = {}; pings = {}; full = false;
     var rows = SH.rows, k;
     for (k in rows) {
       var r = rows[k];
@@ -79,7 +88,7 @@
       else if (kind === 'extra') extraActs.push({ id: item, n: d.n, st: d.st, s: d.s, e: d.e });
       else if (kind === 'stop') custom.push({ id: item, when: d.when || MAIN, m: +d.m, b: d.b || '', s: d.s || '', st: d.st || '', by: r.b || '' });
       else if (kind === 'logi') logiEdits[item] = d;
-      else if (kind === 'member') members[item] = d.n || '';
+      else if (kind === 'member') { members[item] = d.n || ''; if (d.at && ZONE[d.at]) pings[item] = { at: d.at, t: +d.t || 0 }; }
       else if (kind === 'setting' && item === 'full') full = !!d.on;
       else if (kind === 'vote') {
         var bar2 = item.indexOf('|'), mid = item.slice(0, bar2), aid = item.slice(bar2 + 1);
@@ -113,19 +122,21 @@
 
   /* ---------- who wants what ---------- */
   var LEVEL = { 1: 1, 2: 3 }, BONUS = { 1: 1, 2: 15 };
-  function wantOf(a) {                      // per-slot weight of a set for the plan
-    if (!PICKABLE) return 1;
-    if (!SH) return LEVEL[picks[a.id]] || 0;
-    var v = votes[a.id], w = 0; if (!v) return 0;
-    for (var m in v) w += LEVEL[v[m]] || 0;
-    return w;
+  // How much a plan wants each set: w = weight per 5 minutes, b = the one-time bonus at 15 minutes.
+  // mid = one person's picks only; no mid = everybody's picks added up. Off a shared plan: this phone's picks.
+  function weightsFor(mid) {
+    if (!PICKABLE) return { w: function () { return 1; }, b: function () { return 0; } };
+    if (!SH) return { w: function (a) { return LEVEL[picks[a.id]] || 0; }, b: function (a) { return BONUS[picks[a.id]] || 0; } };
+    if (mid) return {
+      w: function (a) { var v = votes[a.id]; return v ? (LEVEL[v[mid]] || 0) : 0; },
+      b: function (a) { var v = votes[a.id]; return v ? (BONUS[v[mid]] || 0) : 0; }
+    };
+    return {
+      w: function (a) { var v = votes[a.id], s = 0; if (v) for (var m in v) s += LEVEL[v[m]] || 0; return s; },
+      b: function (a) { var v = votes[a.id], s = 0; if (v) for (var m in v) s += BONUS[v[m]] || 0; return s; }
+    };
   }
-  function bonusOf(a) {
-    if (!SH) return BONUS[picks[a.id]] || 0;
-    var v = votes[a.id], b = 0; if (!v) return 0;
-    for (var m in v) b += BONUS[v[m]] || 0;
-    return b;
-  }
+  function activeWeights() { return weightsFor(SH && planMode !== 'all' ? me.id : null); }
   function topLevel(a) {                    // the strongest vote on a set (for drawing it)
     if (!SH) return picks[a.id] || 0;
     var v = votes[a.id], t = 0; if (!v) return 0;
@@ -153,9 +164,9 @@
   // Catching 15 minutes of a set pays a one-time bonus (big for a Must), so two
   // clashing Musts get split instead of one dropped. You only ever walk TO a set
   // somebody picked, which also stops the plan hopping out of a set and back in.
-  // With a shared plan, every vote adds up: the plan follows what the most people want most.
+  // W says how much each set is wanted (weightsFor): one person's picks, or everybody's added up.
   var MOVE = 0.5, NEG = -1e18;
-  function planSplit() {
+  function planSplit(W) {
     var G = ORDER.length, w = [], bo = [], actAt = [], k, g, h, c, row, row2, row3;
     for (k = 0; k < K; k++) {
       row = []; row2 = []; row3 = [];
@@ -163,7 +174,7 @@
       w.push(row); actAt.push(row2); bo.push(row3);
     }
     ACTS.forEach(function (a) {
-      var gi = ORDER.indexOf(a.st), wt = wantOf(a), bn = bonusOf(a);
+      var gi = ORDER.indexOf(a.st), wt = W.w(a), bn = W.b(a);
       if (!wt) return;
       for (var m = a.m0; m + SL <= a.m1; m += SL) {
         var kk = Math.floor((m - S0) / SL);
@@ -217,12 +228,12 @@
     return segs;
   }
   // Full-set mode: whole sets only, best chain by weight x minutes with walks in between.
-  function planFull() {
-    var arr = ACTS.filter(function (a) { return wantOf(a) > 0; })
+  function planFull(W) {
+    var arr = ACTS.filter(function (a) { return W.w(a) > 0; })
       .sort(function (x, y) { return (x.m1 - y.m1) || (x.m0 - y.m0); });
     var n = arr.length, dp = [], prev = [], i, j;
     for (i = 0; i < n; i++) {
-      var val = wantOf(arr[i]) * (arr[i].m1 - arr[i].m0), bv = val, bp = -1;
+      var val = W.w(arr[i]) * (arr[i].m1 - arr[i].m0), bv = val, bp = -1;
       for (j = 0; j < i; j++) {
         if (arr[j].m1 + walk(arr[j].st, arr[i].st) <= arr[i].m0 && dp[j] + val > bv) { bv = dp[j] + val; bp = j; }
       }
@@ -251,10 +262,10 @@
     });
     return out;
   }
-  function coverage(segs) {
+  function coverage(segs, W) {
     var res = [];
     ACTS.forEach(function (a) {
-      if (!(wantOf(a) > 0)) return;
+      if (!(W.w(a) > 0)) return;
       var got = 0, over = [];
       segs.forEach(function (s) {
         if (s.act === a) got += s.m1 - s.m0;
@@ -279,11 +290,25 @@
   function ago(ms) { var s = Math.round((Date.now() - ms) / 1000); return s < 20 ? 'just now' : (s < 90 ? 'a minute ago' : (s < 3600 ? Math.round(s / 60) + ' min ago' : Math.round(s / 3600) + ' hr ago')); }
   function joinNames(a) { return a.length <= 1 ? (a[0] || '') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]; }
 
-  var segs = [], items = [], cov = [], preview = null, editDay = false, editSets = false;
+  var segs = [], items = [], cov = [], crew = [], preview = null, editDay = false, editSets = false;
+  function planWith(W) { return !PICKABLE ? planAll() : (full ? planFull(W) : planSplit(W)); }
   function replan() {
-    segs = !PICKABLE ? planAll() : (full ? planFull() : planSplit());
+    var W = activeWeights();
+    segs = planWith(W);
     items = toItems(segs);
-    cov = PICKABLE ? coverage(segs) : [];
+    cov = PICKABLE ? coverage(segs, W) : [];
+    // everybody on a shared plan, each with the plan their own picks make
+    crew = [];
+    if (SH) crewIds().forEach(function (mid) {
+      var s = (mid === me.id && planMode !== 'all') ? segs : planWith(weightsFor(mid)), mins = 0, sets = {};
+      s.forEach(function (x) { mins += x.m1 - x.m0; sets[x.act.id] = 1; });
+      crew.push({ id: mid, n: nameOf(mid), segs: s, minutes: mins, sets: Object.keys(sets).length });
+    });
+  }
+  function crewIds() {   // me first, then everybody else by name
+    var ids = Object.keys(members).filter(function (m) { return m !== me.id && members[m]; });
+    ids.sort(function (a, b) { return nameOf(a).localeCompare(nameOf(b)); });
+    return [me.id].concat(ids);
   }
   function nowMin() { return preview !== null ? preview : (Date.now() - BASE) / 60000; }
 
@@ -334,7 +359,7 @@
   }
 
   /* ---------- the bottom sheet every editor uses ---------- */
-  var sheet = null, sheetBg = null, sheetKey = null, lastFocus = null;
+  var sheet = null, sheetBg = null, sheetKey = null, lastFocus = null, needApply = false;
   function ensureSheet() {
     if (sheet) return;
     sheetBg = document.createElement('div'); sheetBg.className = 'sheet-bg'; sheetBg.hidden = true;
@@ -365,6 +390,7 @@
     sheet.hidden = true; sheetBg.hidden = true; sheetKey = null;
     document.documentElement.classList.remove('sheet-open');
     if (lastFocus && lastFocus.focus) { try { lastFocus.focus({ preventScroll: true }); } catch (e) {} }
+    if (needApply && SH) { needApply = false; applyShared(); rebuild(); }
   }
   function sheetOpen() { return sheet && !sheet.hidden; }
   function sheetErr(msg) { var e = $('sheetErr'); e.textContent = msg; e.hidden = false; }
@@ -389,7 +415,7 @@
     var f = (a.extra ? fld('fN', 'Name', txt('fN', a.n, 'Who is playing', 60)) + fld('fSt', 'Stage', sel('fSt', stageOpts(), a.st)) : '') +
       '<div class="fld-row">' + fld('fS', 'Starts', tim('fS', hhmm(a.m0))) + fld('fE', 'Ends', tim('fE', hhmm(a.m1))) + '</div>' +
       '<p class="sheet-note">' + (a.extra ? 'An added set.' + (SH ? ' Everyone on the shared plan sees it.' : ' Only you see it, unless you send your plan.') :
-        'Official: ' + fmt(hm(a.base.s)) + ' to about ' + fmt(hm(a.base.e)) + '. Fix it here if the festival moves it' + (SH ? ', for everyone on the plan.' : '.')) + '</p>';
+        'Official: ' + fmt(hm(a.base.s)) + ' to about ' + fmt(hm(a.base.e)) + '. Fix it here if the schedule changes' + (SH ? ', for everyone on the plan.' : '.')) + '</p>';
     var k = key('save', 'Save', 'gold') + (a.edited ? key('reset', 'Back to official', 'grey') : '') + (a.extra ? key('del', 'Delete set', 'red') : '') + key('x', 'Cancel', 'grey');
     openSheet((a.extra ? 'Added set: ' : 'Fix the time: ') + a.n, f, k, function (act, btn) {
       if (act === 'x') return closeSheet();
@@ -523,17 +549,19 @@
     if (!grid) return;
     grid.classList.toggle('editing', editSets);
     grid.classList.toggle('group', !!SH);
-    var segBy = {};
+    var segBy = {}, W = activeWeights(), mineMode = SH && planMode !== 'all';
     segs.forEach(function (s) { (segBy[s.act.id] = segBy[s.act.id] || []).push(s); });
     [].forEach.call(grid.querySelectorAll('.lb'), function (b) {
       var a = BY[b.getAttribute('data-id')];
       if (!a) return;
-      var p = PICKABLE ? topLevel(a) : 1, mine = segBy[a.id], wv = b.querySelector('.wv'), tg = b.querySelector('.tg');
+      // planning from my picks: my Want/Must shows as mine, a set only others picked stays lit (their initials say who)
+      var p = !PICKABLE ? 1 : (mineMode ? Math.max(picks[a.id] || 0, topLevel(a) ? 1 : 0) : topLevel(a));
+      var wanted = PICKABLE && W.w(a) > 0, mine = segBy[a.id], wv = b.querySelector('.wv'), tg = b.querySelector('.tg');
       var vs = SH ? voters(a) : [];
       b.setAttribute('data-pick', p);
       b.classList.toggle('myvote', !!(SH && picks[a.id]));
       b.classList.toggle('inplan', !!mine);
-      b.classList.toggle('clash', p > 0 && !mine);
+      b.classList.toggle('clash', wanted && !mine);
       if (mine) {
         var s0 = mine[0].m0, s1 = mine[mine.length - 1].m1;
         wv.style.top = ((s0 - a.m0) * PXM) + 'px'; wv.style.height = Math.max(4, (s1 - s0) * PXM - 3) + 'px'; wv.hidden = false;
@@ -541,10 +569,10 @@
       if (editSets) tg.textContent = 'EDIT';
       else if (!PICKABLE) tg.textContent = '';
       else if (SH) tg.textContent = vs.length ? initials(vs) : '';
-      else tg.textContent = p > 0 && !mine ? 'CLASH' : (p === 2 ? 'MUST' : (p === 1 ? 'WANT' : ''));
+      else tg.textContent = wanted && !mine ? 'CLASH' : (p === 2 ? 'MUST' : (p === 1 ? 'WANT' : ''));
       var state = SH ? (vs.length ? 'picked by ' + joinNames(vs.map(function (x) { return x.n + (x.p === 2 ? ' (must)' : ''); })) : 'nobody picked it') :
         (p === 2 ? 'must see' : (p === 1 ? 'want to see' : 'not picked'));
-      b.setAttribute('aria-label', a.n + ', ' + where(a.st) + ', ' + fmt(a.m0) + ' to about ' + fmt(a.m1) + (editSets ? ', tap to fix the time' : (PICKABLE ? ', ' + state + (mine ? ', in the plan' : (p > 0 ? ', clashes, not in the plan' : '')) : '')));
+      b.setAttribute('aria-label', a.n + ', ' + where(a.st) + ', ' + fmt(a.m0) + ' to about ' + fmt(a.m1) + (editSets ? ', tap to fix the time' : (PICKABLE ? ', ' + state + (mine ? ', in the plan' : (wanted ? ', clashes, not in the plan' : '')) : '')));
     });
     var ke = $('kEditSets');
     if (ke) { ke.classList.toggle('down', editSets); ke.setAttribute('aria-pressed', editSets ? 'true' : 'false'); ke.textContent = editSets ? 'Done fixing' : 'Fix set times'; }
@@ -580,8 +608,16 @@
     if (!$('planList')) return;
     var n = cov.length, fullN = 0, part = 0, miss = [], minutes = 0;
     cov.forEach(function (c) { minutes += c.got; if (c.got >= c.len) fullN++; else if (c.got > 0) part++; else miss.push(c); });
-    if ($('planSum')) $('planSum').innerHTML = !PICKABLE ? '' : (n ? ((SH ? 'Everybody\'s picks: <b>' : 'Catching <b>') + fullN + ' of ' + n + '</b> sets in full' + (part ? ', <b>' + part + '</b> in part' : '') + '. About <b>' + hrs(minutes) + '</b> of sets.') :
+    var from = !SH ? '' : (planMode === 'all' ? 'From everybody\'s picks: c' : 'From your picks: c');
+    if ($('planSum')) $('planSum').innerHTML = !PICKABLE ? '' : (n ? ((from || 'C') + 'atching <b>' + fullN + ' of ' + n + '</b> sets in full' + (part ? ', <b>' + part + '</b> in part' : '') + '. About <b>' + hrs(minutes) + '</b> of sets.') :
       esc(TXT.noPicks || 'Nothing picked yet. Tap sets in the lineup.'));
+    var pm = $('planMode');
+    if (pm) {
+      pm.hidden = !SH || !PICKABLE;
+      [['kPlanMe', planMode !== 'all'], ['kPlanAll', planMode === 'all']].forEach(function (k) {
+        var el = $(k[0]); if (el) { el.classList.toggle('down', k[1]); el.setAttribute('aria-pressed', k[1] ? 'true' : 'false'); }
+      });
+    }
     $('planList').innerHTML = items.map(function (it) {
       if (it.type === 'walk') {
         return '<li class="pl walk" data-m0="' + it.m0 + '" data-m1="' + it.m1 + '"><time>' + fmt(it.m0) + '</time><div><b>Walk to ' + esc(sname(it.to)) + '</b><span>About ' + it.mins + ' min, for ' + esc(it.next.n) + ' at ' + fmt(it.m1) + '.</span></div></li>';
@@ -718,9 +754,10 @@
       $('stagesNow').innerHTML = ORDER.map(function (st) {
         var p = onStage(st, tm), a = p.now || p.next, live = !!p.now && m >= S0 && m < S1;
         if (!a) return '<div class="sn ' + st + ' off"><span class="st">' + esc(sname(st)) + '</span><b>Done</b><span>Nothing left</span></div>';
-        var pk = topLevel(a), vs = SH ? voters(a) : [];
+        var pk = topLevel(a), vs = SH ? voters(a) : [], here = hereAt(st);
         return '<div class="sn ' + st + (live ? '' : ' off') + '"><span class="st">' + esc(sname(st)) + (live ? ' &#183; now' : ' &#183; next') + '</span><b>' + esc(a.n) + '</b><span>' +
-          (live ? 'Till about ' + fmt(a.m1) : 'At ' + fmt(a.m0)) + '</span>' + (SH ? (vs.length ? '<i>' + esc(initials(vs)) + '</i>' : '') : (pk ? '<i>' + (pk === 2 ? 'MUST' : 'WANT') + '</i>' : '')) + '</div>';
+          (live ? 'Till about ' + fmt(a.m1) : 'At ' + fmt(a.m0)) + '</span>' + (SH ? (vs.length ? '<i>' + esc(initials(vs)) + '</i>' : '') : (pk ? '<i>' + (pk === 2 ? 'MUST' : 'WANT') + '</i>' : '')) +
+          (here.length ? '<em class="here">Here: ' + esc(joinNames(here)) + '</em>' : '') + '</div>';
       }).join('');
     }
     var ln = $('luNow');
@@ -751,8 +788,197 @@
     paintSyncLine();
   }
 
-  function refresh() { replan(); paintGrid(); paintPlan(); paintDay(); paintNow(); paintShare(); }
+  function refresh() {
+    replan();
+    document.documentElement.setAttribute('data-shared', SH ? '1' : '0');   // pages show .only-shared / .only-solo bits with this
+    paintGrid(); paintPlan(); paintDay(); paintNow(); paintShare(); paintCrew();
+  }
   function rebuild() { buildActs(); buildGrid(); refresh(); }
+
+  /* ---------- where's everybody ---------- */
+  var crewOpen = {}, crewBuilt = false, lastHtml = {};
+  function setHtml(id, html) { var el = $(id); if (el && lastHtml[id] !== html) { el.innerHTML = html; lastHtml[id] = html; } }
+  function pingOf(mid) {          // someone's last "I'm here", while it's recent enough to show
+    var p = pings[mid];
+    if (!p || !ZONE[p.at]) return null;
+    var age = (Date.now() - p.t) / 60000;
+    if (age > STALE || age < -10) return null;
+    return { z: ZONE[p.at], t: p.t, fresh: age <= FRESH };
+  }
+  function pingWhen(g) { return g.fresh ? ago(g.t) : 'at ' + fmt((g.t - BASE) / 60000); }
+  function hereAt(st) {            // names of who said in the last 90 minutes they're at this stage
+    var out = [];
+    crew.forEach(function (c) { var g = pingOf(c.id); if (g && g.fresh && g.z.st === st) out.push(c.id === me.id ? 'you' : c.n); });
+    return out;
+  }
+  function crewInitials() {
+    var out = {}, seen = {};
+    crew.forEach(function (c) {
+      var n = String(c.id === me.id ? (myName || 'You') : c.n).trim() || '?', i = n.charAt(0).toUpperCase();
+      if (seen[i]) i = n.slice(0, 2).replace(/^./, function (x) { return x.toUpperCase(); });
+      seen[i] = 1; out[c.id] = i;
+    });
+    return out;
+  }
+  function crewNow(c, m) {         // where someone's own plan puts them at minute m
+    if (!c.segs.length) return { t: 'No picks yet', st: '' };
+    var cur = null, nx = null;
+    c.segs.forEach(function (s) { if (s.m0 <= m && m < s.m1) cur = s; else if (s.m0 > m && !nx) nx = s; });
+    if (m < S0) { var f = c.segs[0]; return { t: 'First up: <b>' + esc(f.act.n) + '</b>, ' + fmt(f.m0) + ', ' + esc(sname(f.st)), st: f.st }; }
+    if (cur) return { t: 'At <b>' + esc(cur.act.n) + '</b>, ' + esc(sname(cur.st)) + ', till ' + fmt(cur.m1), st: cur.st };
+    if (nx) return { t: 'Next: <b>' + esc(nx.act.n) + '</b>, ' + fmt(nx.m0) + ', ' + esc(sname(nx.st)), st: nx.st };
+    return { t: 'No more sets', st: '' };
+  }
+  function stripHtml(c, m) {       // the whole day as one bar, colored by stage, with a NOW tick
+    var span = S1 - S0, out = c.segs.map(function (s) {
+      return '<i class="' + s.st + '" style="left:' + ((s.m0 - S0) / span * 100).toFixed(2) + '%;width:' + Math.max(0.6, (s.m1 - s.m0) / span * 100).toFixed(2) + '%"></i>';
+    }).join('');
+    if (m >= S0 && m <= S1) out += '<b class="nowmark" style="left:' + ((m - S0) / span * 100).toFixed(2) + '%"></b>';
+    return '<div class="strip" aria-hidden="true">' + out + '</div>';
+  }
+  function axisHtml() {
+    var span = S1 - S0, out = '';
+    for (var h = Math.ceil(S0 / 60); h * 60 <= S1; h += 2) out += '<span style="left:' + ((h * 60 - S0) / span * 100).toFixed(2) + '%">' + axisLabel(h) + '</span>';
+    return out;
+  }
+  function crewRow(c, m) {
+    var g = pingOf(c.id), now = crewNow(c, m), isMe = c.id === me.id, open = !!crewOpen[c.id];
+    var pin = g ? '<span class="pin ' + (g.z.st || 'bone') + (g.fresh ? '' : ' old') + '">' + esc(g.z.name) + '<small>' + esc(pingWhen(g)) + '</small></span>' :
+      '<span class="pin none">No spot yet</span>';
+    var list = open ? '<ol class="crew-sets">' + c.segs.map(function (s) {
+      var part = s.m0 > s.act.m0 || s.m1 < s.act.m1;
+      return '<li class="' + s.st + '"><time>' + fmt(s.m0) + '</time><b>' + esc(s.act.n) + '</b><span>' + esc(sname(s.st)) + (part ? ', ' + fmt(s.m0) + ' to ' + fmt(s.m1) : '') + '</span></li>';
+    }).join('') + '</ol>' : '';
+    return '<li class="crew-row' + (isMe ? ' me' : '') + '" data-stage="' + now.st + '">' +
+      '<div class="crew-top"><b class="crew-name">' + esc(isMe ? (myName || 'You') : c.n) + (isMe ? ' <small>(you)</small>' : '') + '</b>' + pin + '</div>' +
+      '<p class="crew-now">' + now.t + '</p>' + (c.segs.length ? stripHtml(c, m) : '') +
+      '<div class="crew-foot"><span>' + c.sets + ' set' + (c.sets === 1 ? '' : 's') + (c.minutes ? ', ' + hrs(c.minutes) : '') + '</span>' +
+      (c.segs.length ? '<button type="button" class="key sm grey" data-crew="open" data-id="' + esc(c.id) + '" aria-expanded="' + open + '">' +
+        (open ? 'Hide' : (isMe ? 'Your sets' : 'Their sets')) + '</button>' : '') + '</div>' + list + '</li>';
+  }
+  function together() {            // sets two or more people's own plans have them at (15 minutes or more)
+    var out = [];
+    if (crew.length < 2) return out;
+    ACTS.forEach(function (a) {
+      var need = Math.min(15, a.m1 - a.m0), who = [];
+      crew.forEach(function (c) {
+        var got = 0;
+        c.segs.forEach(function (s) { if (s.act === a) got += s.m1 - s.m0; });
+        if (got >= need) who.push(c);
+      });
+      if (who.length >= 2) out.push({ act: a, who: who });
+    });
+    return out.sort(function (x, y) { return x.act.m0 - y.act.m0; });
+  }
+  function togetherHtml(m) {
+    var tg = together();
+    if (crew.length < 2) return '';
+    if (!tg.length) return '<h3>Together</h3><p class="note">No sets in common yet.</p>';
+    return '<h3>Together</h3><ul class="together">' + tg.map(function (g) {
+      var names = g.who.filter(function (c) { return c.id !== me.id; }).map(function (c) { return c.n; });
+      if (g.who.some(function (c) { return c.id === me.id; })) names.push('you');
+      return '<li class="' + g.act.st + (m >= g.act.m1 ? ' done' : '') + '"><time>' + fmt(g.act.m0) + '</time><b>' + esc(g.act.n) + '</b><span>' +
+        esc(sname(g.act.st)) + ': ' + esc(joinNames(names)) + '</span></li>';
+    }).join('') + '</ul>';
+  }
+  function mapHtml() {             // the event map, cropped (cfg.map.crop = left, top, right, bottom in percent)
+    var M = cfg.map;
+    if (!M || !M.src) return '';
+    var c = M.crop || [0, 0, 100, 100], cw = (c[2] - c[0]) * M.w / 100, ch = (c[3] - c[1]) * M.h / 100;
+    // a background, not an <img>: nothing hangs past the box, so a tap can never scroll the map sideways
+    function at(lo, hi) { var k = 100 / (hi - lo); return k > 1 ? (lo / 100 * k) / (k - 1) * 100 : 0; }
+    return '<div class="crew-map" role="group" aria-label="' + esc((M.alt || 'Map') + '. Tap a spot to say you\'re there.') + '" style="aspect-ratio:' + Math.round(cw) + '/' + Math.round(ch) +
+      ';background-image:url(&quot;' + esc(M.src) + '&quot;);background-size:' + (100 / (c[2] - c[0]) * 100).toFixed(3) + '% auto;background-position:' +
+      at(c[0], c[2]).toFixed(3) + '% ' + at(c[1], c[3]).toFixed(3) + '%">' +
+      '<div class="pins" id="crewPins"></div></div>';
+  }
+  function pinsHtml(ini) {         // a tappable chip per spot, and who's there under (or over) it
+    var M = cfg.map, c = (M && M.crop) || [0, 0, 100, 100], at = {}, off = [], html = '';
+    crew.forEach(function (p) { var g = pingOf(p.id); if (g) (at[g.z.id] = at[g.z.id] || []).push({ c: p, g: g }); });
+    ZONES.forEach(function (z) {
+      var people = at[z.id] || [];
+      var L = (z.x - c[0]) / (c[2] - c[0]) * 100, T = (z.y - c[1]) / (c[3] - c[1]) * 100;
+      if (z.x === undefined || !(L >= 0 && L <= 100 && T >= 0 && T <= 100)) { off = off.concat(people); return; }
+      var up = z.stack ? z.stack === 'up' : T > 62;
+      html += '<div class="zone' + (up ? ' up' : '') + '" style="left:' + L.toFixed(2) + '%;top:' + T.toFixed(2) + '%">' +
+        '<button type="button" class="zchip ' + (z.st || 'bone') + '" data-crew="zone" data-zone="' + esc(z.id) + '" aria-label="' + esc('I\'m at ' + z.name) + '">' + esc(z.short || z.name) + '</button>' +
+        (people.length ? '<span class="whos">' + people.map(function (x) {
+          // no clock text in here: the chips only redraw when someone moves, never under a thumb on a timer
+          return '<span class="who' + (x.c.id === me.id ? ' me' : '') + (x.g.fresh ? '' : ' old') + '" title="' + esc(x.c.id === me.id ? 'You' : x.c.n) + '">' + esc(ini[x.c.id] || '?') + '</span>';
+        }).join('') + '</span>' : '') + '</div>';
+    });
+    return { html: html, off: off };
+  }
+  function paintCrew() {
+    var box = $('crewBox');
+    if (!box) return;
+    if (!SH) {
+      crewBuilt = false;
+      setHtml('crewBox', '<p class="crew-you">' + esc(TXT.crewSolo || 'This fills in on a shared plan: everybody\'s own plan side by side, and where they say they are.') + '</p>' +
+        (SHARE ? '<div class="keys"><a class="key gold" href="#shareBox">' + esc(TXT.crewSoloKey || 'Start or join one') + '</a></div>' : ''));
+      return;
+    }
+    if (!crewBuilt) {
+      box.innerHTML = '<div class="crew-me" id="crewMe"></div>' + mapHtml() + '<p class="crew-off" id="crewOff" hidden></p>' +
+        '<div class="strip-axis" id="crewAxis" aria-hidden="true"></div><ol class="crew-list" id="crewList"></ol><div id="crewTogether"></div>';
+      lastHtml = {}; crewBuilt = true;
+    }
+    var m = nowMin(), mp = pingOf(me.id), ini = crewInitials();
+    setHtml('crewMe', '<p class="crew-you">' + (mp ? 'Your spot: <b>' + esc(mp.z.name) + '</b>, ' + esc(pingWhen(mp)) + '.' : esc(TXT.pingPrompt || 'Tell everybody where you are.')) + '</p>' +
+      (ZONES.length ? '<div class="keys"><button type="button" class="key big gold" data-crew="ping"><span class="kicon" aria-hidden="true">&#9873;</span>' + esc(TXT.pingKey || 'I\'m here') + '</button></div>' : ''));
+    if ($('crewPins')) {
+      var P = pinsHtml(ini), off = $('crewOff');
+      setHtml('crewPins', P.html);
+      if (off) {
+        off.hidden = !P.off.length;
+        setHtml('crewOff', P.off.length ? 'Not on the map: ' + esc(joinNames(P.off.map(function (x) { return (x.c.id === me.id ? 'you' : x.c.n) + ' (' + x.g.z.name + ', ' + pingWhen(x.g) + ')'; }))) : '');
+      }
+    }
+    setHtml('crewAxis', crew.some(function (c) { return c.segs.length; }) ? axisHtml() : '');
+    setHtml('crewList', crew.map(function (c) { return crewRow(c, m); }).join(''));
+    setHtml('crewTogether', togetherHtml(m));
+  }
+  function onCrew(e) {
+    var t = e.target.closest ? e.target.closest('[data-crew]') : null;
+    if (!t) return;
+    var what = t.getAttribute('data-crew');
+    if (what === 'ping') return openPing();
+    if (what === 'zone') return confirmPing(ZONE[t.getAttribute('data-zone')]);
+    if (what === 'open') { var id = t.getAttribute('data-id'); crewOpen[id] = !crewOpen[id]; paintCrew(); }
+  }
+  function meData() {              // my member row: my name, plus where I said I am
+    var p = pings[me.id];
+    return p && p.at ? { n: myName, at: p.at, t: p.t } : { n: myName };
+  }
+  function setPing(zid) {
+    if (!SH) return;
+    pings[me.id] = zid && ZONE[zid] ? { at: zid, t: Date.now() } : null;
+    put('member', me.id, meData(), false);
+    buzz(15);
+    refresh();
+  }
+  function openPing() {
+    if (!SH) { var sb2 = $('shareBox'); if (sb2) sb2.scrollIntoView({ block: 'center' }); return; }
+    if (!myName) return needName();
+    var mp = pingOf(me.id), cur = mp ? mp.z.id : '';
+    var keys = '<div class="zone-keys">' + ZONES.map(function (z) {
+      return '<button type="button" class="key ' + (z.st || 'bone') + (z.st ? ' stagekey' : '') + (z.id === cur ? ' down' : '') + '" data-act="zone:' + esc(z.id) + '">' + esc(z.name) + '</button>';
+    }).join('') + '</div><p class="sheet-note">Everybody on the plan sees it. Tap again when you move.</p>';
+    openSheet(TXT.pingTitle || 'Where are you?', keys, (cur ? key('clear', 'Clear my spot', 'red') : '') + key('x', 'Cancel', 'grey'), function (act) {
+      if (act === 'x') return closeSheet();
+      if (act === 'clear') { setPing(''); return closeSheet(); }
+      if (act.indexOf('zone:') === 0) { setPing(act.slice(5)); closeSheet(); }
+    });
+  }
+  function confirmPing(z) {        // a spot tapped on the map
+    if (!z) return;
+    if (!myName) return needName();
+    openSheet(z.name + '?', '<p class="sheet-note">Tell everybody on the plan you\'re here?</p>',
+      key('zone:' + z.id, 'Yes, I\'m here', 'gold') + key('x', 'Cancel', 'grey'), function (act) {
+        if (act === 'x') return closeSheet();
+        if (act.indexOf('zone:') === 0) { setPing(act.slice(5)); closeSheet(); }
+      });
+  }
 
   /* ---------- the shared plan: sync ---------- */
   var client = null, syncing = false, pushTimer = null, lastOk = SH && SH.ok ? SH.ok : 0, offline = false, lostPlan = false, shareMsg = '';
@@ -807,7 +1033,8 @@
       delete SH.fresh;
       lastOk = Date.now(); SH.ok = lastOk; offline = false; lostPlan = false;
       saveSH();
-      if (changed && !sheetOpen()) { applyShared(); rebuild(); } else paintShare();
+      // never redraw under an open sheet; what came in meanwhile lands when it closes
+      if (changed) { if (sheetOpen()) needApply = true; else { applyShared(); rebuild(); } } else paintShare();
     }).catch(function (e) {
       if (e && e.stale) return;
       if (e && e.lost && SH && SH.fresh) {
@@ -832,7 +1059,7 @@
       if (!code) throw new Error('no code');
       SH = { code: code, rev: 0, rows: {}, pending: [], syncs: 0 };
       // bring this phone's plan in: name, picks, stops, fixes, added sets, the full-sets switch
-      put('member', me.id, { n: myName }, false);
+      put('member', me.id, meData(), false);
       for (var k in L.picks) if (L.picks[k]) put('vote', me.id + '|' + k, { p: L.picks[k] }, false);
       L.custom.forEach(function (c) { put('stop', c.id, { when: c.when, m: c.m, b: c.b, s: c.s, st: c.st }, false); });
       for (k in L.logiEdits) put('logi', k, L.logiEdits[k], false);
@@ -852,7 +1079,7 @@
     var mine = {}, k;
     for (k in L.picks) if (L.picks[k]) mine[k] = L.picks[k];
     SH = { code: code, rev: 0, rows: {}, pending: [], syncs: 0, fresh: true };
-    put('member', me.id, { n: myName }, false);
+    put('member', me.id, meData(), false);
     for (k in mine) put('vote', me.id + '|' + k, { p: mine[k] }, false);
     shareMsg = 'You\'re on the shared plan.';
     invite = null;
@@ -893,7 +1120,7 @@
     var html = '';
     if (invite && (!SH || SH.code !== invite.code)) {
       html = '<p class="sh-big">' + (invite.from ? '<b>' + esc(invite.from) + '</b> invited you' : 'You\'re invited') + ' to the shared plan.</p>' +
-        '<p class="sh-sub">Everybody on it sees the same day: the stops, the time fixes, and everybody\'s picks. Your picks come with you.' + (SH ? ' You\'ll leave the shared plan you\'re on now.' : '') + '</p>' +
+        '<p class="sh-sub">Everybody on it sees the same day: the stops, the time fixes, everybody\'s picks and where everybody is. Your picks come with you.' + (SH ? ' You\'ll leave the shared plan you\'re on now.' : '') + '</p>' +
         nameField + '<div class="keys"><button class="key gold" type="button" id="kJoin">Join the plan</button><button class="key grey" type="button" id="kNoJoin">Not now</button></div>';
     } else if (SH) {
       var names = [], k;
@@ -906,7 +1133,7 @@
         '<p class="sh-sub small">Anyone with the invite link can see and change this plan, so send it only to your people. Keep this page open in a tab on the day: if signal drops it keeps working.</p>';
     } else {
       html = '<p class="sh-big">One plan for everybody</p>' +
-        '<p class="sh-sub">Right now this plan lives only on this phone. Make it shared, send the invite, and everybody sees the same day: the stops, the time fixes, and everybody\'s picks, with the plan built around what the most people want.</p>' +
+        '<p class="sh-sub">Right now this plan lives only on this phone. Make it shared, send the invite, and everybody sees the same day: the stops, the time fixes, everybody\'s picks and where everybody is.</p>' +
         nameField + '<div class="keys"><button class="key gold" type="button" id="kShareStart">Make it a shared plan</button></div>';
     }
     if (shareMsg) html += '<p class="sh-msg" role="status">' + esc(shareMsg) + '</p>';
@@ -952,7 +1179,7 @@
     var a = $('myName'), b = $('shName');
     if (a && document.activeElement !== a) a.value = myName;
     if (b && document.activeElement !== b) b.value = myName;
-    if (SH) { clearTimeout(setMyName.t); setMyName.t = setTimeout(function () { if (SH) { put('member', me.id, { n: myName }, false); refresh(); } }, 700); }
+    if (SH) { clearTimeout(setMyName.t); setMyName.t = setTimeout(function () { if (SH) { put('member', me.id, meData(), false); refresh(); } }, 700); }
     if (shareMsg && myName && /name first/.test(shareMsg)) shareMsg = '';
   }
 
@@ -1109,6 +1336,11 @@
       if (armed(this, 'Tap again to clear yours')) { disarm(this, 'Clear'); setMyVotes({}); refresh(); }
     });
     on('kFull', function () { setFull(!full); refresh(); });
+    function setMode(v) { planMode = v; save(KEY + '-planmode-v1', v); refresh(); }
+    on('kPlanMe', function () { setMode('me'); });
+    on('kPlanAll', function () { setMode('all'); });
+    on('kPingNow', openPing);
+    var cb = $('crewBox'); if (cb) cb.addEventListener('click', onCrew);
     on('kEditSets', function () { editSets = !editSets; paintGrid(); });
     on('kAddSet', addSet);
     on('kEditDay', function () { editDay = !editDay; paintDay(); paintNow(); });
@@ -1158,8 +1390,8 @@
       });
     }
     var sc = $('scrubIn');
-    if (sc) sc.addEventListener('input', function () { preview = +this.value; paintNow(); });
-    on('liveKey', function () { preview = null; paintNow(); });
+    if (sc) sc.addEventListener('input', function () { preview = +this.value; paintNow(); paintCrew(); });
+    on('liveKey', function () { preview = null; paintNow(); paintCrew(); });
     [].slice.call(document.querySelectorAll('[data-copy]')).forEach(function (btn) {
       btn.addEventListener('click', function () { copyText(btn.getAttribute('data-copy'), btn, 'Copied'); });
     });
@@ -1167,7 +1399,7 @@
     refresh();
     if (SH) sync(true);
     setInterval(function () {
-      if (preview === null) paintNow();
+      if (preview === null) { paintNow(); paintCrew(); }
       if (SH && !document.hidden) sync(false);
     }, 15000);
     document.addEventListener('visibilitychange', function () { if (!document.hidden && SH) sync(false); });
@@ -1175,5 +1407,6 @@
   }
 
   init();
-  window.DAYPLAN_ENGINE = { acts: function () { return ACTS; }, walk: walk, shared: function () { return SH; }, sync: function () { sync(true); } };
+  window.DAYPLAN_ENGINE = { acts: function () { return ACTS; }, walk: walk, shared: function () { return SH; }, sync: function () { sync(true); },
+    crew: function () { return crew; }, plan: function () { return segs; } };
 })();

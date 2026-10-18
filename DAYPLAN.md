@@ -41,6 +41,18 @@ shoot day, a family trip: anything where people need to know where to be and whe
   back to the screen. No signal: changes wait on the phone and go up on their own later. *Leave* takes your picks out
   of the group and back to your own plan. A dead invite link drops the person back to their own plan with a message.
   The pack list always stays per phone.
+  - **Your plan follows your own picks** (*Just me*, the default, per phone). *All of us* builds it from everybody's picks
+    added up (a Must weighs 3, a Want 1), for a group that moves as one.
+- **Where's everybody** (shared plans, `#crewBox`): a board with one row per person, like a leaderboard: their name,
+  their last *I'm here* spot, where their own picks put them right now (or first, or next), a day bar colored by stage
+  with a NOW tick, their set count and hours, and their full list on tap. Under it, *Together*: every set two or more
+  people's own plans have them at (15 minutes or more). It follows the time slider too.
+  - *I'm here*: one question, big keys, one per spot in `cfg.zones` (stages first, in their colors). Or tap a spot's
+    chip on the map (`cfg.map`, the event's own map cropped to the grounds), then *Yes, I'm here*. Spots without x/y
+    (the car, medical) are listed under the map. A spot shows as current for 90 minutes, greyed to 8 hours, then drops.
+    Stage tiles in the Now panel say who's there. The spot rides in the person's member row (no extra table).
+  - The Now card's two big keys become *I'm here* and *Everybody* on a shared plan (`.only-shared` / `.only-solo`,
+    keyed on `html[data-shared]`, which a one-line script in the page head sets before first paint).
   - The code is the only key. It lives in the link after the `#` (never sent to a server or a log) and on the phones
     that opened it; the database keeps only its sha256. Anyone with the link can see and change that plan.
   - Caps (migration 047): 1,000 rows a plan, 2,000 plans an event, 5,000 plans in all, data up to 2,000 characters a
@@ -84,6 +96,11 @@ window.DAYPLAN = {
   presets: [{ label: "Use suggested picks", picks: { 'afi': 2 } }],       // ids = slugged names
   packKey: 'snw-family-pack-v1',
   shared: { event: 'snw' },   // optional: one shared plan per group (a-z, 0-9, dashes); leave it out for per-phone only
+  map: { src: 'img/festival-map.jpg', w: 2160, h: 2880, crop: [20, 28, 77, 70], alt: 'The festival map' },  // crop = left, top, right, bottom, percent
+  zones: [                    // I'm here spots; x / y = percent across / down the map image; st = a stage id (color + stage tiles)
+    { id: 'blue', name: 'Blue stage', short: 'Blue', st: 'blue', x: 55.6, y: 33.6, stack: 'down' },  // stack: who's there goes under or over the chip
+    { id: 'car', name: 'At the car' }                                                               // no x / y = listed, not pinned
+  ],
   text: { beforeDoors: 'Gates at 11', doorsNote: '...', after: ["That's the night", '...', '...'],
           planTitle: 'My plan', shareWhat: 'Sick New World plan', inviteWhat: 'the Sick New World plan',
           noPicks: '...', lastSet: '...', freeTime: '...',
@@ -117,12 +134,17 @@ All optional except the Now card ones; a page can drop a block it does not need.
 - Shared link banner: `sharedPicks`, `sharedMsg`, `kUseShared`, `kKeepMine`
 - Shared plan: `shareBox` (the engine fills it: start, invite, join, sync, leave), `syncLine` (one line under the
   Now card); the engine creates `shName`, `kShareStart`, `kInvite`, `kSyncNow`, `kLeave`, `kJoin`, `kNoJoin` inside the box
+- Plan from: `planMode` (holds `kPlanMe`, `kPlanAll`; hidden off a shared plan)
+- Where's everybody: `crewBox` (the engine fills it: `crewMe`, the map with `crewPins`, `crewOff`, `crewAxis`, `crewList`,
+  `crewTogether`), `kPingNow` (an I'm here key anywhere on the page)
 - Day: `dayList`, `kAddItem`, `kEditDay`, `hiddenDay`
 - Pack: `.pack input[type=checkbox]`, `packcount`, `packreset`, `packEdit`, `packCustom`, `packNew`, `packAdd`; any `[data-copy]` button copies its text
 - The edit sheet is created by the engine (`.sheet`, `.sheet-bg`, `.fld`); the page styles it
 - Styling hooks: `.lb` (grid blocks), `.sn` (stage tiles), `.blk` / `.pl.walk` (plan rows),
   `.lu-head span` (column heads), all colored by the stage id as a class. Shared plan: `.lineup.group`,
   `.lb.myvote` (you picked it), `em.who` (who picked a planned set), `.sh-big`, `.sh-sub`, `.sh-msg`, `.sync-line`.
+  Where's everybody: `.crew-map` (background image, `overflow: clip`, so a tap can't scroll it), `.zone` / `.zchip` /
+  `.whos` / `.who`, `.crew-row[data-stage]`, `.pin`, `.strip`, `.crew-sets`, `.together`, `.zone-keys`, `.sn .here`.
 - ⛔ The page needs `[hidden] { display: none !important; }`: `.key` is `inline-flex`, which beats the hidden
   attribute, so keys the engine hides (Add a set, Back to live, Send my plan) would still show.
 
