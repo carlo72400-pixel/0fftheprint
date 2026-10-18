@@ -277,6 +277,47 @@ details.official > summary { list-style: none; width: max-content; }
 details.official > summary::-webkit-details-marker { display: none; }
 details.official[open] > summary { margin-bottom: 16px; }
 
+/* DAYPLAN editing: the bottom sheet, form fields, your own rows, pack edits */
+html.sheet-open { overflow: hidden; }
+.sheet-bg { position: fixed; inset: 0; z-index: 40; background: rgba(5,6,10,.72); }
+.sheet-bg[hidden], .sheet[hidden] { display: none; }
+.sheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: 41; max-height: 88vh; overflow-y: auto; background: var(--panel);
+  border-top: 3px solid var(--bone); box-shadow: 0 -12px 34px rgba(0,0,0,.65);
+  padding: 18px 16px calc(20px + env(safe-area-inset-bottom, 0px)); }
+.sheet-in { max-width: 640px; margin: 0 auto; display: grid; gap: 14px; }
+.sheet h3 { margin: 0; color: var(--bone); font-size: 21px; letter-spacing: .06em; }
+.fld { display: grid; gap: 6px; min-width: 0; }
+.fld > span { font: 800 13px/1 var(--f-label); letter-spacing: .12em; text-transform: uppercase; color: var(--bone-dim); }
+.fld input, .fld select, .fld textarea, .addrow input, .namebox input {
+  width: 100%; min-width: 0; font: 500 17px/1.3 var(--f-body); color: var(--bone); background: #05060a;
+  border: 2px solid var(--rule); border-radius: 10px; padding: 11px 12px; }
+.fld textarea { resize: vertical; }
+.fld input:focus, .fld select:focus, .fld textarea:focus, .addrow input:focus, .namebox input:focus { outline: none; border-color: var(--star); }
+.fld-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.sheet-note { margin: 0; color: var(--bone-dim); font-size: 15px; }
+.sheet-err { margin: 0; color: var(--no); font-weight: 600; }
+.sheet .keys { padding-top: 4px; }
+.rowedit { margin-top: 10px; }
+.setlist li.mine { box-shadow: inset 6px 0 0 var(--star); }
+.mine-tag { display: inline-block; font: 800 11px/1 var(--f-label); font-style: normal; letter-spacing: .1em; background: var(--star); color: var(--ink); padding: 3px 5px 2px; border-radius: 4px; vertical-align: 3px; margin-left: 6px; }
+.heads { display: block; margin-top: 10px; padding: 9px 11px; border-radius: 8px; background: rgba(242,165,65,.16); color: var(--bone); }
+.lineup.editing .lb { opacity: 1; filter: none; outline: 2px dashed var(--star); outline-offset: -2px; }
+.lb.fixed::after { content: ""; position: absolute; top: 4px; right: 4px; width: 7px; height: 7px; border-radius: 50%; background: var(--star); box-shadow: 0 0 0 2px rgba(0,0,0,.5); }
+.lb.mine { border-style: dashed; border-color: var(--bone); }
+.packbar .keys { padding-bottom: 0; gap: 10px; }
+.pack li { position: relative; }
+.pack-x { display: none; position: absolute; top: 12px; right: 12px; z-index: 2; }
+.pack-editing .pack-x { display: inline-flex; }
+.pack-editing .pack label { padding-right: 104px; }
+.pack li.is-hidden { display: none; }
+.pack-editing .pack li.is-hidden { display: block; opacity: .5; }
+#packCustom .pack-x { display: inline-flex; }
+#packCustom label { padding-right: 104px; }
+.addrow { display: flex; gap: 10px; align-items: center; }
+.addrow input { flex: 1; }
+.namebox { display: grid; gap: 8px; font: 800 13px/1.2 var(--f-label); letter-spacing: .12em; text-transform: uppercase; color: var(--bone-dim); }
+.namebox input { text-transform: none; letter-spacing: 0; }
+
 @media (max-width: 380px) { .setlist li, .blk { grid-template-columns: 72px 1fr; } dl.facts > div, dl.kv > div { grid-template-columns: 84px 1fr; } }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .key, .pack label { transition: none; } }
 </style>
@@ -319,12 +360,14 @@ details.official[open] > summary { margin-bottom: 16px; }
 
 <section id="picks" aria-labelledby="picks-h">
   <h2 id="picks-h">Your picks</h2>
-  <p class="hint">Tap a set once for <b>Want</b>, twice for <b>Must</b>, a third time to clear. Your plan builds itself around the clashes and the walks between stages. Picks save on your own phone.</p>
-  <div class="box shared" id="sharedPicks" hidden><p>Someone sent you their picks (<b id="sharedN">0</b> sets).</p><div class="keys"><button class="key gold" type="button" id="kUseShared">Use their picks</button><button class="key grey" type="button" id="kKeepMine">Keep mine</button></div></div>
+  <p class="hint">Tap a set once for <b>Want</b>, twice for <b>Must</b>, a third time to clear. Your plan builds itself around the clashes and the walks between stages. If the festival moves a set, hit <b>Fix set times</b> and change it. Everything saves on your own phone.</p>
+  <div class="box shared" id="sharedPicks" hidden><p id="sharedMsg">Someone sent you their plan.</p><div class="keys"><button class="key gold" type="button" id="kUseShared">Use their plan</button><button class="key grey" type="button" id="kKeepMine">Keep mine</button></div></div>
   <div class="keys">
     <button class="key gold" type="button" id="kPreset">Use Gianni's picks</button>
     <button class="key grey" type="button" id="kFull" aria-pressed="false">Full sets only: off</button>
     <button class="key red" type="button" id="kClear">Clear</button>
+    <button class="key grey" type="button" id="kEditSets" aria-pressed="false">Fix set times</button>
+    <button class="key blue" type="button" id="kAddSet" hidden>Add a set</button>
   </div>
   <div class="lineup" id="grid"></div>
   <p class="note">Walks are estimates: Blue and Gold sit side by side, Diablo is about 10 min away, Spiral about 15. Crowds slow it down. End times are read off the official graphic, so they're about.</p>
@@ -332,9 +375,10 @@ details.official[open] > summary { margin-bottom: 16px; }
   <p class="plan-sum" id="planSum"></p>
   <ol class="plan" id="planList"></ol>
   <div id="missed"></div>
+  <label class="namebox" for="myName">Your name, so people know whose plan it is<input type="text" id="myName" maxlength="40" placeholder="Mom, Sis, Gianni" autocomplete="given-name"></label>
   <div class="keys">
     <button class="key blue" type="button" id="kCopy">Copy my plan</button>
-    <button class="key gold" type="button" id="kShare">Send my picks</button>
+    <button class="key gold" type="button" id="kShare">Send my plan</button>
   </div>
   <details class="official">
     <summary class="key sm grey">Official schedule</summary>
@@ -350,8 +394,10 @@ details.official[open] > summary { margin-bottom: 16px; }
 
 <section id="day" aria-labelledby="day-h">
   <h2 id="day-h">The day</h2>
-  <p class="hint">Your sets drop in here as you pick them. Set times are official (posted 10/16); drive and parking times are targets.</p>
+  <p class="hint">Your sets drop in here as you pick them. Add your own stops, or change or hide anything that doesn't fit you. It all stays on your phone.</p>
+  <div class="keys"><button class="key gold" type="button" id="kAddItem">Add to my day</button><button class="key grey" type="button" id="kEditDay" aria-pressed="false">Edit my day</button></div>
   <ol class="setlist" id="dayList"></ol>
+  <div id="hiddenDay"></div>
 </section>
 
 <p class="stars" aria-hidden="true">&#9733; &#9829; &#9733;</p>
@@ -403,8 +449,8 @@ details.official[open] > summary { margin-bottom: 16px; }
 
 <section id="pack" aria-labelledby="pack-h">
   <h2 id="pack-h">Pack</h2>
-  <p class="hint">Press each key as you pack it. It saves on your own phone, so everybody keeps their own list.</p>
-  <div class="packbar"><span class="count" id="packcount">0 packed</span><button class="key sm grey" type="button" id="packreset">Unpress all</button></div>
+  <p class="hint">Press each key as you pack it. Add your own things at the bottom, or hit Edit list to hide what you don't need. It saves on your own phone, so everybody keeps their own list.</p>
+  <div class="packbar"><span class="count" id="packcount">0 packed</span><span class="keys"><button class="key sm grey" type="button" id="packEdit" aria-pressed="false">Edit list</button><button class="key sm grey" type="button" id="packreset">Unpress all</button></span></div>
   <h3>Each of you</h3>
   <ul class="pack">
       <li><input type="checkbox" id="p-band" class="sr"><label for="p-band"><span class="led" aria-hidden="true">&#10003;</span><span class="txt">Wristband on, snug, activated<small>Never showed up? Box office outside Gates 3 and 4 with the Front Gate order number and ID.</small></span></label></li>
@@ -434,6 +480,11 @@ details.official[open] > summary { margin-bottom: 16px; }
       <li><input type="checkbox" id="p-clothes" class="sr"><label for="p-clothes"><span class="led" aria-hidden="true">&#10003;</span><span class="txt">Change of clothes and a toothbrush for the room</span></label></li>
       <li><input type="checkbox" id="p-room" class="sr"><label for="p-room"><span class="led" aria-hidden="true">&#10003;</span><span class="txt">Room confirmation, screenshotted</span></label></li>
   </ul>
+  <div class="group">
+    <h3>Your own</h3>
+    <ul class="pack" id="packCustom"></ul>
+    <div class="addrow"><input type="text" id="packNew" maxlength="60" placeholder="Add something to bring" aria-label="Add something to bring"><button class="key sm gold" type="button" id="packAdd">Add</button></div>
+  </div>
 </section>
 
 <p class="stars" aria-hidden="true">&#9733; &#9829; &#9733;</p>
@@ -526,8 +577,8 @@ details.official[open] > summary { margin-bottom: 16px; }
 </div>
 
 <script>
-window.DAYPLAN = {"key":"snw","date":"2026-10-24","tz":"-05:00","mainDay":"sat","dayStart":660,"dayEnd":1440,"doors":660,"previewStart":1020,"stageWord":"stage","pxPerMin":2.2,"stages":[{"id":"blue","name":"Blue","area":"north"},{"id":"gold","name":"Gold","area":"north"},{"id":"grey","name":"Spiral","area":"south"},{"id":"red","name":"Diablo","area":"east"}],"walks":{"north|south":15,"east|north":10,"east|south":10},"acts":[{"n":"Speed of Light","st":"blue","s":"11:10","e":"11:35"},{"n":"Failure","st":"blue","s":"12:20","e":"12:45"},{"n":"Filter","st":"blue","s":"13:30","e":"13:55"},{"n":"Power Trip","st":"blue","s":"14:45","e":"15:15"},{"n":"AFI","st":"blue","s":"16:10","e":"16:50"},{"n":"Marilyn Manson","st":"blue","s":"18:05","e":"19:00"},{"n":"Slayer","st":"blue","s":"20:20","e":"21:10"},{"n":"System of a Down","st":"blue","s":"22:35","e":"23:40"},{"n":"Amira Elfeky","st":"gold","s":"11:45","e":"12:10"},{"n":"Dying Wish","st":"gold","s":"12:55","e":"13:20"},{"n":"P.O.D.","st":"gold","s":"14:05","e":"14:35"},{"n":"Mastodon","st":"gold","s":"15:25","e":"16:00"},{"n":"Knocked Loose","st":"gold","s":"17:00","e":"17:55"},{"n":"Evanescence","st":"gold","s":"19:10","e":"20:15"},{"n":"Deftones","st":"gold","s":"21:20","e":"22:30"},{"n":"Showing Teeth","st":"grey","s":"11:35","e":"12:00"},{"n":"Snot","st":"grey","s":"12:10","e":"12:35"},{"n":"Orgy","st":"grey","s":"12:45","e":"13:10"},{"n":"Alien Ant Farm","st":"grey","s":"13:20","e":"13:45"},{"n":"Violent Vira","st":"grey","s":"13:55","e":"14:20"},{"n":"Kittie","st":"grey","s":"14:30","e":"14:55"},{"n":"Lords of Acid","st":"grey","s":"15:05","e":"15:30"},{"n":"Twin Tribes","st":"grey","s":"15:40","e":"16:05"},{"n":"Coal Chamber","st":"grey","s":"16:15","e":"16:40"},{"n":"Melvins","st":"grey","s":"16:50","e":"17:15"},{"n":"She Wants Revenge","st":"grey","s":"17:25","e":"17:50"},{"n":"Clutch","st":"grey","s":"18:00","e":"18:25"},{"n":"Down","st":"grey","s":"18:35","e":"19:00"},{"n":"Ministry","st":"grey","s":"19:10","e":"19:45"},{"n":"Boy Harsher","st":"grey","s":"19:55","e":"20:40"},{"n":"The Prodigy","st":"grey","s":"21:35","e":"22:30"},{"n":"Dead City","st":"red","s":"11:40","e":"12:00"},{"n":"The Dark.FM","st":"red","s":"12:05","e":"12:25"},{"n":"The Tony Danza Tapdance Extravaganza","st":"red","s":"12:30","e":"12:50"},{"n":"Ego Kill Talent","st":"red","s":"12:55","e":"13:15"},{"n":"TSS","st":"red","s":"13:20","e":"13:40"},{"n":"Pain of Truth","st":"red","s":"13:50","e":"14:15"},{"n":"Peelingflesh","st":"red","s":"14:25","e":"14:50"},{"n":"Haywire","st":"red","s":"15:00","e":"15:25"},{"n":"Norma Jean","st":"red","s":"15:35","e":"16:00"},{"n":"Speed","st":"red","s":"16:10","e":"16:35"},{"n":"Sleep Theory","st":"red","s":"16:45","e":"17:10"},{"n":"Superheaven","st":"red","s":"17:20","e":"17:45"},{"n":"Terror","st":"red","s":"17:55","e":"18:20"},{"n":"Deafheaven","st":"red","s":"18:30","e":"18:55"},{"n":"Sunami","st":"red","s":"19:05","e":"19:30"},{"n":"Glassjaw","st":"red","s":"19:40","e":"20:05"},{"n":"Underoath","st":"red","s":"20:15","e":"20:40"},{"n":"Wage War","st":"red","s":"20:50","e":"21:15"},{"n":"Poison the Well","st":"red","s":"21:25","e":"22:15"}],"logistics":[{"m":-300,"day":"fri","t":"Night","b":"Pack and charge","s":"Phones and power banks to 100. Gas up. Room booked. Wristbands on and snug, never stretch or cut them. Activate yours if you haven't (link at the bottom)."},{"m":360,"day":"sat","b":"Leave SA","s":"I-35 north through Austin, Waco and Hillsboro, then I-35W into Fort Worth. Skip the TEXpress lanes, they're tolls. Split the driving."},{"m":660,"day":"sat","b":"Gates open. Hit Buc-ee's","s":"Right below the speedway on SH 114. Fill the tank, eat a real meal (no outside food inside), last good bathroom. Anything not coming in goes in the trunk here, not in the lot."},{"m":690,"day":"sat","b":"Park in the GA lots","s":"In through the Foyt entry gate, staff points you to a spot. Drop a pin. Screenshot the row marker."},{"m":705,"day":"sat","b":"Gates 4, 5, 6","s":"Pat-down and metal detector. Inside: fill the bottles, find water and medical on the map, pick a meet spot."},{"m":1126,"day":"sat","b":"Sunset","s":"Jackets on. It drops toward the mid-50s."},{"m":1440,"day":"sat","b":"Curfew","s":"The lot crawls when everybody leaves at once. Leave during the last song to beat most of it, or chill in the car till it thins out."},{"m":1500,"day":"sat","b":"Sleep","s":"Room near the track or in Burleson. See <a href=\"#home\">Getting home</a>."},{"m":2100,"day":"sun","b":"Drive home","s":"About 5 hrs from the track, about 4 from Burleson."}],"days":{"fri":"Fri 10/23","sat":"Sat 10/24","sun":"Sun 10/25"},"presets":[{"label":"Use Gianni's picks","picks":{"afi":2,"evanescence":2,"deftones":2,"system-of-a-down":1,"marilyn-manson":1,"knocked-loose":1,"slayer":1,"she-wants-revenge":1,"deafheaven":1,"ministry":1,"boy-harsher":1,"the-prodigy":1,"twin-tribes":1,"filter":1}}],"packKey":"snw-family-pack-v1","text":{"beforeDoors":"Gates at 11","doorsIn":"Gates open in","doorsNote":"Park in the GA lots, in at Gates 4, 5, 6.","after":["That's the night","Meet at the car. Pin's in your phone.","Sleep in Fort Worth, drive home rested."],"pillAfter":"See you next year","planTitle":"My Sick New World plan, Sat 10/24","shareTitle":"My Sick New World picks","noPicks":"Nothing picked yet. Tap sets in the lineup, or start from Gianni's picks.","lastSet":"That's your last set. Curfew around midnight.","freeTime":"Till then: water, food, merch. Check All stages for what's on."}};
+window.DAYPLAN = {"key":"snw","date":"2026-10-24","tz":"-05:00","mainDay":"sat","dayStart":660,"dayEnd":1440,"doors":660,"previewStart":1020,"stageWord":"stage","pxPerMin":2.2,"stages":[{"id":"blue","name":"Blue","area":"north"},{"id":"gold","name":"Gold","area":"north"},{"id":"grey","name":"Spiral","area":"south"},{"id":"red","name":"Diablo","area":"east"}],"walks":{"north|south":15,"east|north":10,"east|south":10},"acts":[{"n":"Speed of Light","st":"blue","s":"11:10","e":"11:35"},{"n":"Failure","st":"blue","s":"12:20","e":"12:45"},{"n":"Filter","st":"blue","s":"13:30","e":"13:55"},{"n":"Power Trip","st":"blue","s":"14:45","e":"15:15"},{"n":"AFI","st":"blue","s":"16:10","e":"16:50"},{"n":"Marilyn Manson","st":"blue","s":"18:05","e":"19:00"},{"n":"Slayer","st":"blue","s":"20:20","e":"21:10"},{"n":"System of a Down","st":"blue","s":"22:35","e":"23:40"},{"n":"Amira Elfeky","st":"gold","s":"11:45","e":"12:10"},{"n":"Dying Wish","st":"gold","s":"12:55","e":"13:20"},{"n":"P.O.D.","st":"gold","s":"14:05","e":"14:35"},{"n":"Mastodon","st":"gold","s":"15:25","e":"16:00"},{"n":"Knocked Loose","st":"gold","s":"17:00","e":"17:55"},{"n":"Evanescence","st":"gold","s":"19:10","e":"20:15"},{"n":"Deftones","st":"gold","s":"21:20","e":"22:30"},{"n":"Showing Teeth","st":"grey","s":"11:35","e":"12:00"},{"n":"Snot","st":"grey","s":"12:10","e":"12:35"},{"n":"Orgy","st":"grey","s":"12:45","e":"13:10"},{"n":"Alien Ant Farm","st":"grey","s":"13:20","e":"13:45"},{"n":"Violent Vira","st":"grey","s":"13:55","e":"14:20"},{"n":"Kittie","st":"grey","s":"14:30","e":"14:55"},{"n":"Lords of Acid","st":"grey","s":"15:05","e":"15:30"},{"n":"Twin Tribes","st":"grey","s":"15:40","e":"16:05"},{"n":"Coal Chamber","st":"grey","s":"16:15","e":"16:40"},{"n":"Melvins","st":"grey","s":"16:50","e":"17:15"},{"n":"She Wants Revenge","st":"grey","s":"17:25","e":"17:50"},{"n":"Clutch","st":"grey","s":"18:00","e":"18:25"},{"n":"Down","st":"grey","s":"18:35","e":"19:00"},{"n":"Ministry","st":"grey","s":"19:10","e":"19:45"},{"n":"Boy Harsher","st":"grey","s":"19:55","e":"20:40"},{"n":"The Prodigy","st":"grey","s":"21:35","e":"22:30"},{"n":"Dead City","st":"red","s":"11:40","e":"12:00"},{"n":"The Dark.FM","st":"red","s":"12:05","e":"12:25"},{"n":"The Tony Danza Tapdance Extravaganza","st":"red","s":"12:30","e":"12:50"},{"n":"Ego Kill Talent","st":"red","s":"12:55","e":"13:15"},{"n":"TSS","st":"red","s":"13:20","e":"13:40"},{"n":"Pain of Truth","st":"red","s":"13:50","e":"14:15"},{"n":"Peelingflesh","st":"red","s":"14:25","e":"14:50"},{"n":"Haywire","st":"red","s":"15:00","e":"15:25"},{"n":"Norma Jean","st":"red","s":"15:35","e":"16:00"},{"n":"Speed","st":"red","s":"16:10","e":"16:35"},{"n":"Sleep Theory","st":"red","s":"16:45","e":"17:10"},{"n":"Superheaven","st":"red","s":"17:20","e":"17:45"},{"n":"Terror","st":"red","s":"17:55","e":"18:20"},{"n":"Deafheaven","st":"red","s":"18:30","e":"18:55"},{"n":"Sunami","st":"red","s":"19:05","e":"19:30"},{"n":"Glassjaw","st":"red","s":"19:40","e":"20:05"},{"n":"Underoath","st":"red","s":"20:15","e":"20:40"},{"n":"Wage War","st":"red","s":"20:50","e":"21:15"},{"n":"Poison the Well","st":"red","s":"21:25","e":"22:15"}],"logistics":[{"m":-300,"day":"fri","t":"Night","b":"Pack and charge","s":"Phones and power banks to 100. Gas up. Room booked. Wristbands on and snug, never stretch or cut them. Activate yours if you haven't (link at the bottom)."},{"m":360,"day":"sat","b":"Leave SA","s":"I-35 north through Austin, Waco and Hillsboro, then I-35W into Fort Worth. Skip the TEXpress lanes, they're tolls. Split the driving."},{"m":660,"day":"sat","b":"Gates open. Hit Buc-ee's","s":"Right below the speedway on SH 114. Fill the tank, eat a real meal (no outside food inside), last good bathroom. Anything not coming in goes in the trunk here, not in the lot."},{"m":690,"day":"sat","b":"Park in the GA lots","s":"In through the Foyt entry gate, staff points you to a spot. Drop a pin. Screenshot the row marker."},{"m":705,"day":"sat","b":"Gates 4, 5, 6","s":"Pat-down and metal detector. Inside: fill the bottles, find water and medical on the map, pick a meet spot."},{"m":1126,"day":"sat","b":"Sunset","s":"Jackets on. It drops toward the mid-50s."},{"m":1440,"day":"sat","b":"Curfew","s":"The lot crawls when everybody leaves at once. Leave during the last song to beat most of it, or chill in the car till it thins out."},{"m":1500,"day":"sat","b":"Sleep","s":"Room near the track or in Burleson. See <a href=\"#home\">Getting home</a>."},{"m":2100,"day":"sun","b":"Drive home","s":"About 5 hrs from the track, about 4 from Burleson."}],"days":{"fri":"Fri 10/23","sat":"Sat 10/24","sun":"Sun 10/25"},"presets":[{"label":"Use Gianni's picks","picks":{"afi":2,"evanescence":2,"deftones":2,"system-of-a-down":1,"marilyn-manson":1,"knocked-loose":1,"slayer":1,"she-wants-revenge":1,"deafheaven":1,"ministry":1,"boy-harsher":1,"the-prodigy":1,"twin-tribes":1,"filter":1}}],"packKey":"snw-family-pack-v1","text":{"beforeDoors":"Gates at 11","doorsIn":"Gates open in","doorsNote":"Park in the GA lots, in at Gates 4, 5, 6.","after":["That's the night","Meet at the car. Pin's in your phone.","Sleep in Fort Worth, drive home rested."],"pillAfter":"See you next year","planTitle":"My Sick New World plan, Sat 10/24","shareTitle":"My Sick New World picks","noPicks":"Nothing picked yet. Tap sets in the lineup, or start from Gianni's picks.","lastSet":"That's your last set. Curfew around midnight.","freeTime":"Till then: water, food, merch. Check All stages for what's on.","shareWhat":"Sick New World plan"},"dayOffsets":{"fri":-1440,"sat":0,"sun":1440}};
 </script>
-<script src="../assets/js/dayplan.js?v=5df60b66"></script>
+<script src="../assets/js/dayplan.js?v=15bf7f05"></script>
 </body>
 </html>

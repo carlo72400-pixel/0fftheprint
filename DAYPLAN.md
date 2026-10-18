@@ -22,7 +22,16 @@ shoot day, a family trip: anything where people need to know where to be and whe
   NOW and done states.
 - **Sharing**: Copy my plan (plain text for a group chat) and Send my picks (a link with
   `#picks=...` that offers the same picks to whoever opens it).
-- **Pack list**: keys that stay pressed, saved per phone.
+- **Pack list**: keys that stay pressed, saved per phone. Add your own items, hide the ones you don't need.
+- **Everyone can edit their own copy** (built for handing one link to a whole family):
+  - *Add to my day*: their own stops (day, time, where, note). They show in the day list with a Yours tag and
+    get a "Heads up" line in the Now panel 30 minutes before.
+  - *Edit my day*: change the time, title or note of any logistics row, hide rows that don't fit them, bring them back.
+  - *Fix set times*: tap a set to change its time if the festival moves it (a star dot marks a fixed set),
+    or *Add a set*. Back to official is one key.
+  - *Send my plan*: one link with their name, picks, own stops and added sets (`#plan=...`). Whoever opens it gets
+    "Mom sent you their plan" and can use it (their picks, plus the stops merged into their own) or keep their own.
+  - All of it lives in that phone's browser (localStorage). Nothing syncs between people except through Send my plan.
 - Everything saves in the viewer's own browser (localStorage), so each person keeps their own picks.
 
 ## Files
@@ -47,6 +56,7 @@ window.DAYPLAN = {
   date: '2026-10-24',         // the event day
   tz: '-05:00',               // its UTC offset that day (CDT -05:00, CST -06:00)
   mainDay: 'sat',             // which day key the sets belong to
+  dayOffsets: { fri: -1440, sat: 0, sun: 1440 }, // minutes from the main day, for the Add to my day picker
   dayStart: 660, dayEnd: 1440,// grid window, minutes after midnight (11:00 AM to 12:00 AM)
   doors: 660,                 // when the panel switches from "today" to live
   previewStart: 1020,         // where the slider sits before the day
@@ -60,7 +70,7 @@ window.DAYPLAN = {
   presets: [{ label: "Use Gianni's picks", picks: { 'afi': 2 } }],         // ids = slugged names
   packKey: 'snw-family-pack-v1',
   text: { beforeDoors: 'Gates at 11', doorsNote: '...', after: ["That's the night", '...', '...'],
-          planTitle: 'My plan', shareTitle: 'My picks', noPicks: '...', lastSet: '...', freeTime: '...' }
+          planTitle: 'My plan', shareWhat: 'Sick New World plan', noPicks: '...', lastSet: '...', freeTime: '...' }
 };
 ```
 
@@ -73,10 +83,11 @@ window.DAYPLAN = {
 All optional except the Now card ones; a page can drop a block it does not need.
 
 - Now: `nowCard`, `nowEye`, `nowBig`, `nowAct`, `nowNext`, `stagesNow`, `scrubIn`, `scrubTime`, `liveKey`, `status` (hero pill)
-- Picks: `grid`, `kPreset`, `kFull`, `kClear`, `planSum`, `planList`, `missed`, `kCopy`, `kShare`
-- Shared link banner: `sharedPicks`, `sharedN`, `kUseShared`, `kKeepMine`
-- Day: `dayList`
-- Pack: `.pack input[type=checkbox]`, `packcount`, `packreset`; any `[data-copy]` button copies its text
+- Picks: `grid`, `kPreset`, `kFull`, `kClear`, `kEditSets`, `kAddSet`, `planSum`, `planList`, `missed`, `myName`, `kCopy`, `kShare`
+- Shared link banner: `sharedPicks`, `sharedMsg`, `kUseShared`, `kKeepMine`
+- Day: `dayList`, `kAddItem`, `kEditDay`, `hiddenDay`
+- Pack: `.pack input[type=checkbox]`, `packcount`, `packreset`, `packEdit`, `packCustom`, `packNew`, `packAdd`; any `[data-copy]` button copies its text
+- The edit sheet is created by the engine (`.sheet`, `.sheet-bg`, `.fld`); the page styles it
 - Styling hooks: `.lb` (grid blocks), `.sn` (stage tiles), `.blk` / `.pl.walk` (plan rows),
   `.lu-head span` (column heads), all colored by the stage id as a class.
 
