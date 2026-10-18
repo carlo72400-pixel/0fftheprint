@@ -31,14 +31,28 @@ shoot day, a family trip: anything where people need to know where to be and whe
     or *Add a set*. Back to official is one key.
   - *Send my plan*: one link with their name, picks, own stops and added sets (`#plan=...`). Whoever opens it gets
     "Mom sent you their plan" and can use it (their picks, plus the stops merged into their own) or keep their own.
-  - All of it lives in that phone's browser (localStorage). Nothing syncs between people except through Send my plan.
-- Everything saves in the viewer's own browser (localStorage), so each person keeps their own picks.
+  - On its own, all of it lives in that phone's browser (localStorage).
+- **One shared plan** (pages with `shared: { event }` in the config, needs migration 047): *Make it a shared plan*
+  turns this phone's plan into one plan for the whole group, then *Invite people* sends a link
+  (`#join=<64 hex code>.<their name>`). Everybody on it sees the same day: the stops, the logistics edits, the set
+  time fixes, the added sets, the Full sets switch, and everybody's picks. Picks add up: each person's Want and Must
+  count, so the plan follows what the most people want most (the grid tags each set with who picked it, initials).
+  Each change is one row in the database (`dayplan_items`), synced every 15 s while the page is open and when it comes
+  back to the screen. No signal: changes wait on the phone and go up on their own later. *Leave* takes your picks out
+  of the group and back to your own plan. A dead invite link drops the person back to their own plan with a message.
+  The pack list always stays per phone.
+  - The code is the only key. It lives in the link after the `#` (never sent to a server or a log) and on the phones
+    that opened it; the database keeps only its sha256. Anyone with the link can see and change that plan.
+  - Caps (migration 047): 1,000 rows a plan, 2,000 plans an event, 5,000 plans in all, data up to 2,000 characters a
+    row, and near 250,000 rows in all the table stops taking NEW rows. Nobody can fill the site's database through it.
 
 ## Files
 
 - `assets/js/dayplan.js`: the engine. Shared by every event page.
 - Each event page: its own folder with `index.html` (theme, copy, maps) plus a
   `window.DAYPLAN = {...}` config right before the engine's script tag.
+- `migration-047-the-family-plan.sql`: the shared plan's two tables and its three doors (`dayplan_start`,
+  `dayplan_pull`, `dayplan_push`). Only needed for `shared` pages.
 - The page loads the engine as `../assets/js/dayplan.js?v=<first 8 of its sha1>`. **Change the
   engine, change the stamp on every page that loads it**, or phones keep the old copy.
   `shasum assets/js/dayplan.js | cut -c1-8`
@@ -69,14 +83,26 @@ window.DAYPLAN = {
   days: { fri: 'Fri 10/23', sat: 'Sat 10/24', sun: 'Sun 10/25' },
   presets: [{ label: "Use Gianni's picks", picks: { 'afi': 2 } }],         // ids = slugged names
   packKey: 'snw-family-pack-v1',
+  shared: { event: 'snw' },   // optional: one shared plan per group (a-z, 0-9, dashes); leave it out for per-phone only
   text: { beforeDoors: 'Gates at 11', doorsNote: '...', after: ["That's the night", '...', '...'],
-          planTitle: 'My plan', shareWhat: 'Sick New World plan', noPicks: '...', lastSet: '...', freeTime: '...' }
+          planTitle: 'My plan', shareWhat: 'Sick New World plan', inviteWhat: 'the Sick New World plan',
+          noPicks: '...', lastSet: '...', freeTime: '...' }
 };
+```
+
+A `shared` page also loads the database client before the engine, the same two tags every member page uses:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" integrity="sha384-Rj26LVGvoeRVR6+mwQmFfcR3QOBEwT+ZmuCWpuiqeTzJpCs0ER4ITAWGb4Hiy3Ok" crossorigin="anonymous"></script>
+<script src="../supabase-config.js?v=f1348482"></script>
 ```
 
 4. Check it before pushing: open it locally, drag the slider through the day, tap picks,
    watch the plan, the clashes, the NOW card. Headless check used on SNW: load the page in an
    iframe, click `#kPreset`, set `#scrubIn` and read `#nowBig` back.
+   The shared plan was checked against the local database replica (`99_SYSTEM/_tools/otp_dbtest`, test `t_047.py`)
+   with two "phones" on two local ports, so each had its own storage. ⛔ Give a local test copy its own
+   `supabase-config.js` cache-buster: a browser can hold the real config from an older preview on the same port.
 
 ## Element ids the engine looks for
 
@@ -85,11 +111,16 @@ All optional except the Now card ones; a page can drop a block it does not need.
 - Now: `nowCard`, `nowEye`, `nowBig`, `nowAct`, `nowNext`, `stagesNow`, `scrubIn`, `scrubTime`, `liveKey`, `status` (hero pill)
 - Picks: `grid`, `kPreset`, `kFull`, `kClear`, `kEditSets`, `kAddSet`, `planSum`, `planList`, `missed`, `myName`, `kCopy`, `kShare`
 - Shared link banner: `sharedPicks`, `sharedMsg`, `kUseShared`, `kKeepMine`
+- Shared plan: `shareBox` (the engine fills it: start, invite, join, sync, leave), `syncLine` (one line under the
+  Now card); the engine creates `shName`, `kShareStart`, `kInvite`, `kSyncNow`, `kLeave`, `kJoin`, `kNoJoin` inside the box
 - Day: `dayList`, `kAddItem`, `kEditDay`, `hiddenDay`
 - Pack: `.pack input[type=checkbox]`, `packcount`, `packreset`, `packEdit`, `packCustom`, `packNew`, `packAdd`; any `[data-copy]` button copies its text
 - The edit sheet is created by the engine (`.sheet`, `.sheet-bg`, `.fld`); the page styles it
 - Styling hooks: `.lb` (grid blocks), `.sn` (stage tiles), `.blk` / `.pl.walk` (plan rows),
-  `.lu-head span` (column heads), all colored by the stage id as a class.
+  `.lu-head span` (column heads), all colored by the stage id as a class. Shared plan: `.lineup.group`,
+  `.lb.myvote` (you picked it), `em.who` (who picked a planned set), `.sh-big`, `.sh-sub`, `.sh-msg`, `.sync-line`.
+- ⛔ The page needs `[hidden] { display: none !important; }`: `.key` is `inline-flex`, which beats the hidden
+  attribute, so keys the engine hides (Add a set, Back to live, Send my plan) would still show.
 
 ## Ideas for later
 
