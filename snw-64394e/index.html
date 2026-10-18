@@ -192,13 +192,98 @@ dl.kv dd { margin: 0; min-width: 0; }
 .stars { text-align: center; color: var(--star); letter-spacing: .6em; font-size: 18px; margin: -18px 0; }
 footer { color: var(--bone-dim); font-size: 14px; display: grid; gap: 8px; border-top: 2px solid var(--blood); padding-top: 16px; }
 footer p { margin: 0; }
+/* DAYPLAN: the live panel, the lineup grid and the plan (engine: assets/js/dayplan.js) */
+.now { gap: 14px; }
+.now-card { --c: var(--bone); position: relative; display: grid; gap: 8px; padding: 22px 20px 20px; background: var(--panel); border: 3px solid var(--bone);
+  box-shadow: inset 0 0 0 5px var(--panel), inset 0 0 0 10px var(--c), 6px 6px 0 var(--blood); }
+.now-card[data-stage="blue"] { --c: var(--blue); }
+.now-card[data-stage="gold"] { --c: var(--gold); }
+.now-card[data-stage="grey"] { --c: var(--grey); }
+.now-card[data-stage="red"] { --c: var(--red); }
+.now-eye { margin: 0; font: 800 15px/1 var(--f-label); letter-spacing: .18em; text-transform: uppercase; color: var(--star); }
+.now-big { margin: 0; font: 800 clamp(42px, 12.5vw, 64px)/.95 var(--f-label); letter-spacing: .02em; text-transform: uppercase; text-wrap: balance; overflow-wrap: anywhere; }
+.now-act { margin: 4px 0 0; font-size: 18px; }
+.now-act b { display: block; font: 800 30px/1.08 var(--f-label); letter-spacing: .03em; text-transform: uppercase; overflow-wrap: anywhere; }
+.now-act small { display: block; font: 600 20px/1.3 var(--f-label); letter-spacing: .04em; color: var(--bone-dim); margin-top: 3px; }
+.now-next { margin: 0; color: var(--bone-dim); font-size: 17px; }
+.now-next b { color: var(--bone); }
+.now-keys { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+.key.big { min-height: 96px; flex-direction: column; gap: 6px; font-size: 22px; border-radius: 16px;
+  box-shadow: 0 7px 0 var(--d), 0 10px 18px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.35); }
+.key.big:active { transform: translateY(6px); box-shadow: 0 1px 0 var(--d), 0 3px 6px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.25); }
+.kicon { font-size: 26px; line-height: 1; }
+.sn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.sn { --c: var(--blue); --t: var(--bone); position: relative; min-width: 0; padding: 10px 12px 11px; border-radius: 10px; background: var(--c); color: var(--t);
+  border: 2px solid rgba(0,0,0,.55); box-shadow: 0 4px 0 rgba(0,0,0,.45); }
+.sn.gold { --c: var(--gold); --t: #17120a; }
+.sn.grey { --c: var(--grey); --t: var(--ink); }
+.sn.red { --c: var(--red); --t: var(--bone); }
+.sn.off { opacity: .62; }
+.sn .st { display: block; font: 800 12px/1 var(--f-label); letter-spacing: .14em; text-transform: uppercase; opacity: .85; padding-right: 40px; }
+.sn b { display: block; font: 800 19px/1.15 var(--f-label); letter-spacing: .03em; text-transform: uppercase; margin-top: 6px; overflow-wrap: anywhere; }
+.sn > span:not(.st) { display: block; font-size: 14px; opacity: .9; }
+.sn i { position: absolute; top: 8px; right: 8px; font: 800 10px/1 var(--f-label); font-style: normal; letter-spacing: .1em; background: rgba(0,0,0,.6); color: var(--bone); padding: 3px 5px; border-radius: 4px; }
+.scrub { display: grid; gap: 10px; padding: 14px; background: var(--panel); border: 2px dashed var(--rule); border-radius: 12px; }
+.scrub label { font: 800 14px/1 var(--f-label); letter-spacing: .14em; text-transform: uppercase; color: var(--bone-dim); }
+.scrub input[type=range] { width: 100%; height: 30px; margin: 0; accent-color: var(--star); }
+.scrub-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; min-height: 34px; }
+
+.lineup { position: relative; }
+.lu-head { position: sticky; top: calc(var(--navh, 60px) + env(safe-area-inset-top, 0px)); z-index: 4; display: grid; grid-template-columns: 30px repeat(var(--cols, 4), minmax(0, 1fr)); gap: 4px; padding: 8px 0; background: rgba(14,16,24,.96); }
+.lu-head span { font: 800 13px/1 var(--f-label); letter-spacing: .08em; text-transform: uppercase; text-align: center; padding: 8px 2px 7px; border-radius: 6px; border: 2px solid rgba(0,0,0,.5); }
+.lu-head .ax { border: 0; padding: 0; }
+.lu-head .blue { background: var(--blue); color: var(--bone); }
+.lu-head .gold { background: var(--gold); color: #17120a; }
+.lu-head .grey { background: var(--grey); color: var(--ink); }
+.lu-head .red { background: var(--red); color: var(--bone); }
+.lu-body { position: relative; display: grid; grid-template-columns: 30px repeat(var(--cols, 4), minmax(0, 1fr)); gap: 4px; }
+.lu-axis, .lu-col { position: relative; height: 100%; }
+.lu-col { background: repeating-linear-gradient(to bottom, rgba(242,233,214,.10) 0 1px, transparent 1px 132px); }
+.lu-axis span { position: absolute; left: 0; font: 600 11px/1 var(--f-label); color: var(--bone-dim); transform: translateY(-50%); }
+.lu-axis span:first-child { transform: none; }
+.lb { --c: var(--blue); --t: var(--bone); position: absolute; left: 0; right: 0; display: block; margin: 0; padding: 4px 4px; text-align: left; overflow: hidden; cursor: pointer;
+  background: var(--c); color: var(--t); border: 2px solid rgba(0,0,0,.6); border-radius: 7px; box-shadow: 0 3px 0 rgba(0,0,0,.5);
+  font: 800 11px/1.08 var(--f-label); letter-spacing: 0; text-transform: uppercase; -webkit-tap-highlight-color: transparent;
+  transition: transform .06s ease, box-shadow .06s ease, opacity .15s ease; }
+.lb.gold { --c: var(--gold); --t: #17120a; }
+.lb.grey { --c: var(--grey); --t: var(--ink); }
+.lb.red { --c: var(--red); --t: var(--bone); }
+.lb:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0,0,0,.5); }
+.lb:disabled { cursor: default; }
+.lb[data-pick="0"] { opacity: .42; filter: saturate(.55); box-shadow: none; }
+.lb[data-pick="2"] { outline: 3px solid var(--bone); outline-offset: -2px; }
+.lb .nm { position: relative; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: break-word; hyphens: auto; }
+.lb .tm { position: relative; display: block; font: 600 10.5px/1.1 var(--f-label); opacity: .85; margin-top: 2px; }
+.lb .tg { position: absolute; right: 3px; bottom: 3px; font: 800 9px/1 var(--f-label); font-style: normal; letter-spacing: .08em; padding: 2px 3px; border-radius: 3px; background: rgba(0,0,0,.6); color: var(--bone); }
+.lb .tg:empty { display: none; }
+.lb.clash .tg { background: var(--no); color: #2a0a06; }
+.lb .wv { position: absolute; left: 0; width: 5px; background: var(--bone); box-shadow: 0 0 8px rgba(242,233,214,.8); }
+.lb .wv[hidden] { display: none; }
+.lu-now { position: absolute; left: 0; right: 0; border-top: 2px solid var(--blood); z-index: 3; pointer-events: none; }
+.lu-now[hidden] { display: none; }
+.lu-now span { position: absolute; left: 0; top: -9px; font: 800 10px/1 var(--f-label); letter-spacing: .1em; background: var(--blood); color: var(--bone); padding: 3px 4px; border-radius: 3px; }
+
+.plan-sum { margin: 0; font-size: 18px; }
+.plan { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.pl.walk { display: grid; grid-template-columns: 84px 1fr; gap: 12px; padding: 10px 14px; border: 2px dashed var(--rule); border-radius: 8px; color: var(--bone); }
+.pl.walk > div { min-width: 0; }
+.pl.walk time { font: 800 17px/1.4 var(--f-label); }
+.pl.walk b { display: block; font: 800 18px/1.2 var(--f-label); text-transform: uppercase; letter-spacing: .04em; }
+.pl.walk span { color: var(--bone-dim); font-size: 15px; }
+.pl.now { outline: 3px solid var(--star); outline-offset: 2px; }
+.pl.done { opacity: .45; }
+.shared p { margin: 0 0 12px; }
+details.official > summary { list-style: none; width: max-content; }
+details.official > summary::-webkit-details-marker { display: none; }
+details.official[open] > summary { margin-bottom: 16px; }
+
 @media (max-width: 380px) { .setlist li, .blk { grid-template-columns: 72px 1fr; } dl.facts > div, dl.kv > div { grid-template-columns: 84px 1fr; } }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .key, .pack label { transition: none; } }
 </style>
 </head>
 <body>
 
-<nav class="jump" aria-label="Sections"><ul><li><a class="key sm blue" href="#day">Day</a></li><li><a class="key sm gold" href="#park">Park</a></li><li><a class="key sm grey" href="#pack">Pack</a></li><li><a class="key sm red" href="#gate">Gate</a></li><li><a class="key sm blue" href="#inside">Inside</a></li><li><a class="key sm gold" href="#sets">Sets</a></li><li><a class="key sm grey" href="#home">Home</a></li><li><a class="key sm red" href="#links">Links</a></li></ul></nav>
+<nav class="jump" aria-label="Sections"><ul><li><a class="key sm blue" href="#now">Now</a></li><li><a class="key sm gold" href="#picks">Picks</a></li><li><a class="key sm grey" href="#day">Day</a></li><li><a class="key sm red" href="#basics">Basics</a></li><li><a class="key sm blue" href="#park">Park</a></li><li><a class="key sm gold" href="#pack">Pack</a></li><li><a class="key sm grey" href="#gate">Gate</a></li><li><a class="key sm red" href="#inside">Inside</a></li><li><a class="key sm blue" href="#home">Home</a></li><li><a class="key sm gold" href="#links">Links</a></li></ul></nav>
 
 <div class="wrap">
 
@@ -208,7 +293,72 @@ footer p { margin: 0; }
   <h1>Sick New World</h1>
   <div class="hero-row"><span class="plate">Day sheet</span><span class="key red sm" id="status">8 days out</span></div>
   <p class="lede">Doors at 11, curfew at midnight, <mark>no re-entry</mark>. Whatever walks in with you at 11 AM is what you've got till the last song.</p>
-  <div class="box" style="justify-self: stretch;">
+</header>
+
+<section id="now" class="now" aria-label="Right now">
+  <div class="now-card" id="nowCard" aria-live="polite">
+    <p class="now-eye" id="nowEye">Countdown</p>
+    <p class="now-big" id="nowBig">Soon</p>
+    <p class="now-act" id="nowAct"></p>
+    <p class="now-next" id="nowNext"></p>
+    <div class="now-keys">
+      <a class="key big blue" href="#stages"><span class="kicon" aria-hidden="true">&#9835;</span>All stages</a>
+      <a class="key big gold" href="#plan"><span class="kicon" aria-hidden="true">&#9733;</span>My plan</a>
+    </div>
+  </div>
+  <h3 id="stages">All stages</h3>
+  <div class="sn-grid" id="stagesNow"></div>
+  <div class="scrub">
+    <label for="scrubIn">Preview any time on Saturday</label>
+    <input type="range" id="scrubIn" min="600" max="1470" step="5" value="1020">
+    <div class="scrub-row"><span class="mono" id="scrubTime">Drag to preview</span><button class="key sm grey" type="button" id="liveKey" hidden>Back to live</button></div>
+  </div>
+</section>
+
+<p class="stars" aria-hidden="true">&#9733; &#9829; &#9733;</p>
+
+<section id="picks" aria-labelledby="picks-h">
+  <h2 id="picks-h">Your picks</h2>
+  <p class="hint">Tap a set once for <b>Want</b>, twice for <b>Must</b>, a third time to clear. Your plan builds itself around the clashes and the walks between stages. Picks save on your own phone.</p>
+  <div class="box shared" id="sharedPicks" hidden><p>Someone sent you their picks (<b id="sharedN">0</b> sets).</p><div class="keys"><button class="key gold" type="button" id="kUseShared">Use their picks</button><button class="key grey" type="button" id="kKeepMine">Keep mine</button></div></div>
+  <div class="keys">
+    <button class="key gold" type="button" id="kPreset">Use Gianni's picks</button>
+    <button class="key grey" type="button" id="kFull" aria-pressed="false">Full sets only: off</button>
+    <button class="key red" type="button" id="kClear">Clear</button>
+  </div>
+  <div class="lineup" id="grid"></div>
+  <p class="note">Walks are estimates: Blue and Gold sit side by side, Diablo is about 10 min away, Spiral about 15. Crowds slow it down. End times are read off the official graphic, so they're about.</p>
+  <h3 id="plan">Your plan</h3>
+  <p class="plan-sum" id="planSum"></p>
+  <ol class="plan" id="planList"></ol>
+  <div id="missed"></div>
+  <div class="keys">
+    <button class="key blue" type="button" id="kCopy">Copy my plan</button>
+    <button class="key gold" type="button" id="kShare">Send my picks</button>
+  </div>
+  <details class="official">
+    <summary class="key sm grey">Official schedule</summary>
+    <figure class="map">
+    <a href="img/set-times.png" target="_blank" rel="noopener"><img src="img/set-times.png" width="900" height="1125" alt="Official Sick New World Texas 2026 set times for the Blue, Gold, Spiral and Diablo stages, 11:10 AM to midnight"></a>
+    <figcaption>The festival's set times. Tap it to open full size.</figcaption>
+  </figure>
+  </details>
+</section>
+
+<p class="stars" aria-hidden="true">&#9733; &#9829; &#9733;</p>
+
+
+<section id="day" aria-labelledby="day-h">
+  <h2 id="day-h">The day</h2>
+  <p class="hint">Your sets drop in here as you pick them. Set times are official (posted 10/16); drive and parking times are targets.</p>
+  <ol class="setlist" id="dayList"></ol>
+</section>
+
+<p class="stars" aria-hidden="true">&#9733; &#9829; &#9733;</p>
+
+<section id="basics" aria-labelledby="basics-h">
+  <h2 id="basics-h">The basics</h2>
+  <div class="box">
     <dl class="facts">
       <div><dt>Doors</dt><dd class="mono">11:00 AM</dd></div>
       <div><dt>Curfew</dt><dd class="mono">About 12:00 AM</dd></div>
@@ -221,33 +371,6 @@ footer p { margin: 0; }
       <div><dt>Sunset</dt><dd><span class="mono">6:46 PM</span>, then it drops toward the mid-50s. Check the forecast Thu 10/22.</dd></div>
     </dl>
   </div>
-</header>
-
-<section id="day" aria-labelledby="day-h">
-  <h2 id="day-h">The day</h2>
-  <p class="hint">Set times are official, posted 10/16. Drive and parking times are targets.</p>
-  <ol class="setlist">
-      <li class="day">Fri 10/23</li>
-      <li data-t="2026-10-23T19:00:00-05:00"><time>Night</time><div class="what"><b>Pack and charge</b><span>Phones and power banks to 100. Gas up. Room booked. Wristbands on and snug, never stretch or cut them. Activate yours if you haven't (link at the bottom).</span></div></li>
-      <li class="day">Sat 10/24</li>
-      <li data-t="2026-10-24T06:00:00-05:00"><time>6:00 AM</time><div class="what"><b>Leave SA</b><span>I-35 north through Austin, Waco and Hillsboro, then I-35W into Fort Worth. Skip the TEXpress lanes, they're tolls. Split the driving.</span></div></li>
-      <li data-t="2026-10-24T11:00:00-05:00"><time>11:00 AM</time><div class="what"><b>Gates open. Hit Buc-ee's</b><span>Right below the speedway on SH 114. Fill the tank, eat a real meal (no outside food inside), last good bathroom. Anything that isn't coming in goes in the trunk here, not in the lot.</span></div></li>
-      <li data-t="2026-10-24T11:30:00-05:00"><time>11:30 AM</time><div class="what"><b>Park in the GA lots</b><span>In through the Foyt entry gate, staff points you to a spot. Drop a pin. Screenshot the row marker.</span></div></li>
-      <li data-t="2026-10-24T11:45:00-05:00"><time>11:45 AM</time><div class="what"><b>Gates 4, 5, 6</b><span>Pat-down and metal detector. Inside: fill the bottles, find water and medical on the map, pick a meet spot.</span></div></li>
-      <li data-t="2026-10-24T12:00:00-05:00"><time>12:00 PM</time><div class="what"><b>Early sets, roam</b><span>Filter 1:30 (Blue), Mastodon 3:25 (Gold), Twin Tribes 3:40 (Spiral). Water and shade breaks, it's 12 hours on your feet.</span></div></li>
-      <li data-t="2026-10-24T16:10:00-05:00" data-stage="blue"><time>4:10 PM</time><div class="what"><b>AFI</b><span>Blue. From here the north end runs nonstop: Blue and Gold trade off with no overlap.</span></div></li>
-      <li data-t="2026-10-24T17:00:00-05:00" data-stage="gold"><time>5:00 PM</time><div class="what"><b>Knocked Loose</b><span>Gold.</span></div></li>
-      <li data-t="2026-10-24T18:05:00-05:00" data-stage="blue"><time>6:05 PM</time><div class="what"><b>Marilyn Manson</b><span>Blue.</span></div></li>
-      <li data-t="2026-10-24T18:46:00-05:00"><time>6:46 PM</time><div class="what"><b>Sunset</b><span>Jackets on. It drops toward the mid-50s.</span></div></li>
-      <li data-t="2026-10-24T19:10:00-05:00" data-stage="gold"><time>7:10 PM</time><div class="what"><b>Evanescence</b><span>Gold.</span></div></li>
-      <li data-t="2026-10-24T20:20:00-05:00" data-stage="blue"><time>8:20 PM</time><div class="what"><b>Slayer</b><span>Blue.</span></div></li>
-      <li data-t="2026-10-24T21:20:00-05:00" data-stage="gold"><time>9:20 PM</time><div class="what"><b>Deftones</b><span>Gold.</span></div></li>
-      <li data-t="2026-10-24T22:35:00-05:00" data-stage="blue"><time>10:35 PM</time><div class="what"><b>System of a Down</b><span>Blue, till about 11:40.</span></div></li>
-      <li data-t="2026-10-25T00:00:00-05:00"><time>12:00 AM</time><div class="what"><b>Curfew</b><span>The lot crawls when everybody leaves at once. Leave during the last song to beat most of it, or chill in the car till it thins out.</span></div></li>
-      <li data-t="2026-10-25T01:00:00-05:00"><time>1:00 AM</time><div class="what"><b>Sleep</b><span>Room near the track or in Burleson. See <a href="#home">Getting home</a>.</span></div></li>
-      <li class="day">Sun 10/25</li>
-      <li data-t="2026-10-25T11:00:00-05:00"><time>11:00 AM</time><div class="what"><b>Drive home</b><span>About 5 hrs from the track, about 4 from Burleson.</span></div></li>
-  </ol>
 </section>
 
 <p class="stars" aria-hidden="true">&#9733; &#9829; &#9733;</p>
@@ -362,46 +485,6 @@ footer p { margin: 0; }
 
 <p class="stars" aria-hidden="true">&#9733; &#9829; &#9733;</p>
 
-<section id="sets" aria-labelledby="sets-h">
-  <h2 id="sets-h">Set times</h2>
-  <p class="hint">Official schedule, posted 10/16. It only prints start times, so the end times here are read off the graphic and are about. The festival app has exact ones.</p>
-  <figure class="map">
-    <a href="img/set-times.png" target="_blank" rel="noopener"><img src="img/set-times.png" width="900" height="1125" alt="Official Sick New World Texas 2026 set times for the Blue, Gold, Spiral and Diablo stages, 11:10 AM to midnight" loading="lazy"></a>
-    <figcaption>The festival's set times. Tap it to open full size.</figcaption>
-  </figure>
-  <p class="callout"><mark>Blue and Gold trade off all night.</mark> Post up at the north end from 4:10 and you get seven sets back to back with no overlap:</p>
-  <ul class="blocks">
-      <li class="blk blue"><time>4:10 PM</time><div><b>AFI</b><span>Blue, till about 4:50</span></div></li>
-      <li class="blk gold"><time>5:00 PM</time><div><b>Knocked Loose</b><span>Gold, till about 5:55</span></div></li>
-      <li class="blk blue"><time>6:05 PM</time><div><b>Marilyn Manson</b><span>Blue, till about 7:00</span></div></li>
-      <li class="blk gold"><time>7:10 PM</time><div><b>Evanescence</b><span>Gold, till about 8:15</span></div></li>
-      <li class="blk blue"><time>8:20 PM</time><div><b>Slayer</b><span>Blue, till about 9:10</span></div></li>
-      <li class="blk gold"><time>9:20 PM</time><div><b>Deftones</b><span>Gold, till about 10:30</span></div></li>
-      <li class="blk blue"><time>10:35 PM</time><div><b>System of a Down</b><span>Blue, till about 11:40</span></div></li>
-  </ul>
-  <h3>Also playing, on the other stages</h3>
-  <ul class="blocks">
-      <li class="blk grey"><time>5:25 PM</time><div><b>She Wants Revenge</b><span>Spiral, till about 5:50</span><em>Clashes with Knocked Loose</em></div></li>
-      <li class="blk red"><time>6:30 PM</time><div><b>Deafheaven</b><span>Diablo, till about 6:55</span><em>Clashes with Manson</em></div></li>
-      <li class="blk grey"><time>7:10 PM</time><div><b>Ministry</b><span>Spiral, till about 7:45</span><em>Clashes with Evanescence</em></div></li>
-      <li class="blk grey"><time>7:55 PM</time><div><b>Boy Harsher</b><span>Spiral, till about 8:40</span><em>Clashes with Evanescence and Slayer</em></div></li>
-      <li class="blk grey"><time>9:35 PM</time><div><b>The Prodigy</b><span>Spiral, till about 10:30</span><em>Clashes with Deftones</em></div></li>
-  </ul>
-  <h3>Clashes</h3>
-  <div class="cards">
-    <div class="card"><span class="tag">5:25 PM</span><h3>Knocked Loose or She Wants Revenge</h3><p>You can do both. Leave Knocked Loose around 5:10, walk south to Spiral (10 to 15 min), catch She Wants Revenge, and you're back north for Manson at 6:05.</p></div>
-    <div class="card"><span class="tag">6:30 PM</span><h3>Manson or Deafheaven</h3><p>Manson. You're already standing there, and Diablo is across the infield.</p></div>
-    <div class="card"><span class="tag">7:10 to 8:40 PM</span><h3>Evanescence or Ministry and Boy Harsher</h3><p>Evanescence keeps you at the north end for Slayer at 8:20. Leaving at 7:50 gets you Boy Harsher but costs you the start of Slayer.</p></div>
-    <div class="card"><span class="tag">9:35 PM</span><h3>Deftones or The Prodigy</h3><p>Deftones, then step over to Blue for System at 10:35.</p></div>
-  </div>
-  <div class="keys">
-    <a class="key gold" href="https://www.sicknewworldfest.com/texas/schedule" target="_blank" rel="noopener">Full schedule</a>
-    <a class="key blue" href="https://apps.apple.com/us/app/sick-new-world/id6496356108" target="_blank" rel="noopener">Festival app</a>
-  </div>
-</section>
-
-<p class="stars" aria-hidden="true">&#9733; &#9829; &#9733;</p>
-
 <section id="home" aria-labelledby="home-h">
   <h2 id="home-h">Getting home</h2>
   <p class="hint">Sleep in Fort Worth Saturday night. Getting out of the lot after midnight and then driving 4 or 5 hours on no sleep is the riskiest part of the whole day.</p>
@@ -443,59 +526,8 @@ footer p { margin: 0; }
 </div>
 
 <script>
-(function () {
-  var pill = document.getElementById('status');
-  var show = Date.parse('2026-10-24T00:00:00-05:00');
-  var over = Date.parse('2026-10-25T03:00:00-05:00');
-  var now = Date.now();
-  if (now >= over) { pill.textContent = 'See you next year'; }
-  else if (now >= show) { pill.textContent = 'Today'; }
-  else {
-    var days = Math.ceil((show - now) / 864e5);
-    pill.textContent = days <= 1 ? 'Tomorrow' : days + ' days out';
-  }
-
-  var items = [].slice.call(document.querySelectorAll('.setlist li[data-t]'));
-  items.forEach(function (li, i) {
-    var t = Date.parse(li.getAttribute('data-t'));
-    var next = items[i + 1] ? Date.parse(items[i + 1].getAttribute('data-t')) : t + 3 * 36e5;
-    if (now >= next) li.classList.add('done');
-    else if (now >= t) li.classList.add('now');
-  });
-
-  var KEY = 'snw-family-pack-v1', state = {};
-  try { state = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { state = {}; }
-  var boxes = [].slice.call(document.querySelectorAll('.pack input[type=checkbox]'));
-  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
-  function count() {
-    var n = boxes.filter(function (b) { return b.checked; }).length;
-    document.getElementById('packcount').textContent = n + ' of ' + boxes.length + ' packed';
-  }
-  boxes.forEach(function (b) {
-    if (state[b.id]) b.checked = true;
-    b.addEventListener('change', function () {
-      state[b.id] = b.checked; save(); count();
-      if (navigator.vibrate) { try { navigator.vibrate(b.checked ? 12 : 6); } catch (e) {} }
-    });
-  });
-  document.getElementById('packreset').addEventListener('click', function () {
-    boxes.forEach(function (b) { b.checked = false; }); state = {}; save(); count();
-  });
-  count();
-
-  [].slice.call(document.querySelectorAll('[data-copy]')).forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var text = btn.getAttribute('data-copy');
-      function flash(msg) { btn.textContent = msg; setTimeout(function () { btn.textContent = 'Copy'; }, 1400); }
-      function fallback() {
-        var el = document.getElementById(btn.getAttribute('data-target'));
-        if (el) { var r = document.createRange(); r.selectNodeContents(el); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); }
-        flash('Selected');
-      }
-      try { navigator.clipboard.writeText(text).then(function () { flash('Copied'); }, fallback); } catch (e) { fallback(); }
-    });
-  });
-})();
+window.DAYPLAN = {"key":"snw","date":"2026-10-24","tz":"-05:00","mainDay":"sat","dayStart":660,"dayEnd":1440,"doors":660,"previewStart":1020,"stageWord":"stage","pxPerMin":2.2,"stages":[{"id":"blue","name":"Blue","area":"north"},{"id":"gold","name":"Gold","area":"north"},{"id":"grey","name":"Spiral","area":"south"},{"id":"red","name":"Diablo","area":"east"}],"walks":{"north|south":15,"east|north":10,"east|south":10},"acts":[{"n":"Speed of Light","st":"blue","s":"11:10","e":"11:35"},{"n":"Failure","st":"blue","s":"12:20","e":"12:45"},{"n":"Filter","st":"blue","s":"13:30","e":"13:55"},{"n":"Power Trip","st":"blue","s":"14:45","e":"15:15"},{"n":"AFI","st":"blue","s":"16:10","e":"16:50"},{"n":"Marilyn Manson","st":"blue","s":"18:05","e":"19:00"},{"n":"Slayer","st":"blue","s":"20:20","e":"21:10"},{"n":"System of a Down","st":"blue","s":"22:35","e":"23:40"},{"n":"Amira Elfeky","st":"gold","s":"11:45","e":"12:10"},{"n":"Dying Wish","st":"gold","s":"12:55","e":"13:20"},{"n":"P.O.D.","st":"gold","s":"14:05","e":"14:35"},{"n":"Mastodon","st":"gold","s":"15:25","e":"16:00"},{"n":"Knocked Loose","st":"gold","s":"17:00","e":"17:55"},{"n":"Evanescence","st":"gold","s":"19:10","e":"20:15"},{"n":"Deftones","st":"gold","s":"21:20","e":"22:30"},{"n":"Showing Teeth","st":"grey","s":"11:35","e":"12:00"},{"n":"Snot","st":"grey","s":"12:10","e":"12:35"},{"n":"Orgy","st":"grey","s":"12:45","e":"13:10"},{"n":"Alien Ant Farm","st":"grey","s":"13:20","e":"13:45"},{"n":"Violent Vira","st":"grey","s":"13:55","e":"14:20"},{"n":"Kittie","st":"grey","s":"14:30","e":"14:55"},{"n":"Lords of Acid","st":"grey","s":"15:05","e":"15:30"},{"n":"Twin Tribes","st":"grey","s":"15:40","e":"16:05"},{"n":"Coal Chamber","st":"grey","s":"16:15","e":"16:40"},{"n":"Melvins","st":"grey","s":"16:50","e":"17:15"},{"n":"She Wants Revenge","st":"grey","s":"17:25","e":"17:50"},{"n":"Clutch","st":"grey","s":"18:00","e":"18:25"},{"n":"Down","st":"grey","s":"18:35","e":"19:00"},{"n":"Ministry","st":"grey","s":"19:10","e":"19:45"},{"n":"Boy Harsher","st":"grey","s":"19:55","e":"20:40"},{"n":"The Prodigy","st":"grey","s":"21:35","e":"22:30"},{"n":"Dead City","st":"red","s":"11:40","e":"12:00"},{"n":"The Dark.FM","st":"red","s":"12:05","e":"12:25"},{"n":"The Tony Danza Tapdance Extravaganza","st":"red","s":"12:30","e":"12:50"},{"n":"Ego Kill Talent","st":"red","s":"12:55","e":"13:15"},{"n":"TSS","st":"red","s":"13:20","e":"13:40"},{"n":"Pain of Truth","st":"red","s":"13:50","e":"14:15"},{"n":"Peelingflesh","st":"red","s":"14:25","e":"14:50"},{"n":"Haywire","st":"red","s":"15:00","e":"15:25"},{"n":"Norma Jean","st":"red","s":"15:35","e":"16:00"},{"n":"Speed","st":"red","s":"16:10","e":"16:35"},{"n":"Sleep Theory","st":"red","s":"16:45","e":"17:10"},{"n":"Superheaven","st":"red","s":"17:20","e":"17:45"},{"n":"Terror","st":"red","s":"17:55","e":"18:20"},{"n":"Deafheaven","st":"red","s":"18:30","e":"18:55"},{"n":"Sunami","st":"red","s":"19:05","e":"19:30"},{"n":"Glassjaw","st":"red","s":"19:40","e":"20:05"},{"n":"Underoath","st":"red","s":"20:15","e":"20:40"},{"n":"Wage War","st":"red","s":"20:50","e":"21:15"},{"n":"Poison the Well","st":"red","s":"21:25","e":"22:15"}],"logistics":[{"m":-300,"day":"fri","t":"Night","b":"Pack and charge","s":"Phones and power banks to 100. Gas up. Room booked. Wristbands on and snug, never stretch or cut them. Activate yours if you haven't (link at the bottom)."},{"m":360,"day":"sat","b":"Leave SA","s":"I-35 north through Austin, Waco and Hillsboro, then I-35W into Fort Worth. Skip the TEXpress lanes, they're tolls. Split the driving."},{"m":660,"day":"sat","b":"Gates open. Hit Buc-ee's","s":"Right below the speedway on SH 114. Fill the tank, eat a real meal (no outside food inside), last good bathroom. Anything not coming in goes in the trunk here, not in the lot."},{"m":690,"day":"sat","b":"Park in the GA lots","s":"In through the Foyt entry gate, staff points you to a spot. Drop a pin. Screenshot the row marker."},{"m":705,"day":"sat","b":"Gates 4, 5, 6","s":"Pat-down and metal detector. Inside: fill the bottles, find water and medical on the map, pick a meet spot."},{"m":1126,"day":"sat","b":"Sunset","s":"Jackets on. It drops toward the mid-50s."},{"m":1440,"day":"sat","b":"Curfew","s":"The lot crawls when everybody leaves at once. Leave during the last song to beat most of it, or chill in the car till it thins out."},{"m":1500,"day":"sat","b":"Sleep","s":"Room near the track or in Burleson. See <a href=\"#home\">Getting home</a>."},{"m":2100,"day":"sun","b":"Drive home","s":"About 5 hrs from the track, about 4 from Burleson."}],"days":{"fri":"Fri 10/23","sat":"Sat 10/24","sun":"Sun 10/25"},"presets":[{"label":"Use Gianni's picks","picks":{"afi":2,"evanescence":2,"deftones":2,"system-of-a-down":1,"marilyn-manson":1,"knocked-loose":1,"slayer":1,"she-wants-revenge":1,"deafheaven":1,"ministry":1,"boy-harsher":1,"the-prodigy":1,"twin-tribes":1,"filter":1}}],"packKey":"snw-family-pack-v1","text":{"beforeDoors":"Gates at 11","doorsIn":"Gates open in","doorsNote":"Park in the GA lots, in at Gates 4, 5, 6.","after":["That's the night","Meet at the car. Pin's in your phone.","Sleep in Fort Worth, drive home rested."],"pillAfter":"See you next year","planTitle":"My Sick New World plan, Sat 10/24","shareTitle":"My Sick New World picks","noPicks":"Nothing picked yet. Tap sets in the lineup, or start from Gianni's picks.","lastSet":"That's your last set. Curfew around midnight.","freeTime":"Till then: water, food, merch. Check All stages for what's on."}};
 </script>
+<script src="../assets/js/dayplan.js?v=5df60b66"></script>
 </body>
 </html>
