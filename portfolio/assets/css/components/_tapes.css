@@ -44,3 +44,6 @@
 @media(max-width:640px){.tape.play .t-dur{display:none}}
 /* the weekend montage runs alone, so it gets one column instead of the auto-fit row */
 .tapes.solo{grid-template-columns:minmax(0,300px);max-width:300px}
+/* a widescreen film runs alone across the row and keeps its 16:9 frame (the 9:16 cover crop above would cut the sides off) */
+.tapes.film{grid-template-columns:minmax(0,1fr);max-width:760px}
+.tapes.film .tape video{aspect-ratio:16/9;object-fit:contain}

@@ -12,6 +12,21 @@ live at `portfolio/assets/deco/`; `index.html`, `index-kawaii.html`, `_monitors.
 (`?v=20261001a` on the two CSS links). The notes below that mention `/steel/`, `/dream/`, `/bethel/` or
 `/photoshoots/` are history. `portfolio/hub/` is now written by `99_SYSTEM/build_launcher.py`.
 
+## NIGHTS grew THE BLUE HOUSE, the first wedding and the first widescreen film (Oct 18 2026)
+
+**THE BLUE HOUSE**, the Oct 16 wedding at Pipe Creek (`assets/wedding/wed_*`), after WAP and before FILL-A-BAG (shoot order).
+His calls: "this cut with no vows upload it to my website", then "just the one with no vows": only the B cut (the song, no vows)
+is here, never the A cut with their spoken vows. No names and no address anywhere on the page.
+- `.tapes.film` is NEW in `_tapes.css` (stamp `?v=20261018a` in both twins): one column up to 760px with a 16:9 video. Every other
+  tape is a 9:16 `object-fit:cover` box, which cuts the sides off a widescreen film. Use `.tapes.film` for any 16:9 cut.
+- THE FILM: `assets/wedding/cuts/allyourn_web.mp4`, 1280x720 H.264 CRF 23 capped 2.5 Mb/s, AAC 128k, faststart, 13 MB, SSIM 0.980
+  against the 1080p master; poster = the title over the house (2.6 s). No `.t-dur` badge on it: at 16:9 it sat on the native
+  controls, and the clip-label already says 0:58.
+- Frames pre-cut in the shoot (`2026-10-16_Wedding-PipeCreek/_scripts/nights_stage_wed.py` > `_web/nights_src/` + `_web/nights_wedding.json`):
+  the squares and the hero take the full height of the 4:3 frame (no heads cut), the wide keeps the sun over the mountain.
+- Checked: built on a scratch copy first, headless at 1280 and the real page at 390 (0 overflow offenders, the film 338x190),
+  then applied here byte-identical.
+
 ## NIGHTS grew FILL-A-BAG, the first block with its own tapes (Oct 18 2026)
 
 **FILL-A-BAG** at Thrift @ The Warehouse, both Austin stores (Oct 17, `assets/thrift/tatw_*`), after WAP. His W-2
