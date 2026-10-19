@@ -1,6 +1,31 @@
-# CHROME DIGICAM — site state (saved Jul 15 2026, updated Jul 30)
+# CHROME DIGICAM: site state (saved Jul 15 2026, rebuilt Oct 18 2026)
 
-> NEW SESSION START HERE: read this file + the job-hunt-2026 memory. Site is LIVE and current. As of Jul 30 2026 the homepage is SPLIT-FILE (see Architecture below): CSS lives in `assets/css/`, JS in `assets/js/`, `index.html` is markup only. Edit the file that owns the thing, bump its `?v=` stamp in BOTH `index.html` and `index-kawaii.html` (or `cp index.html index-kawaii.html` after HTML edits), commit, push. Verify visual changes with HEADLESS Chrome (see Gotchas), not just the preview pane.
+> NEW SESSION START HERE: read `BRIEF.md` (why the page is shaped this way), then the Oct 18 section right below, then the rest of this file as history. Live at **https://0fftheprint.com/portfolio/** (this folder is `portfolio/` inside the 0fftheprint repo; the old carlo72400-pixel.github.io root only redirects here). CSS lives in `assets/css/`, JS in `assets/js/`, pages are markup only. Edit the file that owns the thing, bump its `?v=` stamp on EVERY page that links it (home, `index-kawaii.html`, `nights/`, `archive/`, `rates/`), `cp index.html index-kawaii.html` after home edits, commit only your own paths (other sessions keep uncommitted work in this repo), push.
+
+## 🚪 THE TWO-DOOR REBUILD (Oct 18 2026, his ask: "update our portfolio... foundation to purpose to what it's trying to accomplish")
+
+He locked three calls: **both readers, two doors** · **keep the look, cut the gimmicks** · **best six nights up front, the rest one tap deep**. Plus "make sure all the info is up to date." The why lives in `BRIEF.md`.
+
+**Four pages now, one CSS/JS set:**
+- `index.html` (+ byte-identical `index-kawaii.html`): hero (readable name, one line, two doors HIRING / BOOKING, the newest film) > `#hire` > `#book` > `#nights` (best six) > `#contact`. Page-break bands come from `data-band="NAME|descriptor"` on each section (bands.js counts them, REEL 01 / 04).
+- `nights/index.html`: all 23 blocks, NEWEST FIRST (Fill-a-Bag at the top, Blade Rave at the bottom).
+- `archive/index.html`: SA Current, portraits (LIT, editorial, arcade), Legion Ink day one + the shop loops, the stadium photo gallery (`#gallery`, built by main.js), design (Mix poster + collages), VOLUME BTS EP01/EP02.
+- `rates/index.html`: the full card (7 core + commercial / brand marks / add-ons disclosures + fine print).
+- ⛔ **Sub-pages carry `<base href="/portfolio/">`**, so their markup keeps the home page's `assets/...` paths and `./#hire` lands on the main page. Preview them from a server whose root is the REPO root (or a mirror with `portfolio/` inside it), never with `portfolio/` as the server root. `history.replaceState` calls use `location.pathname` on purpose (a relative URL would resolve against the base).
+- Old deep links redirect in bands.js: `#about`→`#hire`, `#stills|#archive|#design|#playback`→`archive/...`, `#feed`→`#contact`.
+
+**What moved / changed:**
+- Hero: Fraunces name in solid ink (the pastel gradient over the Ye photo was unreadable), `.doors` (`.door.d-hire` / `.door.d-book`), `.hero-film` = `assets/wedding/cuts/allyourn_preview.mp4` (960x540, silent, ~5 MB) auto-plays muted unless reduced motion / data saver; **Watch with sound** swaps in `allyourn_web.mp4` with controls. ⛔ Never name a class `.book`: `_footer.css` owns `.book` (margin-top 30, dashed top border) and it knocked the BOOKING door 30px out of line on the first build.
+- `#hire`: credits rewritten to the 10/6 resume facts + Thrift @ The Warehouse content team (Oct 2026); THRIFT block (managed by nightsblock), 48 HOURS, VOLUME, the A/B (relabelled COLOR), 0FF THE PRINT with four fresh captures (`assets/design/otp_1018_0[1-4].jpg`, headless 1100x1375 off the live site), tools + kit chips (FX6, 2x Luna Ultra, X6). The FIELD KIT polaroids are gone (two of the three cameras went to his mom 10/14); their images stay on disk.
+- `#book`: `<!-- BOOK:WEDDING -->` is a hand-kept copy of the wedding grid WITHOUT the film (the film is the hero), so nightsblock never touches it. Three steps, three cards (Event Recap / Event Full / Follow Day, prices unchanged), Book a date + Full rate card. Weddings are quoted, never priced on the page (wedding pricing is still unset).
+- `#nights`: PULSEANGELS, SADBOYZ, BRAINROT, CLOWNCHURCH, STABLEHALL, BLADERAVE. The eight old blocks that had no markers got them (BLADERAVE, THEMIX, ZENHAUS, LEGIONINK, MIXHORROR, STABLEHALL, ANDREWE, CLOWNCHURCH).
+- NEW blocks: **PULSE ANGELS 3** (Oct 3, `assets/pulseangels/pa_*`, ANGEL NO FRAME look, the public gallery set) and **SADBOYZ CLUB** (Sep 16, `assets/sadboyz/sb_*`, SADBOYZ CLUB look). Configs: each shoot's `_web/nights_<marker>.json`, sources copied to `_web/nights_src/`, faces by `facesweb.py`. XBONGX stayed off (his own call on 0TP was "not much content", only 6 distinct moments).
+- `nightsblock.py` v2: replaces a block wherever its marker is (nights page + home), adds a NEW marker at the top of the nights page (`<!-- NIGHTS:TOP -->`) or below `"after"`, and only adds to the home page with `"featured": true`.
+- Gone from the main page on purpose: PHOTO MODE (now the archive's stadium gallery), the FEED monitors, the Vamppsych lane card, the "Stadium concert coverage" credit (off resumes until he says whether it was paid), the contact-card polaroids in the footer (still in SHARE), the price en dashes (now hyphens).
+- `main.js` rewritten null-safe for all four pages; dropped timecode, date stamp, PP chip, AF cursor, scroll strip, magnetic email, monitor slideshows. `bands.js` rewritten around `data-band`. `_doors.css` is NEW and loads LAST. `_hero.css` rewritten (look filters, OSD, mascots, PP chip removed; btn + kit + marquee + nav breakpoints kept).
+- Resume PDFs in `assets/docs/` refreshed to the Oct 6 builds (the Sep 2 copies still said "four-plus years" and "Vamppsych (own brand)"). The Oct 6 builds do NOT list Thrift @ The Warehouse yet.
+- New OG card `assets/preview.jpg` (1200x630: the vows, Pulse Angels, the Fill-a-Bag vest) on all four pages.
+- Checked: 1280 and 375 in the Browser pane, 0 overflow offenders on all four pages, every image loads, no console errors, film preview plays, sound swap works, old `#design` lands on `archive/#design`.
 
 
 ## 🗑 DELETED 2026-10-01 (his call, cleanup pass)

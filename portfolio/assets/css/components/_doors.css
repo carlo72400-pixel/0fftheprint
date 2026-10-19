@@ -1,0 +1,79 @@
+/* ------- 2026-10-18 rebuild: the two doors, the newest film, steps, chips, sub-pages -------
+   One page, two readers. HIRING = someone hiring an editor / shooter / colorist.
+   BOOKING = someone with a wedding, a party or an event. Both get who, proof, and one button. */
+
+/* the two doors: equal weight, big enough to hit with a thumb */
+.doors{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-width:560px}
+.door{display:flex;flex-direction:column;gap:5px;min-height:124px;padding:18px 18px 16px;border-radius:20px;text-decoration:none;
+  border:2px solid var(--pink);box-shadow:var(--shadow-sm);transition:transform .3s var(--spring),box-shadow .3s,border-color .2s}
+.door.d-hire{background:linear-gradient(160deg,#ffffff 0%,#f3eefc 100%);border-color:var(--lilac)}
+.door.d-book{background:linear-gradient(160deg,#ffffff 0%,#fdebf3 100%);border-color:var(--pink)}
+.door:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--rose)}
+.door:focus-visible{outline:2px solid var(--rose-deep);outline-offset:3px}
+.door .d-q{font-family:var(--disp);font-weight:660;font-variation-settings:'SOFT' 100,'WONK' 0,'opsz' 120;font-size:clamp(26px,3.3vw,34px);line-height:1;color:var(--rose-deep)}
+.door .d-t{font-size:14px;font-weight:600;color:var(--ink);line-height:1.35}
+.door .d-go{margin-top:auto;font-family:var(--mono);font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--dim)}
+.door:hover .d-go{color:var(--rose-deep)}
+@media(max-width:400px){.doors{gap:10px}.door{min-height:114px;padding:15px 13px 13px}.door .d-t{font-size:13px}}
+
+/* the newest film beside the name: muted preview, one tap for sound */
+.hero-film{position:relative;margin:0}
+.hero-film::before{content:'';position:absolute;top:-30px;left:-18px;width:96px;height:56px;z-index:7;transform:rotate(-12deg);
+  background:url('../../../assets/kawaii/ribbon_bow.png') no-repeat center / contain;filter:drop-shadow(0 6px 10px rgba(180,110,140,.35));pointer-events:none}
+.hero-film .frame{position:relative;aspect-ratio:16/9;border:3px solid #fff;border-radius:20px;overflow:hidden;background:#140f17;box-shadow:var(--shadow)}
+.hero-film video{display:block;width:100%;height:100%;object-fit:cover}
+.hero-film .frame .bk{border-color:rgba(255,255,255,.75)}
+.hero-film .tag-new{position:absolute;top:14px;left:16px;z-index:6;font-family:var(--mono);font-size:10px;letter-spacing:1.4px;color:#fff;
+  background:rgba(40,22,34,.55);padding:5px 10px;border-radius:999px;pointer-events:none}
+.hero-film .tag-new i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--rose);margin-right:6px;vertical-align:middle;animation:recblink 1.2s steps(1) infinite}
+.hero-film .sound{position:absolute;left:14px;bottom:14px;z-index:6;display:inline-flex;align-items:center;gap:8px;cursor:pointer;
+  font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--rose-deep);
+  background:#fff;border:0;border-radius:999px;padding:10px 16px;box-shadow:0 8px 20px -8px rgba(40,10,25,.6);transition:transform .3s var(--spring)}
+.hero-film .sound:hover{transform:translateY(-2px)}
+.hero-film .sound b{color:var(--dim);font-weight:500}
+.hero-film .sound[hidden]{display:none}
+.hero-film figcaption{margin-top:11px;font-family:var(--mono);font-size:11px;letter-spacing:.6px;color:var(--dim)}
+.hero-film figcaption b{color:var(--ink);font-weight:600}
+@media(max-width:880px){.hero-film{max-width:620px}}
+
+/* a lede paragraph under a section h2 */
+.lede{color:var(--dim);max-width:680px;margin-top:4px}
+.lede b{color:var(--ink)}
+.lede a{color:var(--rose-deep);font-weight:600}
+.sub-k{margin-top:40px;font-family:var(--mono);font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:var(--amber);font-weight:600}
+.sub-k + .clip-label{margin-top:10px !important}
+
+/* how booking works, three steps */
+.steps{list-style:none;counter-reset:st;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:20px}
+@media(max-width:760px){.steps{grid-template-columns:minmax(0,1fr)}}
+.steps li{position:relative;padding:18px 18px 17px 60px;border:2px solid #fff;border-radius:18px;background:var(--panel);box-shadow:var(--shadow-sm)}
+.steps li::before{counter-increment:st;content:counter(st);position:absolute;left:16px;top:17px;width:30px;height:30px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;background:var(--rose);color:#fff;font-family:var(--mono);font-size:13px;font-weight:700}
+.steps b{display:block;font-size:15px;color:var(--ink)}
+.steps span{display:block;margin-top:2px;font-size:14px;color:var(--dim)}
+
+/* tools + kit, one row of chips */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;max-width:900px}
+.chips span{font-family:var(--mono);font-size:11px;letter-spacing:.6px;padding:7px 12px;border-radius:999px;background:#fff;border:1.5px solid var(--line2);color:var(--ink)}
+.chips span.k{border-color:var(--pink);color:var(--rose-deep)}
+
+/* the edits row: four vertical cuts across on desktop, two by two on a phone
+   (one per row made each 9:16 tape a full phone screen tall) */
+.tapes.watch.four{grid-template-columns:repeat(4,minmax(0,1fr));max-width:1000px}
+@media(max-width:860px){.tapes.watch.four{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.tapes.watch{grid-template-columns:repeat(2,minmax(0,1fr))}.tapes.watch .tape.play .t-foot{display:none}
+  .tapes.solo.watch{grid-template-columns:minmax(0,230px);max-width:230px}}
+
+/* sub-pages (nights, archive, rates) */
+header.sub{padding:clamp(26px,5vw,54px) 0 6px}
+header.sub h1{font-size:clamp(40px,6.4vw,78px)}
+header.sub .lede{margin-top:12px}
+.back{display:inline-block;margin-bottom:18px;font-family:var(--mono);font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:var(--rose-deep);text-decoration:none;font-weight:600}
+.back:hover{text-decoration:underline}
+.jump{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.jump a{font-family:var(--mono);font-size:11px;letter-spacing:1px;text-transform:uppercase;text-decoration:none;color:var(--ink);background:#fff;border:1.5px solid var(--line2);border-radius:999px;padding:7px 13px}
+.jump a:hover{border-color:var(--rose);color:var(--rose-deep)}
+.sub-sec{padding-top:56px}
+
+/* four nav chips fit across a 375px phone without the last one hiding under the edge fade */
+@media(max-width:400px){nav ul{gap:6px}nav ul a{padding:8px 10px;letter-spacing:.6px}}

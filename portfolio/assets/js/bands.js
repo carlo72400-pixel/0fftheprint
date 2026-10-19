@@ -1,15 +1,22 @@
 (function(){
-  var PAGES=[['about','01','INFO','the studio'],['stills','02','PHOTO MODE','frames from the floor'],
-    ['nights','03','NIGHTS','venue + event'],['archive','04','ARCHIVE','client work'],
-    ['design','05','DESIGN','posters, collage, sites'],['playback','06','PLAYBACK','the film'],
-    ['feed','07','FEED','on the grid'],['rates','08','RATES','the rate card'],
-    ['contact','09','STANDBY','let us cut something']];
-  PAGES.forEach(function(pg){
-    var sec=document.getElementById(pg[0]); if(!sec) return;
-    var b=document.createElement('div'); b.className='pagebreak'; b.setAttribute('data-page',pg[0]); b.setAttribute('aria-hidden','true');
-    b.innerHTML='<span class="pb-no">REEL '+pg[1]+' / 09</span><span class="pb-name">'+pg[2]+'</span><span class="pb-desc">'+pg[3]+'</span>';
+  /* page-break bands: any section carrying data-band="NAME|descriptor" gets the dark film-slate
+     divider in front of it, numbered in page order (REEL 01 / 04 ...). Sub-pages carry none. */
+  var secs=[].slice.call(document.querySelectorAll('[data-band]')), n=secs.length;
+  function two(x){ return (x<10?'0':'')+x; }
+  secs.forEach(function(sec,i){
+    var p=sec.getAttribute('data-band').split('|');
+    var b=document.createElement('div'); b.className='pagebreak'; b.setAttribute('data-page',sec.id); b.setAttribute('aria-hidden','true');
+    b.innerHTML='<span class="pb-no">REEL '+two(i+1)+' / '+two(n)+'</span><span class="pb-name">'+p[0]+'</span><span class="pb-desc">'+(p[1]||'')+'</span>';
     sec.parentNode.insertBefore(b, sec);
   });
+  /* deep links from before the 2026-10-18 rebuild still land somewhere real */
+  var OLD={about:'#hire',stills:'archive/#stills',archive:'archive/',design:'archive/#design',playback:'archive/#bts',feed:'#contact',standby:'#contact'};
+  var h0=location.hash.slice(1);
+  if(h0 && !document.getElementById(h0) && OLD[h0]){
+    var t=OLD[h0];
+    if(t.charAt(0)!=='#'){ location.replace(new URL(t, document.baseURI).href); return; }
+    history.replaceState(null,'',location.pathname+location.search+t);
+  }
   function scroller(){ return document.scrollingElement || document.documentElement; }
   function goTo(top){
     var el=scroller(), max=el.scrollHeight-el.clientHeight;
@@ -18,16 +25,21 @@
     try{ el.scrollTo({top:top,behavior:'smooth'}); }catch(err){ el.scrollTop=top; }
     setTimeout(function(){ if(Math.abs(el.scrollTop-top)>4) el.scrollTop=top; }, 700);
   }
+  /* in-page links scroll to the band (or the element); a #link whose target is not on this page
+     falls through to the browser, which on a sub-page means the main portfolio (via <base>) */
   document.querySelectorAll('a[href^="#"]').forEach(function(a){
     a.addEventListener('click', function(e){
       var id=a.getAttribute('href').slice(1);
-      if(!id || id==='top'){ e.preventDefault(); goTo(0); history.replaceState(null,'',location.pathname+location.search); return; }
+      if(!id || id==='top'){
+        if(!document.getElementById('top') && id==='top') return;
+        e.preventDefault(); goTo(0); history.replaceState(null,'',location.pathname+location.search); return;
+      }
       var band=document.querySelector('.pagebreak[data-page="'+id+'"]');
       var tgt=band||document.getElementById(id);
       if(tgt){
         e.preventDefault();
         goTo(tgt.getBoundingClientRect().top + scroller().scrollTop - 58);
-        history.replaceState(null,'','#'+id);
+        history.replaceState(null,'',location.pathname+location.search+'#'+id);
       }
     });
   });

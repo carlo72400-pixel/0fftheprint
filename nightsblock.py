@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-0FF THE PRINT — add or replace one NIGHTS block on /portfolio/.
+0FF THE PRINT: add or replace one NIGHTS block on the portfolio.
 
 Generalised from the Brainrot builder that lived in the Austin shoot's
 _scripts/ (9/12). One JSON config per night:
@@ -17,12 +17,22 @@ config:
    "faces": "/path/faces.json",           # YuNet output, list of {file, faces[], dw, dh}
    "alts": [8 strings], "left": "html", "right": "html", "credits": "html",
    "extra": "html",                       # optional, between the grid and the credits (a tapes row)
-   "after": "BRAINROT"}                   # insert after this block (or "archive" = last)
+   "after": "BRAINROT",                   # optional: on the nights page, go directly BELOW this block
+   "featured": true}                      # optional: also put it on the main page (top of its six)
+
+WHERE BLOCKS LIVE (2026-10-18 rebuild):
+  portfolio/nights/index.html  every block, NEWEST FIRST. A marker it has never seen goes to
+                               the top (under <!-- NIGHTS:TOP -->), or below "after".
+  portfolio/index.html         the six featured blocks in #nights, plus THRIFT inside #hire.
+  (+ index-kawaii.html twin)   A block is replaced in place wherever its marker already is;
+                               it is only ADDED to the main page with "featured": true.
+  The BOOKING copy of the wedding is <!-- BOOK:WEDDING --> on purpose (no film there, the film
+  plays in the hero), so re-running WEDDING never touches it.
 
 Crops each frame at the recipe sizes (bwide 1600x842, bhero 1400x1400, six
-squares 1200x1200, q86 progressive), centred on the detected faces, and writes
-the block into BOTH index.html and index-kawaii.html so the twins stay
-byte-identical. Re-running replaces the block in place.
+squares 1200x1200, q86 progressive), centred on the detected faces. Asset paths
+are written as assets/<dir>/..., which the nights page resolves through its
+<base href="/portfolio/">. The twins stay byte-identical.
 
 ⛔ Every frame here must come from the CLEARED set (cull.json). The builder
    does not know what was excluded; the config author does.
@@ -32,6 +42,9 @@ from PIL import Image, ImageOps
 
 PF = os.path.join(os.path.dirname(os.path.abspath(__file__)), "portfolio")
 SLOTS = [("bluep bwide", 1600, 842), ("bluep bhero", 1400, 1400)] + [("bluep", 1200, 1200)] * 6
+TOP = "  <!-- NIGHTS:TOP -->\n"
+NIGHTS_PAGE = os.path.join("nights", "index.html")
+HOME_PAGES = ("index.html", "index-kawaii.html")
 
 
 def find(stem, sources):
@@ -61,6 +74,23 @@ def crop(im, rec, tw, th):
     return im.crop((x0, y0, x0 + cw, y0 + ch)).resize((tw, th), Image.LANCZOS)
 
 
+def place(s, mk, block, after, may_add):
+    """Replace the block in place, or add it (top / below `after`) when may_add."""
+    open_, close = f"  <!-- {mk} -->", f"  <!-- /{mk} -->\n"
+    if open_ in s:
+        a = s.index(open_)
+        b = s.index(close) + len(close)
+        return s[:a] + block + s[b:], "replaced"
+    if not may_add:
+        return s, None
+    if after and f"  <!-- /{after} -->\n" in s:
+        at = s.index(f"  <!-- /{after} -->\n") + len(f"  <!-- /{after} -->\n")
+        return s[:at] + block + s[at:], f"added below {after}"
+    assert s.count(TOP) == 1, "NIGHTS:TOP anchor not found exactly once"
+    at = s.index(TOP) + len(TOP)
+    return s[:at] + block + s[at:], "added at the top"
+
+
 def main():
     cfg = json.load(open(sys.argv[1]))
     assert len(cfg["frames"]) == 8 and len(cfg["alts"]) == 8, "eight frames, eight alts"
@@ -88,23 +118,19 @@ def main():
              + cfg.get("extra", "") +
              f'  <p class="client-credits">{cfg["credits"]}</p>\n'
              f"  <!-- /{mk} -->\n")
-    after = cfg.get("after", "archive")
-    ANCHOR = "</div></section>\n\n<section id=\"archive\""
-    for f in ("index.html", "index-kawaii.html"):
+    after = cfg.get("after")
+    p = os.path.join(PF, NIGHTS_PAGE)
+    s, how = place(open(p).read(), mk, block, after, True)
+    open(p, "w").write(s)
+    print(f"  {NIGHTS_PAGE}: {mk} {how}")
+    for f in HOME_PAGES:
         p = os.path.join(PF, f)
-        s = open(p).read()
-        if f"<!-- {mk} -->" in s:
-            a = s.index(f"  <!-- {mk} -->")
-            b = s.index(f"  <!-- /{mk} -->\n") + len(f"  <!-- /{mk} -->\n")
-            s = s[:a] + block + s[b:]
-        elif after != "archive" and f"  <!-- /{after} -->\n" in s:
-            at = s.index(f"  <!-- /{after} -->\n") + len(f"  <!-- /{after} -->\n")
-            s = s[:at] + block + s[at:]
-        else:
-            assert s.count(ANCHOR) == 1, f"{f}: archive anchor not found exactly once"
-            s = s.replace(ANCHOR, block + ANCHOR)
-        open(p, "w").write(s)
-        print(f"  {f}: {mk} block in place")
+        s, how = place(open(p).read(), mk, block, None, bool(cfg.get("featured")))
+        if how:
+            open(p, "w").write(s)
+        print(f"  {f}: {mk} {how or 'not featured, left alone'}")
+    a, b = (open(os.path.join(PF, f), "rb").read() for f in HOME_PAGES)
+    assert a == b, "index.html and index-kawaii.html are no longer identical"
 
 
 if __name__ == "__main__":
