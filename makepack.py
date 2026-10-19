@@ -233,9 +233,11 @@ def save(im, path):
 def build(slug, frames=None, src_dir=None, focus=None, out=None):
     d = night(slug); media = d["media"]
     if frames:
+        # a night with clips carries v01_t.jpg thumbs next to the numbered photos: --frames names photos only
+        num = lambda m: os.path.basename(m["thumb"]).split("_")[0]
         want = {int(f) for f in frames}
-        ix = [i for i, m in enumerate(media) if int(os.path.basename(m["thumb"]).split("_")[0]) in want]
-        ix.sort(key=lambda i: frames.index(int(os.path.basename(media[i]["thumb"]).split("_")[0])))
+        ix = [i for i, m in enumerate(media) if num(m).isdigit() and int(num(m)) in want]
+        ix.sort(key=lambda i: frames.index(int(num(media[i]))))
     else:
         ix = pick_frames(slug, media)
     hit = hit_index(slug, len(media))

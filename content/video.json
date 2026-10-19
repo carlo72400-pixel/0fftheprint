@@ -1,8 +1,51 @@
 {
   "exclude_nights": [
-    "2026-08-14-blade-rave"
+    "2026-08-14-blade-rave",
+    "2026-10-17-fill-a-bag"
   ],
   "items": [
+    {
+      "slug": "tatw-pain",
+      "title": "Pain",
+      "kind": "CUT",
+      "line": "Chapter one, the finds. Chapter two, the haul. Thirty seconds on PinkPantheress.",
+      "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-10-17-fill-a-bag/v01.mp4",
+      "poster": "../events/2026-10-17-fill-a-bag/media/v01_t.jpg",
+      "w": 520,
+      "h": 924,
+      "dur": "0:31",
+      "from": "Fifteen Dollars And Whatever Fits",
+      "link": "word/fifteen-dollars-and-whatever-fits/",
+      "date": "2026-10-17"
+    },
+    {
+      "slug": "tatw-welcome-back",
+      "title": "Welcome Back",
+      "kind": "CUT",
+      "line": "What is in your bag, at two stores. Somebody made both.",
+      "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-10-17-fill-a-bag/v02.mp4",
+      "poster": "../events/2026-10-17-fill-a-bag/media/v02_t.jpg",
+      "w": 520,
+      "h": 924,
+      "dur": "0:58",
+      "from": "Fifteen Dollars And Whatever Fits",
+      "link": "word/fifteen-dollars-and-whatever-fits/",
+      "date": "2026-10-17"
+    },
+    {
+      "slug": "tatw-item-call",
+      "title": "Item Call",
+      "kind": "CUT",
+      "line": "Fifteen finds, fifteen dollars a bag, one name per hit.",
+      "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-10-17-fill-a-bag/v03.mp4",
+      "poster": "../events/2026-10-17-fill-a-bag/media/v03_t.jpg",
+      "w": 520,
+      "h": 924,
+      "dur": "0:28",
+      "from": "Fifteen Dollars And Whatever Fits",
+      "link": "word/fifteen-dollars-and-whatever-fits/",
+      "date": "2026-10-17"
+    },
     {
       "slug": "ae-loudest",
       "title": "You Are The Loudest",

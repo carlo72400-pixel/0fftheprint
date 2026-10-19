@@ -1,6 +1,15 @@
 {
  "items": [
   {
+   "slug": "2026-10-17-fill-a-bag",
+   "title": "FILL-A-BAG",
+   "venue": "Thrift @ The Warehouse SoCo \u00b7 Thrift @ The Warehouse 34th St",
+   "date": "2026-10-17",
+   "date_short": "10.17.26",
+   "count": 29,
+   "cover": "2026-10-17-fill-a-bag/media/022_t.jpg"
+  },
+  {
    "slug": "2026-10-03-pulse-angels-3",
    "title": "PULSE ANGELS 3",
    "venue": "21st Street Co-op",

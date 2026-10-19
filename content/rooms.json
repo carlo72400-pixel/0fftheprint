@@ -326,6 +326,34 @@
    "lat": 29.88264,
    "lng": -97.94058,
    "city_only": true
+  },
+  {
+   "name": "Thrift @ The Warehouse SoCo",
+   "key": "thrift @ the warehouse soco",
+   "aliases": [
+    "thrift at the warehouse soco",
+    "thrift @ the warehouse south congress",
+    "tatw soco"
+   ],
+   "city": "Austin",
+   "address": "3820 S Congress Ave, Building 2, Austin, TX 78704",
+   "lat": 30.22526,
+   "lng": -97.76265,
+   "city_only": false
+  },
+  {
+   "name": "Thrift @ The Warehouse 34th St",
+   "key": "thrift @ the warehouse 34th st",
+   "aliases": [
+    "thrift at the warehouse 34th st",
+    "thrift @ the warehouse 34th street",
+    "tatw 34th st"
+   ],
+   "city": "Austin",
+   "address": "1104 W 34th St, Austin, TX 78705",
+   "lat": 30.30329,
+   "lng": -97.74581,
+   "city_only": false
   }
  ]
 }

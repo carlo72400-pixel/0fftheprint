@@ -2,6 +2,68 @@
  "v": 1,
  "nights": [
   {
+   "slug": "2026-10-17-fill-a-bag",
+   "title": "FILL-A-BAG",
+   "venue": "Thrift @ The Warehouse SoCo · Thrift @ The Warehouse 34th St",
+   "date": "2026-10-17",
+   "date_short": "10.17.26",
+   "looks": [
+    "KAWAUCHI",
+    "DIGICAM"
+   ],
+   "count": 26,
+   "frames": [
+    {
+     "i": 0,
+     "thumb": "media/001_t.jpg",
+     "w": 2560,
+     "h": 1923,
+     "prints": [
+      {
+       "name": "KAWAUCHI",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-10-17-fill-a-bag/001.jpg"
+      },
+      {
+       "name": "DIGICAM",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-10-17-fill-a-bag/001_digicam.jpg"
+      }
+     ]
+    },
+    {
+     "i": 13,
+     "thumb": "media/014_t.jpg",
+     "w": 1920,
+     "h": 2560,
+     "prints": [
+      {
+       "name": "KAWAUCHI",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-10-17-fill-a-bag/014.jpg"
+      },
+      {
+       "name": "DIGICAM",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-10-17-fill-a-bag/014_digicam.jpg"
+      }
+     ]
+    },
+    {
+     "i": 25,
+     "thumb": "media/026_t.jpg",
+     "w": 1920,
+     "h": 2560,
+     "prints": [
+      {
+       "name": "KAWAUCHI",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-10-17-fill-a-bag/026.jpg"
+      },
+      {
+       "name": "DIGICAM",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-10-17-fill-a-bag/026_digicam.jpg"
+      }
+     ]
+    }
+   ]
+  },
+  {
    "slug": "2026-09-25-wap",
    "title": "WAP",
    "venue": "Private Park",
