@@ -1,17 +1,27 @@
 <!doctype html><html><head><meta charset="utf-8">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:wght@700&display=swap">
 <style>
+/* 1200x630 OG card. 10/18: the edits are out, so three of their opening frames hang on the right as tags. */
 html,body{margin:0;width:1200px;height:630px;overflow:hidden;background:#f4ece0;color:#1b1417}
-.c{position:absolute;inset:0;padding:70px 80px;display:flex;flex-direction:column;justify-content:space-between}
-.k{font:700 24px 'Space Mono',monospace;letter-spacing:.16em;text-transform:uppercase;color:#e0457b}
-h1{font:400 128px/.9 'Archivo Black',sans-serif;text-transform:uppercase;margin:0}
+.c{position:absolute;left:0;top:0;bottom:0;width:640px;padding:70px 0 70px 80px;display:flex;flex-direction:column;justify-content:space-between}
+.k{font:700 22px 'Space Mono',monospace;letter-spacing:.16em;text-transform:uppercase;color:#e0457b}
+h1{font:400 96px/.9 'Archivo Black',sans-serif;text-transform:uppercase;margin:0}
 h1 span{color:#e0457b}
-.b{font:700 26px 'Space Mono',monospace;color:#6b5d58}
-.tag{position:absolute;right:80px;top:70px;width:200px;height:120px;border:4px solid #1b1417;border-radius:8px 30px 30px 8px;background:#fffaf2;display:grid;place-items:center;font:400 48px 'Archivo Black';transform:rotate(8deg)}
-.tag:before{content:"";position:absolute;left:20px;top:46px;width:24px;height:24px;border-radius:50%;border:4px solid #1b1417;background:#f4ece0}
+.b{font:700 24px/1.35 'Space Mono',monospace;color:#6b5d58}
+.f{position:absolute;top:96px;width:150px;height:267px;border:4px solid #1b1417;border-radius:6px;background:#1b1417;overflow:hidden;box-shadow:0 8px 0 #1b1417}
+.f img{display:block;width:100%;height:100%;object-fit:cover}
+.f1{left:716px;transform:rotate(-5deg);top:118px}
+.f2{left:864px;transform:rotate(2deg);top:86px;z-index:2}
+.f3{left:1006px;transform:rotate(7deg);top:126px}
+.tag{position:absolute;left:796px;top:430px;width:200px;height:110px;border:4px solid #1b1417;border-radius:8px 30px 30px 8px;background:#fffaf2;display:grid;place-items:center;font:400 46px 'Archivo Black';transform:rotate(-6deg);z-index:3}
+.tag:before{content:"";position:absolute;left:20px;top:41px;width:22px;height:22px;border-radius:50%;border:4px solid #1b1417;background:#f4ece0}
 .tag b{margin-left:40px;color:#e0457b}
 </style></head><body><div class="c">
-<div class="k">Shot plan · Sat Oct 17 · Austin</div>
+<div class="k">Shot + cut · Sat Oct 17 · Austin</div>
 <h1>Fill-a-Bag<br><span>Saturday</span></h1>
-<div class="b">South Congress + Campus · 24 shots · by Gianni Ortiz</div>
-</div><div class="tag"><b>$15</b></div></body></html>
+<div class="b">3 edits · 105 photos · 52 clips<br>by Gianni Ortiz</div>
+</div>
+<div class="f f1"><img src="../../assets/thrift/cuts/painstore_poster.jpg" alt=""></div>
+<div class="f f2"><img src="../../assets/thrift/cuts/welcomeback_poster.jpg" alt=""></div>
+<div class="f f3"><img src="../../assets/thrift/cuts/itemcall_poster.jpg" alt=""></div>
+<div class="tag"><b>$15</b></div></body></html>

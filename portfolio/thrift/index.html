@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Fill-a-Bag Saturday: shot plan</title>
+<title>Fill-a-Bag Saturday: the edits</title>
 <meta name="robots" content="noindex, nofollow">
-<meta name="description" content="Shot plan for Thrift @ The Warehouse Austin, Fill-a-Bag Saturday Oct 17, both stores. By Gianni Ortiz.">
-<meta property="og:title" content="Fill-a-Bag Saturday: the shot plan">
-<meta property="og:description" content="Both Austin stores, one morning, mostly video. For Thrift @ The Warehouse, Sat Oct 17. By Gianni Ortiz.">
+<meta name="description" content="The edits from Thrift @ The Warehouse Austin's Fill-a-Bag Saturday, Oct 17, both stores, and the shot plan they came from. By Gianni Ortiz.">
+<meta property="og:title" content="Fill-a-Bag Saturday: the edits">
+<meta property="og:description" content="Three edits off one morning at both Austin stores, plus the shot plan they came from. For Thrift @ The Warehouse, Sat Oct 17. By Gianni Ortiz.">
 <meta property="og:image" content="https://0fftheprint.com/portfolio/thrift/preview.jpg">
 <meta property="og:url" content="https://0fftheprint.com/portfolio/thrift/">
 <meta property="og:type" content="website">
@@ -24,9 +24,10 @@ if(location.hash==='#shoot')m='shoot';if(location.hash==='#plan')m='plan';
 document.documentElement.setAttribute('data-mode',m);})();
 </script>
 <style>
-/* Layout: a hang-tag shot plan. Phone first, one column: the short version, what their page already
-   proves, the morning as a timeline, then each shot as a numbered tag grouped by store, then deliverables,
-   specs, people, and the questions for the client. Wider screens put the tags two across. */
+/* Layout: a hang-tag shot plan. Phone first, one column: the edits off the day (added 10/18), then the plan
+   as it was sent: the short version, what their page already proves, the morning as a timeline, then each
+   shot as a numbered tag grouped by store, then deliverables, specs, people, and the questions for the
+   client. Wider screens put the tags two across. */
 :root{
   --paper:#f4ece0; --tag:#fffaf2; --ink:#1b1417; --muted:#6b5d58; --line:#e2d5c3;
   --pink:#e0457b; --pink-soft:#fbe1ea; --denim:#3e5a86;
@@ -49,6 +50,17 @@ h1 span{color:var(--pink)}
 .three div{background:var(--tag);border:1.5px solid var(--ink);padding:12px 14px;min-width:0}
 .three b{display:block;font:400 18px/1.1 var(--f-display);text-transform:uppercase}
 .three small{display:block;color:var(--muted);font-size:14px;margin-top:4px}
+/* THE EDITS (10/18): four phone-shaped players, two across on a phone, four from 640px. preload none, so
+   nothing downloads until someone presses play. .was marks where the plan as sent before the day begins. */
+.reels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media(min-width:640px){.reels{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.reel{margin:0;background:var(--tag);border:1.5px solid var(--ink);padding:6px;min-width:0}
+.reel video{display:block;width:100%;aspect-ratio:9/16;object-fit:cover;background:var(--ink)}
+.reel figcaption{padding:8px 2px 2px}
+.reel b{display:block;font:400 16px/1.1 var(--f-display);text-transform:uppercase}
+.reel small{display:block;color:var(--muted);font:500 12px var(--f-mono);margin-top:3px}
+.was{margin:0;padding-top:14px;border-top:3px solid var(--ink)}
+.was p{font:700 12px/1 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--denim);margin:0}
 h2{font:400 26px/1 var(--f-display);text-transform:uppercase;margin:0 0 14px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
 h2 em{font:400 13px var(--f-mono);font-style:normal;color:var(--muted);letter-spacing:0;text-transform:none}
 .proof{display:grid;gap:10px}
@@ -196,11 +208,38 @@ html:not([data-mode="shoot"]) #shoot{display:none}
 <main class="wrap">
 
   <header>
-    <p class="kick">Shot plan · Sat Oct 17 · Austin · both stores</p>
+    <p class="kick">Sat Oct 17 · Austin · both stores · shot and cut</p>
     <h1>Fill-a-Bag <span>Saturday</span></h1>
     <p class="by">For Thrift @ The Warehouse Austin · by Gianni Ortiz</p>
-    <div class="modekey"><button type="button" id="go-shoot">Shoot mode</button><span>Tap through the shots on the day</span></div>
   </header>
+
+  <section>
+    <h2>How it came out <em>three edits, cut the next day, sound on</em></h2>
+    <div class="reels">
+      <figure class="reel">
+        <video controls preload="none" playsinline poster="../assets/thrift/cuts/painstore_poster.jpg" src="../assets/thrift/cuts/painstore_web.mp4" aria-label="Pain, in your font, 30 seconds with sound"></video>
+        <figcaption><b>Pain</b><small>your font · 0:30</small></figcaption>
+      </figure>
+      <figure class="reel">
+        <video controls preload="none" playsinline poster="../assets/thrift/cuts/pain_poster.jpg" src="../assets/thrift/cuts/pain_web.mp4" aria-label="Pain, with chapter cards, 30 seconds with sound"></video>
+        <figcaption><b>Pain</b><small>chapter cards · 0:30</small></figcaption>
+      </figure>
+      <figure class="reel">
+        <video controls preload="none" playsinline poster="../assets/thrift/cuts/welcomeback_poster.jpg" src="../assets/thrift/cuts/welcomeback_web.mp4" aria-label="Welcome back, what is in your bag at both stores, 58 seconds with sound"></video>
+        <figcaption><b>Welcome back</b><small>what's in your bag · 0:58</small></figcaption>
+      </figure>
+      <figure class="reel">
+        <video controls preload="none" playsinline poster="../assets/thrift/cuts/itemcall_poster.jpg" src="../assets/thrift/cuts/itemcall_web.mp4" aria-label="Item call, every find named on the beat, 28 seconds with sound"></video>
+        <figcaption><b>Item call</b><small>the finds, one a hit · 0:28</small></figcaption>
+      </figure>
+    </div>
+    <p class="note">Pain is the same cut twice, pick the text you like. The full 4K files are ready, along with 105 photos in two looks and all 52 clips graded. The songs are copyrighted, so on Instagram add them from the app's sound picker instead of posting them baked in.</p>
+  </section>
+
+  <div class="was">
+    <p>The plan, as sent before the day</p>
+    <div class="modekey"><button type="button" id="go-shoot">Shoot mode</button><span>The tap-through checklist from the day</span></div>
+  </div>
 
   <section>
     <p class="short">Both stores, about an hour each, mostly video. South Congress for the doors at 10, then Campus. No models, so it's b-roll of the clothes, the groups, and people showing off their bags and finds, the same feel as your Pearl promo. Saturday's footage pulls double duty: Story clips while the sale's still on, and the promo for the next Fill-a-Bag.</p>

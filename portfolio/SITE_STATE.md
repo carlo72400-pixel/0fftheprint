@@ -12,6 +12,21 @@ live at `portfolio/assets/deco/`; `index.html`, `index-kawaii.html`, `_monitors.
 (`?v=20261001a` on the two CSS links). The notes below that mention `/steel/`, `/dream/`, `/bethel/` or
 `/photoshoots/` are history. `portfolio/hub/` is now written by `99_SYSTEM/build_launcher.py`.
 
+## NIGHTS grew FILL-A-BAG, the first block with its own tapes (Oct 18 2026)
+
+**FILL-A-BAG** at Thrift @ The Warehouse, both Austin stores (Oct 17, `assets/thrift/tatw_*`), after WAP. His W-2
+content-team day; posting it here was his call ("update the website with the thrift at the warehouse stuff").
+- `nightsblock.py` gained an optional `extra` field: HTML dropped between the grid and the credits. Here it is THE
+  EDITS, three `.tape.play` cuts (PAIN chapter cards, WELCOME BACK, ITEM CALL) in `assets/thrift/cuts/`: 720x1280
+  H.264 CRF 23 capped at 2.5 Mb/s, AAC 128k, faststart, from the 4K masters (SSIM 0.968 on PAIN), ~10-19 MB each,
+  posters picked by hand off a title or a find (not t=0.3).
+- Config and staging live in the shoot: `2026-10-17_TATW-FillABag/_scripts/nights_stage_tatw.py` (writes `_web/nights_src/`,
+  4 KAWAUCHI + 4 DIGICAM), then `_web/make_nights_config.py` > `_web/nights_tatw.json`. Four frames are pre-cut there because
+  the face crop dropped the point of the frame (the THRIFT@ sign, the PAY HERE sign, the third face in a group, a face
+  behind a held-up tee); a pre-cut frame passes through the builder untouched.
+- `/portfolio/thrift/` went from shot plan to "How it came out" (all four cuts, both PAINs) on top of the plan as sent,
+  Shoot mode moved under the divider, OG card re-rendered from `thrift/_src/preview.html`. Still noindex, linked nowhere.
+
 ## NIGHTS grew three blocks: CHILL & SMOKE, HARAMBE, WAP (Oct 2 2026)
 
 `#nights` went 16 blocks to 19, inserted after BAPTISM in shoot order: **CHILL & SMOKE** at Exotic Takeout

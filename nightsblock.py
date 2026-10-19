@@ -16,6 +16,7 @@ config:
    "sources": ["/folder/of/look", ...],   # searched recursively for <stem>.jpg
    "faces": "/path/faces.json",           # YuNet output, list of {file, faces[], dw, dh}
    "alts": [8 strings], "left": "html", "right": "html", "credits": "html",
+   "extra": "html",                       # optional, between the grid and the credits (a tapes row)
    "after": "BRAINROT"}                   # insert after this block (or "archive" = last)
 
 Crops each frame at the recipe sizes (bwide 1600x842, bhero 1400x1400, six
@@ -84,6 +85,7 @@ def main():
              f'  <div class="clip-label" style="margin-top:40px"><span>{cfg["left"]}</span>'
              f'<span class="r">{cfg["right"]}</span></div>\n'
              '  <div class="blue-grid">\n' + "\n".join(rows) + "\n  </div>\n"
+             + cfg.get("extra", "") +
              f'  <p class="client-credits">{cfg["credits"]}</p>\n'
              f"  <!-- /{mk} -->\n")
     after = cfg.get("after", "archive")
