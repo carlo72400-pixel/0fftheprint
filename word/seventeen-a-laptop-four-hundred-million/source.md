@@ -1,8 +1,8 @@
-In January 2022, a 17 year old uploaded a short film to YouTube about a place with no exits. He made it in Blender, at home. It was about a thing the internet had invented a couple years earlier on an image board.
+In January 2022, a 16 year old uploaded a short film to YouTube about a place with no exits. He made it in Blender, at home. It was about a thing the internet had invented a couple years earlier on an image board.
 
 This May, A24 put his feature in theaters. It cost under ten million dollars, and it's made close to four hundred million worldwide. The domestic opening weekend alone was eighty one and a half million.
 
-He's 20.
+He's 21.
 
 ## Why this one matters and the rest don't
 
