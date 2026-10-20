@@ -1,31 +1,31 @@
-> Spotted: a werewolf movie that only moves when the moon is full.
+> Spotted: a werewolf movie that only moves when the moon's full.
 
 Check the dates. We did.
 
-The first trailer for Robert Eggers' Werwulf went up on 29 June. Full moon. The poster came on 29 July. Full moon. The first merch on 28 August. Full moon. The second trailer landed on Saturday 26 September at ten in the morning our time, and that night the Harvest Moon came up over San Antonio.
+The first trailer for Robert Eggers' Werwulf went up June 29. Full moon. The poster dropped July 29. Full moon. The first merch, August 28. Full moon. The second trailer landed Saturday, September 26 at 10 in the morning our time, and that night the Harvest Moon came up over San Antonio.
 
-That is four for four. Gizmodo clocked it. So did iHorror. We ran all four against the Naval Observatory's moon table and every one is a full moon date.
+That's four for four. Gizmodo caught it. So did iHorror. We ran all four against the Naval Observatory's moon table and every one of them is a full moon date.
 
-## What he has let you see
+## What he's let you see
 
-Aaron Taylor-Johnson is a farmer under a curse. Lily-Rose Depp is his wife. Willem Dafoe is the man sent to kill wolves. It is England, around 1300. Eggers told Esquire that nobody in the film has a name except a dog.
+Aaron Taylor-Johnson's a farmer under a curse. Lily-Rose Depp is his wife. Willem Dafoe's the guy they send to kill wolves. It's England, around 1300. Eggers told Esquire nobody in the film has a name except a dog.
 
-The dialogue is in Middle English. He worked it out with two Oxford professors, then brought in a dialect coach so you can follow it. He shot on 35mm colour film, drained almost to nothing, with the grain of black and white stock worked into it. Those are his own descriptions, given to Esquire and Empire in June.
+The dialogue's in Middle English. He worked it out with two Oxford professors, then brought in a dialect coach so you can actually follow it. He shot on 35mm color film, drained almost to nothing, with the grain of black and white stock worked in. That's his own description, given to Esquire and Empire in June.
 
-## But he will not show you the wolf
+## But he won't show you the wolf
 
-Two trailers. Five minutes of footage. iHorror and Gold Derby both went looking for the full change and came back without it.
+Two trailers. Five minutes of footage. iHorror and Gold Derby both went looking for the full transformation and came back with nothing.
 
-Esquire asked whether he would keep the creature hidden the way he kept Count Orlok hidden. He smiled and said it seemed like a good approach. Empire got the plain version: they do not want to give it away.
+Esquire asked if he'd keep the creature hidden the way he kept Count Orlok hidden. He smiled and said that seemed like a good approach. Empire got the plain version: they don't want to give it away.
 
-Not everybody is charmed. A critic at World of Reel called the grain on the second trailer distracting and guessed it was added after the fact. Eggers has been describing that grain as the look since June. Pick a side.
+Not everybody's into it. A critic at World of Reel called the grain on the second trailer distracting and guessed it got added after the fact. Eggers has been calling that grain the look since June. Pick a side.
 
 ## So mark your own calendar
 
-The moon is full again at 11:12 on the night of Sunday 25 October, Texas time. Something is already booked for it. Focus built a scavenger hunt at DevourethAllMankynde.com that opens for 24 hours on each full moon through November. Whether a third trailer shows up that night is a pattern, not a promise. We will be outside at 11:12 either way.
+The moon's full again at 11:12 on the night of Sunday, October 25, Texas time. Something's already booked for it. Focus built a scavenger hunt at DevourethAllMankynde.com that opens for 24 hours on every full moon through November. A third trailer that night? That's a pattern, not a promise. We'll be outside at 11:12 either way.
 
-One more for the road. The last full moon of the year rises over Texas on 23 December. The film opens two days later.
+One more thing. The last full moon of the year rises over Texas on December 23. The movie opens two days later.
 
-Friday 25 December 2026. Werwulf, Focus Features. Alamo Drafthouse San Antonio already has the page up. No showtimes yet.
+Friday, December 25, 2026. Werwulf, Focus Features. Alamo Drafthouse San Antonio already has the page up. No showtimes yet.
 
 Spotted something? [Tell the desk](https://0fftheprint.com/#take). Off the record stays off the record.

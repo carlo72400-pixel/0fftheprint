@@ -1,17 +1,17 @@
-San Antonio gets the first Texas date on The Fall-Off World Tour. Sunday the thirteenth at the Frost Bank Center, on at eight.
+San Antonio gets the first Texas date on The Fall-Off World Tour. Sunday the 13th at the Frost Bank Center, on at 8.
 
-That is worth saying out loud in a city that spends most of the year watching tours route around it. Earlier today we wrote about Ken Carson taking the Xperimenting Tour to Austin and Irving and skipping this place entirely. This is the other outcome. The Texas run opens here, then Austin on the fourteenth, Houston on the sixteenth and seventeenth, Dallas on the nineteenth and twentieth. Five more Texas nights after this one, and we go first.
+That's worth saying out loud. Most of the year, tours route around this city. Earlier today we wrote about Ken Carson taking the Xperimenting Tour to Austin and Irving and skipping this place entirely. This is the other outcome. The Texas run opens here, then Austin on the 14th, Houston on the 16th and 17th, Dallas on the 19th and 20th. Five more Texas nights after this one, and San Antonio goes first.
 
 ## What the tour actually is
 
-The Fall Off arrived on the sixth of February, his seventh album. The tour was announced ten days later and it is enormous. Seventy three shows, forty five of them in North America, twenty in Europe, seven in Oceania, and one in Johannesburg to close the whole thing on the twelfth of December.
+The Fall-Off came out February 6. It's his seventh album. The tour got announced 10 days later, and it's huge. 73 shows. 45 of them in North America, 20 in Europe, 7 in Oceania. One in Johannesburg to close the whole thing on December 12.
 
-It is his first solo headlining arena run in five years and his first global tour since 2017. The staging is built off the album's two disc structure, Cole at twenty nine on one side of it and thirty nine on the other.
+It's his first solo headlining arena run in five years, and his first global tour since 2017. The staging's built off the album's two disc structure. Cole at 29 on one side of it, and 39 on the other.
 
-## Thirty three songs
+## 33 songs
 
-That is what he played on opening night, the eleventh of July at the Spectrum Center in Charlotte. Thirty three. In a room that size that is not a set, that is a shift.
+That's what he played on opening night, July 11 at the Spectrum Center in Charlotte. 33 songs. In a room that size, that's not a set. That's a shift.
 
-No support act has been announced for the Texas dates, so the first stretch of the thirteenth is still an open question.
+There's no support act announced for the Texas dates. So the first stretch of the 13th is still an open question.
 
-It is a Sunday, which means the room empties straight into a work night, and the parking lot ends up being the afterparty. Tickets opened at eighty four dollars. The house will be there.
+It's a Sunday, so the room empties straight into a work night and the parking lot ends up being the afterparty. Tickets opened at $84. The house will be there.
