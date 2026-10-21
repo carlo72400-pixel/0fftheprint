@@ -35,5 +35,6 @@ The 10-second test, for every screen: who he is, one piece of proof for THEIR ne
 ## WHEN SOMETHING NEW HAPPENS
 
 - New night or event: build its block with `nightsblock.py` (it lands at the top of /nights/). Put it in the main page's six only if it beats one of them (`"featured": true`, then drop the one it replaces).
+- The 0TP homepage timeline (10/21, his rule: everything new shows up there): a block that exists ONLY on the portfolio gets a row in `content/portfolio.json` (nightsblock.py writes it when the config has `"timeline"`; add it by hand for a hand-kept block). Work that is also a Tape cut or a 0TP night already has its card, so it gets no row.
 - New job, title or credit: update the HIRING credits and, if it changes the story, the resumes too, so they never disagree.
 - New film that beats ALL YOUR'N: it takes the hero. Only cuts he has watched and approved go up (the montage rule).
