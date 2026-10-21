@@ -1,6 +1,48 @@
 {
   "items": [
     {
+      "title": "The Item Shop Is The New MTV",
+      "kicker": "THE SHOP",
+      "dek": "MTV's first video was \"Video Killed the Radio Star.\" This October the drops came through Fortnite, Street Fighter before its movie, Yeat, and now A$AP Rocky.",
+      "date": "10.21.26",
+      "lanes": [
+        "story"
+      ],
+      "dept": "story",
+      "platform": "SITE",
+      "thumb": "word/the-item-shop-is-the-new-mtv/thumb.jpg",
+      "link": "word/the-item-shop-is-the-new-mtv/",
+      "num": "0TP-043"
+    },
+    {
+      "title": "Nobody Knows What A Streamer Is",
+      "kicker": "THE BALLOT",
+      "dek": "The Streamer Awards ballot is out. Joe Bartolozzi is up for Streamer of the Year. A peanut is up for Best VTuber again. Voting closes Saturday, October 31.",
+      "date": "10.21.26",
+      "lanes": [
+        "story"
+      ],
+      "dept": "story",
+      "platform": "SITE",
+      "thumb": "word/nobody-knows-what-a-streamer-is/thumb.jpg",
+      "link": "word/nobody-knows-what-a-streamer-is/",
+      "num": "0TP-042"
+    },
+    {
+      "title": "Horror's Farm League Is The Internet",
+      "kicker": "THE FILM",
+      "dek": "A 14-minute YouTube short with Pauly Shore passed 5.5 million views in 9 days. A Reddit post just got a movie deal. Studios don't find horror now. They scroll.",
+      "date": "10.21.26",
+      "lanes": [
+        "story"
+      ],
+      "dept": "story",
+      "platform": "SITE",
+      "thumb": "word/horrors-farm-league-is-the-internet/thumb.jpg",
+      "link": "word/horrors-farm-league-is-the-internet/",
+      "num": "0TP-041"
+    },
+    {
       "title": "This Is A Dorm",
       "kicker": "THE ROOMS",
       "dek": "15 DJs, 3 stages, till 2 in the morning, in a building where 100 people live. Austin's co-ops throw better shows than most clubs. Here's how they do it.",

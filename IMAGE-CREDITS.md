@@ -1,7 +1,7 @@
 # Image credits — THE WORD
 
 Every story cover, where it came from, and what the licence actually lets us do.
-Sourced and licence-verified 2026-08-27, extended 2026-09-02, 2026-09-14, 2026-10-04 and 2026-10-07. The credit line also appears on each
+Sourced and licence-verified 2026-08-27, extended 2026-09-02, 2026-09-14, 2026-10-04, 2026-10-07 and 2026-10-21. The credit line also appears on each
 story page itself, under the cover, which is where attribution legally belongs.
 
 ⛔ **Do not swap a cover without updating this file and the page's credit line.**
@@ -10,6 +10,9 @@ All of these are cropped, so all of them say "Cropped."
 
 | № | Story | Image | Source | Licence |
 |---|---|---|---|---|
+| 0TP-043 | The Item Shop Is The New MTV | The Fortnite Pro-Am at E3, Los Angeles, Jun 2018 (tile: the FORT seats) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Fortnite_Pro-Am_stadium_at_E3_2018_3.jpg) · Sergey Galyonkin | [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/) |
+| 0TP-042 | Nobody Knows What A Streamer Is | IShowSpeed and his videographer at Trifecta Somerset, Singapore, Sep 2024 (tile: Speed alone) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:IShowSpeed_at_Trifecta_Somerset,_Singapore.jpg) · Aerodynamically | [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| 0TP-041 | Horror's Farm League Is The Internet | An empty office, Sep 2011, filed on Commons as a Backrooms level | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Empty_office.jpg) · Ged Carroll | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/) |
 | 0TP-038 | Seven Seats At The Back Of The List | Slayr performing at Rolling Loud Orlando, May 2026 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Slayr_rollingloud_tristanstlws.jpg) · Tristanstlws | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
 | 0TP-037 | And Then Nothing Happened | Trey Parker and Matt Stone at the South Park panel, San Diego Comic-Con, Jul 2016 (tile: Parker alone) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Trey_Parker_and_Matt_Stone_by_Gage_Skidmore.jpg) · Gage Skidmore | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) |
 | 0TP-036 | What The Director Whispered | Richard Linklater at the 2026 Sundance Film Festival | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Richard_Linklater_Sundance_Film_Festival_Everyone_Has_a_Story.jpg) · Colleen Sturtevant (WikiPortraits) | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
