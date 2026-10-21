@@ -81,6 +81,20 @@
   }
   // ⛔ Y-M-D by hand, never new Date('2026-09-15'): that is UTC midnight, the evening BEFORE in San Antonio.
   function ymd(v) { var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(v || '')); return m ? new Date(+m[1], +m[2] - 1, +m[3], 12) : null; }
+  // THE TAPE for the timeline (10/21, his ask: "all the new shit should show up on the timeline"): content/video.json CUTS.
+  // A cut that rides with a story (`link`) already reaches the timeline as that story, and a night's clips as the night,
+  // so only the cuts that went up on their own come back here. `up` = the day it went up (else its `date`).
+  var tapeP = null, POSTER = /^[a-z0-9][a-z0-9\/._-]{0,160}\.(?:jpe?g|webp|png)$/i;
+  function tape() {
+    if (!tapeP) tapeP = fetch('content/video.json', { cache: 'no-cache' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) {
+        return ((j && j.items) || []).filter(function (v) {
+          return v && SLUG.test(v.slug || '') && (v.kind || 'CUT') === 'CUT' && !v.link && v.title && ymd(v.up || v.date);
+        });
+      }).catch(function () { return []; });
+    return tapeP;
+  }
   function mdy(v) { var m = /^(\d{2})\.(\d{2})\.(\d{2})$/.exec(String(v || '')); return m ? new Date(2000 + (+m[3]), +m[1] - 1, +m[2], 12) : null; }
   function binder() { return w.OTPBinder || null; }
 
@@ -253,7 +267,7 @@
   }
 
   /* ---------- the house's own news, in the timeline ----------
-     Nights and stories, dated, slotted between the posts in order. A media house that shot 18 nights
+     Nights, stories and (10/21) the cuts that went up on The Tape, dated, slotted between the posts in order. A media house that shot 18 nights
      and wrote 28 stories should not have a timeline that reads as one person talking to himself.
      ⛔ These are links, not posts: no reactions, no author, never mistaken for something a member said. */
   var HOUSE_CAP = 6;
@@ -312,8 +326,30 @@
       box.appendChild(main);
       return box;
     }
+    // THE TAPE (10/21): a day's new cuts as one card, their posters in a strip, straight into the first one on /video/
+    var TAPE_SHOW = 4;
+    function tapeCard(g, dt) {
+      var a = el('a', 'hx tape'); a.href = 'video/#' + g.list[0].slug;
+      a.appendChild(avatar());
+      var main = el('span', 'hx-main'); main.appendChild(label(g.list.length === 1 ? 'new cut' : g.list.length + ' new cuts', dt));
+      var tx = el('span', 'hx-tx');
+      tx.appendChild(el('b', '', g.from || 'The Tape'));
+      tx.appendChild(el('span', '', g.list.length === 1 ? g.list[0].title + ' went up on The Tape.' : g.list.length + ' cuts went up on The Tape.'));
+      var strip = el('span', 'hx-strip');
+      g.list.slice(0, TAPE_SHOW).forEach(function (v) {
+        var p = String(v.poster || ''); p = p.indexOf('../') === 0 ? p.slice(3) : 'video/' + p;
+        if (!POSTER.test(p)) return;
+        var im = el('img'); im.alt = ''; im.loading = 'lazy'; im.decoding = 'async'; im.width = 520; im.height = 924;
+        im.addEventListener('error', function () { im.remove(); }, { once: true }); im.src = p; strip.appendChild(im);
+      });
+      if (g.list.length > TAPE_SHOW) strip.appendChild(el('span', 'more', '+' + (g.list.length - TAPE_SHOW)));
+      tx.appendChild(strip);
+      tx.appendChild(el('em', '', g.list.length === 1 ? 'watch it \u2192' : 'watch them \u2192'));
+      main.appendChild(tx); a.appendChild(main);
+      return a;
+    }
     var built = null, placing = false, seenPosts = 0;
-    function place(ns, st) {
+    function place(ns, st, tp) {
       // built once, placed again whenever the timeline grows (Show older posts), so the order stays true
       if (built) { slot(); return; }
       var items = [];
@@ -322,8 +358,12 @@
       var by = {};
       st.forEach(function (x) { var dt = mdy(x.date); if (!dt) return; var k = dt.getTime(); (by[k] = by[k] || { t: k, kind: 's', list: [], dt: dt }).list.push(x); });
       Object.keys(by).forEach(function (k) { items.push(by[k]); });
+      var tb = {};
+      (tp || []).forEach(function (v) { var dt = ymd(v.up || v.date); if (!dt) return; var k = dt.getTime() + '|' + (v.from || '');
+        (tb[k] = tb[k] || { t: dt.getTime() + 10 * 36e5, kind: 't', list: [], dt: dt, from: v.from || '' }).list.push(v); });
+      Object.keys(tb).forEach(function (k) { items.push(tb[k]); });
       items.sort(function (a, b) { return b.t - a.t; });
-      built = items.slice(0, HOUSE_CAP).map(function (it) { return { t: it.t, node: it.kind === 'n' ? nightCard(it.e, it.dt) : storyCard(it.list, it.dt) }; });
+      built = items.slice(0, HOUSE_CAP).map(function (it) { return { t: it.t, node: it.kind === 'n' ? nightCard(it.e, it.dt) : it.kind === 't' ? tapeCard(it, it.dt) : storyCard(it.list, it.dt) }; });
       slot();
       // a member's binder moves: the night cards say so
       try { if (binder()) binder().on(function () { Array.prototype.forEach.call(mount.querySelectorAll('.hx.night'), function (a) {
@@ -368,7 +408,7 @@
       pinFold();
       if (placed) { if (built && mount.querySelectorAll('.post-t').length !== seenPosts) slot(); return; }
       placed = true;
-      Promise.all([nights(), stories()]).then(function (got) { try { place(got[0], got[1]); } catch (e) {} });
+      Promise.all([nights(), stories(), tape()]).then(function (got) { try { place(got[0], got[1], got[2]); } catch (e) {} });
     }
     go();
     try { new MutationObserver(go).observe(mount, { childList: true }); } catch (e) {}

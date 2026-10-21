@@ -10,6 +10,9 @@ Two sources, merged, newest first:
   CUTS   content/video.json, hand written. The authored work: montages,
          interview cuts, the films. These are the pieces, so they are curated
          and they carry their own line of copy.
+         `up` (YYYY-MM-DD, optional, 10/21): the day a cut went up. A cut with no
+         story `link` also lands on the homepage timeline as a 'new cuts' card,
+         placed by `up` (else `date`): cathedral.js tape().
   NIGHTS events/*/data.json, walked. Every clip already published on an event
          page, reusing the poster that event already committed. Nothing here is
          hand maintained, but the page BAKES the list (ITEMS), so a clip joins

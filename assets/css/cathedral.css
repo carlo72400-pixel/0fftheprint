@@ -414,7 +414,17 @@ html.cath .hx-st:hover b{color:var(--pink-glow);}
   html.cath .hx-row{grid-template-columns:56px minmax(0,1fr);gap:12px;}
   html.cath .hx-tx b{font-size:19px;}
 }
-@media (prefers-reduced-motion:reduce){ html.cath .dk-pack,html.cath .hx-pk,html.cath .dk-tx em,html.cath .dock{transition:none;} }
+/* THE TAPE on the timeline (10/21): a day's new cuts, their posters in a strip, a +N for the rest */
+html.cath .hx-tx > span.hx-strip{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:0;line-height:0;}
+html.cath .hx-strip img{display:block;width:56px;height:100px;object-fit:cover;border-radius:6px;border:1px solid rgba(244,238,242,.25);background:#0d0c11;
+  filter:drop-shadow(0 5px 7px rgba(0,0,0,.55));transition:transform .25s;}
+html.cath .hx-strip img:nth-child(odd){transform:rotate(-2deg);}
+html.cath .hx-strip img:nth-child(even){transform:rotate(2deg);}
+html.cath a.hx.tape:hover .hx-strip img{transform:translateY(-3px);}
+html.cath .hx-strip .more{display:grid;place-items:center;width:42px;height:100px;border-radius:6px;border:1px dashed rgba(255,121,198,.5);
+  font:700 12px/1 var(--f-mono);color:var(--pink-glow);}
+@media (max-width:820px){ html.cath .hx-strip img{width:48px;height:86px;} html.cath .hx-strip .more{width:38px;height:86px;} }
+@media (prefers-reduced-motion:reduce){ html.cath .dk-pack,html.cath .hx-pk,html.cath .dk-tx em,html.cath .dock,html.cath .hx-strip img{transition:none;} }
 
 /* ---- the tape rail (10/4): a cut's own name is the headline now, and names run one line or three.
         Cards stay one height, the name holds to two lines, and "watch" sits on the floor of the card. ---- */
