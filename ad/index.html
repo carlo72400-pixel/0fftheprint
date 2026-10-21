@@ -173,13 +173,12 @@ details.more .inner{display:grid;gap:18px;padding:2px 14px 16px}
 .bk:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
 .empty{padding:16px;border:3px dashed var(--lilac);border-radius:14px;color:var(--soft);font-size:14px;background:rgba(255,255,255,.6)}
 
-/* THE SET: a pastel handheld. The SCREEN up top is for reading (the day, the line, this line's clock); the DECK under the
-   right thumb is for doing (tools, notes, the two big keys). Nothing on either one moves; keys light up instead. */
-body[data-scr="run"] .app{height:100vh;height:100dvh;display:flex;flex-direction:column;overflow:hidden;padding-bottom:0}
-body[data-scr="run"] .bar{position:relative;margin-bottom:16px}
-.menu-k{display:none;flex:0 0 auto;width:46px;height:46px;border:3px solid var(--line);border-radius:50%;place-items:center;background:linear-gradient(180deg,#fff,#e6dcff);color:var(--line);box-shadow:0 5px 0 var(--line);transition:transform .18s cubic-bezier(.3,1.4,.6,1),box-shadow .18s}
-body[data-scr="run"] .menu-k{display:grid}
-.menu-k svg{width:22px;height:22px}
+/* THE SET: a pastel handheld. The SCREEN up top is for reading (the day, the line, the take and its clock); the DECK under the
+   thumb is for doing (the two big keys, Undo, More). Nothing on either one moves.
+   10/21 his ask, "make the ad simpler and no matter how big the line is u should be able to read it": no title bar here, the
+   tools and the note keys moved into More, the line's dial shrank into one row with the take, so the line gets the room. */
+body[data-scr="run"] .app{height:100vh;height:100dvh;display:flex;flex-direction:column;overflow:hidden;padding-top:calc(var(--sat) + 10px);padding-bottom:0}
+body[data-scr="run"] .bar{display:none}
 #s-run{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px;padding-bottom:calc(var(--sab) + 8px)}
 #s-run>*{flex-shrink:0}
 .screen{flex:1 1 auto!important;min-height:0;display:flex;flex-direction:column;gap:8px;padding:10px;border:3px solid var(--line);border-radius:22px;background:linear-gradient(180deg,#ebe1fb,#ded0f6);box-shadow:inset 0 4px 0 rgba(91,61,142,.2),inset 0 0 0 3px rgba(255,255,255,.5),0 3px 0 rgba(255,255,255,.85)}
@@ -204,7 +203,7 @@ body[data-scr="run"] .menu-k{display:grid}
 @keyframes redline{50%{box-shadow:0 0 0 7px rgba(255,79,122,.12),0 3px 0 rgba(91,61,142,.25)}}
 @media (prefers-reduced-motion:reduce){.day.red{animation:none}}
 /* the ticker: one line that always sits here; it says the one thing that matters now */
-.ticker{display:flex;align-items:center;gap:6px;min-height:52px;padding:3px 4px 3px 12px;border:3px solid var(--line);border-radius:14px;background:#fffdf4;color:var(--ink);font:600 13.5px/1.3 var(--f-body)}
+.ticker{display:flex;align-items:center;gap:6px;min-height:61px;padding:3px 4px 3px 12px;border:3px solid var(--line);border-radius:14px;background:#fffdf4;color:var(--ink);font:600 13.5px/1.3 var(--f-body)}
 .ticker>span:first-child{flex:1;min-width:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .tk-keys{display:flex;gap:6px;flex:0 0 auto}
 .tk-keys .btn{min-height:44px;min-width:44px;margin:0 0 5px;padding:0 10px;font-size:12px}
@@ -216,11 +215,22 @@ body[data-scr="run"] .menu-k{display:grid}
 .who span:first-child{min-width:0;max-width:72%;padding:6px 12px;border:3px solid var(--line);border-radius:10px;background:linear-gradient(180deg,#ffc6e4,#ff8cc6);color:#fff;text-shadow:var(--olp);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .who span:last-child{flex:0 0 auto;padding:4px 10px;border:3px solid var(--line);border-radius:999px;background:#fff;color:var(--soft)}
 .who span:empty{visibility:hidden}
-.screen>.linecard{flex:1 1 auto;min-height:64px;display:flex;flex-direction:column;gap:6px;padding:22px 16px 10px;border:3px solid var(--line);border-radius:18px;text-align:left;color:var(--ink);background:#fff;box-shadow:0 4px 0 rgba(91,61,142,.25)}
+.screen>.linecard{position:relative;flex:1 1 auto;min-height:96px;display:flex;flex-direction:column;gap:6px;padding:24px 14px 10px 16px;border:3px solid var(--line);border-radius:18px;text-align:left;color:var(--ink);background:#fff;box-shadow:0 4px 0 rgba(91,61,142,.25);cursor:pointer;-webkit-user-select:none;user-select:none}
 .linecard .tag{font:400 12px/1.3 var(--f-ui);letter-spacing:.03em;text-transform:uppercase;color:var(--amber)}
 .linecard .tag:empty{display:none}
-.linecard .txtbox{flex:1;min-height:0;display:flex;align-items:center;overflow:hidden}
-.linecard .txt{margin:0;font:700 30px/1.22 var(--f-body);color:var(--ink);text-wrap:balance;overflow-wrap:anywhere}
+/* any length reads: the line takes the biggest size that fits, 52px down to 24px and never smaller. Past that the box scrolls
+   (a faded edge and a MORE cue until you reach the end). Auto margins center a short line and start a long one at the top. */
+.linecard .txtbox{flex:1;min-height:0;display:flex;flex-direction:column;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none}
+.linecard .txtbox::-webkit-scrollbar{display:none}
+.linecard .txt{margin:auto 0;font:700 32px/1.22 var(--f-body);color:var(--ink);text-wrap:balance;overflow-wrap:anywhere}
+.linecard.scroll:not(.end) .txtbox{-webkit-mask-image:linear-gradient(180deg,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(180deg,#000 calc(100% - 36px),transparent)}
+/* MORE with the blinking down arrow an RPG dialog box puts in its corner when the text goes on */
+.more-cue{display:none;position:absolute;right:12px;bottom:8px;align-items:center;gap:6px;padding:5px 9px 5px 10px;border:2px solid var(--line);border-radius:999px;background:var(--lemon);color:var(--line);font:400 11px/1 var(--f-ui);font-style:normal;letter-spacing:.04em;text-transform:uppercase;box-shadow:0 2px 0 var(--line);pointer-events:none}
+.more-cue::after{content:"";border:6px solid transparent;border-top:8px solid var(--pink-deep);border-bottom:0;animation:nudge 1s steps(2,end) infinite}
+@keyframes nudge{50%{transform:translateY(3px)}}
+@media (prefers-reduced-motion:reduce){.more-cue::after{animation:none}}
+.linecard.scroll:not(.end) .more-cue{display:flex}
+.linecard.scroll:not(.end) .tap{visibility:hidden}
 .linecard .tap{align-self:flex-end;font:400 11.5px/1 var(--f-ui);letter-spacing:.03em;text-transform:uppercase;color:var(--muted)}
 .linecard .tap::after{content:"";display:inline-block;margin-left:7px;vertical-align:middle;border:6px solid transparent;border-top:8px solid var(--pink-deep);border-bottom:0}
 .linecard.pop{animation:pop .2s ease-out}
@@ -231,24 +241,25 @@ body[data-scr="run"] .menu-k{display:grid}
 .linecard.drive .txt{font-family:var(--f-pop);font-weight:400;color:var(--blue-t)}
 .linecard.alldone{background:linear-gradient(180deg,#f2fff9,#d6f7e8)}
 .linecard.alldone .txt{font-family:var(--f-pop);font-weight:400;color:var(--green-t)}
-/* this line: its clock and its hearts */
-.mid{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:center}
-.ring{position:relative;flex:0 0 auto;width:104px;height:104px;padding:0;border:3px solid var(--line);border-radius:50%;display:grid;place-items:center;color:inherit;background:radial-gradient(circle at 50% 35%,#fff 0 55%,#f3ecff 100%);box-shadow:0 4px 0 rgba(91,61,142,.35)}
-.ring svg{position:absolute;inset:5px;width:calc(100% - 10px);height:calc(100% - 10px);transform:rotate(-90deg)}
-.ring circle{fill:none;stroke-width:9}
-.ring .tr{stroke:#efe6ff}
-.ring .pr{stroke:url(#rb);stroke-linecap:round;transition:stroke-dashoffset .25s linear}
-.ring b{position:relative;margin-top:-10px;font:400 24px/1 var(--f-px);color:var(--line)}
-.ring b.long{font-size:15px}
-.ring small{position:absolute;left:0;right:0;bottom:23px;text-align:center;font:400 11px/1 var(--f-ui);letter-spacing:.02em;text-transform:uppercase;color:var(--soft)}
-.ring.warn .pr{stroke:#ffbe4f}.ring.warn b{color:var(--amber)}
-.ring.over{background:radial-gradient(circle at 50% 35%,#fff 0 55%,#ffe0e8 100%);animation:pulse 1s steps(2,end) infinite}
-.ring.over .pr{stroke:var(--red)}.ring.over b,.ring.over small{color:var(--red-deep)}
-.ring.drive .pr{stroke:#7cc7ff}
-@keyframes pulse{50%{box-shadow:0 4px 0 rgba(91,61,142,.35),0 0 0 7px rgba(255,79,122,.35)}}
-@media (prefers-reduced-motion:reduce){.ring.over{animation:none;box-shadow:0 4px 0 rgba(91,61,142,.35),0 0 0 5px rgba(255,79,122,.35)}}
-.takes{display:grid;gap:6px;min-width:0}
-.takes b{font:400 26px/1 var(--f-pop);color:#fff;text-shadow:var(--ol),0 3px 0 var(--pink-deep)}
+/* this line, in one row: the take and its hearts on the left, its clock on the right (a small dial that fills, then redlines) */
+.mid{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:0 2px}
+.lclk{display:flex;align-items:center;gap:8px;padding:5px 13px 5px 5px;border:3px solid var(--line);border-radius:999px;background:#fff;box-shadow:0 3px 0 rgba(91,61,142,.3)}
+.lclk svg{flex:0 0 auto;width:40px;height:40px;transform:rotate(-90deg)}
+.lclk circle{fill:none;stroke-width:13}
+.lclk .tr{stroke:#efe6ff}
+.lclk .pr{stroke:url(#rb);stroke-linecap:round;transition:stroke-dashoffset .25s linear}
+.lclk span{display:grid;gap:4px}
+.lclk b{font:400 22px/1 var(--f-px);color:var(--line);font-variant-numeric:tabular-nums;white-space:nowrap}
+.lclk b.long{font-size:16px}
+.lclk small{font:400 10.5px/1 var(--f-ui);letter-spacing:.02em;text-transform:uppercase;color:var(--soft);white-space:nowrap}
+.lclk.warn .pr{stroke:#ffbe4f}.lclk.warn b{color:var(--amber)}
+.lclk.over{background:#ffe3ea;animation:pulse 1s steps(2,end) infinite}
+.lclk.over .pr{stroke:var(--red)}.lclk.over b,.lclk.over small{color:var(--red-deep)}
+.lclk.drive .pr{stroke:#7cc7ff}
+@keyframes pulse{50%{box-shadow:0 3px 0 rgba(91,61,142,.3),0 0 0 6px rgba(255,79,122,.35)}}
+@media (prefers-reduced-motion:reduce){.lclk.over{animation:none;box-shadow:0 3px 0 rgba(91,61,142,.3),0 0 0 4px rgba(255,79,122,.35)}}
+.takes{display:grid;gap:5px;min-width:0}
+.takes b{font:400 24px/1 var(--f-pop);color:#fff;text-shadow:var(--ol),0 3px 0 var(--pink-deep)}
 .pips{display:flex;flex-wrap:wrap;align-items:center;gap:3px;min-height:24px}
 .pip{width:26px;height:24px;overflow:visible}
 .pip path{fill:#fff;stroke:var(--line);stroke-width:2.6;stroke-linejoin:round;transform-box:fill-box;transform-origin:center}
@@ -258,21 +269,16 @@ body[data-scr="run"] .menu-k{display:grid}
 @keyframes lose{0%{transform:scale(1.35)}100%{transform:scale(1)}}
 @media (prefers-reduced-motion:reduce){.pip.lost path{animation:none}}
 .xtra{padding:4px 8px;border:2px solid var(--line);border-radius:999px;background:var(--red);color:#fff;font:400 12px/1 var(--f-ui);font-style:normal;letter-spacing:.02em;text-transform:uppercase;white-space:nowrap}
-.takes small{font:400 12px/1.35 var(--f-ui);letter-spacing:.02em;text-transform:uppercase;color:var(--soft)}
-.takes small.warn{color:var(--amber)}
-#r-last.ok{color:var(--green-t)}#r-last.red{color:var(--red-deep)}
-/* the deck: molded candy plastic with screws; tools, notes, then the two big keys (A under the right thumb) */
+/* the deck: molded candy plastic with screws; the ticker, the two big keys (A under the right thumb), then Undo and More */
 .deck{position:relative;display:grid;gap:8px;padding:14px 12px 12px;border:3px solid var(--line);border-radius:24px;
   background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E"),linear-gradient(180deg,#ffdcee,#f7c3df);
   box-shadow:inset 0 3px 0 rgba(255,255,255,.75),inset 0 -4px 0 rgba(91,61,142,.12),0 5px 0 rgba(91,61,142,.3)}
 .screw{position:absolute;top:5px;width:9px;height:9px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#fff,#e2d6ff 60%,#a58fd0);box-shadow:inset 0 0 0 1px rgba(91,61,142,.5)}
 .screw::after{content:"";position:absolute;left:1px;right:1px;top:3.5px;height:2px;background:rgba(91,61,142,.6);transform:rotate(-35deg)}
 .screw.l{left:9px}.screw.r{right:9px}
-.tools{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
-.tool{display:grid;justify-items:center;align-content:center;gap:3px;min-height:52px;margin:0 0 5px;padding:4px 2px;font-size:11.5px;letter-spacing:.02em}
-.tool svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
-.tool.lit{background:linear-gradient(180deg,#fffbe0,#ffe36e);box-shadow:0 5px 0 var(--line),0 0 0 3px #fff3a0,0 0 14px rgba(255,205,79,.95)}
-.tool.lit::after{content:"";position:absolute;top:5px;right:6px;width:8px;height:8px;border-radius:50%;background:#ff4f7a;box-shadow:0 0 6px #ff4f7a}
+.minis{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn.mini{display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;margin:0 0 5px;padding:0 10px;font-size:13px}
+.btn.mini svg{flex:0 0 auto;width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
 .notes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
 .notes .btn{min-height:46px;margin:0 0 5px;padding:0 4px;font-size:12px;line-height:1.1;letter-spacing:.02em;border-radius:12px}
 .notes .btn:nth-child(1){background:linear-gradient(180deg,#fff,#ffd3ea)}.notes .btn:nth-child(2){background:linear-gradient(180deg,#fff,#ffdcc6)}
@@ -291,15 +297,15 @@ body.lefty .key.got{order:-1}
 .key.again{background:linear-gradient(180deg,#c4e8ff,#5fb2ff);text-shadow:var(--olb)}
 .key.got{background:linear-gradient(180deg,#ffc6e4,#ff6fb7);text-shadow:var(--olp)}
 .key[disabled]{opacity:.42;filter:saturate(.35);pointer-events:none}
-@media (max-height:760px){.ring{width:92px;height:92px}.ring b{margin-top:-12px;font-size:21px}.ring small{bottom:21px;font-size:10px}.key{min-height:74px;font-size:26px}.linecard .tap{display:none}.takes b{font-size:23px}.tool{min-height:48px}.screen{padding:8px;gap:7px}}
-@media (max-height:700px){.notes{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:28%;overflow-x:auto;padding-bottom:2px;scroll-snap-type:x proximity}.notes .btn{scroll-snap-align:start}.key{min-height:66px}.tool svg{display:none}.tool{min-height:44px}.linecard .tag{display:none}.ticker{min-height:50px}}
+@media (max-height:760px){.key{min-height:74px;font-size:26px}.linecard .tap{display:none}.takes b{font-size:22px}.lclk svg{width:34px;height:34px}.screen{padding:8px;gap:7px}}
+@media (max-height:700px){.key{min-height:66px}.linecard .tag{display:none}.btn.mini{min-height:40px}.deck{padding-top:12px}}
 
 /* presses everywhere: the face drops on touch-down, the shadow shrinks by what it drops, it rises with a little spring */
 .key:active,.key.down{transform:translateY(7px);box-shadow:0 0 0 var(--line),0 2px 4px rgba(91,61,142,.25);filter:brightness(.96);transition-duration:0s}
-.menu-k:active,.menu-k.down,.bar .back.down,.bk.down,.sr-main.down,.hl.down{transform:translateY(4px);box-shadow:0 0 0 var(--line);transition-duration:0s}
+.bar .back.down,.bk.down,.sr-main.down,.hl.down{transform:translateY(4px);box-shadow:0 0 0 var(--line);transition-duration:0s}
 .seg button.down{transform:translateY(3px);box-shadow:0 0 0 var(--line)}
 #r-card.down{transform:scale(.99)}
-@media (prefers-reduced-motion:reduce){.btn,.key,.menu-k,.bk,.sr-main,.seg button{transition:none}}
+@media (prefers-reduced-motion:reduce){.btn,.key,.bk,.sr-main,.seg button{transition:none}}
 .swi{flex:0 0 auto;width:52px;height:32px;margin:0;accent-color:var(--pink-deep);cursor:pointer}
 label.toggle{cursor:pointer}
 
@@ -331,8 +337,10 @@ label.toggle{cursor:pointer}
 .full{position:fixed;inset:0;z-index:90;display:flex;flex-direction:column;padding:calc(var(--sat) + 22px) 20px calc(var(--sab) + 16px);background:linear-gradient(180deg,#2b1745,#3c2160);color:#fff;color-scheme:light;forced-color-adjust:none;overflow:hidden}
 .full::after{content:"";position:absolute;left:0;right:0;top:0;height:8px;background:var(--rainbow)}
 #show .s-who{font:400 13px/1.3 var(--f-ui);letter-spacing:.04em;text-transform:uppercase;color:#d8c8ff}
-#show .s-box{flex:1;min-height:0;display:flex;align-items:center;overflow:hidden}
-#show .s-txt{margin:0;font:700 64px/1.14 var(--f-body);color:#fff;text-wrap:balance;overflow-wrap:anywhere}
+#show .s-box{flex:1;min-height:0;display:flex;flex-direction:column;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none}
+#show .s-box::-webkit-scrollbar{display:none}
+#show .s-txt{margin:auto 0;font:700 64px/1.14 var(--f-body);color:#fff;text-wrap:balance;overflow-wrap:anywhere}
+#show.scroll:not(.end) .s-box{-webkit-mask-image:linear-gradient(180deg,#000 calc(100% - 56px),transparent);mask-image:linear-gradient(180deg,#000 calc(100% - 56px),transparent)}
 #show .s-x{font:400 12px/1 var(--f-ui);letter-spacing:.04em;text-transform:uppercase;color:#a996cf;text-align:center}
 #flash{align-items:center;justify-content:center;gap:18px;text-align:center;background:rgba(255,240,248,.95);color:var(--line)}
 #flash::before{content:"";position:absolute;left:50%;top:50%;width:240vmax;height:240vmax;margin:-120vmax 0 0 -120vmax;background:repeating-conic-gradient(from 0deg,rgba(255,158,203,.38) 0 9deg,rgba(255,255,255,0) 9deg 18deg);animation:spin 16s linear infinite}
@@ -342,9 +350,9 @@ label.toggle{cursor:pointer}
 #flash.ok::before{background:repeating-conic-gradient(from 0deg,rgba(166,240,208,.45) 0 9deg,rgba(255,255,255,0) 9deg 18deg)}
 @keyframes spin{to{transform:rotate(360deg)}}
 @media (prefers-reduced-motion:reduce){#flash::before{animation:none}}
-.toast{position:fixed;left:50%;bottom:calc(24px + var(--sab));z-index:99;max-width:calc(100% - 32px);padding:11px 16px;border:3px solid var(--line);border-radius:999px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#fff;color:var(--line);box-shadow:0 4px 0 rgba(91,61,142,.35);font:400 14px/1.3 var(--f-ui);letter-spacing:.03em;transition:opacity .25s,transform .25s}
+.toast{position:fixed;left:50%;bottom:calc(24px + var(--sab));z-index:99;width:max-content;max-width:calc(100% - 32px);padding:11px 16px;border:3px solid var(--line);border-radius:18px;text-align:center;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#fff;color:var(--line);box-shadow:0 4px 0 rgba(91,61,142,.35);font:400 14px/1.3 var(--f-ui);letter-spacing:.03em;transition:opacity .25s,transform .25s}
 .toast.on{opacity:1;transform:translate(-50%,0)}
-body[data-scr="run"] .toast{bottom:calc(var(--sab) + 108px)}
+body[data-scr="run"] .toast{top:calc(var(--sat) + 8px);bottom:auto}
 /* a pop banner for things that just happen (stage clear, overtime): drops from the top, never takes a tap */
 #pop{position:fixed;left:50%;top:calc(var(--sat) + 70px);z-index:80;width:min(92vw,420px);display:grid;gap:4px;justify-items:center;padding:12px 16px;border:3px solid var(--line);border-radius:18px;background:linear-gradient(180deg,#f2fff9,#cdf6e3);box-shadow:0 5px 0 rgba(91,61,142,.35);transform:translate(-50%,-24px);opacity:0;visibility:hidden;transition:transform .22s cubic-bezier(.2,1.4,.4,1),opacity .15s,visibility 0s linear .22s;pointer-events:none;text-align:center}
 #pop.on{transform:translate(-50%,0);opacity:1;visibility:visible;transition:transform .22s cubic-bezier(.2,1.4,.4,1),opacity .15s,visibility 0s}
@@ -355,12 +363,19 @@ body[data-scr="run"] .toast{bottom:calc(var(--sab) + 108px)}
 @media (prefers-reduced-motion:reduce){#pop,#pop.on{transform:translate(-50%,0)}}
 /* the Menu and How to play: a dialog over a dim screen */
 .ovl{position:fixed;inset:0;z-index:85;display:grid;place-items:center;padding:calc(var(--sat) + 16px) 16px calc(var(--sab) + 16px);background:rgba(43,23,69,.55)}
-.dlg{position:relative;width:min(100%,400px);display:grid;gap:10px;padding:18px 16px 16px;border:3px solid var(--line);border-radius:22px;background:var(--cream);box-shadow:inset 0 0 0 3px #ffe1f1,0 6px 0 var(--line)}
+.dlg{position:relative;width:min(100%,400px);display:grid;gap:10px;padding:18px 16px 16px;border:3px solid var(--line);border-radius:22px;background:var(--cream);box-shadow:inset 0 0 0 3px #ffe1f1,0 6px 0 var(--line);max-height:100%;overflow-y:auto;overscroll-behavior:contain}
 .dlg-t{font:400 34px/1 var(--f-pop);color:#fff;text-align:center;text-shadow:var(--ol),0 5px 0 var(--pink-deep)}
 .dlg-s{margin:-2px 0 4px;font:400 13px/1.3 var(--f-ui);letter-spacing:.02em;text-transform:uppercase;text-align:center;color:var(--soft)}
 .dlg .btn{width:100%;margin:0 0 4px;min-height:52px;font-size:15px}
 .dlg .btn.big{min-height:62px;font-size:26px}
 .dlg .btn.bad{background:linear-gradient(180deg,#fff,#ffd6e2);color:var(--red-deep)}
+/* More: this line, the notes, the day */
+.mgrp{display:grid;gap:6px}
+.mgrp>small{font:400 11.5px/1.2 var(--f-ui);letter-spacing:.04em;text-transform:uppercase;color:var(--soft)}
+.mrow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.mrow.two{grid-template-columns:1fr 1fr}
+.dlg .mrow .btn,.dlg .notes .btn{min-height:48px;margin:0 0 5px;padding:0 6px;font-size:13px;line-height:1.1}
+.dlg .notes .btn{font-size:12px}
 .coach{margin:0;padding:0;list-style:none;display:grid;gap:12px}
 .coach li{display:grid;grid-template-columns:44px minmax(0,1fr);gap:10px;align-items:center;font-size:15.5px;line-height:1.35;color:var(--ink)}
 .coach li b{color:var(--line)}
@@ -380,7 +395,6 @@ body[data-scr="run"] .toast{bottom:calc(var(--sab) + 108px)}
     <span class="sp"></span>
     <button type="button" class="ins" id="ins" hidden>Install</button>
     <span class="clock lcd" id="clock" aria-label="Time now"></span>
-    <button type="button" class="menu-k" data-act="menu" aria-label="Menu"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M5 7h14M5 12h14M5 17h14"/></svg></button>
   </header>
 
   <!-- ===== 1. SET UP: paste the lines, set the wrap ===== -->
@@ -441,37 +455,34 @@ body[data-scr="run"] .toast{bottom:calc(var(--sab) + 108px)}
 
   <!-- ===== 3. THE SET: one hand, the line, the clock ===== -->
   <section id="s-run" class="scr" hidden>
-    <!-- the screen: read it -->
+    <!-- the screen: read it. The day up top, the line as big as it can be, the take and its clock in one row -->
     <div class="screen">
       <div class="day lcd" id="r-day" role="timer" aria-label="Time left until the wrap">
         <i class="led" aria-hidden="true"></i>
         <div class="day-bar" aria-hidden="true"><i class="fill" id="r-fill"></i><i class="ot" id="r-ot"></i></div>
         <b id="r-left">0:00</b><small id="r-left-l">left</small>
       </div>
-      <div class="ticker" id="r-tick" aria-live="polite"><span id="r-tick-t"></span><span class="tk-keys" id="r-tick-k"></span></div>
       <div class="who"><span id="r-who"></span><span id="r-at"></span></div>
-      <button type="button" class="linecard" id="r-card" data-act="show"><span class="tag" id="r-tag"></span><span class="txtbox"><span class="txt" id="r-txt"></span></span><span class="tap" id="r-tap">tap to show it big</span></button>
+      <div class="linecard" id="r-card" role="button" tabindex="0" data-act="show"><span class="tag" id="r-tag"></span><span class="txtbox" id="r-box"><span class="txt" id="r-txt"></span></span><span class="tap" id="r-tap">tap to show it big</span><i class="more-cue" aria-hidden="true">more</i></div>
       <div class="mid" id="r-mid">
-        <div class="ring" id="r-ring" role="timer" aria-label="Time on this line">
+        <div class="takes"><b id="r-take">Take 1</b><div class="pips" id="r-pips"></div></div>
+        <div class="lclk" id="r-ring" role="timer" aria-label="Time on this line">
           <svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="rb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff9ecb"/><stop offset=".5" stop-color="#c9b3ff"/><stop offset="1" stop-color="#8fd0ff"/></linearGradient></defs><circle class="tr" cx="50" cy="50" r="44"/><circle class="pr" id="r-arc" cx="50" cy="50" r="44" stroke-dasharray="276.46" stroke-dashoffset="0"/></svg>
-          <b id="r-clock">0:00</b><small id="r-clk-l"></small>
+          <span><b id="r-clock">0:00</b><small id="r-clk-l"></small></span>
         </div>
-        <div class="takes"><b id="r-take">Take 1</b><div class="pips" id="r-pips"></div><small id="r-cap"></small><small id="r-last"></small></div>
       </div>
     </div>
-    <!-- the deck: do it, all under the thumb; nothing here ever moves -->
+    <!-- the deck: do it, all under the thumb; nothing here ever moves. Help (Later, Split, Drop, Go) shows up in the ticker, right over the keys -->
     <div class="deck">
       <i class="screw l" aria-hidden="true"></i><i class="screw r" aria-hidden="true"></i>
-      <div class="tools">
-        <button type="button" class="btn tool" id="t-undo" data-act="undo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg>Undo</button>
-        <button type="button" class="btn tool" id="t-skip" data-act="skipLine"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l9 7-9 7z"/><path d="M18 5v14"/></svg>Skip</button>
-        <button type="button" class="btn tool" id="t-later" data-act="later"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>Later</button>
-        <button type="button" class="btn tool" id="t-split" data-act="splitNow"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="7" r="2.5"/><circle cx="6" cy="17" r="2.5"/><path d="M8.2 8.4 20 17M8.2 15.6 20 7"/></svg>Split</button>
-      </div>
-      <div class="notes" id="r-notes"></div>
+      <div class="ticker" id="r-tick" aria-live="polite"><span id="r-tick-t"></span><span class="tk-keys" id="r-tick-k"></span></div>
       <div class="keys" id="r-keys">
         <button type="button" class="key again" id="k-again" data-act="again"><i class="ab" aria-hidden="true">B</i><small>again</small><span id="k-again-t">Take 2</span></button>
         <button type="button" class="key got" id="k-got" data-act="got"><i class="ab" aria-hidden="true">A</i><small id="k-got-s">line done</small><span id="k-got-t">Got it &rsaquo;</span></button>
+      </div>
+      <div class="minis">
+        <button type="button" class="btn mini" id="t-undo" data-act="undo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg>Undo</button>
+        <button type="button" class="btn mini" id="t-more" data-act="menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M5 12h14M5 17h14"/></svg>More</button>
       </div>
     </div>
   </section>
@@ -496,27 +507,26 @@ body[data-scr="run"] .toast{bottom:calc(var(--sab) + 108px)}
 <div id="show" class="full" hidden><div class="s-who" id="show-who"></div><div class="s-box"><p class="s-txt" id="show-txt"></p></div><div class="s-x">tap anywhere to close</div></div>
 <div id="flash" class="full" hidden><b id="flash-b"></b><span id="flash-s"></span></div>
 <div id="pop" role="status" aria-live="polite"><b id="pop-b"></b><span id="pop-s"></span></div>
-<div id="menu" class="ovl" hidden><div class="dlg" role="dialog" aria-modal="true" aria-label="Menu">
-  <b class="dlg-t">Menu</b><small class="dlg-s">the clock keeps running</small>
+<div id="menu" class="ovl" hidden><div class="dlg" role="dialog" aria-modal="true" aria-label="More">
+  <b class="dlg-t">More</b><small class="dlg-s">the clock keeps running</small>
+  <div class="mgrp"><small>the day</small><div class="mrow two"><button type="button" class="btn bad" data-act="wrap">Wrap the day</button><button type="button" class="btn" data-act="menuPlan">The plan</button><button type="button" class="btn" data-act="dropCur" id="m-drop">Drop script</button><button type="button" class="btn" data-act="nextStop" id="m-next">Next stop</button></div></div>
+  <div class="mgrp"><small>this line</small><div class="mrow"><button type="button" class="btn" data-act="skipLine" id="m-skip">Skip</button><button type="button" class="btn" data-act="later" id="m-later">Later</button><button type="button" class="btn" data-act="splitNow" id="m-split">Split</button></div></div>
+  <div class="mgrp"><small>notes for the talent</small><div class="notes" id="r-notes"></div></div>
   <button type="button" class="btn primary big" data-act="resume">Back to it</button>
-  <button type="button" class="btn" data-act="dropCur" id="m-drop">Drop this script</button>
-  <button type="button" class="btn" data-act="nextStop" id="m-next">Next stop</button>
-  <button type="button" class="btn" data-act="menuPlan">The plan</button>
-  <button type="button" class="btn bad" data-act="wrap">Wrap the day</button>
 </div></div>
 <div id="coach" class="ovl" hidden><div class="dlg" role="dialog" aria-modal="true" aria-label="How to play">
   <b class="dlg-t">How to play</b>
   <ol class="coach">
-    <li><i class="ci ring-i"></i><span><b>The dial</b> is this line's time. It turns red when the line runs past its budget.</span></li>
-    <li><i class="ci bar-i"></i><span><b>Time</b> is your whole day. Its light is green, yellow when you're behind, red in overtime.</span></li>
-    <li><i class="ci"><svg viewBox="-2 -1 28 25" aria-hidden="true"><path d="M12 21.2S3 15.4 1.2 10.1C-.4 5.4 2.6 1.3 6.8 1.3c2.3 0 4.1 1.2 5.2 3 1.1-1.8 2.9-3 5.2-3 4.2 0 7.2 4.1 5.6 8.8C21 15.4 12 21.2 12 21.2z"/></svg></i><span><b>Hearts</b> are takes left. Missed it? <b>Take 2</b>. Nailed it? <b>Got it</b>. Out of hearts? Keep going, nothing stops: <b>Later</b> and <b>Split</b> light up.</span></li>
-    <li><i class="ci menu-i"></i><span><b>B</b> is take again, <b>A</b> is got it. <b>Menu</b> (top right) has drop, next stop and wrap. <b>Undo</b> fixes any tap.</span></li>
+    <li><i class="ci bar-i"></i><span><b>Time</b> up top is your whole day. Green, yellow when you're behind, red in overtime.</span></li>
+    <li><i class="ci"><svg viewBox="-2 -1 28 25" aria-hidden="true"><path d="M12 21.2S3 15.4 1.2 10.1C-.4 5.4 2.6 1.3 6.8 1.3c2.3 0 4.1 1.2 5.2 3 1.1-1.8 2.9-3 5.2-3 4.2 0 7.2 4.1 5.6 8.8C21 15.4 12 21.2 12 21.2z"/></svg></i><span><b>Hearts</b> are takes. Missed it? <b>B</b>, take again. Nailed it? <b>A</b>, got it. Out of hearts? Keep going, <b>Later</b> and <b>Split</b> pop up.</span></li>
+    <li><i class="ci ring-i"></i><span><b>The little dial</b> is this line's time. It goes red when the line runs long.</span></li>
+    <li><i class="ci menu-i"></i><span><b>Undo</b> fixes any tap. <b>More</b> has skip, notes for your talent, drop and wrap. Tap the line to show it big.</span></li>
   </ol>
   <button type="button" class="btn primary big" data-act="coachOk">Let's go!</button>
 </div></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="core.js?v=8fc5895f"></script>
+<script src="core.js?v=9d2f2568"></script>
 <script>
 /* ---------- the shell ---------- */
 const C = window.ADCore;
@@ -739,20 +749,13 @@ function renderPlanLive() {
 /* ---------- 3. the set ---------- */
 let RL = null, liveAt = 0, wasRed = false, wasOT = false, lastPip = { id: '', n: 0 }, lastCard = '', runOver = false, helpKey = '';
 const viewOf = sid => (RL && RL.view && RL.view.find(s => s.id === sid)) || scriptOf(sid);
-// stuck = out of hearts, or this line's clock past its budget: Later and Split light up on the deck, the ticker says so
+// stuck = out of hearts, or this line's clock past its budget: the ticker says so and puts Later and Split right over the keys
 let stuckNow = '', tickSig = '', PROG = { i: 0, total: 0 };
 function paintStuck(red) {
   const L = RL, cur = L && L.cur, busy = !cur || !!L.driveTo;
   const st = busy ? '' : runOver ? 'hearts' : red ? 'time' : '';
-  const key = (cur ? cur.id : '') + '|' + st + '|' + P.cap + '|' + (cur ? (L.att[cur.id] || 0) : 0);
+  const key = (cur ? cur.id : '') + '|' + st;
   if (key === helpKey) return; helpKey = key; stuckNow = st;
-  ['#t-later', '#t-split'].forEach(q => { const b = $(q); b.classList.toggle('lit', !!st && !b.disabled); });
-  if (!busy) {
-    const n = (L.att[cur.id] || 0) - (L.laterAt[cur.id] || 0) + 1, cap = $('#r-cap');
-    cap.className = st ? 'warn' : '';
-    cap.textContent = st === 'hearts' ? 'out of hearts · keep going' : st === 'time' ? 'running long · keep going' : !P.cap ? 'no cap · as many as it needs'
-      : n === P.cap ? 'last heart · make it count' : `${P.cap - n + 1} takes left`;
-  }
   tickSig = ''; paintTicker(Date.now());
 }
 const HEART = '<path d="M12 21.2S3 15.4 1.2 10.1C-.4 5.4 2.6 1.3 6.8 1.3c2.3 0 4.1 1.2 5.2 3 1.1-1.8 2.9-3 5.2-3 4.2 0 7.2 4.1 5.6 8.8C21 15.4 12 21.2 12 21.2z"/>';
@@ -760,12 +763,21 @@ const hms = sec => { sec = Math.max(0, Math.round(sec)); const h = Math.floor(se
 const UNDO = { again: 1, got: 1, skip: 1, roll: 1, go: 1, arrive: 1, drop: 1, add: 1, wrap: 1, later: 1, split: 1 };
 function ev(k, extra) { D.run.events.push(Object.assign({ t: Date.now(), k }, extra || {})); persist(); }
 function scriptOf(id) { return D.scripts.find(s => s.id === id); }
+// the biggest size that fits, never under min; false when even min does not fit (that box scrolls instead)
 function fitText(el, box, max, min) {
   el.style.fontSize = max + 'px';
-  if (el.scrollHeight <= box.clientHeight + 1) return;
+  if (el.scrollHeight <= box.clientHeight + 1) return true;
   let lo = min, hi = max;
   while (hi - lo > 1) { const m = (lo + hi) >> 1; el.style.fontSize = m + 'px'; if (el.scrollHeight <= box.clientHeight + 1) lo = m; else hi = m; }
   el.style.fontSize = lo + 'px';
+  return el.scrollHeight <= box.clientHeight + 1;
+}
+const atEnd = b => b.scrollTop + b.clientHeight >= b.scrollHeight - 4;
+// the line on the set: 52px down to 24px, never smaller. Longer than that, it scrolls, with MORE showing until the end.
+function fitLine() {
+  const card = $('#r-card'), box = $('#r-box');
+  card.classList.toggle('scroll', !fitText($('#r-txt'), box, 52, 24));
+  card.classList.toggle('end', atEnd(box));
 }
 function renderRun() {
   if (!D.run) { go('plan'); return; }
@@ -789,7 +801,7 @@ function renderRun() {
     $('#r-txt').textContent = 'Drive to ' + stopName(L.driveTo); $('#r-tap').hidden = true;
     $('#r-tag').textContent = `about ${mins} min · next: ${nm(scriptOf(cur.sid))}`;
     $('#r-mid').hidden = false;
-    $('#r-take').textContent = 'Drive'; $('#r-pips').innerHTML = ''; $('#r-cap').className = ''; $('#r-cap').textContent = `about ${mins} min`; $('#r-last').textContent = '';
+    $('#r-take').textContent = 'Drive'; $('#r-pips').innerHTML = '';
     $('#k-got-s').textContent = 'arrived'; $('#k-got-t').innerHTML = 'We\'re here &rsaquo;';
   } else {
     const s = viewOf(cur.sid), li = s.lines.findIndex(l => l.id === cur.id) + 1;
@@ -798,9 +810,9 @@ function renderRun() {
     const tag = [];
     if (cur.br) tag.push('b-roll');
     if (cur.dir) tag.push('(' + cur.dir + ')');
-    if (cur.cov.length) tag.push(`same line in ${1 + cur.cov.length} scripts · one good take covers all`);
-    if (cur.g) tag.push(`back to back ${cur.gi} of ${cur.gn} · same spot`);
-    if (L.rounds[cur.id]) tag.push('back for another try · fresh hearts');
+    if (cur.cov.length) tag.push(`in ${1 + cur.cov.length} scripts · one take covers all`);
+    if (cur.g) tag.push(`back to back ${cur.gi} of ${cur.gn}`);
+    if (L.rounds[cur.id]) tag.push('another try · fresh hearts');
     $('#r-tag').textContent = tag.join(' · ');
     $('#r-txt').textContent = cur.text;
     $('#r-mid').hidden = false;
@@ -814,18 +826,12 @@ function renderRun() {
       + (n > P.cap ? `<i class="xtra">+${n - P.cap} extra</i>` : '');
     lastPip = { id: cur.id, n };
     runOver = capOn && n > P.cap;
-    // the line before this one: how long it took, green inside its budget, red past it (the payoff, right away)
-    const got = L.log.filter(r => r.k === 'got'), last = L.log[L.log.length - 1], lt = $('#r-last');
-    lt.className = last ? (last.over ? 'red' : 'ok') : '';
-    lt.textContent = last ? `last line ${hms(last.min * 60)}${last.k === 'skip' ? ' (skipped)' : ''}${got.length > 1 ? ' · avg ' + hms(got.reduce((m, r) => m + r.min, 0) / got.length * 60) : ''}` : '';
   }
-  // the deck: tools and notes always in the same spots; what does not apply right now goes dim, it never disappears
-  $('#t-skip').disabled = busy; $('#t-later').disabled = busy;
-  $('#t-split').disabled = busy || cur.br || C.splitLine(cur.text).length < 2;
+  // the note keys live in More; they go dim when there is no line to give a note on
   $('#r-notes').innerHTML = P.notes.map((x, i) => `<button type="button" class="btn" data-act="note" data-i="${i}"${busy ? ' disabled' : ''}>${esc(x.b)}</button>`).join('');
-  requestAnimationFrame(() => fitText($('#r-txt'), $('#r-card .txtbox'), 44, 16));
   const key = cur ? cur.id + (L.driveTo || '') : 'done';
-  if (key !== lastCard) { card.classList.remove('pop'); void card.offsetWidth; card.classList.add('pop'); lastCard = key; }
+  if (key !== lastCard) { card.classList.remove('pop'); void card.offsetWidth; card.classList.add('pop'); lastCard = key; $('#r-box').scrollTop = 0; }
+  fitLine(); requestAnimationFrame(fitLine);
   helpKey = ''; tickSig = '';
   paintStuck(!busy && (now - L.lastT) / 1e3 >= Math.max(30, L.curBudget * 60));
   tickRun(now);
@@ -847,7 +853,7 @@ function tickRun(now) {
     if (red && !wasRed) { buzz([60, 40, 60]); if (P.beep) beep(); }
     wasRed = red;
   }
-  ring.className = 'ring ' + cls;
+  ring.className = 'lclk ' + cls;
   $('#r-clock').textContent = big; $('#r-clock').className = big.length > 5 ? 'long' : ''; $('#r-clk-l').textContent = lab;
   arc.style.strokeDashoffset = String(CIRC * (1 - Math.max(0, Math.min(1, frac))));
   // THE DAY TIMER: counts down to the wrap; amber when the pace says you will run over, red and counting up in overtime
@@ -869,7 +875,10 @@ function paintTicker(now) {
   let cls = '', text = '', keys = '';
   if (!L.cur) text = 'That is every line. Tap A to wrap the day.';
   else if (L.driveTo) text = `On the road to ${stopName(L.driveTo)}. Tap A when you get there.`;
-  else if (stuckNow) { cls = 'stuck'; text = (stuckNow === 'hearts' ? 'Out of hearts.' : 'This line is running long.') + ' Keep going, or tap Later or Split below.'; }
+  else if (stuckNow) {
+    cls = 'stuck'; text = (stuckNow === 'hearts' ? 'Out of hearts.' : 'Running long.') + ' Keep going, or:';
+    keys = `<button type="button" class="btn" data-act="later">Later</button>` + (!L.cur.br && C.splitLine(L.cur.text).length > 1 ? `<button type="button" class="btn" data-act="splitNow">Split</button>` : '');
+  }
   else if (n && !(dismissed[dk] > now)) {
     const x = `<button type="button" class="btn ghost" data-act="dismiss" data-key="${esc(dk)}" aria-label="Not now">&times;</button>`;
     cls = n.k === 'add' ? '' : n.k === 'leave' ? 'warn' : 'hot';
@@ -891,9 +900,15 @@ function flash(b, s, ok, ms) {
   clearTimeout(flashT); flashT = setTimeout(() => { f.hidden = true; }, ms || 1600);
 }
 $('#flash').addEventListener('click', () => { $('#flash').hidden = true; });
+// the line big for the talent: 120px down to 34px, then it scrolls
+function fitShow() {
+  const sh = $('#show'), box = $('#show .s-box'), fits = fitText($('#show-txt'), box, 120, 34);
+  sh.classList.toggle('scroll', !fits); sh.classList.toggle('end', atEnd(box));
+  $('#show .s-x').textContent = fits ? 'tap anywhere to close' : 'scroll for the rest · tap to close';
+}
 function showBig(text, who) {
-  $('#show-who').textContent = who || ''; $('#show-txt').textContent = text; $('#show').hidden = false;
-  requestAnimationFrame(() => fitText($('#show-txt'), $('#show .s-box'), 120, 22));
+  $('#show-who').textContent = who || ''; $('#show-txt').textContent = text; $('#show').hidden = false; $('#show .s-box').scrollTop = 0;
+  fitShow(); requestAnimationFrame(fitShow);
 }
 $('#show').addEventListener('click', () => { $('#show').hidden = true; });
 let lock = null;
@@ -1030,19 +1045,25 @@ const act = {
     if (st && st.lines && st.done >= st.lines) pop('Stage clear!', nm(scriptOf(sid)) + ' · ' + Math.round(st.min) + ' min');
     renderRun();
   },
-  splitNow: () => { if (!RL || !RL.cur || RL.driveTo || RL.cur.br) return; const parts = C.splitLine(RL.cur.text); if (parts.length < 2) { act.show(); return; } ev('split', { id: RL.cur.id, parts }); buzz(20); pop('Split!', parts.length + ' shorter lines · shoot the first one'); renderRun(); },
-  later: () => { if (!RL || !RL.cur || RL.driveTo) return; ev('later', { id: RL.cur.id }); buzz(15); toast('Later: it comes back at the end of this stop, with fresh hearts.'); renderRun(); },
-  skipLine: () => { if (!RL || !RL.cur || RL.driveTo) return; ev('skip', { id: RL.cur.id }); toast('Skipped the line.'); renderRun(); },
+  splitNow: () => { closeMenu(); if (!RL || !RL.cur || RL.driveTo || RL.cur.br) return; const parts = C.splitLine(RL.cur.text); if (parts.length < 2) { act.show(); return; } ev('split', { id: RL.cur.id, parts }); buzz(20); pop('Split!', parts.length + ' shorter lines · shoot the first one'); renderRun(); },
+  later: () => { closeMenu(); if (!RL || !RL.cur || RL.driveTo) return; ev('later', { id: RL.cur.id }); buzz(15); toast('Later: it comes back at the end of this stop, with fresh hearts.'); renderRun(); },
+  skipLine: () => { closeMenu(); if (!RL || !RL.cur || RL.driveTo) return; ev('skip', { id: RL.cur.id }); toast('Skipped the line.'); renderRun(); },
   dropCur: () => { closeMenu(); if (!RL || !RL.cur || RL.driveTo) return; const s = scriptOf(RL.cur.sid); ev('drop', { sid: s.id }); toast('Dropped ' + nm(s) + '. Undo brings it back.'); renderRun(); },
   dropS: b => { const s = scriptOf(b.dataset.sid); ev('drop', { sid: s.id }); toast('Dropped ' + nm(s) + '.'); document.body.dataset.scr === 'run' ? renderRun() : renderPlan(); },
   addS: b => { const s = scriptOf(b.dataset.sid); ev('add', { sid: s.id }); toast('Added ' + nm(s) + ' at the end of its stop.'); document.body.dataset.scr === 'run' ? renderRun() : renderPlan(); },
   nextStop: () => { closeMenu(); if (!RL || !RL.cur) return; const nx = RL.rest.find(it => it.stop !== RL.cur.stop); if (!nx) return; ev('go', { stop: nx.stop }); toast('Off to ' + stopName(nx.stop) + '. What is left here stays behind.'); renderRun(); },
-  menu: () => { if (!RL) return; const later = RL.cur && RL.rest.some(it => it.stop !== RL.cur.stop); $('#m-next').hidden = !(later && !RL.driveTo); $('#m-drop').hidden = !(RL.cur && !RL.driveTo); $('#menu').hidden = false; },
+  menu: () => {
+    if (!RL) return;
+    const cur = RL.cur, busy = !cur || !!RL.driveTo, later = cur && RL.rest.some(it => it.stop !== cur.stop);
+    $('#m-next').hidden = !(later && !RL.driveTo); $('#m-drop').hidden = busy;
+    $('#m-skip').disabled = busy; $('#m-later').disabled = busy; $('#m-split').disabled = busy || cur.br || C.splitLine(cur.text).length < 2;
+    $('#menu').hidden = false;
+  },
   resume: () => closeMenu(),
   menuPlan: () => { closeMenu(); go('plan'); },
   goStop: b => { ev('go', { stop: b.dataset.stop }); buzz(30); renderRun(); },
   dismiss: b => { dismissed[b.dataset.key] = Date.now() + 5 * 6e4; tickSig = ''; paintTicker(Date.now()); },
-  note: b => { const n = P.notes[+b.dataset.i]; if (!n) return; ev('note', { n: b.dataset.i, id: RL && RL.cur ? RL.cur.id : '' }); buzz(10); flash(n.b, n.s, false, 1500); },
+  note: b => { closeMenu(); const n = P.notes[+b.dataset.i]; if (!n) return; ev('note', { n: b.dataset.i, id: RL && RL.cur ? RL.cur.id : '' }); buzz(10); flash(n.b, n.s, false, 1500); },
   show: () => { if (!RL || !RL.cur || RL.driveTo) return; ev('show', { id: RL.cur.id }); showBig(RL.cur.text, nm(scriptOf(RL.cur.sid))); },
   undo: () => {
     const E = D.run.events;
@@ -1057,7 +1078,7 @@ const act = {
 // iPhone Safari only paints :active (the key sinking) when a touchstart listener exists
 document.addEventListener('touchstart', () => {}, { passive: true });
 // the press: the key sinks on touch-down in the next frame and lifts on release, a slide-off or a scroll (nothing stays stuck down)
-const PRESS = '.btn,.key,.bk,.menu-k,.sr-main,.hl,.seg button,.bar .back,#r-card';
+const PRESS = '.btn,.key,.bk,.sr-main,.hl,.seg button,.bar .back,#r-card';
 document.addEventListener('pointerdown', e => { const k = e.target.closest && e.target.closest(PRESS); if (k && !k.disabled) k.classList.add('down'); }, { passive: true });
 const lift = () => $$('.down').forEach(k => k.classList.remove('down'));
 ['pointerup', 'pointercancel', 'scroll'].forEach(t => document.addEventListener(t, lift, { passive: true, capture: true }));
@@ -1089,9 +1110,13 @@ setInterval(() => {
   if (scr === 'plan' && now - planPainted > 30000 && !open.size) renderPlan();
 }, 250);
 $('#clock').textContent = hm(Date.now());
-window.addEventListener('resize', () => { if (document.body.dataset.scr === 'run') fitText($('#r-txt'), $('#r-card .txtbox'), 44, 16); if (!$('#show').hidden) fitText($('#show-txt'), $('#show .s-box'), 120, 22); });
-// the line re-fits whenever its box changes size (the hearts row grows, the ticker wraps, the phone turns), not only on a redraw
-if (window.ResizeObserver) new ResizeObserver(() => { if (document.body.dataset.scr === 'run') fitText($('#r-txt'), $('#r-card .txtbox'), 44, 16); }).observe($('#r-card .txtbox'));
+window.addEventListener('resize', () => { if (document.body.dataset.scr === 'run') fitLine(); if (!$('#show').hidden) fitShow(); });
+// the line re-fits whenever its box changes size (the hearts row wraps, the phone turns), not only on a redraw
+if (window.ResizeObserver) new ResizeObserver(() => { if (document.body.dataset.scr === 'run') fitLine(); }).observe($('#r-box'));
+$('#r-box').addEventListener('scroll', () => $('#r-card').classList.toggle('end', atEnd($('#r-box'))), { passive: true });
+$('#show .s-box').addEventListener('scroll', () => $('#show').classList.toggle('end', atEnd($('#show .s-box'))), { passive: true });
+// the line card is a box, not a button (a box that scrolls cannot sit in a button), so Enter and Space show it big like a key
+$('#r-card').addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); act.show(); } });
 let deferred = null;
 window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferred = e; $('#ins').hidden = false; });
 $('#ins').addEventListener('click', async () => { if (!deferred) return; deferred.prompt(); await deferred.userChoice; deferred = null; $('#ins').hidden = true; });

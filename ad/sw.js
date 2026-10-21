@@ -1,7 +1,7 @@
 /* THE AD offline worker (10/21): the page, the core, the icons and the house fonts are cached on install, so it opens
    on set with no signal. Bump BUILD when anything here changes (and the core.js ?v= in the page and below). */
-const BUILD = 'ad-20261021-8fc5895f';
-const FILES = ['./', './index.html', './core.js?v=8fc5895f', './manifest.webmanifest', './icon-192.png', './icon-512.png', './art/icon.webp',
+const BUILD = 'ad-20261021-9d2f2568';
+const FILES = ['./', './index.html', './core.js?v=9d2f2568', './manifest.webmanifest', './icon-192.png', './icon-512.png', './art/icon.webp',
   '../assets/fonts/mochiy-pop-one-400.woff2', '../assets/fonts/silkscreen-400.woff2', '../assets/fonts/silkscreen-700.woff2',
   '../assets/fonts/inter-400.woff2', '../assets/fonts/inter-500.woff2', '../assets/fonts/inter-600.woff2', '../assets/fonts/inter-700.woff2', '../assets/fonts/inter-800.woff2'];
 // one file that will not load never blocks the rest from going offline
