@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>This Is A Dorm · 0FF THE PRINT</title>
+<meta name="description" content="15 DJs, 3 stages, till 2 in the morning, in a building where 100 people live. Austin&#x27;s co-ops throw better shows than most clubs. Here&#x27;s how they do it.">
+<meta property="og:title" content="This Is A Dorm">
+<meta property="og:description" content="15 DJs, 3 stages, till 2 in the morning, in a building where 100 people live. Austin&#x27;s co-ops throw better shows than most clubs. Here&#x27;s how they do it.">
+<meta property="og:image" content="https://0fftheprint.com/word/this-is-a-dorm/cover.jpg">
+<meta property="og:type" content="article">
+<meta name="theme-color" content="#0a0a0d">
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#f2eef5;--muted:#8d8798;--line:rgba(255,255,255,.1);--pink:#ff79c6;--bg:#0a0a0d}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif}
+  .leopard-bar{height:7px;background:linear-gradient(90deg,#ff79c6,#caa9ff,#2f6bff,#ff79c6);background-size:300% 100%}
+  .wrap{max-width:720px;margin:0 auto;padding:34px 20px 90px}
+  a.back{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--muted);text-decoration:none}
+  a.back:hover{color:var(--pink)}
+  .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.3em;
+    text-transform:uppercase;color:var(--pink);margin:34px 0 10px}
+  h1{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
+    text-transform:uppercase;font-size:clamp(34px,7vw,56px);line-height:.98}
+  .dek{font-size:17px;line-height:1.6;color:var(--muted);margin-top:14px}
+  .byline{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted);margin:18px 0 26px;
+    padding-bottom:18px;border-bottom:1px solid var(--line)}
+  .byline b{color:var(--ink)}
+  .cover{margin:0 0 8px;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+  .cover img{width:100%;display:block}
+  .cover-credit{font-family:'JetBrains Mono',monospace;font-size:10px;
+    letter-spacing:.06em;color:var(--muted);margin:8px 0 30px;line-height:1.5}
+  .cover-credit a{color:var(--muted);text-decoration:underline}
+  article{font-size:17.5px;line-height:1.85}
+  article p{margin:0 0 22px}
+  article h2{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
+    text-transform:uppercase;font-size:27px;margin:38px 0 14px}
+  article a{color:var(--pink);text-decoration:none}
+  article a:hover{text-decoration:underline}
+  article blockquote{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
+    font-size:26px;line-height:1.2;text-transform:uppercase;color:var(--pink);
+    border-left:3px solid var(--pink);padding-left:18px;margin:32px 0}
+  article figure{margin:30px -20px}
+  article figure img,article figure video{width:100%;display:block;border-radius:0;background:#000}
+  article figure.clip video{width:auto;max-width:100%;max-height:82vh;aspect-ratio:9/16;margin:0 auto}
+  article figcaption{font-family:'JetBrains Mono',monospace;font-size:10.5px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+    padding:10px 20px 0;text-align:center}
+  @media(min-width:760px){article figure{margin:30px 0}
+    article figure img,article figure video{border-radius:12px}
+    article figcaption{padding:10px 0 0}}
+  .foot{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);
+    font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted)}
+  .foot a{color:var(--pink);text-decoration:none}
+  .wall{max-width:680px;margin:34px auto 0;padding-top:26px;border-top:1px solid var(--line)}
+  .wall h2{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;font-size:22px;text-transform:uppercase;margin-bottom:14px}
+  .wall-entry{border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-bottom:10px}
+  .we-by{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--pink);margin-bottom:6px}
+  .we-text{font-size:15px;line-height:1.65;color:var(--ink);overflow-wrap:anywhere}
+  .we-none,.we-pending,.we-msg{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);line-height:1.7}
+  .we-msg{color:#ff6a7e;min-height:16px;margin-top:6px}
+  #wall-compose textarea{width:100%;background:#111016;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:12px;font-size:16px;font-family:Inter,sans-serif;margin-top:8px}
+  .we-row{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+  .we-count{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+  .we-row button,.we-pending button{background:transparent;color:var(--pink);border:1px solid var(--pink);border-radius:7px;padding:9px 16px;font-size:13px;cursor:pointer;min-height:40px}
+</style>
+<link rel="stylesheet" href="../../assets/css/binder.css?v=f47d0aee">
+<script src="../../assets/js/binder.js?v=a9913f49" defer></script>
+</head>
+<body>
+<div class="leopard-bar"></div>
+<div class="wrap">
+  <a class="back" href="../../#desk">&larr; The Word · 0FF THE PRINT</a>
+  <div class="kicker">THE ROOMS</div>
+  <h1>This Is A Dorm</h1>
+  <div class="dek">15 DJs, 3 stages, till 2 in the morning, in a building where 100 people live. Austin&#x27;s co-ops throw better shows than most clubs. Here&#x27;s how they do it.</div>
+  <div class="byline">0TP-040 &nbsp;·&nbsp; <b>0FF THE PRINT</b> &nbsp;·&nbsp; San Antonio &nbsp;·&nbsp; OCT 21, 2026</div>
+  <div class="cover"><img src="cover.jpg" alt=""></div>
+
+  <article data-stamp="92eb2414">
+<blockquote>Spotted: PULSE ANGELS 3 at 21st Street Co-op, Saturday, October 3.</blockquote>
+<p>15 DJs. 3 stages. Till 2 in the morning. This is a dorm.</p>
+<p>A week before that, we shot a five-band show in the same building. A couple weeks before that, BRAINROT at New Guild, another co-op a few blocks over. We think the best rooms in Austin right now aren't clubs. They're dorms. So we looked into how that works.</p>
+<h2>It was built for this</h2>
+<p>21st Street opened in November 1974. An Austin architect named William Tamminga designed it and built it. When it opened, it was dark red cedar with bright blue trim. So it wasn't an apartment somebody turned into a co-op later. It was built to be one.</p>
+<p>100 people live there. Upstairs there's a room called the Commons, and touring and local bands play it.</p>
+<p>Now here's the part that breaks our brain. This isn't a venue. It's somebody's home. A private room is $1,080 a month, and that includes cooked meals. The rent comes with a job, too. Everybody works up to 6 hours a week. So the people throwing the party are the same people mopping the floor the next morning.</p>
+<h2>But the other house is older</h2>
+<p>1936. A group of guys at UT start the Campus Guild, the first student co-op in Austin. By 1972 their building's condemned. So on August 31, 1972, they hand the lot to the Inter-Cooperative Council for $10,000, and the council buys a former women's dorm for $120,000. They call it the New Guild. Rent's $90 a month.</p>
+<p>Then on July 4, 1973, the old Guild burns down.</p>
+<p>So New Guild is basically what's left of the first one, and it kept partying, because the May Day Red Ball stayed a New Guild tradition until the late '80s. Today it's the council's biggest house. 32 people. Its own page calls it an artistic-bohemian commune.</p>
+<h2>Nobody here is the boss</h2>
+<p>So why do the shows keep ending up in somebody's house instead of a club? Because nobody here is the boss. At 21st Street, even the rent gets voted on by the members. In 2014 the Austin Chronicle gave the house a Best of Austin for Best "Whoever Holds the Conch." That's a Lord of the Flies joke. It's also just accurate.</p>
+<h2>So the house says yes</h2>
+<p>A night happens when a crew brings it and the house says yes. XBONGX came in with One Bee. Five bands on a Saturday in somebody's living situation. PULSE ANGELS came from The New Project, a creative collective out of UT, with Groove Sanctuary and ithertz. We think that's the whole difference. A club books whatever sells drinks. A house books what the house wants to hear.</p>
+<h2>What you heard and what's on the record</h2>
+<p>You heard 21st Street throws a birthday every fall for thousands of people. Wikipedia says so and puts it on the third Saturday of November. We couldn't find a listing for this year. If it's still on, that's November 21. We're gonna go find out.</p>
+<h2>So mark your own calendar</h2>
+<p>AMOR ETERNO is at New Guild on Friday, October 30. The New Project and Pearl Street Co-op have NIGHTMARE ON PEARL STREET on Halloween. The houses post their own flyers, so read them before you drive. Austin's about an hour and 20 minutes up I-35 from San Antonio.</p>
+<p>Our frames from <a href="https://0fftheprint.com/events/2026-10-03-pulse-angels-3/" target="_blank" rel="noopener">PULSE ANGELS 3</a>, <a href="https://0fftheprint.com/events/2026-09-26-xbongx/" target="_blank" rel="noopener">XBONGX</a> and <a href="https://0fftheprint.com/events/2026-09-11-brainrot/" target="_blank" rel="noopener">BRAINROT</a> are up.</p>
+<p>None of it works unless 100 people keep doing their 6 hours. So when the house throws a party, that's the receipt. The house still works.</p>
+<p>21st Street Co-op and New Guild Co-op, Austin. September 11 to October 3, 2026.</p>
+<p>Spotted something? <a href="https://0fftheprint.com/#take" target="_blank" rel="noopener">Tell the desk</a>. Off the record stays off the record.</p>
+  </article>
+  <section class="wall" id="wall" data-story="this-is-a-dorm" hidden>
+    <h2>From the floor</h2>
+    <div id="wall-entries"></div>
+    <div id="wall-compose"></div>
+  </section>
+  <div class="foot">Every drop gets a number. This one is 0TP-040. <a href="../../#desk">Back to The Word &rarr;</a></div>
+</div>
+<script src="../../supabase-config.js?v=f1348482"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" integrity="sha384-Rj26LVGvoeRVR6+mwQmFfcR3QOBEwT+ZmuCWpuiqeTzJpCs0ER4ITAWGb4Hiy3Ok" crossorigin="anonymous"></script>
+<script src="../../assets/js/desk.js?v=12f3e9e0" defer></script>
+<script src="../../assets/js/word.js?v=bd4e6159" defer></script>
+</body>
+</html>

@@ -1,6 +1,21 @@
 {
   "items": [
     {
+      "title": "This Is A Dorm",
+      "kicker": "THE ROOMS",
+      "dek": "15 DJs, 3 stages, till 2 in the morning, in a building where 100 people live. Austin's co-ops throw better shows than most clubs. Here's how they do it.",
+      "date": "10.21.26",
+      "lanes": [
+        "story"
+      ],
+      "dept": "story",
+      "platform": "SITE",
+      "thumb": "word/this-is-a-dorm/thumb.jpg",
+      "link": "word/this-is-a-dorm/",
+      "num": "0TP-040",
+      "shelf": "nights"
+    },
+    {
       "title": "Fifteen Dollars And Whatever Fits",
       "kicker": "THE HAUL",
       "dek": "Thrift @ The Warehouse fills a bag for fifteen dollars every third Saturday. We hit both Austin stores before noon. Here is what came out of the pile.",
