@@ -28,6 +28,17 @@ He locked three calls: **both readers, two doors** · **keep the look, cut the g
 - Checked: 1280 and 375 in the Browser pane, 0 overflow offenders on all four pages, every image loads, no console errors, film preview plays, sound swap works, old `#design` lands on `archive/#design`.
 
 
+## HIRING grew the SCRIPTED PROMOS block, the Thrift model day (Oct 21 2026)
+
+His ask: "add them to the portfolio too" (right after the 10 model-day edits went on THE TAPE). `<!-- THRIFT1020 -->` sits under
+"The newest job", ABOVE `<!-- THRIFT -->` (Fill-a-Bag): clip-label SCRIPTED PROMOS · 5 PROMOS · 2 WALK-INS · 3 MONTAGES, ten `.tape.play`
+cuts, one client-credits paragraph. Hand-kept (not a nightsblock marker: the day has no photos).
+- The clips are NOT copied here: they play from 0tp-media-2 (`video/2026-10-20-tatw-model-day/`, the same files THE TAPE uses) and the
+  posters are the tape's own (`/video/thrift-1020/*.jpg`, root-absolute so the twins and the sub-pages agree). The site repo is ~485 MB.
+- `.tapes.watch.ten` is NEW in `_tapes.css`: 5 across, 3 under 860px, 2 under 640px (159px tiles at 375), so ten cuts do not stack
+  into ten screens. Stamp `?v=20261021a` on all five pages that load `_tapes.css`. index.html and index-kawaii.html stay byte-identical.
+- Checked on a scratch mirror at 375 and 1280: 2 and 5 columns, no overflow, posters load, a clip plays (readyState 4).
+
 ## 🗑 DELETED 2026-10-01 (his call, cleanup pass)
 Removed: `portfolio/photoshoots/ theplan/ sarisari/ bethel/ brujas/ rise/ gateway/ dream/ steel/`, plus the hit
 list (`/hitlist/` + `/desk/targets/`) and its links on the board, the desk and the goals page. All recoverable

@@ -47,3 +47,8 @@
 /* a widescreen film runs alone across the row and keeps its 16:9 frame (the 9:16 cover crop above would cut the sides off) */
 .tapes.film{grid-template-columns:minmax(0,1fr);max-width:760px}
 .tapes.film .tape video{aspect-ratio:16/9;object-fit:contain}
+/* .tapes.watch.ten = a whole job's edits in one block (10/21, the Thrift model day): five across on a laptop, two on a phone,
+   so ten cuts do not stack into ten screens of scroll */
+.tapes.watch.ten{grid-template-columns:repeat(5,minmax(0,1fr));max-width:1010px;gap:12px}
+@media(max-width:860px){.tapes.watch.ten{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:640px){.tapes.watch.ten{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}}
