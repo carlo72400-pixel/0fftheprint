@@ -978,10 +978,14 @@ def main():
     # update the index
     idx_path = os.path.join(EVENTS, "events.json")
     idx = json.load(open(idx_path)) if os.path.exists(idx_path) else {"items": []}
+    old = next((e for e in idx["items"] if e["slug"] == slug), None)
     idx["items"] = [e for e in idx["items"] if e["slug"] != slug]
     row = {"slug": slug, "title": title, "venue": a.venue,
            "date": a.date, "date_short": dateshort,
            "count": len(items), "cover": f"{slug}/media/001_t.jpg"}
+    # 10/21: the day it went up. The homepage timeline places a night by `up` (else its date), so a night posted late
+    # still lands on top; a rebuild keeps the first day.
+    row["up"] = (old or {}).get("up") or datetime.now().strftime("%Y-%m-%d")
     if a.mini:
         row["mini"] = True
     idx["items"].append(row)

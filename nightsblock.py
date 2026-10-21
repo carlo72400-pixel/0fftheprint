@@ -18,7 +18,11 @@ config:
    "alts": [8 strings], "left": "html", "right": "html", "credits": "html",
    "extra": "html",                       # optional, between the grid and the credits (a tapes row)
    "after": "BRAINROT",                   # optional: on the nights page, go directly BELOW this block
-   "featured": true}                      # optional: also put it on the main page (top of its six)
+   "featured": true,                      # optional: also put it on the main page (top of its six)
+   "timeline": {"title": "...", "line": "...", "link": "portfolio/nights/", "thumb": "portfolio/assets/..."}}
+                                          # optional (10/21): a PORTFOLIO-ONLY block (no 0TP night or Tape cut of its own)
+                                          # also lands on the homepage timeline: content/portfolio.json, keyed by marker,
+                                          # `up` = the first day it went up (a re-run keeps it). thumb defaults to frame 01.
 
 WHERE BLOCKS LIVE (2026-10-18 rebuild):
   portfolio/nights/index.html  every block, NEWEST FIRST. A marker it has never seen goes to
@@ -131,6 +135,18 @@ def main():
         print(f"  {f}: {mk} {how or 'not featured, left alone'}")
     a, b = (open(os.path.join(PF, f), "rb").read() for f in HOME_PAGES)
     assert a == b, "index.html and index-kawaii.html are no longer identical"
+    tl = cfg.get("timeline")
+    if tl:
+        import datetime
+        fp = os.path.join(os.path.dirname(PF), "content", "portfolio.json")
+        j = json.load(open(fp)) if os.path.exists(fp) else {"items": []}
+        old = next((r for r in j["items"] if r.get("key") == mk), None)
+        row = {"key": mk, "up": (old or {}).get("up") or datetime.date.today().isoformat(), "title": tl["title"],
+               "line": tl.get("line", ""), "link": tl.get("link", "portfolio/nights/"),
+               "thumb": tl.get("thumb", f"portfolio/assets/{cfg['asset_dir']}/{pre}_01.jpg")}
+        j["items"] = [row] + [r for r in j["items"] if r.get("key") != mk]
+        open(fp, "w").write(json.dumps(j, indent=2, ensure_ascii=True) + "\n")
+        print(f"  content/portfolio.json: {mk} on the homepage timeline (up {row['up']})")
 
 
 if __name__ == "__main__":

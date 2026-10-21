@@ -29,19 +29,25 @@
   /* ---------- what the house has: asked for once, shared by everything below ---------- */
   var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   var DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  var nightsP = null, storiesP = null;
-  function nights() {
-    if (!nightsP) nightsP = fetch('events/events.json', { cache: 'no-cache' })
+  var nightsP = null, storiesP = null, eventsP = null;
+  function events() {
+    if (!eventsP) eventsP = fetch('events/events.json', { cache: 'no-cache' })
       .then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (j) {
-        // a MINI PACK (10/16, events.json `mini`) is not a night: off the counter, the picker and the new-night card.
-        // It still sits on the shelf (/events/, the Photos set list), tagged MINI.
-        var items = ((j && j.items) || []).filter(function (e) { return e && SLUG.test(e.slug || '') && (e.count | 0) > 0 && !e.mini; });
-        items.sort(function (a, b) { return String(b.date).localeCompare(String(a.date)); });
-        return items;
-      }).catch(function () { return []; });
+      .then(function (j) { return ((j && j.items) || []).filter(function (e) { return e && SLUG.test(e.slug || '') && (e.count | 0) > 0; }); })
+      .catch(function () { return []; });
+    return eventsP;
+  }
+  function nights() {
+    if (!nightsP) nightsP = events().then(function (all) {
+      // a MINI PACK (10/16, events.json `mini`) is not a night: off the counter, the picker and the new-night card.
+      // It still sits on the shelf (/events/, the Photos set list), tagged MINI, and (10/21) gets its own timeline card.
+      var items = all.filter(function (e) { return !e.mini; });
+      items.sort(function (a, b) { return String(b.date).localeCompare(String(a.date)); });
+      return items;
+    });
     return nightsP;
   }
+  function minis() { return events().then(function (all) { return all.filter(function (e) { return e.mini; }); }); }
   // a story's page, or (Wave 2) a live one the reader serves before the bake: word/live/?s=<slug>
   var STORY = /^word\/(?:[a-z0-9][a-z0-9-]{0,90}\/|live\/\?s=[a-z0-9][a-z0-9-]{0,90})$/, STHUMB = /^word\/[a-z0-9][a-z0-9-]{0,90}\/thumb\.jpg$/;
   // Wave 2: wait for something the page sets (window[flag] stops being undefined, or it fires ev), 2 s at most.
@@ -94,6 +100,42 @@
         });
       }).catch(function () { return []; });
     return tapeP;
+  }
+  // PORTFOLIO-ONLY work for the timeline (10/21): content/portfolio.json, one row per thing that went up on /portfolio/ and
+  // nowhere else (a cut that is also on The Tape, or a night that is also a pack, already has its card). nightsblock.py
+  // writes a row when its config carries "timeline"; a hand-kept block adds its row by hand.
+  var folioP = null, FOLIO = /^portfolio\/(?:[a-z0-9-]+\/)?(?:#[a-z0-9-]+)?$/, FTHUMB = /^portfolio\/assets\/[a-z0-9\/._-]{1,160}\.(?:jpe?g|webp|png)$/i;
+  function folio() {
+    if (!folioP) folioP = fetch('content/portfolio.json', { cache: 'no-cache' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) { return ((j && j.items) || []).filter(function (x) { return x && x.title && FOLIO.test(x.link || '') && ymd(x.up); }); })
+      .catch(function () { return []; });
+    return folioP;
+  }
+  // THE CRYPT for the timeline (10/21): the weekly flyer build stamps wall/build.txt (yyyymmddhhmmss). Members only, like
+  // its nav link (his call 10/2): the card is built for everyone and cathedral.css shows it only on html[data-door="in"].
+  var cryptP = null;
+  function crypt() {
+    if (!cryptP) cryptP = fetch('wall/build.txt', { cache: 'no-cache' })
+      .then(function (r) { return r.ok ? r.text() : ''; })
+      .then(function (t) { var m = /^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})/.exec(String(t || '').trim()); return m ? new Date(+m[1], +m[2] - 1, +m[3], +m[4], +m[5]) : null; })
+      .catch(function () { return null; });
+    return cryptP;
+  }
+  // THE PACKS members and the house make (migration 037 packs_list, anon reads the shelf): the published ones, by the day made.
+  var apacksP = null;
+  function apacks() {
+    if (!apacksP) apacksP = (w.OTP && w.OTP.configured && w.OTP.sb ? Promise.resolve(w.OTP.sb().rpc('packs_list')) : Promise.resolve(null))
+      .then(function (r) { return (r && !r.error && Array.isArray(r.data)) ? r.data.filter(function (p) { return p && p.published && SLUG.test(p.slug || '') && p.title && !isNaN(Date.parse(p.created_at || '')); }) : []; })
+      .catch(function () { return []; });
+    return apacksP;
+  }
+  function packCover(key) {
+    try {
+      var u = w.OTP && w.OTP.packPhotoUrl ? w.OTP.packPhotoUrl(key) : ''; if (!u) return '';
+      var x = new URL(u, d.baseURI), host = new URL((w.OTP_SUPABASE || {}).url || '').host;
+      return x.protocol === 'https:' && host && x.host === host && /^\/storage\/v1\/object\/public\//.test(x.pathname) ? x.href : '';
+    } catch (e) { return ''; }
   }
   function mdy(v) { var m = /^(\d{2})\.(\d{2})\.(\d{2})$/.exec(String(v || '')); return m ? new Date(2000 + (+m[3]), +m[1] - 1, +m[2], 12) : null; }
   function binder() { return w.OTPBinder || null; }
@@ -267,10 +309,11 @@
   }
 
   /* ---------- the house's own news, in the timeline ----------
-     Nights, stories and (10/21) the cuts that went up on The Tape, dated, slotted between the posts in order. A media house that shot 18 nights
+     Nights, stories and (10/21, his rule: "all the new shit should show up on the timeline") the cuts on The Tape, mini packs,
+     portfolio-only work, the Crypt's weekly flyers (members only) and the packs on the shelf, dated, slotted between the posts. A media house that shot 18 nights
      and wrote 28 stories should not have a timeline that reads as one person talking to himself.
      ⛔ These are links, not posts: no reactions, no author, never mistaken for something a member said. */
-  var HOUSE_CAP = 6;
+  var HOUSE_CAP = 8;   // the newest eight, across nights, mini packs, stories, cuts, the portfolio, the Crypt and the packs (10/21: 6 -> 8)
   function houseFeed() {
     var mount = d.getElementById('take-mount'); if (!mount) return;
     var placed = false;
@@ -284,16 +327,16 @@
       return i;
     }
     function nightCard(e, dt) {
-      var a = el('a', 'hx night'); a.href = 'events/' + e.slug + '/';
+      var a = el('a', 'hx night' + (e.mini ? ' mini' : '')); a.href = 'events/' + e.slug + '/';
       a.appendChild(avatar());
-      var main = el('span', 'hx-main'); main.appendChild(label('new night', dt));
+      var main = el('span', 'hx-main'); main.appendChild(label(e.mini ? 'new mini pack' : 'new night', dt));
       var row = el('span', 'hx-row');
       var pk = el('span', 'hx-pk'); var im = el('img'); im.alt = ''; im.loading = 'lazy'; im.decoding = 'async'; im.width = 520; im.height = 878;
       im.addEventListener('error', function () { im.src = 'assets/cathedral/pack-house.webp'; }, { once: true });
       im.src = 'events/' + e.slug + '/pack.webp'; pk.appendChild(im); row.appendChild(pk);
       var tx = el('span', 'hx-tx');
       tx.appendChild(el('b', '', (e.title || '') + (e.venue ? ' @ ' + e.venue : '')));
-      var line = el('span', '', (e.count | 0) + ' frames went up. Were you there?'), go = el('em', '', 'tear the pack →');
+      var line = el('span', '', e.mini ? (e.count | 0) + ' frames, one rip deals them all.' : (e.count | 0) + ' frames went up. Were you there?'), go = el('em', '', 'tear the pack →');
       var B = binder(), st = null; try { st = B ? B.night(e.slug) : null; } catch (err) {}
       if (st && st.opened) { line.textContent = st.done ? 'All ' + (e.count | 0) + ' frames are in your binder.' : st.have + ' of ' + (e.count | 0) + ' in your binder.'; go.textContent = st.done ? 'see the night →' : 'rip another →'; }
       tx.appendChild(line); tx.appendChild(go); row.appendChild(tx);
@@ -348,13 +391,50 @@
       main.appendChild(tx); a.appendChild(main);
       return a;
     }
+    // the wide row (10/21): a 16:9 picture beside the words, for the portfolio and the Crypt
+    function wideCard(cls, href, what, dt, pic, title, line, go) {
+      var a = el('a', 'hx ' + cls); a.href = href;
+      a.appendChild(avatar());
+      var main = el('span', 'hx-main'); main.appendChild(label(what, dt));
+      var row = el('span', 'hx-row hx-wide');
+      var pk = el('span', 'hx-wpic'); var im = el('img'); im.alt = ''; im.loading = 'lazy'; im.decoding = 'async'; im.width = 1200; im.height = 675;
+      im.addEventListener('error', function () { pk.remove(); }, { once: true }); im.src = pic; pk.appendChild(im); row.appendChild(pk);
+      var tx = el('span', 'hx-tx'); tx.appendChild(el('b', '', title)); tx.appendChild(el('span', '', line)); tx.appendChild(el('em', '', go));
+      row.appendChild(tx); main.appendChild(row); a.appendChild(main);
+      return a;
+    }
+    function folioCard(x, dt) {
+      var pic = FTHUMB.test(x.thumb || '') ? x.thumb : 'portfolio/assets/preview.jpg';
+      return wideCard('folio', x.link, 'new on the portfolio', dt, pic, x.title, String(x.line || '').slice(0, 160), 'see it \u2192');
+    }
+    function cryptCard(dt) {
+      return wideCard('crypt', 'wall/', 'new flyers', dt, 'wall/preview.jpg', 'This week in the Crypt', 'The week\u2019s flyers are up. See who\u2019s going.', 'open the Crypt \u2192');
+    }
+    function apackCard(g, dt) {
+      var one = g.list.length === 1, p0 = g.list[0];
+      var a = el('a', 'hx apack'); a.href = one ? 'packs/?p=' + encodeURIComponent(p0.slug) : 'packs/';
+      a.appendChild(avatar());
+      var main = el('span', 'hx-main'); main.appendChild(label(one ? 'new pack' : g.list.length + ' new packs', dt));
+      var tx = el('span', 'hx-tx');
+      tx.appendChild(el('b', '', one ? p0.title : g.list.map(function (p) { return p.title; }).slice(0, 2).join(' + ') + (g.list.length > 2 ? ' + more' : '')));
+      tx.appendChild(el('span', '', one ? 'by ' + (p0.author || 'Member') + ' \u00b7 ' + (p0.cards | 0) + ' cards' + (p0.has_hit ? ' \u00b7 one hit' : '') : g.list.length + ' packs went on the shelf.'));
+      var strip = el('span', 'hx-strip sq');
+      g.list.slice(0, TAPE_SHOW).forEach(function (p) { var u = packCover(p.cover); if (!u) return; var im = el('img'); im.alt = ''; im.loading = 'lazy'; im.decoding = 'async';
+        im.width = 400; im.height = 500; im.addEventListener('error', function () { im.remove(); }, { once: true }); im.src = u; strip.appendChild(im); });
+      if (strip.childNodes.length) tx.appendChild(strip);
+      tx.appendChild(el('em', '', one ? 'tear it open \u2192' : 'see the shelf \u2192'));
+      main.appendChild(tx); a.appendChild(main);
+      return a;
+    }
     var built = null, placing = false, seenPosts = 0;
-    function place(ns, st, tp) {
+    function place(ns, st, tp, mi, fo, cr, ap) {
       // built once, placed again whenever the timeline grows (Show older posts), so the order stays true
       if (built) { slot(); return; }
       var items = [];
       // the newest night is on the dock already
-      ns.slice(1).forEach(function (e) { var dt = ymd(e.date); if (dt) items.push({ t: dt.getTime() + 9 * 36e5, kind: 'n', e: e, dt: dt }); });
+      // a night lands by the day it went up (`up`, newevent.py since 10/21), else its own date; the card still says its date
+      ns.slice(1).forEach(function (e) { var dt = ymd(e.date), at = ymd(e.up || e.date); if (dt && at) items.push({ t: at.getTime() + 9 * 36e5, kind: 'n', e: e, dt: dt }); });
+      (mi || []).forEach(function (e) { var dt = ymd(e.date), at = ymd(e.up || e.date); if (dt && at) items.push({ t: at.getTime() + 9 * 36e5, kind: 'n', e: e, dt: dt }); });
       var by = {};
       st.forEach(function (x) { var dt = mdy(x.date); if (!dt) return; var k = dt.getTime(); (by[k] = by[k] || { t: k, kind: 's', list: [], dt: dt }).list.push(x); });
       Object.keys(by).forEach(function (k) { items.push(by[k]); });
@@ -362,8 +442,16 @@
       (tp || []).forEach(function (v) { var dt = ymd(v.up || v.date); if (!dt) return; var k = dt.getTime() + '|' + (v.from || '');
         (tb[k] = tb[k] || { t: dt.getTime() + 10 * 36e5, kind: 't', list: [], dt: dt, from: v.from || '' }).list.push(v); });
       Object.keys(tb).forEach(function (k) { items.push(tb[k]); });
+      (fo || []).forEach(function (x) { var dt = ymd(x.up); if (dt) items.push({ t: dt.getTime() + 11 * 36e5, kind: 'f', x: x, dt: dt }); });
+      if (cr) items.push({ t: cr.getTime(), kind: 'c', dt: cr });
+      var pb = {};
+      (ap || []).forEach(function (p) { var c = new Date(Date.parse(p.created_at)), dt = new Date(c.getFullYear(), c.getMonth(), c.getDate(), 12), k = dt.getTime();
+        (pb[k] = pb[k] || { t: c.getTime(), kind: 'a', list: [], dt: dt }).list.push(p); });
+      Object.keys(pb).forEach(function (k) { items.push(pb[k]); });
       items.sort(function (a, b) { return b.t - a.t; });
-      built = items.slice(0, HOUSE_CAP).map(function (it) { return { t: it.t, node: it.kind === 'n' ? nightCard(it.e, it.dt) : it.kind === 't' ? tapeCard(it, it.dt) : storyCard(it.list, it.dt) }; });
+      var CARD = { n: function (it) { return nightCard(it.e, it.dt); }, t: function (it) { return tapeCard(it, it.dt); }, s: function (it) { return storyCard(it.list, it.dt); },
+                   f: function (it) { return folioCard(it.x, it.dt); }, c: function (it) { return cryptCard(it.dt); }, a: function (it) { return apackCard(it, it.dt); } };
+      built = items.slice(0, HOUSE_CAP).map(function (it) { return { t: it.t, node: CARD[it.kind](it) }; });
       slot();
       // a member's binder moves: the night cards say so
       try { if (binder()) binder().on(function () { Array.prototype.forEach.call(mount.querySelectorAll('.hx.night'), function (a) {
@@ -408,7 +496,7 @@
       pinFold();
       if (placed) { if (built && mount.querySelectorAll('.post-t').length !== seenPosts) slot(); return; }
       placed = true;
-      Promise.all([nights(), stories(), tape()]).then(function (got) { try { place(got[0], got[1], got[2]); } catch (e) {} });
+      Promise.all([nights(), stories(), tape(), minis(), folio(), crypt(), apacks()]).then(function (got) { try { place(got[0], got[1], got[2], got[3], got[4], got[5], got[6]); } catch (e) {} });
     }
     go();
     try { new MutationObserver(go).observe(mount, { childList: true }); } catch (e) {}
