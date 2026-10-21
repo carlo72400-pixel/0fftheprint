@@ -560,3 +560,20 @@ html.cath .tear-new{position:absolute;right:10px;top:8px;padding:4px 8px;border:
 .pk-t small{font:700 10px/1.3 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:#a39fad}
 .pk-go{font:700 11px/1 var(--f-mono);letter-spacing:.18em;text-transform:uppercase;color:var(--gold,#ffd479);padding:9px 10px;border-radius:4px;background:#0b0a0e;box-shadow:inset 0 1px 3px rgba(0,0,0,.9),0 1px 0 rgba(255,255,255,.1);white-space:nowrap}
 @media (max-width:420px){.playkey{grid-template-columns:56px minmax(0,1fr) auto;gap:10px}.pk-gem{width:56px;height:56px}.pk-t b{font-size:22px}.pk-go{padding:8px 8px;font-size:10px}}
+
+/* 10/21: THE AD joins the play key ("find a way to impliment it nicely on to the home"). One deck, two keys, the game and
+   the tool, side by side on the same camera-body slab. Narrow, each key stacks: the gem with its pill across from it, the
+   name under, and only the short line (.pk-more drops). */
+.keydeck{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0 16px}
+.keydeck .playkey{margin:0}
+@media (max-width:760px){
+  .keydeck .playkey{grid-template-columns:auto minmax(0,1fr);align-items:center;gap:10px 8px;padding:11px 11px 13px}
+  .keydeck .pk-gem{grid-row:1;grid-column:1;width:52px;height:52px;padding:6px}
+  .keydeck .pk-go{grid-row:1;grid-column:2;justify-self:end}
+  .keydeck .pk-t{grid-row:2;grid-column:1/-1}
+  .keydeck .pk-t b{font-size:21px}
+  .keydeck .pk-t small{font-size:9.5px;letter-spacing:.12em}
+  .keydeck .pk-more{display:none}
+}
+.keydeck .pk-gem.pk-ad{padding:3px}   /* the stopwatch is square with air around it, so it sits bigger in the gem to weigh what the shutter does */
+@media (max-width:360px){ .keydeck .pk-gem{width:46px;height:46px} .keydeck .pk-go{letter-spacing:.12em;padding:8px 7px} }   /* 320 wide: START cleared the gem by -2px */

@@ -3973,7 +3973,7 @@
 <!-- THE CATHEDRAL (10/3): the homepage skin. Scoped under html.cath, loaded last on purpose. -->
 <link rel="stylesheet" href="assets/css/pack.css?v=19b679bc">
 <link rel="stylesheet" href="assets/css/binder.css?v=f47d0aee">
-<link rel="stylesheet" href="assets/css/cathedral.css?v=618f7979">
+<link rel="stylesheet" href="assets/css/cathedral.css?v=d1de4c7e">
 <link rel="stylesheet" href="assets/css/lounge.css?v=2d07e1fc">
 <link rel="stylesheet" href="assets/css/music.css?v=815cfdc9">
 <link rel="stylesheet" href="assets/css/people.css?v=85ce71bf">
@@ -4291,8 +4291,13 @@
            the member's counts off the same calls the Crypt makes: Messages unread (dm_inbox), Kin asks (friend_asks),
            nights going (wall_going), the binder totals, the pulls Get the Shot banked. A stranger gets the three steps
            and what the house gives you. ⛔ Both stay hidden until the door is known, so nobody sees the wrong one. -->
-      <!-- GET THE SHOT: the one key for the game (10/15 late, his call: Play off the tab bar, "a special button for it on the home screen"). -->
-      <a class="playkey" href="play/"><img class="pk-gem" src="play/art/ui/shutter.webp" alt="" width="64" height="64" decoding="async"><span class="pk-t"><b>Get the Shot</b><small>the game &middot; three tin rooms &middot; shoot for pulls</small></span><i class="pk-go">play &rsaquo;</i></a>
+      <!-- THE KEYS. GET THE SHOT: the key for the game (10/15 late, his call: Play off the tab bar, "a special button for it on the home screen").
+           THE AD beside it (10/21, "find a way to impliment it nicely on to the home"): the game and the tool, one deck, the same slab.
+           On a phone the .pk-more words drop, so each key reads its name and one line. -->
+      <div class="keydeck">
+        <a class="playkey" href="play/"><img class="pk-gem" src="play/art/ui/shutter.webp" alt="" width="64" height="64" decoding="async"><span class="pk-t"><b>Get the Shot</b><small><span class="pk-more">the game &middot; </span>shoot&nbsp;for&nbsp;pulls</small></span><i class="pk-go">play &rsaquo;</i></a>
+        <a class="playkey" href="ad/"><img class="pk-gem pk-ad" src="assets/cathedral/w/ad.webp" alt="" width="64" height="64" decoding="async"><span class="pk-t"><b>The AD</b><small><span class="pk-more">the tool &middot; </span>shoot&nbsp;day&nbsp;timer</small></span><i class="pk-go">start &rsaquo;</i></a>
+      </div>
       <div class="house" id="house-in" hidden>
         <div class="hs-head"><b>Welcome back, <span id="hs-name">you</span></b><span id="hs-sub">tonight &middot; your people &middot; your packs</span></div>
         <div class="hs-rail">
@@ -4334,10 +4339,11 @@
         <a class="do" href="dates/" id="do-next" data-cal><img class="di" src="assets/cathedral/a/coming.webp" alt="" width="44" height="44" decoding="async"><b>What&rsquo;s coming</b><span>what the house has coming</span></a>
         <a class="do" href="#open"><img class="di" src="assets/cathedral/a/pack.webp" alt="" width="44" height="44" decoding="async"><b>Open a pack</b><span>a random card from the house</span></a>
         <a class="do" href="#music"><img class="di" src="assets/cathedral/a/music.webp" alt="" width="44" height="44" decoding="async"><b>Play something</b><span>on rotation</span></a>
-        <a class="do" href="#desk"><img class="di" src="assets/cathedral/a/story.webp" alt="" width="44" height="44" decoding="async"><b>Read a story</b><span>from the house</span>
+        <a class="do" href="#desk"><img class="di" src="assets/cathedral/a/story.webp" alt="" width="44" height="44" decoding="async"><b>Read a story</b><span>from the house</span></a>
         <a class="do" href="#book"><img class="di" src="assets/cathedral/a/story.webp" alt="" width="44" height="44" decoding="async"><b>Book the house</b><span>events &middot; portraits &middot; artists</span></a>
         <a class="do" href="kit/"><img class="di" src="assets/cathedral/i-kit.webp" alt="" width="44" height="44" decoding="async"><b>The Kit</b><span>filmmaker tools &middot; free</span></a>
-        <a class="do" href="play/"><img class="di" src="assets/cathedral/i-play.webp" alt="" width="44" height="44" decoding="async"><b>Get the Shot</b><span>the game &middot; ten frames</span></a></a>
+        <a class="do" href="ad/"><img class="di" src="assets/cathedral/w/ad.webp" alt="" width="44" height="44" decoding="async"><b>The AD</b><span>shoot day timer &middot; free</span></a>
+        <a class="do" href="play/"><img class="di" src="assets/cathedral/i-play.webp" alt="" width="44" height="44" decoding="async"><b>Get the Shot</b><span>the game &middot; ten frames</span></a>
         <a class="do wall" id="do-join" href="wall/" hidden><img class="di" src="assets/cathedral/a/join.webp" alt="" width="44" height="44" decoding="async"><b>Join the Crypt</b><span>all it takes is an @</span></a>
       </div>
     </section>
