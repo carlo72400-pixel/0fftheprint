@@ -1,0 +1,16 @@
+{
+ "name": "THE AD · 0FF THE PRINT",
+ "short_name": "THE AD",
+ "id": "/ad/",
+ "start_url": "/ad/",
+ "scope": "/ad/",
+ "display": "standalone",
+ "orientation": "portrait",
+ "background_color": "#ffe8f5",
+ "theme_color": "#ffc2e2",
+ "description": "Your pocket assistant director: paste the lines, see what fits before the wrap, run the set on the clock.",
+ "icons": [
+  {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+  {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+ ]
+}

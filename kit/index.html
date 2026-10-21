@@ -296,6 +296,7 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
 .qrkey{display:grid;grid-template-columns:44px minmax(0,1fr);gap:0 12px;align-items:center;text-align:left;margin:0 0 14px;padding:10px 14px;min-height:64px;font-size:20px}
 .qrkey img{width:44px;height:44px;border-radius:4px;background:#fff;padding:2px}
 .qrkey small{display:block;font:700 9.5px/1.3 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(42,10,30,.7)}
+.adkey{color:#f1ecf5}.adkey img{background:none;padding:0;object-fit:contain;filter:drop-shadow(0 0 8px rgba(255,121,198,.35))}.adkey small{color:#9b95a6}
 .qrfull{position:fixed;inset:0;z-index:95;background:#0a0a0d url(../assets/cathedral/shot/qr_wall.webp) center/cover no-repeat;display:grid;place-items:center;padding:24px}
 .qrfull::before{content:"";position:absolute;inset:0;background:radial-gradient(70% 55% at 50% 60%,transparent 40%,rgba(0,0,0,.55) 100%)}
 .qrfull[hidden]{display:none}
@@ -469,6 +470,8 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
          page: follow, leave your @, wait for the pack). The PNG is in the worker, so it shows with no signal. -->
     <button type="button" class="btn primary big qrkey" id="qr-show"><img src="qr-shot.png" alt="" width="44" height="44"><span>Show the QR<small>you got shot · 0fftheprint.com/shot</small></span></button>
     <button type="button" class="btn primary big qrkey askkey" id="ask-show"><img src="../assets/cathedral/shot/ask_p.webp?v=3" alt="" width="44" height="44" style="object-fit:contain;object-position:top;background:#2a0a1e"><span>The Ask<small>can I get a photo? · they tap YES</small></span></button>
+    <!-- THE AD (10/21): his pocket assistant director, its own page and its own home-screen icon (../ad/) -->
+    <a class="btn big qrkey adkey" href="../ad/"><img src="../assets/cathedral/w/ad.webp" alt="" width="44" height="44"><span>The AD<small>run a shoot day on the clock · lines, takes, wrap</small></span></a>
     <div class="doors">
       <button type="button" class="door" data-go="prompter"><img src="../assets/cathedral/w/screen.webp" alt=""><b>Prompter</b><span>read to camera</span></button>
       <button type="button" class="door" data-go="slate"><img src="../assets/cathedral/w/film.webp" alt=""><b>Slate</b><span>beep + flash to sync</span></button>

@@ -1,0 +1,1115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>THE AD · 0FF THE PRINT</title>
+<meta name="description" content="Your pocket assistant director: paste the lines, see what fits before the wrap, shoot the repeats back to back, a shot clock between takes, a day report after. Works offline.">
+<meta name="robots" content="noindex">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Your lines · THE AD">
+<meta property="og:description" content="Your lines for the shoot, big and easy to read.">
+<meta property="og:image" content="https://0fftheprint.com/ad/preview.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#ffc2e2">
+<meta name="color-scheme" content="light">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="THE AD">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="icon-192.png">
+<style>
+/* the fonts, self-hosted (a phone's own system font never swaps in): Mochiy Pop One and Silkscreen are OFL (Pixelify was dropped: its 5 reads as an S), licenses in assets/fonts */
+@font-face{font-family:'Inter';font-style:normal;font-weight:100 900;font-display:swap;src:url(../assets/fonts/inter-400.woff2) format('woff2')}
+@font-face{font-family:'Mochiy Pop One';font-style:normal;font-weight:400;font-display:swap;src:url(../assets/fonts/mochiy-pop-one-400.woff2) format('woff2')}
+@font-face{font-family:'Silkscreen';font-style:normal;font-weight:400;font-display:swap;src:url(../assets/fonts/silkscreen-400.woff2) format('woff2')}
+@font-face{font-family:'Silkscreen';font-style:normal;font-weight:700;font-display:swap;src:url(../assets/fonts/silkscreen-700.woff2) format('woff2')}
+</style>
+<style>
+/* THE AD (10/21): the pocket assistant director. Paste the client's lines on the spot, see what fits before the wrap, then
+   run the set with one hand: the line big, a timer per line that redlines past its budget, a TIME bar for the day that
+   drains and then fills back up red in overtime, takes as hearts, one-word notes, a report after.
+   SKIN (his 10/21 ask, "give it an early 2000s game ui and make it cute"): a pastel candy handheld-game menu. Glossy
+   bubble keys with one purple cartoon line, RPG dialog boxes (the script name is the name tab), READY? GO! and STAGE
+   CLEAR! pop-ups. Light on purpose: color-scheme light keeps phone dark modes off the pastels. Works with no signal (sw.js). */
+:root{
+  --ink:#4a2a6e;--line:#5b3d8e;--soft:#6a4f9c;--muted:#6b5a96;
+  --pink:#ff8cc6;--pink-2:#ffc8e4;--pink-deep:#d63a8c;--lilac:#c9b3ff;--lilac-2:#ebe2ff;--sky:#8fd0ff;--sky-2:#d9f0ff;
+  --mint:#a6f0d0;--lemon:#fff3a0;--peach:#ffcaa8;--cream:#fffafd;--red:#ff4f7a;--red-deep:#a8203f;--amber:#8f4c0a;--green-t:#1f7a52;--blue-t:#235d97;--pink-t:#b02a72;
+  --rainbow:linear-gradient(90deg,#ff9ecb,#ffc29e 20%,#fff09a 40%,#a8f0c6 60%,#9fd8ff 80%,#c9b3ff);
+  --ol:2px 0 0 var(--line),-2px 0 0 var(--line),0 2px 0 var(--line),0 -2px 0 var(--line),1.5px 1.5px 0 var(--line),-1.5px -1.5px 0 var(--line),1.5px -1.5px 0 var(--line),-1.5px 1.5px 0 var(--line);
+  --olp:2px 0 0 #b8306f,-2px 0 0 #b8306f,0 2px 0 #b8306f,0 -2px 0 #b8306f,1.5px 1.5px 0 #b8306f,-1.5px -1.5px 0 #b8306f,1.5px -1.5px 0 #b8306f,-1.5px 1.5px 0 #b8306f;
+  --olb:2px 0 0 #2f6fb0,-2px 0 0 #2f6fb0,0 2px 0 #2f6fb0,0 -2px 0 #2f6fb0,1.5px 1.5px 0 #2f6fb0,-1.5px -1.5px 0 #2f6fb0,1.5px -1.5px 0 #2f6fb0,-1.5px 1.5px 0 #2f6fb0;
+  --f-pop:'Mochiy Pop One','Arial Rounded MT Bold','Trebuchet MS',sans-serif;--f-px:'Silkscreen','Courier New',monospace;--f-ui:'Silkscreen','Courier New',monospace;--f-body:'Inter',system-ui,-apple-system,sans-serif;
+  --star:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);
+  --sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);color-scheme:light;
+}
+*{box-sizing:border-box}
+html{background:#ffe8f5;-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;color:var(--ink);font:500 16px/1.45 var(--f-body);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;overscroll-behavior:none;
+  background:radial-gradient(rgba(255,255,255,.8) 1.2px,transparent 1.8px) 0 0/16px 16px,linear-gradient(180deg,#ffe0f1 0%,#f0e4ff 48%,#dcefff 100%);background-attachment:fixed}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+.app{position:relative;z-index:1;max-width:560px;margin:0 auto;min-height:100vh;min-height:100dvh;padding:0 16px calc(var(--sab) + 28px)}
+
+/* the sky: sparkles that twinkle behind everything */
+.sky{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.sky i{position:absolute;width:14px;height:14px;background:#fff;clip-path:var(--star);animation:tw 4.2s ease-in-out infinite}
+body[data-scr="run"] .sky i{animation:none;opacity:.55}
+.sky i:nth-child(1){left:7%;top:16%}.sky i:nth-child(2){left:86%;top:12%;width:18px;height:18px;animation-delay:-.7s}
+.sky i:nth-child(3){left:72%;top:34%;width:10px;height:10px;background:#ffc8e4;animation-delay:-1.4s}.sky i:nth-child(4){left:12%;top:48%;width:20px;height:20px;animation-delay:-2s}
+.sky i:nth-child(5){left:92%;top:58%;width:12px;height:12px;background:#d9c8ff;animation-delay:-.4s}.sky i:nth-child(6){left:40%;top:8%;width:10px;height:10px;animation-delay:-1.1s}
+.sky i:nth-child(7){left:24%;top:78%;width:16px;height:16px;background:#ffc8e4;animation-delay:-1.8s}.sky i:nth-child(8){left:80%;top:84%;width:18px;height:18px;animation-delay:-2.4s}
+.sky i:nth-child(9){left:54%;top:66%;width:9px;height:9px;animation-delay:-.2s}.sky i:nth-child(10){left:4%;top:92%;width:12px;height:12px;background:#d9c8ff;animation-delay:-1.6s}
+@keyframes tw{0%,100%{transform:scale(.55);opacity:.4}50%{transform:scale(1.1);opacity:1}}
+@media (prefers-reduced-motion:reduce){.sky i{animation:none;opacity:.7}}
+
+/* the title bar: a glossy pastel strip with a rainbow under it */
+.bar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;margin:0 -16px 20px;padding:calc(var(--sat) + 8px) 14px 10px;min-height:62px;
+  background:linear-gradient(180deg,rgba(255,255,255,.6),rgba(255,255,255,0) 55%),linear-gradient(90deg,#ffa8d6,#d8b8ff 55%,#a9d8ff);border-bottom:3px solid var(--line)}
+.bar::after{content:"";position:absolute;left:0;right:0;bottom:-11px;height:8px;background:var(--rainbow);border-bottom:3px solid var(--line)}
+.bar .back{flex:0 0 auto;width:46px;height:46px;border:3px solid var(--line);border-radius:50%;display:grid;place-items:center;background:linear-gradient(180deg,#fff,#e6dcff);color:var(--line);font:400 22px/1 var(--f-pop);box-shadow:0 3px 0 var(--line)}
+.bar .back:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
+body[data-scr="setup"] .bar .back,body[data-scr="her"] .bar .back{display:none}
+.wm{display:flex;align-items:center;gap:8px;min-width:0}
+.wm img{width:42px;height:42px;object-fit:contain;filter:drop-shadow(0 2px 0 rgba(91,61,142,.35))}
+.wm b{display:block;font:400 21px/1 var(--f-pop);color:#fff;letter-spacing:.02em;text-shadow:var(--ol),0 3px 0 var(--pink-deep);white-space:nowrap}
+.wm small{display:block;margin-top:5px;font:400 11px/1 var(--f-ui);letter-spacing:.04em;text-transform:uppercase;color:var(--line)}
+.sp{flex:1}
+.bar .clock{padding:8px 10px;border:3px solid var(--line);border-radius:999px;background:#fff;color:var(--line);font:400 15px/1 var(--f-px);white-space:nowrap;box-shadow:0 3px 0 var(--line)}
+body[data-scr="her"] .bar .clock{display:none}
+.bar .ins{min-height:44px;padding:0 10px;border:3px solid var(--line);border-radius:999px;background:var(--lemon);color:var(--line);font:400 12px/1 var(--f-ui);letter-spacing:.03em;text-transform:uppercase;box-shadow:0 3px 0 var(--line)}
+
+/* candy keys: one purple line, a hard shadow under, a gloss on top */
+.btn{position:relative;overflow:hidden;min-height:48px;padding:0 14px;border:3px solid var(--line);border-radius:14px;background:linear-gradient(180deg,#fff,#efe6ff);color:var(--line);font:400 14px/1.1 var(--f-ui);letter-spacing:.03em;text-transform:uppercase;box-shadow:0 5px 0 var(--line);transition:transform .18s cubic-bezier(.3,1.4,.6,1),box-shadow .18s;margin-bottom:5px}
+.btn::before{content:"";position:absolute;left:8%;right:8%;top:3px;height:40%;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(255,255,255,0));pointer-events:none}
+.btn:active,.btn.down{transform:translateY(5px);box-shadow:0 0 0 var(--line);transition-duration:0s}
+.btn.primary{background:linear-gradient(180deg,#ffc6e4,#ff7dbd);color:#fff;text-shadow:var(--olp)}
+.btn.ghost{background:linear-gradient(180deg,#fff,#f6f0ff);color:var(--soft)}
+.btn.big{width:100%;min-height:66px;font:400 26px/1 var(--f-pop);letter-spacing:.02em;text-transform:none}
+.btn[aria-pressed="true"]{background:linear-gradient(180deg,#fff9c4,#ffe36e);color:var(--line);text-shadow:none}
+.btn[disabled]{opacity:.45;pointer-events:none}
+.card{position:relative;display:grid;gap:10px;margin:0 0 14px;padding:14px;border:3px solid var(--line);border-radius:18px;background:var(--cream);box-shadow:inset 0 0 0 3px #ffe1f1,0 5px 0 rgba(91,61,142,.3)}
+.lbl{display:flex;align-items:baseline;gap:8px;font:400 13px/1.2 var(--f-ui);letter-spacing:.04em;text-transform:uppercase;color:var(--line)}
+.lbl::before{content:"";flex:0 0 auto;align-self:center;width:13px;height:13px;background:var(--pink);clip-path:var(--star)}
+.lbl span{margin-left:auto;font:600 12px/1.3 var(--f-body);letter-spacing:0;text-transform:none;color:var(--muted);text-align:right}
+.in{width:100%;border:3px solid var(--line);border-radius:12px;padding:10px 12px;background:#fff;color:var(--ink);box-shadow:inset 0 3px 0 rgba(91,61,142,.12);caret-color:var(--pink-deep);font:500 16px/1.45 var(--f-body)}
+.in::placeholder{color:#ad9dc8}
+textarea.in{min-height:232px;resize:vertical;padding:0 12px 0 42px;line-height:28px;background:linear-gradient(90deg,transparent 30px,#ffb3d4 30px 32px,transparent 32px),repeating-linear-gradient(180deg,#fff 0 27px,#d6ebff 27px 28px);background-attachment:local}
+textarea.in[readonly]{opacity:.6}
+input[type=time].in{min-height:62px;font:400 25px/1 var(--f-px);color:var(--line);-webkit-appearance:none;appearance:none;background:linear-gradient(180deg,#fff,#f0fbff)}
+.row{display:flex;flex-wrap:wrap;gap:8px}
+.row>.btn{flex:1}
+.hint{margin:0;font:500 14px/1.5 var(--f-body);color:var(--soft)}
+.hint b{color:var(--line);font-weight:800}
+.seg{display:flex;gap:6px}
+.seg button{flex:1;min-height:44px;border:3px solid var(--line);border-radius:12px;background:linear-gradient(180deg,#fff,#efe6ff);color:var(--soft);font:400 14px/1 var(--f-ui);box-shadow:0 3px 0 var(--line)}
+.seg button:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
+.seg button[aria-pressed="true"]{background:linear-gradient(180deg,#fff9c4,#ffe36e);color:var(--line)}
+.step{display:grid;grid-template-columns:72px minmax(0,1fr) 72px;gap:8px}
+.step .btn{margin:0;font-size:13px}
+.step output{display:grid;place-items:center;min-height:50px;border:3px solid var(--line);border-radius:12px;background:#fff;color:var(--line);font:400 19px/1 var(--f-px)}
+.toggle{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center}
+.toggle b{display:block;font:400 13px/1.3 var(--f-ui);letter-spacing:.03em;text-transform:uppercase;color:var(--line)}
+.toggle small{display:block;font-size:14px;color:var(--muted)}
+.toggle .btn{min-width:76px;margin:0}
+
+/* set up */
+.intro{margin:4px 0 14px}
+.intro h1{margin:0;font:400 clamp(40px,12vw,56px)/1.05 var(--f-pop);color:#fff;letter-spacing:.01em;text-shadow:3px 0 0 var(--line),-3px 0 0 var(--line),0 3px 0 var(--line),0 -3px 0 var(--line),2px 2px 0 var(--line),-2px -2px 0 var(--line),2px -2px 0 var(--line),-2px 2px 0 var(--line),0 7px 0 var(--pink-deep)}
+.intro p{margin:10px 0 0;color:var(--soft);font-size:16px}
+.resume{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;margin:0 0 14px;padding:10px 10px 10px 14px;border:3px solid var(--line);border-radius:16px;background:var(--lemon);box-shadow:0 4px 0 rgba(91,61,142,.3);font:400 13px/1.35 var(--f-ui);letter-spacing:.03em;text-transform:uppercase;color:var(--line)}
+.resume .btn{margin:0}
+details.more{padding:0;gap:0}
+details.more>summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:15px 14px;font:400 13px/1.2 var(--f-ui);letter-spacing:.04em;text-transform:uppercase;color:var(--line);cursor:pointer}
+details.more>summary::-webkit-details-marker{display:none}
+details.more>summary::after{content:"+";display:grid;place-items:center;width:28px;height:28px;border:3px solid var(--line);border-radius:50%;background:var(--pink-2);font:400 16px/1 var(--f-pop)}
+details.more[open]>summary::after{content:"-"}
+details.more .inner{display:grid;gap:18px;padding:2px 14px 16px}
+.stoprow{display:grid;grid-template-columns:minmax(0,1fr) 116px 46px;gap:6px;align-items:center}
+.stoprow .in{padding:9px 10px}
+.stoprow select.in{font-size:14px;padding:9px 6px}
+.stoprow .btn{margin:0;min-height:46px;padding:0;font:400 18px/1 var(--f-pop)}
+.noterow{display:grid;grid-template-columns:132px minmax(0,1fr);gap:6px}
+.noterow .in{padding:8px 10px;font-size:16px}
+.foot{margin:22px 0 0;font:400 12px/1.6 var(--f-ui);letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.foot a{color:var(--soft)}
+
+/* the plan: a stage select */
+.verdict{position:relative;display:grid;gap:7px;margin:0 0 10px;padding:16px;border:3px solid var(--line);border-radius:18px;background:linear-gradient(180deg,#effff7,#c9f5e1);box-shadow:inset 0 0 0 3px rgba(255,255,255,.75),0 5px 0 rgba(91,61,142,.3)}
+.verdict b{font:400 clamp(30px,9vw,40px)/1.08 var(--f-pop);color:#fff;text-shadow:var(--ol),0 4px 0 #3aa57c}
+.verdict small{font:400 13px/1.45 var(--f-ui);letter-spacing:.05em;text-transform:uppercase;color:var(--line)}
+.verdict.hot{background:linear-gradient(180deg,#fff2f8,#ffd0e6)}
+.verdict.hot b{text-shadow:var(--ol),0 4px 0 var(--pink-deep)}
+.why{margin:0 0 6px;color:var(--soft);font-size:14px;line-height:1.5}
+.sec{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:20px 0 10px;padding:7px 12px;border:3px solid var(--line);border-radius:999px;background:var(--line);font:400 13px/1.2 var(--f-ui);letter-spacing:.04em;text-transform:uppercase;color:#fff}
+.sec span{font-size:11px;font-weight:400;letter-spacing:.02em;color:#e6dcff;text-align:right}
+.srow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:stretch;margin:0 0 10px}
+.sr-main{display:grid;gap:8px;align-content:start;padding:12px;border:3px solid var(--line);border-radius:16px;text-align:left;background:#fff;color:var(--ink);box-shadow:0 4px 0 var(--line)}
+.sr-main:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.sr-main b{font:400 18px/1.15 var(--f-pop);color:var(--line)}
+.srow.out .sr-main{opacity:.55}
+.srow.fin .sr-main{background:linear-gradient(180deg,#f2fff9,#d6f7e8)}
+.chips{display:flex;flex-wrap:wrap;align-items:flex-start;gap:5px}
+.chip{padding:4px 8px;border:2px solid var(--line);border-radius:999px;background:var(--lilac-2);font:400 11.5px/1 var(--f-ui);font-style:normal;letter-spacing:.05em;text-transform:uppercase;color:var(--line)}
+.chip.warm{background:var(--lemon)}.chip.date{background:var(--pink-2)}.chip.must{background:var(--pink);color:#fff}.chip.ok{background:var(--mint)}.chip.stop{background:var(--sky-2)}
+.sr-keys{display:grid;gap:7px;align-content:start;min-width:74px}
+.sr-keys .btn{min-height:44px;margin:0 0 3px;padding:0 9px;font-size:12px;border-radius:12px}
+.slines{display:grid;gap:10px;margin:-2px 0 16px;padding:4px 0 2px 14px;border-left:3px dotted var(--lilac)}
+.sl{display:grid;gap:6px;font-size:15px;color:var(--ink)}
+.sl.br{color:var(--blue-t)}
+.sl small{display:block;margin-top:3px;font:400 11.5px/1.35 var(--f-ui);letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.sl .row{justify-content:flex-end;gap:6px}
+.sl .btn{min-height:44px;margin:0 0 3px;padding:0 9px;font-size:11.5px;border-radius:11px}
+.dock{position:sticky;bottom:0;z-index:15;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr) 58px;align-items:center;gap:8px;margin:18px -16px 0;padding:14px 16px calc(var(--sab) + 12px);background:linear-gradient(180deg,rgba(220,239,255,0),#dcefff 30%)}
+.dock .btn{margin:0;min-height:60px;font-size:12px;letter-spacing:.02em}
+.dock .btn.primary{font:400 21px/1 var(--f-pop);letter-spacing:0;text-transform:none;white-space:nowrap}
+.dock .btn.primary small{position:relative;display:block;margin:0 0 5px;font:400 11px/1 var(--f-ui);font-style:normal;letter-spacing:.03em;text-transform:uppercase;text-shadow:none;color:#a12a62}
+.dock .wide{grid-column:1/3}
+.bk{position:relative;width:58px;height:58px;border:3px solid var(--line);border-radius:50%;display:grid;place-items:center;background:linear-gradient(180deg,#fff,#d9c8ff);color:var(--line);font:400 24px/1 var(--f-pop);box-shadow:0 4px 0 var(--line)}
+.bk:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.empty{padding:16px;border:3px dashed var(--lilac);border-radius:14px;color:var(--soft);font-size:14px;background:rgba(255,255,255,.6)}
+
+/* THE SET: a pastel handheld. The SCREEN up top is for reading (the day, the line, this line's clock); the DECK under the
+   right thumb is for doing (tools, notes, the two big keys). Nothing on either one moves; keys light up instead. */
+body[data-scr="run"] .app{height:100vh;height:100dvh;display:flex;flex-direction:column;overflow:hidden;padding-bottom:0}
+body[data-scr="run"] .bar{position:relative;margin-bottom:16px}
+.menu-k{display:none;flex:0 0 auto;width:46px;height:46px;border:3px solid var(--line);border-radius:50%;place-items:center;background:linear-gradient(180deg,#fff,#e6dcff);color:var(--line);box-shadow:0 5px 0 var(--line);transition:transform .18s cubic-bezier(.3,1.4,.6,1),box-shadow .18s}
+body[data-scr="run"] .menu-k{display:grid}
+.menu-k svg{width:22px;height:22px}
+#s-run{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px;padding-bottom:calc(var(--sab) + 8px)}
+#s-run>*{flex-shrink:0}
+.screen{flex:1 1 auto!important;min-height:0;display:flex;flex-direction:column;gap:8px;padding:10px;border:3px solid var(--line);border-radius:22px;background:linear-gradient(180deg,#ebe1fb,#ded0f6);box-shadow:inset 0 4px 0 rgba(91,61,142,.2),inset 0 0 0 3px rgba(255,255,255,.5),0 3px 0 rgba(255,255,255,.85)}
+.screen>*{flex-shrink:0}
+/* the day: a status LED, the TIME bar, the countdown */
+.day{position:relative;display:flex;align-items:center;gap:9px;padding:7px 10px;border:3px solid var(--line);border-radius:14px;background:#fff;box-shadow:0 3px 0 rgba(91,61,142,.25)}
+.led{flex:0 0 auto;width:16px;height:16px;border:2px solid var(--line);border-radius:50%;background:radial-gradient(circle at 35% 35%,#eafff3,#3fd18e 60%,#1f8f5c);box-shadow:0 0 9px rgba(63,209,142,.85)}
+.day.warn .led{background:radial-gradient(circle at 35% 35%,#fff7d6,#ffc24a 60%,#c98a12);box-shadow:0 0 9px rgba(255,194,74,.95)}
+.day.red .led{background:radial-gradient(circle at 35% 35%,#ffe3ea,#ff4f7a 60%,#a8203f);box-shadow:0 0 11px rgba(255,79,122,.95)}
+.day-bar{position:relative;flex:1;min-width:40px;height:16px;border:3px solid var(--line);border-radius:999px;overflow:hidden;background:#efe6ff;box-shadow:inset 0 3px 0 rgba(91,61,142,.15)}
+.day-bar i{position:absolute;left:0;top:0;bottom:0;border-radius:999px}
+.day-bar .fill{background:linear-gradient(180deg,#c6f7e0,#6fdcaa);transition:width .25s linear,background .3s}
+.day-bar .fill::after{content:"";position:absolute;left:4px;right:4px;top:2px;height:35%;border-radius:999px;background:rgba(255,255,255,.7)}
+.day.mid .day-bar .fill{background:linear-gradient(180deg,#fff6bd,#ffd95e)}
+.day.low .day-bar .fill{background:linear-gradient(180deg,#ffd0de,#ff8fb0)}
+.day-bar .ot{background:repeating-linear-gradient(135deg,var(--red) 0 6px,#ff8aa8 6px 12px)}
+.day b{font:400 19px/1 var(--f-px);color:var(--line);font-variant-numeric:tabular-nums;white-space:nowrap}
+.day small{font:400 11px/1 var(--f-ui);letter-spacing:.02em;text-transform:uppercase;color:var(--soft)}
+.day.warn b,.day.warn small{color:var(--amber)}
+.day.red{background:linear-gradient(180deg,#fff0f4,#ffd3df);box-shadow:0 0 0 3px rgba(255,79,122,.3),0 3px 0 rgba(91,61,142,.25);animation:redline 1s steps(2,end) infinite}
+.day.red b,.day.red small{color:var(--red-deep)}
+@keyframes redline{50%{box-shadow:0 0 0 7px rgba(255,79,122,.12),0 3px 0 rgba(91,61,142,.25)}}
+@media (prefers-reduced-motion:reduce){.day.red{animation:none}}
+/* the ticker: one line that always sits here; it says the one thing that matters now */
+.ticker{display:flex;align-items:center;gap:6px;min-height:52px;padding:3px 4px 3px 12px;border:3px solid var(--line);border-radius:14px;background:#fffdf4;color:var(--ink);font:600 13.5px/1.3 var(--f-body)}
+.ticker>span:first-child{flex:1;min-width:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tk-keys{display:flex;gap:6px;flex:0 0 auto}
+.tk-keys .btn{min-height:44px;min-width:44px;margin:0 0 5px;padding:0 10px;font-size:12px}
+.ticker.warn{background:#fff8d6;color:var(--amber)}
+.ticker.stuck{background:#fff3a0;color:var(--line)}
+.ticker.hot{background:#ffd9e6;color:var(--red-deep)}
+/* the line: an RPG dialog box with the script as its name tab */
+.who{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:flex-end;gap:8px;margin:2px 6px -19px;font:400 12px/1.2 var(--f-ui);letter-spacing:.03em;text-transform:uppercase}
+.who span:first-child{min-width:0;max-width:72%;padding:6px 12px;border:3px solid var(--line);border-radius:10px;background:linear-gradient(180deg,#ffc6e4,#ff8cc6);color:#fff;text-shadow:var(--olp);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.who span:last-child{flex:0 0 auto;padding:4px 10px;border:3px solid var(--line);border-radius:999px;background:#fff;color:var(--soft)}
+.who span:empty{visibility:hidden}
+.screen>.linecard{flex:1 1 auto;min-height:64px;display:flex;flex-direction:column;gap:6px;padding:22px 16px 10px;border:3px solid var(--line);border-radius:18px;text-align:left;color:var(--ink);background:#fff;box-shadow:0 4px 0 rgba(91,61,142,.25)}
+.linecard .tag{font:400 12px/1.3 var(--f-ui);letter-spacing:.03em;text-transform:uppercase;color:var(--amber)}
+.linecard .tag:empty{display:none}
+.linecard .txtbox{flex:1;min-height:0;display:flex;align-items:center;overflow:hidden}
+.linecard .txt{margin:0;font:700 30px/1.22 var(--f-body);color:var(--ink);text-wrap:balance;overflow-wrap:anywhere}
+.linecard .tap{align-self:flex-end;font:400 11.5px/1 var(--f-ui);letter-spacing:.03em;text-transform:uppercase;color:var(--muted)}
+.linecard .tap::after{content:"";display:inline-block;margin-left:7px;vertical-align:middle;border:6px solid transparent;border-top:8px solid var(--pink-deep);border-bottom:0}
+.linecard.pop{animation:pop .2s ease-out}
+@keyframes pop{from{transform:scale(.965);opacity:.35}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.linecard.pop{animation:none}}
+.linecard.br,.linecard.drive{background:linear-gradient(180deg,#f4fbff,#dff1ff)}
+.linecard.br .txt{color:var(--blue-t)}
+.linecard.drive .txt{font-family:var(--f-pop);font-weight:400;color:var(--blue-t)}
+.linecard.alldone{background:linear-gradient(180deg,#f2fff9,#d6f7e8)}
+.linecard.alldone .txt{font-family:var(--f-pop);font-weight:400;color:var(--green-t)}
+/* this line: its clock and its hearts */
+.mid{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:center}
+.ring{position:relative;flex:0 0 auto;width:104px;height:104px;padding:0;border:3px solid var(--line);border-radius:50%;display:grid;place-items:center;color:inherit;background:radial-gradient(circle at 50% 35%,#fff 0 55%,#f3ecff 100%);box-shadow:0 4px 0 rgba(91,61,142,.35)}
+.ring svg{position:absolute;inset:5px;width:calc(100% - 10px);height:calc(100% - 10px);transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:9}
+.ring .tr{stroke:#efe6ff}
+.ring .pr{stroke:url(#rb);stroke-linecap:round;transition:stroke-dashoffset .25s linear}
+.ring b{position:relative;margin-top:-10px;font:400 24px/1 var(--f-px);color:var(--line)}
+.ring b.long{font-size:15px}
+.ring small{position:absolute;left:0;right:0;bottom:23px;text-align:center;font:400 11px/1 var(--f-ui);letter-spacing:.02em;text-transform:uppercase;color:var(--soft)}
+.ring.warn .pr{stroke:#ffbe4f}.ring.warn b{color:var(--amber)}
+.ring.over{background:radial-gradient(circle at 50% 35%,#fff 0 55%,#ffe0e8 100%);animation:pulse 1s steps(2,end) infinite}
+.ring.over .pr{stroke:var(--red)}.ring.over b,.ring.over small{color:var(--red-deep)}
+.ring.drive .pr{stroke:#7cc7ff}
+@keyframes pulse{50%{box-shadow:0 4px 0 rgba(91,61,142,.35),0 0 0 7px rgba(255,79,122,.35)}}
+@media (prefers-reduced-motion:reduce){.ring.over{animation:none;box-shadow:0 4px 0 rgba(91,61,142,.35),0 0 0 5px rgba(255,79,122,.35)}}
+.takes{display:grid;gap:6px;min-width:0}
+.takes b{font:400 26px/1 var(--f-pop);color:#fff;text-shadow:var(--ol),0 3px 0 var(--pink-deep)}
+.pips{display:flex;flex-wrap:wrap;align-items:center;gap:3px;min-height:24px}
+.pip{width:26px;height:24px;overflow:visible}
+.pip path{fill:#fff;stroke:var(--line);stroke-width:2.6;stroke-linejoin:round;transform-box:fill-box;transform-origin:center}
+.pip.on path{fill:#ff6fb7}
+.pip.now path{stroke:var(--pink-deep);stroke-width:3.4}
+.pip.lost path{animation:lose .32s ease-out}
+@keyframes lose{0%{transform:scale(1.35)}100%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.pip.lost path{animation:none}}
+.xtra{padding:4px 8px;border:2px solid var(--line);border-radius:999px;background:var(--red);color:#fff;font:400 12px/1 var(--f-ui);font-style:normal;letter-spacing:.02em;text-transform:uppercase;white-space:nowrap}
+.takes small{font:400 12px/1.35 var(--f-ui);letter-spacing:.02em;text-transform:uppercase;color:var(--soft)}
+.takes small.warn{color:var(--amber)}
+#r-last.ok{color:var(--green-t)}#r-last.red{color:var(--red-deep)}
+/* the deck: molded candy plastic with screws; tools, notes, then the two big keys (A under the right thumb) */
+.deck{position:relative;display:grid;gap:8px;padding:14px 12px 12px;border:3px solid var(--line);border-radius:24px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E"),linear-gradient(180deg,#ffdcee,#f7c3df);
+  box-shadow:inset 0 3px 0 rgba(255,255,255,.75),inset 0 -4px 0 rgba(91,61,142,.12),0 5px 0 rgba(91,61,142,.3)}
+.screw{position:absolute;top:5px;width:9px;height:9px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#fff,#e2d6ff 60%,#a58fd0);box-shadow:inset 0 0 0 1px rgba(91,61,142,.5)}
+.screw::after{content:"";position:absolute;left:1px;right:1px;top:3.5px;height:2px;background:rgba(91,61,142,.6);transform:rotate(-35deg)}
+.screw.l{left:9px}.screw.r{right:9px}
+.tools{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.tool{display:grid;justify-items:center;align-content:center;gap:3px;min-height:52px;margin:0 0 5px;padding:4px 2px;font-size:11.5px;letter-spacing:.02em}
+.tool svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.tool.lit{background:linear-gradient(180deg,#fffbe0,#ffe36e);box-shadow:0 5px 0 var(--line),0 0 0 3px #fff3a0,0 0 14px rgba(255,205,79,.95)}
+.tool.lit::after{content:"";position:absolute;top:5px;right:6px;width:8px;height:8px;border-radius:50%;background:#ff4f7a;box-shadow:0 0 6px #ff4f7a}
+.notes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.notes .btn{min-height:46px;margin:0 0 5px;padding:0 4px;font-size:12px;line-height:1.1;letter-spacing:.02em;border-radius:12px}
+.notes .btn:nth-child(1){background:linear-gradient(180deg,#fff,#ffd3ea)}.notes .btn:nth-child(2){background:linear-gradient(180deg,#fff,#ffdcc6)}
+.notes .btn:nth-child(3){background:linear-gradient(180deg,#fff,#fff0a0)}.notes .btn:nth-child(4){background:linear-gradient(180deg,#fff,#c4f3dc)}
+.notes .btn:nth-child(5){background:linear-gradient(180deg,#fff,#cbe8ff)}.notes .btn:nth-child(6){background:linear-gradient(180deg,#fff,#ddd0ff)}
+.keys{display:grid;grid-template-columns:1fr 1.5fr;gap:10px}
+body.lefty .keys{grid-template-columns:1.5fr 1fr}
+body.lefty .key.got{order:-1}
+.key{position:relative;overflow:hidden;min-height:86px;display:grid;place-content:center;gap:5px;border:3px solid var(--line);border-radius:22px;color:#fff;font:400 29px/1 var(--f-pop);letter-spacing:.01em;box-shadow:0 7px 0 var(--line),0 10px 14px rgba(91,61,142,.25);transition:transform .2s cubic-bezier(.3,1.5,.6,1),box-shadow .2s,filter .2s;margin-bottom:7px}
+.key::before{content:"";position:absolute;left:7%;right:7%;top:4px;height:40%;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(255,255,255,0));pointer-events:none}
+.key small{position:relative;font:400 12px/1 var(--f-ui);font-style:normal;letter-spacing:.03em;text-transform:uppercase;text-shadow:none}
+.key.again small{color:#235d97}.key.got small{color:#a12a62}
+.key span{position:relative;white-space:nowrap}
+.key.again span{font-size:.86em}
+.key .ab{position:absolute;top:7px;right:10px;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.88);color:var(--line);font:400 12px/1 var(--f-ui);font-style:normal;text-shadow:none;box-shadow:inset 0 -2px 0 rgba(91,61,142,.25)}
+.key.again{background:linear-gradient(180deg,#c4e8ff,#5fb2ff);text-shadow:var(--olb)}
+.key.got{background:linear-gradient(180deg,#ffc6e4,#ff6fb7);text-shadow:var(--olp)}
+.key[disabled]{opacity:.42;filter:saturate(.35);pointer-events:none}
+@media (max-height:760px){.ring{width:92px;height:92px}.ring b{margin-top:-12px;font-size:21px}.ring small{bottom:21px;font-size:10px}.key{min-height:74px;font-size:26px}.linecard .tap{display:none}.takes b{font-size:23px}.tool{min-height:48px}.screen{padding:8px;gap:7px}}
+@media (max-height:700px){.notes{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:28%;overflow-x:auto;padding-bottom:2px;scroll-snap-type:x proximity}.notes .btn{scroll-snap-align:start}.key{min-height:66px}.tool svg{display:none}.tool{min-height:44px}.linecard .tag{display:none}.ticker{min-height:50px}}
+
+/* presses everywhere: the face drops on touch-down, the shadow shrinks by what it drops, it rises with a little spring */
+.key:active,.key.down{transform:translateY(7px);box-shadow:0 0 0 var(--line),0 2px 4px rgba(91,61,142,.25);filter:brightness(.96);transition-duration:0s}
+.menu-k:active,.menu-k.down,.bar .back.down,.bk.down,.sr-main.down,.hl.down{transform:translateY(4px);box-shadow:0 0 0 var(--line);transition-duration:0s}
+.seg button.down{transform:translateY(3px);box-shadow:0 0 0 var(--line)}
+#r-card.down{transform:scale(.99)}
+@media (prefers-reduced-motion:reduce){.btn,.key,.menu-k,.bk,.sr-main,.seg button{transition:none}}
+.swi{flex:0 0 auto;width:52px;height:32px;margin:0;accent-color:var(--pink-deep);cursor:pointer}
+label.toggle{cursor:pointer}
+
+/* the report: a results screen */
+#rep-v{padding-right:92px}
+.rank{position:absolute;right:12px;top:50%;width:70px;height:70px;margin-top:-35px;border:3px solid var(--line);border-radius:50%;display:grid;place-items:center;background:#fff;box-shadow:inset 0 0 0 5px #ffe36e,0 4px 0 var(--line);font:400 34px/1 var(--f-pop);font-style:normal;color:var(--pink-deep)}
+.rank::before{content:"rank";position:absolute;top:8px;font:400 10px/1 var(--f-ui);letter-spacing:.04em;text-transform:uppercase;color:var(--soft)}
+.rank:empty{display:none}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 12px}
+.stat{display:grid;gap:5px;padding:10px;border:3px solid var(--line);border-radius:14px;box-shadow:0 3px 0 rgba(91,61,142,.3)}
+.stat:nth-child(1){background:#fff0f8}.stat:nth-child(2){background:#fff6ec}.stat:nth-child(3){background:#fffbe0}.stat:nth-child(4){background:#ecfff6}.stat:nth-child(5){background:#eef8ff}.stat:nth-child(6){background:#f4eeff}
+.stat i{font:400 11.5px/1.25 var(--f-ui);font-style:normal;letter-spacing:.03em;text-transform:uppercase;color:var(--soft)}
+.stat b{font:400 19px/1 var(--f-px);color:var(--line)}
+.rl{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:baseline;padding:10px 12px;margin:0 0 8px;border:3px solid var(--line);border-radius:14px;background:#fff;box-shadow:0 3px 0 rgba(91,61,142,.25);font-size:14.5px}
+.rl b{font:400 16px/1.25 var(--f-pop);color:var(--line)}
+.rl small{display:block;margin-top:2px;font:400 11.5px/1.4 var(--f-ui);letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.rl em{font:400 14px/1 var(--f-px);font-style:normal;color:var(--green-t);white-space:nowrap}
+.rl em.red{color:var(--red-deep)}
+.rl.sm{padding:8px 12px}.rl.sm b{font:600 14px/1.35 var(--f-body);color:var(--ink)}
+
+/* her lines: how to play */
+.rules ol{margin:0;padding-left:24px;display:grid;gap:8px;font-size:16.5px;color:var(--ink)}
+.rules li::marker{font:400 16px var(--f-ui);color:var(--pink-t)}
+.hs{display:inline-block;margin:22px 0 10px;padding:6px 14px;border:3px solid var(--line);border-radius:999px;background:var(--line);font:400 14px/1.2 var(--f-ui);letter-spacing:.03em;text-transform:uppercase;color:#fff}
+.hl{display:block;width:100%;margin:0 0 10px;padding:13px 14px;border:3px solid var(--line);border-radius:16px;text-align:left;font:600 19px/1.35 var(--f-body);color:var(--ink);background:#fff;box-shadow:0 4px 0 rgba(91,61,142,.3)}
+.hl:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(91,61,142,.3)}
+
+/* full screens: the line big for the talent, the pop-ups */
+.full{position:fixed;inset:0;z-index:90;display:flex;flex-direction:column;padding:calc(var(--sat) + 22px) 20px calc(var(--sab) + 16px);background:linear-gradient(180deg,#2b1745,#3c2160);color:#fff;color-scheme:light;forced-color-adjust:none;overflow:hidden}
+.full::after{content:"";position:absolute;left:0;right:0;top:0;height:8px;background:var(--rainbow)}
+#show .s-who{font:400 13px/1.3 var(--f-ui);letter-spacing:.04em;text-transform:uppercase;color:#d8c8ff}
+#show .s-box{flex:1;min-height:0;display:flex;align-items:center;overflow:hidden}
+#show .s-txt{margin:0;font:700 64px/1.14 var(--f-body);color:#fff;text-wrap:balance;overflow-wrap:anywhere}
+#show .s-x{font:400 12px/1 var(--f-ui);letter-spacing:.04em;text-transform:uppercase;color:#a996cf;text-align:center}
+#flash{align-items:center;justify-content:center;gap:18px;text-align:center;background:rgba(255,240,248,.95);color:var(--line)}
+#flash::before{content:"";position:absolute;left:50%;top:50%;width:240vmax;height:240vmax;margin:-120vmax 0 0 -120vmax;background:repeating-conic-gradient(from 0deg,rgba(255,158,203,.38) 0 9deg,rgba(255,255,255,0) 9deg 18deg);animation:spin 16s linear infinite}
+#flash b{position:relative;font:400 clamp(44px,13vw,80px)/1.05 var(--f-pop);color:#fff;text-shadow:3px 0 0 var(--line),-3px 0 0 var(--line),0 3px 0 var(--line),0 -3px 0 var(--line),2px 2px 0 var(--line),-2px -2px 0 var(--line),2px -2px 0 var(--line),-2px 2px 0 var(--line),0 8px 0 var(--pink-deep)}
+#flash span{position:relative;max-width:24ch;font:400 18px/1.4 var(--f-ui);letter-spacing:.03em;color:var(--line)}
+#flash.ok b{text-shadow:3px 0 0 var(--line),-3px 0 0 var(--line),0 3px 0 var(--line),0 -3px 0 var(--line),2px 2px 0 var(--line),-2px -2px 0 var(--line),2px -2px 0 var(--line),-2px 2px 0 var(--line),0 8px 0 #3aa57c}
+#flash.ok::before{background:repeating-conic-gradient(from 0deg,rgba(166,240,208,.45) 0 9deg,rgba(255,255,255,0) 9deg 18deg)}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){#flash::before{animation:none}}
+.toast{position:fixed;left:50%;bottom:calc(24px + var(--sab));z-index:99;max-width:calc(100% - 32px);padding:11px 16px;border:3px solid var(--line);border-radius:999px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#fff;color:var(--line);box-shadow:0 4px 0 rgba(91,61,142,.35);font:400 14px/1.3 var(--f-ui);letter-spacing:.03em;transition:opacity .25s,transform .25s}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+body[data-scr="run"] .toast{bottom:calc(var(--sab) + 108px)}
+/* a pop banner for things that just happen (stage clear, overtime): drops from the top, never takes a tap */
+#pop{position:fixed;left:50%;top:calc(var(--sat) + 70px);z-index:80;width:min(92vw,420px);display:grid;gap:4px;justify-items:center;padding:12px 16px;border:3px solid var(--line);border-radius:18px;background:linear-gradient(180deg,#f2fff9,#cdf6e3);box-shadow:0 5px 0 rgba(91,61,142,.35);transform:translate(-50%,-24px);opacity:0;visibility:hidden;transition:transform .22s cubic-bezier(.2,1.4,.4,1),opacity .15s,visibility 0s linear .22s;pointer-events:none;text-align:center}
+#pop.on{transform:translate(-50%,0);opacity:1;visibility:visible;transition:transform .22s cubic-bezier(.2,1.4,.4,1),opacity .15s,visibility 0s}
+#pop.red{background:linear-gradient(180deg,#fff0f4,#ffd0dd)}
+#pop b{font:400 28px/1.05 var(--f-pop);color:#fff;text-shadow:var(--ol),0 4px 0 #3aa57c}
+#pop.red b{text-shadow:var(--ol),0 4px 0 var(--red-deep)}
+#pop span{font:400 13px/1.35 var(--f-ui);letter-spacing:.02em;text-transform:uppercase;color:var(--line)}
+@media (prefers-reduced-motion:reduce){#pop,#pop.on{transform:translate(-50%,0)}}
+/* the Menu and How to play: a dialog over a dim screen */
+.ovl{position:fixed;inset:0;z-index:85;display:grid;place-items:center;padding:calc(var(--sat) + 16px) 16px calc(var(--sab) + 16px);background:rgba(43,23,69,.55)}
+.dlg{position:relative;width:min(100%,400px);display:grid;gap:10px;padding:18px 16px 16px;border:3px solid var(--line);border-radius:22px;background:var(--cream);box-shadow:inset 0 0 0 3px #ffe1f1,0 6px 0 var(--line)}
+.dlg-t{font:400 34px/1 var(--f-pop);color:#fff;text-align:center;text-shadow:var(--ol),0 5px 0 var(--pink-deep)}
+.dlg-s{margin:-2px 0 4px;font:400 13px/1.3 var(--f-ui);letter-spacing:.02em;text-transform:uppercase;text-align:center;color:var(--soft)}
+.dlg .btn{width:100%;margin:0 0 4px;min-height:52px;font-size:15px}
+.dlg .btn.big{min-height:62px;font-size:26px}
+.dlg .btn.bad{background:linear-gradient(180deg,#fff,#ffd6e2);color:var(--red-deep)}
+.coach{margin:0;padding:0;list-style:none;display:grid;gap:12px}
+.coach li{display:grid;grid-template-columns:44px minmax(0,1fr);gap:10px;align-items:center;font-size:15.5px;line-height:1.35;color:var(--ink)}
+.coach li b{color:var(--line)}
+.ci{display:grid;place-items:center;width:44px;height:44px;border:3px solid var(--line);border-radius:50%;background:#fff;font-style:normal}
+.ci.ring-i{background:conic-gradient(#ff9ecb 0 40%,#ebe2ff 0);box-shadow:inset 0 0 0 7px #fff}
+.ci.bar-i{border-radius:10px;background:linear-gradient(90deg,#6fdcaa 0 55%,#ffd95e 55% 75%,#efe6ff 75%)}
+.ci.menu-i{background:linear-gradient(var(--line),var(--line)) center 12px/20px 3px no-repeat,linear-gradient(var(--line),var(--line)) center 19px/20px 3px no-repeat,linear-gradient(var(--line),var(--line)) center 26px/20px 3px no-repeat,#fff}
+.ci svg{width:26px;height:24px}.ci svg path{fill:#ff6fb7;stroke:var(--line);stroke-width:2.6}
+</style>
+</head>
+<body data-scr="setup">
+<div class="sky" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<div class="app">
+  <header class="bar">
+    <button type="button" class="back" id="back" aria-label="Back">&lsaquo;</button>
+    <div class="wm"><img src="art/icon.webp" alt="" width="42" height="42" onerror="this.onerror=null;this.src='../assets/cathedral/w/ad.webp'"><span><b id="bar-t">THE AD</b><small>0FF THE PRINT</small></span></div>
+    <span class="sp"></span>
+    <button type="button" class="ins" id="ins" hidden>Install</button>
+    <span class="clock lcd" id="clock" aria-label="Time now"></span>
+    <button type="button" class="menu-k" data-act="menu" aria-label="Menu"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M5 7h14M5 12h14M5 17h14"/></svg></button>
+  </header>
+
+  <!-- ===== 1. SET UP: paste the lines, set the wrap ===== -->
+  <section id="s-setup" class="scr">
+    <div class="intro"><h1>The AD</h1><p>Your pocket assistant director. Paste the lines, set when your talent has to leave, and it runs the clock so you just direct.</p></div>
+    <div class="resume" id="resume" hidden><span id="resume-t">A shoot is running</span><button type="button" class="btn primary" data-act="toRun">Back to the set &rsaquo;</button></div>
+    <div class="card">
+      <div class="lbl">The lines <span>paste the whole doc</span></div>
+      <textarea class="in" id="raw" aria-label="Paste the scripts" spellcheck="false" autocapitalize="sentences" placeholder="Paste the scripts here, straight from the doc or the text.&#10;&#10;A short line with no period (or ending in :) = a script name&#10;Every line under it = a line they say&#10;MODEL: &quot;...&quot; lines work too&#10;(Brackets) or B-roll: = b-roll"></textarea>
+      <div class="row"><button type="button" class="btn" data-act="paste">Paste</button><button type="button" class="btn ghost" data-act="sample">Sample</button><button type="button" class="btn ghost" data-act="clearRaw">Clear</button></div>
+      <p class="hint" id="readout">Nothing read yet.</p>
+    </div>
+    <div class="card">
+      <div class="lbl">Wrap by <span>when the talent has to leave</span></div>
+      <input type="time" class="in" id="wrap" aria-label="Wrap time">
+    </div>
+    <details class="card more" id="more">
+      <summary>More · stops, warm-up, pace, notes</summary>
+      <div class="inner">
+        <div>
+          <div class="lbl">Stops <span>each place you shoot, then the drive</span></div>
+          <div id="stops" style="display:grid;gap:8px;margin-top:10px"></div>
+          <button type="button" class="btn ghost" data-act="addStop" style="margin-top:10px;width:100%">+ Add a stop</button>
+        </div>
+        <div>
+          <div class="lbl">Warm-up <span>the first script always runs slow</span></div>
+          <div class="seg" id="warm" style="margin-top:10px"></div>
+        </div>
+        <div>
+          <div class="lbl">Line budget <span id="pace-sub">minutes a line, takes and talk included</span></div>
+          <div class="step" style="margin-top:10px"><button type="button" class="btn" data-act="pace" data-d="-0.5" aria-label="Less time a line">less</button><output class="lcd" id="pace"></output><button type="button" class="btn" data-act="pace" data-d="0.5" aria-label="More time a line">more</button></div>
+        </div>
+        <label class="toggle"><span><b>Repeats back to back</b><small>The same line in a few scripts gets shot together, at one spot. A word-for-word twin gets said once.</small></span><input type="checkbox" switch class="swi" id="group"></label>
+        <div>
+          <div class="lbl">Hearts <span>takes per line before it offers help · off = just count</span></div>
+          <div class="seg" id="cap" style="margin-top:10px"></div>
+        </div>
+        <label class="toggle"><span><b>Beep at the redline</b><small>When a line runs past its budget. Off by default: the camera mic hears it.</small></span><input type="checkbox" switch class="swi" id="beep"></label>
+        <label class="toggle"><span><b>Left hand</b><small>Puts Got it (A) on the left, under your left thumb.</small></span><input type="checkbox" switch class="swi" id="lefty"></label>
+        <div>
+          <div class="lbl">Note keys <span>one tap instead of a speech</span></div>
+          <div id="notes-ed" style="display:grid;gap:6px;margin-top:10px"></div>
+          <button type="button" class="btn ghost" data-act="notesReset" style="margin-top:10px;width:100%">Back to the house notes</button>
+        </div>
+      </div>
+    </details>
+    <button type="button" class="btn primary big" data-act="plan">Plan it &rsaquo;</button>
+    <p class="foot">Part of <a href="../kit/">the Kit</a> · everything stays on this phone · add it to your home screen and it opens with no signal</p>
+  </section>
+
+  <!-- ===== 2. THE PLAN: what fits, in what order ===== -->
+  <section id="s-plan" class="scr" hidden>
+    <div class="verdict lcd" id="verdict"><b></b><small></small></div>
+    <p class="why" id="why"></p>
+    <div id="plist"></div>
+    <div class="dock" id="pdock"></div>
+  </section>
+
+  <!-- ===== 3. THE SET: one hand, the line, the clock ===== -->
+  <section id="s-run" class="scr" hidden>
+    <!-- the screen: read it -->
+    <div class="screen">
+      <div class="day lcd" id="r-day" role="timer" aria-label="Time left until the wrap">
+        <i class="led" aria-hidden="true"></i>
+        <div class="day-bar" aria-hidden="true"><i class="fill" id="r-fill"></i><i class="ot" id="r-ot"></i></div>
+        <b id="r-left">0:00</b><small id="r-left-l">left</small>
+      </div>
+      <div class="ticker" id="r-tick" aria-live="polite"><span id="r-tick-t"></span><span class="tk-keys" id="r-tick-k"></span></div>
+      <div class="who"><span id="r-who"></span><span id="r-at"></span></div>
+      <button type="button" class="linecard" id="r-card" data-act="show"><span class="tag" id="r-tag"></span><span class="txtbox"><span class="txt" id="r-txt"></span></span><span class="tap" id="r-tap">tap to show it big</span></button>
+      <div class="mid" id="r-mid">
+        <div class="ring" id="r-ring" role="timer" aria-label="Time on this line">
+          <svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="rb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff9ecb"/><stop offset=".5" stop-color="#c9b3ff"/><stop offset="1" stop-color="#8fd0ff"/></linearGradient></defs><circle class="tr" cx="50" cy="50" r="44"/><circle class="pr" id="r-arc" cx="50" cy="50" r="44" stroke-dasharray="276.46" stroke-dashoffset="0"/></svg>
+          <b id="r-clock">0:00</b><small id="r-clk-l"></small>
+        </div>
+        <div class="takes"><b id="r-take">Take 1</b><div class="pips" id="r-pips"></div><small id="r-cap"></small><small id="r-last"></small></div>
+      </div>
+    </div>
+    <!-- the deck: do it, all under the thumb; nothing here ever moves -->
+    <div class="deck">
+      <i class="screw l" aria-hidden="true"></i><i class="screw r" aria-hidden="true"></i>
+      <div class="tools">
+        <button type="button" class="btn tool" id="t-undo" data-act="undo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg>Undo</button>
+        <button type="button" class="btn tool" id="t-skip" data-act="skipLine"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l9 7-9 7z"/><path d="M18 5v14"/></svg>Skip</button>
+        <button type="button" class="btn tool" id="t-later" data-act="later"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>Later</button>
+        <button type="button" class="btn tool" id="t-split" data-act="splitNow"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="7" r="2.5"/><circle cx="6" cy="17" r="2.5"/><path d="M8.2 8.4 20 17M8.2 15.6 20 7"/></svg>Split</button>
+      </div>
+      <div class="notes" id="r-notes"></div>
+      <div class="keys" id="r-keys">
+        <button type="button" class="key again" id="k-again" data-act="again"><i class="ab" aria-hidden="true">B</i><small>again</small><span id="k-again-t">Take 2</span></button>
+        <button type="button" class="key got" id="k-got" data-act="got"><i class="ab" aria-hidden="true">A</i><small id="k-got-s">line done</small><span id="k-got-t">Got it &rsaquo;</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 4. THE REPORT ===== -->
+  <section id="s-report" class="scr" hidden>
+    <div class="verdict lcd" id="rep-v"><b></b><small></small><i class="rank" id="rep-rank"></i></div>
+    <div class="stats" id="rep-stats"></div>
+    <div id="rep-body"></div>
+    <div class="dock" id="rdock"></div>
+  </section>
+
+  <!-- ===== HER LINES (opened from the link he sends) ===== -->
+  <section id="s-her" class="scr" hidden>
+    <div class="intro"><h1>Your lines</h1><p>Read them through once or twice. No need to memorize: we shoot one line at a time.</p></div>
+    <div class="card rules"><div class="lbl">How to play</div><ol><li>Say it to one friend in the lens, not a crowd.</li><li>Finish the line, then hold for 2 seconds.</li><li>Messed up? Keep going, start the line again.</li></ol></div>
+    <div id="her-list"></div>
+    <p class="foot">Tap a line to see it big · sent with THE AD by 0FF THE PRINT</p>
+  </section>
+</div>
+
+<div id="show" class="full" hidden><div class="s-who" id="show-who"></div><div class="s-box"><p class="s-txt" id="show-txt"></p></div><div class="s-x">tap anywhere to close</div></div>
+<div id="flash" class="full" hidden><b id="flash-b"></b><span id="flash-s"></span></div>
+<div id="pop" role="status" aria-live="polite"><b id="pop-b"></b><span id="pop-s"></span></div>
+<div id="menu" class="ovl" hidden><div class="dlg" role="dialog" aria-modal="true" aria-label="Menu">
+  <b class="dlg-t">Menu</b><small class="dlg-s">the clock keeps running</small>
+  <button type="button" class="btn primary big" data-act="resume">Back to it</button>
+  <button type="button" class="btn" data-act="dropCur" id="m-drop">Drop this script</button>
+  <button type="button" class="btn" data-act="nextStop" id="m-next">Next stop</button>
+  <button type="button" class="btn" data-act="menuPlan">The plan</button>
+  <button type="button" class="btn bad" data-act="wrap">Wrap the day</button>
+</div></div>
+<div id="coach" class="ovl" hidden><div class="dlg" role="dialog" aria-modal="true" aria-label="How to play">
+  <b class="dlg-t">How to play</b>
+  <ol class="coach">
+    <li><i class="ci ring-i"></i><span><b>The dial</b> is this line's time. It turns red when the line runs past its budget.</span></li>
+    <li><i class="ci bar-i"></i><span><b>Time</b> is your whole day. Its light is green, yellow when you're behind, red in overtime.</span></li>
+    <li><i class="ci"><svg viewBox="-2 -1 28 25" aria-hidden="true"><path d="M12 21.2S3 15.4 1.2 10.1C-.4 5.4 2.6 1.3 6.8 1.3c2.3 0 4.1 1.2 5.2 3 1.1-1.8 2.9-3 5.2-3 4.2 0 7.2 4.1 5.6 8.8C21 15.4 12 21.2 12 21.2z"/></svg></i><span><b>Hearts</b> are takes left. Missed it? <b>Take 2</b>. Nailed it? <b>Got it</b>. Out of hearts? Keep going, nothing stops: <b>Later</b> and <b>Split</b> light up.</span></li>
+    <li><i class="ci menu-i"></i><span><b>B</b> is take again, <b>A</b> is got it. <b>Menu</b> (top right) has drop, next stop and wrap. <b>Undo</b> fixes any tap.</span></li>
+  </ol>
+  <button type="button" class="btn primary big" data-act="coachOk">Let's go!</button>
+</div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="core.js?v=8fc5895f"></script>
+<script>
+/* ---------- the shell ---------- */
+const C = window.ADCore;
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const load = (k, d) => { try { const v = localStorage.getItem('ad-' + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } };
+const save = (k, v) => { try { localStorage.setItem('ad-' + k, JSON.stringify(v)); } catch (e) {} };
+let toastT; function toast(m) { const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 2400); }
+const buzz = ms => { try { if (navigator.userActivation && !navigator.userActivation.hasBeenActive) return; navigator.vibrate && navigator.vibrate(ms || 12); } catch (e) {} };
+const hm = t => { const d = new Date(t); return (d.getHours() % 12 || 12) + ':' + String(d.getMinutes()).padStart(2, '0'); };
+const ap = t => new Date(t).getHours() < 12 ? 'AM' : 'PM';
+const mmss = s => { s = Math.max(0, Math.round(s)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
+const hmin = m => { m = Math.max(0, Math.round(m)); return m >= 60 ? Math.floor(m / 60) + ':' + String(m % 60).padStart(2, '0') : m + ' min'; };
+const nm = s => C.name(s, D.scripts);
+
+const NOTES = [
+  { b: 'Tell a friend', s: 'Say it to one friend in the lens, not a crowd.' },
+  { b: 'Slower', s: 'Breathe first, then the line.' },
+  { b: 'Bigger', s: 'Twice the smile, same speed.' },
+  { b: 'Hands busy', s: 'Hold, touch or show something while you say it.' },
+  { b: 'Last word', s: 'Hit the last word, then hold 2 seconds.' },
+  { b: 'Same again', s: 'Exactly that. One more for safety.' }
+];
+const SAMPLE = 'STORE PROMO 1\nHey! Did you know there\'s a record shop right around the corner?\nWe\'ve got vinyl, tapes, posters and so much more.\nPlus we put out new stuff every single day.\nWe\'re at 123 Main Street, open 10 to 8 every day.\nSee you there!\n(B-roll: flipping through the racks)\n\nSTORE PROMO 2\nIf you didn\'t have plans today, now you do.\nCome dig through the crates with us.\nWe\'re at 123 Main Street, open 10 to 8 every day.\nSee you there!\n\nTRADE-IN\nYour old records could be making you money right now.\nBring them in and leave with cash or store credit.\nWe\'re at 123 Main Street, open 10 to 8 every day.\nSee you soon!\n\nSATURDAY MARKET\nHey! Our Saturday market is back!\nLocal vendors, food, drinks and a live DJ.\nSaturday, November 14th, noon to 5 at 123 Main Street.\nSee you there!';
+
+function defWrap() { const d = new Date(Date.now() + 3 * 36e5); d.setMinutes(Math.ceil(d.getMinutes() / 15) * 15, 0, 0); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); }
+let H = load('hist', []);
+const lastPace = () => { const h = H.filter(x => x.pace > 0).slice(-3); return h.length ? Math.round(C.median(h.map(x => x.pace)) * 2) / 2 : 0; };
+function fresh() { return { v: 1, raw: '', parsedRaw: '', wrap: defWrap(), warm: 10, pace: lastPace() || 3.5, group: true, stops: [{ id: 'p0', name: '', drive: 20 }], scripts: [], run: null, edited: false }; }
+let D = load('day', null) || fresh();
+let P = Object.assign({ again: 45, line: 90, cap: 3, beep: false }, load('prefs', {}));
+if (!Array.isArray(P.notes) || P.notes.length !== 6) P.notes = NOTES.map(n => Object.assign({}, n));
+const persist = () => save('day', D);
+const savePrefs = () => save('prefs', P);
+const running = () => !!(D.run && !wrappedAt());
+function wrappedAt() { const e = D.run && D.run.events; return e && e.length && e[e.length - 1].k === 'wrap' ? e[e.length - 1].t : 0; }
+
+/* ---------- moving between screens ---------- */
+const BACK = { plan: 'setup', run: 'plan', report: 'plan' };
+function go(scr, push) {
+  document.body.dataset.scr = scr;
+  $$('.scr').forEach(el => { el.hidden = el.id !== 's-' + scr; });
+  if (push !== false && scr !== 'her') { try { history.replaceState(null, '', '#' + scr); } catch (e) {} }
+  window.scrollTo(0, 0);
+  if (scr === 'setup') renderSetup();
+  if (scr === 'plan') renderPlan();
+  if (scr === 'run') { renderRun(); lockOn(); } else lockOff();
+  if (scr === 'report') renderReport();
+}
+function back() { const b = BACK[document.body.dataset.scr]; if (b) { buzz(); go(b); } }
+$('#back').addEventListener('click', back);
+
+/* ---------- 1. set up ---------- */
+const seg = (el, vals, cur, fmt, onPick) => {
+  el.innerHTML = vals.map(v => `<button type="button" aria-pressed="${v === cur}" data-v="${v}">${esc(fmt(v))}</button>`).join('');
+  el.onclick = e => { const b = e.target.closest('button'); if (!b) return; buzz(); onPick(+b.dataset.v); };
+};
+function readout() {
+  const S = C.parse($('#raw').value);
+  if (!S.length) { $('#readout').textContent = 'Nothing read yet.'; return; }
+  const lines = S.reduce((m, s) => m + C.dialogue(s), 0), br = S.reduce((m, s) => m + s.lines.length - C.dialogue(s), 0);
+  const pl = C.placesIn(S), dated = S.filter(s => s.dated).length;
+  $('#readout').innerHTML = `<b>${S.length} script${S.length > 1 ? 's' : ''} · ${lines} line${lines === 1 ? '' : 's'}</b>${br ? ' · ' + br + ' b-roll' : ''}${dated ? ' · ' + dated + ' with a date' : ''}`
+    + (pl.length > 1 ? `<br>${pl.length} places: ${pl.map(esc).join(', ')}. They become your stops (drive times under More).` : '');
+}
+function renderStops() {
+  const opts = [0, 5, 10, 15, 20, 25, 30, 40, 45, 60];
+  $('#stops').innerHTML = D.stops.map((s, i) => `<div class="stoprow"><input class="in" data-stop="${i}" value="${esc(s.name)}" placeholder="${i ? 'Next place' : 'Where you start'}" aria-label="Stop ${i + 1} name">`
+    + (i < D.stops.length - 1 ? `<select class="in" data-drive="${i}" aria-label="Drive to the next stop">${opts.map(o => `<option value="${o}"${+s.drive === o ? ' selected' : ''}>then ${o} min</option>`).join('')}</select>` : '<span class="hint" style="text-align:center">last stop</span>')
+    + `<button type="button" class="btn ghost" data-act="rmStop" data-i="${i}" aria-label="Remove this stop"${D.stops.length < 2 ? ' disabled' : ''}>&times;</button></div>`).join('');
+}
+function renderSetup() {
+  const r = $('#raw');
+  if (document.activeElement !== r) r.value = D.raw || '';
+  r.readOnly = running();
+  $('#resume').hidden = !running();
+  if (running()) { const L = C.live(D, Date.now()); $('#resume-t').textContent = `A shoot is running · ${L.rest.length} left`; }
+  $('#wrap').value = D.wrap || defWrap();
+  readout(); renderStops();
+  seg($('#warm'), [0, 5, 10, 15, 20], +D.warm, v => v ? v + ' min' : 'none', v => { D.warm = v; persist(); renderSetup(); });
+  $('#pace').textContent = (+D.pace).toFixed(1) + ' min';
+  const lp = lastPace(); $('#pace-sub').textContent = lp ? `the dial redlines past it · your last days: ${lp.toFixed(1)}` : 'the dial redlines past it · learns from your days';
+  $('#group').checked = D.group !== false; $('#lefty').checked = !!P.lefty;
+  seg($('#cap'), [2, 3, 4, 5, 0], P.cap, v => v ? String(v) : 'off', v => { P.cap = v; savePrefs(); renderSetup(); });
+  $('#beep').checked = !!P.beep;
+  $('#notes-ed').innerHTML = P.notes.map((n, i) => `<div class="noterow"><input class="in" data-nb="${i}" value="${esc(n.b)}" maxlength="18" aria-label="Note ${i + 1} key"><input class="in" data-ns="${i}" value="${esc(n.s)}" maxlength="80" aria-label="Note ${i + 1} meaning"></div>`).join('');
+}
+let rawT;
+$('#raw').addEventListener('input', () => { clearTimeout(rawT); rawT = setTimeout(() => { if (!running()) { D.raw = $('#raw').value; persist(); } readout(); }, 250); });
+$('#wrap').addEventListener('change', e => { if (e.target.value) { D.wrap = e.target.value; persist(); } });
+$('#stops').addEventListener('change', e => {
+  const n = e.target.dataset.stop, d = e.target.dataset.drive;
+  if (n != null) D.stops[+n].name = e.target.value.trim();
+  if (d != null) D.stops[+d].drive = +e.target.value;
+  persist();
+});
+$('#notes-ed').addEventListener('change', e => {
+  const b = e.target.dataset.nb, s = e.target.dataset.ns;
+  if (b != null) P.notes[+b].b = e.target.value.trim() || NOTES[+b].b;
+  if (s != null) P.notes[+s].s = e.target.value.trim();
+  savePrefs();
+});
+function reparse() {
+  const old = new Map(D.scripts.map(s => [s.title + '|' + (s.short || ''), s]));
+  const S = C.parse(D.raw);
+  S.forEach(s => { const o = old.get(s.title + '|' + (s.short || '')); if (o) { s.must = o.must; s.skip = o.skip; s.stop = o.stop; } });
+  D.scripts = S; D.parsedRaw = D.raw; D.edited = false;
+  const pl = C.placesIn(S);
+  if (pl.length > 1 && D.stops.length === 1 && !D.stops[0].name) D.stops = pl.map((p, i) => ({ id: 'p' + i, name: p, drive: 20 }));
+  D.scripts.forEach(s => { if (s.stop && !D.stops.some(x => x.id === s.stop)) delete s.stop; });
+}
+
+/* ---------- 2. the plan ---------- */
+const open = new Set();
+let planPainted = 0;
+function chipsFor(s, est, warmId, n, withStop) {
+  const c = [];
+  if (s.id === warmId) c.push('<i class="chip warm">warm-up</i>');
+  if (s.must) c.push('<i class="chip must">must</i>');
+  if (s.dated) c.push(`<i class="chip date">${esc(s.dated)}</i>`);
+  c.push(`<i class="chip">${n} line${n === 1 ? '' : 's'}</i>`);
+  const br = s.lines.length - C.dialogue(s); if (br) c.push(`<i class="chip">${br} b-roll</i>`);
+  if (est != null) c.push(`<i class="chip">~${Math.round(est)} min</i>`);
+  if (withStop && D.stops.length > 1) c.push(`<i class="chip stop">at ${esc(stopName(C.stopFor(s, D.stops)))}</i>`);
+  return c.join('');
+}
+const stopName = id => { const s = D.stops.find(x => x.id === id); return s ? (s.name || 'stop ' + (D.stops.indexOf(s) + 1)) : ''; };
+function linesHtml(s, items, L) {
+  const byId = new Map(items.map(it => [it.id, it]));
+  const coveredBy = {}; items.forEach(it => it.cov.forEach(c => { coveredBy[c] = it; }));
+  const here = C.stopFor(s, D.stops), nx = D.stops[(D.stops.findIndex(x => x.id === here) + 1) % D.stops.length];
+  const mv = D.stops.length > 1 && !running() && !wrappedAt() ? `<div class="sl"><span><small>shot at ${esc(stopName(here))}</small></span><button type="button" class="btn ghost" data-act="cycleStop" data-sid="${s.id}">Move to ${esc(stopName(nx.id))}</button></div>` : '';
+  return `<div class="slines">${mv}${s.lines.map(l => {
+    const it = byId.get(l.id), cv = coveredBy[l.id];
+    const tags = [];
+    if (l.br) tags.push('b-roll');
+    if (l.who && new Set(D.scripts.flatMap(x => x.lines.map(y => y.who)).filter(Boolean)).size > 1) tags.push(l.who);
+    if (l.dir) tags.push('(' + l.dir + ')');
+    if (it && it.cov.length) tags.push(`same line in ${1 + it.cov.length} scripts, said once`);
+    if (cv) tags.push('said once with ' + nm(D.scripts.find(x => x.id === cv.sid)));
+    if (it && it.g) tags.push(`back to back with ${it.gn - 1} like it`);
+    if (L && (L.done[l.id] || (cv && L.isDone(cv)) || (it && L.isDone(it)))) tags.push('done');
+    const edit = running() || wrappedAt() ? '' : `<span class="row"><button type="button" class="btn ghost" data-act="editLine" data-id="${l.id}">Edit</button>${!l.br && C.sentences(l.text).length > 1 ? `<button type="button" class="btn ghost" data-act="splitLine" data-id="${l.id}">Split</button>` : ''}<button type="button" class="btn ghost" data-act="flipLine" data-id="${l.id}">${l.br ? 'Line' : 'B-roll'}</button></span>`;
+    return `<div class="sl${l.br ? ' br' : ''}"><span>${esc(l.text)}${tags.length ? `<small>${esc(tags.join(' · '))}</small>` : ''}</span>${edit}</div>`;
+  }).join('')}</div>`;
+}
+function renderPlan() {
+  planPainted = Date.now();
+  if (!D.scripts.length) {
+    $('#verdict').className = 'verdict lcd'; $('#verdict b').textContent = 'No lines yet'; $('#verdict small').textContent = 'paste them in the first screen';
+    $('#why').textContent = ''; $('#plist').innerHTML = '';
+    $('#pdock').innerHTML = '<button type="button" class="btn primary wide" data-act="toSetup">Paste the lines &rsaquo;</button><button type="button" class="bk" data-act="back" aria-label="Back">&lsaquo;</button>';
+    return;
+  }
+  if (D.run) return renderPlanLive();
+  const now = Date.now(), Pl = C.plan(D, now);
+  const fit = Pl.inc.size, all = D.scripts.filter(s => !s.skip).length;
+  const v = $('#verdict');
+  if (Pl.avail <= 0) { v.className = 'verdict lcd hot'; v.querySelector('b').textContent = 'Wrap time passed'; v.querySelector('small').textContent = 'set a later wrap in the first screen'; }
+  else if (fit === all) { v.className = 'verdict lcd'; v.querySelector('b').textContent = `All ${all} fit`; v.querySelector('small').textContent = `need ${hmin(Pl.need)} · have ${hmin(Pl.avail)} · ${hmin(Pl.avail - Pl.need)} spare · wrap ${hm(Pl.wrapAt)} ${ap(Pl.wrapAt)}`; }
+  else { v.className = 'verdict lcd hot'; v.querySelector('b').textContent = `Fits ${fit} of ${all}`; v.querySelector('small').textContent = `${fit ? 'these ' + fit + ' need ' + hmin(Pl.need) + ' · ' : ''}have ${hmin(Pl.avail)} · wrap ${hm(Pl.wrapAt)} ${ap(Pl.wrapAt)}`; }
+  const lines = D.scripts.filter(s => Pl.inc.has(s.id)).reduce((m, s) => m + C.dialogue(s), 0), said = Pl.items.filter(it => !it.br).length;
+  $('#why').textContent = `In shoot order: an easy script first (the talent warms up on it), dated ones early, the same line in different scripts back to back.${lines > said ? ` ${lines - said} line${lines - said > 1 ? 's are' : ' is'} word for word in another script, said once.` : ''} At ${(+D.pace).toFixed(1)} min a line.`;
+  // scripts in the order they get worked through, split by stop (repeats from later scripts get pulled in early)
+  const fitS = C.rank(D.scripts.filter(s => Pl.inc.has(s.id)), Pl.warmId);
+  let h = '';
+  D.stops.forEach((st, si) => {
+    const S = fitS.filter(s => C.stopFor(s, D.stops) === st.id);
+    if (!S.length) return;
+    if (D.stops.length > 1) h += `<div class="sec">${esc(stopName(st.id))}<span>${S.length} script${S.length > 1 ? 's' : ''}${si < D.stops.length - 1 && fitS.some(s => D.stops.findIndex(x => x.id === C.stopFor(s, D.stops)) > si) ? ` · then ${+st.drive || 0} min drive` : ''}</span></div>`;
+    else h += `<div class="sec">Shoot these<span>${S.length} script${S.length > 1 ? 's' : ''}</span></div>`;
+    S.forEach(s => { h += rowHtml(s, Pl.per[s.id], Pl.warmId, Pl.items, ''); });
+  });
+  const cut = D.scripts.filter(s => !s.skip && !Pl.inc.has(s.id));
+  if (cut.length) { h += `<div class="sec">Won't fit<span>tap Must to bring one in</span></div>`; cut.forEach(s => { h += rowHtml(s, null, '', Pl.items, 'out'); }); }
+  const sk = D.scripts.filter(s => s.skip);
+  if (sk.length) { h += `<div class="sec">Skipped<span>not today</span></div>`; sk.forEach(s => { h += rowHtml(s, null, '', Pl.items, 'out'); }); }
+  $('#plist').innerHTML = h;
+  $('#pdock').innerHTML = `<button type="button" class="btn" data-act="her">Send the lines</button><button type="button" class="btn primary" data-act="start"${fit ? '' : ' disabled'}><small>talent's here</small>Start &rsaquo;</button><button type="button" class="bk" data-act="back" aria-label="Back">&lsaquo;</button>`;
+}
+function rowHtml(s, est, warmId, items, cls, L) {
+  const n = C.dialogue(s);
+  let keys;
+  if (L) {
+    const st = L.per[s.id], fin = st.lines && st.done >= st.lines;
+    keys = fin ? '' : L.inc.has(s.id) ? `<button type="button" class="btn ghost" data-act="dropS" data-sid="${s.id}">Drop</button>` : `<button type="button" class="btn" data-act="addS" data-sid="${s.id}">Add</button>`;
+  } else {
+    keys = `<button type="button" class="btn" data-act="must" data-sid="${s.id}" aria-pressed="${!!s.must}">Must</button><button type="button" class="btn ghost" data-act="skipS" data-sid="${s.id}" aria-pressed="${!!s.skip}">${s.skip ? 'Back' : 'Skip'}</button>`;
+  }
+  return `<div class="srow ${cls}"><button type="button" class="sr-main" data-act="openS" data-sid="${s.id}" aria-expanded="${open.has(s.id)}"><b>${esc(s.title)}</b><span class="chips">${L ? liveChips(s, L) : chipsFor(s, est, warmId, n, cls === 'out')}</span></button><div class="sr-keys">${keys}</div></div>`
+    + (open.has(s.id) ? linesHtml(s, items, L) : '');
+}
+function liveChips(s, L) {
+  const st = L.per[s.id], c = [];
+  if (s.id === D.run.warmId) c.push('<i class="chip warm">warm-up</i>');
+  if (s.dated) c.push(`<i class="chip date">${esc(s.dated)}</i>`);
+  c.push(`<i class="chip${st.lines && st.done >= st.lines ? ' ok' : ''}">${st.done} of ${st.lines} done</i>`);
+  if (st.min >= 1) c.push(`<i class="chip">${Math.round(st.min)} min so far</i>`);
+  if (st.left) c.push('<i class="chip">left behind</i>');
+  if (L.dropped.has(s.id)) c.push('<i class="chip">dropped</i>');
+  return c.join('');
+}
+function renderPlanLive() {
+  const now = Date.now(), L = C.live(D, now), w = wrappedAt();
+  const v = $('#verdict');
+  v.className = 'verdict lcd' + (L.over > 2 && !w ? ' hot' : '');
+  v.querySelector('b').textContent = w ? 'Wrapped' : `${L.rest.length} left`;
+  v.querySelector('small').textContent = w ? `${hm(D.run.at)} to ${hm(w)}` : `on pace to wrap ${hm(L.proj)} · ${L.over > 0 ? Math.round(L.over) + ' min over' : Math.round(-L.over) + ' min spare'}`;
+  $('#why').textContent = w ? 'The day as it went. The report has the numbers.' : 'Drop a script to make time, add one back if you are ahead. Lines you already shot stay shot.';
+  const first = {}; L.items.forEach((it, i) => { if (first[it.sid] == null) first[it.sid] = i; });
+  const inS = D.scripts.filter(s => L.inc.has(s.id) || L.per[s.id].done).sort((a, b) => (first[a.id] ?? 1e9) - (first[b.id] ?? 1e9));
+  const outS = D.scripts.filter(s => !inS.includes(s));
+  let h = `<div class="sec">Today<span>${inS.length} script${inS.length === 1 ? '' : 's'}</span></div>`;
+  inS.forEach(s => { const st = L.per[s.id]; h += rowHtml(s, null, '', L.items, st.lines && st.done >= st.lines ? 'fin' : '', L); });
+  if (outS.length) { h += `<div class="sec">Not in today<span>add one if there is time</span></div>`; outS.forEach(s => { h += rowHtml(s, null, '', L.items, 'out', L); }); }
+  $('#plist').innerHTML = h;
+  $('#pdock').innerHTML = `<button type="button" class="btn" data-act="her">Send the lines</button>` + (w ? `<button type="button" class="btn primary" data-act="toReport">Report &rsaquo;</button>` : `<button type="button" class="btn primary" data-act="toRun"><small>back to</small>The set &rsaquo;</button>`) + '<button type="button" class="bk" data-act="back" aria-label="Back">&lsaquo;</button>';
+}
+
+/* ---------- 3. the set ---------- */
+let RL = null, liveAt = 0, wasRed = false, wasOT = false, lastPip = { id: '', n: 0 }, lastCard = '', runOver = false, helpKey = '';
+const viewOf = sid => (RL && RL.view && RL.view.find(s => s.id === sid)) || scriptOf(sid);
+// stuck = out of hearts, or this line's clock past its budget: Later and Split light up on the deck, the ticker says so
+let stuckNow = '', tickSig = '', PROG = { i: 0, total: 0 };
+function paintStuck(red) {
+  const L = RL, cur = L && L.cur, busy = !cur || !!L.driveTo;
+  const st = busy ? '' : runOver ? 'hearts' : red ? 'time' : '';
+  const key = (cur ? cur.id : '') + '|' + st + '|' + P.cap + '|' + (cur ? (L.att[cur.id] || 0) : 0);
+  if (key === helpKey) return; helpKey = key; stuckNow = st;
+  ['#t-later', '#t-split'].forEach(q => { const b = $(q); b.classList.toggle('lit', !!st && !b.disabled); });
+  if (!busy) {
+    const n = (L.att[cur.id] || 0) - (L.laterAt[cur.id] || 0) + 1, cap = $('#r-cap');
+    cap.className = st ? 'warn' : '';
+    cap.textContent = st === 'hearts' ? 'out of hearts · keep going' : st === 'time' ? 'running long · keep going' : !P.cap ? 'no cap · as many as it needs'
+      : n === P.cap ? 'last heart · make it count' : `${P.cap - n + 1} takes left`;
+  }
+  tickSig = ''; paintTicker(Date.now());
+}
+const HEART = '<path d="M12 21.2S3 15.4 1.2 10.1C-.4 5.4 2.6 1.3 6.8 1.3c2.3 0 4.1 1.2 5.2 3 1.1-1.8 2.9-3 5.2-3 4.2 0 7.2 4.1 5.6 8.8C21 15.4 12 21.2 12 21.2z"/>';
+const hms = sec => { sec = Math.max(0, Math.round(sec)); const h = Math.floor(sec / 3600), m = Math.floor(sec % 3600 / 60), x = sec % 60; return h ? h + ':' + String(m).padStart(2, '0') + ':' + String(x).padStart(2, '0') : m + ':' + String(x).padStart(2, '0'); };
+const UNDO = { again: 1, got: 1, skip: 1, roll: 1, go: 1, arrive: 1, drop: 1, add: 1, wrap: 1, later: 1, split: 1 };
+function ev(k, extra) { D.run.events.push(Object.assign({ t: Date.now(), k }, extra || {})); persist(); }
+function scriptOf(id) { return D.scripts.find(s => s.id === id); }
+function fitText(el, box, max, min) {
+  el.style.fontSize = max + 'px';
+  if (el.scrollHeight <= box.clientHeight + 1) return;
+  let lo = min, hi = max;
+  while (hi - lo > 1) { const m = (lo + hi) >> 1; el.style.fontSize = m + 'px'; if (el.scrollHeight <= box.clientHeight + 1) lo = m; else hi = m; }
+  el.style.fontSize = lo + 'px';
+}
+function renderRun() {
+  if (!D.run) { go('plan'); return; }
+  const now = Date.now(), L = RL = C.live(D, now); liveAt = now;
+  if (L.wrapped) { go('report'); return; }
+  const cur = L.cur, card = $('#r-card'), busy = !cur || !!L.driveTo;
+  const total = L.items.filter(it => !L.gone.has(it.stop) || L.isDone(it)).length, doneN = L.items.filter(it => L.isDone(it)).length;
+  PROG = { i: Math.min(doneN + 1, total), total };
+  card.className = 'linecard';
+  $('#r-tag').textContent = ''; $('#r-tap').hidden = false;
+  // the two big keys stay put in every state (anchors never move): B goes dim when there is nothing to retake
+  $('#k-again').disabled = busy;
+  if (!cur) {
+    card.classList.add('alldone'); $('#r-who').textContent = 'That is everything'; $('#r-at').textContent = '';
+    $('#r-txt').textContent = 'All done. Wrap it.'; $('#r-tap').hidden = true;
+    $('#r-mid').hidden = true;
+    $('#k-got-s').textContent = 'all done'; $('#k-got-t').innerHTML = 'Wrap &rsaquo;';
+  } else if (L.driveTo) {
+    const mins = +((D.stops.find(s => s.id === L.stop) || {}).drive || 0);
+    card.classList.add('drive'); $('#r-who').textContent = 'On the move'; $('#r-at').textContent = '';
+    $('#r-txt').textContent = 'Drive to ' + stopName(L.driveTo); $('#r-tap').hidden = true;
+    $('#r-tag').textContent = `about ${mins} min · next: ${nm(scriptOf(cur.sid))}`;
+    $('#r-mid').hidden = false;
+    $('#r-take').textContent = 'Drive'; $('#r-pips').innerHTML = ''; $('#r-cap').className = ''; $('#r-cap').textContent = `about ${mins} min`; $('#r-last').textContent = '';
+    $('#k-got-s').textContent = 'arrived'; $('#k-got-t').innerHTML = 'We\'re here &rsaquo;';
+  } else {
+    const s = viewOf(cur.sid), li = s.lines.findIndex(l => l.id === cur.id) + 1;
+    $('#r-who').textContent = nm(s); $('#r-at').textContent = `line ${li} of ${s.lines.length}`;
+    if (cur.br) card.classList.add('br');
+    const tag = [];
+    if (cur.br) tag.push('b-roll');
+    if (cur.dir) tag.push('(' + cur.dir + ')');
+    if (cur.cov.length) tag.push(`same line in ${1 + cur.cov.length} scripts · one good take covers all`);
+    if (cur.g) tag.push(`back to back ${cur.gi} of ${cur.gn} · same spot`);
+    if (L.rounds[cur.id]) tag.push('back for another try · fresh hearts');
+    $('#r-tag').textContent = tag.join(' · ');
+    $('#r-txt').textContent = cur.text;
+    $('#r-mid').hidden = false;
+    const n = (L.att[cur.id] || 0) - (L.laterAt[cur.id] || 0) + 1, capOn = P.cap > 0;
+    $('#k-again-t').textContent = 'Take ' + (n + 1); $('#k-got-s').textContent = 'line done'; $('#k-got-t').innerHTML = 'Got it &rsaquo;';
+    $('#r-take').textContent = 'Take ' + n;
+    // hearts are takes left, like lives: full = still yours, the current take is the last full one, a spent one empties (and pops once).
+    // Out of hearts never stops anything: the hearts sit empty, "+N extra" counts on, and Later + Split light up on the deck.
+    const left = capOn ? Math.max(0, P.cap - n + 1) : 0, lost = capOn && lastPip.id === cur.id && n > lastPip.n && n <= P.cap + 1 ? P.cap - left : -1;
+    $('#r-pips').innerHTML = !capOn ? '' : Array.from({ length: P.cap }, (_, i) => `<svg class="pip${i < left ? ' on' : ''}${i === left - 1 ? ' now' : ''}${i === lost ? ' lost' : ''}" viewBox="-2 -1 28 25" aria-hidden="true">${HEART}</svg>`).join('')
+      + (n > P.cap ? `<i class="xtra">+${n - P.cap} extra</i>` : '');
+    lastPip = { id: cur.id, n };
+    runOver = capOn && n > P.cap;
+    // the line before this one: how long it took, green inside its budget, red past it (the payoff, right away)
+    const got = L.log.filter(r => r.k === 'got'), last = L.log[L.log.length - 1], lt = $('#r-last');
+    lt.className = last ? (last.over ? 'red' : 'ok') : '';
+    lt.textContent = last ? `last line ${hms(last.min * 60)}${last.k === 'skip' ? ' (skipped)' : ''}${got.length > 1 ? ' · avg ' + hms(got.reduce((m, r) => m + r.min, 0) / got.length * 60) : ''}` : '';
+  }
+  // the deck: tools and notes always in the same spots; what does not apply right now goes dim, it never disappears
+  $('#t-skip').disabled = busy; $('#t-later').disabled = busy;
+  $('#t-split').disabled = busy || cur.br || C.splitLine(cur.text).length < 2;
+  $('#r-notes').innerHTML = P.notes.map((x, i) => `<button type="button" class="btn" data-act="note" data-i="${i}"${busy ? ' disabled' : ''}>${esc(x.b)}</button>`).join('');
+  requestAnimationFrame(() => fitText($('#r-txt'), $('#r-card .txtbox'), 44, 16));
+  const key = cur ? cur.id + (L.driveTo || '') : 'done';
+  if (key !== lastCard) { card.classList.remove('pop'); void card.offsetWidth; card.classList.add('pop'); lastCard = key; }
+  helpKey = ''; tickSig = '';
+  paintStuck(!busy && (now - L.lastT) / 1e3 >= Math.max(30, L.curBudget * 60));
+  tickRun(now);
+}
+function tickRun(now) {
+  if (!RL) return;
+  if (now - liveAt > 1000) { RL = C.live(D, now); liveAt = now; paintTicker(now); }
+  const L = RL, ring = $('#r-ring'), arc = $('#r-arc'), CIRC = 276.46;
+  // THE LINE TIMER: starts when the line comes up, runs through every take, stops at GOT IT; redlines past the line's budget
+  let cls = '', big = '', lab = '', frac = 0;
+  if (L.cur && L.driveTo) {
+    const el = (now - L.lastT) / 1e3, b = Math.max(60, (+((D.stops.find(s => s.id === L.stop) || {}).drive || 0)) * 60);
+    cls = el > b ? 'over' : 'drive'; big = mmss(el); lab = 'driving'; frac = el / b;
+  } else if (L.cur) {
+    const el = (now - L.lastT) / 1e3, b = Math.max(30, L.curBudget * 60), red = el >= b;
+    paintStuck(red);
+    frac = el / b; big = el >= 3600 ? hms(el) : mmss(el);
+    cls = red ? 'over' : frac >= .75 ? 'warn' : ''; lab = red ? 'redline' : 'of ' + mmss(b);
+    if (red && !wasRed) { buzz([60, 40, 60]); if (P.beep) beep(); }
+    wasRed = red;
+  }
+  ring.className = 'ring ' + cls;
+  $('#r-clock').textContent = big; $('#r-clock').className = big.length > 5 ? 'long' : ''; $('#r-clk-l').textContent = lab;
+  arc.style.strokeDashoffset = String(CIRC * (1 - Math.max(0, Math.min(1, frac))));
+  // THE DAY TIMER: counts down to the wrap; amber when the pace says you will run over, red and counting up in overtime
+  const day = $('#r-day'), total = Math.max(1, L.wrapAt - D.run.at), leftMs = L.wrapAt - now, red = leftMs < 0;
+  const warn = !red && !!L.cur && L.over > 2, low = !red && leftMs < total * .2, mid = !red && !low && leftMs < total * .5;
+  $('#r-left').textContent = (red ? '+' : '') + hms(Math.abs(leftMs) / 1e3);
+  $('#r-left-l').textContent = red ? 'overtime' : 'left';
+  day.className = 'day lcd' + (red ? ' red' : warn ? ' warn' : '') + (low ? ' low' : mid ? ' mid' : '');
+  // the TIME bar drains like a life bar; past the wrap it fills back up in red (full red = 30 min over)
+  $('#r-fill').style.width = red ? '0%' : Math.max(0, Math.min(100, leftMs / total * 100)) + '%';
+  $('#r-ot').style.width = red ? Math.min(100, -leftMs / (30 * 6e4) * 100) + '%' : '0%';
+  if (red && !wasOT && L.cur) pop('Overtime!', 'past the ' + hm(L.wrapAt) + ' wrap · drop what you can', true);
+  wasOT = red;
+}
+const dismissed = {};
+function paintTicker(now) {
+  const L = RL; if (!L) return;
+  const n = L.cur && !L.driveTo ? C.nudge(D, L, now) : null, dk = n ? n.k + (n.sid || n.stop || '') : '';
+  let cls = '', text = '', keys = '';
+  if (!L.cur) text = 'That is every line. Tap A to wrap the day.';
+  else if (L.driveTo) text = `On the road to ${stopName(L.driveTo)}. Tap A when you get there.`;
+  else if (stuckNow) { cls = 'stuck'; text = (stuckNow === 'hearts' ? 'Out of hearts.' : 'This line is running long.') + ' Keep going, or tap Later or Split below.'; }
+  else if (n && !(dismissed[dk] > now)) {
+    const x = `<button type="button" class="btn ghost" data-act="dismiss" data-key="${esc(dk)}" aria-label="Not now">&times;</button>`;
+    cls = n.k === 'add' ? '' : n.k === 'leave' ? 'warn' : 'hot';
+    if (n.k === 'leave' || n.k === 'leave-now') { text = n.k === 'leave' ? `Leave for ${n.name} by ${hm(n.at)}, ${Math.max(0, Math.round((n.at - now) / 6e4))} min from now.` : `Leave now for ${n.name} to fit the rest.`; keys = `<button type="button" class="btn primary" data-act="goStop" data-stop="${esc(n.stop)}">Go</button>` + x; }
+    else if (n.k === 'drop') { text = `${Math.round(L.over)} min over. Drop ${nm(scriptOf(n.sid))}? Saves ${Math.round(n.save)} min.`; keys = `<button type="button" class="btn primary" data-act="dropS" data-sid="${n.sid}">Drop</button>` + x; }
+    else if (n.k === 'add') { text = `${Math.round(-L.over)} min spare. Add ${nm(scriptOf(n.sid))} back? About ${Math.max(1, Math.round(n.cost))} min.`; keys = `<button type="button" class="btn" data-act="addS" data-sid="${n.sid}">Add</button>` + x; }
+    else { text = `${Math.round(L.over)} min over. Keep it moving.`; keys = x; }
+  }
+  else if (now > L.wrapAt) { cls = 'hot'; text = `Past the ${hm(L.wrapAt)} wrap. ${L.rest.length} left to shoot.`; }
+  else { cls = L.over > 2 ? 'warn' : ''; text = `Line ${PROG.i} of ${PROG.total} · on pace to wrap ${hm(L.proj)}${L.over > 2 ? ', ' + Math.round(L.over) + ' min over' : L.over < -2 ? ', ' + Math.round(-L.over) + ' min spare' : ''}`; }
+  const sig = cls + '|' + text + '|' + keys; if (sig === tickSig) return; tickSig = sig;
+  $('#r-tick').className = 'ticker ' + cls; $('#r-tick-t').textContent = text; $('#r-tick-k').innerHTML = keys;
+}
+let AC = null;
+function beep() { try { AC = AC || new (window.AudioContext || window.webkitAudioContext)(); if (AC.state === 'suspended') AC.resume(); const o = AC.createOscillator(), g = AC.createGain(), t = AC.currentTime; o.frequency.value = 880; g.gain.value = .25; o.connect(g); g.connect(AC.destination); o.start(t); g.gain.linearRampToValueAtTime(0, t + .12); o.stop(t + .14); } catch (e) {} }
+let flashT;
+function flash(b, s, ok, ms) {
+  const f = $('#flash'); $('#flash-b').textContent = b; $('#flash-s').textContent = s || ''; f.className = 'full' + (ok ? ' ok' : ''); f.hidden = false;
+  clearTimeout(flashT); flashT = setTimeout(() => { f.hidden = true; }, ms || 1600);
+}
+$('#flash').addEventListener('click', () => { $('#flash').hidden = true; });
+function showBig(text, who) {
+  $('#show-who').textContent = who || ''; $('#show-txt').textContent = text; $('#show').hidden = false;
+  requestAnimationFrame(() => fitText($('#show-txt'), $('#show .s-box'), 120, 22));
+}
+$('#show').addEventListener('click', () => { $('#show').hidden = true; });
+let lock = null;
+async function lockOn() { try { if ('wakeLock' in navigator && !lock) { lock = await navigator.wakeLock.request('screen'); lock.addEventListener('release', () => { lock = null; }); } } catch (e) {} }
+function lockOff() { try { if (lock) lock.release(); } catch (e) {} lock = null; }
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && document.body.dataset.scr === 'run') { lockOn(); renderRun(); } });
+
+/* ---------- 4. the report ---------- */
+function reportText(R) {
+  const L = [];
+  L.push('THE AD · day report · ' + new Date(R.start).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' }));
+  L.push(`On the clock ${hm(R.start)} ${ap(R.start)} to ${hm(R.end)} ${ap(R.end)} (${hmin(R.min)})`);
+  L.push(`Scripts done: ${R.finished} of ${R.planned} planned${R.dropped ? ', ' + R.dropped + ' dropped' : ''}${R.left ? ', ' + R.left + ' left behind' : ''}${R.never ? ', ' + R.never + ' never fit' : ''}`);
+  L.push(`Lines: ${R.lines} shot${R.skipped ? ', ' + R.skipped + ' skipped' : ''} · ${R.takes} takes · ${R.perLine.toFixed(1)} takes a line`);
+  if (R.pace) L.push(`Pace after the warm-up: ${R.pace.toFixed(1)} min a line`);
+  if (R.warm) L.push(`Warm-up script: ${Math.round(R.warm)} min`);
+  if (R.lines) L.push(`Average line: ${hms(R.avgLine * 60)} · ${R.overN} of ${R.lines} went past their budget`);
+  if (R.slowest.length) { L.push('Slowest lines:'); R.slowest.forEach(x => L.push(`  ${hms(x.min * 60)}  "${x.text}" (${x.script}, ${x.takes} take${x.takes === 1 ? '' : 's'})`)); }
+  const n = Object.entries(R.notes); if (n.length) L.push('Notes used: ' + n.map(([k, c]) => (P.notes[+k] ? P.notes[+k].b : k) + ' x' + c).join(', '));
+  L.push('Per script:');
+  R.scripts.forEach(s => L.push(`  ${s.title}: ${Math.round(s.min)} min, ${s.done} of ${s.lines} lines, ${s.takes} takes${s.warm ? ' (warm-up)' : ''}${s.dropped ? ' (dropped)' : ''}${s.left ? ' (left behind)' : ''}`));
+  if (R.every.length) { L.push('Every line, in the order shot:'); R.every.forEach(x => L.push(`  ${hms(x.min * 60)}${x.over ? ' (over)' : ''}  ${x.k === 'skip' ? '[skipped] ' : x.k === 'later' ? '[later] ' : ''}${x.text} (${x.takes} take${x.takes === 1 ? '' : 's'})`)); }
+  return L.join('\n');
+}
+let lastReport = null;
+function renderReport() {
+  if (!D.run) { go(D.scripts.length ? 'plan' : 'setup'); return; }
+  const now = Date.now(), L = C.live(D, now), R = lastReport = C.report(D, L, now), w = wrappedAt();
+  const v = $('#rep-v');
+  v.querySelector('b').textContent = `${R.finished} of ${R.planned} scripts`;
+  v.querySelector('small').textContent = `results · ${hm(R.start)} to ${hm(R.end)} ${ap(R.end)} · ${hmin(R.min)} on the clock${w ? '' : ' · still running'}`;
+  // a rank, like the end of a level: how many lines landed inside their budget
+  const inB = R.lines ? (R.lines - R.overN) / R.lines : 0;
+  $('#rep-rank').textContent = !R.lines ? '' : inB >= .9 ? 'S' : inB >= .75 ? 'A' : inB >= .55 ? 'B' : 'C';
+  const st = [['Lines shot', R.lines], ['Takes', R.takes], ['Takes a line', R.perLine ? R.perLine.toFixed(1) : '0'],
+    ['Average line', R.lines ? hms(R.avgLine * 60) : '0:00'], ['Pace after warm-up', R.pace ? R.pace.toFixed(1) + ' min' : 'soon'], ['Past budget', R.lines ? R.overN + ' of ' + R.lines : '0']];
+  $('#rep-stats').innerHTML = st.map(([i, b]) => `<div class="stat lcd"><i>${esc(i)}</i><b>${esc(b)}</b></div>`).join('');
+  let h = '';
+  if (R.laterN || R.splitN) h += `<p class="why">${R.laterN ? R.laterN + ' line' + (R.laterN > 1 ? 's' : '') + ' went to Later. ' : ''}${R.splitN ? R.splitN + ' line' + (R.splitN > 1 ? 's were' : ' was') + ' split on set.' : ''}</p>`;
+  if (R.warm >= 1) h += `<p class="why">The warm-up script took ${Math.round(R.warm)} min.${R.pace ? ` After it you ran ${R.pace.toFixed(1)} min a line, so the next plan starts there.` : ''}</p>`;
+  if (R.slowest.length) { h += `<div class="sec">Slowest lines<span>where the clock went</span></div>`; R.slowest.forEach(x => { h += `<div class="rl"><span><b>${esc(x.text)}</b><small>${esc(x.script)} · ${x.takes} take${x.takes === 1 ? '' : 's'}</small></span><em class="${x.over ? 'red' : ''}">${hms(x.min * 60)}</em></div>`; }); }
+  const n = Object.entries(R.notes);
+  if (n.length) h += `<div class="sec">Notes you gave<span>${n.reduce((m, [, c]) => m + c, 0)} taps</span></div><p class="why">${n.map(([k, c]) => esc(P.notes[+k] ? P.notes[+k].b : k) + ' x' + c).join(' · ')}</p>`;
+  h += `<div class="sec">Per script<span>minutes · lines · takes</span></div>`;
+  R.scripts.forEach(s => { h += `<div class="rl"><span><b>${esc(s.title)}</b><small>${s.done} of ${s.lines} lines · ${s.takes} takes${s.warm ? ' · warm-up' : ''}${s.dropped ? ' · dropped' : ''}${s.left ? ' · left behind' : ''}</small></span><em>${Math.round(s.min)} min</em></div>`; });
+  if (R.every.length) { h += `<div class="sec">Every line<span>red = past budget</span></div>`; R.every.forEach(x => { h += `<div class="rl sm"><span><b>${esc(x.text)}</b><small>${esc(x.script)} · ${x.k === 'skip' ? 'skipped' : x.k === 'later' ? 'sent to Later after ' + x.takes + ' take' + (x.takes === 1 ? '' : 's') : x.takes + ' take' + (x.takes === 1 ? '' : 's')}</small></span><em class="${x.over ? 'red' : ''}">${hms(x.min * 60)}</em></div>`; }); }
+  if (w) h += `<button type="button" class="btn ghost" data-act="unwrap" style="width:100%;margin-top:10px">Not done? Undo the wrap</button>`;
+  $('#rep-body').innerHTML = h;
+  $('#rdock').innerHTML = `<button type="button" class="btn" data-act="copyRep">Copy it</button>` + (w ? `<button type="button" class="btn primary" data-act="newDay"><small>start a</small>New day &rsaquo;</button>` : `<button type="button" class="btn primary" data-act="toRun"><small>back to</small>The set &rsaquo;</button>`) + '<button type="button" class="bk" data-act="back" aria-label="Back">&lsaquo;</button>';
+  if (w && R.lines) { const i = H.findIndex(x => x.at === R.start), e = { at: R.start, pace: R.pace, lines: R.lines, takes: R.takes, perLine: R.perLine, finished: R.finished, planned: R.planned, warm: R.warm }; if (i >= 0) H[i] = e; else H.push(e); H = H.slice(-30); save('hist', H); }
+}
+
+/* ---------- her lines: a link that carries them (nothing goes to a server) ---------- */
+const b64u = u8 => { let s = ''; for (let i = 0; i < u8.length; i += 32768) s += String.fromCharCode.apply(null, u8.subarray(i, i + 32768)); return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); };
+const unb64u = s => { s = s.replace(/-/g, '+').replace(/_/g, '/'); while (s.length % 4) s += '='; const b = atob(s), u = new Uint8Array(b.length); for (let i = 0; i < b.length; i++) u[i] = b.charCodeAt(i); return u; };
+async function pack(o) {
+  const bytes = new TextEncoder().encode(JSON.stringify(o));
+  if (window.CompressionStream) { try { const buf = await new Response(new Blob([bytes]).stream().pipeThrough(new CompressionStream('deflate-raw'))).arrayBuffer(); return 'z' + b64u(new Uint8Array(buf)); } catch (e) {} }
+  return 'j' + b64u(bytes);
+}
+async function unpack(code) {
+  const u = unb64u(code.slice(1));
+  if (code[0] === 'z') return JSON.parse(await new Response(new Blob([u]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).text());
+  return JSON.parse(new TextDecoder().decode(u));
+}
+async function herLink() {
+  const now = Date.now(), X = D.run ? C.live(D, now) : C.plan(D, now);
+  const first = {}; X.items.forEach((it, i) => { if (first[it.sid] == null) first[it.sid] = i; });
+  const S = D.scripts.filter(s => X.inc.has(s.id)).sort((a, b) => (first[a.id] ?? 1e9) - (first[b.id] ?? 1e9));
+  const data = { v: 1, s: S.map(s => ({ n: nm(s), l: s.lines.filter(l => !l.br).map(l => l.text) })).filter(x => x.l.length) };
+  return location.origin + location.pathname + '#her=' + await pack(data);
+}
+async function renderHer(code) {
+  go('her', false);
+  let data = null; try { data = await unpack(code); } catch (e) {}
+  if (!data || !Array.isArray(data.s)) { $('#her-list').innerHTML = '<p class="empty">This link did not open on this phone. Ask for a new one, or a screenshot of the lines.</p>'; return; }
+  $('#her-list').innerHTML = data.s.map(s => `<div class="hs">${esc(s.n)}</div>` + s.l.map(t => `<button type="button" class="hl" data-act="herBig" data-who="${esc(s.n)}">${esc(t)}</button>`).join('')).join('');
+}
+
+/* ---------- every key ---------- */
+const act = {
+  toSetup: () => go('setup'), toRun: () => go('run'), toReport: () => go('report'), back: () => back(),
+  paste: async () => { try { const t = await navigator.clipboard.readText(); if (t) { $('#raw').value = t; $('#raw').dispatchEvent(new Event('input')); toast('Pasted.'); } else toast('The clipboard is empty.'); } catch (e) { toast('Long-press the box and tap Paste.'); $('#raw').focus(); } },
+  sample: () => { if (running()) return; if ($('#raw').value.trim() && !confirm('Swap the pasted lines for the sample?')) return; $('#raw').value = SAMPLE; D.raw = SAMPLE; persist(); readout(); },
+  clearRaw: () => { if (running()) return; if ($('#raw').value.trim() && !confirm('Clear the pasted lines?')) return; $('#raw').value = ''; D.raw = ''; persist(); readout(); },
+  addStop: () => { const ids = new Set(D.stops.map(s => s.id)); let i = D.stops.length; while (ids.has('p' + i)) i++; D.stops.push({ id: 'p' + i, name: '', drive: 20 }); persist(); renderStops(); },
+  rmStop: b => { if (D.stops.length < 2) return; const [s] = D.stops.splice(+b.dataset.i, 1); D.scripts.forEach(x => { if (x.stop === s.id) delete x.stop; }); persist(); renderStops(); },
+  pace: b => { D.pace = Math.max(1, Math.min(10, Math.round(((+D.pace || 3.5) + +b.dataset.d) * 2) / 2)); persist(); renderSetup(); },
+  notesReset: () => { P.notes = NOTES.map(n => Object.assign({}, n)); savePrefs(); renderSetup(); },
+  plan: () => {
+    if (running()) { go('plan'); return; }
+    D.raw = $('#raw').value; D.wrap = $('#wrap').value || D.wrap;
+    if (!D.raw.trim()) { toast('Paste the lines first.'); $('#raw').focus(); return; }
+    if (D.run) { if (!confirm('Start a new day with these lines? The last report stays in your history.')) { go('report'); return; } D.run = null; D.parsedRaw = ''; }
+    if (D.raw !== D.parsedRaw || !D.scripts.length) { if (D.edited && D.scripts.length && !confirm('Read the pasted lines again? Edits you made on the plan get replaced.')) { go('plan'); return; } reparse(); }
+    persist(); go('plan');
+  },
+  openS: b => { const id = b.dataset.sid; if (open.has(id)) open.delete(id); else open.add(id); renderPlan(); },
+  must: b => { const s = scriptOf(b.dataset.sid); s.must = !s.must; if (s.must) s.skip = false; persist(); renderPlan(); },
+  skipS: b => { const s = scriptOf(b.dataset.sid); s.skip = !s.skip; if (s.skip) s.must = false; persist(); renderPlan(); },
+  cycleStop: b => { const s = scriptOf(b.dataset.sid), i = D.stops.findIndex(x => x.id === C.stopFor(s, D.stops)); s.stop = D.stops[(i + 1) % D.stops.length].id; persist(); renderPlan(); toast('Moved to ' + stopName(s.stop) + '.'); },
+  editLine: b => { const id = b.dataset.id, s = scriptOf(id.split('.')[0]), l = s.lines.find(x => x.id === id); const t = prompt('Edit the line (empty it to delete it):', l.text); if (t == null) return; if (!t.trim()) s.lines = s.lines.filter(x => x !== l); else l.text = t.trim(); D.edited = true; persist(); renderPlan(); },
+  splitLine: b => { const id = b.dataset.id, s = scriptOf(id.split('.')[0]), i = s.lines.findIndex(x => x.id === id), l = s.lines[i], parts = C.sentences(l.text); if (parts.length < 2) return; s.lines.splice(i, 1, ...parts.map((t, k) => Object.assign({}, l, { id: l.id + '.' + k, text: t }))); D.edited = true; persist(); renderPlan(); toast('Split into ' + parts.length + ' lines.'); },
+  flipLine: b => { const id = b.dataset.id, l = scriptOf(id.split('.')[0]).lines.find(x => x.id === id); l.br = !l.br; D.edited = true; persist(); renderPlan(); },
+  her: async () => {
+    let url; try { url = await herLink(); } catch (e) { toast('Could not build the link.'); return; }
+    const text = 'Your lines for today. Read them through once, no need to memorize.';
+    if (navigator.share) { try { await navigator.share({ title: 'Your lines', text, url }); return; } catch (e) { if (e && e.name === 'AbortError') return; } }
+    try { await navigator.clipboard.writeText(url); toast('Link copied. Text it to your talent.'); } catch (e) { prompt('Copy this link and text it to your talent:', url); }
+  },
+  herBig: b => showBig(b.textContent, b.dataset.who),
+  start: () => {
+    const Pl = C.plan(D, Date.now());
+    if (!Pl.inc.size) { toast('Nothing fits. Push the wrap later or skip a script.'); return; }
+    if (!load('coach', 0)) { $('#coach').hidden = false; return; }   // the first time ever: how to play, then the clock starts
+    act.go();
+  },
+  coachOk: () => { save('coach', 1); $('#coach').hidden = true; act.go(); },
+  go: () => {
+    const Pl = C.plan(D, Date.now());
+    if (!Pl.inc.size) return;
+    D.run = { at: Date.now(), warmId: Pl.warmId, base: [...Pl.inc], events: [] };
+    persist(); buzz(30); go('run');
+    flash('Ready? Go!', 'Wrap by ' + hm(Pl.wrapAt) + '. First up: ' + nm(scriptOf(Pl.warmId) || scriptOf(Pl.items[0].sid)) + ', the warm-up.', true, 1800);
+  },
+  again: () => { if (!RL || !RL.cur || RL.driveTo) return; ev('again', { id: RL.cur.id }); buzz(15); renderRun(); },
+  got: () => {
+    if (!RL) return;
+    if (!RL.cur) { act.wrap(); return; }
+    if (RL.driveTo) { ev('arrive', { stop: RL.driveTo }); buzz(30); pop('Here!', stopName(RL.driveTo) + ' · the clock is back on'); renderRun(); return; }
+    const sid = RL.cur.sid;
+    ev('got', { id: RL.cur.id }); buzz(25);
+    const L = C.live(D, Date.now()), st = L.per[sid];
+    if (st && st.lines && st.done >= st.lines) pop('Stage clear!', nm(scriptOf(sid)) + ' · ' + Math.round(st.min) + ' min');
+    renderRun();
+  },
+  splitNow: () => { if (!RL || !RL.cur || RL.driveTo || RL.cur.br) return; const parts = C.splitLine(RL.cur.text); if (parts.length < 2) { act.show(); return; } ev('split', { id: RL.cur.id, parts }); buzz(20); pop('Split!', parts.length + ' shorter lines · shoot the first one'); renderRun(); },
+  later: () => { if (!RL || !RL.cur || RL.driveTo) return; ev('later', { id: RL.cur.id }); buzz(15); toast('Later: it comes back at the end of this stop, with fresh hearts.'); renderRun(); },
+  skipLine: () => { if (!RL || !RL.cur || RL.driveTo) return; ev('skip', { id: RL.cur.id }); toast('Skipped the line.'); renderRun(); },
+  dropCur: () => { closeMenu(); if (!RL || !RL.cur || RL.driveTo) return; const s = scriptOf(RL.cur.sid); ev('drop', { sid: s.id }); toast('Dropped ' + nm(s) + '. Undo brings it back.'); renderRun(); },
+  dropS: b => { const s = scriptOf(b.dataset.sid); ev('drop', { sid: s.id }); toast('Dropped ' + nm(s) + '.'); document.body.dataset.scr === 'run' ? renderRun() : renderPlan(); },
+  addS: b => { const s = scriptOf(b.dataset.sid); ev('add', { sid: s.id }); toast('Added ' + nm(s) + ' at the end of its stop.'); document.body.dataset.scr === 'run' ? renderRun() : renderPlan(); },
+  nextStop: () => { closeMenu(); if (!RL || !RL.cur) return; const nx = RL.rest.find(it => it.stop !== RL.cur.stop); if (!nx) return; ev('go', { stop: nx.stop }); toast('Off to ' + stopName(nx.stop) + '. What is left here stays behind.'); renderRun(); },
+  menu: () => { if (!RL) return; const later = RL.cur && RL.rest.some(it => it.stop !== RL.cur.stop); $('#m-next').hidden = !(later && !RL.driveTo); $('#m-drop').hidden = !(RL.cur && !RL.driveTo); $('#menu').hidden = false; },
+  resume: () => closeMenu(),
+  menuPlan: () => { closeMenu(); go('plan'); },
+  goStop: b => { ev('go', { stop: b.dataset.stop }); buzz(30); renderRun(); },
+  dismiss: b => { dismissed[b.dataset.key] = Date.now() + 5 * 6e4; tickSig = ''; paintTicker(Date.now()); },
+  note: b => { const n = P.notes[+b.dataset.i]; if (!n) return; ev('note', { n: b.dataset.i, id: RL && RL.cur ? RL.cur.id : '' }); buzz(10); flash(n.b, n.s, false, 1500); },
+  show: () => { if (!RL || !RL.cur || RL.driveTo) return; ev('show', { id: RL.cur.id }); showBig(RL.cur.text, nm(scriptOf(RL.cur.sid))); },
+  undo: () => {
+    const E = D.run.events;
+    for (let i = E.length - 1; i >= 0; i--) if (UNDO[E[i].k]) { const e = E.splice(i, 1)[0]; persist(); toast('Undid ' + ({ again: 'the extra take', got: 'GOT IT', skip: 'the skip', roll: 'rolling', go: 'leaving', arrive: 'arriving', drop: 'the drop', add: 'the add', wrap: 'the wrap', later: 'Later', split: 'the split' }[e.k]) + '.'); renderRun(); return; }
+    toast('Nothing to undo.');
+  },
+  wrap: () => { closeMenu(); ev('wrap'); buzz(40); go('report'); },
+  unwrap: () => { const E = D.run.events; if (E.length && E[E.length - 1].k === 'wrap') { E.pop(); persist(); } go('run'); },
+  copyRep: async () => { if (!lastReport) return; const t = reportText(lastReport); try { await navigator.clipboard.writeText(t); toast('Report copied.'); } catch (e) { if (navigator.share) { try { await navigator.share({ text: t }); } catch (x) {} } else prompt('Copy the report:', t); } },
+  newDay: () => { if (!confirm('Start a new day? The lines and the clock clear. Your past days stay.')) return; D = fresh(); persist(); open.clear(); go('setup'); }
+};
+// iPhone Safari only paints :active (the key sinking) when a touchstart listener exists
+document.addEventListener('touchstart', () => {}, { passive: true });
+// the press: the key sinks on touch-down in the next frame and lifts on release, a slide-off or a scroll (nothing stays stuck down)
+const PRESS = '.btn,.key,.bk,.menu-k,.sr-main,.hl,.seg button,.bar .back,#r-card';
+document.addEventListener('pointerdown', e => { const k = e.target.closest && e.target.closest(PRESS); if (k && !k.disabled) k.classList.add('down'); }, { passive: true });
+const lift = () => $$('.down').forEach(k => k.classList.remove('down'));
+['pointerup', 'pointercancel', 'scroll'].forEach(t => document.addEventListener(t, lift, { passive: true, capture: true }));
+document.addEventListener('pointerout', e => { const k = e.target.closest && e.target.closest('.down'); if (k && !k.contains(e.relatedTarget)) k.classList.remove('down'); }, { passive: true });
+$('#group').addEventListener('change', e => { D.group = e.target.checked; persist(); });
+$('#beep').addEventListener('change', e => { P.beep = e.target.checked; savePrefs(); if (P.beep) beep(); });
+$('#lefty').addEventListener('change', e => { P.lefty = e.target.checked; savePrefs(); document.body.classList.toggle('lefty', P.lefty); });
+document.body.classList.toggle('lefty', !!P.lefty);
+function closeMenu() { $('#menu').hidden = true; }
+$('#menu').addEventListener('click', e => { if (e.target === e.currentTarget) closeMenu(); });
+// things that just happen (stage clear, overtime, arrived) drop in at the top and never take a tap
+let popT;
+function pop(b, s, red) {
+  const p = $('#pop'); $('#pop-b').textContent = b; $('#pop-s').textContent = s || ''; p.className = red ? 'red' : ''; void p.offsetWidth; p.classList.add('on');
+  clearTimeout(popT); popT = setTimeout(() => p.classList.remove('on'), 1700);
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-act]');
+  if (!b || !act[b.dataset.act]) return;
+  if (b.closest('.full') && b.dataset.act !== 'herBig') return;
+  act[b.dataset.act](b);
+});
+
+/* ---------- the clock, install, offline ---------- */
+setInterval(() => {
+  const now = Date.now(), scr = document.body.dataset.scr;
+  $('#clock').textContent = hm(now);
+  if (scr === 'run' && D.run) tickRun(now);
+  if (scr === 'plan' && now - planPainted > 30000 && !open.size) renderPlan();
+}, 250);
+$('#clock').textContent = hm(Date.now());
+window.addEventListener('resize', () => { if (document.body.dataset.scr === 'run') fitText($('#r-txt'), $('#r-card .txtbox'), 44, 16); if (!$('#show').hidden) fitText($('#show-txt'), $('#show .s-box'), 120, 22); });
+// the line re-fits whenever its box changes size (the hearts row grows, the ticker wraps, the phone turns), not only on a redraw
+if (window.ResizeObserver) new ResizeObserver(() => { if (document.body.dataset.scr === 'run') fitText($('#r-txt'), $('#r-card .txtbox'), 44, 16); }).observe($('#r-card .txtbox'));
+let deferred = null;
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferred = e; $('#ins').hidden = false; });
+$('#ins').addEventListener('click', async () => { if (!deferred) return; deferred.prompt(); await deferred.userChoice; deferred = null; $('#ins').hidden = true; });
+if (!matchMedia('(display-mode: standalone)').matches && !navigator.standalone && /iphone|ipad/i.test(navigator.userAgent) && !load('iosHint', 0) && !location.hash.startsWith('#her=')) {
+  setTimeout(() => { toast('Share, then Add to Home Screen, puts THE AD on your phone'); save('iosHint', 1); }, 2500);
+}
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+window.addEventListener('hashchange', () => { const h = location.hash; if (h.startsWith('#her=')) renderHer(h.slice(5)); });
+
+/* ---------- boot (last, so every function above exists) ---------- */
+(function boot() {
+  const h = location.hash;
+  if (h.startsWith('#her=')) { renderHer(h.slice(5)); return; }
+  if (D.run && !wrappedAt()) { go('run'); return; }
+  if (D.run) { go(h === '#setup' ? 'setup' : 'report'); return; }
+  if (D.scripts.length && h !== '#setup') { go('plan'); return; }
+  go('setup');
+})();
+</script>
+</body>
+</html>
