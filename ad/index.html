@@ -635,6 +635,8 @@ img[src*="art/m/"]{image-rendering:-webkit-optimize-contrast;image-rendering:cri
 .hl-t.first{letter-spacing:.06em;font-family:var(--f-ui);font-weight:400;font-size:17px;color:var(--line);word-spacing:.2em}
 .hl-t.blank{letter-spacing:.2em;color:var(--lilac)}
 .hl small.hard{color:var(--red-deep)}
+.hl.other{background:#f3eefb;color:var(--soft);font-weight:500;box-shadow:0 3px 0 rgba(91,61,142,.18)}
+.hl.other .hl-who{color:var(--muted)}
 /* the prompter: the lines roll up a dark screen; a tap holds, mirror flips it for a phone under the lens */
 #prompt{padding:0;background:#000;color:#fff}
 #prompt::after{display:none}
@@ -705,7 +707,7 @@ img[src*="art/m/"]{image-rendering:-webkit-optimize-contrast;image-rendering:cri
     <div class="resume" id="resume" hidden><span id="resume-t">A shoot is running</span><button type="button" class="btn primary" data-act="toRun">Back to the set &rsaquo;</button></div>
     <div class="card">
       <div class="lbl">The lines <span>paste the whole doc</span></div>
-      <textarea class="in" id="raw" aria-label="Paste the scripts" spellcheck="false" autocapitalize="sentences" placeholder="Paste the scripts here, straight from the doc or the text.&#10;&#10;A short line with no period (or ending in :) = a script name&#10;Every line under it = a line they say&#10;MODEL: &quot;...&quot; lines work too&#10;(Brackets) or B-roll: = b-roll"></textarea>
+      <textarea class="in" id="raw" aria-label="Paste the scripts" spellcheck="false" autocapitalize="sentences" placeholder="Paste the scripts here, straight from the doc or the text. Any shape works:&#10;&#10;A short line with no period (or ending in :) = a script name&#10;Every line under it = a line they say&#10;MODEL: &quot;...&quot; or SARAH: lines = who says it&#10;A screenplay, a two-column table, hook / body / CTA, numbered, timestamped, bullets&#10;(Brackets) or B-roll: = b-roll"></textarea>
       <div class="row tight"><button type="button" class="btn" data-act="paste">Paste</button><button type="button" class="btn ghost" data-act="sample">Sample</button><button type="button" class="btn ghost" data-act="clearRaw">Clear</button></div>
       <p class="hint" id="readout">Nothing read yet.</p>
     </div>
@@ -865,7 +867,7 @@ img[src*="art/m/"]{image-rendering:-webkit-optimize-contrast;image-rendering:cri
   <!-- ===== HER LINES (opened from the link he sends) ===== -->
   <section id="s-her" class="scr" hidden>
     <div class="intro"><img class="intro-m" src="art/m/wave.webp" alt="" width="178" height="240" decoding="async"><h1>Your lines</h1><p>Read them once. No need to memorize: we do one line at a time.</p></div>
-    <div class="card rules"><div class="lbl">How to play</div><ol><li>Talk to the camera like it is your best friend.</li><li>Say the line, then freeze for 2 seconds.</li><li>Messed up? Just start the line again.</li><li>The <u class="op">pink word</u> is the one to hit.</li></ol></div>
+    <div class="card rules"><div class="lbl">How to play</div><ol><li>Talk to the camera like it is your best friend.</li><li>Say the line, then freeze for 2 seconds.</li><li>Messed up? Just start the line again.</li><li>The <u class="op">pink word</u> is the one to hit.</li><li id="her-partner" hidden>Grey lines are your scene partner's. Know your cue, say yours.</li></ol></div>
     <div class="herbar"><div class="seg" id="her-mode" aria-label="How the lines show"></div><button type="button" class="btn" data-act="prompter">Prompter</button></div>
     <div id="her-list"></div>
     <p class="foot">Tap a line to see it big · sent with Sweet Takes by 0FF THE PRINT</p>
@@ -923,6 +925,11 @@ img[src*="art/m/"]{image-rendering:-webkit-optimize-contrast;image-rendering:cri
   <div class="tp-stage"><video id="tp-v" class="mir" autoplay muted playsinline hidden></video><video id="tp-p" controls playsinline hidden></video><div class="tp-msg" id="tp-msg">Opening the camera...</div><div class="tp-rec" id="tp-recdot" hidden><i></i><span id="tp-rect">rec 0:00</span></div><div class="tp-line" id="tp-line"></div></div>
   <div class="tp-keys"><button type="button" class="key plain" data-act="tapeClose"><small>back to the set</small><span>Done</span></button><button type="button" class="key rec" id="tp-k" data-act="tapeRec"><small id="tp-ks">front camera</small><span id="tp-kt">Rec</span></button></div>
 </div>
+<div id="whopick" class="ovl" hidden><div class="dlg" role="dialog" aria-modal="true" aria-label="Send the lines to">
+  <b class="dlg-t">Send to</b><small class="dlg-s">one link a person: their lines lit, the partner's grey</small>
+  <div class="opgrid" id="whogrid" style="display:grid"></div>
+  <button type="button" class="btn" data-act="whoClose">Back</button>
+</div></div>
 <div id="oppick" class="ovl" hidden><div class="dlg" role="dialog" aria-modal="true" aria-label="The word to hit">
   <b class="dlg-t">Hit this word</b><small class="dlg-s" id="oppick-s">the one that carries the line</small>
   <div class="opgrid" id="opgrid"></div>
@@ -932,7 +939,7 @@ img[src*="art/m/"]{image-rendering:-webkit-optimize-contrast;image-rendering:cri
 <div id="crt" aria-hidden="true"><i></i><b></b></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="core.js?v=ddc53183"></script>
+<script src="core.js?v=d381627a"></script>
 <script>
 /* ---------- the shell ---------- */
 const C = window.ADCore;
@@ -1066,7 +1073,23 @@ function readout() {
   const lines = S.reduce((m, s) => m + C.dialogue(s), 0), br = S.reduce((m, s) => m + s.lines.length - C.dialogue(s), 0);
   const pl = C.placesIn(S), dated = S.filter(s => s.dated).length;
   $('#readout').innerHTML = `<b>${S.length} script${S.length > 1 ? 's' : ''} · ${lines} line${lines === 1 ? '' : 's'}</b>${br ? ' · ' + br + ' b-roll' : ''}${dated ? ' · ' + dated + ' with a date' : ''}`
-    + (pl.length > 1 ? `<br>${pl.length} places: ${pl.map(esc).join(', ')}. They become your stops (drive times under More).` : '');
+    + (pl.length > 1 ? `<br>${pl.length} places: ${pl.map(esc).join(', ')}. They become your stops (drive times under More).` : '')
+    + shapeText(S.shape);
+}
+// v3 ANY SCRIPT: what shape the reader saw, in plain words, so a wrong read shows before the plan
+function shapeText(sh) {
+  if (!sh) return '';
+  const how = [];
+  if (sh.table) how.push('a two-column table' + (sh.cols ? ' (' + esc(sh.cols) + ')' : '') + ', the spoken column = lines, the other = b-roll');
+  if (sh.screenplay) how.push('a screenplay: scene headings = scripts, the NAME over a speech = who says it, action = b-roll');
+  if (sh.caps) how.push('all caps, so caps do not mean a heading here');
+  if (sh.sections) how.push(sh.sections + ' hook / body / CTA label' + (sh.sections > 1 ? 's' : '') + ' kept as a tag on the line');
+  if (sh.stamps) how.push(sh.stamps + ' timestamp' + (sh.stamps > 1 ? 's' : '') + ' dropped');
+  if (sh.meta) how.push(sh.meta + ' caption / music / talent / note row' + (sh.meta > 1 ? 's' : '') + ' left out');
+  if (sh.bullets) how.push('emoji bullets dropped');
+  const ppl = sh.people || [];
+  const who = ppl.length > 1 ? `<br><b>${ppl.length} people:</b> ${ppl.map(esc).join(', ')}. Each gets their own link from the plan.` : ppl.length === 1 ? `<br>Lines labeled ${esc(ppl[0])}.` : '';
+  return (how.length ? `<br>Read as ${how.join(' · ')}.` : '') + who;
 }
 function renderStops() {
   const opts = [0, 5, 10, 15, 20, 25, 30, 40, 45, 60];
@@ -1928,7 +1951,7 @@ const trainTips = () => { const pk = lessonOf(D); return pk ? [...pk.tips, pk.pr
 
 /* ---------- HOW TO PLAY ---------- */
 const HELP = [
-  ['hold', 'New game', 'Paste the lines straight from the doc or the text. Set when the talent has to leave. That is it.'],
+  ['hold', 'New game', 'Paste the lines straight from the doc or the text, any shape: a plain list, MODEL: or SARAH: labels, a screenplay, a two-column table, hook / body / CTA, numbers, timestamps, bullets. Two or more people in a script works too. Set when the talent has to leave. That is it.'],
   ['point', 'The plan', 'It puts the scripts in shoot order and shows the day as a bar. Red means it will not fit. Star a must, skip the rest, send the talent their lines.'],
   ['go', 'On set', 'One line at a time, big. B means take it again. A means got it. The next line comes up by itself. Every take flashes a slate: point the phone at the lens and the footage slates itself.'],
   ['hearts', 'Hearts and clocks', 'Hearts are takes. The little dial is this line, the bar up top is the whole day. Green is fine, red is late.'],
@@ -1953,6 +1976,7 @@ function chipsFor(s, est, warmId, n, withStop) {
   if (s.dated) c.push(`<i class="chip date">${esc(s.dated)}</i>`);
   c.push(`<i class="chip">${n} line${n === 1 ? '' : 's'}</i>`);
   const br = s.lines.length - C.dialogue(s); if (br) c.push(`<i class="chip">${br} b-roll</i>`);
+  const ppl = C.people([s]); if (ppl.length > 1 || (ppl.length === 1 && C.people(D.scripts).length > 1)) c.push(`<i class="chip stop">${esc(ppl.join(' + '))}</i>`);
   if (est != null) c.push(`<i class="chip">~${Math.round(est)} min</i>`);
   if (withStop && D.stops.length > 1) c.push(`<i class="chip stop">at ${esc(stopName(C.stopFor(s, D.stops)))}</i>`);
   return c.join('');
@@ -1968,6 +1992,7 @@ function linesHtml(s, items, L) {
     const tags = [];
     if (l.br) tags.push('b-roll');
     if (l.who && new Set(D.scripts.flatMap(x => x.lines.map(y => y.who)).filter(Boolean)).size > 1) tags.push(l.who);
+    if (l.sec) tags.push(l.sec);
     if (l.dir) tags.push('(' + l.dir + ')');
     if (it && it.cov.length) tags.push(`same line in ${1 + it.cov.length} scripts, said once`);
     if (cv) tags.push('said once with ' + nm(D.scripts.find(x => x.id === cv.sid)));
@@ -2163,6 +2188,7 @@ function renderRun() {
     if (cur.br) card.classList.add('br');
     const tag = [];
     if (cur.br) tag.push('b-roll');
+    if (cur.sec) tag.push(cur.sec);
     if (cur.dir) tag.push('(' + cur.dir + ')');
     if (cur.cov.length) tag.push(`in ${1 + cur.cov.length} scripts · one take covers all`);
     if (cur.g) tag.push(`back to back ${cur.gi} of ${cur.gn}`);
@@ -2341,7 +2367,7 @@ function reportText(R) {
 function postText(R) {
   const L = ['Sweet Takes · post sheet · ' + new Date(R.start).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' }) + ' · kept takes, clock time'];
   L.push(['from', 'got', 'script', 'line', 'take', 'size', 'text'].join('\t'));
-  R.kept.forEach(k => L.push([clk(k.from), clk(k.at), k.script, k.br ? 'b-roll' : k.line + '/' + k.of, k.cover ? 'cover' : k.side ? 'gap' : k.takes, k.size ? SIZES[k.size] : '', k.text].join('\t')));
+  R.kept.forEach(k => L.push([clk(k.from), clk(k.at), k.script, k.br ? 'b-roll' : k.line + '/' + k.of, k.cover ? 'cover' : k.side ? 'gap' : k.takes, k.size ? SIZES[k.size] : '', (k.who ? k.who + ': ' : '') + k.text].join('\t')));
   return L.join('\n');
 }
 // v3 THE CLIENT SHEET: what got shot and what is left, no clocks, no ranks, no takes. Generic words.
@@ -2392,6 +2418,17 @@ function renderReport() {
     const sz = Object.entries(R.sizeN).filter(([k]) => k !== 'none').sort((a, b) => b[1] - a[1]), un = R.sizeN.none || 0;
     const one = sz.length === 1 && !un && R.lines >= 4;
     h += `<div class="sec">Shot sizes<span>${R.coverN ? R.coverN + ' cover take' + (R.coverN > 1 ? 's' : '') : 'for the edit'}</span></div><p class="why">${sz.length ? sz.map(([k, c]) => esc(SIZES[k]) + ' x' + c).join(' · ') : 'No sizes marked'}${un && sz.length ? ' · ' + un + ' unmarked' : ''}.${one ? ' Every line on one size: the edit has nowhere to cut. Next time grab a second size on the lines you have spare time for.' : !sz.length ? ' Tap the size chip on the line card next time, and the post sheet carries it.' : ''}</p>`;
+  }
+  // v3 many people: how each one did (lines, takes a line, past budget, why their takes missed)
+  const ppl = C.people(D.scripts);
+  if (ppl.length > 1 && R.lines) {
+    h += `<div class="sec">Per person<span>lines · takes · past budget</span></div>`;
+    ppl.forEach(p => {
+      const E = R.every.filter(x => x.who === p && x.k === 'got' && !x.side); if (!E.length) return;
+      const takes = E.reduce((m, x) => m + x.takes, 0), over = E.filter(x => x.over).length, whyN = {}; E.forEach(x => x.why.forEach(w => { whyN[w] = (whyN[w] || 0) + 1; }));
+      const top = Object.entries(whyN).sort((a, b) => b[1] - a[1])[0];
+      h += `<div class="rl"><span><b>${esc(p)}</b><small>${E.length} line${E.length === 1 ? '' : 's'} · ${(takes / E.length).toFixed(1)} takes a line · ${over} past budget${top ? ' · misses: ' + esc(top[0]) : ''}</small></span><em class="${over > E.length / 2 ? 'red' : ''}">${hms(E.reduce((m, x) => m + x.min, 0) * 60)}</em></div>`;
+    });
   }
   h += `<div class="sec">Per script<span>minutes · lines · takes</span></div>`;
   const topS = Math.max(1, ...R.scripts.map(x => x.min));
@@ -2445,13 +2482,20 @@ async function unpack(code) {
   if (code[0] === 'z') return JSON.parse(await new Response(new Blob([u]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).text());
   return JSON.parse(new TextDecoder().decode(u));
 }
-async function herLink() {
+async function herLink(me) {
   const now = Date.now(), X = D.run ? C.live(D, now) : C.plan(D, now);
   const first = {}; X.items.forEach((it, i) => { if (first[it.sid] == null) first[it.sid] = i; });
   const S = D.scripts.filter(s => X.inc.has(s.id)).sort((a, b) => (first[a.id] ?? 1e9) - (first[b.id] ?? 1e9));
-  // v3: the link also carries the word to hit (o) and why a line is hard (h)
+  // v3: the link also carries the word to hit (o), why a line is hard (h), and for a many-people doc whose link it is (me)
   const data = { v: 1, s: S.map(s => { const ls = s.lines.filter(l => !l.br); return Object.assign({ n: nm(s), l: ls.map(l => l.text), d: ls.map(l => doFor(l)), o: ls.map(l => opFor(l)), h: ls.map(l => C.isHard(l) ? (l.hard || C.hardOf(l.text)) : '') }, new Set(ls.map(l => l.who).filter(Boolean)).size > 1 ? { w: ls.map(l => l.who || '') } : {}); }).filter(x => x.l.length) };
+  if (me) { data.me = me; data.s = data.s.filter(x => Array.isArray(x.w) ? x.w.includes(me) : true); }
   return location.origin + location.pathname + '#her=' + await pack(data);
+}
+async function sendLines(me) {
+  let url; try { url = await herLink(me); } catch (e) { toast('Could not build the link.'); return; }
+  const text = me ? `Your lines for today, ${me}. Yours are lit, your scene partner's are grey. Read them through once, no need to memorize.` : 'Your lines for today. Read them through once, no need to memorize.';
+  if (navigator.share) { try { await navigator.share({ title: me ? me + "'s lines" : 'Your lines', text, url }); return; } catch (e) { if (e && e.name === 'AbortError') return; } }
+  try { await navigator.clipboard.writeText(url); toast('Link copied. Text it to ' + (me || 'your talent') + '.'); } catch (e) { prompt('Copy this link and text it to ' + (me || 'your talent') + ':', url); }
 }
 // the talent's page: read, first letters, or blank (memorize), a tap still shows any line big
 let HER = { data: null, mode: 'read' };
@@ -2464,12 +2508,17 @@ async function renderHer(code) {
 }
 function paintHer() {
   const data = HER.data; if (!data) return;
+  const me = data.me || '';
+  $('#s-her h1').textContent = me ? 'Your lines, ' + me : 'Your lines';
+  $('#her-partner').hidden = !me;
   const modes = [['read', 'Read'], ['first', 'First letters'], ['blank', 'Blank']];
   $('#her-mode').innerHTML = modes.map(([v, t]) => `<button type="button" aria-pressed="${v === HER.mode}" data-act="herMode" data-v="${v}">${t}</button>`).join('');
   $('#her-list').innerHTML = data.s.map(s => `<div class="hs">${esc(s.n)}</div>` + s.l.map((t, i) => {
     const dk = Array.isArray(s.d) && DOS[s.d[i]] ? s.d[i] : '', op = Array.isArray(s.o) ? s.o[i] || '' : '', hd = Array.isArray(s.h) ? s.h[i] || '' : '';
-    const body = HER.mode === 'first' ? `<span class="hl-t first">${esc(firstLetters(t))}</span>` : HER.mode === 'blank' ? `<span class="hl-t blank">${esc(blanks(t))}</span>` : `<span class="hl-t">${markOp(t, op)}</span>`;
-    return `<button type="button" class="hl" data-act="herBig" data-who="${esc(s.n)}" data-text="${esc(t)}"${dk ? ` data-do="${dk}"` : ''}${op ? ` data-op="${esc(op)}"` : ''}${hd ? ` data-hard="${esc(hd)}"` : ''}>${doImg(dk)}<span>${Array.isArray(s.w) && s.w[i] ? `<i class="hl-who">${esc(s.w[i])}</i>` : ''}${body}${dk || hd ? `<small>${hd ? `<span class="hard">tricky: ${esc(hd)}, say it slow</span>${dk ? ' · ' : ''}` : ''}${dk ? esc(DOHINT[dk]) : ''}</small>` : ''}</span></button>`;
+    const w = Array.isArray(s.w) ? s.w[i] || '' : '', other = !!(me && w && w !== me);   // the partner's line: a cue, read it, never memorize it
+    const mode = other ? 'read' : HER.mode;
+    const body = mode === 'first' ? `<span class="hl-t first">${esc(firstLetters(t))}</span>` : mode === 'blank' ? `<span class="hl-t blank">${esc(blanks(t))}</span>` : `<span class="hl-t">${other ? esc(t) : markOp(t, op)}</span>`;
+    return `<button type="button" class="hl${other ? ' other' : ''}" data-act="herBig" data-who="${esc(s.n)}" data-text="${esc(t)}"${dk && !other ? ` data-do="${dk}"` : ''}${op && !other ? ` data-op="${esc(op)}"` : ''}${hd && !other ? ` data-hard="${esc(hd)}"` : ''}>${other ? '' : doImg(dk)}<span>${w ? `<i class="hl-who">${esc(w)}${other ? ' · their line' : ''}</i>` : ''}${body}${(dk || hd) && !other ? `<small>${hd ? `<span class="hard">tricky: ${esc(hd)}, say it slow</span>${dk ? ' · ' : ''}` : ''}${dk ? esc(DOHINT[dk]) : ''}</small>` : ''}</span></button>`;
   }).join('')).join('');
 }
 /* ---------- v3 THE PROMPTER: the lines roll up a black screen at a steady speed; a tap holds, another rolls on;
@@ -2565,12 +2614,15 @@ const act = {
   editLine: b => { const id = b.dataset.id, s = scriptOf(id.split('.')[0]), l = s.lines.find(x => x.id === id); const t = prompt('Edit the line (empty it to delete it):', l.text); if (t == null) return; if (!t.trim()) s.lines = s.lines.filter(x => x !== l); else l.text = t.trim(); D.edited = true; persist(); renderPlan(); },
   splitLine: b => { const id = b.dataset.id, s = scriptOf(id.split('.')[0]), i = s.lines.findIndex(x => x.id === id), l = s.lines[i], parts = C.sentences(l.text); if (parts.length < 2) return; s.lines.splice(i, 1, ...parts.map((t, k) => Object.assign({}, l, { id: l.id + '.' + k, text: t }))); D.edited = true; persist(); renderPlan(); toast('Split into ' + parts.length + ' lines.'); },
   flipLine: b => { const id = b.dataset.id, l = scriptOf(id.split('.')[0]).lines.find(x => x.id === id); l.br = !l.br; D.edited = true; persist(); renderPlan(); },
-  her: async () => {
-    let url; try { url = await herLink(); } catch (e) { toast('Could not build the link.'); return; }
-    const text = 'Your lines for today. Read them through once, no need to memorize.';
-    if (navigator.share) { try { await navigator.share({ title: 'Your lines', text, url }); return; } catch (e) { if (e && e.name === 'AbortError') return; } }
-    try { await navigator.clipboard.writeText(url); toast('Link copied. Text it to your talent.'); } catch (e) { prompt('Copy this link and text it to your talent:', url); }
+  her: () => {
+    // v3: a many-people doc = one link per person (their lines lit, the partner's grey), or one link with everyone
+    const ppl = C.people(D.scripts);
+    if (ppl.length < 2) { sendLines(''); return; }
+    $('#whogrid').innerHTML = `<button type="button" class="btn primary" data-act="herTo" data-me="">Everyone, one link</button>` + ppl.map(p => `<button type="button" class="btn" data-act="herTo" data-me="${esc(p)}">${esc(p)}</button>`).join('');
+    $('#whopick').hidden = false;
   },
+  herTo: b => { $('#whopick').hidden = true; sendLines(b.dataset.me || ''); },
+  whoClose: () => { $('#whopick').hidden = true; },
   herBig: b => { const w = b.querySelector('.hl-who'); showBig(b.dataset.text || b.textContent.trim(), (w ? w.textContent + ' · ' : '') + b.dataset.who, b.dataset.do, b.dataset.op || '', b.dataset.hard || ''); },
   herMode: b => { HER.mode = b.dataset.v; try { sessionStorage.setItem('ad-hermode', HER.mode); } catch (e) {} paintHer(); },
   // v3 the word to hit: pick one of the line's words on the plan, or hand it back to the words
@@ -2757,6 +2809,7 @@ function closeMenu() { $('#menu').hidden = true; }
 $('#menu').addEventListener('click', e => { if (e.target === e.currentTarget) closeMenu(); });
 $('#dopick').addEventListener('click', e => { if (e.target === e.currentTarget) $('#dopick').hidden = true; });
 $('#oppick').addEventListener('click', e => { if (e.target === e.currentTarget) $('#oppick').hidden = true; });
+$('#whopick').addEventListener('click', e => { if (e.target === e.currentTarget) $('#whopick').hidden = true; });
 $('#fileopt').addEventListener('click', e => { if (e.target === e.currentTarget) closeOpt(); });
 $('#lesson').addEventListener('click', e => { if (e.target === e.currentTarget) $('#lesson').hidden = true; });
 // boxes that act like keys (a file, a pack, the logo): Enter and Space press them

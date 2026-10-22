@@ -24,8 +24,103 @@ const R_DATE = new RegExp('\\b(?:(?:' + MONTHS + ')\\.?\\s+\\d{1,2}(?:st|nd|rd|t
 const R_SOON = new RegExp('\\b(?:(?:first|second|third|fourth|last)\\s+' + DAYS + '|this\\s+(?:weekend|' + DAYS + ')|tonight|tomorrow)\\b', 'i');
 const R_STREET = /\b\d{2,6}\s+(?:(?:n|s|e|w|north|south|east|west)\.?\s+)?(?:[a-z0-9.']+\s+){0,3}(?:street|st|avenue|ave|av|boulevard|blvd|road|rd|drive|dr|lane|ln|way|highway|hwy|parkway|pkwy|place|pl|court|ct|plaza|square|sq|trail|trl|loop|circle|cir)\b/i;
 const R_ADDR = new RegExp(R_STREET.source + '|\\baddress\\b', 'i');
-const R_SPK_CAPS = /^([A-Z][A-Z0-9 .'&/]{0,23}?)\s*:\s+(?=\S)/;     // MODEL: / VO: / HOST 2:
-const R_SPK_WORD = /^([A-Z][a-z]{1,15})\s*:\s+(?=\S)/;              // Model: (only in a doc that labels its lines)
+const R_SPK_CAPS = /^([A-Z][A-Z0-9 .'&/]{0,23}?)(?:\s*\([^)]{1,14}\))?\s*:\s+(?=\S)/;     // MODEL: / VO: / HOST 2: / SARAH (V.O.):
+const R_SPK_WORD = /^([A-Z][a-z]{1,15}(?:\s[A-Z][a-z]{1,15})?)\s*:\s+(?=\S)/;              // Model: / Sarah Lee: (only in a doc that labels its lines)
+
+/* ---------- ANY SCRIPT (v3, his "work with any script ... different people have different types of script writing") ----------
+   A pre-pass that turns the shapes people send into the one shape the reader below knows (headings, lines, MODEL: labels,
+   (brackets), B-roll:). Handled: a two-column AV table (tab or | cells: the AUDIO column is the line, the VIDEO column is
+   b-roll), a screenplay (INT./EXT. sluglines = scripts, a NAME cue over its lines = who says it, a (parenthetical) under a
+   cue = the line's direction, action paragraphs = b-roll, CUT TO: dropped), HOOK / BODY / CTA labels (kept as a tag on the
+   line, never a new script), timestamps (0:00-0:05) and emoji bullets stripped, "Line 3:" prefixes stripped, caption /
+   music / hashtag / editor-note rows left out, a "Talent: Sarah" name row left out, a trailing "- Name" attribution after
+   a quoted line dropped, and an ALL-CAPS doc (caps stop meaning "heading"). parse() returns what it read in .shape. */
+const R_EMO = /^(?:\d️?⃣\s*)?[\s←-⇿☀-➿⬀-⯿️‍⃣\p{Extended_Pictographic}\p{So}]+/u;
+const R_STAMP = /^[[(]?\d{1,2}:\d{2}(?::\d{2})?(?:\s*(?:-|–|—|to)\s*\d{1,2}:\d{2}(?::\d{2})?)?[\])]?\s*[:.\-–—]?\s*(?=\S)/;
+const R_LINEN = /^(?:line|take|clip|part|step|beat|segment|seg|section|no\.?|number|shot)\s*#?\s*\d+[a-z]?\s*[:.)\-–—]\s+(?=\S)/i;
+const R_META = /^(?:caption|hashtags?|tags|music|song|sound|track|sfx|link(?:s| in bio)?|posting|post date|due|deadline|platform|format|length|duration|ratio|aspect|orientation|notes? (?:to|for) (?:the )?editor|editor'?s? notes?|edit notes?|deliverables?|brand|client|product|goal|objective|tone(?: of voice)?|target|audience|references?|ref|inspo|cta link|date|time|call time|wardrobe|props)\s*:/i;
+const R_HASH = /^(?:#\w+[\s,]*)+$/;
+const R_NAMEROW = /^(?:talent|model|host|creator|actor|actress|cast|on[- ]camera|presenter|spokesperson)\s*:\s*[A-Z][a-z]+(?:\s+[A-Z][a-z.]+){0,2}\s*$/i;
+const R_TRANS = /^(?:(?:cut|fade|dissolve|smash cut|match cut|jump cut|wipe)\s+(?:to|in|out)\b.*|fade in|fade out|the end|end of script|end)\.?:?$/i;
+const R_ATTR = /^(["“'].*["”'])\s*[-–—]\s*[A-Z][\w .']{1,24}$/;
+const SECS = 'hook|body|cta|call to action|intro|outro|close|closing|opening|open|middle|end|ending|setup|set up|punchline|punch line|tagline|tag line|pitch|problem|solution|offer|proof|story|bridge|payoff|value|benefit|main|part one|part two|part three';
+const R_SEC = new RegExp('^(' + SECS + ')\\s*(?:\\d+)?\\s*(?::|[-\\u2013\\u2014]\\s|$)\\s*(.*)$', 'i');
+const R_SLUG = /^(?:INT|EXT|INT\.?\/EXT|I\/E|EST)[. ]/i;
+const R_CUE = /^([A-Z][A-Z0-9'.\-]*(?:\s[A-Z][A-Z0-9'.\-]*){0,2})\s*(?:\((?:V\.?O\.?|O\.?S\.?|O\.?C\.?|CONT'?D\.?|CONT\.?|ON PHONE|PHONE|FILTERED)\))?\s*$/;
+const A_COL = /\b(?:audio|vo|v\.o\.|voice|voiceover|voice over|script|dialogue|dialog|lines?|copy|says|talent|on[- ]camera|narration|spoken|words)\b/i;
+const V_COL = /\b(?:video|visuals?|shots?|b-?roll|action|on[- ]screen|scene|footage|camera|image)\b/i;
+// a two-column script pasted as a table: the AUDIO cell is the line, the VIDEO cell is b-roll in front of it
+function untable(raw, sep, shape) {
+  const out = []; let aCol = -1, vCol = -1;
+  for (const r of raw) {
+    const isRow = sep === '|' ? /^\s*\|/.test(r) : r.includes('\t');
+    if (!isRow) { out.push(r); continue; }
+    const cells = (sep === '|' ? r.replace(/^\s*\|/, '').replace(/\|\s*$/, '') : r).split(sep).map(c => c.trim());
+    if (cells.every(c => /^[\s:-]*$/.test(c))) continue;
+    if (aCol < 0) { const ai = cells.findIndex(c => c.length < 30 && A_COL.test(c)), vi = cells.findIndex(c => c.length < 30 && V_COL.test(c)); if (ai >= 0) { aCol = ai; vCol = vi; shape.cols = cells.filter(Boolean).join(' / '); continue; } }
+    const full = cells.filter(Boolean);
+    const a = aCol >= 0 ? cells[aCol] || '' : full[full.length - 1] || '', v = aCol >= 0 ? (vCol >= 0 ? cells[vCol] || '' : '') : (full.length > 1 ? full[0] : '');
+    if (v && v !== a && !/^b-?roll\s*:/i.test(v)) out.push('B-roll: ' + v); else if (v && v !== a) out.push(v);
+    if (a) out.push(a); else if (!v) out.push('');
+  }
+  shape.table = true; return out;
+}
+function prep(text) {
+  let raw = String(text || '').split(/\r\n|\r|\n/);
+  const shape = { table: false, screenplay: false, caps: false, sections: 0, stamps: 0, meta: 0, bullets: 0 };
+  const pipes = raw.filter(r => /^\s*\|.*\|\s*$/.test(r)).length, tabs = raw.filter(r => r.includes('\t')).length;
+  if (pipes >= 3) raw = untable(raw, '|', shape); else if (tabs >= 3) raw = untable(raw, '\t', shape);
+  let rows = raw.map(r => unmark(clean(r)));
+  // emoji and arrow bullets, keycap numbers
+  rows = rows.map(r => { const s = r.replace(R_EMO, '').trim(); if (s !== r.trim()) shape.bullets++; return s; });
+  // timestamps lead the rows only when the doc is timed (three or more), so "10:30 doors open" stays a line elsewhere
+  if (rows.filter(r => R_STAMP.test(r)).length >= 3) rows = rows.map(r => { if (R_STAMP.test(r)) { shape.stamps++; return r.replace(R_STAMP, '').trim(); } return r; });
+  // rows that are about the post, not the lines
+  rows = rows.map(r => { if (r && (R_META.test(r) || R_HASH.test(r) || R_NAMEROW.test(r) || R_TRANS.test(r))) { shape.meta++; return ''; } return r; });
+  rows = rows.map(r => r.replace(R_LINEN, '').trim());
+  rows = rows.map(r => { const m = r.match(R_ATTR); return m ? m[1] : r; });
+  // an ALL-CAPS doc: caps stop meaning "heading" (the reader keeps R_KEY, a trailing colon, # and the gap rule)
+  const body = rows.filter(Boolean), capsN = body.filter(r => { const L = r.replace(/[^A-Za-z]/g, ''); return L.length >= 3 && L === L.toUpperCase(); }).length;
+  if (body.length >= 4 && capsN >= body.length * .7) shape.caps = true;
+  // a screenplay: a NAME over its lines, repeated; INT./EXT. sluglines
+  const slugs = rows.filter(r => R_SLUG.test(r)).length;
+  const isCue = (r, i) => { const m = r && !R_SLUG.test(r) && !R_KEY.test(r) && !R_SEC.test(r) && r.match(R_CUE); if (!m) return ''; const nx = rows[i + 1] || ''; if (!nx || R_CUE.test(nx) && nx === nx.toUpperCase()) return ''; return m[1]; };
+  const cues = rows.map((r, i) => (i === 0 || !rows[i - 1]) ? isCue(r, i) : '').filter(Boolean);
+  const distinct = new Set(cues).size;
+  if ((cues.length >= 2 && cues.length - distinct >= 2) || slugs >= 2) {
+    shape.screenplay = true; shape.cues = distinct;
+    const out = []; let who = '', dir = '', buf = null;   // buf: a speech wrapped over rows joins into one line
+    const flush = () => { if (buf) { out.push(buf.who + ': ' + (buf.dir ? '(' + buf.dir + ') ' : '') + buf.text); buf = null; } };
+    rows.forEach((r, i) => {
+      if (!r) { flush(); who = ''; dir = ''; out.push(''); return; }
+      if (R_SLUG.test(r)) { flush(); who = ''; out.push(r.replace(/^(INT|EXT|INT\.?\/EXT|I\/E|EST)\.?\s*/i, (x, k) => k.toUpperCase() + '. ')); return; }
+      if ((i === 0 || !rows[i - 1]) && isCue(r, i)) { flush(); who = isCue(r, i); dir = ''; return; }
+      if (who) {
+        const p = r.match(/^\(([^)]{1,40})\)$/); if (p) { flush(); dir = p[1]; return; }
+        if (buf) buf.text += ' ' + r; else buf = { who, dir, text: r };
+        dir = ''; return;
+      }
+      if (headKind(r, true, shape.caps) === 2 || R_BR.test(r)) out.push(r); else out.push('B-roll: ' + r);
+    });
+    flush();
+    rows = out;
+  }
+  // HOOK / BODY / CTA: a tag on the lines under it (secOf), never a new script; a row that only names the section goes.
+  // A row under a section is a line for sure (forced), so "This is your sign" under HOOK: never opens a new script.
+  const secOf = {}, forced = new Set(); let sec = '', secHead = false;
+  rows = rows.map((r, i) => {
+    if (!r) { sec = ''; return r; }
+    let m = null;
+    if (!R_BR.test(r)) m = r.match(R_SEC);   // HOOK: / CTA: are sections before they are speakers
+    if (m) { sec = m[1].toLowerCase().replace(/\s+/g, ' '); shape.sections++; r = m[2].trim(); secHead = true; }
+    else secHead = false;
+    if (sec && r) { secOf[i] = sec; forced.add(i); }
+    void secHead;
+    return r;
+  });
+  rows = rows.map(r => r.replace(R_LEAD, '').trim());
+  return { rows, shape, secOf, forced };
+}
 const R_SPLIT = new RegExp('\\s[-|:' + DASH + MID + ']\\s|[,|:' + DASH + MID + ']');
 const R_BYE = /\b(?:see (?:you|ya|u)|(?:we'?ll )?meet (?:you|ya)|join us|come (?:thrift|shop|see|visit|hang|check|through|dig|by|out|spend)|stop (?:by|in)|pull up|swing by|don'?t miss|we'?ll be waiting|link in (?:the |our )?bio|follow us|tag us)\b/i;
 const STOP = new Set('a an the and or but to of in on at for with from by is are be been it its this that these those we our ours us you your yours i me my so just also all get got have has do did will can'.split(' '));
@@ -43,7 +138,7 @@ function unmark(s) {
   return s.replace(/\\([\\`*_{}[\]()#+\-.!?:"'@&])/g, '$1').replace(/\*\*|__/g, '').replace(/^\*([^*]+)\*$/, '$1').replace(/(^|\s)\*([^*]+)\*(?=\s|$|[.,!?:;])/g, '$1$2').trim();
 }
 // 0 = a line she says, 1 = a weak heading (only because it follows a gap), 2 = clearly a heading
-function headKind(s, gap) {
+function headKind(s, gap, capsDoc) {
   if (/^#{1,6}\s*\S/.test(s) || R_KEY.test(s)) return 2;
   if (s.length > 72) return 0;
   if (/:\s*$/.test(s)) return 2;
@@ -51,12 +146,12 @@ function headKind(s, gap) {
   const w = s.split(' ');
   if (w.length > 10) return 0;
   const L = s.replace(/[^A-Za-z]/g, '');
-  if (L.length >= 2 && L === L.toUpperCase()) return 2;
+  if (!capsDoc && L.length >= 2 && L === L.toUpperCase()) return 2;   // in an all-caps doc, caps say nothing
   const tn = s.match(/(\S+)\s+\(?\d{1,2}[a-z]?\)?$/);
   if (tn && !/^(?:to|at|from|by|until|til|till|and|or|of|is|the|on|in|open|than)$/i.test(tn[1])) return 2;
   if (R_SEP.test(s)) return 2;
   const caps = w.filter(x => /^[A-Z0-9@#&]/.test(x)).length;
-  if (w.length >= 2 && caps / w.length >= .6) return 2;
+  if (!capsDoc && w.length >= 2 && caps / w.length >= .6) return 2;
   return gap ? 1 : 0;
 }
 function headType(t) { return R_KEY.test(t) ? 'leaf' : R_STREET.test(t) ? 'place' : 'group'; }
@@ -130,7 +225,7 @@ function splitLine(t) {
 }
 const LONG = 25;   // a line with more words than this is a paragraph: it gets split into sentences
 function parse(text) {
-  const rows = String(text || '').split(/\r\n|\r|\n/).map(r => unmark(clean(r)).replace(R_LEAD, '').trim());
+  const pp = prep(text), rows = pp.rows, shape = pp.shape;
   const body = rows.filter(Boolean);
   const said = body.filter(s => R_SPK_CAPS.test(s) || R_SPK_WORD.test(s) || /^"/.test(s)).length;
   const labelMode = said >= 3 && said >= body.length * .4;   // a doc that marks its lines (MODEL: "...") calls everything else a heading
@@ -152,7 +247,8 @@ function parse(text) {
     cur = { title: titleOf(gr, lf, pl, out.length), place: pl, group: gr, lines: [], notes: [] };
     out.push(cur); pend = []; pendLoc = '';
   };
-  for (let s of rows) {
+  for (let ri = 0; ri < rows.length; ri++) {
+    let s = rows[ri];
     if (!s) { gap = true; continue; }
     const lm = s.match(R_LOC);
     if (lm && lm[1].length <= 40) { const v = clean(lm[1]); if (pend.length || !cur) pendLoc = v; else { cur.place = v; ctx.place = v; ctx.addr = true; } gap = false; continue; }
@@ -161,12 +257,13 @@ function parse(text) {
     const sp = speaker(s, labelMode);
     if (R_BR.test(s) || /^[[({].*[\])}]$/.test(s)) head = false;
     else if (sp) { who = sp.who; s = sp.rest; }
+    else if (pp.forced.has(ri)) head = false;   // a row under HOOK: / BODY: / CTA: is a line for sure
     else if (labelMode) {
-      if (quoteOpen && cur && !pend.length && headKind(s, false) !== 2) {   // a quote that runs onto the next line
+      if (quoteOpen && cur && !pend.length && headKind(s, false, shape.caps) !== 2) {   // a quote that runs onto the next line
         const L = cur.lines[cur.lines.length - 1]; L.text = (L.text + ' ' + unquote(s)).trim(); quoteOpen = !/"\s*$/.test(s); gap = false; continue;
       }
       head = !/^"/.test(s);
-    } else { hk = headKind(s, gap); head = hk > 0; }
+    } else { hk = headKind(s, gap, shape.caps); head = hk > 0; }
     gap = false;
     if (head) {
       quoteOpen = false;
@@ -177,18 +274,24 @@ function parse(text) {
       continue;
     }
     if (pend.length || !cur) open();
-    cur.lines.push(lineOf(s, who));
+    const ln = lineOf(s, who); if (pp.secOf[ri]) ln.sec = pp.secOf[ri];
+    cur.lines.push(ln);
     quoteOpen = labelMode && /^"/.test(s) && !/"\s*$/.test(s.slice(1));
   }
   for (const p of pend) if (p.weak && cur) cur.lines.push(lineOf(p.t));
   out.forEach(s => { s.lines = s.lines.flatMap(l => !l.br && l.text.split(/\s+/).length > LONG ? sentences(l.text).map(t => Object.assign({}, l, { text: t })) : [l]); });
-  return out.filter(s => s.lines.length).map((s, i) => {
+  const res = out.filter(s => s.lines.length).map((s, i) => {
     const id = 's' + i;
     s.lines.forEach((l, j) => { l.id = id + '.' + j; });
     const blob = [s.title, s.group, ...s.lines.map(l => l.text)].join(' . '), dm = blob.match(R_DATE) || blob.match(R_SOON);
     return { id, idx: i, title: s.title, place: s.place, short: shortPlace(s.place), group: s.group, notes: s.notes, lines: s.lines, dated: dm ? dateChip(dm[0]) : '' };
   });
+  shape.people = people(res);
+  Object.defineProperty(res, 'shape', { value: shape, enumerable: false });
+  return res;
 }
+// who is in the doc: every speaker named on a line, in the order they first speak (one or none = a one-person doc)
+function people(scripts) { const seen = []; for (const s of scripts) for (const l of s.lines) if (l.who && !seen.includes(l.who)) seen.push(l.who); return seen; }
 // the places a doc names (DOWNTOWN, EASTSIDE), for "use these as stops"
 function placesIn(scripts) {
   const seen = new Map();
@@ -243,7 +346,8 @@ function opWord(text) {
   if (words.length < 2) return '';
   const core = w => w.replace(/^[^A-Za-z0-9$]+|[^A-Za-z0-9%]+$/g, '');
   const ok = w => { const c = core(w); return c.length >= 2 && !STOP.has(c.toLowerCase()); };
-  const shout = words.find(w => /^[A-Z][A-Z]{2,}[!.]*$/.test(core(w)) && ok(w));
+  const allCaps = t.replace(/[^A-Za-z]/g, '') === t.replace(/[^A-Za-z]/g, '').toUpperCase();
+  const shout = allCaps ? null : words.find(w => /^[A-Z][A-Z]{2,}[!.]*$/.test(core(w)) && ok(w));
   if (shout) return core(shout);
   const money = words.find(w => /^(?:\$\d[\d,.]*|\d[\d,.]*%|\d{2,}[\d,.]*)$/.test(core(w)));
   if (money) return core(money);
@@ -299,7 +403,7 @@ function order(day, inc, warm) {
   for (const st of stops) {
     const S = day.scripts.filter(s => inc.has(s.id) && stopFor(s, stops) === st.id).sort(byRank(warm));
     const L = [];
-    S.forEach((s, si) => s.lines.forEach((l, li) => L.push({ id: l.id, sid: s.id, stop: st.id, br: !!l.br, text: l.text, dir: l.dir || '', do: l.do || '', who: l.who || '', hard: isHard(l) ? (l.hard || hardOf(l.text)) : '', op: l.br ? '' : (l.op != null ? l.op : opWord(l.text)), n: norm(l.text), k: l.br ? '' : kindOf(l.text), t: toks(l.text), si, li })));
+    S.forEach((s, si) => s.lines.forEach((l, li) => L.push({ id: l.id, sid: s.id, stop: st.id, br: !!l.br, text: l.text, dir: l.dir || '', do: l.do || '', who: l.who || '', sec: l.sec || '', hard: isHard(l) ? (l.hard || hardOf(l.text)) : '', op: l.br ? '' : (l.op != null ? l.op : opWord(l.text)), n: norm(l.text), k: l.br ? '' : kindOf(l.text), t: toks(l.text), si, li })));
     // twins = the same words from the same speaker with the same (bracket) direction: "(whisper) I can't believe it" and
     // "(yell) I can't believe it" are two different takes, so a line read five ways stays five lines (10/21)
     const first = new Map(), cov = {};
@@ -324,7 +428,7 @@ function order(day, inc, warm) {
     const seen = new Set();
     const emit = x => {
       seen.add(x.id);
-      const it = { id: x.id, sid: x.sid, stop: x.stop, br: x.br, text: x.text, dir: x.dir, do: x.do, who: x.who, hard: x.hard, op: x.op, cov: cov[x.id] || [] };
+      const it = { id: x.id, sid: x.sid, stop: x.stop, br: x.br, text: x.text, dir: x.dir, do: x.do, who: x.who, sec: x.sec, hard: x.hard, op: x.op, cov: cov[x.id] || [] };
       const g = grp[x.id];
       if (g) { it.g = g.key; it.gi = g.all.indexOf(x) + 1; it.gn = g.all.length; }
       items.push(it);
@@ -568,7 +672,7 @@ function report(day, L, now) {
     const o = textOf(t.id), ln = lineNo(t.id);
     if (!t.cover) seenTake[t.id] = (seenTake[t.id] || 0) + 1;
     const take = t.cover ? 'cover' : (() => { let n = 0; for (const e of run.events) { if (e.t > t.t) break; if (e.id === t.id && (e.k === 'again' || (e.k === 'got' && !e.side))) n++; } return n; })();
-    return { id: t.id, text: o ? o.l.text : '', script: o ? name(o.s, S) : '', line: ln.n, of: ln.of, br: !!(o && o.l.br), side: !!t.side, cover: t.cover || '', size: t.cover && t.cover !== 'again' ? t.cover : (sizes[t.id] || ''), from: t.from, at: t.t, takes: take };
+    return { id: t.id, text: o ? o.l.text : '', script: o ? name(o.s, S) : '', who: o ? o.l.who || '' : '', line: ln.n, of: ln.of, br: !!(o && o.l.br), side: !!t.side, cover: t.cover || '', size: t.cover && t.cover !== 'again' ? t.cover : (sizes[t.id] || ''), from: t.from, at: t.t, takes: take };
   });
   const sizeN = {}; kept.forEach(k => { if (!k.br) sizeN[k.size || 'none'] = (sizeN[k.size || 'none'] || 0) + 1; });
   const whyList = Object.entries(L.whyN || {}).sort((a, b) => b[1] - a[1]);
@@ -584,7 +688,7 @@ function report(day, L, now) {
     rollPct: rolled.length ? 100 * rollSec / ((end - run.at) / 1e3) : 0, rolledN: rolled.length,
     pace: L.paceLive, samples: L.samples.length, warm,
     longest, notes: L.notes, left,
-    every: L.log.map(r => { const o = textOf(r.id); return { id: r.id, text: o ? o.l.text : '', script: o ? name(o.s, S) : '', min: r.min, takes: r.takes, k: r.k, budget: r.budget, over: r.over, side: !!r.side, hard: !!(o && isHard(o.l)), why: (L.why && L.why[r.id]) || [], size: sizes[r.id] || '', covers: (L.covers && L.covers[r.id] || []).length }; }),
+    every: L.log.map(r => { const o = textOf(r.id); return { id: r.id, text: o ? o.l.text : '', script: o ? name(o.s, S) : '', who: o ? o.l.who || '' : '', min: r.min, takes: r.takes, k: r.k, budget: r.budget, over: r.over, side: !!r.side, hard: !!(o && isHard(o.l)), why: (L.why && L.why[r.id]) || [], size: sizes[r.id] || '', covers: (L.covers && L.covers[r.id] || []).length }; }),
     slowest: L.log.filter(r => r.k === 'got').slice().sort((a, b) => b.min - a.min).slice(0, 3).map(r => { const o = textOf(r.id); return { text: o ? o.l.text : '', script: o ? name(o.s, S) : '', min: r.min, takes: r.takes, over: r.over }; }),
     overN: L.log.filter(r => r.k === 'got' && r.over).length,
     laterN: run.events.filter(e => e.k === 'later').length, splitN: Object.keys(L.splits || {}).length,
@@ -596,7 +700,7 @@ function report(day, L, now) {
 // scripts in the order they get worked through (warm-up, must, dated, the rest as the doc has them)
 function rank(scripts, warm) { return scripts.slice().sort(byRank(warm)); }
 
-const API = { parse, sentences, splitLine, placesIn, stopFor, shortPlace, name, rank, norm, kindOf, doOf, DO, hardOf, isHard, opWord, lineCost, order, plan, live, nudge, report, wrapMs, median, dialogue, BR_MIN, HARD_MIN };
+const API = { parse, people, sentences, splitLine, placesIn, stopFor, shortPlace, name, rank, norm, kindOf, doOf, DO, hardOf, isHard, opWord, lineCost, order, plan, live, nudge, report, wrapMs, median, dialogue, BR_MIN, HARD_MIN };
 if (typeof module !== 'undefined' && module.exports) module.exports = API;
 root.ADCore = API;
 })(typeof globalThis !== 'undefined' ? globalThis : this);
