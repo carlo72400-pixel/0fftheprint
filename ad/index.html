@@ -581,6 +581,96 @@ img[src*="art/m/"]{image-rendering:-webkit-optimize-contrast;image-rendering:cri
 /* Settings */
 .filebtn{display:grid;place-items:center}
 .card>.btn{width:100%;margin:0 0 5px}
+
+/* ===== v3 (10/21 night, his "go run all of those"): the filmmaker's and the actor's pass =====
+   Filmmaker: a SLATE flash on every take (the phone is the slate), a shot SIZE chip per line, a cover-take and b-roll
+   hint in the ticker, HARD lines flagged with an extra minute, a POST SHEET of kept takes with the clock on them, a
+   client sheet. Actor: the operative WORD marked on every line, WHY a take missed, a BREATHE card when the hearts run
+   out, memorize and prompter modes on the talent's page, SELF-TAPE in training. */
+.row.tight>.btn{padding:0 6px;font-size:12.5px;letter-spacing:.02em}   /* Paste / Sample / Clear clipped to SAMP at 390 */
+.sl .row>.btn,.sl .row>.do-pick{flex:0 0 auto}   /* a line's keys wrap to a second row instead of shrinking to "ED" */
+/* the slate: white card, black type, big enough to read in the footage when the phone faces the lens */
+#slate{position:fixed;inset:0;z-index:94;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:24px;background:#fff;color:#111;text-align:center;pointer-events:none;opacity:0;visibility:hidden;color-scheme:light;forced-color-adjust:none}
+#slate.on{opacity:1;visibility:visible;animation:slate .65s steps(1,end) forwards}
+@keyframes slate{0%{opacity:1;visibility:visible}100%{opacity:0;visibility:hidden}}
+#slate small{font:400 15px/1.3 var(--f-ui);letter-spacing:.06em;text-transform:uppercase;color:#333;max-width:22ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#slate b{font:400 clamp(72px,26vw,150px)/1 var(--f-pop);color:#111}
+#slate span{font:400 22px/1.2 var(--f-ui);letter-spacing:.06em;text-transform:uppercase;color:#111}
+#slate i{position:absolute;left:0;right:0;top:0;height:18px;background:repeating-linear-gradient(90deg,#111 0 28px,#fff 28px 56px)}
+#slate i.b{top:auto;bottom:0}
+@media (prefers-reduced-motion:reduce){#slate.on{animation:none;transition:opacity 0s;opacity:1;visibility:visible}#slate.on.off{opacity:0;visibility:hidden}}
+/* the operative word: the one to hit, marked wherever the line shows */
+.op{color:var(--pink-deep);text-decoration:underline;text-decoration-thickness:.12em;text-underline-offset:.14em;text-decoration-color:var(--pink)}
+#show .op{color:#ffb3d6;text-decoration-color:#ff8cc6}
+/* the shot size: a chip on the line card that cycles wide / medium / close (a tap, so it never leaves the thumb's path) */
+.size-chip{display:inline-flex;align-items:center;gap:5px;min-height:44px;margin:-7px 0;padding:0 9px;border:2px solid var(--line);border-radius:999px;background:var(--sky-2);color:var(--line);font:400 11px/1 var(--f-ui);letter-spacing:.04em;text-transform:uppercase;box-shadow:0 2px 0 var(--line)}
+.size-chip.none{background:#fff;color:var(--muted);border-style:dashed}
+.size-chip.W{background:var(--sky-2)}.size-chip.M{background:var(--lemon)}.size-chip.C{background:var(--pink-2)}
+.size-chip:active,.size-chip.down{transform:translateY(2px);box-shadow:0 0 0 var(--line)}
+.size-chip svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linejoin:round}
+.chip.hard{background:#ffd6e2;color:var(--red-deep)}
+.chip.size{background:var(--sky-2)}
+.linecard .tag .hard{display:inline-block;margin-right:6px;padding:3px 8px;border:2px solid var(--line);border-radius:999px;background:#ffd6e2;color:var(--red-deep)}
+/* why a take missed: four small keys in the ticker for ten seconds after a B */
+.tk-keys .btn.why{min-width:0;padding:0 6px;font-size:10.5px;letter-spacing:.01em}
+.tk-keys .btn.sm{min-width:0;padding:0 8px;font-size:11px}
+/* breathe: the flash as a calm card with a countdown */
+#flash.breathe{background:rgba(236,246,255,.97)}
+#flash.breathe::before{background:repeating-conic-gradient(from 0deg,rgba(143,208,255,.35) 0 9deg,rgba(255,255,255,0) 9deg 18deg);animation-duration:40s}
+#flash.breathe b{text-shadow:3px 0 0 var(--line),-3px 0 0 var(--line),0 3px 0 var(--line),0 -3px 0 var(--line),2px 2px 0 var(--line),-2px -2px 0 var(--line),2px -2px 0 var(--line),-2px 2px 0 var(--line),0 8px 0 #2f6fb0}
+#flash.breathe span{font-size:20px}
+/* the post sheet: every kept take with its clock */
+.ps{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;align-items:center;padding:8px 12px;margin:0 0 8px;border:3px solid var(--line);border-radius:14px;background:#fff;box-shadow:0 3px 0 rgba(91,61,142,.25)}
+.ps em{grid-row:1/3;display:grid;gap:3px;font:400 13px/1 var(--f-px);font-style:normal;color:var(--line);white-space:nowrap}
+.ps em small{font:400 9.5px/1 var(--f-ui);letter-spacing:.03em;text-transform:uppercase;color:var(--muted)}
+.ps b{font:600 14.5px/1.3 var(--f-body);color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ps small{font:400 11px/1.4 var(--f-ui);letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.ps small i{font-style:normal;padding:1px 6px;border:2px solid var(--line);border-radius:999px;background:var(--sky-2);color:var(--line);margin-right:4px}
+.ps.cover{background:linear-gradient(180deg,#fff,#f0fbff)}
+.ps.side{background:linear-gradient(180deg,#fff,#f4fbff)}.ps.side b{color:var(--blue-t)}
+/* the talent's page: read / first letters / blank, and a prompter */
+.herbar{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;margin:0 0 14px}
+.herbar .seg button{min-height:46px;font-size:11.5px;padding:0 4px}
+.herbar>.btn{margin:0;min-height:46px;padding:0 12px}
+.hl-t.first{letter-spacing:.06em;font-family:var(--f-ui);font-weight:400;font-size:17px;color:var(--line);word-spacing:.2em}
+.hl-t.blank{letter-spacing:.2em;color:var(--lilac)}
+.hl small.hard{color:var(--red-deep)}
+/* the prompter: the lines roll up a dark screen; a tap holds, mirror flips it for a phone under the lens */
+#prompt{padding:0;background:#000;color:#fff}
+#prompt::after{display:none}
+.p-bar{position:relative;z-index:2;display:flex;align-items:center;gap:6px;padding:calc(var(--sat) + 10px) 12px 10px;background:linear-gradient(180deg,rgba(0,0,0,.9),rgba(0,0,0,0))}
+.p-bar .btn{min-height:44px;margin:0;padding:0 10px;font-size:11px;background:#fff;box-shadow:0 3px 0 var(--line)}
+.p-bar .btn[aria-pressed="true"]{background:linear-gradient(180deg,#fff9c4,#ffe36e)}
+.p-bar .sp{flex:1}
+.p-box{position:absolute;inset:0;overflow:hidden;cursor:pointer}
+.p-box.mirror{transform:scaleX(-1)}
+.p-txt{position:absolute;left:0;right:0;top:0;padding:45vh 22px 60vh;font:700 34px/1.3 var(--f-body);color:#fff;text-wrap:balance;will-change:transform}
+.p-txt .p-h{display:block;margin:28px 0 12px;font:400 14px/1.2 var(--f-ui);letter-spacing:.06em;text-transform:uppercase;color:#ff8cc6}
+.p-txt .p-l{display:block;margin:0 0 20px}
+.p-txt .p-who{display:block;font:400 13px/1.2 var(--f-ui);letter-spacing:.05em;text-transform:uppercase;color:#8fd0ff}
+.p-line{position:absolute;left:0;right:0;top:42vh;height:2px;background:rgba(255,140,198,.5);pointer-events:none}
+.p-hold{position:absolute;left:50%;bottom:calc(var(--sab) + 22px);transform:translateX(-50%);padding:8px 14px;border:3px solid var(--line);border-radius:999px;background:#fff;color:var(--line);font:400 12px/1 var(--f-ui);letter-spacing:.04em;text-transform:uppercase;pointer-events:none;opacity:0;transition:opacity .2s}
+#prompt.held .p-hold{opacity:1}
+/* self-tape (training): the front camera as a mirror, a REC key, then the take plays back */
+#tape{padding:0;background:#0d0716}
+#tape::after{display:none}
+.tp-stage{position:relative;flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+.tp-stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000}
+.tp-stage video.mir{transform:scaleX(-1)}
+.tp-line{position:absolute;left:12px;right:12px;bottom:12px;padding:12px 14px;border:3px solid var(--line);border-radius:16px;background:rgba(255,255,255,.92);color:var(--ink);font:700 20px/1.25 var(--f-body);text-align:center;max-height:38%;overflow:hidden}
+.tp-rec{position:absolute;left:14px;top:calc(var(--sat) + 14px);display:flex;align-items:center;gap:8px;padding:6px 12px;border:3px solid var(--line);border-radius:999px;background:#fff;color:var(--red-deep);font:400 12px/1 var(--f-ui);letter-spacing:.04em;text-transform:uppercase}
+.tp-rec i{width:12px;height:12px;border-radius:50%;background:var(--red);animation:blink 1s steps(2,end) infinite}
+@keyframes blink{50%{opacity:.2}}
+@media (prefers-reduced-motion:reduce){.tp-rec i{animation:none}}
+.tp-keys{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;padding:12px 14px calc(var(--sab) + 12px);background:linear-gradient(180deg,#f7c3df,#ffdcee)}
+.tp-keys .key{min-height:72px;font-size:26px}
+.tp-keys .key.rec{background:linear-gradient(180deg,#ffb3c6,#ff4f7a);text-shadow:var(--olp)}
+.tp-keys .key.plain{background:linear-gradient(180deg,#fff,#efe6ff);color:var(--line);text-shadow:none}
+.tp-keys .key.plain small{color:var(--soft)}
+.tp-msg{position:absolute;inset:0;display:grid;place-items:center;padding:24px;text-align:center;color:#fff;font:600 17px/1.5 var(--f-body)}
+/* op word picker: the words of the line as chips */
+.opgrid{display:flex;flex-wrap:wrap;gap:6px}
+.opgrid .btn{min-height:44px;margin:0 0 4px;padding:0 10px;font:600 15px/1 var(--f-body);text-transform:none;letter-spacing:0}
 </style>
 </head>
 <body data-scr="setup">
@@ -616,7 +706,7 @@ img[src*="art/m/"]{image-rendering:-webkit-optimize-contrast;image-rendering:cri
     <div class="card">
       <div class="lbl">The lines <span>paste the whole doc</span></div>
       <textarea class="in" id="raw" aria-label="Paste the scripts" spellcheck="false" autocapitalize="sentences" placeholder="Paste the scripts here, straight from the doc or the text.&#10;&#10;A short line with no period (or ending in :) = a script name&#10;Every line under it = a line they say&#10;MODEL: &quot;...&quot; lines work too&#10;(Brackets) or B-roll: = b-roll"></textarea>
-      <div class="row"><button type="button" class="btn" data-act="paste">Paste</button><button type="button" class="btn ghost" data-act="sample">Sample</button><button type="button" class="btn ghost" data-act="clearRaw">Clear</button></div>
+      <div class="row tight"><button type="button" class="btn" data-act="paste">Paste</button><button type="button" class="btn ghost" data-act="sample">Sample</button><button type="button" class="btn ghost" data-act="clearRaw">Clear</button></div>
       <p class="hint" id="readout">Nothing read yet.</p>
     </div>
     <div class="card">
@@ -664,7 +754,7 @@ img[src*="art/m/"]{image-rendering:-webkit-optimize-contrast;image-rendering:cri
         <b id="r-left">0:00</b><small id="r-left-l">left</small>
       </div>
       <div class="who"><span id="r-who"></span><span id="r-at"></span></div>
-      <div class="linecard" id="r-card" role="button" tabindex="0" data-act="show"><span class="tag" id="r-tag"></span><img class="card-art" id="r-art" src="art/m/drive.webp" alt="" decoding="async"><span class="txtbox" id="r-box"><span class="txt" id="r-txt"></span></span><span class="card-foot"><span class="do-chip" id="r-do"></span><span class="tap" id="r-tap">tap for big</span></span><i class="more-cue" aria-hidden="true">more</i></div>
+      <div class="linecard" id="r-card" role="button" tabindex="0" data-act="show"><span class="tag" id="r-tag"></span><img class="card-art" id="r-art" src="art/m/drive.webp" alt="" decoding="async"><span class="txtbox" id="r-box"><span class="txt" id="r-txt"></span></span><span class="card-foot"><span class="do-chip" id="r-do"></span><button type="button" class="size-chip none" id="r-size" data-act="size" aria-label="Shot size" hidden></button><span class="tap" id="r-tap">tap for big</span></span><i class="more-cue" aria-hidden="true">more</i></div>
       <div class="trow" id="r-mid">
         <div class="takes"><b id="r-take">Take 1</b><div class="pips" id="r-pips"></div></div>
         <img class="face" id="r-face" src="art/m/f-idle.webp" alt="" width="52" height="52" decoding="async">
@@ -750,6 +840,13 @@ img[src*="art/m/"]{image-rendering:-webkit-optimize-contrast;image-rendering:cri
       <label class="toggle"><span><b>Old TV screen</b><small>Scanlines and dark glass corners, like a CRT. The big line for the talent always stays clean.</small></span><input type="checkbox" switch class="swi" id="crtsw"></label>
     </div>
     <div class="card">
+      <div class="lbl">On set <span>the filmmaker's and the actor's helpers</span></div>
+      <label class="toggle"><span><b>Slate flash</b><small>Every take flashes the script, line and take number in black on white. Point the phone at the lens and the footage slates itself.</small></span><input type="checkbox" switch class="swi" id="slatesw"></label>
+      <label class="toggle"><span><b>Breathe card</b><small>Out of hearts? A ten second breathe card before the next take. Tap it away any time.</small></span><input type="checkbox" switch class="swi" id="breathesw"></label>
+      <label class="toggle"><span><b>Why a take missed</b><small>After B, four small keys for ten seconds: words, eyes, energy, flub. The report shows the pattern.</small></span><input type="checkbox" switch class="swi" id="whysw"></label>
+      <label class="toggle"><span><b>Gap hints</b><small>Spare time? The ticker offers a close-up of the last line, or a b-roll grab between takes.</small></span><input type="checkbox" switch class="swi" id="gapsw"></label>
+    </div>
+    <div class="card">
       <div class="lbl">Note keys <span>one tap instead of a speech</span></div>
       <div id="notes-ed" style="display:grid;gap:6px"></div>
       <button type="button" class="btn ghost" data-act="notesReset">Back to the house notes</button>
@@ -768,7 +865,8 @@ img[src*="art/m/"]{image-rendering:-webkit-optimize-contrast;image-rendering:cri
   <!-- ===== HER LINES (opened from the link he sends) ===== -->
   <section id="s-her" class="scr" hidden>
     <div class="intro"><img class="intro-m" src="art/m/wave.webp" alt="" width="178" height="240" decoding="async"><h1>Your lines</h1><p>Read them once. No need to memorize: we do one line at a time.</p></div>
-    <div class="card rules"><div class="lbl">How to play</div><ol><li>Talk to the camera like it is your best friend.</li><li>Say the line, then freeze for 2 seconds.</li><li>Messed up? Just start the line again.</li></ol></div>
+    <div class="card rules"><div class="lbl">How to play</div><ol><li>Talk to the camera like it is your best friend.</li><li>Say the line, then freeze for 2 seconds.</li><li>Messed up? Just start the line again.</li><li>The <u class="op">pink word</u> is the one to hit.</li></ol></div>
+    <div class="herbar"><div class="seg" id="her-mode" aria-label="How the lines show"></div><button type="button" class="btn" data-act="prompter">Prompter</button></div>
     <div id="her-list"></div>
     <p class="foot">Tap a line to see it big · sent with Sweet Takes by 0FF THE PRINT</p>
   </section>
@@ -779,7 +877,7 @@ img[src*="art/m/"]{image-rendering:-webkit-optimize-contrast;image-rendering:cri
 <div id="pop" role="status" aria-live="polite"><img id="pop-i" alt="" hidden><b id="pop-b"></b><span id="pop-s"></span></div>
 <div id="menu" class="ovl" hidden><div class="dlg" role="dialog" aria-modal="true" aria-label="More">
   <b class="dlg-t">More</b><small class="dlg-s">the clock keeps running</small>
-  <div class="mgrp"><small>the day</small><div class="mrow two"><button type="button" class="btn bad" data-act="wrap">Wrap the day</button><button type="button" class="btn" data-act="menuPlan">The plan</button><button type="button" class="btn" data-act="dropCur" id="m-drop">Drop script</button><button type="button" class="btn" data-act="nextStop" id="m-next">Next stop</button><button type="button" class="btn" data-act="toHome">Title screen</button></div></div>
+  <div class="mgrp"><small>the day</small><div class="mrow two"><button type="button" class="btn bad" data-act="wrap">Wrap the day</button><button type="button" class="btn" data-act="menuPlan">The plan</button><button type="button" class="btn" data-act="dropCur" id="m-drop">Drop script</button><button type="button" class="btn" data-act="nextStop" id="m-next">Next stop</button><button type="button" class="btn" data-act="prompter">Prompter</button><button type="button" class="btn" data-act="toHome">Title screen</button></div></div>
   <div class="mgrp"><small>this line</small><div class="mrow"><button type="button" class="btn" data-act="skipLine" id="m-skip">Skip</button><button type="button" class="btn" data-act="later" id="m-later">Later</button><button type="button" class="btn" data-act="splitNow" id="m-split">Split</button></div></div>
   <div class="mgrp"><small>notes for the talent</small><div class="notes" id="r-notes"></div></div>
   <button type="button" class="btn primary big" data-act="resume">Back to it</button>
@@ -816,10 +914,25 @@ img[src*="art/m/"]{image-rendering:-webkit-optimize-contrast;image-rendering:cri
   <button type="button" class="btn" data-act="doAuto">Read it from the words</button>
   <button type="button" class="btn primary big" data-act="doClose">Back</button>
 </div></div>
+<div id="slate" aria-hidden="true"><i></i><small id="sl-s"></small><b id="sl-t"></b><span id="sl-n"></span><i class="b"></i></div>
+<div id="prompt" class="full" hidden>
+  <div class="p-bar"><button type="button" class="btn" data-act="promptClose">Close</button><span class="sp"></span><button type="button" class="btn" data-act="promptSpeed" data-d="-1" aria-label="Slower">Slower</button><button type="button" class="btn" data-act="promptSpeed" data-d="1" aria-label="Faster">Faster</button><button type="button" class="btn" data-act="promptMirror" id="p-mir" aria-pressed="false">Mirror</button><button type="button" class="btn" data-act="promptTop">Top</button></div>
+  <div class="p-box" id="p-box"><div class="p-txt" id="p-txt"></div></div><i class="p-line" aria-hidden="true"></i><span class="p-hold">held · tap to roll</span>
+</div>
+<div id="tape" class="full" hidden>
+  <div class="tp-stage"><video id="tp-v" class="mir" autoplay muted playsinline hidden></video><video id="tp-p" controls playsinline hidden></video><div class="tp-msg" id="tp-msg">Opening the camera...</div><div class="tp-rec" id="tp-recdot" hidden><i></i><span id="tp-rect">rec 0:00</span></div><div class="tp-line" id="tp-line"></div></div>
+  <div class="tp-keys"><button type="button" class="key plain" data-act="tapeClose"><small>back to the set</small><span>Done</span></button><button type="button" class="key rec" id="tp-k" data-act="tapeRec"><small id="tp-ks">front camera</small><span id="tp-kt">Rec</span></button></div>
+</div>
+<div id="oppick" class="ovl" hidden><div class="dlg" role="dialog" aria-modal="true" aria-label="The word to hit">
+  <b class="dlg-t">Hit this word</b><small class="dlg-s" id="oppick-s">the one that carries the line</small>
+  <div class="opgrid" id="opgrid"></div>
+  <button type="button" class="btn" data-act="opAuto">Read it from the words</button>
+  <button type="button" class="btn primary big" data-act="opClose">Back</button>
+</div></div>
 <div id="crt" aria-hidden="true"><i></i><b></b></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="core.js?v=da1be10c"></script>
+<script src="core.js?v=ddc53183"></script>
 <script>
 /* ---------- the shell ---------- */
 const C = window.ADCore;
@@ -843,6 +956,24 @@ const doFor = l => (!l || l.br) ? '' : (DOS[l.do] ? l.do : C.doOf(l.text, l.dir)
 const doImg = (k, cls) => k ? `<img${cls ? ` class="${cls}"` : ''} src="${ART}${k}.webp" alt="" decoding="async">` : '';
 const lineById = id => { const sc = scriptOf(String(id).split('.')[0]); return sc ? sc.lines.find(x => x.id === id) : null; };
 let PICK = '';
+/* ---------- v3 helpers: the word to hit, memorize text, shot sizes, why a take missed, the clock for the post sheet ---------- */
+const opFor = l => (!l || l.br) ? '' : (l.op != null ? l.op : C.opWord(l.text));
+// the line as HTML with its operative word marked (the first whole-word match; a word he typed that is not in the line marks nothing)
+function markOp(text, op) {
+  const t = String(text || ''); if (!op) return esc(t);
+  const re = new RegExp('(^|[^A-Za-z0-9$])(' + op.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')(?![A-Za-z0-9%])');
+  const m = t.match(re); if (!m) return esc(t);
+  const i = m.index + m[1].length;
+  return esc(t.slice(0, i)) + '<u class="op">' + esc(m[2]) + '</u>' + esc(t.slice(i + m[2].length));
+}
+// memorize modes on the talent's page: first letters ("W__ a_ 1__ M___") or one dot a word
+const firstLetters = t => String(t).split(/\s+/).map(w => { const m = w.match(/^([^A-Za-z0-9]*)([A-Za-z0-9])(.*)$/); if (!m) return w; const rest = m[3].replace(/[A-Za-z0-9]/g, '_'); return m[1] + m[2] + rest.slice(0, 5); }).join(' ');
+const blanks = t => String(t).split(/\s+/).map(() => '•').join(' ');
+const SIZES = { '': 'size', W: 'wide', M: 'medium', C: 'close' }, SIZE_NEXT = { '': 'W', W: 'M', M: 'C', C: '' };
+const SIZE_ICON = { '': '<svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/></svg>', W: '<svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="13" r="2"/></svg>', M: '<svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="3.5"/></svg>', C: '<svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="5.5"/></svg>' };
+const WHYS = [['words', 'Words', 'forgot or swapped a word'], ['eyes', 'Eyes', 'looked away from the lens'], ['energy', 'Energy', 'flat, or too much'], ['flub', 'Flub', 'tripped on it']];
+const WHY_COACH = { words: 'Most misses were the words. Say the line out loud twice before the take, eyes closed.', eyes: 'Most misses were the eyes. Pick one spot on the lens and keep it through the last word.', energy: 'Most misses were energy. Decide the feeling before the take, then double it.', flub: 'Most misses were flubs. Find the hard sound and say it slow three times first.' };
+const clk = t => { const d = new Date(t); return [d.getHours(), d.getMinutes(), d.getSeconds()].map(x => String(x).padStart(2, '0')).join(':'); };
 
 const NOTES = [
   { b: 'Tell a friend', s: 'Talk to the camera like it is your best friend.' },
@@ -963,6 +1094,7 @@ function renderSetup() {
 function renderSettings() {
   seg($('#cap'), [2, 3, 4, 5, 0], P.cap, v => v ? String(v) : 'off', v => { P.cap = v; savePrefs(); renderSettings(); });
   $('#beep').checked = !!P.beep; $('#lefty').checked = !!P.lefty; $('#crtsw').checked = P.crt !== false;
+  $('#slatesw').checked = P.slate !== false; $('#breathesw').checked = P.breathe !== false; $('#whysw').checked = P.why !== false; $('#gapsw').checked = P.gaps !== false;
   let kb = 0; try { kb = Math.round(Object.keys(localStorage).filter(k => k.startsWith('ad-')).reduce((m, k) => m + (localStorage.getItem(k) || '').length, 0) / 1024); } catch (e) {}
   $('#st-saves').textContent = `${SLOTS.length} day${SLOTS.length === 1 ? '' : 's'} saved, about ${kb} KB on this phone. Back up before you switch phones or clear Safari.`;
   $('#notes-ed').innerHTML = P.notes.map((n, i) => `<div class="noterow"><input class="in" data-nb="${i}" value="${esc(n.b)}" maxlength="18" aria-label="Note ${i + 1} key"><input class="in" data-ns="${i}" value="${esc(n.s)}" maxlength="80" aria-label="Note ${i + 1} meaning"></div>`).join('');
@@ -1798,12 +1930,12 @@ const trainTips = () => { const pk = lessonOf(D); return pk ? [...pk.tips, pk.pr
 const HELP = [
   ['hold', 'New game', 'Paste the lines straight from the doc or the text. Set when the talent has to leave. That is it.'],
   ['point', 'The plan', 'It puts the scripts in shoot order and shows the day as a bar. Red means it will not fit. Star a must, skip the rest, send the talent their lines.'],
-  ['go', 'On set', 'One line at a time, big. B means take it again. A means got it. The next line comes up by itself.'],
+  ['go', 'On set', 'One line at a time, big. B means take it again. A means got it. The next line comes up by itself. Every take flashes a slate: point the phone at the lens and the footage slates itself.'],
   ['hearts', 'Hearts and clocks', 'Hearts are takes. The little dial is this line, the bar up top is the whole day. Green is fine, red is late.'],
   ['long', 'Stuck?', 'Out of hearts or running long: Later sends the line to the end, Split cuts it in two. Undo fixes any tap.'],
-  ['lean', 'Show the talent', 'Tap the line to show it big. Her pose shows what to do: point, wave, hold it up, lean in.'],
+  ['lean', 'Show the talent', 'Tap the line to show it big. Her pose shows what to do: point, wave, hold it up, lean in. The pink word is the one to hit. A hard line (an address, numbers) says so and gets an extra minute.'],
   ['calm', 'Notes', 'More has notes. One tap shows the talent a picture and a few words instead of a speech.'],
-  ['wrap', 'Wrap', 'Wrap the day for the report: a rank, every line as a bar, the lines that ran long.'],
+  ['wrap', 'Wrap', 'Wrap the day for the report: a rank, every line as a bar, a post sheet of the kept takes with the clock on them (the good clip finds itself in the edit), and a client sheet to send.'],
   ['take', 'Saves and training', 'Every day saves itself, so Load game picks any day back up. Training has lessons in Easy, Medium and Hard. Clear a level, earn a star, and practice every day for a streak.']
 ];
 function renderHelp() {
@@ -1841,9 +1973,11 @@ function linesHtml(s, items, L) {
     if (cv) tags.push('said once with ' + nm(D.scripts.find(x => x.id === cv.sid)));
     if (it && it.g) tags.push(`back to back with ${it.gn - 1} like it`);
     if (L && (L.done[l.id] || (cv && L.isDone(cv)) || (it && L.isDone(it)))) tags.push('done');
+    const hard = C.isHard(l) ? (l.hard || C.hardOf(l.text)) : '', sz = (D.sizes || {})[l.id];
     const dk = doFor(l), pick = dk ? `<button type="button" class="do-pick" data-act="pickDo" data-id="${l.id}" aria-label="What they do: ${esc(DOS[dk])}. Change it">${doImg(dk)}${esc(DOS[dk])}</button>` : '';
-    const edit = running() || wrappedAt() ? (pick ? `<span class="row">${pick}</span>` : '') : `<span class="row">${pick}<button type="button" class="btn ghost" data-act="editLine" data-id="${l.id}">Edit</button>${!l.br && C.sentences(l.text).length > 1 ? `<button type="button" class="btn ghost" data-act="splitLine" data-id="${l.id}">Split</button>` : ''}<button type="button" class="btn ghost" data-act="flipLine" data-id="${l.id}">${l.br ? 'Line' : 'B-roll'}</button></span>`;
-    return `<div class="sl${l.br ? ' br' : ''}"><span>${esc(l.text)}${tags.length ? `<small>${esc(tags.join(' · '))}</small>` : ''}</span>${edit}</div>`;
+    const op = l.br ? '' : `<button type="button" class="do-pick" data-act="pickOp" data-id="${l.id}" aria-label="The word to hit. Change it">hit: <u class="op">${esc(opFor(l) || 'none')}</u></button>`;
+    const edit = running() || wrappedAt() ? (pick || op ? `<span class="row">${pick}${op}</span>` : '') : `<span class="row">${pick}${op}<button type="button" class="btn ghost" data-act="editLine" data-id="${l.id}">Edit</button>${!l.br && C.sentences(l.text).length > 1 ? `<button type="button" class="btn ghost" data-act="splitLine" data-id="${l.id}">Split</button>` : ''}<button type="button" class="btn ghost" data-act="flipLine" data-id="${l.id}">${l.br ? 'Line' : 'B-roll'}</button></span>`;
+    return `<div class="sl${l.br ? ' br' : ''}"><span>${markOp(l.text, opFor(l))}${hard || sz || tags.length ? `<small>${hard ? `<i class="chip hard">hard · ${esc(hard)} · +${C.HARD_MIN} min</i> ` : ''}${sz ? `<i class="chip size">${esc(SIZES[sz])}</i> ` : ''}${esc(tags.join(' · '))}</small>` : ''}</span>${edit}</div>`;
   }).join('')}</div>`;
 }
 // THE DAY AS A BAR (10/21 charts): every script in shoot order, a color family per stop, the drives striped, a white
@@ -1904,7 +2038,8 @@ function renderPlan() {
   else if (fit === all) { v.className = 'verdict lcd'; v.querySelector('b').textContent = `All ${all} fit`; v.querySelector('small').textContent = `need ${hmin(Pl.need)} · have ${hmin(Pl.avail)} · ${hmin(Pl.avail - Pl.need)} spare · wrap ${hm(Pl.wrapAt)} ${ap(Pl.wrapAt)}`; }
   else { v.className = 'verdict lcd hot'; v.querySelector('b').textContent = `Fits ${fit} of ${all}`; v.querySelector('small').textContent = `${fit ? 'these ' + fit + ' need ' + hmin(Pl.need) + ' · ' : ''}have ${hmin(Pl.avail)} · wrap ${hm(Pl.wrapAt)} ${ap(Pl.wrapAt)}`; }
   const lines = D.scripts.filter(s => Pl.inc.has(s.id)).reduce((m, s) => m + C.dialogue(s), 0), said = Pl.items.filter(it => !it.br).length;
-  $('#why').textContent = `In shoot order: an easy script first (the talent warms up on it), dated ones early, the same line in different scripts back to back.${lines > said ? ` ${lines - said} line${lines - said > 1 ? 's are' : ' is'} word for word in another script, said once.` : ''} At ${(+D.pace).toFixed(1)} min a line.`;
+  const hardN = Pl.items.filter(it => it.hard).length;
+  $('#why').textContent = `In shoot order: an easy script first (the talent warms up on it), dated ones early, the same line in different scripts back to back.${lines > said ? ` ${lines - said} line${lines - said > 1 ? 's are' : ' is'} word for word in another script, said once.` : ''} At ${(+D.pace).toFixed(1)} min a line${hardN ? `, plus ${C.HARD_MIN} min on ${hardN} hard line${hardN > 1 ? 's' : ''} (addresses, numbers, long ones)` : ''}.`;
   // scripts in the order they get worked through, split by stop (repeats from later scripts get pulled in early)
   const fitS = C.rank(D.scripts.filter(s => Pl.inc.has(s.id)), Pl.warmId);
   let h = planBar(Pl);
@@ -1962,7 +2097,7 @@ function renderPlanLive() {
 }
 
 /* ---------- 3. the set ---------- */
-let RL = null, liveAt = 0, wasRed = false, wasOT = false, lastPip = { id: '', n: 0 }, lastCard = '', runOver = false, helpKey = '';
+let RL = null, liveAt = 0, wasRed = false, wasOT = false, lastPip = { id: '', n: 0 }, lastCard = '', runOver = false, helpKey = '', whyFor = null;
 const viewOf = sid => (RL && RL.view && RL.view.find(s => s.id === sid)) || scriptOf(sid);
 // stuck = out of hearts, or this line's clock past its budget: the ticker says so and puts Later and Split right over the keys
 let stuckNow = '', tickSig = '', PROG = { i: 0, total: 0 };
@@ -1975,7 +2110,7 @@ function paintStuck(red) {
 }
 const HEART = '<path d="M12 21.2S3 15.4 1.2 10.1C-.4 5.4 2.6 1.3 6.8 1.3c2.3 0 4.1 1.2 5.2 3 1.1-1.8 2.9-3 5.2-3 4.2 0 7.2 4.1 5.6 8.8C21 15.4 12 21.2 12 21.2z"/>';
 const hms = sec => { sec = Math.max(0, Math.round(sec)); const h = Math.floor(sec / 3600), m = Math.floor(sec % 3600 / 60), x = sec % 60; return h ? h + ':' + String(m).padStart(2, '0') + ':' + String(x).padStart(2, '0') : m + ':' + String(x).padStart(2, '0'); };
-const UNDO = { again: 1, got: 1, skip: 1, roll: 1, go: 1, arrive: 1, drop: 1, add: 1, wrap: 1, later: 1, split: 1 };
+const UNDO = { again: 1, got: 1, skip: 1, roll: 1, go: 1, arrive: 1, drop: 1, add: 1, wrap: 1, later: 1, split: 1, cover: 1 };
 function ev(k, extra) { D.run.events.push(Object.assign({ t: Date.now(), k }, extra || {})); persist(); }
 function scriptOf(id) { return D.scripts.find(s => s.id === id); }
 // the biggest size that fits, never under min; false when even min does not fit (that box scrolls instead)
@@ -2006,7 +2141,7 @@ function renderRun() {
   const total = L.items.filter(it => !L.gone.has(it.stop) || L.isDone(it)).length, doneN = L.items.filter(it => L.isDone(it)).length;
   PROG = { i: Math.min(doneN + 1, total), total };
   card.className = 'linecard';
-  $('#r-tag').textContent = ''; $('#r-tap').hidden = false; $('#r-do').innerHTML = '';
+  $('#r-tag').textContent = ''; $('#r-tap').hidden = false; $('#r-do').innerHTML = ''; $('#r-size').hidden = true;
   // the two big keys stay put in every state (anchors never move): B goes dim when there is nothing to retake
   $('#k-again').disabled = busy;
   if (!cur) {
@@ -2033,11 +2168,15 @@ function renderRun() {
     if (cur.g) tag.push(`back to back ${cur.gi} of ${cur.gn}`);
     if (L.rounds[cur.id]) tag.push('another try · fresh hearts');
     const voices = new Set(s.lines.map(l => l.who).filter(Boolean)), spk = cur.who && voices.size > 1 ? cur.who : '';   // two-person scripts: who says it
-    $('#r-tag').innerHTML = spk || tag.length ? (spk ? `<b class="spk">${esc(spk)}</b>` : '') + `<span class="tg-rest">${esc(tag.join(' · '))}</span>` : '';
-    $('#r-txt').textContent = cur.text;
+    const hard = cur.hard ? `<b class="hard">hard · ${esc(cur.hard)}</b>` : '';   // v3: a hard line says why before the first take
+    $('#r-tag').innerHTML = spk || hard || tag.length ? (spk ? `<b class="spk">${esc(spk)}</b>` : '') + hard + `<span class="tg-rest">${esc(tag.join(' · '))}</span>` : '';
+    $('#r-txt').innerHTML = markOp(cur.text, cur.op);
     $('#r-mid').hidden = false;
     const dk = doFor(cur); $('#r-do').innerHTML = dk ? doImg(dk) + esc(DOS[dk]) : '';
+    if (!cur.br) { const sz = (D.sizes || {})[cur.id] || ''; const sc = $('#r-size'); sc.hidden = false; sc.className = 'size-chip ' + (sz || 'none'); sc.innerHTML = SIZE_ICON[sz] + esc(SIZES[sz]); }
     const n = (L.att[cur.id] || 0) - (L.laterAt[cur.id] || 0) + 1, capOn = P.cap > 0;
+    // v3: the hearts just ran out on this line: a breathe card before the next take (Settings turns it off; a tap skips it)
+    if (capOn && P.breathe !== false && lastPip.id === cur.id && lastPip.n === P.cap && n === P.cap + 1) breathe();
     $('#k-again-t').textContent = 'Take ' + (n + 1); $('#k-got-s').textContent = 'line done'; $('#k-got-t').innerHTML = 'Got it &rsaquo;';
     $('#r-take').textContent = 'Take ' + n;
     // hearts are takes left, like lives: full = still yours, the current take is the last full one, a spent one empties (and pops once).
@@ -2052,7 +2191,12 @@ function renderRun() {
   // the note keys live in More; they go dim when there is no line to give a note on
   $('#r-notes').innerHTML = P.notes.map((x, i) => `<button type="button" class="btn" data-act="note" data-i="${i}"${busy ? ' disabled' : ''}>${esc(x.b)}</button>`).join('');
   const key = cur ? cur.id + (L.driveTo || '') : 'done';
-  if (key !== lastCard) { card.classList.remove('pop'); void card.offsetWidth; card.classList.add('pop'); lastCard = key; $('#r-box').scrollTop = 0; }
+  if (key !== lastCard) {
+    card.classList.remove('pop'); void card.offsetWidth; card.classList.add('pop'); $('#r-box').scrollTop = 0;
+    // v3: a new line on a running set slates its first take (the first line after Start has the Ready Go flash instead)
+    if (lastCard && cur && !busy && !cur.br) { const s = viewOf(cur.sid); slate(nm(s), `line ${s.lines.findIndex(l => l.id === cur.id) + 1} of ${s.lines.length}`, (L.att[cur.id] || 0) - (L.laterAt[cur.id] || 0) + 1); }
+    lastCard = key; whyFor = null;
+  }
   fitLine(); requestAnimationFrame(fitLine);
   helpKey = ''; tickSig = '';
   paintStuck(!busy && (now - L.lastT) / 1e3 >= Math.max(30, L.curBudget * 60));
@@ -2108,21 +2252,30 @@ function paintTicker(now) {
   const L = RL; if (!L) return;
   const n = L.cur && !L.driveTo && !D.practice ? C.nudge(D, L, now) : null, dk = n ? n.k + (n.sid || n.stop || '') : '';
   let cls = '', text = '', keys = '';
+  const x = k => `<button type="button" class="btn ghost sm" data-act="dismiss" data-key="${esc(k)}" aria-label="Not now">&times;</button>`;
+  // v3 gap hints: a close-up (or a wide) of the line just got when there is spare time; a b-roll grab once the line has sat 20 s
+  const gaps = P.gaps !== false && L.cur && !L.driveTo && !D.practice;
+  const lg = gaps && L.lastGot && !L.covers[L.lastGot] && L.over < -4 && L.done[L.lastGot] && now - L.done[L.lastGot].t < 4 * 6e4 && !(dismissed['cover' + L.lastGot] > now) ? L.textOf[L.lastGot] : null;
+  const br = gaps && !L.cur.br && L.brLeft.length && now - L.lastT >= 20e3 && !(dismissed['br' + L.brLeft[0].id] > now) ? L.brLeft[0] : null;
   if (!L.cur) text = 'That is every line. Tap A to wrap the day.';
   else if (L.driveTo) text = `On the road to ${stopName(L.driveTo)}. Tap A when you get there.`;
+  else if (whyFor && whyFor.until > now && whyFor.id === L.cur.id && P.why !== false) {
+    text = 'Why?'; keys = WHYS.map(([k, b]) => `<button type="button" class="btn why" data-act="why" data-w="${k}">${b}</button>`).join('');
+  }
   else if (stuckNow) {
     cls = 'stuck'; text = (stuckNow === 'hearts' ? 'Out of hearts.' : 'Running long.') + ' Keep going, or:';
     keys = `<button type="button" class="btn" data-act="later">Later</button>` + (!L.cur.br && C.splitLine(L.cur.text).length > 1 ? `<button type="button" class="btn" data-act="splitNow">Split</button>` : '');
   }
   else if (n && !(dismissed[dk] > now)) {
-    const x = `<button type="button" class="btn ghost" data-act="dismiss" data-key="${esc(dk)}" aria-label="Not now">&times;</button>`;
     cls = n.k === 'add' ? '' : n.k === 'leave' ? 'warn' : 'hot';
-    if (n.k === 'leave' || n.k === 'leave-now') { text = n.k === 'leave' ? `Leave for ${n.name} by ${hm(n.at)}, ${Math.max(0, Math.round((n.at - now) / 6e4))} min from now.` : `Leave now for ${n.name} to fit the rest.`; keys = `<button type="button" class="btn primary" data-act="goStop" data-stop="${esc(n.stop)}">Go</button>` + x; }
-    else if (n.k === 'drop') { text = `${Math.round(L.over)} min over. Drop ${nm(scriptOf(n.sid))}? Saves ${Math.round(n.save)} min.`; keys = `<button type="button" class="btn primary" data-act="dropS" data-sid="${n.sid}">Drop</button>` + x; }
-    else if (n.k === 'add') { text = `${Math.round(-L.over)} min spare. Add ${nm(scriptOf(n.sid))} back? About ${Math.max(1, Math.round(n.cost))} min.`; keys = `<button type="button" class="btn" data-act="addS" data-sid="${n.sid}">Add</button>` + x; }
-    else { text = `${Math.round(L.over)} min over. Keep it moving.`; keys = x; }
+    if (n.k === 'leave' || n.k === 'leave-now') { text = n.k === 'leave' ? `Leave for ${n.name} by ${hm(n.at)}, ${Math.max(0, Math.round((n.at - now) / 6e4))} min from now.` : `Leave now for ${n.name} to fit the rest.`; keys = `<button type="button" class="btn primary" data-act="goStop" data-stop="${esc(n.stop)}">Go</button>` + x(dk); }
+    else if (n.k === 'drop') { text = `${Math.round(L.over)} min over. Drop ${nm(scriptOf(n.sid))}? Saves ${Math.round(n.save)} min.`; keys = `<button type="button" class="btn primary" data-act="dropS" data-sid="${n.sid}">Drop</button>` + x(dk); }
+    else if (n.k === 'add') { text = `${Math.round(-L.over)} min spare. Add ${nm(scriptOf(n.sid))} back? About ${Math.max(1, Math.round(n.cost))} min.`; keys = `<button type="button" class="btn" data-act="addS" data-sid="${n.sid}">Add</button>` + x(dk); }
+    else { text = `${Math.round(L.over)} min over. Keep it moving.`; keys = x(dk); }
   }
-  else if (D.practice) { const tt = trainTips(); text = `Line ${PROG.i} of ${PROG.total} · ` + (PROG.i > 1 && tt.length ? tt[(PROG.i - 2) % tt.length] : 'say it, then A. Again? B.'); }
+  else if (D.practice) { const tt = trainTips(); text = `Line ${PROG.i} of ${PROG.total} · ` + (PROG.i > 1 && tt.length ? tt[(PROG.i - 2) % tt.length] : 'say it, then A. Again? B.'); keys = `<button type="button" class="btn sm" data-act="tape">Tape</button>`; }
+  else if (lg) { const want = ((D.sizes || {})[L.lastGot] || '') === 'C' ? 'W' : 'C'; text = `${Math.round(-L.over)} min spare. Shoot "${lg.l.text.length > 34 ? lg.l.text.slice(0, 32) + '...' : lg.l.text}" ${SIZES[want]} too? Tap when you got it.`; keys = `<button type="button" class="btn primary sm" data-act="cover" data-id="${esc(L.lastGot)}" data-size="${want}">Got it</button>` + x('cover' + L.lastGot); }
+  else if (br) { text = `Between takes: grab "${br.text.length > 40 ? br.text.slice(0, 38) + '...' : br.text}"`; keys = `<button type="button" class="btn primary sm" data-act="sideGot" data-id="${esc(br.id)}">Got it</button>` + x('br' + br.id); }
   else if (now > L.wrapAt) { cls = 'hot'; text = `Past the ${hm(L.wrapAt)} wrap. ${L.rest.length} left to shoot.`; }
   else { cls = L.over > 2 ? 'warn' : ''; text = `Line ${PROG.i} of ${PROG.total} · done about ${hm(L.proj)}${L.over > 2 ? ', ' + Math.round(L.over) + ' min late' : L.over < -2 ? ', ' + Math.round(-L.over) + ' min to spare' : ''}`; }
   const sig = cls + '|' + text + '|' + keys; if (sig === tickSig) return; tickSig = sig;
@@ -2130,21 +2283,33 @@ function paintTicker(now) {
 }
 let AC = null;
 function beep() { try { AC = AC || new (window.AudioContext || window.webkitAudioContext)(); if (AC.state === 'suspended') AC.resume(); const o = AC.createOscillator(), g = AC.createGain(), t = AC.currentTime; o.frequency.value = 880; g.gain.value = .25; o.connect(g); g.connect(AC.destination); o.start(t); g.gain.linearRampToValueAtTime(0, t + .12); o.stop(t + .14); } catch (e) {} }
-let flashT;
+let flashT, breatheT;
 function flash(b, s, ok, ms, art) {
   const f = $('#flash'); $('#flash-b').textContent = b; $('#flash-s').textContent = s || ''; f.className = 'full' + (ok ? ' ok' : ''); f.hidden = false;
   const im = $('#flash-i'); im.hidden = !art; if (art) im.src = ART + art + '.webp';
-  clearTimeout(flashT); flashT = setTimeout(() => { f.hidden = true; }, ms || 1600);
+  clearTimeout(flashT); clearInterval(breatheT); flashT = setTimeout(() => { f.hidden = true; }, ms || 1600);
 }
-$('#flash').addEventListener('click', () => { $('#flash').hidden = true; });
+// v3 BREATHE: ten seconds, in for four, out for six, her calm pose; the flubs come from rushing back in. A tap skips it.
+function breathe() {
+  flash('10', 'breathe in', false, 10500, 'calm');
+  $('#flash').classList.add('breathe');
+  const t0 = Date.now();
+  breatheT = setInterval(() => {
+    const s = (Date.now() - t0) / 1e3, left = Math.max(0, Math.ceil(10 - s));
+    $('#flash-b').textContent = String(left || 'Go'); $('#flash-s').textContent = s < 4 ? 'breathe in' : s < 10 ? 'breathe out, shoulders down' : 'fresh take';
+    if (s >= 10.4) clearInterval(breatheT);
+  }, 200);
+}
+$('#flash').addEventListener('click', () => { $('#flash').hidden = true; clearInterval(breatheT); });
 // the line big for the talent: 120px down to 34px, then it scrolls
 function fitShow() {
   const sh = $('#show'), box = $('#show .s-box'), fits = fitText($('#show-txt'), box, 120, 34);
   sh.classList.toggle('scroll', !fits); sh.classList.toggle('end', atEnd(box));
   $('#show .s-x').textContent = fits ? 'tap anywhere to close' : 'scroll for the rest · tap to close';
 }
-function showBig(text, who, dk) {
-  $('#show-who').textContent = who || ''; $('#show-do').innerHTML = DOS[dk] ? doImg(dk) + `<span><b>${esc(DOS[dk])}</b><small>${esc(DOHINT[dk])}</small></span>` : ''; $('#show-txt').textContent = text; $('#show').hidden = false; $('#show .s-box').scrollTop = 0;
+function showBig(text, who, dk, op, hard) {
+  $('#show-who').textContent = (who || '') + (hard ? ` · hard: ${hard}, say it slow` : '');
+  $('#show-do').innerHTML = DOS[dk] ? doImg(dk) + `<span><b>${esc(DOS[dk])}</b><small>${esc(DOHINT[dk])}</small></span>` : ''; $('#show-txt').innerHTML = markOp(text, op); $('#show').hidden = false; $('#show .s-box').scrollTop = 0;
   fitShow(); requestAnimationFrame(fitShow);
 }
 $('#show').addEventListener('click', () => { $('#show').hidden = true; });
@@ -2167,7 +2332,28 @@ function reportText(R) {
   const n = Object.entries(R.notes); if (n.length) L.push('Notes used: ' + n.map(([k, c]) => (P.notes[+k] ? P.notes[+k].b : k) + ' x' + c).join(', '));
   L.push('Per script:');
   R.scripts.forEach(s => L.push(`  ${s.title}: ${Math.round(s.min)} min, ${s.done} of ${s.lines} lines, ${s.takes} takes${s.warm ? ' (warm-up)' : ''}${s.dropped ? ' (dropped)' : ''}${s.left ? ' (left behind)' : ''}`));
-  if (R.every.length) { L.push('Every line, in the order shot:'); R.every.forEach(x => L.push(`  ${hms(x.min * 60)}${x.over ? ' (over)' : ''}  ${x.k === 'skip' ? '[skipped] ' : x.k === 'later' ? '[later] ' : ''}${x.text} (${x.takes} take${x.takes === 1 ? '' : 's'})`)); }
+  if (R.why.length) L.push('Why takes missed: ' + R.why.map(([k, c]) => k + ' x' + c).join(', '));
+  if (R.every.length) { L.push('Every line, in the order shot:'); R.every.forEach(x => L.push(`  ${x.side ? 'gap' : hms(x.min * 60)}${x.over ? ' (over)' : ''}  ${x.k === 'skip' ? '[skipped] ' : x.k === 'later' ? '[later] ' : ''}${x.text} (${x.takes} take${x.takes === 1 ? '' : 's'}${x.size ? ', ' + SIZES[x.size] : ''}${x.covers ? ', +' + x.covers + ' cover' : ''}${x.why.length ? ', missed: ' + x.why.join('/') : ''})`)); }
+  return L.join('\n');
+}
+// v3 THE POST SHEET: one row a kept take, tab separated, so it pastes next to the clip list in the edit.
+// from = about when the camera rolled (the tap before), got = the Got it tap; the clip whose clock sits between them is the one.
+function postText(R) {
+  const L = ['Sweet Takes · post sheet · ' + new Date(R.start).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' }) + ' · kept takes, clock time'];
+  L.push(['from', 'got', 'script', 'line', 'take', 'size', 'text'].join('\t'));
+  R.kept.forEach(k => L.push([clk(k.from), clk(k.at), k.script, k.br ? 'b-roll' : k.line + '/' + k.of, k.cover ? 'cover' : k.side ? 'gap' : k.takes, k.size ? SIZES[k.size] : '', k.text].join('\t')));
+  return L.join('\n');
+}
+// v3 THE CLIENT SHEET: what got shot and what is left, no clocks, no ranks, no takes. Generic words.
+function clientText(R) {
+  const d = new Date(R.start).toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
+  const done = R.scripts.filter(s => s.lines && s.done >= s.lines), part = R.scripts.filter(s => s.done && s.done < s.lines), none = R.scripts.filter(s => !s.done);
+  const never = D.scripts.filter(s => !s.skip && !R.scripts.some(x => x.id === s.id));
+  const L = ['Shoot update · ' + d];
+  if (done.length) { L.push(''); L.push('Shot today:'); done.forEach(s => L.push('  ' + s.title + ' (' + s.lines + ' line' + (s.lines === 1 ? '' : 's') + ')')); }
+  if (part.length) { L.push(''); L.push('Started, to finish next time:'); part.forEach(s => L.push('  ' + s.title + ' (' + s.done + ' of ' + s.lines + ' lines)')); }
+  if (none.length || never.length) { L.push(''); L.push('Still to shoot:'); none.concat(never.map(s => ({ title: nm(s) }))).forEach(s => L.push('  ' + s.title)); }
+  L.push(''); L.push('Edits to follow. Reply with any changes to the lines before the next day.');
   return L.join('\n');
 }
 let lastReport = null;
@@ -2189,6 +2375,8 @@ function renderReport() {
   let h = lineBars(R);
   if (lsn && R.lines) {   // the coach: plain words off the takes, then what to try next
     const say = [R.perLine <= 1.6 ? 'Most lines in one or two takes. That is camera ready.' : R.perLine <= 2.6 ? 'A couple of takes a line. Say each line once in your head before you go.' : 'Lots of retakes. Say the tricky part slow first, then the whole line.'];
+    if (R.why.length && WHY_COACH[R.why[0][0]]) say.push(WHY_COACH[R.why[0][0]]);
+    if (R.hardOver) say.push(`${R.hardOver} hard line${R.hardOver > 1 ? 's' : ''} (addresses, numbers) ran long even with the extra minute. Say the numbers as words first: "ten to eight".`);
     if (R.overN) say.push(`${R.overN} line${R.overN > 1 ? 's' : ''} ran long. Run ${R.overN > 1 ? 'them' : 'it'} once more on your own.`);
     if (clear) say.push(D.trainLv < 3 ? `Ready for ${LEVELS[D.trainLv].n}.` : rk === 'S' ? 'Hard, rank S. That is star quality.' : 'Hard is cleared. Go for rank S next.');
     h = `<div class="sec">Coach says<span>for next time</span></div><p class="why">${say.map(esc).join(' ')}</p>` + h;
@@ -2198,10 +2386,24 @@ function renderReport() {
   if (R.slowest.length) { h += `<div class="sec">Slowest lines<span>where the clock went</span></div>`; R.slowest.forEach(x => { h += `<div class="rl"><span><b>${esc(x.text)}</b><small>${esc(x.script)} · ${x.takes} take${x.takes === 1 ? '' : 's'}</small></span><em class="${x.over ? 'red' : ''}">${hms(x.min * 60)}</em></div>`; }); }
   const n = Object.entries(R.notes);
   if (n.length) h += `<div class="sec">Notes you gave<span>${n.reduce((m, [, c]) => m + c, 0)} taps</span></div><p class="why">${n.map(([k, c]) => esc(P.notes[+k] ? P.notes[+k].b : k) + ' x' + c).join(' · ')}</p>`;
+  // v3: why takes missed, and the shot sizes (one size all day = no cuts in the edit)
+  if (R.why.length) h += `<div class="sec">Why takes missed<span>${R.why.reduce((m, [, c]) => m + c, 0)} taps</span></div><p class="why">${R.why.map(([k, c]) => { const w = WHYS.find(x => x[0] === k); return esc(w ? w[1] : k) + ' x' + c; }).join(' · ')}.${WHY_COACH[R.why[0][0]] ? ' ' + esc(WHY_COACH[R.why[0][0]]) : ''}</p>`;
+  if (!D.practice && R.lines) {
+    const sz = Object.entries(R.sizeN).filter(([k]) => k !== 'none').sort((a, b) => b[1] - a[1]), un = R.sizeN.none || 0;
+    const one = sz.length === 1 && !un && R.lines >= 4;
+    h += `<div class="sec">Shot sizes<span>${R.coverN ? R.coverN + ' cover take' + (R.coverN > 1 ? 's' : '') : 'for the edit'}</span></div><p class="why">${sz.length ? sz.map(([k, c]) => esc(SIZES[k]) + ' x' + c).join(' · ') : 'No sizes marked'}${un && sz.length ? ' · ' + un + ' unmarked' : ''}.${one ? ' Every line on one size: the edit has nowhere to cut. Next time grab a second size on the lines you have spare time for.' : !sz.length ? ' Tap the size chip on the line card next time, and the post sheet carries it.' : ''}</p>`;
+  }
   h += `<div class="sec">Per script<span>minutes · lines · takes</span></div>`;
   const topS = Math.max(1, ...R.scripts.map(x => x.min));
   R.scripts.forEach(s => { h += `<div class="rl"><span><b>${esc(s.title)}</b><small>${s.done} of ${s.lines} lines · ${s.takes} takes${s.warm ? ' · warm-up' : ''}${s.dropped ? ' · dropped' : ''}${s.left ? ' · left behind' : ''}</small><i class="rl-bar" style="width:${(100 * s.min / topS).toFixed(1)}%"></i></span><em>${Math.round(s.min)} min</em></div>`; });
-  if (R.every.length) { h += `<div class="sec">Every line<span>red = past budget</span></div>`; R.every.forEach(x => { h += `<div class="rl sm"><span><b>${esc(x.text)}</b><small>${esc(x.script)} · ${x.k === 'skip' ? 'skipped' : x.k === 'later' ? 'sent to Later after ' + x.takes + ' take' + (x.takes === 1 ? '' : 's') : x.takes + ' take' + (x.takes === 1 ? '' : 's')}</small></span><em class="${x.over ? 'red' : ''}">${hms(x.min * 60)}</em></div>`; }); }
+  if (!D.practice) h += `<button type="button" class="btn" data-act="client" style="width:100%;margin-top:6px">Send the client a shoot update</button>`;
+  if (R.every.length) { h += `<div class="sec">Every line<span>red = past budget</span></div>`; R.every.forEach(x => { h += `<div class="rl sm"><span><b>${esc(x.text)}</b><small>${esc(x.script)} · ${x.k === 'skip' ? 'skipped' : x.k === 'later' ? 'sent to Later after ' + x.takes + ' take' + (x.takes === 1 ? '' : 's') : x.side ? 'grabbed in a gap' : x.takes + ' take' + (x.takes === 1 ? '' : 's')}${x.hard ? ' · hard' : ''}${x.size ? ' · ' + esc(SIZES[x.size]) : ''}${x.covers ? ' · +' + x.covers + ' cover' : ''}${x.why.length ? ' · missed: ' + esc(x.why.join(', ')) : ''}</small></span><em class="${x.over ? 'red' : ''}">${x.side ? 'gap' : hms(x.min * 60)}</em></div>`; }); }
+  // v3 THE POST SHEET: every kept take with the clock on it, so the good clip finds itself in the edit
+  if (R.kept.length && !D.practice) {
+    h += `<div class="sec">Post sheet<span>kept takes · clock time</span></div><p class="lb-k">from = about when the camera rolled · got = the Got it tap. The clip whose time sits between them is the one.</p>`;
+    R.kept.forEach(k => { h += `<div class="ps${k.cover ? ' cover' : ''}${k.side ? ' side' : ''}"><em>${clk(k.from)}<small>from</small>${clk(k.at)}<small>got</small></em><b>${esc(k.text)}</b><small>${k.size ? `<i>${esc(SIZES[k.size])}</i>` : ''}${esc(k.script)} · ${k.br ? 'b-roll' : 'line ' + k.line + ' of ' + k.of} · ${k.cover ? 'cover take' : k.side ? 'gap grab' : 'take ' + k.takes}</small></div>`; });
+    h += `<button type="button" class="btn" data-act="copyPost" style="width:100%;margin-top:6px">Copy the post sheet</button>`;
+  }
   if (w) h += `<button type="button" class="btn ghost" data-act="unwrap" style="width:100%;margin-top:10px">Not done? Undo the wrap</button>`;
   $('#rep-body').innerHTML = h;
   if (D.practice && w && R.lines && !D.logged) {   // once a run: the star (or a better letter), the log, the streak, trophies
@@ -2247,14 +2449,96 @@ async function herLink() {
   const now = Date.now(), X = D.run ? C.live(D, now) : C.plan(D, now);
   const first = {}; X.items.forEach((it, i) => { if (first[it.sid] == null) first[it.sid] = i; });
   const S = D.scripts.filter(s => X.inc.has(s.id)).sort((a, b) => (first[a.id] ?? 1e9) - (first[b.id] ?? 1e9));
-  const data = { v: 1, s: S.map(s => { const ls = s.lines.filter(l => !l.br); return Object.assign({ n: nm(s), l: ls.map(l => l.text), d: ls.map(l => doFor(l)) }, new Set(ls.map(l => l.who).filter(Boolean)).size > 1 ? { w: ls.map(l => l.who || '') } : {}); }).filter(x => x.l.length) };
+  // v3: the link also carries the word to hit (o) and why a line is hard (h)
+  const data = { v: 1, s: S.map(s => { const ls = s.lines.filter(l => !l.br); return Object.assign({ n: nm(s), l: ls.map(l => l.text), d: ls.map(l => doFor(l)), o: ls.map(l => opFor(l)), h: ls.map(l => C.isHard(l) ? (l.hard || C.hardOf(l.text)) : '') }, new Set(ls.map(l => l.who).filter(Boolean)).size > 1 ? { w: ls.map(l => l.who || '') } : {}); }).filter(x => x.l.length) };
   return location.origin + location.pathname + '#her=' + await pack(data);
 }
+// the talent's page: read, first letters, or blank (memorize), a tap still shows any line big
+let HER = { data: null, mode: 'read' };
+try { HER.mode = sessionStorage.getItem('ad-hermode') || 'read'; } catch (e) {}
 async function renderHer(code) {
   go('her', false);
   let data = null; try { data = await unpack(code); } catch (e) {}
-  if (!data || !Array.isArray(data.s)) { $('#her-list').innerHTML = '<p class="empty">This link did not open on this phone. Ask for a new one, or a screenshot of the lines.</p>'; return; }
-  $('#her-list').innerHTML = data.s.map(s => `<div class="hs">${esc(s.n)}</div>` + s.l.map((t, i) => { const dk = Array.isArray(s.d) && DOS[s.d[i]] ? s.d[i] : ''; return `<button type="button" class="hl" data-act="herBig" data-who="${esc(s.n)}"${dk ? ` data-do="${dk}"` : ''}>${doImg(dk)}<span>${Array.isArray(s.w) && s.w[i] ? `<i class="hl-who">${esc(s.w[i])}</i>` : ''}<span class="hl-t">${esc(t)}</span>${dk ? `<small>${esc(DOHINT[dk])}</small>` : ''}</span></button>`; }).join('')).join('');
+  if (!data || !Array.isArray(data.s)) { $('#her-list').innerHTML = '<p class="empty">This link did not open on this phone. Ask for a new one, or a screenshot of the lines.</p>'; $('.herbar').hidden = true; return; }
+  HER.data = data; paintHer();
+}
+function paintHer() {
+  const data = HER.data; if (!data) return;
+  const modes = [['read', 'Read'], ['first', 'First letters'], ['blank', 'Blank']];
+  $('#her-mode').innerHTML = modes.map(([v, t]) => `<button type="button" aria-pressed="${v === HER.mode}" data-act="herMode" data-v="${v}">${t}</button>`).join('');
+  $('#her-list').innerHTML = data.s.map(s => `<div class="hs">${esc(s.n)}</div>` + s.l.map((t, i) => {
+    const dk = Array.isArray(s.d) && DOS[s.d[i]] ? s.d[i] : '', op = Array.isArray(s.o) ? s.o[i] || '' : '', hd = Array.isArray(s.h) ? s.h[i] || '' : '';
+    const body = HER.mode === 'first' ? `<span class="hl-t first">${esc(firstLetters(t))}</span>` : HER.mode === 'blank' ? `<span class="hl-t blank">${esc(blanks(t))}</span>` : `<span class="hl-t">${markOp(t, op)}</span>`;
+    return `<button type="button" class="hl" data-act="herBig" data-who="${esc(s.n)}" data-text="${esc(t)}"${dk ? ` data-do="${dk}"` : ''}${op ? ` data-op="${esc(op)}"` : ''}${hd ? ` data-hard="${esc(hd)}"` : ''}>${doImg(dk)}<span>${Array.isArray(s.w) && s.w[i] ? `<i class="hl-who">${esc(s.w[i])}</i>` : ''}${body}${dk || hd ? `<small>${hd ? `<span class="hard">tricky: ${esc(hd)}, say it slow</span>${dk ? ' · ' : ''}` : ''}${dk ? esc(DOHINT[dk]) : ''}</small>` : ''}</span></button>`;
+  }).join('')).join('');
+}
+/* ---------- v3 THE PROMPTER: the lines roll up a black screen at a steady speed; a tap holds, another rolls on;
+   mirror flips it for a phone laid under the lens on a glass. From the talent's page (every script in the link) and from
+   More on the set (the scripts in the plan). ---------- */
+const PR = { speed: 40, y: 0, held: false, mirror: false, raf: 0, last: 0 };
+function promptScripts() {
+  if (HER.data) return HER.data.s.map(s => ({ n: s.n, l: s.l.map((t, i) => ({ text: t, who: Array.isArray(s.w) ? s.w[i] : '', op: Array.isArray(s.o) ? s.o[i] : '' })) }));
+  const X = D.run ? C.live(D, Date.now()) : (D.scripts.length ? C.plan(D, Date.now()) : null); if (!X) return [];
+  return D.scripts.filter(s => X.inc.has(s.id)).map(s => ({ n: nm(s), l: s.lines.filter(l => !l.br).map(l => ({ text: l.text, who: l.who || '', op: opFor(l) })) })).filter(s => s.l.length);
+}
+function openPrompt(S) {
+  $('#p-txt').innerHTML = S.map(s => `<span class="p-h">${esc(s.n)}</span>` + s.l.map(l => `${l.who ? `<span class="p-who">${esc(l.who)}</span>` : ''}<span class="p-l">${markOp(l.text, l.op)}</span>`).join('')).join('');
+  PR.y = 0; PR.held = true; PR.last = 0; $('#prompt').hidden = false; $('#prompt').classList.add('held'); $('#p-box').classList.toggle('mirror', PR.mirror); $('#p-mir').setAttribute('aria-pressed', String(PR.mirror));
+  paintPrompt(); lockOn();
+  cancelAnimationFrame(PR.raf); PR.raf = requestAnimationFrame(stepPrompt);
+}
+function paintPrompt() { $('#p-txt').style.transform = `translateY(${-PR.y}px)`; }
+function stepPrompt(t) {
+  if ($('#prompt').hidden) return;
+  if (PR.last && !PR.held && !matchMedia('(prefers-reduced-motion: reduce)').matches) { PR.y += PR.speed * (t - PR.last) / 1000; const max = $('#p-txt').offsetHeight - innerHeight * .45; if (PR.y >= max) { PR.y = max; PR.held = true; $('#prompt').classList.add('held'); } paintPrompt(); }
+  PR.last = t; PR.raf = requestAnimationFrame(stepPrompt);
+}
+function closePrompt() { cancelAnimationFrame(PR.raf); $('#prompt').hidden = true; if (document.body.dataset.scr !== 'run') lockOff(); }
+$('#p-box').addEventListener('click', () => { PR.held = !PR.held; $('#prompt').classList.toggle('held', PR.held); });
+// a finger drag scrubs the prompter (and holds it)
+(() => { let y0 = 0, p0 = 0, drag = false; const box = $('#p-box');
+  box.addEventListener('pointerdown', e => { y0 = e.clientY; p0 = PR.y; drag = false; }, { passive: true });
+  box.addEventListener('pointermove', e => { if (e.buttons !== 1 && e.pointerType === 'mouse') return; const d = y0 - e.clientY; if (Math.abs(d) > 6) { drag = true; PR.y = Math.max(0, p0 + d); PR.held = true; $('#prompt').classList.add('held'); paintPrompt(); } }, { passive: true });
+  box.addEventListener('click', e => { if (drag) { e.stopImmediatePropagation(); drag = false; } }, true);
+})();
+/* ---------- v3 SELF-TAPE (training): the front camera as a mirror with the line under it, REC, then the take plays back.
+   Nothing leaves the phone and nothing is saved: she watches herself, fixes it, goes again. ---------- */
+const TP = { stream: null, rec: null, chunks: [], url: '', t0: 0, timer: 0 };
+async function openTape() {
+  const tp = $('#tape'), v = $('#tp-v'), p = $('#tp-p'), msg = $('#tp-msg');
+  tp.hidden = false; v.hidden = true; p.hidden = true; msg.hidden = false; msg.textContent = 'Opening the camera...'; $('#tp-recdot').hidden = true;
+  $('#tp-line').innerHTML = RL && RL.cur && !RL.driveTo ? markOp(RL.cur.text, RL.cur.op) : 'Say a line, watch it back.';
+  $('#tp-ks').textContent = 'front camera'; $('#tp-kt').textContent = 'Rec'; $('#tp-k').disabled = true;
+  try {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error('no camera api');
+    TP.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } }, audio: true });
+    v.srcObject = TP.stream; v.hidden = false; msg.hidden = true; $('#tp-k').disabled = false;
+  } catch (e) { msg.textContent = 'No camera here. On your phone, allow the camera when it asks, then tap Tape again.'; }
+}
+function tapeRec() {
+  const v = $('#tp-v'), p = $('#tp-p');
+  if (TP.rec && TP.rec.state === 'recording') { TP.rec.stop(); return; }
+  if (!TP.stream) return;
+  if (!p.hidden) { p.pause(); p.hidden = true; v.hidden = false; if (TP.url) { URL.revokeObjectURL(TP.url); TP.url = ''; } }
+  let rec; const types = ['video/mp4', 'video/webm;codecs=vp9', 'video/webm'];
+  try { const mt = types.find(t => window.MediaRecorder && MediaRecorder.isTypeSupported(t)); rec = new MediaRecorder(TP.stream, mt ? { mimeType: mt } : undefined); } catch (e) { toast('This phone cannot record here.'); return; }
+  TP.rec = rec; TP.chunks = []; TP.t0 = Date.now();
+  rec.ondataavailable = e => { if (e.data && e.data.size) TP.chunks.push(e.data); };
+  rec.onstop = () => {
+    clearInterval(TP.timer); $('#tp-recdot').hidden = true; $('#tp-ks').textContent = 'one more'; $('#tp-kt').textContent = 'Again';
+    const blob = new Blob(TP.chunks, { type: rec.mimeType || 'video/webm' }); TP.url = URL.createObjectURL(blob);
+    v.hidden = true; p.src = TP.url; p.hidden = false; p.play().catch(() => {});
+  };
+  rec.start(250); buzz(20);
+  $('#tp-recdot').hidden = false; $('#tp-ks').textContent = 'tap to stop'; $('#tp-kt').textContent = 'Stop';
+  TP.timer = setInterval(() => { $('#tp-rect').textContent = 'rec ' + mmss((Date.now() - TP.t0) / 1e3); }, 250);
+}
+function closeTape() {
+  try { if (TP.rec && TP.rec.state === 'recording') { TP.rec.onstop = null; TP.rec.stop(); } } catch (e) {}
+  clearInterval(TP.timer); TP.rec = null;
+  if (TP.stream) { TP.stream.getTracks().forEach(t => t.stop()); TP.stream = null; }
+  const p = $('#tp-p'); p.pause(); p.removeAttribute('src'); p.load(); if (TP.url) { URL.revokeObjectURL(TP.url); TP.url = ''; }
+  $('#tp-v').srcObject = null; $('#tape').hidden = true;
 }
 
 /* ---------- every key ---------- */
@@ -2287,7 +2571,33 @@ const act = {
     if (navigator.share) { try { await navigator.share({ title: 'Your lines', text, url }); return; } catch (e) { if (e && e.name === 'AbortError') return; } }
     try { await navigator.clipboard.writeText(url); toast('Link copied. Text it to your talent.'); } catch (e) { prompt('Copy this link and text it to your talent:', url); }
   },
-  herBig: b => { const t = b.querySelector('.hl-t'), w = b.querySelector('.hl-who'); showBig(t ? t.textContent : b.textContent.trim(), (w ? w.textContent + ' · ' : '') + b.dataset.who, b.dataset.do); },
+  herBig: b => { const w = b.querySelector('.hl-who'); showBig(b.dataset.text || b.textContent.trim(), (w ? w.textContent + ' · ' : '') + b.dataset.who, b.dataset.do, b.dataset.op || '', b.dataset.hard || ''); },
+  herMode: b => { HER.mode = b.dataset.v; try { sessionStorage.setItem('ad-hermode', HER.mode); } catch (e) {} paintHer(); },
+  // v3 the word to hit: pick one of the line's words on the plan, or hand it back to the words
+  pickOp: b => {
+    const l = lineById(b.dataset.id); if (!l) return;
+    PICK = l.id; const cur = opFor(l);
+    $('#oppick-s').textContent = l.text.length > 64 ? l.text.slice(0, 62) + '...' : l.text;
+    const words = [...new Set(l.text.split(/\s+/).map(w => w.replace(/^[^A-Za-z0-9$]+|[^A-Za-z0-9%]+$/g, '')).filter(w => w.length >= 2))];
+    $('#opgrid').innerHTML = words.map(w => `<button type="button" class="btn${w === cur ? ' primary' : ''}" data-act="opSet" data-w="${esc(w)}">${esc(w)}</button>`).join('');
+    $('#oppick').hidden = false;
+  },
+  opSet: b => { const l = lineById(PICK); if (l) { l.op = b.dataset.w; D.edited = true; persist(); } $('#oppick').hidden = true; document.body.dataset.scr === 'run' ? renderRun() : renderPlan(); },
+  opAuto: () => { const l = lineById(PICK); if (l) { delete l.op; persist(); } $('#oppick').hidden = true; document.body.dataset.scr === 'run' ? renderRun() : renderPlan(); },
+  opClose: () => { $('#oppick').hidden = true; },
+  // v3 the prompter: the lines roll up a black screen; a tap holds, mirror flips it for a phone under the lens
+  prompter: () => { closeMenu(); const S = promptScripts(); if (!S.length) { toast('No lines to roll yet.'); return; } openPrompt(S); },
+  promptClose: () => closePrompt(),
+  promptSpeed: b => { PR.speed = Math.max(10, Math.min(140, PR.speed + 15 * +b.dataset.d)); toast(PR.speed <= 25 ? 'Slow' : PR.speed >= 100 ? 'Fast' : 'Speed ' + Math.round(PR.speed / 15)); },
+  promptMirror: b => { PR.mirror = !PR.mirror; b.setAttribute('aria-pressed', String(PR.mirror)); $('#p-box').classList.toggle('mirror', PR.mirror); },
+  promptTop: () => { PR.y = 0; PR.held = true; $('#prompt').classList.add('held'); paintPrompt(); },
+  // v3 self-tape (training): the front camera as a mirror, a take recorded on the phone only, played back, never saved
+  tape: () => openTape(),
+  tapeRec: () => tapeRec(),
+  tapeClose: () => closeTape(),
+  // v3 the post sheet and the client sheet, from the report
+  copyPost: async () => { if (!lastReport) return; const t = postText(lastReport); try { await navigator.clipboard.writeText(t); toast('Post sheet copied. Paste it next to the clips.'); } catch (e) { if (navigator.share) { try { await navigator.share({ title: 'Post sheet', text: t }); } catch (x) {} } else prompt('Copy the post sheet:', t); } },
+  client: async () => { if (!lastReport) return; const t = clientText(lastReport); if (navigator.share) { try { await navigator.share({ title: 'Shoot update', text: t }); return; } catch (e) { if (e && e.name === 'AbortError') return; } } try { await navigator.clipboard.writeText(t); toast('Client sheet copied.'); } catch (e) { prompt('Copy the client sheet:', t); } },
   start: () => {
     const Pl = C.plan(D, Date.now());
     if (!Pl.inc.size) { toast('Nothing fits. Push the wrap later or skip a script.'); return; }
@@ -2304,7 +2614,18 @@ const act = {
     else flash('Ready? Go!', 'Wrap by ' + hm(Pl.wrapAt) + '. First up: ' + nm(scriptOf(Pl.warmId) || scriptOf(Pl.items[0].sid)) + ', the warm-up.', true, 1800, 'go');
     beat('go', 2400);
   },
-  again: () => { if (!RL || !RL.cur || RL.driveTo) return; ev('again', { id: RL.cur.id }); buzz(15); beat('take'); renderRun(); },
+  again: () => {
+    if (!RL || !RL.cur || RL.driveTo) return;
+    const cur = RL.cur; ev('again', { id: cur.id }); buzz(15); beat('take');
+    whyFor = P.why !== false && !cur.br ? { id: cur.id, until: Date.now() + 10e3 } : null;   // v3: why did it miss? ten seconds of keys
+    renderRun();
+    if (!cur.br) { const s = viewOf(cur.sid), L = RL; slate(nm(s), `line ${s.lines.findIndex(l => l.id === cur.id) + 1} of ${s.lines.length}`, (L.att[cur.id] || 0) - (L.laterAt[cur.id] || 0) + 1); }
+  },
+  // v3: why the last take missed (a note on the line, not a clock event), the shot size, a cover take, a b-roll grab in a gap
+  why: b => { if (!RL || !RL.cur) return; ev('why', { id: RL.cur.id, w: b.dataset.w }); whyFor = null; buzz(10); tickSig = ''; paintTicker(Date.now()); toast('Noted: ' + b.dataset.w + '.'); },
+  size: () => { if (!RL || !RL.cur || RL.driveTo || RL.cur.br) return; D.sizes = D.sizes || {}; const id = RL.cur.id, nx = SIZE_NEXT[D.sizes[id] || '']; if (nx) D.sizes[id] = nx; else delete D.sizes[id]; persist(); buzz(8); renderRun(); },
+  cover: b => { if (!RL) return; const id = b.dataset.id, sz = b.dataset.size || 'C'; ev('cover', { id, size: sz }); buzz(25); pop('Covered!', SIZES[sz] + ' angle in the can', false, 'got'); beat('got'); renderRun(); },
+  sideGot: b => { if (!RL) return; ev('got', { id: b.dataset.id, side: true }); buzz(20); pop('B-roll!', 'grabbed between takes', false, 'hold'); renderRun(); },
   got: () => {
     if (!RL) return;
     if (!RL.cur) { act.wrap(); return; }
@@ -2334,10 +2655,10 @@ const act = {
   goStop: b => { ev('go', { stop: b.dataset.stop }); buzz(30); renderRun(); },
   dismiss: b => { dismissed[b.dataset.key] = Date.now() + 5 * 6e4; tickSig = ''; paintTicker(Date.now()); },
   note: b => { closeMenu(); const n = P.notes[+b.dataset.i]; if (!n) return; ev('note', { n: b.dataset.i, id: RL && RL.cur ? RL.cur.id : '' }); buzz(10); flash(n.b, n.s, false, 2200, NOTE_ART[+b.dataset.i]); },
-  show: () => { if (!RL || !RL.cur || RL.driveTo) return; ev('show', { id: RL.cur.id }); const sc = viewOf(RL.cur.sid), li = sc.lines.findIndex(l => l.id === RL.cur.id) + 1, voices = new Set(sc.lines.map(l => l.who).filter(Boolean)); showBig(RL.cur.text, `${RL.cur.who && voices.size > 1 ? RL.cur.who + ' · ' : ''}line ${li} of ${sc.lines.length}`, doFor(RL.cur)); },
+  show: () => { if (!RL || !RL.cur || RL.driveTo) return; ev('show', { id: RL.cur.id }); const sc = viewOf(RL.cur.sid), li = sc.lines.findIndex(l => l.id === RL.cur.id) + 1, voices = new Set(sc.lines.map(l => l.who).filter(Boolean)); showBig(RL.cur.text, `${RL.cur.who && voices.size > 1 ? RL.cur.who + ' · ' : ''}line ${li} of ${sc.lines.length}`, doFor(RL.cur), RL.cur.op, RL.cur.hard); },
   undo: () => {
     const E = D.run.events;
-    for (let i = E.length - 1; i >= 0; i--) if (UNDO[E[i].k]) { const e = E.splice(i, 1)[0]; persist(); toast('Undid ' + ({ again: 'the extra take', got: 'GOT IT', skip: 'the skip', roll: 'rolling', go: 'leaving', arrive: 'arriving', drop: 'the drop', add: 'the add', wrap: 'the wrap', later: 'Later', split: 'the split' }[e.k]) + '.'); renderRun(); return; }
+    for (let i = E.length - 1; i >= 0; i--) if (UNDO[E[i].k]) { const e = E.splice(i, 1)[0]; persist(); whyFor = null; toast('Undid ' + ({ again: 'the extra take', got: e.side ? 'the b-roll grab' : 'GOT IT', skip: 'the skip', roll: 'rolling', go: 'leaving', arrive: 'arriving', drop: 'the drop', add: 'the add', wrap: 'the wrap', later: 'Later', split: 'the split', cover: 'the cover take' }[e.k]) + '.'); renderRun(); return; }
     toast('Nothing to undo.');
   },
   wrap: () => { closeMenu(); ev('wrap'); buzz(40); go('report'); },
@@ -2421,9 +2742,21 @@ $('#lefty').addEventListener('change', e => { P.lefty = e.target.checked; savePr
 document.body.classList.toggle('lefty', !!P.lefty);
 $('#crtsw').addEventListener('change', e => { P.crt = e.target.checked; savePrefs(); document.body.classList.toggle('crt', P.crt); });
 document.body.classList.toggle('crt', P.crt !== false);   // the CRT is on unless switched off in Settings
+[['slatesw', 'slate'], ['breathesw', 'breathe'], ['whysw', 'why'], ['gapsw', 'gaps']].forEach(([id, k]) => $('#' + id).addEventListener('change', e => { P[k] = e.target.checked; savePrefs(); if (k === 'gaps' || k === 'why') { tickSig = ''; if (RL) paintTicker(Date.now()); } }));
+/* THE SLATE (v3): every take flashes a white card with the script, the line and the take number, black on white, big.
+   Point the phone at the lens and every clip slates itself; the post sheet then matches the clip by its clock. Never
+   takes a tap (pointer-events none), never a sound. */
+let slateT;
+function slate(script, who, take) {
+  if (P.slate === false) return;
+  const s = $('#slate'); $('#sl-s').textContent = script; $('#sl-t').textContent = 'TAKE ' + take; $('#sl-n').textContent = who;
+  s.classList.remove('on', 'off'); void s.offsetWidth; s.classList.add('on');
+  clearTimeout(slateT); slateT = setTimeout(() => { s.classList.add('off'); s.classList.remove('on'); }, 700);
+}
 function closeMenu() { $('#menu').hidden = true; }
 $('#menu').addEventListener('click', e => { if (e.target === e.currentTarget) closeMenu(); });
 $('#dopick').addEventListener('click', e => { if (e.target === e.currentTarget) $('#dopick').hidden = true; });
+$('#oppick').addEventListener('click', e => { if (e.target === e.currentTarget) $('#oppick').hidden = true; });
 $('#fileopt').addEventListener('click', e => { if (e.target === e.currentTarget) closeOpt(); });
 $('#lesson').addEventListener('click', e => { if (e.target === e.currentTarget) $('#lesson').hidden = true; });
 // boxes that act like keys (a file, a pack, the logo): Enter and Space press them
@@ -2464,7 +2797,7 @@ function pop(b, s, red, art) {
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-act]');
   if (!b || !act[b.dataset.act]) return;
-  if (b.closest('.full') && b.dataset.act !== 'herBig') return;
+  if (b.closest('.full') && !/^(?:herBig|prompt|tape)/.test(b.dataset.act)) return;
   act[b.dataset.act](b);
 });
 

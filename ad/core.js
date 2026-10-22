@@ -213,6 +213,50 @@ function jac(a, b) { const A = new Set(a), B = new Set(b); let n = 0; A.forEach(
 function kindOf(t) { if (R_ADDR.test(t)) return 'addr'; if (R_BYE.test(t) && t.split(/\s+/).length <= 8) return 'bye'; return ''; }
 function dialogue(s) { return s.lines.filter(l => !l.br).length; }
 
+/* ---------- hard lines (10/21 v3): the ones that eat the clock ----------
+   An address took 11.8 min on a real day, a line with a price and a time took 5 takes. A line gets flagged HARD for an
+   address, numbers (prices, times, phone numbers, dates), a long word, or just being long, and the plan gives it one more
+   minute (HARD_MIN). The set says why, so the talent slows down before the first take, not after the fourth. */
+const HARD_MIN = 1;
+const R_NUM = /\d/;
+const R_LONGWORD = /\b[a-z][a-z'-]{10,}\b/i;
+function hardOf(text) {
+  const t = String(text || '');
+  if (!t) return '';
+  if (R_ADDR.test(t)) return 'address';
+  if ((t.match(/\d+/g) || []).length >= 2) return 'numbers';
+  if (/[$]\d|\d\s*(?:%|am|pm|a\.m|p\.m)\b/i.test(t)) return 'numbers';
+  if (R_NUM.test(t) && t.split(/\s+/).length >= 10) return 'long';
+  if (R_LONGWORD.test(t)) return 'a long word';
+  if (t.split(/\s+/).length >= 18) return 'long';
+  return '';
+}
+const isHard = l => !!(l && !l.br && (l.hard != null ? l.hard : hardOf(l.text)));
+
+/* ---------- the operative word (10/21 v3): the one word that sells the line ----------
+   Actors hit one word a line, the one that carries the news. Read off the words: a shouted word, a name or a number, else
+   the last content word that is not a stop word (the news usually lands at the end). The director can pick another on the
+   plan (line.op). Returned as the word itself, so the screens can mark it wherever it sits. */
+function opWord(text) {
+  const t = String(text || '');
+  const words = t.split(/\s+/).filter(Boolean);
+  if (words.length < 2) return '';
+  const core = w => w.replace(/^[^A-Za-z0-9$]+|[^A-Za-z0-9%]+$/g, '');
+  const ok = w => { const c = core(w); return c.length >= 2 && !STOP.has(c.toLowerCase()); };
+  const shout = words.find(w => /^[A-Z][A-Z]{2,}[!.]*$/.test(core(w)) && ok(w));
+  if (shout) return core(shout);
+  const money = words.find(w => /^(?:\$\d[\d,.]*|\d[\d,.]*%|\d{2,}[\d,.]*)$/.test(core(w)));
+  if (money) return core(money);
+  const name = words.slice(1).find(w => /^[A-Z][a-z]{2,}$/.test(core(w)) && ok(w));
+  if (name) return core(name);
+  const bang = t.lastIndexOf('!');
+  if (bang > 0) { const before = t.slice(0, bang).split(/\s+/).filter(ok); if (before.length >= 3) return core(before[before.length - 1]); }
+  const cands = words.filter(ok);
+  if (!cands.length) return '';
+  for (let i = cands.length - 1; i >= 0; i--) if (core(cands[i]).length >= 4) return core(cands[i]);
+  return core(cands[cands.length - 1]);
+}
+
 /* ---------- what the talent does on a line (10/21, his ask for visuals: direction icons) ----------
    One direction per line, read off its words, so the talent gets a picture instead of a speech. A (bracket) note wins;
    then the address (point at it), hello and see-you lines (wave), a hook told like a secret (lean in), the goods
@@ -255,7 +299,7 @@ function order(day, inc, warm) {
   for (const st of stops) {
     const S = day.scripts.filter(s => inc.has(s.id) && stopFor(s, stops) === st.id).sort(byRank(warm));
     const L = [];
-    S.forEach((s, si) => s.lines.forEach((l, li) => L.push({ id: l.id, sid: s.id, stop: st.id, br: !!l.br, text: l.text, dir: l.dir || '', do: l.do || '', who: l.who || '', n: norm(l.text), k: l.br ? '' : kindOf(l.text), t: toks(l.text), si, li })));
+    S.forEach((s, si) => s.lines.forEach((l, li) => L.push({ id: l.id, sid: s.id, stop: st.id, br: !!l.br, text: l.text, dir: l.dir || '', do: l.do || '', who: l.who || '', hard: isHard(l) ? (l.hard || hardOf(l.text)) : '', op: l.br ? '' : (l.op != null ? l.op : opWord(l.text)), n: norm(l.text), k: l.br ? '' : kindOf(l.text), t: toks(l.text), si, li })));
     // twins = the same words from the same speaker with the same (bracket) direction: "(whisper) I can't believe it" and
     // "(yell) I can't believe it" are two different takes, so a line read five ways stays five lines (10/21)
     const first = new Map(), cov = {};
@@ -280,7 +324,7 @@ function order(day, inc, warm) {
     const seen = new Set();
     const emit = x => {
       seen.add(x.id);
-      const it = { id: x.id, sid: x.sid, stop: x.stop, br: x.br, text: x.text, dir: x.dir, do: x.do, who: x.who, cov: cov[x.id] || [] };
+      const it = { id: x.id, sid: x.sid, stop: x.stop, br: x.br, text: x.text, dir: x.dir, do: x.do, who: x.who, hard: x.hard, op: x.op, cov: cov[x.id] || [] };
       const g = grp[x.id];
       if (g) { it.g = g.key; it.gi = g.all.indexOf(x) + 1; it.gn = g.all.length; }
       items.push(it);
@@ -293,7 +337,8 @@ function order(day, inc, warm) {
   }
   return items;
 }
-function itemCost(it, pace) { return it.br ? BR_MIN : pace; }
+function itemCost(it, pace) { return it.br ? BR_MIN : pace + (it.hard ? HARD_MIN : 0); }
+const lineCost = (l, pace) => l.br ? BR_MIN : pace + (isHard(l) ? HARD_MIN : 0);
 function driveCost(items, stops, fromStop) {
   const ix = id => stops.findIndex(s => s.id === id);
   let m = 0, prev = fromStop || (items[0] && items[0].stop);
@@ -349,12 +394,15 @@ function plan(day, now) {
    run = { at, warmId, base: [script ids in the plan at START], events: [{t, k, id?, sid?, stop?, n?}] }
    k: again (a take that was not it) · got (the take that was) · skip (line) · roll (camera on) · note · show
       arrive (at a stop) · drop / add (a script) · later (to the back of its stop) · split (a line into parts) · wrap.
+   v3 (10/21): got with side: true = a b-roll item grabbed in a gap, it never touches the line clock · cover {id, size} =
+      one more angle of a line already got (a kept take for the post sheet, the line stays done) · why {id, w} = why the
+      last take missed (words / eyes / energy / flub), a note on the line, never a clock event.
    Every screen number comes from replaying these, so Undo can take any of them back. */
 const TERM = { got: 1, skip: 1, later: 1, arrive: 1 };
 function live(day, now) {
   const run = day.run, stops = day.stops;
   const inc = new Set(run.base), dropped = new Set(), added = {};
-  const done = {}, gotN = new Set(), att = {}, notes = {}, shows = {}, gone = new Set();
+  const done = {}, gotN = new Set(), att = {}, notes = {}, shows = {}, gone = new Set(), why = {}, whyN = {}, covers = {}, sides = {};
   let rolling = null, lastT = run.at, lastK = 'line', wrapped = 0, touched = '', stop = (stops[0] || {}).id;
   const arrived = {}; arrived[stop] = run.at;
   const samples = [], takes = [], log = [];   // takes: every take-ending tap; log: every finished line (start, end, takes)
@@ -373,6 +421,12 @@ function live(day, now) {
         takes.push({ id: e.id, t: e.t, from: prevTake, roll: rolling && rolling.id === e.id ? rolling.t : 0, ok: false });
         prevTake = e.t; lastK = 'again'; rolling = null; touched = e.id; break;
       case 'got': case 'skip': {
+        if (e.k === 'got' && e.side) {   // a b-roll item grabbed between takes: done, logged, no clock touched
+          done[e.id] = { k: 'got', t: e.t, side: true }; sides[e.id] = e.t;
+          log.push({ id: e.id, k: 'got', t0: e.t, t1: e.t, takes: 1, side: true });
+          takes.push({ id: e.id, t: e.t, from: e.t, roll: 0, ok: true, side: true });
+          break;
+        }
         done[e.id] = { k: e.k, t: e.t };
         log.push({ id: e.id, k: e.k, t0: lastT, t1: e.t, takes: (att[e.id] || 0) + (e.k === 'got' ? 1 : 0) });
         const x = textOf[e.id];
@@ -389,6 +443,11 @@ function live(day, now) {
         deferred[e.id] = e.t; laterAt[e.id] = att[e.id] || 0; rounds[e.id] = (rounds[e.id] || 0) + 1;
         prevTake = e.t; lastT = e.t; lastK = 'line'; rolling = null; touched = ''; break;
       case 'split': touched = ''; break;   // its first part is up next, the line's clock keeps running
+      case 'cover':   // one more angle of a line already got: a kept take (post sheet), the line stays done, the next line's clock runs on
+        (covers[e.id] = covers[e.id] || []).push({ t: e.t, from: prevTake, size: e.size || '' });
+        takes.push({ id: e.id, t: e.t, from: prevTake, roll: 0, ok: true, cover: e.size || 'again' });
+        prevTake = e.t; break;
+      case 'why': (why[e.id] = why[e.id] || []).push(e.w); whyN[e.w] = (whyN[e.w] || 0) + 1; break;
       case 'roll': rolling = { id: e.id, t: e.t }; touched = e.id; break;
       case 'arrive': arrived[e.stop] = e.t; stop = e.stop; lastT = e.t; prevTake = e.t; lastK = 'line'; rolling = null; break;
       case 'go': { const ix = stops.findIndex(x => x.id === e.stop); stops.forEach((x, k) => { if (k < ix) gone.add(x.id); }); lastT = e.t; prevTake = e.t; lastK = 'line'; rolling = null; touched = ''; break; }
@@ -425,8 +484,8 @@ function live(day, now) {
   if (driveTo) left -= Math.min(+((stops.find(s => s.id === stop) || {}).drive || 0), (now - lastT) / 6e4);
   const wrapAt = wrapMs(day.wrap, run.at), proj = now + Math.max(0, left) * 6e4;
   const warmN = items.filter(it => it.sid === run.warmId).length;
-  const budget = it => (it.br ? BR_MIN : pace) + (it.sid === run.warmId && warmN ? (+day.warm || 0) / warmN : 0);
-  log.forEach(r => { const x = textOf[r.id]; r.sid = x ? x.s.id : ''; r.min = (r.t1 - r.t0) / 6e4; r.budget = budget({ br: x && x.l.br, sid: r.sid }); r.over = r.min > r.budget; });
+  const budget = it => (it.br ? BR_MIN : pace + (it.hard ? HARD_MIN : 0)) + (it.sid === run.warmId && warmN ? (+day.warm || 0) / warmN : 0);
+  log.forEach(r => { const x = textOf[r.id]; r.sid = x ? x.s.id : ''; r.min = (r.t1 - r.t0) / 6e4; r.budget = budget({ br: x && x.l.br, hard: x && isHard(x.l), sid: r.sid }); r.over = !r.side && r.min > r.budget; });
   const over = (proj - wrapAt) / 6e4;
   // per script: lines, done, minutes on the clock (each line owns the time from the tap before it to its own tap)
   const per = {};
@@ -439,6 +498,7 @@ function live(day, now) {
     if (!TERM[e.k]) continue;
     const x = textOf[e.id]; if (!x) continue;
     const P = per[x.s.id];
+    if (e.k === 'got' && e.side) { P.got += 1; P.takes += 1; continue; }   // a gap grab owns no clock time
     P.min += (e.t - t0) / 6e4; P[e.k] += 1; if (e.k !== 'later') P.takes += (att[e.id] || 0) + (e.k === 'got' ? 1 : 0);
     if (!P.first) P.first = t0; P.last = e.t; t0 = e.t;
   }
@@ -449,8 +509,14 @@ function live(day, now) {
     const tail = driveCost(after, stops, cur.stop) + after.reduce((m, it) => m + itemCost(it, p), 0);
     leave = { stop: after[0].stop, at: wrapAt - tail * 6e4 };
   }
+  // the last line got (not a gap grab): the one a cover take or a why note would be about
+  let lastGot = '';
+  for (let i = run.events.length - 1; i >= 0; i--) { const e = run.events[i]; if (TERM[e.k] || e.k === 'arrive' || e.k === 'go' || e.k === 'wrap') { if (e.k === 'got' && !e.side) lastGot = e.id; break; } }
+  // b-roll still to grab at this stop (for the gaps between takes)
+  const brLeft = rest.filter(it => it.br && it.stop === (cur ? cur.stop : stop) && it.id !== (cur && cur.id));
   return { items, rest, cur, driveTo, stop, arrived, gone, done, lastTap: prevTake, log, budget, curBudget: cur ? budget(cur) : 0, isDone, att, takes, notes, shows, rolling, lastT, lastK, touched, wrapped,
-           inc, dropped, pace, paceLive, p, left, proj, wrapAt, over, per, leave, samples, deferred, laterAt, rounds, splits, view: view.scripts };
+           inc, dropped, pace, paceLive, p, left, proj, wrapAt, over, per, leave, samples, deferred, laterAt, rounds, splits, view: view.scripts,
+           why, whyN, covers, sides, lastGot, brLeft, textOf };
 }
 function median(a) { const b = a.slice().sort((x, y) => x - y), m = b.length >> 1; return b.length % 2 ? b[m] : (b[m - 1] + b[m]) / 2; }
 
@@ -471,7 +537,7 @@ function nudge(day, L, now) {
   if (L.over < -5 && L.samples.length >= 3) {   // only once today's pace is real, not off one lucky line
     const pool = day.scripts.filter(s => !s.skip && !L.inc.has(s.id)).sort((a, b) => cutRank(b, a));
     for (const s of pool) {
-      const cost = s.lines.reduce((m, l) => m + (l.br ? BR_MIN : L.p), 0);
+      const cost = s.lines.reduce((m, l) => m + lineCost(l, L.p), 0);
       if (cost <= -L.over) return { k: 'add', sid: s.id, title: s.title, cost };
     }
   }
@@ -493,7 +559,24 @@ function report(day, L, now) {
   const longest = waits.slice().sort((a, b) => b.w - a.w).slice(0, 3).map(x => { const o = textOf(x.id); return { w: x.w, text: o ? o.l.text : '', script: o ? name(o.s, S) : '' }; });
   const warm = run.warmId && L.per[run.warmId] ? L.per[run.warmId].min : 0;
   const left = inPlan.filter(s => L.per[s.id].left).length;
+  // THE POST SHEET (v3): every kept take with the clock on it, so the good clip finds itself in the edit by its time.
+  // from = the tap before it (about when the camera rolled), at = the Got it tap (the take's end), take = which one it was.
+  const sizes = day.sizes || {};
+  const lineNo = id => { const o = textOf(id); if (!o) return { n: 0, of: 0 }; const ls = o.s.lines; return { n: ls.findIndex(l => l.id === id) + 1, of: ls.length }; };
+  const seenTake = {};
+  const kept = L.takes.filter(t => t.ok).map(t => {
+    const o = textOf(t.id), ln = lineNo(t.id);
+    if (!t.cover) seenTake[t.id] = (seenTake[t.id] || 0) + 1;
+    const take = t.cover ? 'cover' : (() => { let n = 0; for (const e of run.events) { if (e.t > t.t) break; if (e.id === t.id && (e.k === 'again' || (e.k === 'got' && !e.side))) n++; } return n; })();
+    return { id: t.id, text: o ? o.l.text : '', script: o ? name(o.s, S) : '', line: ln.n, of: ln.of, br: !!(o && o.l.br), side: !!t.side, cover: t.cover || '', size: t.cover && t.cover !== 'again' ? t.cover : (sizes[t.id] || ''), from: t.from, at: t.t, takes: take };
+  });
+  const sizeN = {}; kept.forEach(k => { if (!k.br) sizeN[k.size || 'none'] = (sizeN[k.size || 'none'] || 0) + 1; });
+  const whyList = Object.entries(L.whyN || {}).sort((a, b) => b[1] - a[1]);
+  const hardN = L.log.filter(r => r.k === 'got' && !r.side && textOf(r.id) && isHard(textOf(r.id).l)).length;
+  const hardOver = L.log.filter(r => r.k === 'got' && r.over && textOf(r.id) && isHard(textOf(r.id).l)).length;
+  const coverN = kept.filter(k => k.cover).length, sideN = kept.filter(k => k.side).length;
   return {
+    kept, sizeN, why: whyList, whyBy: L.why || {}, hardN, hardOver, coverN, sideN,
     start: run.at, end, min: (end - run.at) / 6e4,
     planned: run.base.length, finished: finished.length, dropped: [...L.dropped].length, never: S.filter(s => !s.skip && !inPlan.includes(s)).length,
     lines: got, skipped, takes: nTakes, perLine: got ? nTakes / got : 0,
@@ -501,7 +584,7 @@ function report(day, L, now) {
     rollPct: rolled.length ? 100 * rollSec / ((end - run.at) / 1e3) : 0, rolledN: rolled.length,
     pace: L.paceLive, samples: L.samples.length, warm,
     longest, notes: L.notes, left,
-    every: L.log.map(r => { const o = textOf(r.id); return { text: o ? o.l.text : '', script: o ? name(o.s, S) : '', min: r.min, takes: r.takes, k: r.k, budget: r.budget, over: r.over }; }),
+    every: L.log.map(r => { const o = textOf(r.id); return { id: r.id, text: o ? o.l.text : '', script: o ? name(o.s, S) : '', min: r.min, takes: r.takes, k: r.k, budget: r.budget, over: r.over, side: !!r.side, hard: !!(o && isHard(o.l)), why: (L.why && L.why[r.id]) || [], size: sizes[r.id] || '', covers: (L.covers && L.covers[r.id] || []).length }; }),
     slowest: L.log.filter(r => r.k === 'got').slice().sort((a, b) => b.min - a.min).slice(0, 3).map(r => { const o = textOf(r.id); return { text: o ? o.l.text : '', script: o ? name(o.s, S) : '', min: r.min, takes: r.takes, over: r.over }; }),
     overN: L.log.filter(r => r.k === 'got' && r.over).length,
     laterN: run.events.filter(e => e.k === 'later').length, splitN: Object.keys(L.splits || {}).length,
@@ -513,7 +596,7 @@ function report(day, L, now) {
 // scripts in the order they get worked through (warm-up, must, dated, the rest as the doc has them)
 function rank(scripts, warm) { return scripts.slice().sort(byRank(warm)); }
 
-const API = { parse, sentences, splitLine, placesIn, stopFor, shortPlace, name, rank, norm, kindOf, doOf, DO, order, plan, live, nudge, report, wrapMs, median, dialogue, BR_MIN };
+const API = { parse, sentences, splitLine, placesIn, stopFor, shortPlace, name, rank, norm, kindOf, doOf, DO, hardOf, isHard, opWord, lineCost, order, plan, live, nudge, report, wrapMs, median, dialogue, BR_MIN, HARD_MIN };
 if (typeof module !== 'undefined' && module.exports) module.exports = API;
 root.ADCore = API;
 })(typeof globalThis !== 'undefined' ? globalThis : this);
