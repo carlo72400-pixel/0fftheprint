@@ -27,7 +27,7 @@
   .tabs{display:flex;gap:8px;margin:24px 0 22px;flex-wrap:wrap}
   .tab{background:transparent;color:var(--muted);border:1px solid var(--line);border-radius:999px;min-height:44px;display:inline-flex;align-items:center;
     padding:9px 16px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;
-    text-transform:uppercase;cursor:pointer;min-height:38px}
+    text-transform:uppercase;cursor:pointer}
   .tab.on{color:#12070f;background:var(--pink);border-color:var(--pink);font-weight:600}
   /* A RAIL, same grammar as the homepage. 28 of the 35 pieces here are 9:16, so
      vertical is what this page actually is and the tile is 9:16 native.
@@ -80,24 +80,51 @@
   .empty{color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:12px;padding:30px 0}
   .railnote{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;
     text-transform:uppercase;color:var(--muted);margin-top:12px}
-  /* ---- lightbox ---- */
-  .lb{position:fixed;inset:0;background:rgba(6,5,8,.96);display:none;z-index:60;
-    grid-template-rows:1fr auto;padding:14px}
-  .lb.on{display:grid}
-  .lb-stage{display:grid;place-items:center;min-height:0}
-  .lb video{max-width:100%;max-height:100%;border-radius:10px;background:#000;display:block}
-  .lb-bar{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap;padding:12px 4px 2px}
+  /* ---- lightbox = THE STRIP (10/22, his ask: "scroll left and right to scroll through ... instead
+     of having to go in and out of each video"). Every piece in the rail is a slide in ONE horizontal
+     scroller: a finger or trackpad swipe lands on the next piece, the arrows and arrow keys step it.
+     ⛔ ONE <video> for the whole strip. It moves into the slide that comes to rest, so only that
+     slide ever has a src (the bandwidth rule), and a phone that let it play once lets it play on
+     every slide after (iOS unlocks the element, not the page). Posters load two slides either side. */
+  .lb{position:fixed;inset:0;background:#060508;display:none;z-index:60}
+  .lb.on{display:block}
+  .lb-track{position:absolute;inset:0;display:flex;overflow-x:auto;overflow-y:hidden;
+    scroll-snap-type:x mandatory;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+    touch-action:pan-x pinch-zoom;scrollbar-width:none}
+  .lb-track::-webkit-scrollbar{display:none}
+  .lb-s{flex:0 0 100%;min-width:0;height:100%;scroll-snap-align:center;scroll-snap-stop:always;
+    display:grid;grid-template-rows:minmax(0,1fr) auto;
+    padding:calc(56px + env(safe-area-inset-top,0px)) 14px calc(12px + env(safe-area-inset-bottom,0px))}
+  .lb-m{min-height:0;display:grid;place-items:center;container-type:size}
+  /* the frame takes the clip's own shape, as big as the slide allows (container units) */
+  .lb-f{position:relative;aspect-ratio:var(--ar);width:100%;width:min(100cqw,100cqh * var(--ar));
+    max-width:100%;max-height:100%;border-radius:10px;overflow:hidden;background:#000}
+  .lb-f img,.lb-f video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;
+    display:block;background:#000}
+  .lb-bar{display:flex;gap:4px 14px;align-items:baseline;flex-wrap:wrap;padding:10px 4px 0}
   .lb-t{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
     text-transform:uppercase;font-size:20px}
   .lb-l{font-size:13px;color:var(--muted);flex:1 1 240px;line-height:1.5}
-  .lb a,.lb button{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;
-    text-transform:uppercase;color:var(--pink);text-decoration:none;background:transparent;
-    border:0;cursor:pointer;padding:8px 2px;min-height:38px}
-  .lb-x{position:absolute;top:10px;right:14px;font-size:26px;color:#fff;background:transparent;
-    border:0;cursor:pointer;line-height:1;padding:6px 10px}
-  .nav{position:absolute;top:50%;transform:translateY(-50%);font-size:34px;color:#fff;
-    background:transparent;border:0;cursor:pointer;padding:10px 14px;opacity:.75}
-  .nav:hover{opacity:1}.pv{left:2px}.nx{right:2px}
+  .lb-bar a{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--pink);text-decoration:none;display:inline-flex;
+    align-items:center;min-height:44px;padding:0 2px}
+  /* where you are in the run that went up together: 3 / 10 · THRIFT @ THE WAREHOUSE */
+  .lb-top{position:absolute;top:env(safe-area-inset-top,0px);left:0;right:64px;min-height:56px;
+    display:flex;align-items:center;gap:12px;padding:0 18px;pointer-events:none;white-space:nowrap;
+    overflow:hidden;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--muted)}
+  .lb-c{color:var(--pink);flex:none}
+  .lb-g{overflow:hidden;text-overflow:ellipsis}
+  /* ⛔ the arrows and the close carry their own type: the old shared `.lb button` rule out-ranked
+     .nav and .lb-x, so all three drew as 11 px pink text 12 px wide and nobody found them */
+  .lb .lb-x,.lb .nav{position:absolute;display:grid;place-items:center;min-width:48px;min-height:48px;
+    padding:0;border:0;background:transparent;color:#fff;cursor:pointer;line-height:1;
+    font-family:Inter,system-ui,sans-serif;text-shadow:0 2px 12px rgba(0,0,0,.85)}
+  .lb .lb-x{top:calc(4px + env(safe-area-inset-top,0px));right:6px;font-size:30px}
+  .lb .nav{top:50%;transform:translateY(-50%);font-size:46px;opacity:.8}
+  .lb .nav:hover{opacity:1}
+  .lb .nav:disabled{opacity:.18;cursor:default}
+  .pv{left:4px}.nx{right:4px}
   .foot{margin-top:46px;padding-top:20px;border-top:1px solid var(--line);
     font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;
     text-transform:uppercase;color:var(--muted);line-height:2}
@@ -121,17 +148,13 @@
   </div>
 </div>
 
-<div class="lb" id="lb">
-  <button class="lb-x" id="lbx" aria-label="Close">&times;</button>
-  <button class="nav pv" id="lbp" aria-label="Previous">&#8249;</button>
-  <button class="nav nx" id="lbn" aria-label="Next">&#8250;</button>
-  <div class="lb-stage"><video id="lbv" controls playsinline preload="none"></video></div>
-  <div class="lb-bar">
-    <span class="lb-t" id="lbt"></span>
-    <span class="lb-l" id="lbl"></span>
-    <a id="lbfrom" href="#"></a>
-    <a id="lbdl" href="#" target="_blank" rel="noopener" hidden>full res &darr;</a>
-  </div>
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="The Tape">
+  <div class="lb-track" id="lbtrack"></div>
+  <div class="lb-top" aria-live="polite"><span class="lb-c" id="lbc"></span><span class="lb-g" id="lbg"></span></div>
+  <button class="lb-x" id="lbx" type="button" aria-label="Close">&times;</button>
+  <button class="nav pv" id="lbp" type="button" aria-label="Previous">&#8249;</button>
+  <button class="nav nx" id="lbn" type="button" aria-label="Next">&#8250;</button>
+  <video id="lbv" controls playsinline preload="none" hidden></video>
 </div>
 
 <script>
@@ -187,47 +210,157 @@ const tAll = mkTab('All', null); mkTab('Cuts', 'CUT'); mkTab('Off the nights', '
 tAll.classList.add('on');
 draw(null);
 
-/* ---- lightbox ---- */
-const lb=document.getElementById('lb'), lbv=document.getElementById('lbv'),
-      lbt=document.getElementById('lbt'), lbl=document.getElementById('lbl'),
-      lbf=document.getElementById('lbfrom'), lbd=document.getElementById('lbdl');
-let at = 0;
+/* ---- lightbox = THE STRIP (10/22): swipe, trackpad, arrows or arrow keys, piece to piece ---- */
+const lb = document.getElementById('lb'), track = document.getElementById('lbtrack'),
+      lbv = document.getElementById('lbv'), lbc = document.getElementById('lbc'),
+      lbg = document.getElementById('lbg'), lbp = document.getElementById('lbp'),
+      lbn = document.getElementById('lbn');
+const SMOOTH = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+let at = -1;        /* the slide holding the video */
+let shown = -1;     /* the slide the counter names */
+let aim = null;     /* where an arrow press is headed while the strip glides */
+let built = null;   /* the rail the strip was cut for */
+let held = false;   /* the video paused itself because a swipe took it off screen */
+let settleT = 0;
 
-function show(i){
-  at = (i + view.length) % view.length;
-  const m = view[at];
+/* one slide per piece in the rail; posters wait in data-src until the strip gets near them */
+function strip(){
+  lb.appendChild(lbv); lbv.hidden = true;      /* out of the old strip before it is replaced */
+  track.innerHTML = view.map((m, i) => {
+    const p = safeUrl(m.poster), link = safeUrl(m.link), full = safeUrl(m.full);
+    const ar = (m.w > 0 && m.h > 0) ? (m.w / m.h).toFixed(4) : '0.5625';
+    return '<div class="lb-s" data-i="' + i + '" style="--ar:' + ar + '">'
+      + '<div class="lb-m"><div class="lb-f">' + (p ? '<img alt="" data-src="' + esc(p) + '">' : '') + '</div></div>'
+      + '<div class="lb-bar"><span class="lb-t">' + esc(m.title) + '</span>'
+        + '<span class="lb-l">' + esc(m.line) + '</span>'
+        + (link ? '<a href="../' + esc(link) + '">' + esc(m.from || m.title) + ' →</a>' : '')
+        + (full ? '<a href="' + esc(full) + '" target="_blank" rel="noopener">full res ↓</a>' : '')
+      + '</div></div>';
+  }).join('');
+  built = view; shown = -1;
+}
+const W = () => track.getBoundingClientRect().width || 1;
+const idx = () => Math.max(0, Math.min(view.length - 1, Math.round(track.scrollLeft / W())));
+
+function near(i){
+  for (let k = i - 2; k <= i + 2; k++){
+    const im = track.children[k] && track.children[k].querySelector('img[data-src]');
+    if (im){ im.src = im.getAttribute('data-src'); im.removeAttribute('data-src'); }
+  }
+}
+/* 3 / 10: this piece inside the run of pieces that share its `from`, i.e. what went up together */
+function label(i){
+  if (i === shown || !view[i]) return;
+  shown = i;
+  const f = view[i].from;
+  let a = i, b = i;
+  while (a > 0 && view[a - 1].from === f) a--;
+  while (b < view.length - 1 && view[b + 1].from === f) b++;
+  lbc.textContent = (i - a + 1) + ' / ' + (b - a + 1);
+  lbg.textContent = f || '';
+  lbp.disabled = i === 0; lbn.disabled = i === view.length - 1;
+  near(i);
+}
+/* the one <video> moves into slide i and plays it */
+function play(i){
+  const s = track.children[i], m = view[i];
+  if (!s || !m) return;
+  at = i; held = false; label(i);
   lbv.pause();
-  lbv.src = safeUrl(m.src);
+  s.querySelector('.lb-f').appendChild(lbv);
   lbv.poster = safeUrl(m.poster) || '';
-  lbt.textContent = m.title || '';
-  lbl.textContent = m.line || '';
-  lbf.textContent = m.from ? (m.from + ' \u2192') : '';
-  lbf.href = safeUrl(m.link) ? '../' + m.link : '#';
-  lbf.style.display = m.link ? '' : 'none';
-  if (m.full){ lbd.href = safeUrl(m.full); lbd.hidden = false; } else { lbd.hidden = true; }
-  lb.classList.add('on');
+  lbv.src = safeUrl(m.src);
+  lbv.hidden = false;
   /* the open piece is in the address, so it can be copied and sent (replaceState: no history pile, no hashchange) */
   try { if (m.slug) history.replaceState(null, '', '#' + m.slug); } catch (e) {}
   lbv.play().catch(()=>{});          /* a blocked autoplay is fine, controls are there */
 }
+
+function show(i){
+  if (!view.length) return;
+  if (built !== view) strip();
+  lb.classList.add('on');
+  document.documentElement.style.overflow = 'hidden';      /* the page behind stays put */
+  i = Math.max(0, Math.min(view.length - 1, i));
+  aim = null; shown = -1;
+  track.scrollLeft = i * W();
+  play(i);
+}
 /* ⛔ clear src on close or the clip keeps downloading behind the closed lightbox */
 function hide(){
+  clearTimeout(settleT);
   lb.classList.remove('on'); lbv.pause(); lbv.removeAttribute('src'); lbv.load();
+  document.documentElement.style.overflow = '';
+  /* the rail waits on the piece the strip stopped at */
+  const c = at >= 0 && grid.querySelector('.card[data-i="' + at + '"]');
+  if (c) c.scrollIntoView({ block: 'nearest', inline: 'center' });
+  at = -1; aim = null; held = false;
   try { if (location.hash) history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+}
+
+/* the strip came to rest: the slide it rests on gets the video */
+function settle(){
+  clearTimeout(settleT);
+  if (!lb.classList.contains('on')) return;
+  aim = null;
+  const i = idx();
+  if (i !== at) play(i);
+  else if (held){ held = false; lbv.play().catch(()=>{}); }
+}
+track.addEventListener('scroll', () => {
+  if (!lb.classList.contains('on')) return;
+  const i = idx();
+  label(i);
+  /* past halfway to the next piece: the one leaving goes quiet */
+  if (i !== at && !lbv.paused){ lbv.pause(); held = true; }
+  clearTimeout(settleT); settleT = setTimeout(settle, 160);
+}, { passive: true });
+if ('onscrollend' in window) track.addEventListener('scrollend', settle);
+
+function go(d){
+  if (!lb.classList.contains('on')) return;
+  const base = aim == null ? idx() : aim;
+  const i = Math.max(0, Math.min(view.length - 1, base + d));
+  if (i === base) return;
+  aim = i;
+  track.scrollTo({ left: i * W(), behavior: SMOOTH });
 }
 
 grid.addEventListener('click', e => {
   const b = e.target.closest('.card'); if (b) show(+b.dataset.i);
 });
 document.getElementById('lbx').addEventListener('click', hide);
-document.getElementById('lbp').addEventListener('click', () => show(at - 1));
-document.getElementById('lbn').addEventListener('click', () => show(at + 1));
-lb.addEventListener('click', e => { if (e.target === lb) hide(); });
+lbp.addEventListener('click', () => go(-1));
+lbn.addEventListener('click', () => go(1));
+/* a tap on the dark around a piece closes it */
+track.addEventListener('click', e => {
+  const t = e.target;
+  if (t.classList && (t.classList.contains('lb-s') || t.classList.contains('lb-m'))) hide();
+});
 document.addEventListener('keydown', e => {
   if (!lb.classList.contains('on')) return;
   if (e.key === 'Escape') hide();
-  if (e.key === 'ArrowLeft') show(at - 1);
-  if (e.key === 'ArrowRight') show(at + 1);
+  else if (e.key === 'ArrowLeft'){ e.preventDefault(); go(-1); }
+  else if (e.key === 'ArrowRight'){ e.preventDefault(); go(1); }
+});
+/* a trackpad or a mouse wheel: one swipe = one piece, whichever way it leans. Left native, a laptop
+   swipe had to carry half a 1280 px slide or the snap pulled it back (seen 10/22: 283 px, back to 0).
+   Phones never get here (a finger sends no wheel events) and keep the native snap. A swipe glides on
+   for a second, so a step waits for that glide to end, or for a fresh surge (a second swipe inside it). */
+let wT = 0, wMag = 0, wStep = 0, wArmed = true;
+lb.addEventListener('wheel', e => {
+  if (e.ctrlKey) return;                       /* a trackpad pinch is zoom, leave it */
+  e.preventDefault();
+  const d = Math.abs(e.deltaX) >= Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+  const mag = Math.abs(d) * (e.deltaMode === 1 ? 33 : e.deltaMode === 2 ? 800 : 1);
+  const now = performance.now();
+  if (now - wT > 220) wArmed = true;
+  else if (mag > 30 && mag > wMag * 1.8 && now - wStep > 260) wArmed = true;
+  wT = now; wMag = mag;
+  if (wArmed && mag >= 4){ wArmed = false; wStep = now; go(d > 0 ? 1 : -1); }
+}, { passive: false });
+addEventListener('resize', () => {
+  if (at >= 0 && lb.classList.contains('on')) track.scrollLeft = at * W();
 });
 
 /* ---- a link straight to one piece: video/#<slug> (10/4) ----

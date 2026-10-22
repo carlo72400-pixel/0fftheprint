@@ -137,7 +137,7 @@ html.cath .hero .lg-deck:hover span,html.cath .hero .lg-deck.on span{color:var(-
   #frames .fr-t img{transition:none;}
 }
 
-/* 10/22 UX sweep: a visible tap cue on each character (his mom's rule: say what everything does; canon 4.3: lounge characters get a tag), and a 44 px floor on the hit box */
+/* 10/22 UX sweep: a 44 px floor on the hit box.
+   ⛔ NO visible label on the characters (his call 10/22: "that's supposed to be a secret feature ... all you gotta do is hover over them").
+   The sweep's 'talk' chip came off the same day: the hover glow and the head sparks are the only cue. */
 html.cath .hero .lg-oc{min-width:44px;min-height:44px}
-html.cath .hero .lg-oc::before{content:'talk';position:absolute;left:50%;bottom:2%;transform:translateX(-50%);padding:3px 8px;border-radius:999px;background:rgba(10,10,13,.78);color:#f7b9dd;font:700 11px/1 var(--f-mono,monospace);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;pointer-events:none;opacity:.85}
-html.cath .hero .lg-oc:hover::before,html.cath .hero .lg-oc.on::before{opacity:1;color:#fff}
