@@ -124,6 +124,7 @@ input[type=time].in{min-height:62px;font:400 25px/1 var(--f-px);color:var(--line
 .intro p{margin:10px 0 0;color:var(--soft);font-size:16px}
 .resume{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;margin:0 0 14px;padding:10px 10px 10px 14px;border:3px solid var(--line);border-radius:16px;background:var(--lemon);box-shadow:0 4px 0 rgba(91,61,142,.3);font:400 13px/1.35 var(--f-ui);letter-spacing:.03em;text-transform:uppercase;color:var(--line)}
 .resume .btn{margin:0}
+@media (max-width:440px){.resume{grid-template-columns:minmax(0,1fr)}.resume .btn{width:100%}}   /* a phone: the note on top, its key under it (side by side it crushed the words) */
 details.more{padding:0;gap:0}
 details.more>summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:15px 14px;font:400 13px/1.2 var(--f-ui);letter-spacing:.04em;text-transform:uppercase;color:var(--line);cursor:pointer}
 details.more>summary::-webkit-details-marker{display:none}
@@ -460,19 +461,18 @@ body[data-scr="run"] .toast{top:calc(var(--sat) + 8px);bottom:auto}
 
 /* ===== 10/21 THE TITLE SCREEN and the systems behind it (his ask: "a home screen ... new game, load game, settings, how it
    works ... and build the systems for it", then "a training mode ... different types of scripts ... to practice on") ===== */
-body[data-scr="home"]{background:#cab3f6}
+body[data-scr="home"]{background:#ffe6f3}
 body[data-scr="home"] .sky,body[data-scr="home"] .bar{display:none}
 body[data-scr="home"] .app{padding-bottom:0}
-#s-home{display:flex;flex-direction:column;min-height:100vh;min-height:100dvh}
-.t-hero{position:relative;margin:0 -16px;line-height:0}
-.t-hero>img{display:block;width:100%;height:auto;aspect-ratio:900/1592;max-height:calc(100dvh - 236px);object-fit:cover;object-position:50% 18%}
-#s-home.has-cont .t-hero>img{max-height:calc(100dvh - 296px)}   /* Continue takes a row: the art gives it back so nothing scrolls */
-.t-hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:80px;background:linear-gradient(180deg,rgba(202,179,246,0),#cab3f6 92%)}
-.t-logo{position:absolute;left:0;right:0;top:calc(var(--sat) + 10px);z-index:1;text-align:center;line-height:1}
-.t-logo b{display:block;font:400 clamp(50px,16vw,74px)/1 var(--f-pop);color:#fff;letter-spacing:.01em;text-shadow:3px 0 0 var(--line),-3px 0 0 var(--line),0 3px 0 var(--line),0 -3px 0 var(--line),2px 2px 0 var(--line),-2px -2px 0 var(--line),2px -2px 0 var(--line),-2px 2px 0 var(--line),0 7px 0 var(--pink-deep)}
-.t-logo img{display:block;margin:0 auto;width:min(60vw,250px);height:auto;filter:drop-shadow(0 5px 0 rgba(91,61,142,.25))}
-.t-logo small{display:inline-block;margin-top:10px;padding:5px 11px;border:2px solid var(--line);border-radius:999px;background:rgba(255,255,255,.88);font:400 11px/1 var(--f-ui);letter-spacing:.08em;text-transform:uppercase;color:var(--line)}
-.t-menu{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:11px 10px;margin-top:-40px}
+#s-home{position:relative;display:flex;flex-direction:column;min-height:100vh;min-height:100dvh}
+/* 10/21 PIXEL (his "make this pixelated", "i dont want a static game"): the title is a moving pixel scene on one canvas
+   behind the menu (THE TITLE SCENE in the script); the hero is only the room it gets, with the notch kept clear. Her art
+   everywhere is pixel art (build_pixel.py in the icons folder), so the browser scales it pixel by pixel, never smeared. */
+#t-scene{position:absolute;z-index:-1;top:0;left:-16px;display:block;width:calc(100% + 32px);height:100%;image-rendering:-webkit-optimize-contrast;image-rendering:crisp-edges;image-rendering:pixelated}
+img[src*="art/m/"]{image-rendering:-webkit-optimize-contrast;image-rendering:crisp-edges;image-rendering:pixelated}
+.t-hero{position:relative;flex:1 1 auto;min-height:200px;padding-top:var(--sat)}
+.vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.t-menu{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:11px 10px}
 .mk{position:relative;overflow:hidden;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:8px;min-height:64px;margin:0 0 6px;padding:7px 8px 7px 6px;border:3px solid var(--line);border-radius:18px;text-align:left;color:var(--line);background:linear-gradient(180deg,#fff,#efe6ff);box-shadow:0 6px 0 var(--line);transition:transform .18s cubic-bezier(.3,1.4,.6,1),box-shadow .18s}
 .mk::before{content:"";position:absolute;left:8%;right:8%;top:3px;height:38%;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(255,255,255,0));pointer-events:none}
 .mk:active,.mk.down{transform:translateY(6px);box-shadow:0 0 0 var(--line);transition-duration:0s}
@@ -488,7 +488,7 @@ body[data-scr="home"] .app{padding-bottom:0}
 .t-small{grid-column:1/-1;display:flex;justify-content:center}
 .t-small .btn{min-width:150px;margin:0 0 5px;min-height:44px;font-size:12px}
 .t-foot{margin:6px 0 calc(var(--sab) + 12px);text-align:center;font:400 10.5px/1.4 var(--f-ui);letter-spacing:.06em;text-transform:uppercase;color:var(--line);opacity:.8}
-@media (max-height:720px){.mk{min-height:54px}.mk img{width:36px;height:36px}.mk b{font-size:15px}.mk.go b{font-size:20px}.t-menu{gap:9px 10px}.t-hero>img,#s-home.has-cont .t-hero>img{max-height:calc(100dvh - 302px)}.t-logo img{width:min(50vw,190px)}}
+@media (max-height:720px){.mk{min-height:54px}.mk img{width:36px;height:36px}.mk b{font-size:15px}.mk.go b{font-size:20px}.t-menu{gap:9px 10px}.t-hero{min-height:160px}}
 @media (prefers-reduced-motion:reduce){.mk{transition:none}}
 /* Load game: one file per day */
 .slot,.pack{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;margin:0 0 10px;padding:10px;border:3px solid var(--line);border-radius:16px;background:#fff;box-shadow:0 4px 0 rgba(91,61,142,.3);cursor:pointer;transition:transform .18s cubic-bezier(.3,1.4,.6,1),box-shadow .18s}
@@ -503,6 +503,28 @@ body[data-scr="home"] .app{padding-bottom:0}
 .pack{grid-template-columns:64px minmax(0,1fr) auto}
 .pack img{justify-self:center;height:76px;width:auto;margin:-6px 0}
 .lvl{font-style:normal;font-size:15px;letter-spacing:1px;color:#ff8cc6;-webkit-text-stroke:1px var(--line);white-space:nowrap}
+/* Training, the star path (10/21): the rank card, a finished lesson, the lesson card's tips and its three level keys */
+.starcard{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:center;margin:0 0 14px;padding:8px 14px 12px 6px;border:3px solid var(--line);border-radius:20px;background:linear-gradient(180deg,#fff,#ffe1f1 60%,#efe3ff);box-shadow:0 5px 0 rgba(91,61,142,.3)}
+.starcard img{height:116px;width:auto;margin:-2px 0 -6px}
+.starcard i{display:block;font:400 11px/1 var(--f-ui);font-style:normal;letter-spacing:.06em;text-transform:uppercase;color:var(--pink-t)}
+.starcard b{display:block;margin-top:5px;font:400 clamp(24px,7.4vw,30px)/1.05 var(--f-pop);color:#fff;text-shadow:var(--ol),0 4px 0 var(--pink-deep)}
+.starcard .sbar{display:block;height:16px;margin:10px 0 6px;border:3px solid var(--line);border-radius:10px;background:#fff;overflow:hidden}
+.starcard .sbar i{height:100%;background:linear-gradient(90deg,#ff8cc6,#ffd95e)}
+.starcard small{display:block;font:400 11px/1.35 var(--f-ui);letter-spacing:.03em;text-transform:uppercase;color:var(--soft)}
+.pack.done{background:linear-gradient(180deg,#fff,#fff4c2)}
+.pack .lvl{font-size:20px;letter-spacing:0}@media (max-width:360px){.pack .lvl{font-size:16px}}.pack .lvl b{display:inline;font:inherit;color:#fff}.pack .lvl b.on{color:#ffc93c}
+#lesson .dlg-t{font-size:30px}
+.coach .ci.num{font:400 19px/1 var(--f-pop);color:var(--line);background:#ffe1f1}
+.lvpick{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:6px 0 4px}
+.lvpick button{position:relative;display:grid;align-content:center;justify-items:center;gap:4px;min-height:86px;padding:8px 4px;border:3px solid var(--line);border-radius:16px;background:linear-gradient(180deg,#fff,#ffd6ea);color:var(--line);box-shadow:0 4px 0 var(--line);cursor:pointer;transition:transform .18s cubic-bezier(.3,1.4,.6,1),box-shadow .18s}
+.lvpick button:nth-child(2){background:linear-gradient(180deg,#fff,#ffe8a6)}
+.lvpick button:nth-child(3){background:linear-gradient(180deg,#fff,#d8c9ff)}
+.lvpick button.down{transform:translateY(4px);box-shadow:0 0 0 var(--line);transition-duration:0s}
+.lvpick b{font:400 19px/1 var(--f-pop)}
+.lvpick small{font:400 9.5px/1.2 var(--f-ui);letter-spacing:.03em;text-transform:uppercase;color:var(--soft);text-align:center}
+.lvpick em{position:absolute;top:-11px;right:-7px;padding:3px 6px;border:2px solid var(--line);border-radius:10px;background:#fff9c4;font:400 11px/1 var(--f-pop);font-style:normal;color:var(--line);white-space:nowrap}
+@media (max-width:360px){.lvpick b{font-size:15.5px}.lvpick small{font-size:8.5px}}
+@media (prefers-reduced-motion:reduce){.lvpick button{transition:none}}
 /* How to play: the steps, each acted out */
 .steps{margin:0 0 16px;padding:0;list-style:none;display:grid;gap:12px}
 .steps li{display:grid;grid-template-columns:80px minmax(0,1fr);gap:12px;align-items:center;padding:12px 14px 12px 8px;border:3px solid var(--line);border-radius:18px;background:#fff;box-shadow:0 4px 0 rgba(91,61,142,.3)}
@@ -528,12 +550,13 @@ body[data-scr="home"] .app{padding-bottom:0}
 
   <!-- ===== 0. THE TITLE SCREEN (10/21): continue, new game, load game, training, how to play, settings ===== -->
   <section id="s-home" class="scr" hidden>
-    <div class="t-hero"><img src="art/title.webp" alt="" width="900" height="1592" decoding="async" fetchpriority="high"><div class="t-logo"><img src="art/logo.webp" alt="Sweet Takes" width="760" height="528" decoding="async"></div></div>
+    <canvas id="t-scene" aria-hidden="true"></canvas>
+    <div class="t-hero"><h1 class="vh">Sweet Takes</h1></div>
     <nav class="t-menu" aria-label="Main menu">
       <button type="button" class="mk go wide" id="h-cont" data-act="cont" hidden><img src="art/m/f-go.webp" alt=""><span><b>Continue</b><small id="h-cont-s"></small></span></button>
       <button type="button" class="mk" data-act="newGame"><img src="art/m/f-idle.webp" alt=""><span><b>New game</b><small>a new day</small></span></button>
       <button type="button" class="mk" data-act="toLoad"><img src="art/m/f-wrap.webp" alt=""><span><b>Load game</b><small id="h-load-s">your days</small></span></button>
-      <button type="button" class="mk" data-act="toTrain"><img src="art/m/f-take.webp" alt=""><span><b>Training</b><small>practice lines</small></span></button>
+      <button type="button" class="mk" data-act="toTrain"><img src="art/m/f-take.webp" alt=""><span><b>Training</b><small id="h-tr-s">practice lines</small></span></button>
       <button type="button" class="mk" data-act="toHelp"><img src="art/m/f-got.webp" alt=""><span><b>How to play</b><small>9 steps</small></span></button>
       <div class="t-small"><button type="button" class="btn" data-act="toSettings">Settings</button></div>
     </nav>
@@ -637,7 +660,8 @@ body[data-scr="home"] .app{padding-bottom:0}
 
   <!-- ===== TRAINING: practice packs, one per kind of script ===== -->
   <section id="s-train" class="scr" hidden>
-    <div class="intro"><img class="intro-m" src="art/m/hype.webp" alt="" decoding="async"><h1>Training</h1><p>Pick a kind of script and practice it line by line. No clock to beat. A when you nail it, B to go again.</p></div>
+    <div class="intro"><h1>Training</h1><p>Pick a lesson, then a level. Clear it to earn a star. Stars make you a star.</p></div>
+    <div class="starcard" id="tr-star"></div>
     <div id="tr-list"></div>
     <div class="card">
       <div class="lbl">Your own lines <span>practice what you got sent</span></div>
@@ -705,6 +729,13 @@ body[data-scr="home"] .app{padding-bottom:0}
   <button type="button" class="btn bad" data-act="deleteFile">Delete it</button>
   <button type="button" class="btn primary big" data-act="closeOpt">Back</button>
 </div></div>
+<div id="lesson" class="ovl" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="ls-t">
+  <img class="coach-m" id="ls-m" src="art/m/smile.webp" alt="" decoding="async">
+  <b class="dlg-t" id="ls-t">Lesson</b><small class="dlg-s" id="ls-s"></small>
+  <ol class="coach" id="ls-tips"></ol>
+  <div class="lvpick" id="ls-lv" role="group" aria-label="Pick a level to start"></div>
+  <button type="button" class="btn" data-act="closeLesson">Back</button>
+</div></div>
 <div id="coach" class="ovl" hidden><div class="dlg" role="dialog" aria-modal="true" aria-label="How to play">
   <img class="coach-m" src="art/m/wave.webp" alt="" width="178" height="240" decoding="async">
   <b class="dlg-t">How to play</b>
@@ -724,7 +755,7 @@ body[data-scr="home"] .app{padding-bottom:0}
 </div></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="core.js?v=7e78c439"></script>
+<script src="core.js?v=429c29cc"></script>
 <script>
 /* ---------- the shell ---------- */
 const C = window.ADCore;
@@ -811,6 +842,7 @@ const BACK = { setup: 'home', plan: 'setup', run: 'plan', report: 'plan', load: 
 function go(scr, push) {
   document.body.dataset.scr = scr;
   if (scr !== 'run') { $('#flash').hidden = true; $('#show').hidden = true; }   // a pop-up never follows you off the set
+  $('#lesson').hidden = true;
   $$('.scr').forEach(el => { el.hidden = el.id !== 's-' + scr; });
   if (push !== false && scr !== 'her') { try { history.replaceState(null, '', '#' + scr); } catch (e) {} }
   window.scrollTo(0, 0);
@@ -932,6 +964,7 @@ function renderHome() {
   c.hidden = !t; $('#s-home').classList.toggle('has-cont', !!t);
   if (t) $('#h-cont-s').textContent = t.d.practice ? 'training · ' + (t.d.practiceTitle || 'practice') : fileName(SLOTS.find(m => m.id === t.id) || { id: t.id, made: Date.now() }, t.d) + ' · ' + fileStatus(t.d).text;
   $('#h-load-s').textContent = SLOTS.length ? `${SLOTS.length} day${SLOTS.length === 1 ? '' : 's'} saved` : 'no saves yet';
+  const sn = starCount(); $('#h-tr-s').innerHTML = sn ? sn + ' &#9733; &middot; ' + esc(rankAt(sn)[0]) : 'practice lines';
 }
 let OPT = '';
 function renderLoad() {
@@ -945,11 +978,68 @@ function renderLoad() {
 }
 function closeOpt() { $('#fileopt').hidden = true; }
 
-/* ---------- TRAINING (10/21, his ask: "a training mode where they can load in different types of scripts, different types of
-   dialogues that they can practice on"). Each pack is a doc in the same shape a client sends, read by the same parser and
-   played on the same set with no clock to beat. Generic words only: no clients, no real places. ---------- */
+/* ---------- TRAINING: THE STAR PATH (10/21, his asks: "a training mode where they can load in different types of scripts,
+   different types of dialogues that they can practice on", then "levels of lines ... easy ... medium ... hard ... a variety",
+   then "make training in-depth so it turns them into a star"). Eleven lessons in order, each in three levels; a level
+   cleared is a star, and the stars add up to a rank, New Face to Icon. Every lesson has three coach tips: on its card before
+   the first take, then on the set's ticker. Each level is a doc in the same shape a client sends, read by the same parser
+   and played on the same set. Generic words only: no clients, no real places, no real people. ---------- */
+const LEVELS = [
+  { n: 'Easy', s: 'short lines', pace: 1.5, tip: 'Easy: short lines. Nail each one in one or two takes.' },
+  { n: 'Medium', s: 'longer lines', pace: 2, tip: 'Medium: longer lines. Slow down on names and numbers.' },
+  { n: 'Hard', s: 'long + fast', pace: 3, tip: 'Hard: long lines. Breathe at the commas, energy to the last word.' }
+];
 const PACKS = [
-  { id: 'store', art: 'point', title: 'Store promo', kind: 'to camera · call to shop', lvl: 1, text: `STORE PROMO 1
+  { id: 'warm', art: 'calm', title: 'Warm-ups', skill: 'mouth and voice',
+    tips: ['Say every sound. The ends of words matter most.', 'Slow first, then faster. Clear beats fast.', 'Smile while you warm up. It wakes up your face too.'],
+    lv: [`LIPS
+Red leather, yellow leather.
+Toy boat, toy boat, toy boat.
+Big black bug.
+Good blood, bad blood.
+Fresh fried fish.
+
+VOICE
+(Say it low) Hello.
+(Say it high) Hello!
+(Say it slow) Hello.
+(Say it fast) Hello!`, `TONGUE TWISTERS
+Red leather, yellow leather.
+Unique New York, you know you need unique New York.
+She sells seashells by the seashore.
+Toy boat, toy boat, toy boat.
+
+BREATH
+(One breath) One, two, three, four, five, six, seven, eight, nine, ten.
+(One breath, louder) One, two, three, four, five, six, seven, eight, nine, ten.
+(Breathe in for four, then say it slow) I've got all the time in the world.
+(Smile) And now I'm ready.`, `TWISTERS
+The sixth sick sheikh's sixth sheep's sick.
+Irish wristwatch, Swiss wristwatch, Irish wristwatch, Swiss wristwatch.
+Peter Piper picked a peck of pickled peppers.
+How can a clam cram in a clean cream can?
+Pad kid poured curd pulled cod.
+
+FAST AND CLEAR
+(Fast, one breath) A proper copper coffee pot, a proper copper coffee pot, a proper copper coffee pot.
+(Fast, one breath) Truly rural, truly rural, truly rural, truly rural.
+(Fast, then slow) Six slippery snails slid slowly seaward.
+(Whisper, every sound clear) Fred fed Ted bread, and Ted fed Fred bread.`] },
+
+  { id: 'store', art: 'point', title: 'Store promo', skill: 'talk to the camera',
+    tips: ['The lens is a friend. Talk to it, not at it.', 'Smile with your eyes before the first word.', 'Slow down on the store name and the address.'],
+    lv: [`SHOP SMALL
+Hey! Come shop with us.
+We've got so much new stuff.
+New pieces every day.
+We're right on Main Street.
+See you soon!
+
+NEW ARRIVALS
+New stuff just dropped!
+Come see it first.
+Bring your best friend.
+We'll be here!`, `STORE PROMO 1
 Hey! Did you know there's a record shop right around the corner?
 We've got vinyl, tapes, posters and so much more.
 Plus we put out new stuff every single day.
@@ -960,8 +1050,181 @@ STORE PROMO 2
 If you didn't have plans today, now you do.
 Come dig through the crates with us.
 We're at 123 Main Street, open 10 to 8 every day.
-See you there!` },
-  { id: 'event', art: 'hype', title: 'Event night', kind: 'to camera · big news', lvl: 1, text: `NIGHT MARKET
+See you there!`, `BIG SALE
+Okay, listen up, because this only happens twice a year: everything in the store is buy one, get one half off, all weekend long.
+That means vintage denim, leather jackets, band tees, cowboy boots, handbags, and every single piece on the new arrivals rack.
+Doors open at 9 AM sharp on Saturday and Sunday, and trust me, the line starts way before that.
+We're at 4417 Willow Creek Boulevard, right next to the coffee shop with the pink door.
+(Point at the camera) Don't say I didn't warn you!
+
+MEMBERS NIGHT
+This Thursday from 6 to 9, we're closing the doors to the public and opening them just for our members.
+You get thirty percent off everything, free drinks from the bar upstairs, and first pick of the winter collection before anyone else sees it.
+Not a member yet? It's free, just give us your email at the register, or scan the code on the sign by the door.
+And if you bring a friend who signs up too, you both get a free tote bag and an extra ten percent off.
+(Lean in) Between us, the good stuff goes in the first twenty minutes.`] },
+
+  { id: 'clear', art: 'take', title: 'Say it clear', skill: 'names, numbers, addresses',
+    tips: ['Numbers are where takes die. Say them a little slower.', 'Break long numbers into small groups.', 'Look right at the lens on the address. That is the part they need.'],
+    lv: [`THE BASICS
+We're at 123 Main Street.
+Open 10 to 6.
+Every day of the week.
+Come say hi!
+
+PRICES
+Everything is ten dollars.
+Two for fifteen.
+Today only!
+Don't miss it!`, `FIND US
+Come see us at 456 Oak Avenue, Suite 210.
+We're open Tuesday through Sunday, 11 AM to 8 PM.
+Call or text us at 555-0142.
+Or shop online at honeyandhem.com.
+
+DEAL OF THE WEEK
+This week only, get twenty percent off with the code SPRING20.
+That's S, P, R, I, N, G, two, zero.
+The deal ends Sunday, March 9th, at midnight.
+Shop online at honeyandhem.com, or come in and see us.`, `ALL THE DETAILS
+Our grand reopening is Saturday, April 18th, from 10 AM to 4 PM, at 2871 East Magnolia Parkway, Building C, right behind the bank.
+The first fifty guests get a free gift bag, and from noon to 2, every purchase over forty dollars gets a free scrunchie.
+Can't make it? Order online at honeyandhem.com with the code REOPEN15 for fifteen percent off through Sunday the 19th.
+Questions? Call us at 555-0187, that's five, five, five, oh, one, eight, seven, or send us a message anytime.
+(Point at the camera) Screenshot this so you don't forget!
+
+BOOK NOW
+Ready to book? Call 555-0123 between 9 and 5, Monday through Friday, and ask for the events team.
+Packages start at three hundred ninety-nine dollars for two hours, and every package comes with setup, cleanup, and a photo booth.
+We book out about six weeks ahead, so the first open dates right now are June 6th, June 13th, and June 27th.
+Mention this video when you call, and we'll take fifty dollars off any package booked before May 31st.
+That's 555-0123. Don't wait!`] },
+
+  { id: 'food', art: 'smile', title: 'Food spot', skill: 'make it look good',
+    tips: ['Taste it like it is the best bite of your life.', 'Hold the food near your face, not in front of it.', 'Tell it like you are telling a friend, not reading a menu.'],
+    lv: [`FIRST BITE
+Okay, try this.
+Mmm, so good.
+Sweet and creamy.
+Come get one!
+
+PIZZA NIGHT
+Pizza night is here!
+Grab a slice.
+Bring a friend.
+See you tonight!`, `CAFE
+Okay, you need to try this.
+This is the strawberry matcha everyone is talking about.
+It's sweet, it's creamy, and it's so pretty.
+We open at 7 every morning.
+Come say hi at 789 Elm Street!
+
+TACO NIGHT
+Taco Tuesday just got better.
+Three tacos and a drink for ten bucks.
+Every Tuesday, all night long.
+Pull up and bring your crew!`, `SECRET MENU
+(Lean in) Okay, I'm about to tell you about the best thing here, and it's not even on the menu.
+It's a brown butter brioche French toast with whipped mascarpone, roasted strawberries, and a drizzle of hot honey.
+They only make twenty-four of them every Saturday and Sunday, starting at 8 AM, and they're usually gone by ten.
+You have to ask for the secret toast at the counter, and they'll know exactly what you mean.
+789 Elm Street. Thank me later!
+
+HAPPY HOUR
+Happy hour just got happier: every weekday from 3 to 6, everything on this list is half off.
+Crispy Brussels sprouts, truffle parmesan fries, street corn, smash sliders, and a twelve-dollar margarita flight.
+And on Thursdays, there's live acoustic music on the patio from 5 until close.
+Find us on the corner of Fifth and Maple, right across from the park.
+(Hold up your glass) Cheers, see you there!`] },
+
+  { id: 'review', art: 'hold', title: 'Product review', skill: 'hold it up',
+    tips: ['Hold it still, next to your face, label to the lens.', 'Look at the product, then back at the camera.', 'Be honest. Real beats perfect.'],
+    lv: [`FIRST LOOK
+Okay, look at this.
+It's so cute!
+I love the color.
+Would you wear it?
+
+FAVORITE THING
+This is my new favorite.
+I use it every day.
+It smells so good.
+You need one!`, `REVIEW
+Okay, I have to show you this.
+This is the lip gloss everyone keeps asking me about.
+It's super shiny but not sticky at all.
+I wore it all day and it's still here.
+Link is in my bio, go get it!
+
+UNBOXING
+It finally came!
+Let's open it together.
+Look how cute the packaging is.
+Okay, first impressions? I'm obsessed.
+Would you try it? Tell me in the comments.`, `HONEST REVIEW
+So I've been testing this hydrating serum for two whole weeks, and I'm finally ready to give you my honest review.
+It's got hyaluronic acid, niacinamide, and vitamin C, and it soaks in in about thirty seconds without feeling sticky or greasy.
+(Hold it up) The bottle is thirty milliliters, and it lasted me about six weeks using two pumps every morning and night.
+It's thirty-two dollars, which isn't cheap, but compared to the forty-eight dollar one I used before, honestly, it's better.
+Would I buy it again? Yes. Link's in my bio, and the code GLOW15 gets you fifteen percent off.
+
+OLD VERSUS NEW
+(Hold up the first one) This is the original, and this one is the brand-new version that just dropped.
+The new one is lighter, the strap is adjustable, and they finally added the little inside pocket everyone kept asking for.
+But the old one came in eight colors, and this one only comes in three: black, cream, and dusty rose.
+So which one would I pick? The new one, but only if they bring back the lavender.
+Comment old or new, and tell me which team you're on!`] },
+
+  { id: 'hooks', art: 'look', title: 'Hooks', skill: 'the first two seconds',
+    tips: ['Start talking right away. No um, no so.', 'Your first line should make them need the second.', 'End strong. Look at the lens and hold it a beat after.'],
+    lv: [`STOP SCROLLING
+Wait, stop scrolling.
+You need to see this.
+Okay, watch.
+Told you!
+
+SIGN-OFFS
+Follow for more!
+Link in bio.
+See you next time!
+Bye, besties!`, `HOOKS
+This is your sign to finally take that trip.
+Nobody is talking about this, and it's driving me crazy.
+I tried the viral hack so you don't have to.
+Three things I wish I knew before I moved out.
+Picture this: you just found your new favorite coffee spot.
+
+SIGN-OFFS 2
+If this helped, save it for later.
+Send this to the friend who needs to hear it.
+Follow, because part two is coming tomorrow.
+Okay, that's it, I love you, bye!`, `STORY HOOKS
+I almost didn't post this, but after what happened at the store today, I have to tell you.
+Three years ago I was broke and sleeping on my sister's couch, and today I signed the lease on my own studio.
+If you've ever been told you're too much, too loud, or too extra, this one is for you.
+Here's the thing nobody tells you about starting over: the scary part isn't the start, it's the middle.
+Stay till the end, because the last one is the one that changed everything.
+
+OPEN AND CLOSE
+(Fast, straight to camera) You're using your dry shampoo wrong, and I'm going to fix it in thirty seconds.
+(Hold it up) Spray it at night, not in the morning, about six inches from your roots, then sleep on it.
+By morning it's soaked up the oil, and you just brush it out, with no white cast and no crunchy hair.
+(Lean in) And if you only remember one thing, it's this: less product, more time.
+(Point at the camera) Follow for part two, where I fix your curling iron too.`] },
+
+  { id: 'event', art: 'hype', title: 'Event night', skill: 'big energy',
+    tips: ['Big energy, but keep every word clear.', 'Hit the important words: the day, the time, the place.', 'Let the fun show on your face before you say it.'],
+    lv: [`PARTY
+Hey, everybody!
+Party this Saturday!
+Music, food, and friends.
+Come hang out!
+
+OPENING DAY
+Guess what?
+We're opening a new spot!
+Free treats all day.
+We can't wait!`, `NIGHT MARKET
 Hey, everybody!
 Our night market is BACK!
 Local vendors, food trucks, drinks AND a live DJ!
@@ -974,33 +1237,34 @@ Guess what? We're opening a brand new spot!
 Free samples all day on Friday.
 The first 50 people get a free tote bag.
 Come through, 456 Oak Avenue, 10 AM sharp.
-We can't wait to meet you!` },
-  { id: 'review', art: 'hold', title: 'Product review', kind: 'to camera · show and tell', lvl: 2, text: `REVIEW
-Okay, I have to show you this.
-This is the lip gloss everyone keeps asking me about.
-It's super shiny but not sticky at all.
-I wore it all day and it's still here.
-Link is in my bio, go get it!
+We can't wait to meet you!`, `LAST NIGHT MARKET
+(Big energy) It's the last night market of the year, and we are going out with a BANG!
+Over sixty local vendors, five food trucks, a full bar, a photo booth, face painting, and a live DJ from 6 until midnight.
+The first one hundred people through the gate get a free tote bag, a drink ticket, and a mystery gift from one of our vendors.
+Saturday, December 12th, at 123 Main Street, rain or shine, and it's totally free to get in.
+(Whisper) Bring cash, because some of the vendors don't take cards.
 
-UNBOXING
-It finally came!
-Let's open it together.
-Look how cute the packaging is.
-Okay, first impressions? I'm obsessed.
-Would you try it? Tell me in the comments.` },
-  { id: 'food', art: 'smile', title: 'Food spot', kind: 'to camera · make it look good', lvl: 1, text: `CAFE
-Okay, you need to try this.
-This is the strawberry matcha everyone is talking about.
-It's sweet, it's creamy, and it's so pretty.
-We open at 7 every morning.
-Come say hi at 789 Elm Street!
+COSTUME PARTY
+Mark your calendars, because on Friday the 30th, we're throwing a costume party you do not want to miss.
+The costume contest starts at 10 sharp, with three cash prizes: one hundred, two hundred fifty, and five hundred dollars.
+Tickets are fifteen dollars online or twenty at the door, and every ticket gets you one free drink before 9.
+It's at The Velvet Room, 22 River Road, twenty-one and up, so bring your ID.
+Tag the friend you're dragging with you!`] },
 
-TACO NIGHT
-Taco Tuesday just got better.
-Three tacos and a drink for ten bucks.
-Every Tuesday, all night long.
-Pull up and bring your crew!` },
-  { id: 'tour', art: 'walk', title: 'Walk-through tour', kind: 'on the move · walk and point', lvl: 2, text: `VENUE TOUR
+  { id: 'tour', art: 'walk', title: 'Walk-through tour', skill: 'walk and talk',
+    tips: ['Walk slow. Slower than feels normal.', 'Point first, then say what it is.', 'Chin up and eyes on the lens, even while you move.'],
+    lv: [`SHOP TOUR
+Come on in!
+This is the front.
+Here's the new stuff.
+And this is my favorite part.
+Come see it!
+
+ROOM TOUR
+Hi! Welcome in.
+This is my room.
+Look at this view.
+I love it here.`, `VENUE TOUR
 Welcome in! Let me show you around.
 This is the main room. It fits two hundred people.
 Over here we've got the bar and the photo wall.
@@ -1012,8 +1276,33 @@ Come on in, this is the new place.
 Look at all this light from the big windows.
 The kitchen is brand new, check out these counters.
 And the best part? A balcony with a view.
-Message us to set up a visit.` },
-  { id: 'music', art: 'wave', title: 'Music drop', kind: 'to camera · artist promo', lvl: 2, text: `NEW SINGLE
+Message us to set up a visit.`, `EVENT SPACE TOUR
+(Walk in) Welcome to the brand-new event space, and yes, you can book every single room you're about to see.
+This is the main hall: it holds three hundred standing or one hundred eighty seated, with a full stage and a built-in sound system.
+(Point left) Over here is the bar, which can be fully stocked or bring your own, and that door is the green room for your artists.
+Upstairs, there's a rooftop deck with string lights, heaters for the winter, and the best sunset view in the whole city.
+Weekdays start at twelve hundred dollars, and weekends book out about four months ahead, so message us today.
+
+OPEN HOUSE
+(Walk to the window) The first thing everybody notices is the light, because these windows go floor to ceiling and face south.
+It's two bedrooms, two bathrooms, eleven hundred square feet, with brand-new floors and a washer and dryer in the unit.
+The kitchen has quartz counters, a gas range, and this pantry, which is honestly bigger than my first apartment.
+Rent is two thousand one hundred fifty a month, pets are welcome, and parking is included.
+The open house is Sunday from 1 to 4, so come walk through it yourself.`] },
+
+  { id: 'music', art: 'wave', title: 'Music drop', skill: 'sell yourself',
+    tips: ['Say the song name like you are proud of it. You are.', 'Talk to one fan, not to everybody.', 'Big finish: end on a smile or a wave.'],
+    lv: [`NEW SONG
+My new song is out!
+Go listen now.
+Tell a friend.
+Love you guys!
+
+SHOW
+I'm playing a show!
+This Friday night.
+Come sing with me!
+See you there!`, `NEW SINGLE
 My new song is out right now!
 I wrote it about the best summer of my life.
 Go stream it, save it, add it to your playlist.
@@ -1023,8 +1312,71 @@ SHOW NIGHT
 I'm playing live this Friday!
 Doors at 8, I go on at 10.
 The Velvet Room, 22 River Road.
-Come sing with me!` },
-  { id: 'talk', art: 'lean', title: 'Two-person scene', kind: 'dialogue · back and forth', lvl: 3, text: `MORNING SHOW
+Come sing with me!`, `ALBUM DROP
+(Calm, real) This album took me two years, three cities, and one really bad breakup to finish, and it's finally done.
+It's called Velvet Static, it's twelve songs long, and it comes out everywhere on Friday the 13th at midnight.
+Pre-save it with the link in my bio, and the first five hundred people get a signed lyric card in the mail.
+The vinyl comes in cherry red, smoke, and glow-in-the-dark, and the glow one is limited to three hundred copies.
+(Big smile) Thank you for waiting for me. I'll see you on release night.
+
+TOUR DATES
+I'm going on tour, and I'm hitting five cities in seven days, so listen closely.
+Tuesday the 3rd, Riverside, Wednesday the 4th, Lakeview, Friday the 6th, Pine Hill, Saturday the 7th, Bayside, and Monday the 9th, back home for the finale.
+Doors are at 7, openers at 8, and I'm on at 9:30 every night.
+Tickets go on sale this Thursday at 10 AM, and the meet-and-greet ones always sell out in minutes.
+So set an alarm, and I'll see you on the road!`] },
+
+  { id: 'range', art: 'hearts', title: 'Acting range', skill: 'feelings on cue',
+    tips: ['Change your face first. Your voice will follow.', 'Same words, new feeling. Do not change the words.', 'Go bigger than you think. You can always bring it down.'],
+    lv: [`FEELINGS
+(Happy) Hi!
+(Sad) Hi.
+(Surprised) Hi?!
+(Excited) Hi!!
+
+ONE WORD
+(Like you won) Yes!
+(Like you're tired) Yes.
+(Like it's a secret) Yes.
+(Like you're mad) Yes!`, `ENERGY CHECK
+(Jump, like you just won) I can't believe it!
+(Whisper it like a secret) I can't believe it.
+(Slow, like you are bored) I can't believe it.
+(Smile at your best friend) I can't believe it!
+
+REACTIONS
+(You just got a gift) Oh my gosh, for me?
+(You just got bad news) Oh my gosh, really?
+(Someone snuck up on you) Oh my gosh, you scared me!
+(You're laughing too hard) Oh my gosh, stop it!`, `FIVE WAYS
+(Excited, like you just won) I can't believe you did that.
+(Whisper it like a secret) I can't believe you did that.
+(Slow and disappointed) I can't believe you did that.
+(Laugh while you say it) I can't believe you did that.
+(Start calm, end yelling) I can't believe you did that!
+
+SWITCH IT UP
+(Start happy, turn sad halfway) I got the part, but they want me to move across the country.
+(Start bored, then get excited) Okay, so the meeting was long, but then they offered me the job.
+(Nervous, then confident) I've never done this before, but you know what? I'm ready.
+(Calm, then furious) I'm fine, really, I'm totally fine, I just can't believe nobody told me!`] },
+
+  { id: 'talk', art: 'lean', title: 'Two-person scene', skill: 'back and forth',
+    tips: ['Listen to their line. React, then talk.', 'Pick up your cue fast. No dead air.', 'Talk to each other, then share it with the camera.'],
+    lv: [`SAY HI
+FRIEND 1: Hey, you!
+FRIEND 2: Hi! It's been forever.
+FRIEND 1: You look so good.
+FRIEND 2: Aw, thank you!
+FRIEND 1: Coffee?
+FRIEND 2: Yes, let's go!
+
+AT THE SHOP
+CLERK: Hi! Can I help you?
+SHOPPER: Just looking.
+CLERK: Take your time.
+SHOPPER: Wait, I love this!
+CLERK: It's on sale today!`, `MORNING SHOW
 HOST: Good morning, everybody, and welcome back to the show!
 GUEST: Thanks for having me, I'm so happy to be here.
 HOST: So tell us, what are you working on right now?
@@ -1037,33 +1389,64 @@ FRIEND 1: Wait, is that a new jacket?
 FRIEND 2: Yes! I got it at the thrift store for five dollars.
 FRIEND 1: Five dollars? Stop it.
 FRIEND 2: I'm serious, they put out new stuff every day.
-FRIEND 1: Okay, we are going this weekend.` },
-  { id: 'warm', art: 'calm', title: 'Warm-ups', kind: 'diction · energy', lvl: 1, text: `TONGUE TWISTERS
-Red leather, yellow leather.
-Unique New York, you know you need unique New York.
-She sells seashells by the seashore.
-Toy boat, toy boat, toy boat.
+FRIEND 1: Okay, we are going this weekend.`, `THE INTERVIEW
+HOST: Okay, so you went from selling bracelets out of your car to opening three stores in two years. How?
+GUEST: Honestly? A lot of late nights, a lot of mistakes, and a best friend who wouldn't let me quit.
+HOST: Wait, is that the same best friend who's your business partner now?
+GUEST: Same one! She does the numbers, I do the designs, and we fight about colors every single week.
+HOST: (Laughing) I love that. So what's next? Because I heard a rumor about a fourth store.
+GUEST: (Lean in) I can't say much yet, but let's just say you should watch our page on Friday.
 
-ENERGY CHECK
-(Jump, like you just won) I can't believe it!
-(Whisper it like a secret) I can't believe it.
-(Slow, like you are bored) I can't believe it.
-(Smile at your best friend) I can't believe it!` }
+LEFTOVERS
+ROOMMATE 1: Did you eat my leftovers again? The ones with my name on the lid in giant letters?
+ROOMMATE 2: Okay, technically, the lid said Sam, and the container was in my half of the fridge.
+ROOMMATE 1: There is no your half! We bought the fridge together, at the same store, on the same day!
+ROOMMATE 2: (Backing away slowly) Then technically, half of those leftovers were already mine.
+ROOMMATE 1: You know what? You're buying dinner tonight. And tomorrow. And the day after that.
+ROOMMATE 2: Fine, but I'm picking the place.`] }
 ];
+const RANKS = [['New Face', 0, 'smile'], ['Rising Star', 3, 'hype'], ['Star', 10, 'got'], ['Superstar', 20, 'clear'], ['Icon', PACKS.length * 3, 'wrap']];
+let TR = load('trained', {});                       // lesson id -> { level: its best rank letter }; a star per level cleared
+const rankVal = r => r && 'CBAS'.includes(r) ? 'CBAS'.indexOf(r) + 1 : 0;
+const cleared = (id, lv) => !!(TR[id] && TR[id][lv]);
+const starCount = () => PACKS.reduce((m, pk) => m + [1, 2, 3].filter(lv => cleared(pk.id, lv)).length, 0);
+const rankAt = n => RANKS.reduce((r, x) => n >= x[1] ? x : r, RANKS[0]);
+const firstOpen = id => [1, 2, 3].find(lv => !cleared(id, lv)) || 1;
+const linesIn = t => C.parse(t).reduce((m, sc) => m + C.dialogue(sc), 0);
 function renderTrain() {
-  $('#tr-list').innerHTML = PACKS.map(pk => {
-    const n = C.parse(pk.text).reduce((m, sc) => m + C.dialogue(sc), 0);
-    return `<div class="pack" role="button" tabindex="0" data-act="trainPack" data-id="${pk.id}">${doImg(pk.art)}<span><b>${esc(pk.title)}</b><small>${esc(pk.kind)} &middot; ${n} lines</small></span><i class="lvl" aria-label="level ${pk.lvl} of 3">${'&#9733;'.repeat(pk.lvl)}${'&#9734;'.repeat(3 - pk.lvl)}</i></div>`;
+  const n = starCount(), tot = PACKS.length * 3, r = rankAt(n), nx = RANKS.find(x => x[1] > n);
+  const pct = nx ? 100 * (n - r[1]) / Math.max(1, nx[1] - r[1]) : 100;
+  $('#tr-star').innerHTML = `${doImg(r[2])}<span><i>your rank</i><b>${esc(r[0])}</b><em class="sbar" aria-hidden="true"><i style="width:${pct.toFixed(0)}%"></i></em><small>${n} of ${tot} stars${nx ? ` · ${nx[1] - n} more to ${esc(nx[0])}` : ' · every lesson cleared'}</small></span>`;
+  $('#tr-list').innerHTML = PACKS.map((pk, i) => {
+    const got = [1, 2, 3].map(lv => cleared(pk.id, lv)), k = got.filter(Boolean).length;
+    return `<div class="pack${k === 3 ? ' done' : ''}" role="button" tabindex="0" data-act="trainPack" data-id="${pk.id}">${doImg(pk.art)}<span><b>${esc(pk.title)}</b><small>lesson ${i + 1} · ${esc(pk.skill)}</small></span><i class="lvl" aria-label="${k} of 3 levels cleared">${got.map(g => `<b${g ? ' class="on"' : ''}>&#9733;</b>`).join('')}</i></div>`;
   }).join('');
 }
-// a training run: its own file, a wrap three hours out (no pressure), a 2 minute budget a line, then the same set
-function startTraining(text, id, title) {
-  const d = fresh(), t = new Date(Date.now() + 3 * 36e5);
-  Object.assign(d, { practice: id, practiceTitle: title, raw: text, warm: 0, pace: 2, wrap: String(t.getHours()).padStart(2, '0') + ':' + String(t.getMinutes()).padStart(2, '0') });
+// a lesson's card: what it teaches, three coach tips, and the three levels as the start keys
+let LESSON = '';
+function openLesson(id) {
+  const i = PACKS.findIndex(x => x.id === id), pk = PACKS[i]; if (!pk) return;
+  LESSON = id;
+  $('#ls-m').src = ART + pk.art + '.webp';
+  $('#ls-t').textContent = pk.title;
+  $('#ls-s').textContent = `lesson ${i + 1} · ${pk.skill}`;
+  $('#ls-tips').innerHTML = pk.tips.map((t, k) => `<li><i class="ci num">${k + 1}</i><span>${esc(t)}</span></li>`).join('');
+  $('#ls-lv').innerHTML = LEVELS.map((L, k) => { const best = TR[id] && TR[id][k + 1]; return `<button type="button"${best ? ' class="won"' : ''} data-act="startLv" data-lv="${k + 1}"><b>${L.n}</b><small>${L.s}</small><small>${linesIn(pk.lv[k])} lines</small>${best ? `<em aria-label="cleared, rank ${best}">&#9733; ${best}</em>` : ''}</button>`; }).join('');
+  $('#lesson').hidden = false;
+}
+// a training run: its own file, a wrap three hours out (no pressure), the level's minutes a line, then the same set
+function startTraining(text, id, title, lv) {
+  const d = fresh(), t = new Date(Date.now() + 3 * 36e5), L = LEVELS[(lv || 0) - 1];
+  Object.assign(d, { practice: id, practiceTitle: title + (L ? ' · ' + L.n : ''), trainLv: L ? lv : 0, raw: text, warm: 0, pace: L ? L.pace : 2, wrap: String(t.getHours()).padStart(2, '0') + ':' + String(t.getMinutes()).padStart(2, '0') });
   d.scripts = C.parse(text); d.parsedRaw = text;
   if (!d.scripts.length) { toast('No lines in there yet.'); return; }
+  $('#lesson').hidden = true;
   useFile('train', d); persist(); act.start();
 }
+function startPack(id, lv) { const pk = PACKS.find(x => x.id === id); if (pk && pk.lv[lv - 1]) startTraining(pk.lv[lv - 1], pk.id, pk.title, lv); }
+const lessonOf = d => d && d.trainLv ? PACKS.find(x => x.id === d.practice) || null : null;
+// the coach on the set: the lesson's tips, then the level's, one per line after the first
+const trainTips = () => { const pk = lessonOf(D); return pk ? [...pk.tips, LEVELS[D.trainLv - 1].tip] : []; };
 
 /* ---------- HOW TO PLAY ---------- */
 const HELP = [
@@ -1075,7 +1458,7 @@ const HELP = [
   ['lean', 'Show the talent', 'Tap the line to show it big. Her pose shows what to do: point, wave, hold it up, lean in.'],
   ['calm', 'Notes', 'More has notes. One tap shows the talent a picture and a few words instead of a speech.'],
   ['wrap', 'Wrap', 'Wrap the day for the report: a rank, every line as a bar, the lines that ran long.'],
-  ['take', 'Saves and training', 'Every day saves itself, so Load game picks any day back up. Training has practice scripts to warm up on.']
+  ['take', 'Saves and training', 'Every day saves itself, so Load game picks any day back up. Training has lessons in Easy, Medium and Hard. Clear a level, earn a star.']
 ];
 function renderHelp() {
   $('#help-steps').innerHTML = HELP.map(([art, b, t], i) => `<li>${doImg(art)}<span><i>step ${i + 1}</i><b>${esc(b)}</b><p>${esc(t)}</p></span></li>`).join('');
@@ -1393,7 +1776,7 @@ function paintTicker(now) {
     else if (n.k === 'add') { text = `${Math.round(-L.over)} min spare. Add ${nm(scriptOf(n.sid))} back? About ${Math.max(1, Math.round(n.cost))} min.`; keys = `<button type="button" class="btn" data-act="addS" data-sid="${n.sid}">Add</button>` + x; }
     else { text = `${Math.round(L.over)} min over. Keep it moving.`; keys = x; }
   }
-  else if (D.practice) text = `Line ${PROG.i} of ${PROG.total} · say it, then A. Again? B.`;
+  else if (D.practice) { const tt = trainTips(); text = `Line ${PROG.i} of ${PROG.total} · ` + (PROG.i > 1 && tt.length ? tt[(PROG.i - 2) % tt.length] : 'say it, then A. Again? B.'); }
   else if (now > L.wrapAt) { cls = 'hot'; text = `Past the ${hm(L.wrapAt)} wrap. ${L.rest.length} left to shoot.`; }
   else { cls = L.over > 2 ? 'warn' : ''; text = `Line ${PROG.i} of ${PROG.total} · done about ${hm(L.proj)}${L.over > 2 ? ', ' + Math.round(L.over) + ' min late' : L.over < -2 ? ', ' + Math.round(-L.over) + ' min to spare' : ''}`; }
   const sig = cls + '|' + text + '|' + keys; if (sig === tickSig) return; tickSig = sig;
@@ -1447,15 +1830,23 @@ function renderReport() {
   const now = Date.now(), L = C.live(D, now), R = lastReport = C.report(D, L, now), w = wrappedAt();
   const v = $('#rep-v');
   $('#rep-m').src = ART + (w ? 'wrap' : 'got') + '.webp';
-  v.querySelector('b').textContent = D.practice ? 'Training clear!' : `${R.finished} of ${R.planned} scripts`;
+  const lsn = lessonOf(D), LV = lsn ? LEVELS[D.trainLv - 1] : null, clear = !!(lsn && w && R.lines && R.finished >= R.planned);
+  v.querySelector('b').textContent = D.practice ? (lsn ? (clear ? LV.n + ' clear!' : 'Good practice!') : 'Training clear!') : `${R.finished} of ${R.planned} scripts`;
   v.querySelector('small').textContent = `results · ${hm(R.start)} to ${hm(R.end)} ${ap(R.end)} · ${hmin(R.min)} on the clock${w ? '' : ' · still running'}`;
   // a rank, like the end of a level: how many lines landed inside their budget
   const inB = R.lines ? (R.lines - R.overN) / R.lines : 0;
-  $('#rep-rank').textContent = !R.lines ? '' : inB >= .9 ? 'S' : inB >= .75 ? 'A' : inB >= .55 ? 'B' : 'C';
+  const rk = !R.lines ? '' : inB >= .9 ? 'S' : inB >= .75 ? 'A' : inB >= .55 ? 'B' : 'C';
+  $('#rep-rank').textContent = rk;
   const st = [['Lines shot', R.lines], ['Takes', R.takes], ['Takes a line', R.perLine ? R.perLine.toFixed(1) : '0'],
     ['Average line', R.lines ? hms(R.avgLine * 60) : '0:00'], ['Pace after warm-up', R.pace ? R.pace.toFixed(1) + ' min' : 'soon'], ['Past budget', R.lines ? R.overN + ' of ' + R.lines : '0']];
   $('#rep-stats').innerHTML = st.map(([i, b]) => `<div class="stat lcd"><i>${esc(i)}</i><b>${esc(b)}</b></div>`).join('');
   let h = lineBars(R);
+  if (lsn && R.lines) {   // the coach: plain words off the takes, then what to try next
+    const say = [R.perLine <= 1.6 ? 'Most lines in one or two takes. That is camera ready.' : R.perLine <= 2.6 ? 'A couple of takes a line. Say each line once in your head before you go.' : 'Lots of retakes. Say the tricky part slow first, then the whole line.'];
+    if (R.overN) say.push(`${R.overN} line${R.overN > 1 ? 's' : ''} ran long. Run ${R.overN > 1 ? 'them' : 'it'} once more on your own.`);
+    if (clear) say.push(D.trainLv < 3 ? `Ready for ${LEVELS[D.trainLv].n}.` : rk === 'S' ? 'Hard, rank S. That is star quality.' : 'Hard is cleared. Go for rank S next.');
+    h = `<div class="sec">Coach says<span>for next time</span></div><p class="why">${say.map(esc).join(' ')}</p>` + h;
+  }
   if (R.laterN || R.splitN) h += `<p class="why">${R.laterN ? R.laterN + ' line' + (R.laterN > 1 ? 's' : '') + ' went to Later. ' : ''}${R.splitN ? R.splitN + ' line' + (R.splitN > 1 ? 's were' : ' was') + ' split on set.' : ''}</p>`;
   if (R.warm >= 1) h += `<p class="why">The warm-up script took ${Math.round(R.warm)} min.${R.pace ? ` After it you ran ${R.pace.toFixed(1)} min a line, so the next plan starts there.` : ''}</p>`;
   if (R.slowest.length) { h += `<div class="sec">Slowest lines<span>where the clock went</span></div>`; R.slowest.forEach(x => { h += `<div class="rl"><span><b>${esc(x.text)}</b><small>${esc(x.script)} · ${x.takes} take${x.takes === 1 ? '' : 's'}</small></span><em class="${x.over ? 'red' : ''}">${hms(x.min * 60)}</em></div>`; }); }
@@ -1467,7 +1858,23 @@ function renderReport() {
   if (R.every.length) { h += `<div class="sec">Every line<span>red = past budget</span></div>`; R.every.forEach(x => { h += `<div class="rl sm"><span><b>${esc(x.text)}</b><small>${esc(x.script)} · ${x.k === 'skip' ? 'skipped' : x.k === 'later' ? 'sent to Later after ' + x.takes + ' take' + (x.takes === 1 ? '' : 's') : x.takes + ' take' + (x.takes === 1 ? '' : 's')}</small></span><em class="${x.over ? 'red' : ''}">${hms(x.min * 60)}</em></div>`; }); }
   if (w) h += `<button type="button" class="btn ghost" data-act="unwrap" style="width:100%;margin-top:10px">Not done? Undo the wrap</button>`;
   $('#rep-body').innerHTML = h;
-  if (D.practice) { $('#rdock').innerHTML = `<button type="button" class="btn" data-act="toTrain">Training</button><button type="button" class="btn primary" data-act="trainAgain"><small>same lines</small>Again &rsaquo;</button><button type="button" class="bk" data-act="toHome" aria-label="Title screen">&lsaquo;</button>`; }
+  if (clear && !D.awarded) {   // a star the first time a level is cleared, a better rank letter after that
+    const n0 = starCount(), had = TR[lsn.id] && TR[lsn.id][D.trainLv];
+    if (rankVal(rk) > rankVal(had)) { TR[lsn.id] = Object.assign({}, TR[lsn.id], { [D.trainLv]: rk }); save('trained', TR); }
+    D.awarded = true; persist();
+    const r0 = rankAt(n0), r1 = rankAt(starCount());
+    if (!had) { pop('Star earned!', lsn.title + ' · ' + LV.n, false, 'hearts'); if (r1 !== r0) setTimeout(() => pop('New rank: ' + r1[0] + '!', starCount() + ' stars', false, r1[2]), 1900); }
+    else if (rankVal(rk) > rankVal(had)) pop('New best: ' + rk + '!', lsn.title + ' · ' + LV.n, false, 'got');
+  }
+  if (D.practice) {   // cleared: the next level, then the next lesson; not cleared: the same lines again
+    const nx = lsn && clear && D.trainLv === 3 ? PACKS[PACKS.indexOf(lsn) + 1] : null;
+    const k2 = lsn && clear && D.trainLv < 3 ? `<button type="button" class="btn primary" data-act="trainNext" data-id="${lsn.id}" data-lv="${D.trainLv + 1}"><small>next level</small>${LEVELS[D.trainLv].n} &rsaquo;</button>`
+      : nx ? `<button type="button" class="btn primary" data-act="trainNext" data-id="${nx.id}" data-lv="${firstOpen(nx.id)}"><small>lesson ${PACKS.indexOf(nx) + 1}</small>Next &rsaquo;</button>`
+      : lsn && clear ? `<button type="button" class="btn primary" data-act="toTrain"><small>back to</small>Training &rsaquo;</button>`
+      : `<button type="button" class="btn primary" data-act="trainAgain"><small>same lines</small>Again &rsaquo;</button>`;
+    const k1 = lsn && clear ? `<button type="button" class="btn" data-act="trainAgain">Again</button>` : `<button type="button" class="btn" data-act="toTrain">Training</button>`;
+    $('#rdock').innerHTML = k1 + k2 + (lsn ? `<button type="button" class="bk" data-act="toTrain" aria-label="Training">&lsaquo;</button>` : `<button type="button" class="bk" data-act="toHome" aria-label="Title screen">&lsaquo;</button>`);
+  }
   else $('#rdock').innerHTML = `<button type="button" class="btn" data-act="copyRep">Copy it</button>` + (w ? `<button type="button" class="btn primary" data-act="newGame"><small>start a</small>New day &rsaquo;</button>` : `<button type="button" class="btn primary" data-act="toRun"><small>back to</small>The set &rsaquo;</button>`) + '<button type="button" class="bk" data-act="back" aria-label="Back">&lsaquo;</button>';
   if (w && R.lines && !D.practice) { const i = H.findIndex(x => x.at === R.start), e = { at: R.start, pace: R.pace, lines: R.lines, takes: R.takes, perLine: R.perLine, finished: R.finished, planned: R.planned, warm: R.warm }; if (i >= 0) H[i] = e; else H.push(e); H = H.slice(-30); save('hist', H); }
 }
@@ -1542,7 +1949,7 @@ const act = {
     if (!Pl.inc.size) return;
     D.run = { at: Date.now(), warmId: Pl.warmId, base: [...Pl.inc], events: [] };
     persist(); buzz(30); go('run');
-    if (D.practice) flash('Training!', 'No clock to beat. Say the line, then A. Again? B.', true, 2200, 'go');
+    if (D.practice) { const pk = lessonOf(D); flash(pk ? LEVELS[D.trainLv - 1].n + ' mode!' : 'Training!', pk ? pk.tips[0] : 'No clock to beat. Say the line, then A. Again? B.', true, 2400, pk ? pk.art : 'go'); }
     else flash('Ready? Go!', 'Wrap by ' + hm(Pl.wrapAt) + '. First up: ' + nm(scriptOf(Pl.warmId) || scriptOf(Pl.items[0].sid)) + ', the warm-up.', true, 1800, 'go');
     beat('go', 2400);
   },
@@ -1619,14 +2026,21 @@ const act = {
     closeOpt(); renderLoad();
   },
   // training
-  trainPack: b => { const pk = PACKS.find(x => x.id === b.dataset.id); if (pk) startTraining(pk.text, pk.id, pk.title); },
-  trainRandom: () => { const pk = PACKS[Math.floor(Math.random() * PACKS.length)]; startTraining(pk.text, pk.id, pk.title); },
+  trainPack: b => openLesson(b.dataset.id),
+  startLv: b => startPack(LESSON, +b.dataset.lv),
+  closeLesson: () => { $('#lesson').hidden = true; },
+  trainNext: b => startPack(b.dataset.id, +b.dataset.lv),
+  trainRandom: () => {   // the lowest level not cleared yet in a random lesson; anything at all once every star is in
+    const open = PACKS.filter(pk => [1, 2, 3].some(lv => !cleared(pk.id, lv)));
+    if (open.length) { const pk = open[Math.floor(Math.random() * open.length)]; startPack(pk.id, firstOpen(pk.id)); }
+    else startPack(PACKS[Math.floor(Math.random() * PACKS.length)].id, 1 + Math.floor(Math.random() * 3));
+  },
   trainOwn: () => { const t = $('#tr-raw').value; if (!t.trim()) { toast('Paste the lines first.'); $('#tr-raw').focus(); return; } startTraining(t, 'own', 'Your own lines'); },
-  trainAgain: () => { if (D.practice) startTraining(D.raw, D.practice, D.practiceTitle || 'Practice'); },
+  trainAgain: () => { if (!D.practice) return; if (lessonOf(D)) startPack(D.practice, D.trainLv); else startTraining(D.raw, D.practice, D.practiceTitle || 'Practice'); },
   // the saves: a backup file, a restore, an erase
   backup: async () => {
     const files = SLOTS.map(m => Object.assign({}, m, { day: dayOf(m.id) })).filter(x => x.day);
-    const data = { app: 'the-ad', v: 1, at: Date.now(), files, hist: H, prefs: P };
+    const data = { app: 'the-ad', v: 1, at: Date.now(), files, hist: H, prefs: P, trained: TR };
     const name = 'sweet-takes-backup-' + new Date().toISOString().slice(0, 10) + '.json', blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
     try { const file = new File([blob], name, { type: 'application/json' }); if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: 'Sweet Takes backup' }); return; } } catch (e) { if (e && e.name === 'AbortError') return; }
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click();
@@ -1643,7 +2057,7 @@ const act = {
 // iPhone Safari only paints :active (the key sinking) when a touchstart listener exists
 document.addEventListener('touchstart', () => {}, { passive: true });
 // the press: the key sinks on touch-down in the next frame and lifts on release, a slide-off or a scroll (nothing stays stuck down)
-const PRESS = '.btn,.key,.bk,.sr-main,.hl,.seg button,.bar .back,#r-card,.do-pick,.mk,.slot,.pack,.slot .opt';
+const PRESS = '.btn,.key,.bk,.sr-main,.hl,.seg button,.bar .back,#r-card,.do-pick,.mk,.slot,.pack,.slot .opt,.lvpick button';
 document.addEventListener('pointerdown', e => { const k = e.target.closest && e.target.closest(PRESS); if (k && !k.disabled) k.classList.add('down'); }, { passive: true });
 const lift = () => $$('.down').forEach(k => k.classList.remove('down'));
 ['pointerup', 'pointercancel', 'scroll'].forEach(t => document.addEventListener(t, lift, { passive: true, capture: true }));
@@ -1656,6 +2070,7 @@ function closeMenu() { $('#menu').hidden = true; }
 $('#menu').addEventListener('click', e => { if (e.target === e.currentTarget) closeMenu(); });
 $('#dopick').addEventListener('click', e => { if (e.target === e.currentTarget) $('#dopick').hidden = true; });
 $('#fileopt').addEventListener('click', e => { if (e.target === e.currentTarget) closeOpt(); });
+$('#lesson').addEventListener('click', e => { if (e.target === e.currentTarget) $('#lesson').hidden = true; });
 // boxes that act like keys (a file, a pack, the logo): Enter and Space press them
 document.addEventListener('keydown', e => { const t = e.target; if ((e.key === 'Enter' || e.key === ' ') && t && t.matches && t.matches('div[role="button"][data-act]') && t.id !== 'r-card') { e.preventDefault(); t.click(); } });
 // Restore a backup: files it does not have come in, a file it has comes in only when the backup's copy is newer
@@ -1674,7 +2089,12 @@ $('#restore').addEventListener('change', async e => {
     n++;
   }
   if (Array.isArray(data.hist)) { const seen = new Set(H.map(x => x.at)); data.hist.forEach(x => { if (x && x.at && !seen.has(x.at)) H.push(x); }); H.sort((a, b) => a.at - b.at); H = H.slice(-30); save('hist', H); }
-  pruneFiles(); save('slots', SLOTS); renderSettings(); toast(n ? `Restored ${n} day${n === 1 ? '' : 's'}.` : 'Nothing new in that backup.');
+  let st = 0;   // training stars: the better rank letter wins, level by level
+  if (data.trained && typeof data.trained === 'object') {
+    for (const [id, lvs] of Object.entries(data.trained)) { if (!lvs || typeof lvs !== 'object') continue; for (const [lv, r] of Object.entries(lvs)) if (rankVal(r) > rankVal(TR[id] && TR[id][lv])) { TR[id] = Object.assign({}, TR[id], { [lv]: r }); st++; } }
+    if (st) save('trained', TR);
+  }
+  pruneFiles(); save('slots', SLOTS); renderSettings(); toast(n ? `Restored ${n} day${n === 1 ? '' : 's'}.` : st ? 'Training stars restored.' : 'Nothing new in that backup.');
 });
 // things that just happen (stage clear, overtime, arrived) drop in at the top and never take a tap
 let popT;
@@ -1714,6 +2134,152 @@ if (!matchMedia('(display-mode: standalone)').matches && !navigator.standalone &
 }
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
 window.addEventListener('hashchange', () => { const h = location.hash; if (h.startsWith('#her=')) renderHer(h.slice(5)); });
+
+/* ---------- THE TITLE SCENE (10/21, his asks: "make it so the main menu actually moves", "how about we make this
+   pixelated ... it wouldn't take any generation", "i dont want a static game"). One canvas behind the title screen, on her
+   pixel grid (build_pixel.py in the icons folder): a candy checker that drifts, twinkles, a little stage with chasing
+   lights, her, and the logo. She idles (a bob, a blink), does a move every few seconds, and takes the pose of the key under
+   the finger or the cursor. 10 frames a second, only while the title shows; reduced motion = one still frame. ---------- */
+(() => {
+  const cv = $('#t-scene');
+  if (!cv || !cv.getContext) return;
+  const g = cv.getContext('2d'), home = $('#s-home'), hero = $('#s-home .t-hero'), menu = $('#s-home .t-menu');
+  const still = matchMedia('(prefers-reduced-motion: reduce)');
+  const KEY = { cont: 'go', newGame: 'hype', toLoad: 'look', toTrain: 'take', toHelp: 'point', toSettings: 'lean' };
+  const MOVES = ['wave', 'hearts', 'got', 'hype', 'look', 'lean'];
+  const LINE = '#5b3d8e', IM = {}, FOOT = {}, logo = new Image();
+  // twinkles: [across, down the room, phase]
+  const SP = [[.1, .34, 0], [.9, .3, 5], [.16, .66, 9], [.86, .7, 2], [.26, .5, 7], [.76, .52, 11], [.06, .86, 4], [.94, .9, 8], [.33, .2, 3], [.68, .16, 6]];
+  let W = 0, H = 0, L = null, tick = 0, timer = 0, pose = 'smile', p0 = -9, held = '', move = '', until = 0, next = 50, blinkAt = 24, last = '', rel = 0;
+
+  // where her feet are across the bottom rows, so every pose stands on the same spot of the stage
+  function footOf(im) {
+    try {
+      const c = document.createElement('canvas'), w = c.width = im.naturalWidth, h = c.height = im.naturalHeight, rows = Math.max(1, Math.round(h * .1));
+      const x = c.getContext('2d'); x.drawImage(im, 0, 0);
+      const d = x.getImageData(0, h - rows, w, rows).data;
+      let sx = 0, n = 0;
+      for (let p = 3, q = 0; p < d.length; p += 4, q++) if (d[p] > 128) { sx += q % w; n++; }
+      return n ? sx / n : w / 2;
+    } catch (e) { return im.naturalWidth / 2; }
+  }
+  ['smile', 'smile-blink', ...new Set([...Object.values(KEY), ...MOVES])].forEach(k => {
+    const im = new Image();
+    im.onload = () => { FOOT[k] = footOf(im); draw(); };
+    im.src = ART + k + '.webp'; IM[k] = im;
+  });
+  logo.onload = () => draw(); logo.src = 'art/logo-px.webp';
+
+  // one art pixel = s css px: as big as the width allows, small enough that logo + her + stage fit above the menu
+  function layout() {
+    const cw = cv.clientWidth, ch = cv.clientHeight;
+    if (!cw || !ch) return false;
+    const top = parseFloat(getComputedStyle(hero).paddingTop) || 0;
+    const floor = menu.getBoundingClientRect().top - cv.getBoundingClientRect().top;
+    const s = Math.max(1, Math.min(cw / 144, (floor - top) / 190));
+    W = Math.ceil(cw / s); H = Math.ceil(ch / s);
+    if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
+    L = { top: Math.round(top / s), floor: Math.floor(floor / s) - 2 };
+    g.imageSmoothingEnabled = false;
+    return true;
+  }
+  // a pixel oval drawn row by row, so its edge stays hard; oval() = an outlined one
+  function disc(cx, cy, rx, ry, col) {
+    g.fillStyle = col;
+    for (let y = -ry; y <= ry; y++) { const hw = Math.round(rx * Math.sqrt(Math.max(0, 1 - (y / (ry + .5)) ** 2))); g.fillRect(cx - hw, cy + y, hw * 2 + 1, 1); }
+  }
+  function oval(cx, cy, rx, ry, fill) { disc(cx, cy, rx, ry, LINE); disc(cx, cy, rx - 1, ry - 1, fill); }
+  function spark(x, y, ph) {
+    if (ph === 2) { g.fillStyle = '#ffb8dc'; g.fillRect(x, y - 2, 1, 5); g.fillRect(x - 2, y, 5, 1); }
+    g.fillStyle = '#fff';
+    if (ph === 0) { g.fillRect(x, y, 1, 1); return; }
+    g.fillRect(x, y - 1, 1, 3); g.fillRect(x - 1, y, 3, 1);
+  }
+  function stage(cx, cy, t) {
+    oval(cx, cy + 4, 40, 8, '#b9a0ee');
+    oval(cx, cy, 40, 8, '#e4d6ff');
+    g.fillStyle = '#f6f0ff'; g.fillRect(cx - 26, cy - 4, 20, 1); g.fillRect(cx - 30, cy - 3, 8, 1);
+    for (let i = 0; i < 11; i++) {
+      const a = Math.PI * (.1 + .8 * i / 10), x = Math.round(cx - 37 * Math.cos(a)), y = Math.round(cy + 5 + 5 * Math.sin(a));
+      const lit = ((i - (t >> 1)) % 3 + 3) % 3 === 0;
+      g.fillStyle = lit ? '#fff' : '#ff9fcf'; g.fillRect(x, y, 1, 1);
+      if (lit) { g.fillStyle = '#ffd9ee'; g.fillRect(x - 1, y, 1, 1); g.fillRect(x + 1, y, 1, 1); }
+    }
+  }
+  function draw() {
+    if (!L && !layout()) return;
+    const calm = still.matches, t = calm ? 0 : tick;
+    // the checker: two candy pinks in 8 px squares, drifting a pixel a frame (16 px later it lines up again)
+    g.fillStyle = '#ffe6f3'; g.fillRect(0, 0, W, H);
+    g.fillStyle = '#ffd3ea';
+    const o = t % 16;
+    for (let j = 0, y = o - 16; y < H; j++, y += 8) for (let i = 0, x = o - 16; x < W; i++, x += 8) if (!((i + j) & 1)) g.fillRect(x, y, 8, 8);
+    const room = L.floor - L.top;
+    SP.forEach(([fx, fy, ph]) => spark(Math.round(fx * W), Math.round(L.top + fy * room), calm ? (ph & 1 ? 1 : 2) : ((t + ph) / 3 | 0) % 4));
+    const cx = W >> 1, cy = L.floor - 12;
+    stage(cx, cy, t);
+    // her: a hop when the pose changes, else a two step bob; the blink only on the idle pose
+    const dy = calm ? 0 : tick - p0 < 4 ? [-3, -4, -3, -1][tick - p0] : ((tick >> 2) & 1 ? -1 : 0);
+    const k = pose === 'smile' && !calm && tick >= blinkAt && tick < blinkAt + 2 ? 'smile-blink' : pose;
+    let im = IM[k];
+    if (!im || !im.naturalWidth) im = IM.smile;
+    if (im && im.naturalWidth) {
+      const sc = im.naturalHeight > 140 ? 96 / im.naturalHeight : 1;   // an old smooth sprite still cached the first open after a deploy
+      const w = Math.round(im.naturalWidth * sc), h = Math.round(im.naturalHeight * sc), fx = (FOOT[k] != null ? FOOT[k] : im.naturalWidth / 2) * sc;
+      g.imageSmoothingEnabled = sc !== 1;
+      g.drawImage(im, Math.round(cx - fx), cy + 2 - h + dy, w, h);
+      g.imageSmoothingEnabled = false;
+    }
+    // the logo up top; on a tall phone it comes down a little into the room over her head
+    const free = cy - 95 - (L.top + 3) - logo.naturalHeight;
+    if (logo.naturalWidth) g.drawImage(logo, (W - logo.naturalWidth) >> 1, L.top + 3 + Math.max(0, Math.round(free * .4)) + (calm ? 0 : (tick >> 3) & 1));
+  }
+  // what she does this frame: the key you are on, else her move, else idle (and every few seconds a new move)
+  function step() {
+    tick++;
+    let want = 'smile';
+    if (held) want = held;
+    else if (move && tick < until) want = move;
+    else {
+      move = '';
+      if (tick >= next) {
+        do move = MOVES[Math.random() * MOVES.length | 0]; while (move === last);
+        last = move; want = move; until = tick + 16; next = until + 40 + (Math.random() * 30 | 0);
+      }
+    }
+    if (want !== pose) { pose = want; p0 = tick; }
+    if (tick >= blinkAt + 2) blinkAt = tick + 26 + (Math.random() * 34 | 0);
+  }
+  const keyPose = el => { const b = el && el.closest ? el.closest('[data-act]') : null; return b && home.contains(b) ? KEY[b.dataset.act] || '' : ''; };
+  // the key under the finger: she switches on the spot (the screen changes on release, so the next frame is too late)
+  function hold(k) {
+    clearTimeout(rel);
+    if (k === held) return;
+    held = k;
+    const want = k || (move && tick < until ? move : 'smile');
+    if (want !== pose) { pose = want; p0 = tick; }
+    draw();
+  }
+  home.addEventListener('pointerover', e => { if (e.pointerType === 'mouse') hold(keyPose(e.target)); });
+  home.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') hold(''); });
+  home.addEventListener('pointerdown', e => hold(keyPose(e.target)));
+  home.addEventListener('pointerup', e => { if (e.pointerType !== 'mouse') rel = setTimeout(() => hold(''), 800); });
+  home.addEventListener('pointercancel', () => { rel = setTimeout(() => hold(''), 300); });
+  home.addEventListener('focusin', e => { if (e.target.matches && e.target.matches(':focus-visible')) hold(keyPose(e.target)); });
+  home.addEventListener('focusout', () => hold(''));
+  function sync() {
+    clearInterval(timer); timer = 0;
+    if (document.body.dataset.scr !== 'home' || document.hidden) return;
+    L = null; held = ''; move = ''; pose = 'smile';
+    draw();
+    if (!still.matches) timer = setInterval(() => { step(); draw(); }, 100);
+  }
+  new MutationObserver(sync).observe(document.body, { attributes: true, attributeFilter: ['data-scr'] });
+  document.addEventListener('visibilitychange', sync);
+  if (still.addEventListener) still.addEventListener('change', sync);
+  if (window.ResizeObserver) { const ro = new ResizeObserver(() => { L = null; draw(); }); ro.observe(hero); ro.observe(menu); }
+  window.addEventListener('resize', () => { L = null; draw(); });
+})();
 
 /* ---------- boot (last, so every function above exists) ---------- */
 (function boot() {

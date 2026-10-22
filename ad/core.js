@@ -207,6 +207,8 @@ function name(s, scripts) { return s.short && placesIn(scripts).length > 1 ? s.s
 /* ---------- lines that say the same thing ---------- */
 function norm(t) { return String(t).toLowerCase().replace(/'/g, '').replace(/[^a-z0-9]+/g, ' ').trim(); }
 function toks(t) { return norm(t).split(' ').filter(w => w && !STOP.has(w)); }
+// one line said once covers its twin: the same words from the same speaker with the same (bracket) direction (10/21)
+const twinKey = (stop, l) => stop + '|' + norm(l.text) + '|' + norm(l.dir || '') + '|' + (l.who || '');
 function jac(a, b) { const A = new Set(a), B = new Set(b); let n = 0; A.forEach(x => { if (B.has(x)) n++; }); return n / ((A.size + B.size - n) || 1); }
 function kindOf(t) { if (R_ADDR.test(t)) return 'addr'; if (R_BYE.test(t) && t.split(/\s+/).length <= 8) return 'bye'; return ''; }
 function dialogue(s) { return s.lines.filter(l => !l.br).length; }
@@ -254,11 +256,13 @@ function order(day, inc, warm) {
     const S = day.scripts.filter(s => inc.has(s.id) && stopFor(s, stops) === st.id).sort(byRank(warm));
     const L = [];
     S.forEach((s, si) => s.lines.forEach((l, li) => L.push({ id: l.id, sid: s.id, stop: st.id, br: !!l.br, text: l.text, dir: l.dir || '', do: l.do || '', who: l.who || '', n: norm(l.text), k: l.br ? '' : kindOf(l.text), t: toks(l.text), si, li })));
+    // twins = the same words from the same speaker with the same (bracket) direction: "(whisper) I can't believe it" and
+    // "(yell) I can't believe it" are two different takes, so a line read five ways stays five lines (10/21)
     const first = new Map(), cov = {};
     for (const x of L) {
       if (x.br || !x.n) continue;
-      const f = first.get(x.n);
-      if (f) { x.cov = f.id; (cov[f.id] = cov[f.id] || []).push(x.id); } else first.set(x.n, x);
+      const key = x.n + '|' + norm(x.dir) + '|' + x.who, f = first.get(key);
+      if (f) { x.cov = f.id; (cov[f.id] = cov[f.id] || []).push(x.id); } else first.set(key, x);
     }
     const live = L.filter(x => !x.br && !x.cov), grp = {};
     if (day.group !== false) {
@@ -374,7 +378,7 @@ function live(day, now) {
         const x = textOf[e.id];
         if (e.k === 'got') {
           takes.push({ id: e.id, t: e.t, from: prevTake, roll: rolling && rolling.id === e.id ? rolling.t : 0, ok: true });
-          if (x && !x.l.br) gotN.add(stopFor(x.s, stops) + '|' + norm(x.l.text));
+          if (x && !x.l.br) gotN.add(twinKey(stopFor(x.s, stops), x.l));
           const dur = (e.t - lastT) / 6e4;
           if (x && x.s.id !== run.warmId && !x.l.br && dur > .25 && dur < MAX_SAMPLE) samples.push(dur);   // under 15 s is a double tap, not a line
         }
@@ -398,7 +402,7 @@ function live(day, now) {
   if (run.events.length && run.events[run.events.length - 1].k !== 'wrap') wrapped = 0;
   const view = Object.assign({}, day, { scripts: scripts.map(s => added[s.id] ? Object.assign({}, s, { added: added[s.id] }) : s) });
   const items = order(view, inc, run.warmId);
-  const isDone = it => !!(done[it.id] || (!it.br && gotN.has(it.stop + '|' + norm(it.text))));
+  const isDone = it => !!(done[it.id] || (!it.br && gotN.has(twinKey(it.stop, it))));
   let rest = items.filter(it => !isDone(it) && !gone.has(it.stop));
   if (Object.keys(deferred).length) {   // "later" lines go to the back of their own stop, in the order they were sent there
     const segs = [], by = new Map();
