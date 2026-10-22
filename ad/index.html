@@ -354,6 +354,23 @@ label.toggle{cursor:pointer}
 #flash.ok::before{background:repeating-conic-gradient(from 0deg,rgba(166,240,208,.45) 0 9deg,rgba(255,255,255,0) 9deg 18deg)}
 @keyframes spin{to{transform:rotate(360deg)}}
 @media (prefers-reduced-motion:reduce){#flash::before{animation:none}}
+/* CRT (10/21, his "add crt effect"): scanlines, dark glass corners, a slow roll band and a switch-on flash, laid over the
+   whole app (taps go through it). Show-it-big sits above it, so the talent's line stays clean. Off in Settings. */
+#crt{position:fixed;inset:0;z-index:92;pointer-events:none;display:none;overflow:hidden}
+body.crt #crt{display:block}
+#crt::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(180deg,rgba(43,23,69,0) 0 2px,rgba(43,23,69,.1) 2px 3px),radial-gradient(ellipse 120% 100% at 50% 50%,rgba(43,23,69,0) 55%,rgba(43,23,69,.26) 100%)}
+#crt::after{content:"";position:absolute;left:0;right:0;top:-30%;height:30%;background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.08) 50%,rgba(255,255,255,0));animation:crt-roll 9s linear infinite}
+@keyframes crt-roll{to{transform:translateY(433%)}}
+#crt i,#crt b{position:absolute;inset:0;opacity:0}
+#crt i{background:#140b20}
+#crt b{background:linear-gradient(180deg,#fff,#ffe1f1);transform:scaleY(.004)}
+body.crt-boot #crt i{animation:crt-dark .8s ease-out forwards}
+body.crt-boot #crt b{animation:crt-line .8s ease-out forwards}
+@keyframes crt-dark{0%,40%{opacity:1}100%{opacity:0}}
+@keyframes crt-line{0%{opacity:1;transform:scaleX(.5) scaleY(.004)}25%{opacity:1;transform:scaleX(1) scaleY(.004)}55%{opacity:.85;transform:scaleX(1) scaleY(1)}100%{opacity:0;transform:scaleX(1) scaleY(1)}}
+#show{z-index:96}
+body.crt .intro h1,body.crt .dlg-t,body.crt #pop b,body.crt .starcard b{filter:drop-shadow(-1.5px 0 rgba(255,70,140,.45)) drop-shadow(1.5px 0 rgba(70,200,255,.45))}
+@media (prefers-reduced-motion:reduce){#crt::after{animation:none;display:none}body.crt-boot #crt i,body.crt-boot #crt b{animation:none}}
 .toast{position:fixed;left:50%;bottom:calc(24px + var(--sab));z-index:99;width:max-content;max-width:calc(100% - 32px);padding:11px 16px;border:3px solid var(--line);border-radius:18px;text-align:center;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#fff;color:var(--line);box-shadow:0 4px 0 rgba(91,61,142,.35);font:400 14px/1.3 var(--f-ui);letter-spacing:.03em;transition:opacity .25s,transform .25s}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 body[data-scr="run"] .toast{top:calc(var(--sat) + 8px);bottom:auto}
@@ -730,6 +747,7 @@ img[src*="art/m/"]{image-rendering:-webkit-optimize-contrast;image-rendering:cri
       <div class="seg" id="cap"></div>
       <label class="toggle"><span><b>Beep at the redline</b><small>When a line runs past its budget. Off by default: the camera mic hears it.</small></span><input type="checkbox" switch class="swi" id="beep"></label>
       <label class="toggle"><span><b>Left hand</b><small>Puts Got it (A) on the left, under your left thumb.</small></span><input type="checkbox" switch class="swi" id="lefty"></label>
+      <label class="toggle"><span><b>Old TV screen</b><small>Scanlines and dark glass corners, like a CRT. The big line for the talent always stays clean.</small></span><input type="checkbox" switch class="swi" id="crtsw"></label>
     </div>
     <div class="card">
       <div class="lbl">Note keys <span>one tap instead of a speech</span></div>
@@ -798,9 +816,10 @@ img[src*="art/m/"]{image-rendering:-webkit-optimize-contrast;image-rendering:cri
   <button type="button" class="btn" data-act="doAuto">Read it from the words</button>
   <button type="button" class="btn primary big" data-act="doClose">Back</button>
 </div></div>
+<div id="crt" aria-hidden="true"><i></i><b></b></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="core.js?v=b1c72414"></script>
+<script src="core.js?v=da1be10c"></script>
 <script>
 /* ---------- the shell ---------- */
 const C = window.ADCore;
@@ -943,7 +962,7 @@ function renderSetup() {
 }
 function renderSettings() {
   seg($('#cap'), [2, 3, 4, 5, 0], P.cap, v => v ? String(v) : 'off', v => { P.cap = v; savePrefs(); renderSettings(); });
-  $('#beep').checked = !!P.beep; $('#lefty').checked = !!P.lefty;
+  $('#beep').checked = !!P.beep; $('#lefty').checked = !!P.lefty; $('#crtsw').checked = P.crt !== false;
   let kb = 0; try { kb = Math.round(Object.keys(localStorage).filter(k => k.startsWith('ad-')).reduce((m, k) => m + (localStorage.getItem(k) || '').length, 0) / 1024); } catch (e) {}
   $('#st-saves').textContent = `${SLOTS.length} day${SLOTS.length === 1 ? '' : 's'} saved, about ${kb} KB on this phone. Back up before you switch phones or clear Safari.`;
   $('#notes-ed').innerHTML = P.notes.map((n, i) => `<div class="noterow"><input class="in" data-nb="${i}" value="${esc(n.b)}" maxlength="18" aria-label="Note ${i + 1} key"><input class="in" data-ns="${i}" value="${esc(n.s)}" maxlength="80" aria-label="Note ${i + 1} meaning"></div>`).join('');
@@ -2400,6 +2419,8 @@ $('#group').addEventListener('change', e => { D.group = e.target.checked; persis
 $('#beep').addEventListener('change', e => { P.beep = e.target.checked; savePrefs(); if (P.beep) beep(); });
 $('#lefty').addEventListener('change', e => { P.lefty = e.target.checked; savePrefs(); document.body.classList.toggle('lefty', P.lefty); });
 document.body.classList.toggle('lefty', !!P.lefty);
+$('#crtsw').addEventListener('change', e => { P.crt = e.target.checked; savePrefs(); document.body.classList.toggle('crt', P.crt); });
+document.body.classList.toggle('crt', P.crt !== false);   // the CRT is on unless switched off in Settings
 function closeMenu() { $('#menu').hidden = true; }
 $('#menu').addEventListener('click', e => { if (e.target === e.currentTarget) closeMenu(); });
 $('#dopick').addEventListener('click', e => { if (e.target === e.currentTarget) $('#dopick').hidden = true; });
@@ -2625,6 +2646,7 @@ window.addEventListener('hashchange', () => { const h = location.hash; if (h.sta
   // mid-shoot (a tap in the last 45 min), a relaunch goes straight back to the set; any other time, the title screen
   if (D.run && !wrappedAt()) { const E = D.run.events, last = E.length ? E[E.length - 1].t : D.run.at; if (Date.now() - last < 45 * 6e4) { go('run'); return; } }
   go('home');
+  if (P.crt !== false) { document.body.classList.add('crt-boot'); setTimeout(() => document.body.classList.remove('crt-boot'), 900); }   // the old TV switching on
 })();
 </script>
 </body>
