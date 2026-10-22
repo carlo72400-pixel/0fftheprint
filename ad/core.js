@@ -211,6 +211,37 @@ function jac(a, b) { const A = new Set(a), B = new Set(b); let n = 0; A.forEach(
 function kindOf(t) { if (R_ADDR.test(t)) return 'addr'; if (R_BYE.test(t) && t.split(/\s+/).length <= 8) return 'bye'; return ''; }
 function dialogue(s) { return s.lines.filter(l => !l.br).length; }
 
+/* ---------- what the talent does on a line (10/21, his ask for visuals: direction icons) ----------
+   One direction per line, read off its words, so the talent gets a picture instead of a speech. A (bracket) note wins;
+   then the address (point at it), hello and see-you lines (wave), a hook told like a secret (lean in), the goods
+   (hold it up), big news (big energy), an invitation (walk in), a find (look around), shouting caps (big energy),
+   and a smile for the rest. The director can change any of them on the plan (line.do). */
+const DO = ['smile', 'hype', 'point', 'hold', 'walk', 'wave', 'lean', 'look', 'calm'];
+const R_DO_NOTE = [['walk', /\b(?:walk|walks|walking|enter|enters|entering|step|steps|stepping)\b/i], ['point', /\b(?:point|points|pointing|gestures?)\b/i],
+  ['hold', /\b(?:hold|holds|holding|show|shows|showing|lift|lifts|pick)\b/i], ['wave', /\b(?:wave|waves|waving)\b/i], ['lean', /\b(?:lean|leans|leaning|whisper|whispers)\b/i],
+  ['look', /\b(?:look|looks|looking|browse|browses|browsing|search|searching)\b/i], ['hype', /\b(?:jump|jumps|dance|dances|dancing|cheer|cheers|excited|hype)\b/i],
+  ['calm', /\b(?:calm|slow|slowly|breathe|relax)\b/i], ['smile', /\b(?:smile|smiles|smiling|laugh|laughs|laughing)\b/i]];
+const R_HI = /^(?:hey|hi|hello|yo|what'?s up|sup)\b/i;
+const R_SEEYOU = /\b(?:see (?:you|ya|u)|meet (?:you|ya)|bye|join us|we'?ll be waiting)\b/i;
+const R_SECRET = /\b(?:did you know|this is your sign|psst|guess what|between us|secret|if you didn'?t|are you looking|looking for|what are you doing)\b/i;
+const R_GOODS = /\b(?:we'?ve got|we have|we got|we'?re buying|bring|check (?:out|these)|these|pieces|clothes|clothing|items|merch|products?)\b/i;
+const R_NEWS = /\b(?:tons|is back|are back|live dj|djs?|market|party|sale|grand opening)\b/i;
+const R_COME = /\b(?:come (?:thrift|shop|dig|see|hang|through|in|by|on|out|spend|visit)|stop by|swing by|pull up|head (?:to|over)|walk in)\b/i;
+const R_FIND = /\b(?:found|find|discover|new favorite)\b/i;
+function doOf(text, note) {
+  if (note) for (const [k, r] of R_DO_NOTE) if (r.test(note)) return k;
+  const t = String(text || '');
+  if (R_ADDR.test(t)) return 'point';
+  if (R_SEEYOU.test(t) || (R_HI.test(t) && t.split(/\s+/).length <= 4)) return 'wave';
+  if (R_SECRET.test(t)) return 'lean';
+  if (R_NEWS.test(t)) return 'hype';
+  if (R_GOODS.test(t)) return 'hold';
+  if (R_COME.test(t)) return 'walk';
+  if (R_FIND.test(t)) return 'look';
+  if (/!/.test(t) && /\b[A-Z]{3,}\b/.test(t)) return 'hype';
+  return 'smile';
+}
+
 /* ---------- the order of the day ---------- */
 const byRank = warm => (a, b) => ((a.id === warm ? 0 : 1) - (b.id === warm ? 0 : 1)) || ((b.must ? 1 : 0) - (a.must ? 1 : 0)) || ((b.dated ? 1 : 0) - (a.dated ? 1 : 0)) || ((a.added || 0) - (b.added || 0)) || (a.idx - b.idx);
 // who goes first when the day does not fit: not starred, not dated, latest in the doc
@@ -222,7 +253,7 @@ function order(day, inc, warm) {
   for (const st of stops) {
     const S = day.scripts.filter(s => inc.has(s.id) && stopFor(s, stops) === st.id).sort(byRank(warm));
     const L = [];
-    S.forEach((s, si) => s.lines.forEach((l, li) => L.push({ id: l.id, sid: s.id, stop: st.id, br: !!l.br, text: l.text, dir: l.dir || '', n: norm(l.text), k: l.br ? '' : kindOf(l.text), t: toks(l.text), si, li })));
+    S.forEach((s, si) => s.lines.forEach((l, li) => L.push({ id: l.id, sid: s.id, stop: st.id, br: !!l.br, text: l.text, dir: l.dir || '', do: l.do || '', who: l.who || '', n: norm(l.text), k: l.br ? '' : kindOf(l.text), t: toks(l.text), si, li })));
     const first = new Map(), cov = {};
     for (const x of L) {
       if (x.br || !x.n) continue;
@@ -245,7 +276,7 @@ function order(day, inc, warm) {
     const seen = new Set();
     const emit = x => {
       seen.add(x.id);
-      const it = { id: x.id, sid: x.sid, stop: x.stop, br: x.br, text: x.text, dir: x.dir, cov: cov[x.id] || [] };
+      const it = { id: x.id, sid: x.sid, stop: x.stop, br: x.br, text: x.text, dir: x.dir, do: x.do, who: x.who, cov: cov[x.id] || [] };
       const g = grp[x.id];
       if (g) { it.g = g.key; it.gi = g.all.indexOf(x) + 1; it.gn = g.all.length; }
       items.push(it);
@@ -478,7 +509,7 @@ function report(day, L, now) {
 // scripts in the order they get worked through (warm-up, must, dated, the rest as the doc has them)
 function rank(scripts, warm) { return scripts.slice().sort(byRank(warm)); }
 
-const API = { parse, sentences, splitLine, placesIn, stopFor, shortPlace, name, rank, norm, kindOf, order, plan, live, nudge, report, wrapMs, median, dialogue, BR_MIN };
+const API = { parse, sentences, splitLine, placesIn, stopFor, shortPlace, name, rank, norm, kindOf, doOf, DO, order, plan, live, nudge, report, wrapMs, median, dialogue, BR_MIN };
 if (typeof module !== 'undefined' && module.exports) module.exports = API;
 root.ADCore = API;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

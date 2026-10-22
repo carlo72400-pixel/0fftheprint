@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>THE AD · 0FF THE PRINT</title>
+<title>Sweet Takes · 0FF THE PRINT</title>
 <meta name="description" content="Your pocket assistant director: paste the lines, see what fits before the wrap, shoot the repeats back to back, a shot clock between takes, a day report after. Works offline.">
 <meta name="robots" content="noindex">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Your lines · THE AD">
+<meta property="og:title" content="Your lines · Sweet Takes">
 <meta property="og:description" content="Your lines for the shoot, big and easy to read.">
 <meta property="og:image" content="https://0fftheprint.com/ad/preview.jpg">
 <meta name="twitter:card" content="summary_large_image">
@@ -15,7 +15,7 @@
 <meta name="color-scheme" content="light">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="THE AD">
+<meta name="apple-mobile-web-app-title" content="Sweet Takes">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" href="icon-192.png">
@@ -27,7 +27,7 @@
 @font-face{font-family:'Silkscreen';font-style:normal;font-weight:700;font-display:swap;src:url(../assets/fonts/silkscreen-700.woff2) format('woff2')}
 </style>
 <style>
-/* THE AD (10/21): the pocket assistant director. Paste the client's lines on the spot, see what fits before the wrap, then
+/* SWEET TAKES (was THE AD; renamed 10/21, his pick of a cuter name the girls on set will love): the pocket assistant director. Paste the client's lines on the spot, see what fits before the wrap, then
    run the set with one hand: the line big, a timer per line that redlines past its budget, a TIME bar for the day that
    drains and then fills back up red in overtime, takes as hearts, one-word notes, a report after.
    SKIN (his 10/21 ask, "give it an early 2000s game ui and make it cute"): a pastel candy handheld-game menu. Glossy
@@ -73,9 +73,10 @@ body[data-scr="run"] .sky i{animation:none;opacity:.55}
 .bar::after{content:"";position:absolute;left:0;right:0;bottom:-11px;height:8px;background:var(--rainbow);border-bottom:3px solid var(--line)}
 .bar .back{flex:0 0 auto;width:46px;height:46px;border:3px solid var(--line);border-radius:50%;display:grid;place-items:center;background:linear-gradient(180deg,#fff,#e6dcff);color:var(--line);font:400 22px/1 var(--f-pop);box-shadow:0 3px 0 var(--line)}
 .bar .back:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
-body[data-scr="setup"] .bar .back,body[data-scr="her"] .bar .back{display:none}
-.wm{display:flex;align-items:center;gap:8px;min-width:0}
+body[data-scr="her"] .bar .back{display:none}
+.wm{display:flex;align-items:center;gap:8px;min-width:0;cursor:pointer}
 .wm img{width:42px;height:42px;object-fit:contain;filter:drop-shadow(0 2px 0 rgba(91,61,142,.35))}
+.wm img.wm-logo{width:auto;height:46px}
 .wm b{display:block;font:400 21px/1 var(--f-pop);color:#fff;letter-spacing:.02em;text-shadow:var(--ol),0 3px 0 var(--pink-deep);white-space:nowrap}
 .wm small{display:block;margin-top:5px;font:400 11px/1 var(--f-ui);letter-spacing:.04em;text-transform:uppercase;color:var(--line)}
 .sp{flex:1}
@@ -222,7 +223,8 @@ body[data-scr="run"] .bar{display:none}
    (a faded edge and a MORE cue until you reach the end). Auto margins center a short line and start a long one at the top. */
 .linecard .txtbox{flex:1;min-height:0;display:flex;flex-direction:column;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none}
 .linecard .txtbox::-webkit-scrollbar{display:none}
-.linecard .txt{margin:auto 0;font:700 32px/1.22 var(--f-body);color:var(--ink);text-wrap:balance;overflow-wrap:anywhere}
+.linecard .txt{margin:auto 0;font:700 32px/1.22 var(--f-body);color:var(--ink);text-wrap:balance;overflow-wrap:normal}
+.txt.brk,.s-txt.brk{overflow-wrap:anywhere}
 .linecard.scroll:not(.end) .txtbox{-webkit-mask-image:linear-gradient(180deg,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(180deg,#000 calc(100% - 36px),transparent)}
 /* MORE with the blinking down arrow an RPG dialog box puts in its corner when the text goes on */
 .more-cue{display:none;position:absolute;right:12px;bottom:8px;align-items:center;gap:6px;padding:5px 9px 5px 10px;border:2px solid var(--line);border-radius:999px;background:var(--lemon);color:var(--line);font:400 11px/1 var(--f-ui);font-style:normal;letter-spacing:.04em;text-transform:uppercase;box-shadow:0 2px 0 var(--line);pointer-events:none}
@@ -242,7 +244,7 @@ body[data-scr="run"] .bar{display:none}
 .linecard.alldone{background:linear-gradient(180deg,#f2fff9,#d6f7e8)}
 .linecard.alldone .txt{font-family:var(--f-pop);font-weight:400;color:var(--green-t)}
 /* this line, in one row: the take and its hearts on the left, its clock on the right (a small dial that fills, then redlines) */
-.mid{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:0 2px}
+.trow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:0 2px}   /* .trow, never .mid: the TIME row wears .mid at half time */
 .lclk{display:flex;align-items:center;gap:8px;padding:5px 13px 5px 5px;border:3px solid var(--line);border-radius:999px;background:#fff;box-shadow:0 3px 0 rgba(91,61,142,.3)}
 .lclk svg{flex:0 0 auto;width:40px;height:40px;transform:rotate(-90deg)}
 .lclk circle{fill:none;stroke-width:13}
@@ -293,12 +295,13 @@ body.lefty .key.got{order:-1}
 .key.again small{color:#235d97}.key.got small{color:#a12a62}
 .key span{position:relative;white-space:nowrap}
 .key.again span{font-size:.86em}
+.key span.sm{font-size:.74em}
 .key .ab{position:absolute;top:7px;right:10px;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.88);color:var(--line);font:400 12px/1 var(--f-ui);font-style:normal;text-shadow:none;box-shadow:inset 0 -2px 0 rgba(91,61,142,.25)}
 .key.again{background:linear-gradient(180deg,#c4e8ff,#5fb2ff);text-shadow:var(--olb)}
 .key.got{background:linear-gradient(180deg,#ffc6e4,#ff6fb7);text-shadow:var(--olp)}
 .key[disabled]{opacity:.42;filter:saturate(.35);pointer-events:none}
 @media (max-height:760px){.key{min-height:74px;font-size:26px}.linecard .tap{display:none}.takes b{font-size:22px}.lclk svg{width:34px;height:34px}.screen{padding:8px;gap:7px}}
-@media (max-height:700px){.key{min-height:66px}.linecard .tag{display:none}.btn.mini{min-height:40px}.deck{padding-top:12px}}
+@media (max-height:700px){.key{min-height:66px}.linecard .tag .tg-rest{display:none}.btn.mini{min-height:40px}.deck{padding-top:12px}}
 
 /* presses everywhere: the face drops on touch-down, the shadow shrinks by what it drops, it rises with a little spring */
 .key:active,.key.down{transform:translateY(7px);box-shadow:0 0 0 var(--line),0 2px 4px rgba(91,61,142,.25);filter:brightness(.96);transition-duration:0s}
@@ -339,7 +342,7 @@ label.toggle{cursor:pointer}
 #show .s-who{font:400 13px/1.3 var(--f-ui);letter-spacing:.04em;text-transform:uppercase;color:#d8c8ff}
 #show .s-box{flex:1;min-height:0;display:flex;flex-direction:column;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none}
 #show .s-box::-webkit-scrollbar{display:none}
-#show .s-txt{margin:auto 0;font:700 64px/1.14 var(--f-body);color:#fff;text-wrap:balance;overflow-wrap:anywhere}
+#show .s-txt{margin:auto 0;font:700 64px/1.14 var(--f-body);color:#fff;text-wrap:balance;overflow-wrap:normal}
 #show.scroll:not(.end) .s-box{-webkit-mask-image:linear-gradient(180deg,#000 calc(100% - 56px),transparent);mask-image:linear-gradient(180deg,#000 calc(100% - 56px),transparent)}
 #show .s-x{font:400 12px/1 var(--f-ui);letter-spacing:.04em;text-transform:uppercase;color:#a996cf;text-align:center}
 #flash{align-items:center;justify-content:center;gap:18px;text-align:center;background:rgba(255,240,248,.95);color:var(--line)}
@@ -384,6 +387,132 @@ body[data-scr="run"] .toast{top:calc(var(--sat) + 8px);bottom:auto}
 .ci.bar-i{border-radius:10px;background:linear-gradient(90deg,#6fdcaa 0 55%,#ffd95e 55% 75%,#efe6ff 75%)}
 .ci.menu-i{background:linear-gradient(var(--line),var(--line)) center 12px/20px 3px no-repeat,linear-gradient(var(--line),var(--line)) center 19px/20px 3px no-repeat,linear-gradient(var(--line),var(--line)) center 26px/20px 3px no-repeat,#fff}
 .ci svg{width:26px;height:24px}.ci svg path{fill:#ff6fb7;stroke:var(--line);stroke-width:2.6}
+
+/* ===== 10/21 VISUALS (his ask: game art, charts, direction icons) =====
+   THE AD herself: a chibi girl AD (pink twin tails, heart shades, headset, a stopwatch on a lanyard), 18 poses and 10
+   faces in art/m/, made in Higgsfield (build_mascot.py in the icons folder). */
+.intro-m{float:right;height:150px;width:auto;margin:-6px -8px 0 4px;filter:drop-shadow(0 4px 0 rgba(91,61,142,.18))}
+/* her face in the take row: it reacts (a take, got it, stage clear, out of hearts, running long, overtime, the drive, the wrap) */
+.trow{grid-template-columns:minmax(0,1fr) auto auto}
+.face{display:block;width:52px;height:52px;border-radius:50%;border:3px solid var(--line);background:radial-gradient(circle at 50% 30%,#fff,#ffe1f1 70%);box-shadow:0 3px 0 rgba(91,61,142,.3);object-fit:cover}
+.face.boing{animation:boing .38s cubic-bezier(.3,1.6,.5,1)}
+@keyframes boing{0%{transform:scale(.7)}100%{transform:none}}
+@media (prefers-reduced-motion:reduce){.face.boing{animation:none}}
+/* the line card: what to do under the line (left), the hint (right); her art in the drive and all-done cards */
+.card-foot{display:flex;align-items:center;gap:8px;min-height:30px}
+.card-foot .tap{margin-left:auto;white-space:nowrap}
+.do-chip{display:flex;align-items:center;gap:6px;padding:2px 10px 2px 4px;border:2px solid var(--line);border-radius:999px;background:var(--pink-2);font:400 11.5px/1 var(--f-ui);letter-spacing:.03em;text-transform:uppercase;color:var(--line);white-space:nowrap}
+.do-chip img{height:36px;width:auto;margin:-7px 0 -5px}
+.do-chip:empty{display:none}
+.card-art{display:none;align-self:center;height:min(20vh,170px);width:auto;margin:-6px 0 0}
+.linecard.drive .card-art,.linecard.alldone .card-art{display:block}
+/* the pop-ups carry her: Ready Go and the notes full screen, Stage clear / Overtime / Here in the banner */
+#flash img{position:relative;height:min(30vh,240px);width:auto;filter:drop-shadow(0 6px 0 rgba(91,61,142,.22))}
+#pop.art{grid-template-columns:62px minmax(0,1fr);column-gap:12px;justify-items:start;align-items:center;text-align:left}
+#pop img{grid-row:1/3;width:62px;height:auto}
+/* show it big: what to do, then the line */
+#show .s-do{display:flex;align-items:center;gap:12px;margin:8px 0 2px}
+#show .s-do:empty{display:none}
+#show .s-do img{height:min(15vh,118px);width:auto}
+#show .s-do b{font:400 26px/1 var(--f-pop);color:#fff;text-shadow:var(--olp)}
+#show .s-do span{display:grid;gap:6px}
+#show .s-do small{font:600 16px/1.3 var(--f-body);color:#eadfff}
+/* the coach and the results screen */
+.coach-m{justify-self:center;height:104px;width:auto;margin:-4px 0 -6px}
+.rep-m{display:block;height:150px;width:auto;margin:-6px auto -14px;position:relative;z-index:2;filter:drop-shadow(0 4px 0 rgba(91,61,142,.2))}
+/* her lines: the direction leads each line */
+.hl{display:flex;align-items:center;gap:10px}
+.hl img{flex:0 0 auto;height:46px;width:auto;margin:-6px 0}
+.hl>span{display:grid;gap:5px}
+.hl small{font:400 11.5px/1.3 var(--f-ui);letter-spacing:.03em;text-transform:uppercase;color:var(--pink-t)}
+/* the plan: what they do on each line, and the picker */
+.do-pick{display:inline-flex;align-items:center;gap:6px;min-height:44px;margin:0 0 3px;padding:0 10px 0 4px;border:3px solid var(--line);border-radius:12px;background:linear-gradient(180deg,#fff,#ffe1f1);color:var(--line);font:400 11.5px/1 var(--f-ui);letter-spacing:.03em;text-transform:uppercase;box-shadow:0 3px 0 var(--line);transition:transform .18s cubic-bezier(.3,1.4,.6,1),box-shadow .18s}
+.do-pick img{height:38px;width:auto}
+.do-pick.down{transform:translateY(3px);box-shadow:0 0 0 var(--line);transition-duration:0s}
+.dogrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.dlg .dogrid .btn{display:grid;justify-items:center;align-content:center;gap:4px;min-height:96px;margin:0 0 5px;padding:6px 4px;font-size:11px;line-height:1.1}
+.dogrid img{height:58px;width:auto}
+/* THE DAY AS A BAR (plan) and every line as a bar (report) */
+.tl{margin:0 0 14px}
+.tl-bar{position:relative;display:flex;height:32px;border:3px solid var(--line);border-radius:12px;overflow:hidden;background:repeating-linear-gradient(90deg,#fff 0 6px,#f6f0ff 6px 12px);box-shadow:0 3px 0 rgba(91,61,142,.25)}
+.tl-s{position:relative;flex:0 0 auto;height:100%;border-right:2px solid rgba(91,61,142,.3);display:grid;place-items:center;font:400 12px/1 var(--f-ui);font-style:normal;color:var(--line);overflow:hidden}
+.tl-s.drive{background:repeating-linear-gradient(135deg,#e6dcff 0 5px,#fff 5px 10px)}
+.tl-s.cut,.tl-s.late{background:repeating-linear-gradient(135deg,var(--red) 0 6px,#ffb3c6 6px 12px)}
+.tl-s.done{background:linear-gradient(180deg,#c9b3ff,#9f86e6)}
+.tl-s.left{background:linear-gradient(180deg,#ffc6e4,#ff9ccd)}
+.tl-wrap{position:absolute;top:0;bottom:0;width:5px;margin-left:-2px;background:#fff;box-shadow:0 0 0 2px var(--line)}
+.tl-foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 10px;margin-top:8px;font:400 11px/1.3 var(--f-ui);letter-spacing:.03em;text-transform:uppercase;color:var(--soft)}
+.tl-foot b{font-weight:400;color:var(--line)}
+.chip.n{color:var(--line)}
+.lb{height:124px;padding:8px 8px 0;margin:0 0 6px;border:3px solid var(--line);border-radius:14px;background:#fff;box-shadow:0 3px 0 rgba(91,61,142,.25)}
+.lb-in{position:relative;display:flex;align-items:flex-end;gap:2px;height:100%}
+.lb-in>i:not(.bud){flex:1 1 0;min-width:3px;border-radius:4px 4px 0 0;background:linear-gradient(180deg,#a6f0d0,#3fc68b)}
+.lb-in>i.over{background:linear-gradient(180deg,#ffb3c6,var(--red))}
+.lb-in>i.skip{background:#e6dcff}
+.lb-in>i.later{background:repeating-linear-gradient(135deg,#d9c8ff 0 4px,#fff 4px 8px)}
+.lb .bud{position:absolute;left:0;right:0;border-top:2px dashed var(--line);opacity:.6;pointer-events:none}
+.lb-k{margin:0 0 14px;font:400 11px/1.4 var(--f-ui);letter-spacing:.03em;text-transform:uppercase;color:var(--soft)}
+.rl-bar{display:block;height:7px;margin-top:7px;border-radius:999px;background:linear-gradient(90deg,#ffc6e4,#ff8cc6);box-shadow:inset 0 0 0 1px rgba(91,61,142,.25)}
+/* who says the line, in a two-person script: a chip that leads the tag (it stays when the rest of the tag hides on short phones) */
+.linecard .tag .spk{display:inline-block;margin-right:6px;padding:3px 8px;border:2px solid var(--line);border-radius:999px;background:var(--sky-2);color:var(--line)}
+.hl-who{display:block;font:400 11px/1 var(--f-ui);font-style:normal;letter-spacing:.05em;text-transform:uppercase;color:var(--blue-t)}
+.btn.bad{background:linear-gradient(180deg,#fff,#ffd6e2);color:var(--red-deep)}
+
+/* ===== 10/21 THE TITLE SCREEN and the systems behind it (his ask: "a home screen ... new game, load game, settings, how it
+   works ... and build the systems for it", then "a training mode ... different types of scripts ... to practice on") ===== */
+body[data-scr="home"]{background:#cab3f6}
+body[data-scr="home"] .sky,body[data-scr="home"] .bar{display:none}
+body[data-scr="home"] .app{padding-bottom:0}
+#s-home{display:flex;flex-direction:column;min-height:100vh;min-height:100dvh}
+.t-hero{position:relative;margin:0 -16px;line-height:0}
+.t-hero>img{display:block;width:100%;height:auto;aspect-ratio:900/1592;max-height:calc(100dvh - 236px);object-fit:cover;object-position:50% 18%}
+#s-home.has-cont .t-hero>img{max-height:calc(100dvh - 296px)}   /* Continue takes a row: the art gives it back so nothing scrolls */
+.t-hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:80px;background:linear-gradient(180deg,rgba(202,179,246,0),#cab3f6 92%)}
+.t-logo{position:absolute;left:0;right:0;top:calc(var(--sat) + 10px);z-index:1;text-align:center;line-height:1}
+.t-logo b{display:block;font:400 clamp(50px,16vw,74px)/1 var(--f-pop);color:#fff;letter-spacing:.01em;text-shadow:3px 0 0 var(--line),-3px 0 0 var(--line),0 3px 0 var(--line),0 -3px 0 var(--line),2px 2px 0 var(--line),-2px -2px 0 var(--line),2px -2px 0 var(--line),-2px 2px 0 var(--line),0 7px 0 var(--pink-deep)}
+.t-logo img{display:block;margin:0 auto;width:min(60vw,250px);height:auto;filter:drop-shadow(0 5px 0 rgba(91,61,142,.25))}
+.t-logo small{display:inline-block;margin-top:10px;padding:5px 11px;border:2px solid var(--line);border-radius:999px;background:rgba(255,255,255,.88);font:400 11px/1 var(--f-ui);letter-spacing:.08em;text-transform:uppercase;color:var(--line)}
+.t-menu{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:11px 10px;margin-top:-40px}
+.mk{position:relative;overflow:hidden;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:8px;min-height:64px;margin:0 0 6px;padding:7px 8px 7px 6px;border:3px solid var(--line);border-radius:18px;text-align:left;color:var(--line);background:linear-gradient(180deg,#fff,#efe6ff);box-shadow:0 6px 0 var(--line);transition:transform .18s cubic-bezier(.3,1.4,.6,1),box-shadow .18s}
+.mk::before{content:"";position:absolute;left:8%;right:8%;top:3px;height:38%;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(255,255,255,0));pointer-events:none}
+.mk:active,.mk.down{transform:translateY(6px);box-shadow:0 0 0 var(--line);transition-duration:0s}
+.mk img{position:relative;width:40px;height:40px;border-radius:50%;border:2px solid var(--line);background:#fff;object-fit:cover}
+.mk span{position:relative;min-width:0}
+.mk b{display:block;font:400 16px/1.05 var(--f-pop)}
+.mk.go img{width:48px;height:48px}
+.mk small{display:block;margin-top:4px;font:400 10px/1.25 var(--f-ui);letter-spacing:.03em;text-transform:uppercase;color:var(--soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mk.wide{grid-column:1/-1}
+.mk.go{background:linear-gradient(180deg,#ffc6e4,#ff7dbd);color:#fff}
+.mk.go b{font-size:24px;text-shadow:var(--olp)}
+.mk.go small{color:#7d1a4c}
+.t-small{grid-column:1/-1;display:flex;justify-content:center}
+.t-small .btn{min-width:150px;margin:0 0 5px;min-height:44px;font-size:12px}
+.t-foot{margin:6px 0 calc(var(--sab) + 12px);text-align:center;font:400 10.5px/1.4 var(--f-ui);letter-spacing:.06em;text-transform:uppercase;color:var(--line);opacity:.8}
+@media (max-height:720px){.mk{min-height:54px}.mk img{width:36px;height:36px}.mk b{font-size:15px}.mk.go b{font-size:20px}.t-menu{gap:9px 10px}.t-hero>img,#s-home.has-cont .t-hero>img{max-height:calc(100dvh - 302px)}.t-logo img{width:min(50vw,190px)}}
+@media (prefers-reduced-motion:reduce){.mk{transition:none}}
+/* Load game: one file per day */
+.slot,.pack{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;margin:0 0 10px;padding:10px;border:3px solid var(--line);border-radius:16px;background:#fff;box-shadow:0 4px 0 rgba(91,61,142,.3);cursor:pointer;transition:transform .18s cubic-bezier(.3,1.4,.6,1),box-shadow .18s}
+.slot.down,.pack.down{transform:translateY(3px);box-shadow:0 1px 0 rgba(91,61,142,.3);transition-duration:0s}
+.slot.cur{background:linear-gradient(180deg,#fff,#ffe1f1)}
+.slot img{width:52px;height:52px;border-radius:50%;border:3px solid var(--line);background:#fff;object-fit:cover}
+.slot b,.pack b{display:block;font:400 17px/1.15 var(--f-pop);color:var(--line)}
+.slot small,.pack small{display:block;margin-top:5px;font:400 11px/1.35 var(--f-ui);letter-spacing:.03em;text-transform:uppercase;color:var(--soft)}
+.slot .opt{min-width:44px;min-height:44px;border:3px solid var(--line);border-radius:12px;background:linear-gradient(180deg,#fff,#efe6ff);color:var(--line);font:400 18px/1 var(--f-pop);box-shadow:0 3px 0 var(--line)}
+.slot .opt.down{transform:translateY(3px);box-shadow:0 0 0 var(--line)}
+/* Training: a pack per kind of script */
+.pack{grid-template-columns:64px minmax(0,1fr) auto}
+.pack img{justify-self:center;height:76px;width:auto;margin:-6px 0}
+.lvl{font-style:normal;font-size:15px;letter-spacing:1px;color:#ff8cc6;-webkit-text-stroke:1px var(--line);white-space:nowrap}
+/* How to play: the steps, each acted out */
+.steps{margin:0 0 16px;padding:0;list-style:none;display:grid;gap:12px}
+.steps li{display:grid;grid-template-columns:80px minmax(0,1fr);gap:12px;align-items:center;padding:12px 14px 12px 8px;border:3px solid var(--line);border-radius:18px;background:#fff;box-shadow:0 4px 0 rgba(91,61,142,.3)}
+.steps img{justify-self:center;height:92px;width:auto}
+.steps i{display:block;font:400 11px/1 var(--f-ui);font-style:normal;letter-spacing:.06em;text-transform:uppercase;color:var(--pink-t)}
+.steps b{display:block;margin-top:4px;font:400 19px/1.1 var(--f-pop);color:var(--line)}
+.steps p{margin:6px 0 0;font:500 15px/1.45 var(--f-body);color:var(--ink)}
+/* Settings */
+.filebtn{display:grid;place-items:center}
+.card>.btn{width:100%;margin:0 0 5px}
 </style>
 </head>
 <body data-scr="setup">
@@ -391,15 +520,29 @@ body[data-scr="run"] .toast{top:calc(var(--sat) + 8px);bottom:auto}
 <div class="app">
   <header class="bar">
     <button type="button" class="back" id="back" aria-label="Back">&lsaquo;</button>
-    <div class="wm"><img src="art/icon.webp" alt="" width="42" height="42" onerror="this.onerror=null;this.src='../assets/cathedral/w/ad.webp'"><span><b id="bar-t">THE AD</b><small>0FF THE PRINT</small></span></div>
+    <div class="wm" data-act="toHome" role="button" tabindex="0" aria-label="Title screen"><img class="wm-logo" src="art/logo-sm.webp" alt="Sweet Takes" width="66" height="46"><span><small>0FF THE PRINT</small></span></div>
     <span class="sp"></span>
     <button type="button" class="ins" id="ins" hidden>Install</button>
     <span class="clock lcd" id="clock" aria-label="Time now"></span>
   </header>
 
-  <!-- ===== 1. SET UP: paste the lines, set the wrap ===== -->
+  <!-- ===== 0. THE TITLE SCREEN (10/21): continue, new game, load game, training, how to play, settings ===== -->
+  <section id="s-home" class="scr" hidden>
+    <div class="t-hero"><img src="art/title.webp" alt="" width="900" height="1592" decoding="async" fetchpriority="high"><div class="t-logo"><img src="art/logo.webp" alt="Sweet Takes" width="760" height="528" decoding="async"></div></div>
+    <nav class="t-menu" aria-label="Main menu">
+      <button type="button" class="mk go wide" id="h-cont" data-act="cont" hidden><img src="art/m/f-go.webp" alt=""><span><b>Continue</b><small id="h-cont-s"></small></span></button>
+      <button type="button" class="mk" data-act="newGame"><img src="art/m/f-idle.webp" alt=""><span><b>New game</b><small>a new day</small></span></button>
+      <button type="button" class="mk" data-act="toLoad"><img src="art/m/f-wrap.webp" alt=""><span><b>Load game</b><small id="h-load-s">your days</small></span></button>
+      <button type="button" class="mk" data-act="toTrain"><img src="art/m/f-take.webp" alt=""><span><b>Training</b><small>practice lines</small></span></button>
+      <button type="button" class="mk" data-act="toHelp"><img src="art/m/f-got.webp" alt=""><span><b>How to play</b><small>9 steps</small></span></button>
+      <div class="t-small"><button type="button" class="btn" data-act="toSettings">Settings</button></div>
+    </nav>
+    <p class="t-foot">your bestie on set &middot; 0FF THE PRINT &middot; <span class="ver"></span></p>
+  </section>
+
+  <!-- ===== 1. SET UP (New game): paste the lines, set the wrap ===== -->
   <section id="s-setup" class="scr">
-    <div class="intro"><h1>The AD</h1><p>Your pocket assistant director. Paste the lines, set when your talent has to leave, and it runs the clock so you just direct.</p></div>
+    <div class="intro"><img class="intro-m" src="art/m/wave.webp" alt="" width="178" height="240" decoding="async"><h1>New day</h1><p>Paste the lines. Set when the talent has to leave. It does the rest.</p></div>
     <div class="resume" id="resume" hidden><span id="resume-t">A shoot is running</span><button type="button" class="btn primary" data-act="toRun">Back to the set &rsaquo;</button></div>
     <div class="card">
       <div class="lbl">The lines <span>paste the whole doc</span></div>
@@ -412,7 +555,7 @@ body[data-scr="run"] .toast{top:calc(var(--sat) + 8px);bottom:auto}
       <input type="time" class="in" id="wrap" aria-label="Wrap time">
     </div>
     <details class="card more" id="more">
-      <summary>More · stops, warm-up, pace, notes</summary>
+      <summary>More · stops, warm-up, pace</summary>
       <div class="inner">
         <div>
           <div class="lbl">Stops <span>each place you shoot, then the drive</span></div>
@@ -428,17 +571,6 @@ body[data-scr="run"] .toast{top:calc(var(--sat) + 8px);bottom:auto}
           <div class="step" style="margin-top:10px"><button type="button" class="btn" data-act="pace" data-d="-0.5" aria-label="Less time a line">less</button><output class="lcd" id="pace"></output><button type="button" class="btn" data-act="pace" data-d="0.5" aria-label="More time a line">more</button></div>
         </div>
         <label class="toggle"><span><b>Repeats back to back</b><small>The same line in a few scripts gets shot together, at one spot. A word-for-word twin gets said once.</small></span><input type="checkbox" switch class="swi" id="group"></label>
-        <div>
-          <div class="lbl">Hearts <span>takes per line before it offers help · off = just count</span></div>
-          <div class="seg" id="cap" style="margin-top:10px"></div>
-        </div>
-        <label class="toggle"><span><b>Beep at the redline</b><small>When a line runs past its budget. Off by default: the camera mic hears it.</small></span><input type="checkbox" switch class="swi" id="beep"></label>
-        <label class="toggle"><span><b>Left hand</b><small>Puts Got it (A) on the left, under your left thumb.</small></span><input type="checkbox" switch class="swi" id="lefty"></label>
-        <div>
-          <div class="lbl">Note keys <span>one tap instead of a speech</span></div>
-          <div id="notes-ed" style="display:grid;gap:6px;margin-top:10px"></div>
-          <button type="button" class="btn ghost" data-act="notesReset" style="margin-top:10px;width:100%">Back to the house notes</button>
-        </div>
       </div>
     </details>
     <button type="button" class="btn primary big" data-act="plan">Plan it &rsaquo;</button>
@@ -463,9 +595,10 @@ body[data-scr="run"] .toast{top:calc(var(--sat) + 8px);bottom:auto}
         <b id="r-left">0:00</b><small id="r-left-l">left</small>
       </div>
       <div class="who"><span id="r-who"></span><span id="r-at"></span></div>
-      <div class="linecard" id="r-card" role="button" tabindex="0" data-act="show"><span class="tag" id="r-tag"></span><span class="txtbox" id="r-box"><span class="txt" id="r-txt"></span></span><span class="tap" id="r-tap">tap to show it big</span><i class="more-cue" aria-hidden="true">more</i></div>
-      <div class="mid" id="r-mid">
+      <div class="linecard" id="r-card" role="button" tabindex="0" data-act="show"><span class="tag" id="r-tag"></span><img class="card-art" id="r-art" src="art/m/drive.webp" alt="" decoding="async"><span class="txtbox" id="r-box"><span class="txt" id="r-txt"></span></span><span class="card-foot"><span class="do-chip" id="r-do"></span><span class="tap" id="r-tap">tap for big</span></span><i class="more-cue" aria-hidden="true">more</i></div>
+      <div class="trow" id="r-mid">
         <div class="takes"><b id="r-take">Take 1</b><div class="pips" id="r-pips"></div></div>
+        <img class="face" id="r-face" src="art/m/f-idle.webp" alt="" width="52" height="52" decoding="async">
         <div class="lclk" id="r-ring" role="timer" aria-label="Time on this line">
           <svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="rb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff9ecb"/><stop offset=".5" stop-color="#c9b3ff"/><stop offset="1" stop-color="#8fd0ff"/></linearGradient></defs><circle class="tr" cx="50" cy="50" r="44"/><circle class="pr" id="r-arc" cx="50" cy="50" r="44" stroke-dasharray="276.46" stroke-dashoffset="0"/></svg>
           <span><b id="r-clock">0:00</b><small id="r-clk-l"></small></span>
@@ -489,32 +622,91 @@ body[data-scr="run"] .toast{top:calc(var(--sat) + 8px);bottom:auto}
 
   <!-- ===== 4. THE REPORT ===== -->
   <section id="s-report" class="scr" hidden>
-    <div class="verdict lcd" id="rep-v"><b></b><small></small><i class="rank" id="rep-rank"></i></div>
+    <img class="rep-m" id="rep-m" src="art/m/wrap.webp" alt="" decoding="async"><div class="verdict lcd" id="rep-v"><b></b><small></small><i class="rank" id="rep-rank"></i></div>
     <div class="stats" id="rep-stats"></div>
     <div id="rep-body"></div>
     <div class="dock" id="rdock"></div>
   </section>
 
+  <!-- ===== LOAD GAME: every day is a file ===== -->
+  <section id="s-load" class="scr" hidden>
+    <div class="intro"><h1>Load game</h1><p id="ld-sub">Every day saves itself, every tap.</p></div>
+    <div id="ld-list"></div>
+    <div class="dock"><button type="button" class="btn primary wide" data-act="newGame">New game &rsaquo;</button><button type="button" class="bk" data-act="back" aria-label="Back">&lsaquo;</button></div>
+  </section>
+
+  <!-- ===== TRAINING: practice packs, one per kind of script ===== -->
+  <section id="s-train" class="scr" hidden>
+    <div class="intro"><img class="intro-m" src="art/m/hype.webp" alt="" decoding="async"><h1>Training</h1><p>Pick a kind of script and practice it line by line. No clock to beat. A when you nail it, B to go again.</p></div>
+    <div id="tr-list"></div>
+    <div class="card">
+      <div class="lbl">Your own lines <span>practice what you got sent</span></div>
+      <textarea class="in" id="tr-raw" aria-label="Paste lines to practice" spellcheck="false" autocapitalize="sentences" placeholder="Paste any script here to practice it."></textarea>
+      <button type="button" class="btn primary" data-act="trainOwn">Practice these &rsaquo;</button>
+    </div>
+    <div class="dock"><button type="button" class="btn primary wide" data-act="trainRandom">Surprise me &rsaquo;</button><button type="button" class="bk" data-act="back" aria-label="Back">&lsaquo;</button></div>
+  </section>
+
+  <!-- ===== HOW TO PLAY ===== -->
+  <section id="s-help" class="scr" hidden>
+    <div class="intro"><h1>How to play</h1><p>Nine steps. That is the whole game.</p></div>
+    <ol class="steps" id="help-steps"></ol>
+    <div class="dock"><button type="button" class="btn primary wide" data-act="newGame">New game &rsaquo;</button><button type="button" class="bk" data-act="back" aria-label="Back">&lsaquo;</button></div>
+  </section>
+
+  <!-- ===== SETTINGS: how the set plays, and the saves ===== -->
+  <section id="s-settings" class="scr" hidden>
+    <div class="intro"><h1>Settings</h1><p>How the set plays. Each day keeps its own stops, warm-up and pace under More when you start it.</p></div>
+    <div class="card">
+      <div class="lbl">Hearts <span>takes per line before it offers help · off = just count</span></div>
+      <div class="seg" id="cap"></div>
+      <label class="toggle"><span><b>Beep at the redline</b><small>When a line runs past its budget. Off by default: the camera mic hears it.</small></span><input type="checkbox" switch class="swi" id="beep"></label>
+      <label class="toggle"><span><b>Left hand</b><small>Puts Got it (A) on the left, under your left thumb.</small></span><input type="checkbox" switch class="swi" id="lefty"></label>
+    </div>
+    <div class="card">
+      <div class="lbl">Note keys <span>one tap instead of a speech</span></div>
+      <div id="notes-ed" style="display:grid;gap:6px"></div>
+      <button type="button" class="btn ghost" data-act="notesReset">Back to the house notes</button>
+    </div>
+    <div class="card">
+      <div class="lbl">Your saves <span>they live on this phone only</span></div>
+      <p class="hint" id="st-saves"></p>
+      <button type="button" class="btn" data-act="backup">Back up every save</button>
+      <label class="btn ghost filebtn">Restore a backup<input type="file" id="restore" accept="application/json,.json" hidden></label>
+      <button type="button" class="btn bad" data-act="eraseAll">Erase everything</button>
+    </div>
+    <p class="foot">Sweet Takes <span class="ver"></span> · everything stays on this phone · part of <a href="../kit/">the Kit</a></p>
+    <div class="dock"><button type="button" class="btn primary wide" data-act="toHome">Title screen &rsaquo;</button><button type="button" class="bk" data-act="back" aria-label="Back">&lsaquo;</button></div>
+  </section>
+
   <!-- ===== HER LINES (opened from the link he sends) ===== -->
   <section id="s-her" class="scr" hidden>
-    <div class="intro"><h1>Your lines</h1><p>Read them through once or twice. No need to memorize: we shoot one line at a time.</p></div>
-    <div class="card rules"><div class="lbl">How to play</div><ol><li>Say it to one friend in the lens, not a crowd.</li><li>Finish the line, then hold for 2 seconds.</li><li>Messed up? Keep going, start the line again.</li></ol></div>
+    <div class="intro"><img class="intro-m" src="art/m/wave.webp" alt="" width="178" height="240" decoding="async"><h1>Your lines</h1><p>Read them once. No need to memorize: we do one line at a time.</p></div>
+    <div class="card rules"><div class="lbl">How to play</div><ol><li>Talk to the camera like it is your best friend.</li><li>Say the line, then freeze for 2 seconds.</li><li>Messed up? Just start the line again.</li></ol></div>
     <div id="her-list"></div>
-    <p class="foot">Tap a line to see it big · sent with THE AD by 0FF THE PRINT</p>
+    <p class="foot">Tap a line to see it big · sent with Sweet Takes by 0FF THE PRINT</p>
   </section>
 </div>
 
-<div id="show" class="full" hidden><div class="s-who" id="show-who"></div><div class="s-box"><p class="s-txt" id="show-txt"></p></div><div class="s-x">tap anywhere to close</div></div>
-<div id="flash" class="full" hidden><b id="flash-b"></b><span id="flash-s"></span></div>
-<div id="pop" role="status" aria-live="polite"><b id="pop-b"></b><span id="pop-s"></span></div>
+<div id="show" class="full" hidden><div class="s-who" id="show-who"></div><div class="s-do" id="show-do"></div><div class="s-box"><p class="s-txt" id="show-txt"></p></div><div class="s-x">tap anywhere to close</div></div>
+<div id="flash" class="full" hidden><img id="flash-i" alt="" hidden><b id="flash-b"></b><span id="flash-s"></span></div>
+<div id="pop" role="status" aria-live="polite"><img id="pop-i" alt="" hidden><b id="pop-b"></b><span id="pop-s"></span></div>
 <div id="menu" class="ovl" hidden><div class="dlg" role="dialog" aria-modal="true" aria-label="More">
   <b class="dlg-t">More</b><small class="dlg-s">the clock keeps running</small>
-  <div class="mgrp"><small>the day</small><div class="mrow two"><button type="button" class="btn bad" data-act="wrap">Wrap the day</button><button type="button" class="btn" data-act="menuPlan">The plan</button><button type="button" class="btn" data-act="dropCur" id="m-drop">Drop script</button><button type="button" class="btn" data-act="nextStop" id="m-next">Next stop</button></div></div>
+  <div class="mgrp"><small>the day</small><div class="mrow two"><button type="button" class="btn bad" data-act="wrap">Wrap the day</button><button type="button" class="btn" data-act="menuPlan">The plan</button><button type="button" class="btn" data-act="dropCur" id="m-drop">Drop script</button><button type="button" class="btn" data-act="nextStop" id="m-next">Next stop</button><button type="button" class="btn" data-act="toHome">Title screen</button></div></div>
   <div class="mgrp"><small>this line</small><div class="mrow"><button type="button" class="btn" data-act="skipLine" id="m-skip">Skip</button><button type="button" class="btn" data-act="later" id="m-later">Later</button><button type="button" class="btn" data-act="splitNow" id="m-split">Split</button></div></div>
   <div class="mgrp"><small>notes for the talent</small><div class="notes" id="r-notes"></div></div>
   <button type="button" class="btn primary big" data-act="resume">Back to it</button>
 </div></div>
+<div id="fileopt" class="ovl" hidden><div class="dlg" role="dialog" aria-modal="true" aria-label="This day">
+  <b class="dlg-t">This day</b><small class="dlg-s" id="fo-s"></small>
+  <button type="button" class="btn" data-act="replayFile">Replay these lines as a new day</button>
+  <button type="button" class="btn" data-act="renameFile">Rename it</button>
+  <button type="button" class="btn bad" data-act="deleteFile">Delete it</button>
+  <button type="button" class="btn primary big" data-act="closeOpt">Back</button>
+</div></div>
 <div id="coach" class="ovl" hidden><div class="dlg" role="dialog" aria-modal="true" aria-label="How to play">
+  <img class="coach-m" src="art/m/wave.webp" alt="" width="178" height="240" decoding="async">
   <b class="dlg-t">How to play</b>
   <ol class="coach">
     <li><i class="ci bar-i"></i><span><b>Time</b> up top is your whole day. Green, yellow when you're behind, red in overtime.</span></li>
@@ -524,9 +716,15 @@ body[data-scr="run"] .toast{top:calc(var(--sat) + 8px);bottom:auto}
   </ol>
   <button type="button" class="btn primary big" data-act="coachOk">Let's go!</button>
 </div></div>
+<div id="dopick" class="ovl" hidden><div class="dlg" role="dialog" aria-modal="true" aria-label="What the talent does on this line">
+  <b class="dlg-t">On this line</b><small class="dlg-s" id="dopick-s">what the talent does</small>
+  <div class="dogrid" id="dogrid"></div>
+  <button type="button" class="btn" data-act="doAuto">Read it from the words</button>
+  <button type="button" class="btn primary big" data-act="doClose">Back</button>
+</div></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="core.js?v=9d2f2568"></script>
+<script src="core.js?v=7e78c439"></script>
 <script>
 /* ---------- the shell ---------- */
 const C = window.ADCore;
@@ -541,14 +739,23 @@ const ap = t => new Date(t).getHours() < 12 ? 'AM' : 'PM';
 const mmss = s => { s = Math.max(0, Math.round(s)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
 const hmin = m => { m = Math.max(0, Math.round(m)); return m >= 60 ? Math.floor(m / 60) + ':' + String(m % 60).padStart(2, '0') : m + ' min'; };
 const nm = s => C.name(s, D.scripts);
+// THE AD herself (10/21): her poses and faces live in art/m/. A line's direction is its .do, else read off its words (core doOf).
+const ART = 'art/m/';
+const DOS = { smile: 'Smile', hype: 'Big energy', point: 'Point', hold: 'Hold it up', walk: 'Walk in', wave: 'Wave', lean: 'Lean in', look: 'Look around', calm: 'Breathe' };
+const DOHINT = { smile: 'smile while you say it', hype: 'say it loud and happy', point: 'point at what you talk about', hold: 'show it to the camera', walk: 'walk into the shot, then talk', wave: 'wave at the camera', lean: "lean in like it's a secret", look: 'look around like you just found it', calm: 'breathe, then say it slow' };
+const NOTE_ART = ['lean', 'calm', 'hype', 'hold', 'smile', 'got'];   // the note keys by position: tell a friend, slower, bigger, hands busy, last word, same again
+const doFor = l => (!l || l.br) ? '' : (DOS[l.do] ? l.do : C.doOf(l.text, l.dir));
+const doImg = (k, cls) => k ? `<img${cls ? ` class="${cls}"` : ''} src="${ART}${k}.webp" alt="" decoding="async">` : '';
+const lineById = id => { const sc = scriptOf(String(id).split('.')[0]); return sc ? sc.lines.find(x => x.id === id) : null; };
+let PICK = '';
 
 const NOTES = [
-  { b: 'Tell a friend', s: 'Say it to one friend in the lens, not a crowd.' },
-  { b: 'Slower', s: 'Breathe first, then the line.' },
-  { b: 'Bigger', s: 'Twice the smile, same speed.' },
-  { b: 'Hands busy', s: 'Hold, touch or show something while you say it.' },
-  { b: 'Last word', s: 'Hit the last word, then hold 2 seconds.' },
-  { b: 'Same again', s: 'Exactly that. One more for safety.' }
+  { b: 'Tell a friend', s: 'Talk to the camera like it is your best friend.' },
+  { b: 'Slower', s: 'Breathe first. Then say it slow.' },
+  { b: 'Bigger', s: 'Twice the smile. Same speed.' },
+  { b: 'Hands busy', s: 'Hold or touch something while you talk.' },
+  { b: 'Last word', s: 'Hit the last word, then freeze for 2 seconds.' },
+  { b: 'Same again', s: 'That was it! One more just like it.' }
 ];
 const SAMPLE = 'STORE PROMO 1\nHey! Did you know there\'s a record shop right around the corner?\nWe\'ve got vinyl, tapes, posters and so much more.\nPlus we put out new stuff every single day.\nWe\'re at 123 Main Street, open 10 to 8 every day.\nSee you there!\n(B-roll: flipping through the racks)\n\nSTORE PROMO 2\nIf you didn\'t have plans today, now you do.\nCome dig through the crates with us.\nWe\'re at 123 Main Street, open 10 to 8 every day.\nSee you there!\n\nTRADE-IN\nYour old records could be making you money right now.\nBring them in and leave with cash or store credit.\nWe\'re at 123 Main Street, open 10 to 8 every day.\nSee you soon!\n\nSATURDAY MARKET\nHey! Our Saturday market is back!\nLocal vendors, food, drinks and a live DJ.\nSaturday, November 14th, noon to 5 at 123 Main Street.\nSee you there!';
 
@@ -556,27 +763,68 @@ function defWrap() { const d = new Date(Date.now() + 3 * 36e5); d.setMinutes(Mat
 let H = load('hist', []);
 const lastPace = () => { const h = H.filter(x => x.pace > 0).slice(-3); return h.length ? Math.round(C.median(h.map(x => x.pace)) * 2) / 2 : 0; };
 function fresh() { return { v: 1, raw: '', parsedRaw: '', wrap: defWrap(), warm: 10, pace: lastPace() || 3.5, group: true, stops: [{ id: 'p0', name: '', drive: 20 }], scripts: [], run: null, edited: false }; }
-let D = load('day', null) || fresh();
+/* ---------- SAVE FILES (10/21, his ask: a title screen with New game and Load game) ----------
+   Every day is a file: ad-s-<id> holds the day, ad-slots is the index [{ id, name, made, saved }], ad-cur is the file in
+   play. Every tap saves it (persist). The one day a phone had before files existed becomes its first file. A training run
+   is its own file (ad-s-train): never listed, never in the pace history. Past MAX_FILES the oldest wrapped day goes
+   (its numbers stay in the history). */
+const MAX_FILES = 24;
+const newId = () => 'f' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+const hasContent = d => !!(d && ((d.raw && d.raw.trim()) || (d.scripts && d.scripts.length) || d.run));
+const dayWrapped = d => { const e = d && d.run && d.run.events; return !!(e && e.length && e[e.length - 1].k === 'wrap'); };
+let SLOTS = load('slots', null), CUR = load('cur', '');
+if (!Array.isArray(SLOTS)) {
+  SLOTS = [];
+  const old = load('day', null);
+  if (hasContent(old)) { const id = newId(); save('s-' + id, old); SLOTS.push({ id, name: '', made: old.run ? old.run.at : Date.now(), saved: Date.now() }); CUR = id; }
+  save('slots', SLOTS); save('cur', CUR);
+}
+let D = (CUR && load('s-' + CUR, null)) || fresh();
+if (!CUR) CUR = newId();
 let P = Object.assign({ again: 45, line: 90, cap: 3, beep: false }, load('prefs', {}));
 if (!Array.isArray(P.notes) || P.notes.length !== 6) P.notes = NOTES.map(n => Object.assign({}, n));
-const persist = () => save('day', D);
+// 10/21 plainer note words: a phone still holding the old house wording gets the new one (a note he wrote himself stays)
+const OLD_NOTES = ['Say it to one friend in the lens, not a crowd.', 'Breathe first, then the line.', 'Twice the smile, same speed.', 'Hold, touch or show something while you say it.', 'Hit the last word, then hold 2 seconds.', 'Exactly that. One more for safety.'];
+P.notes.forEach((n, i) => { if (n.s === OLD_NOTES[i]) n.s = NOTES[i].s; });
+const persist = () => {
+  const m = SLOTS.find(x => x.id === CUR);
+  if (!m && !hasContent(D)) return;          // a new day is not a file until it has lines in it
+  save('s-' + CUR, D); save('cur', CUR);
+  if (D.practice) return;                     // the training file is never listed
+  if (m) m.saved = Date.now();
+  else { SLOTS.push({ id: CUR, name: '', made: Date.now(), saved: Date.now() }); pruneFiles(); }
+  save('slots', SLOTS);
+};
+function pruneFiles() {
+  while (SLOTS.length > MAX_FILES) {
+    const old = SLOTS.filter(m => m.id !== CUR).map(m => ({ m, d: load('s-' + m.id, null) })).filter(x => dayWrapped(x.d)).sort((a, b) => a.m.saved - b.m.saved)[0];
+    if (!old) break;
+    SLOTS = SLOTS.filter(m => m !== old.m); try { localStorage.removeItem('ad-s-' + old.m.id); } catch (e) {}
+  }
+}
 const savePrefs = () => save('prefs', P);
 const running = () => !!(D.run && !wrappedAt());
 function wrappedAt() { const e = D.run && D.run.events; return e && e.length && e[e.length - 1].k === 'wrap' ? e[e.length - 1].t : 0; }
 
 /* ---------- moving between screens ---------- */
-const BACK = { plan: 'setup', run: 'plan', report: 'plan' };
+const BACK = { setup: 'home', plan: 'setup', run: 'plan', report: 'plan', load: 'home', train: 'home', help: 'home', settings: 'home' };
 function go(scr, push) {
   document.body.dataset.scr = scr;
+  if (scr !== 'run') { $('#flash').hidden = true; $('#show').hidden = true; }   // a pop-up never follows you off the set
   $$('.scr').forEach(el => { el.hidden = el.id !== 's-' + scr; });
   if (push !== false && scr !== 'her') { try { history.replaceState(null, '', '#' + scr); } catch (e) {} }
   window.scrollTo(0, 0);
+  if (scr === 'home') renderHome();
   if (scr === 'setup') renderSetup();
+  if (scr === 'load') renderLoad();
+  if (scr === 'train') renderTrain();
+  if (scr === 'help') renderHelp();
+  if (scr === 'settings') renderSettings();
   if (scr === 'plan') renderPlan();
   if (scr === 'run') { renderRun(); lockOn(); } else lockOff();
   if (scr === 'report') renderReport();
 }
-function back() { const b = BACK[document.body.dataset.scr]; if (b) { buzz(); go(b); } }
+function back() { const sc = document.body.dataset.scr; let b = BACK[sc]; if (D.practice && (sc === 'plan' || sc === 'report' || sc === 'setup')) b = 'train'; if (b) { buzz(); go(b); } }
 $('#back').addEventListener('click', back);
 
 /* ---------- 1. set up ---------- */
@@ -601,21 +849,29 @@ function renderStops() {
 function renderSetup() {
   const r = $('#raw');
   if (document.activeElement !== r) r.value = D.raw || '';
-  r.readOnly = running();
-  $('#resume').hidden = !running();
-  if (running()) { const L = C.live(D, Date.now()); $('#resume-t').textContent = `A shoot is running · ${L.rest.length} left`; }
+  r.readOnly = !!D.run;   // a day that started keeps its lines as shot (Load game > Replay starts a new day from them)
+  $('#resume').hidden = !D.run;
+  if (D.run) {
+    const b = $('#resume .btn');
+    if (wrappedAt()) { $('#resume-t').textContent = 'This day is wrapped · its lines stay as shot'; b.dataset.act = 'toReport'; b.innerHTML = 'The report &rsaquo;'; }
+    else { const L = C.live(D, Date.now()); $('#resume-t').textContent = `A shoot is running · ${L.rest.length} left`; b.dataset.act = 'toRun'; b.innerHTML = 'Back to the set &rsaquo;'; }
+  }
   $('#wrap').value = D.wrap || defWrap();
   readout(); renderStops();
   seg($('#warm'), [0, 5, 10, 15, 20], +D.warm, v => v ? v + ' min' : 'none', v => { D.warm = v; persist(); renderSetup(); });
   $('#pace').textContent = (+D.pace).toFixed(1) + ' min';
   const lp = lastPace(); $('#pace-sub').textContent = lp ? `the dial redlines past it · your last days: ${lp.toFixed(1)}` : 'the dial redlines past it · learns from your days';
-  $('#group').checked = D.group !== false; $('#lefty').checked = !!P.lefty;
-  seg($('#cap'), [2, 3, 4, 5, 0], P.cap, v => v ? String(v) : 'off', v => { P.cap = v; savePrefs(); renderSetup(); });
-  $('#beep').checked = !!P.beep;
+  $('#group').checked = D.group !== false;
+}
+function renderSettings() {
+  seg($('#cap'), [2, 3, 4, 5, 0], P.cap, v => v ? String(v) : 'off', v => { P.cap = v; savePrefs(); renderSettings(); });
+  $('#beep').checked = !!P.beep; $('#lefty').checked = !!P.lefty;
+  let kb = 0; try { kb = Math.round(Object.keys(localStorage).filter(k => k.startsWith('ad-')).reduce((m, k) => m + (localStorage.getItem(k) || '').length, 0) / 1024); } catch (e) {}
+  $('#st-saves').textContent = `${SLOTS.length} day${SLOTS.length === 1 ? '' : 's'} saved, about ${kb} KB on this phone. Back up before you switch phones or clear Safari.`;
   $('#notes-ed').innerHTML = P.notes.map((n, i) => `<div class="noterow"><input class="in" data-nb="${i}" value="${esc(n.b)}" maxlength="18" aria-label="Note ${i + 1} key"><input class="in" data-ns="${i}" value="${esc(n.s)}" maxlength="80" aria-label="Note ${i + 1} meaning"></div>`).join('');
 }
 let rawT;
-$('#raw').addEventListener('input', () => { clearTimeout(rawT); rawT = setTimeout(() => { if (!running()) { D.raw = $('#raw').value; persist(); } readout(); }, 250); });
+$('#raw').addEventListener('input', () => { clearTimeout(rawT); rawT = setTimeout(() => { if (!D.run) { D.raw = $('#raw').value; persist(); } readout(); }, 250); });
 $('#wrap').addEventListener('change', e => { if (e.target.value) { D.wrap = e.target.value; persist(); } });
 $('#stops').addEventListener('change', e => {
   const n = e.target.dataset.stop, d = e.target.dataset.drive;
@@ -639,11 +895,198 @@ function reparse() {
   D.scripts.forEach(s => { if (s.stop && !D.stops.some(x => x.id === s.stop)) delete s.stop; });
 }
 
+/* ---------- 0. THE TITLE SCREEN and its files ---------- */
+const VER = (($('script[src^="core.js"]') || { getAttribute: () => '' }).getAttribute('src') || '').split('v=')[1] || '';
+const rankOf = R => { const inB = R.lines ? (R.lines - R.overN) / R.lines : 0; return !R.lines ? '' : inB >= .9 ? 'S' : inB >= .75 ? 'A' : inB >= .55 ? 'B' : 'C'; };
+const dayOf = id => id === CUR ? D : load('s-' + id, null);
+const screenFor = d => d.run ? (dayWrapped(d) ? 'report' : 'run') : d.scripts && d.scripts.length ? 'plan' : 'setup';
+function fileName(m, d) {
+  if (m.name) return m.name;
+  d = d || dayOf(m.id) || {};
+  const S = d.scripts && d.scripts.length ? d.scripts : d.raw ? C.parse(d.raw) : [], pl = S.length ? C.placesIn(S) : [];   // not planned yet: read the pasted lines for a name
+  const what = pl.length > 1 ? pl.join(' + ') : S.length ? S[0].title + (S.length > 1 ? ' +' + (S.length - 1) : '') : 'lines pasted';
+  return new Date(m.made).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) + ' · ' + what;
+}
+function fileStatus(d) {
+  if (d.run) {
+    const now = Date.now(), L = C.live(d, now);
+    if (dayWrapped(d)) { const R = C.report(d, L, now), rk = rankOf(R); return { face: 'wrap', text: `wrapped${rk ? ' · rank ' + rk : ''} · ${R.lines} line${R.lines === 1 ? '' : 's'} shot` }; }
+    return { face: 'go', text: `on set · ${L.items.filter(it => L.isDone(it)).length} of ${L.items.length} lines` };
+  }
+  if (d.scripts && d.scripts.length) return { face: 'idle', text: `planned · ${d.scripts.length} script${d.scripts.length === 1 ? '' : 's'}` };
+  return { face: 'take', text: 'lines pasted' };
+}
+// what Continue picks up: the day in play (unless it is a training run while a real day is still going), else the newest unfinished day
+function contTarget() {
+  const cur = hasContent(D) && !dayWrapped(D) ? { id: CUR, d: D } : null;
+  if (cur && !D.practice) return cur;
+  const live = SLOTS.slice().sort((a, b) => b.saved - a.saved).map(m => ({ id: m.id, d: dayOf(m.id) })).find(x => x.d && hasContent(x.d) && !dayWrapped(x.d) && x.d.run);
+  return live || cur || SLOTS.slice().sort((a, b) => b.saved - a.saved).map(m => ({ id: m.id, d: dayOf(m.id) })).find(x => x.d && hasContent(x.d) && !dayWrapped(x.d)) || null;
+}
+function useFile(id, day) {
+  CUR = id; D = day || load('s-' + id, null) || fresh(); save('cur', CUR);
+  open.clear(); RL = null; lastCard = ''; helpKey = ''; tickSig = ''; faceNow = ''; wasOT = false;
+}
+function renderHome() {
+  const t = contTarget(), c = $('#h-cont');
+  c.hidden = !t; $('#s-home').classList.toggle('has-cont', !!t);
+  if (t) $('#h-cont-s').textContent = t.d.practice ? 'training · ' + (t.d.practiceTitle || 'practice') : fileName(SLOTS.find(m => m.id === t.id) || { id: t.id, made: Date.now() }, t.d) + ' · ' + fileStatus(t.d).text;
+  $('#h-load-s').textContent = SLOTS.length ? `${SLOTS.length} day${SLOTS.length === 1 ? '' : 's'} saved` : 'no saves yet';
+}
+let OPT = '';
+function renderLoad() {
+  const list = SLOTS.slice().sort((a, b) => b.saved - a.saved);
+  $('#ld-sub').textContent = list.length ? `${list.length} of ${MAX_FILES} files. Every day saves itself, every tap. Tap one to pick it back up.` : 'No saves yet. A new game saves itself as soon as you paste the lines.';
+  $('#ld-list').innerHTML = list.map(m => {
+    const d = dayOf(m.id); if (!d) return '';
+    const st = fileStatus(d);
+    return `<div class="slot${m.id === CUR ? ' cur' : ''}" role="button" tabindex="0" data-act="loadSlot" data-id="${m.id}"><img src="${ART}f-${st.face}.webp" alt=""><span><b>${esc(fileName(m, d))}</b><small>${esc(st.text)}${m.id === CUR && !D.practice ? ' · playing' : ''}</small></span><button type="button" class="opt" data-act="slotOpt" data-id="${m.id}" aria-label="Options for this day">&middot;&middot;&middot;</button></div>`;
+  }).join('');
+}
+function closeOpt() { $('#fileopt').hidden = true; }
+
+/* ---------- TRAINING (10/21, his ask: "a training mode where they can load in different types of scripts, different types of
+   dialogues that they can practice on"). Each pack is a doc in the same shape a client sends, read by the same parser and
+   played on the same set with no clock to beat. Generic words only: no clients, no real places. ---------- */
+const PACKS = [
+  { id: 'store', art: 'point', title: 'Store promo', kind: 'to camera · call to shop', lvl: 1, text: `STORE PROMO 1
+Hey! Did you know there's a record shop right around the corner?
+We've got vinyl, tapes, posters and so much more.
+Plus we put out new stuff every single day.
+We're at 123 Main Street, open 10 to 8 every day.
+See you there!
+
+STORE PROMO 2
+If you didn't have plans today, now you do.
+Come dig through the crates with us.
+We're at 123 Main Street, open 10 to 8 every day.
+See you there!` },
+  { id: 'event', art: 'hype', title: 'Event night', kind: 'to camera · big news', lvl: 1, text: `NIGHT MARKET
+Hey, everybody!
+Our night market is BACK!
+Local vendors, food trucks, drinks AND a live DJ!
+So grab your friends and come hang out with us.
+Saturday, November 14th, 6 to 11 at 123 Main Street!
+See you there!
+
+GRAND OPENING
+Guess what? We're opening a brand new spot!
+Free samples all day on Friday.
+The first 50 people get a free tote bag.
+Come through, 456 Oak Avenue, 10 AM sharp.
+We can't wait to meet you!` },
+  { id: 'review', art: 'hold', title: 'Product review', kind: 'to camera · show and tell', lvl: 2, text: `REVIEW
+Okay, I have to show you this.
+This is the lip gloss everyone keeps asking me about.
+It's super shiny but not sticky at all.
+I wore it all day and it's still here.
+Link is in my bio, go get it!
+
+UNBOXING
+It finally came!
+Let's open it together.
+Look how cute the packaging is.
+Okay, first impressions? I'm obsessed.
+Would you try it? Tell me in the comments.` },
+  { id: 'food', art: 'smile', title: 'Food spot', kind: 'to camera · make it look good', lvl: 1, text: `CAFE
+Okay, you need to try this.
+This is the strawberry matcha everyone is talking about.
+It's sweet, it's creamy, and it's so pretty.
+We open at 7 every morning.
+Come say hi at 789 Elm Street!
+
+TACO NIGHT
+Taco Tuesday just got better.
+Three tacos and a drink for ten bucks.
+Every Tuesday, all night long.
+Pull up and bring your crew!` },
+  { id: 'tour', art: 'walk', title: 'Walk-through tour', kind: 'on the move · walk and point', lvl: 2, text: `VENUE TOUR
+Welcome in! Let me show you around.
+This is the main room. It fits two hundred people.
+Over here we've got the bar and the photo wall.
+And this is my favorite part, the rooftop.
+Book your night with us today!
+
+APARTMENT TOUR
+Come on in, this is the new place.
+Look at all this light from the big windows.
+The kitchen is brand new, check out these counters.
+And the best part? A balcony with a view.
+Message us to set up a visit.` },
+  { id: 'music', art: 'wave', title: 'Music drop', kind: 'to camera · artist promo', lvl: 2, text: `NEW SINGLE
+My new song is out right now!
+I wrote it about the best summer of my life.
+Go stream it, save it, add it to your playlist.
+And tag me when you play it in the car!
+
+SHOW NIGHT
+I'm playing live this Friday!
+Doors at 8, I go on at 10.
+The Velvet Room, 22 River Road.
+Come sing with me!` },
+  { id: 'talk', art: 'lean', title: 'Two-person scene', kind: 'dialogue · back and forth', lvl: 3, text: `MORNING SHOW
+HOST: Good morning, everybody, and welcome back to the show!
+GUEST: Thanks for having me, I'm so happy to be here.
+HOST: So tell us, what are you working on right now?
+GUEST: I just opened my own little clothing shop downtown.
+HOST: That is amazing! Where can people find you?
+GUEST: Come see me at 123 Main Street, we open at ten!
+
+BEST FRIENDS
+FRIEND 1: Wait, is that a new jacket?
+FRIEND 2: Yes! I got it at the thrift store for five dollars.
+FRIEND 1: Five dollars? Stop it.
+FRIEND 2: I'm serious, they put out new stuff every day.
+FRIEND 1: Okay, we are going this weekend.` },
+  { id: 'warm', art: 'calm', title: 'Warm-ups', kind: 'diction · energy', lvl: 1, text: `TONGUE TWISTERS
+Red leather, yellow leather.
+Unique New York, you know you need unique New York.
+She sells seashells by the seashore.
+Toy boat, toy boat, toy boat.
+
+ENERGY CHECK
+(Jump, like you just won) I can't believe it!
+(Whisper it like a secret) I can't believe it.
+(Slow, like you are bored) I can't believe it.
+(Smile at your best friend) I can't believe it!` }
+];
+function renderTrain() {
+  $('#tr-list').innerHTML = PACKS.map(pk => {
+    const n = C.parse(pk.text).reduce((m, sc) => m + C.dialogue(sc), 0);
+    return `<div class="pack" role="button" tabindex="0" data-act="trainPack" data-id="${pk.id}">${doImg(pk.art)}<span><b>${esc(pk.title)}</b><small>${esc(pk.kind)} &middot; ${n} lines</small></span><i class="lvl" aria-label="level ${pk.lvl} of 3">${'&#9733;'.repeat(pk.lvl)}${'&#9734;'.repeat(3 - pk.lvl)}</i></div>`;
+  }).join('');
+}
+// a training run: its own file, a wrap three hours out (no pressure), a 2 minute budget a line, then the same set
+function startTraining(text, id, title) {
+  const d = fresh(), t = new Date(Date.now() + 3 * 36e5);
+  Object.assign(d, { practice: id, practiceTitle: title, raw: text, warm: 0, pace: 2, wrap: String(t.getHours()).padStart(2, '0') + ':' + String(t.getMinutes()).padStart(2, '0') });
+  d.scripts = C.parse(text); d.parsedRaw = text;
+  if (!d.scripts.length) { toast('No lines in there yet.'); return; }
+  useFile('train', d); persist(); act.start();
+}
+
+/* ---------- HOW TO PLAY ---------- */
+const HELP = [
+  ['hold', 'New game', 'Paste the lines straight from the doc or the text. Set when the talent has to leave. That is it.'],
+  ['point', 'The plan', 'It puts the scripts in shoot order and shows the day as a bar. Red means it will not fit. Star a must, skip the rest, send the talent their lines.'],
+  ['go', 'On set', 'One line at a time, big. B means take it again. A means got it. The next line comes up by itself.'],
+  ['hearts', 'Hearts and clocks', 'Hearts are takes. The little dial is this line, the bar up top is the whole day. Green is fine, red is late.'],
+  ['long', 'Stuck?', 'Out of hearts or running long: Later sends the line to the end, Split cuts it in two. Undo fixes any tap.'],
+  ['lean', 'Show the talent', 'Tap the line to show it big. Her pose shows what to do: point, wave, hold it up, lean in.'],
+  ['calm', 'Notes', 'More has notes. One tap shows the talent a picture and a few words instead of a speech.'],
+  ['wrap', 'Wrap', 'Wrap the day for the report: a rank, every line as a bar, the lines that ran long.'],
+  ['take', 'Saves and training', 'Every day saves itself, so Load game picks any day back up. Training has practice scripts to warm up on.']
+];
+function renderHelp() {
+  $('#help-steps').innerHTML = HELP.map(([art, b, t], i) => `<li>${doImg(art)}<span><i>step ${i + 1}</i><b>${esc(b)}</b><p>${esc(t)}</p></span></li>`).join('');
+}
+
 /* ---------- 2. the plan ---------- */
 const open = new Set();
 let planPainted = 0;
 function chipsFor(s, est, warmId, n, withStop) {
   const c = [];
+  const tg = TAGS[s.id]; if (tg && est != null) c.push(`<i class="chip n" style="background:${tg.bg}">#${tg.n}</i>`);
   if (s.id === warmId) c.push('<i class="chip warm">warm-up</i>');
   if (s.must) c.push('<i class="chip must">must</i>');
   if (s.dated) c.push(`<i class="chip date">${esc(s.dated)}</i>`);
@@ -669,9 +1112,52 @@ function linesHtml(s, items, L) {
     if (cv) tags.push('said once with ' + nm(D.scripts.find(x => x.id === cv.sid)));
     if (it && it.g) tags.push(`back to back with ${it.gn - 1} like it`);
     if (L && (L.done[l.id] || (cv && L.isDone(cv)) || (it && L.isDone(it)))) tags.push('done');
-    const edit = running() || wrappedAt() ? '' : `<span class="row"><button type="button" class="btn ghost" data-act="editLine" data-id="${l.id}">Edit</button>${!l.br && C.sentences(l.text).length > 1 ? `<button type="button" class="btn ghost" data-act="splitLine" data-id="${l.id}">Split</button>` : ''}<button type="button" class="btn ghost" data-act="flipLine" data-id="${l.id}">${l.br ? 'Line' : 'B-roll'}</button></span>`;
+    const dk = doFor(l), pick = dk ? `<button type="button" class="do-pick" data-act="pickDo" data-id="${l.id}" aria-label="What they do: ${esc(DOS[dk])}. Change it">${doImg(dk)}${esc(DOS[dk])}</button>` : '';
+    const edit = running() || wrappedAt() ? (pick ? `<span class="row">${pick}</span>` : '') : `<span class="row">${pick}<button type="button" class="btn ghost" data-act="editLine" data-id="${l.id}">Edit</button>${!l.br && C.sentences(l.text).length > 1 ? `<button type="button" class="btn ghost" data-act="splitLine" data-id="${l.id}">Split</button>` : ''}<button type="button" class="btn ghost" data-act="flipLine" data-id="${l.id}">${l.br ? 'Line' : 'B-roll'}</button></span>`;
     return `<div class="sl${l.br ? ' br' : ''}"><span>${esc(l.text)}${tags.length ? `<small>${esc(tags.join(' · '))}</small>` : ''}</span>${edit}</div>`;
   }).join('')}</div>`;
+}
+// THE DAY AS A BAR (10/21 charts): every script in shoot order, a color family per stop, the drives striped, a white
+// mark at the wrap. What will not fit hangs off the end, hatched red. Each script's row below wears its number and color.
+const TL_COL = [['#ffb3d6', '#ff9ccd'], ['#d9c8ff', '#c2acf7'], ['#b0dcff', '#8ccaff'], ['#bdf0d6', '#93e2bb'], ['#ffe79a', '#ffd970'], ['#ffd0b0', '#ffb98f']];
+let TAGS = {};
+const scriptMin = sc => sc.lines.reduce((m, l) => m + (l.br ? C.BR_MIN : +D.pace || 3), 0);
+function bar(parts, total, wrapM, foot, label) {
+  const pct = m => (100 * Math.max(0, m) / total).toFixed(2) + '%';
+  return `<div class="tl"><div class="tl-bar" role="img" aria-label="${esc(label)}">${parts.map(q => `<i class="tl-s ${q.cls || ''}" style="width:${pct(q.min)}${q.bg ? ';background:' + q.bg : ''}">${q.tag && q.min / total > .06 ? esc(q.tag) : ''}</i>`).join('')}<i class="tl-wrap" style="left:${pct(wrapM)}"></i></div><div class="tl-foot">${foot}</div></div>`;
+}
+function planBar(Pl) {
+  const fitS = C.rank(D.scripts.filter(sc => Pl.inc.has(sc.id)), Pl.warmId), parts = [];
+  TAGS = {};
+  let n = 0, prev = -1;
+  D.stops.forEach((st, si) => {
+    const S = fitS.filter(sc => C.stopFor(sc, D.stops) === st.id);
+    if (!S.length) return;
+    if (prev >= 0) { let dm = 0; for (let k = prev; k < si; k++) dm += +D.stops[k].drive || 0; if (dm) parts.push({ min: dm, cls: 'drive' }); }
+    prev = si;
+    S.forEach((sc, k) => { n++; const bg = TL_COL[si % TL_COL.length][k % 2]; TAGS[sc.id] = { n, bg }; parts.push({ min: Pl.per[sc.id] || 0, bg, tag: String(n) }); });
+  });
+  const cutMin = D.scripts.filter(sc => Pl.cut.includes(sc.id)).reduce((m, sc) => m + scriptMin(sc), 0);
+  if (cutMin) parts.push({ min: cutMin, cls: 'cut' });
+  const total = Math.max(Pl.avail, Pl.need + cutMin, 1), spare = Pl.avail - Pl.need, done = Pl.start + Pl.need * 6e4;
+  const foot = `<span>${hm(Pl.start)} now</span><span>done about <b>${hm(done)}</b></span><span>wrap <b>${hm(Pl.wrapAt)}</b></span>` + (cutMin ? '<span>red = won\'t fit</span>' : spare >= 1 ? `<span>${hmin(spare)} spare</span>` : '');
+  return bar(parts, total, Pl.avail, foot, `The day: done about ${hm(done)}, wrap ${hm(Pl.wrapAt)}`);
+}
+function liveBar(L, now) {
+  const start = D.run.at, w = wrappedAt(), end = w || now, el = (end - start) / 6e4, left = w ? 0 : Math.max(0, (L.proj - now) / 6e4), wrapM = (L.wrapAt - start) / 6e4;
+  const total = Math.max(wrapM, el + left, 1), parts = [];
+  if (el <= wrapM) parts.push({ min: el, cls: 'done' }); else parts.push({ min: wrapM, cls: 'done' }, { min: el - wrapM, cls: 'late' });
+  if (left) { const before = Math.max(0, Math.min(left, wrapM - el)); if (before) parts.push({ min: before, cls: 'left' }); if (left - before > 0) parts.push({ min: left - before, cls: 'late' }); }
+  const foot = w ? `<span>${hm(start)} start</span><span>wrapped <b>${hm(w)}</b></span><span>wrap was <b>${hm(L.wrapAt)}</b></span>`
+    : `<span>${hm(start)} start</span><span>now ${hm(now)}</span><span>done about <b>${hm(L.proj)}</b></span><span>wrap <b>${hm(L.wrapAt)}</b></span>`;
+  return bar(parts, total, wrapM, foot, w ? `The day: ${hm(start)} to ${hm(w)}` : `The day so far: done about ${hm(L.proj)}, wrap ${hm(L.wrapAt)}`);
+}
+// every line as a bar, in the order shot (10/21 charts): green inside its budget, red past it; the dashed line = the budget
+function lineBars(R) {
+  if (!R.every.length) return '';
+  const pace = +D.pace || 3.5, top = Math.max(pace * 1.25, ...R.every.map(x => x.min));
+  const bars = R.every.map(x => `<i class="${x.k === 'skip' ? 'skip' : x.k === 'later' ? 'later' : x.over ? 'over' : ''}" style="height:${Math.max(2, 100 * x.min / top).toFixed(1)}%" title="${esc(hms(x.min * 60) + ' ' + x.text)}"></i>`).join('');
+  return `<div class="sec">Every line, as a bar<span>in the order shot</span></div><div class="lb" role="img" aria-label="${R.every.length} lines, ${R.overN} past their budget"><div class="lb-in">${bars}<i class="bud" style="bottom:${(100 * pace / top).toFixed(1)}%"></i></div></div><p class="lb-k">green = inside its budget &middot; red = past it &middot; dashed = ${pace.toFixed(1)} min a line</p>`;
 }
 function renderPlan() {
   planPainted = Date.now();
@@ -692,7 +1178,7 @@ function renderPlan() {
   $('#why').textContent = `In shoot order: an easy script first (the talent warms up on it), dated ones early, the same line in different scripts back to back.${lines > said ? ` ${lines - said} line${lines - said > 1 ? 's are' : ' is'} word for word in another script, said once.` : ''} At ${(+D.pace).toFixed(1)} min a line.`;
   // scripts in the order they get worked through, split by stop (repeats from later scripts get pulled in early)
   const fitS = C.rank(D.scripts.filter(s => Pl.inc.has(s.id)), Pl.warmId);
-  let h = '';
+  let h = planBar(Pl);
   D.stops.forEach((st, si) => {
     const S = fitS.filter(s => C.stopFor(s, D.stops) === st.id);
     if (!S.length) return;
@@ -739,7 +1225,7 @@ function renderPlanLive() {
   const first = {}; L.items.forEach((it, i) => { if (first[it.sid] == null) first[it.sid] = i; });
   const inS = D.scripts.filter(s => L.inc.has(s.id) || L.per[s.id].done).sort((a, b) => (first[a.id] ?? 1e9) - (first[b.id] ?? 1e9));
   const outS = D.scripts.filter(s => !inS.includes(s));
-  let h = `<div class="sec">Today<span>${inS.length} script${inS.length === 1 ? '' : 's'}</span></div>`;
+  let h = liveBar(L, now) + `<div class="sec">Today<span>${inS.length} script${inS.length === 1 ? '' : 's'}</span></div>`;
   inS.forEach(s => { const st = L.per[s.id]; h += rowHtml(s, null, '', L.items, st.lines && st.done >= st.lines ? 'fin' : '', L); });
   if (outS.length) { h += `<div class="sec">Not in today<span>add one if there is time</span></div>`; outS.forEach(s => { h += rowHtml(s, null, '', L.items, 'out', L); }); }
   $('#plist').innerHTML = h;
@@ -765,12 +1251,16 @@ function ev(k, extra) { D.run.events.push(Object.assign({ t: Date.now(), k }, ex
 function scriptOf(id) { return D.scripts.find(s => s.id === id); }
 // the biggest size that fits, never under min; false when even min does not fit (that box scrolls instead)
 function fitText(el, box, max, min) {
+  // fits = no taller than the box AND no word wider than it (words never break mid-word: "Saturda / y" lost a reader)
+  const tall = () => el.scrollHeight <= box.clientHeight + 1, wide = () => el.scrollWidth <= el.clientWidth + 1;
+  el.classList.remove('brk');
   el.style.fontSize = max + 'px';
-  if (el.scrollHeight <= box.clientHeight + 1) return true;
+  if (tall() && wide()) return true;
   let lo = min, hi = max;
-  while (hi - lo > 1) { const m = (lo + hi) >> 1; el.style.fontSize = m + 'px'; if (el.scrollHeight <= box.clientHeight + 1) lo = m; else hi = m; }
+  while (hi - lo > 1) { const m = (lo + hi) >> 1; el.style.fontSize = m + 'px'; if (tall() && wide()) lo = m; else hi = m; }
   el.style.fontSize = lo + 'px';
-  return el.scrollHeight <= box.clientHeight + 1;
+  if (!wide()) el.classList.add('brk');   // one word wider than the box even at the smallest size: only then may it break
+  return tall();
 }
 const atEnd = b => b.scrollTop + b.clientHeight >= b.scrollHeight - 4;
 // the line on the set: 52px down to 24px, never smaller. Longer than that, it scrolls, with MORE showing until the end.
@@ -787,17 +1277,17 @@ function renderRun() {
   const total = L.items.filter(it => !L.gone.has(it.stop) || L.isDone(it)).length, doneN = L.items.filter(it => L.isDone(it)).length;
   PROG = { i: Math.min(doneN + 1, total), total };
   card.className = 'linecard';
-  $('#r-tag').textContent = ''; $('#r-tap').hidden = false;
+  $('#r-tag').textContent = ''; $('#r-tap').hidden = false; $('#r-do').innerHTML = '';
   // the two big keys stay put in every state (anchors never move): B goes dim when there is nothing to retake
   $('#k-again').disabled = busy;
   if (!cur) {
-    card.classList.add('alldone'); $('#r-who').textContent = 'That is everything'; $('#r-at').textContent = '';
+    card.classList.add('alldone'); $('#r-art').src = ART + 'wrap.webp'; $('#r-who').textContent = 'That is everything'; $('#r-at').textContent = '';
     $('#r-txt').textContent = 'All done. Wrap it.'; $('#r-tap').hidden = true;
     $('#r-mid').hidden = true;
     $('#k-got-s').textContent = 'all done'; $('#k-got-t').innerHTML = 'Wrap &rsaquo;';
   } else if (L.driveTo) {
     const mins = +((D.stops.find(s => s.id === L.stop) || {}).drive || 0);
-    card.classList.add('drive'); $('#r-who').textContent = 'On the move'; $('#r-at').textContent = '';
+    card.classList.add('drive'); $('#r-art').src = ART + 'drive.webp'; $('#r-who').textContent = 'On the move'; $('#r-at').textContent = '';
     $('#r-txt').textContent = 'Drive to ' + stopName(L.driveTo); $('#r-tap').hidden = true;
     $('#r-tag').textContent = `about ${mins} min · next: ${nm(scriptOf(cur.sid))}`;
     $('#r-mid').hidden = false;
@@ -813,9 +1303,11 @@ function renderRun() {
     if (cur.cov.length) tag.push(`in ${1 + cur.cov.length} scripts · one take covers all`);
     if (cur.g) tag.push(`back to back ${cur.gi} of ${cur.gn}`);
     if (L.rounds[cur.id]) tag.push('another try · fresh hearts');
-    $('#r-tag').textContent = tag.join(' · ');
+    const voices = new Set(s.lines.map(l => l.who).filter(Boolean)), spk = cur.who && voices.size > 1 ? cur.who : '';   // two-person scripts: who says it
+    $('#r-tag').innerHTML = spk || tag.length ? (spk ? `<b class="spk">${esc(spk)}</b>` : '') + `<span class="tg-rest">${esc(tag.join(' · '))}</span>` : '';
     $('#r-txt').textContent = cur.text;
     $('#r-mid').hidden = false;
+    const dk = doFor(cur); $('#r-do').innerHTML = dk ? doImg(dk) + esc(DOS[dk]) : '';
     const n = (L.att[cur.id] || 0) - (L.laterAt[cur.id] || 0) + 1, capOn = P.cap > 0;
     $('#k-again-t').textContent = 'Take ' + (n + 1); $('#k-got-s').textContent = 'line done'; $('#k-got-t').innerHTML = 'Got it &rsaquo;';
     $('#r-take').textContent = 'Take ' + n;
@@ -827,6 +1319,7 @@ function renderRun() {
     lastPip = { id: cur.id, n };
     runOver = capOn && n > P.cap;
   }
+  $('#k-got-t').classList.toggle('sm', !!(cur && L.driveTo));   // "We're here" ran past the key's edge on a 390 phone
   // the note keys live in More; they go dim when there is no line to give a note on
   $('#r-notes').innerHTML = P.notes.map((x, i) => `<button type="button" class="btn" data-act="note" data-i="${i}"${busy ? ' disabled' : ''}>${esc(x.b)}</button>`).join('');
   const key = cur ? cur.id + (L.driveTo || '') : 'done';
@@ -836,8 +1329,18 @@ function renderRun() {
   paintStuck(!busy && (now - L.lastT) / 1e3 >= Math.max(30, L.curBudget * 60));
   tickRun(now);
 }
+// her face in the take row: what the set is doing right now, or for a beat after a tap (a take, got it, stage clear, go)
+let faceNow = '', faceBeat = { k: '', until: 0 };
+function beat(k, ms) { faceBeat = { k, until: Date.now() + (ms || 1400) }; paintFace(Date.now()); }
+function paintFace(now) {
+  const L = RL; if (!L) return;
+  const k = faceBeat.until > now ? faceBeat.k : !L.cur ? 'wrap' : L.driveTo ? 'drive' : now > L.wrapAt ? 'over' : stuckNow === 'hearts' ? 'hearts' : stuckNow === 'time' ? 'long' : 'idle';
+  if (k === faceNow) return;
+  faceNow = k; const f = $('#r-face'); f.src = ART + 'f-' + k + '.webp'; f.classList.remove('boing'); void f.offsetWidth; f.classList.add('boing');
+}
 function tickRun(now) {
   if (!RL) return;
+  paintFace(now);
   if (now - liveAt > 1000) { RL = C.live(D, now); liveAt = now; paintTicker(now); }
   const L = RL, ring = $('#r-ring'), arc = $('#r-arc'), CIRC = 276.46;
   // THE LINE TIMER: starts when the line comes up, runs through every take, stops at GOT IT; redlines past the line's budget
@@ -856,6 +1359,9 @@ function tickRun(now) {
   ring.className = 'lclk ' + cls;
   $('#r-clock').textContent = big; $('#r-clock').className = big.length > 5 ? 'long' : ''; $('#r-clk-l').textContent = lab;
   arc.style.strokeDashoffset = String(CIRC * (1 - Math.max(0, Math.min(1, frac))));
+  if (D.practice) {   // training: no wrap to beat, the top row just counts the practice up
+    $('#r-left').textContent = hms((now - D.run.at) / 1e3); $('#r-left-l').textContent = 'training'; $('#r-day').className = 'day lcd'; $('#r-fill').style.width = '100%'; $('#r-ot').style.width = '0%'; return;
+  }
   // THE DAY TIMER: counts down to the wrap; amber when the pace says you will run over, red and counting up in overtime
   const day = $('#r-day'), total = Math.max(1, L.wrapAt - D.run.at), leftMs = L.wrapAt - now, red = leftMs < 0;
   const warn = !red && !!L.cur && L.over > 2, low = !red && leftMs < total * .2, mid = !red && !low && leftMs < total * .5;
@@ -865,13 +1371,13 @@ function tickRun(now) {
   // the TIME bar drains like a life bar; past the wrap it fills back up in red (full red = 30 min over)
   $('#r-fill').style.width = red ? '0%' : Math.max(0, Math.min(100, leftMs / total * 100)) + '%';
   $('#r-ot').style.width = red ? Math.min(100, -leftMs / (30 * 6e4) * 100) + '%' : '0%';
-  if (red && !wasOT && L.cur) pop('Overtime!', 'past the ' + hm(L.wrapAt) + ' wrap · drop what you can', true);
+  if (red && !wasOT && L.cur) pop('Overtime!', 'past the ' + hm(L.wrapAt) + ' wrap · drop what you can', true, 'over');
   wasOT = red;
 }
 const dismissed = {};
 function paintTicker(now) {
   const L = RL; if (!L) return;
-  const n = L.cur && !L.driveTo ? C.nudge(D, L, now) : null, dk = n ? n.k + (n.sid || n.stop || '') : '';
+  const n = L.cur && !L.driveTo && !D.practice ? C.nudge(D, L, now) : null, dk = n ? n.k + (n.sid || n.stop || '') : '';
   let cls = '', text = '', keys = '';
   if (!L.cur) text = 'That is every line. Tap A to wrap the day.';
   else if (L.driveTo) text = `On the road to ${stopName(L.driveTo)}. Tap A when you get there.`;
@@ -887,16 +1393,18 @@ function paintTicker(now) {
     else if (n.k === 'add') { text = `${Math.round(-L.over)} min spare. Add ${nm(scriptOf(n.sid))} back? About ${Math.max(1, Math.round(n.cost))} min.`; keys = `<button type="button" class="btn" data-act="addS" data-sid="${n.sid}">Add</button>` + x; }
     else { text = `${Math.round(L.over)} min over. Keep it moving.`; keys = x; }
   }
+  else if (D.practice) text = `Line ${PROG.i} of ${PROG.total} · say it, then A. Again? B.`;
   else if (now > L.wrapAt) { cls = 'hot'; text = `Past the ${hm(L.wrapAt)} wrap. ${L.rest.length} left to shoot.`; }
-  else { cls = L.over > 2 ? 'warn' : ''; text = `Line ${PROG.i} of ${PROG.total} · on pace to wrap ${hm(L.proj)}${L.over > 2 ? ', ' + Math.round(L.over) + ' min over' : L.over < -2 ? ', ' + Math.round(-L.over) + ' min spare' : ''}`; }
+  else { cls = L.over > 2 ? 'warn' : ''; text = `Line ${PROG.i} of ${PROG.total} · done about ${hm(L.proj)}${L.over > 2 ? ', ' + Math.round(L.over) + ' min late' : L.over < -2 ? ', ' + Math.round(-L.over) + ' min to spare' : ''}`; }
   const sig = cls + '|' + text + '|' + keys; if (sig === tickSig) return; tickSig = sig;
   $('#r-tick').className = 'ticker ' + cls; $('#r-tick-t').textContent = text; $('#r-tick-k').innerHTML = keys;
 }
 let AC = null;
 function beep() { try { AC = AC || new (window.AudioContext || window.webkitAudioContext)(); if (AC.state === 'suspended') AC.resume(); const o = AC.createOscillator(), g = AC.createGain(), t = AC.currentTime; o.frequency.value = 880; g.gain.value = .25; o.connect(g); g.connect(AC.destination); o.start(t); g.gain.linearRampToValueAtTime(0, t + .12); o.stop(t + .14); } catch (e) {} }
 let flashT;
-function flash(b, s, ok, ms) {
+function flash(b, s, ok, ms, art) {
   const f = $('#flash'); $('#flash-b').textContent = b; $('#flash-s').textContent = s || ''; f.className = 'full' + (ok ? ' ok' : ''); f.hidden = false;
+  const im = $('#flash-i'); im.hidden = !art; if (art) im.src = ART + art + '.webp';
   clearTimeout(flashT); flashT = setTimeout(() => { f.hidden = true; }, ms || 1600);
 }
 $('#flash').addEventListener('click', () => { $('#flash').hidden = true; });
@@ -906,8 +1414,8 @@ function fitShow() {
   sh.classList.toggle('scroll', !fits); sh.classList.toggle('end', atEnd(box));
   $('#show .s-x').textContent = fits ? 'tap anywhere to close' : 'scroll for the rest · tap to close';
 }
-function showBig(text, who) {
-  $('#show-who').textContent = who || ''; $('#show-txt').textContent = text; $('#show').hidden = false; $('#show .s-box').scrollTop = 0;
+function showBig(text, who, dk) {
+  $('#show-who').textContent = who || ''; $('#show-do').innerHTML = DOS[dk] ? doImg(dk) + `<span><b>${esc(DOS[dk])}</b><small>${esc(DOHINT[dk])}</small></span>` : ''; $('#show-txt').textContent = text; $('#show').hidden = false; $('#show .s-box').scrollTop = 0;
   fitShow(); requestAnimationFrame(fitShow);
 }
 $('#show').addEventListener('click', () => { $('#show').hidden = true; });
@@ -919,7 +1427,7 @@ document.addEventListener('visibilitychange', () => { if (document.visibilitySta
 /* ---------- 4. the report ---------- */
 function reportText(R) {
   const L = [];
-  L.push('THE AD · day report · ' + new Date(R.start).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' }));
+  L.push('Sweet Takes · day report · ' + new Date(R.start).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' }));
   L.push(`On the clock ${hm(R.start)} ${ap(R.start)} to ${hm(R.end)} ${ap(R.end)} (${hmin(R.min)})`);
   L.push(`Scripts done: ${R.finished} of ${R.planned} planned${R.dropped ? ', ' + R.dropped + ' dropped' : ''}${R.left ? ', ' + R.left + ' left behind' : ''}${R.never ? ', ' + R.never + ' never fit' : ''}`);
   L.push(`Lines: ${R.lines} shot${R.skipped ? ', ' + R.skipped + ' skipped' : ''} · ${R.takes} takes · ${R.perLine.toFixed(1)} takes a line`);
@@ -938,7 +1446,8 @@ function renderReport() {
   if (!D.run) { go(D.scripts.length ? 'plan' : 'setup'); return; }
   const now = Date.now(), L = C.live(D, now), R = lastReport = C.report(D, L, now), w = wrappedAt();
   const v = $('#rep-v');
-  v.querySelector('b').textContent = `${R.finished} of ${R.planned} scripts`;
+  $('#rep-m').src = ART + (w ? 'wrap' : 'got') + '.webp';
+  v.querySelector('b').textContent = D.practice ? 'Training clear!' : `${R.finished} of ${R.planned} scripts`;
   v.querySelector('small').textContent = `results · ${hm(R.start)} to ${hm(R.end)} ${ap(R.end)} · ${hmin(R.min)} on the clock${w ? '' : ' · still running'}`;
   // a rank, like the end of a level: how many lines landed inside their budget
   const inB = R.lines ? (R.lines - R.overN) / R.lines : 0;
@@ -946,19 +1455,21 @@ function renderReport() {
   const st = [['Lines shot', R.lines], ['Takes', R.takes], ['Takes a line', R.perLine ? R.perLine.toFixed(1) : '0'],
     ['Average line', R.lines ? hms(R.avgLine * 60) : '0:00'], ['Pace after warm-up', R.pace ? R.pace.toFixed(1) + ' min' : 'soon'], ['Past budget', R.lines ? R.overN + ' of ' + R.lines : '0']];
   $('#rep-stats').innerHTML = st.map(([i, b]) => `<div class="stat lcd"><i>${esc(i)}</i><b>${esc(b)}</b></div>`).join('');
-  let h = '';
+  let h = lineBars(R);
   if (R.laterN || R.splitN) h += `<p class="why">${R.laterN ? R.laterN + ' line' + (R.laterN > 1 ? 's' : '') + ' went to Later. ' : ''}${R.splitN ? R.splitN + ' line' + (R.splitN > 1 ? 's were' : ' was') + ' split on set.' : ''}</p>`;
   if (R.warm >= 1) h += `<p class="why">The warm-up script took ${Math.round(R.warm)} min.${R.pace ? ` After it you ran ${R.pace.toFixed(1)} min a line, so the next plan starts there.` : ''}</p>`;
   if (R.slowest.length) { h += `<div class="sec">Slowest lines<span>where the clock went</span></div>`; R.slowest.forEach(x => { h += `<div class="rl"><span><b>${esc(x.text)}</b><small>${esc(x.script)} · ${x.takes} take${x.takes === 1 ? '' : 's'}</small></span><em class="${x.over ? 'red' : ''}">${hms(x.min * 60)}</em></div>`; }); }
   const n = Object.entries(R.notes);
   if (n.length) h += `<div class="sec">Notes you gave<span>${n.reduce((m, [, c]) => m + c, 0)} taps</span></div><p class="why">${n.map(([k, c]) => esc(P.notes[+k] ? P.notes[+k].b : k) + ' x' + c).join(' · ')}</p>`;
   h += `<div class="sec">Per script<span>minutes · lines · takes</span></div>`;
-  R.scripts.forEach(s => { h += `<div class="rl"><span><b>${esc(s.title)}</b><small>${s.done} of ${s.lines} lines · ${s.takes} takes${s.warm ? ' · warm-up' : ''}${s.dropped ? ' · dropped' : ''}${s.left ? ' · left behind' : ''}</small></span><em>${Math.round(s.min)} min</em></div>`; });
+  const topS = Math.max(1, ...R.scripts.map(x => x.min));
+  R.scripts.forEach(s => { h += `<div class="rl"><span><b>${esc(s.title)}</b><small>${s.done} of ${s.lines} lines · ${s.takes} takes${s.warm ? ' · warm-up' : ''}${s.dropped ? ' · dropped' : ''}${s.left ? ' · left behind' : ''}</small><i class="rl-bar" style="width:${(100 * s.min / topS).toFixed(1)}%"></i></span><em>${Math.round(s.min)} min</em></div>`; });
   if (R.every.length) { h += `<div class="sec">Every line<span>red = past budget</span></div>`; R.every.forEach(x => { h += `<div class="rl sm"><span><b>${esc(x.text)}</b><small>${esc(x.script)} · ${x.k === 'skip' ? 'skipped' : x.k === 'later' ? 'sent to Later after ' + x.takes + ' take' + (x.takes === 1 ? '' : 's') : x.takes + ' take' + (x.takes === 1 ? '' : 's')}</small></span><em class="${x.over ? 'red' : ''}">${hms(x.min * 60)}</em></div>`; }); }
   if (w) h += `<button type="button" class="btn ghost" data-act="unwrap" style="width:100%;margin-top:10px">Not done? Undo the wrap</button>`;
   $('#rep-body').innerHTML = h;
-  $('#rdock').innerHTML = `<button type="button" class="btn" data-act="copyRep">Copy it</button>` + (w ? `<button type="button" class="btn primary" data-act="newDay"><small>start a</small>New day &rsaquo;</button>` : `<button type="button" class="btn primary" data-act="toRun"><small>back to</small>The set &rsaquo;</button>`) + '<button type="button" class="bk" data-act="back" aria-label="Back">&lsaquo;</button>';
-  if (w && R.lines) { const i = H.findIndex(x => x.at === R.start), e = { at: R.start, pace: R.pace, lines: R.lines, takes: R.takes, perLine: R.perLine, finished: R.finished, planned: R.planned, warm: R.warm }; if (i >= 0) H[i] = e; else H.push(e); H = H.slice(-30); save('hist', H); }
+  if (D.practice) { $('#rdock').innerHTML = `<button type="button" class="btn" data-act="toTrain">Training</button><button type="button" class="btn primary" data-act="trainAgain"><small>same lines</small>Again &rsaquo;</button><button type="button" class="bk" data-act="toHome" aria-label="Title screen">&lsaquo;</button>`; }
+  else $('#rdock').innerHTML = `<button type="button" class="btn" data-act="copyRep">Copy it</button>` + (w ? `<button type="button" class="btn primary" data-act="newGame"><small>start a</small>New day &rsaquo;</button>` : `<button type="button" class="btn primary" data-act="toRun"><small>back to</small>The set &rsaquo;</button>`) + '<button type="button" class="bk" data-act="back" aria-label="Back">&lsaquo;</button>';
+  if (w && R.lines && !D.practice) { const i = H.findIndex(x => x.at === R.start), e = { at: R.start, pace: R.pace, lines: R.lines, takes: R.takes, perLine: R.perLine, finished: R.finished, planned: R.planned, warm: R.warm }; if (i >= 0) H[i] = e; else H.push(e); H = H.slice(-30); save('hist', H); }
 }
 
 /* ---------- her lines: a link that carries them (nothing goes to a server) ---------- */
@@ -978,31 +1489,30 @@ async function herLink() {
   const now = Date.now(), X = D.run ? C.live(D, now) : C.plan(D, now);
   const first = {}; X.items.forEach((it, i) => { if (first[it.sid] == null) first[it.sid] = i; });
   const S = D.scripts.filter(s => X.inc.has(s.id)).sort((a, b) => (first[a.id] ?? 1e9) - (first[b.id] ?? 1e9));
-  const data = { v: 1, s: S.map(s => ({ n: nm(s), l: s.lines.filter(l => !l.br).map(l => l.text) })).filter(x => x.l.length) };
+  const data = { v: 1, s: S.map(s => { const ls = s.lines.filter(l => !l.br); return Object.assign({ n: nm(s), l: ls.map(l => l.text), d: ls.map(l => doFor(l)) }, new Set(ls.map(l => l.who).filter(Boolean)).size > 1 ? { w: ls.map(l => l.who || '') } : {}); }).filter(x => x.l.length) };
   return location.origin + location.pathname + '#her=' + await pack(data);
 }
 async function renderHer(code) {
   go('her', false);
   let data = null; try { data = await unpack(code); } catch (e) {}
   if (!data || !Array.isArray(data.s)) { $('#her-list').innerHTML = '<p class="empty">This link did not open on this phone. Ask for a new one, or a screenshot of the lines.</p>'; return; }
-  $('#her-list').innerHTML = data.s.map(s => `<div class="hs">${esc(s.n)}</div>` + s.l.map(t => `<button type="button" class="hl" data-act="herBig" data-who="${esc(s.n)}">${esc(t)}</button>`).join('')).join('');
+  $('#her-list').innerHTML = data.s.map(s => `<div class="hs">${esc(s.n)}</div>` + s.l.map((t, i) => { const dk = Array.isArray(s.d) && DOS[s.d[i]] ? s.d[i] : ''; return `<button type="button" class="hl" data-act="herBig" data-who="${esc(s.n)}"${dk ? ` data-do="${dk}"` : ''}>${doImg(dk)}<span>${Array.isArray(s.w) && s.w[i] ? `<i class="hl-who">${esc(s.w[i])}</i>` : ''}<span class="hl-t">${esc(t)}</span>${dk ? `<small>${esc(DOHINT[dk])}</small>` : ''}</span></button>`; }).join('')).join('');
 }
 
 /* ---------- every key ---------- */
 const act = {
   toSetup: () => go('setup'), toRun: () => go('run'), toReport: () => go('report'), back: () => back(),
   paste: async () => { try { const t = await navigator.clipboard.readText(); if (t) { $('#raw').value = t; $('#raw').dispatchEvent(new Event('input')); toast('Pasted.'); } else toast('The clipboard is empty.'); } catch (e) { toast('Long-press the box and tap Paste.'); $('#raw').focus(); } },
-  sample: () => { if (running()) return; if ($('#raw').value.trim() && !confirm('Swap the pasted lines for the sample?')) return; $('#raw').value = SAMPLE; D.raw = SAMPLE; persist(); readout(); },
-  clearRaw: () => { if (running()) return; if ($('#raw').value.trim() && !confirm('Clear the pasted lines?')) return; $('#raw').value = ''; D.raw = ''; persist(); readout(); },
+  sample: () => { if (D.run) return; if ($('#raw').value.trim() && !confirm('Swap the pasted lines for the sample?')) return; $('#raw').value = SAMPLE; D.raw = SAMPLE; persist(); readout(); },
+  clearRaw: () => { if (D.run) return; if ($('#raw').value.trim() && !confirm('Clear the pasted lines?')) return; $('#raw').value = ''; D.raw = ''; persist(); readout(); },
   addStop: () => { const ids = new Set(D.stops.map(s => s.id)); let i = D.stops.length; while (ids.has('p' + i)) i++; D.stops.push({ id: 'p' + i, name: '', drive: 20 }); persist(); renderStops(); },
   rmStop: b => { if (D.stops.length < 2) return; const [s] = D.stops.splice(+b.dataset.i, 1); D.scripts.forEach(x => { if (x.stop === s.id) delete x.stop; }); persist(); renderStops(); },
   pace: b => { D.pace = Math.max(1, Math.min(10, Math.round(((+D.pace || 3.5) + +b.dataset.d) * 2) / 2)); persist(); renderSetup(); },
-  notesReset: () => { P.notes = NOTES.map(n => Object.assign({}, n)); savePrefs(); renderSetup(); },
+  notesReset: () => { P.notes = NOTES.map(n => Object.assign({}, n)); savePrefs(); renderSettings(); },
   plan: () => {
-    if (running()) { go('plan'); return; }
+    if (D.run) { go(wrappedAt() ? 'report' : 'plan'); return; }
     D.raw = $('#raw').value; D.wrap = $('#wrap').value || D.wrap;
     if (!D.raw.trim()) { toast('Paste the lines first.'); $('#raw').focus(); return; }
-    if (D.run) { if (!confirm('Start a new day with these lines? The last report stays in your history.')) { go('report'); return; } D.run = null; D.parsedRaw = ''; }
     if (D.raw !== D.parsedRaw || !D.scripts.length) { if (D.edited && D.scripts.length && !confirm('Read the pasted lines again? Edits you made on the plan get replaced.')) { go('plan'); return; } reparse(); }
     persist(); go('plan');
   },
@@ -1019,7 +1529,7 @@ const act = {
     if (navigator.share) { try { await navigator.share({ title: 'Your lines', text, url }); return; } catch (e) { if (e && e.name === 'AbortError') return; } }
     try { await navigator.clipboard.writeText(url); toast('Link copied. Text it to your talent.'); } catch (e) { prompt('Copy this link and text it to your talent:', url); }
   },
-  herBig: b => showBig(b.textContent, b.dataset.who),
+  herBig: b => { const t = b.querySelector('.hl-t'), w = b.querySelector('.hl-who'); showBig(t ? t.textContent : b.textContent.trim(), (w ? w.textContent + ' · ' : '') + b.dataset.who, b.dataset.do); },
   start: () => {
     const Pl = C.plan(D, Date.now());
     if (!Pl.inc.size) { toast('Nothing fits. Push the wrap later or skip a script.'); return; }
@@ -1032,17 +1542,19 @@ const act = {
     if (!Pl.inc.size) return;
     D.run = { at: Date.now(), warmId: Pl.warmId, base: [...Pl.inc], events: [] };
     persist(); buzz(30); go('run');
-    flash('Ready? Go!', 'Wrap by ' + hm(Pl.wrapAt) + '. First up: ' + nm(scriptOf(Pl.warmId) || scriptOf(Pl.items[0].sid)) + ', the warm-up.', true, 1800);
+    if (D.practice) flash('Training!', 'No clock to beat. Say the line, then A. Again? B.', true, 2200, 'go');
+    else flash('Ready? Go!', 'Wrap by ' + hm(Pl.wrapAt) + '. First up: ' + nm(scriptOf(Pl.warmId) || scriptOf(Pl.items[0].sid)) + ', the warm-up.', true, 1800, 'go');
+    beat('go', 2400);
   },
-  again: () => { if (!RL || !RL.cur || RL.driveTo) return; ev('again', { id: RL.cur.id }); buzz(15); renderRun(); },
+  again: () => { if (!RL || !RL.cur || RL.driveTo) return; ev('again', { id: RL.cur.id }); buzz(15); beat('take'); renderRun(); },
   got: () => {
     if (!RL) return;
     if (!RL.cur) { act.wrap(); return; }
-    if (RL.driveTo) { ev('arrive', { stop: RL.driveTo }); buzz(30); pop('Here!', stopName(RL.driveTo) + ' · the clock is back on'); renderRun(); return; }
+    if (RL.driveTo) { ev('arrive', { stop: RL.driveTo }); buzz(30); pop('Here!', stopName(RL.driveTo) + ' · the clock is back on', false, 'wave'); renderRun(); return; }
     const sid = RL.cur.sid;
     ev('got', { id: RL.cur.id }); buzz(25);
     const L = C.live(D, Date.now()), st = L.per[sid];
-    if (st && st.lines && st.done >= st.lines) pop('Stage clear!', nm(scriptOf(sid)) + ' · ' + Math.round(st.min) + ' min');
+    if (st && st.lines && st.done >= st.lines) { pop('Stage clear!', nm(scriptOf(sid)) + ' · ' + Math.round(st.min) + ' min', false, 'clear'); beat('clear', 1800); } else beat('got');
     renderRun();
   },
   splitNow: () => { closeMenu(); if (!RL || !RL.cur || RL.driveTo || RL.cur.br) return; const parts = C.splitLine(RL.cur.text); if (parts.length < 2) { act.show(); return; } ev('split', { id: RL.cur.id, parts }); buzz(20); pop('Split!', parts.length + ' shorter lines · shoot the first one'); renderRun(); },
@@ -1063,22 +1575,75 @@ const act = {
   menuPlan: () => { closeMenu(); go('plan'); },
   goStop: b => { ev('go', { stop: b.dataset.stop }); buzz(30); renderRun(); },
   dismiss: b => { dismissed[b.dataset.key] = Date.now() + 5 * 6e4; tickSig = ''; paintTicker(Date.now()); },
-  note: b => { closeMenu(); const n = P.notes[+b.dataset.i]; if (!n) return; ev('note', { n: b.dataset.i, id: RL && RL.cur ? RL.cur.id : '' }); buzz(10); flash(n.b, n.s, false, 1500); },
-  show: () => { if (!RL || !RL.cur || RL.driveTo) return; ev('show', { id: RL.cur.id }); showBig(RL.cur.text, nm(scriptOf(RL.cur.sid))); },
+  note: b => { closeMenu(); const n = P.notes[+b.dataset.i]; if (!n) return; ev('note', { n: b.dataset.i, id: RL && RL.cur ? RL.cur.id : '' }); buzz(10); flash(n.b, n.s, false, 2200, NOTE_ART[+b.dataset.i]); },
+  show: () => { if (!RL || !RL.cur || RL.driveTo) return; ev('show', { id: RL.cur.id }); const sc = viewOf(RL.cur.sid), li = sc.lines.findIndex(l => l.id === RL.cur.id) + 1, voices = new Set(sc.lines.map(l => l.who).filter(Boolean)); showBig(RL.cur.text, `${RL.cur.who && voices.size > 1 ? RL.cur.who + ' · ' : ''}line ${li} of ${sc.lines.length}`, doFor(RL.cur)); },
   undo: () => {
     const E = D.run.events;
     for (let i = E.length - 1; i >= 0; i--) if (UNDO[E[i].k]) { const e = E.splice(i, 1)[0]; persist(); toast('Undid ' + ({ again: 'the extra take', got: 'GOT IT', skip: 'the skip', roll: 'rolling', go: 'leaving', arrive: 'arriving', drop: 'the drop', add: 'the add', wrap: 'the wrap', later: 'Later', split: 'the split' }[e.k]) + '.'); renderRun(); return; }
     toast('Nothing to undo.');
   },
   wrap: () => { closeMenu(); ev('wrap'); buzz(40); go('report'); },
+  // what the talent does on a line: pick one on the plan, or hand it back to the words
+  pickDo: b => {
+    const l = lineById(b.dataset.id); if (!l) return;
+    PICK = l.id; const cur = doFor(l);
+    $('#dopick-s').textContent = l.text.length > 64 ? l.text.slice(0, 62) + '...' : l.text;
+    $('#dogrid').innerHTML = C.DO.map(k => `<button type="button" class="btn${k === cur ? ' primary' : ''}" data-act="doSet" data-k="${k}">${doImg(k)}${esc(DOS[k])}</button>`).join('');
+    $('#dopick').hidden = false;
+  },
+  doSet: b => { const l = lineById(PICK); if (l) { l.do = b.dataset.k; D.edited = true; persist(); } $('#dopick').hidden = true; document.body.dataset.scr === 'run' ? renderRun() : renderPlan(); },
+  doAuto: () => { const l = lineById(PICK); if (l) { delete l.do; persist(); } $('#dopick').hidden = true; document.body.dataset.scr === 'run' ? renderRun() : renderPlan(); },
+  doClose: () => { $('#dopick').hidden = true; },
   unwrap: () => { const E = D.run.events; if (E.length && E[E.length - 1].k === 'wrap') { E.pop(); persist(); } go('run'); },
   copyRep: async () => { if (!lastReport) return; const t = reportText(lastReport); try { await navigator.clipboard.writeText(t); toast('Report copied.'); } catch (e) { if (navigator.share) { try { await navigator.share({ text: t }); } catch (x) {} } else prompt('Copy the report:', t); } },
-  newDay: () => { if (!confirm('Start a new day? The lines and the clock clear. Your past days stay.')) return; D = fresh(); persist(); open.clear(); go('setup'); }
+  newDay: () => act.newGame(),
+  // the title screen and the files
+  toHome: () => { closeMenu(); go('home'); },
+  toLoad: () => go('load'), toTrain: () => go('train'), toHelp: () => go('help'), toSettings: () => go('settings'),
+  cont: () => { const t = contTarget(); if (!t) { act.newGame(); return; } if (t.id !== CUR) useFile(t.id); buzz(20); go(screenFor(D)); },
+  newGame: () => { useFile(newId(), fresh()); buzz(20); go('setup'); },
+  loadSlot: b => { const id = b.dataset.id; if (id !== CUR) useFile(id); buzz(20); go(screenFor(D)); },
+  slotOpt: b => { OPT = b.dataset.id; const m = SLOTS.find(x => x.id === OPT); if (!m) return; $('#fo-s').textContent = fileName(m); $('#fileopt').hidden = false; },
+  closeOpt: () => closeOpt(),
+  replayFile: () => {
+    const src = dayOf(OPT); closeOpt(); if (!src) return;
+    const d = Object.assign(fresh(), { raw: src.raw || '', warm: src.warm, group: src.group, stops: (src.stops || []).map(x => ({ id: x.id, name: x.name, drive: x.drive })) });
+    useFile(newId(), d); persist(); go('setup'); toast('Same lines, a new day. Set the wrap and plan it.');
+  },
+  renameFile: () => { const m = SLOTS.find(x => x.id === OPT); if (!m) return; const t = prompt('Name this day:', fileName(m)); if (t == null) return; m.name = t.trim().slice(0, 40); save('slots', SLOTS); closeOpt(); renderLoad(); },
+  deleteFile: () => {
+    const m = SLOTS.find(x => x.id === OPT); if (!m) return;
+    if (!confirm('Delete "' + fileName(m) + '"? This cannot be undone.')) return;
+    SLOTS = SLOTS.filter(x => x !== m); save('slots', SLOTS); try { localStorage.removeItem('ad-s-' + m.id); } catch (e) {}
+    if (m.id === CUR) useFile(newId(), fresh());
+    closeOpt(); renderLoad();
+  },
+  // training
+  trainPack: b => { const pk = PACKS.find(x => x.id === b.dataset.id); if (pk) startTraining(pk.text, pk.id, pk.title); },
+  trainRandom: () => { const pk = PACKS[Math.floor(Math.random() * PACKS.length)]; startTraining(pk.text, pk.id, pk.title); },
+  trainOwn: () => { const t = $('#tr-raw').value; if (!t.trim()) { toast('Paste the lines first.'); $('#tr-raw').focus(); return; } startTraining(t, 'own', 'Your own lines'); },
+  trainAgain: () => { if (D.practice) startTraining(D.raw, D.practice, D.practiceTitle || 'Practice'); },
+  // the saves: a backup file, a restore, an erase
+  backup: async () => {
+    const files = SLOTS.map(m => Object.assign({}, m, { day: dayOf(m.id) })).filter(x => x.day);
+    const data = { app: 'the-ad', v: 1, at: Date.now(), files, hist: H, prefs: P };
+    const name = 'sweet-takes-backup-' + new Date().toISOString().slice(0, 10) + '.json', blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+    try { const file = new File([blob], name, { type: 'application/json' }); if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: 'Sweet Takes backup' }); return; } } catch (e) { if (e && e.name === 'AbortError') return; }
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500); toast('Backup saved: ' + name);
+  },
+  eraseAll: () => {
+    if (!confirm('Erase every day, setting and past report on this phone?')) return;
+    if (!confirm('Really? This cannot be undone. Back up first if you might want them.')) return;
+    try { Object.keys(localStorage).filter(k => k.startsWith('ad-')).forEach(k => localStorage.removeItem(k)); } catch (e) {}
+    try { history.replaceState(null, '', location.pathname); } catch (e) {}
+    location.reload();
+  }
 };
 // iPhone Safari only paints :active (the key sinking) when a touchstart listener exists
 document.addEventListener('touchstart', () => {}, { passive: true });
 // the press: the key sinks on touch-down in the next frame and lifts on release, a slide-off or a scroll (nothing stays stuck down)
-const PRESS = '.btn,.key,.bk,.sr-main,.hl,.seg button,.bar .back,#r-card';
+const PRESS = '.btn,.key,.bk,.sr-main,.hl,.seg button,.bar .back,#r-card,.do-pick,.mk,.slot,.pack,.slot .opt';
 document.addEventListener('pointerdown', e => { const k = e.target.closest && e.target.closest(PRESS); if (k && !k.disabled) k.classList.add('down'); }, { passive: true });
 const lift = () => $$('.down').forEach(k => k.classList.remove('down'));
 ['pointerup', 'pointercancel', 'scroll'].forEach(t => document.addEventListener(t, lift, { passive: true, capture: true }));
@@ -1089,10 +1654,34 @@ $('#lefty').addEventListener('change', e => { P.lefty = e.target.checked; savePr
 document.body.classList.toggle('lefty', !!P.lefty);
 function closeMenu() { $('#menu').hidden = true; }
 $('#menu').addEventListener('click', e => { if (e.target === e.currentTarget) closeMenu(); });
+$('#dopick').addEventListener('click', e => { if (e.target === e.currentTarget) $('#dopick').hidden = true; });
+$('#fileopt').addEventListener('click', e => { if (e.target === e.currentTarget) closeOpt(); });
+// boxes that act like keys (a file, a pack, the logo): Enter and Space press them
+document.addEventListener('keydown', e => { const t = e.target; if ((e.key === 'Enter' || e.key === ' ') && t && t.matches && t.matches('div[role="button"][data-act]') && t.id !== 'r-card') { e.preventDefault(); t.click(); } });
+// Restore a backup: files it does not have come in, a file it has comes in only when the backup's copy is newer
+$('#restore').addEventListener('change', async e => {
+  const f = e.target.files && e.target.files[0]; e.target.value = ''; if (!f) return;
+  let data = null; try { data = JSON.parse(await f.text()); } catch (x) {}
+  if (!data || data.app !== 'the-ad' || !Array.isArray(data.files)) { toast('That file is not a Sweet Takes backup.'); return; }
+  let n = 0;
+  for (const it of data.files) {
+    if (!it || !it.id || !hasContent(it.day)) continue;
+    const have = SLOTS.find(m => m.id === it.id);
+    if (have && have.saved >= (it.saved || 0)) continue;
+    save('s-' + it.id, it.day);
+    if (have) Object.assign(have, { name: it.name || have.name, saved: it.saved || Date.now() }); else SLOTS.push({ id: it.id, name: it.name || '', made: it.made || Date.now(), saved: it.saved || Date.now() });
+    if (it.id === CUR) D = it.day;
+    n++;
+  }
+  if (Array.isArray(data.hist)) { const seen = new Set(H.map(x => x.at)); data.hist.forEach(x => { if (x && x.at && !seen.has(x.at)) H.push(x); }); H.sort((a, b) => a.at - b.at); H = H.slice(-30); save('hist', H); }
+  pruneFiles(); save('slots', SLOTS); renderSettings(); toast(n ? `Restored ${n} day${n === 1 ? '' : 's'}.` : 'Nothing new in that backup.');
+});
 // things that just happen (stage clear, overtime, arrived) drop in at the top and never take a tap
 let popT;
-function pop(b, s, red) {
-  const p = $('#pop'); $('#pop-b').textContent = b; $('#pop-s').textContent = s || ''; p.className = red ? 'red' : ''; void p.offsetWidth; p.classList.add('on');
+function pop(b, s, red, art) {
+  const p = $('#pop'); $('#pop-b').textContent = b; $('#pop-s').textContent = s || ''; p.className = (red ? 'red' : '') + (art ? ' art' : '');
+  const im = $('#pop-i'); im.hidden = !art; if (art) im.src = ART + art + '.webp';
+  void p.offsetWidth; p.classList.add('on');
   clearTimeout(popT); popT = setTimeout(() => p.classList.remove('on'), 1700);
 }
 document.addEventListener('click', e => {
@@ -1121,7 +1710,7 @@ let deferred = null;
 window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferred = e; $('#ins').hidden = false; });
 $('#ins').addEventListener('click', async () => { if (!deferred) return; deferred.prompt(); await deferred.userChoice; deferred = null; $('#ins').hidden = true; });
 if (!matchMedia('(display-mode: standalone)').matches && !navigator.standalone && /iphone|ipad/i.test(navigator.userAgent) && !load('iosHint', 0) && !location.hash.startsWith('#her=')) {
-  setTimeout(() => { toast('Share, then Add to Home Screen, puts THE AD on your phone'); save('iosHint', 1); }, 2500);
+  setTimeout(() => { toast('Share, then Add to Home Screen, puts Sweet Takes on your phone'); save('iosHint', 1); }, 2500);
 }
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
 window.addEventListener('hashchange', () => { const h = location.hash; if (h.startsWith('#her=')) renderHer(h.slice(5)); });
@@ -1130,10 +1719,10 @@ window.addEventListener('hashchange', () => { const h = location.hash; if (h.sta
 (function boot() {
   const h = location.hash;
   if (h.startsWith('#her=')) { renderHer(h.slice(5)); return; }
-  if (D.run && !wrappedAt()) { go('run'); return; }
-  if (D.run) { go(h === '#setup' ? 'setup' : 'report'); return; }
-  if (D.scripts.length && h !== '#setup') { go('plan'); return; }
-  go('setup');
+  $$('.ver').forEach(e => { e.textContent = VER ? 'v' + VER : ''; });
+  // mid-shoot (a tap in the last 45 min), a relaunch goes straight back to the set; any other time, the title screen
+  if (D.run && !wrappedAt()) { const E = D.run.events, last = E.length ? E[E.length - 1].t : D.run.at; if (Date.now() - last < 45 * 6e4) { go('run'); return; } }
+  go('home');
 })();
 </script>
 </body>
