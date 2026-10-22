@@ -65,9 +65,11 @@ color:var(--ink);width:44px;height:44px;border-radius:50%;font-size:20px;cursor:
 @media(max-width:640px){.lb-p,.lb-n{bottom:14px;top:auto;transform:none}.lb-p{left:14px}.lb-n{right:14px}}
 /* 10/22 UX sweep: the venue filters are 44 px targets */
 .filters>*{min-height:44px;display:inline-flex;align-items:center}
+/* 10/22 scrim: the tile label sits on the photo, so it gets a dark fade under it */
+.tile figcaption{background:linear-gradient(180deg,rgba(10,10,13,0),rgba(10,10,13,.88) 45%);text-shadow:0 1px 2px #000}
 </style>
 <link rel="stylesheet" href="../assets/css/binder.css?v=ce577337">
-<script src="../assets/js/binder.js?v=a9913f49" defer></script>
+<script src="../assets/js/binder.js?v=1d2dddf5" defer></script>
 </head>
 <body>
 <div class="leopard-bar"></div>

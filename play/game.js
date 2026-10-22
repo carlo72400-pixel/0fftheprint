@@ -150,13 +150,22 @@ const BRIEF_ORDER = ['decks', 'wide', 'tight', 'arch', 'lead', 'low', 'ball', 'b
 /* ---------- art ---------- */
 const ART = {}; let ARTREADY = false;
 const img = src => new Promise(ok => { const i = new Image(); i.onload = () => ok(i); i.onerror = () => ok(null); i.src = src; });
-async function loadArt() {
+// 10/22 UX sweep: the game used to pull every room and every pose (10 MB) before the title showed. Now the saved room
+// and the idle poses come first (about a quarter), the title opens, and the rest lands behind it. A room picked before
+// its flats arrive draws them as they come in (the draw code already skips a missing image).
+const roomKeys = rk => { const r = ROOMS[rk] || ROOMS.booth; return ['proscenium', r.backdrop].concat(r.flats.map(f => f.k)); };
+function loadKeys(keys, poses) {
   const jobs = [];
-  const flats = new Set(['proscenium']); Object.values(ROOMS).forEach(r => { flats.add(r.backdrop); r.flats.forEach(f => flats.add(f.k)); });
-  flats.forEach(k => jobs.push(img(`art/v3/flat/${k}.webp`).then(i => { ART[k] = i; })));
+  keys.forEach(k => { if (!(k in ART)) { ART[k] = undefined; jobs.push(img(`art/v3/flat/${k}.webp`).then(i => { ART[k] = i; })); } });
+  CAST.forEach(k => poses.forEach(p => { const id = k + '_' + p; if (!(id in ART)) { ART[id] = undefined; jobs.push(img(`art/v2/oc/${k}_${p}.webp`).then(i => { if (i) ART[id] = i; else delete ART[id]; })); } }));
+  return Promise.all(jobs);
+}
+function loadRest() { const keys = new Set(); Object.values(ROOMS).forEach(r => { keys.add(r.backdrop); r.flats.forEach(f => keys.add(f.k)); }); return loadKeys([...keys], POSES); }
+async function loadArt() {
   try { META = await (await fetch('art/v2/oc/meta.json', {cache: 'no-cache'})).json(); } catch (e) { META = {}; }
-  CAST.forEach(k => POSES.forEach(p => jobs.push(img(`art/v2/oc/${k}_${p}.webp`).then(i => { if (i) ART[k + '_' + p] = i; }))));
-  await Promise.all(jobs); ARTREADY = true;
+  const first = load('room', 'booth');
+  await loadKeys(roomKeys(ROOMS[first] ? first : 'booth'), ['idle']); ARTREADY = true;
+  setTimeout(loadRest, 400);
 }
 
 /* ---------- audio ---------- */
@@ -542,6 +551,7 @@ $('#hint-x').addEventListener('click', e => { e.stopPropagation(); $('#hint').cl
 function start(mode) {
   G.mode = mode; G.day = dayKey(); G.seed = mode === 'daily' ? hash('v2' + G.day) : (Math.random() * 1e9) >>> 0; G.rnd = rng(G.seed);
   G.room = mode === 'daily' ? ROOM_ORDER[hash('room' + G.day) % ROOM_ORDER.length] : (load('room', 'booth')); if (!ROOMS[G.room]) G.room = 'booth'; G.idx = 0; G.castQ = [];
+  loadKeys(roomKeys(G.room), POSES);   // this room and every pose, ahead of the rest
   // the daily opens on the decks (the easy one), then five drawn from the rest; free play draws one at a time
   const pool = BRIEF_ORDER.slice(1); const pick = mode === 'daily' ? ['decks'] : []; while (pick.length < (mode === 'daily' ? 6 : 1)) pick.push(pool.splice(Math.floor(G.rnd() * pool.length), 1)[0]); G.set = pick;
   $$('.scr').forEach(s => s.hidden = true); $('#hud').hidden = false; ac();

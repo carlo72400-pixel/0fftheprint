@@ -1,3 +1,14 @@
+/* 10/22 UX sweep: images under the fold hold their src in data-src until they come within 400 px of the screen
+   (Chrome's own loading=lazy still pulls everything within about 2500 px on a slow line, which was the 2.8 MB first load).
+   One observer, a debounced scan on DOM changes, a plain src when the browser has no observer. */
+window.OTPLazy = window.OTPLazy || (function () {
+  var io = ('IntersectionObserver' in window) ? new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { var im = e.target; if (im.dataset.src) { im.src = im.dataset.src; im.removeAttribute('data-src'); } io.unobserve(im); } }); }, { rootMargin: '400px 0px' }) : null;
+  function watch(im) { if (!im.dataset.src) return; if (!io) { im.src = im.dataset.src; im.removeAttribute('data-src'); return; } io.observe(im); }
+  function scan(root) { var list = (root || document).querySelectorAll('img[data-src]'); for (var i = 0; i < list.length; i++) watch(list[i]); }
+  var t = 0; try { new MutationObserver(function () { if (t) return; t = requestAnimationFrame(function () { t = 0; scan(); }); }).observe(document.documentElement, { childList: true, subtree: true }); } catch (e) {}
+  if (document.readyState !== 'loading') scan(); else document.addEventListener('DOMContentLoaded', function () { scan(); });
+  return { watch: watch, scan: scan };
+})();
 /* 0FF THE PRINT — THE BINDER (10/4).
  *
  * What you pull, you keep. Every frame a pack deals, the one hit hiding in each
@@ -337,7 +348,7 @@
     var pp = el('span', 'pp' + (e.mini ? ' mini' : ''));   // a MINI PACK (10/16): the smaller pouch with the sticker (pack.css)
     var wimg = el('img', 'pp-w'); wimg.alt = ''; wimg.width = 520; wimg.height = 878; wimg.loading = 'lazy'; wimg.decoding = 'async';
     wimg.addEventListener('error', function () { wimg.src = BASE + 'assets/cathedral/pack-house.webp'; }, { once: true });
-    wimg.src = BASE + 'events/' + e.slug + '/pack.webp';
+    wimg.dataset.src = BASE + 'events/' + e.slug + '/pack.webp'; window.OTPLazy.watch(wimg);
     pp.appendChild(wimg);
     pp.appendChild(el('span', 'pp-t' + (title.length <= 7 ? ' short' : title.length > 16 ? ' long' : ''), title));
     pp.appendChild(el('span', 'pp-d', e.date_short || ''));

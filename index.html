@@ -47,7 +47,20 @@
 <script src="assets/js/door.js?v=c30bcb85" defer></script>
 <script src="assets/js/composer.js?v=f7ec8eea" defer></script>
 <script src="assets/js/edit.js?v=46763485" defer></script>
-<script src="assets/js/binder.js?v=a9913f49" defer></script>
+<script>
+/* 10/22 UX sweep: images under the fold hold their src in data-src until they come within 400 px of the screen
+   (Chrome's own loading=lazy still pulls everything within about 2500 px on a slow line, which was the 2.8 MB first load).
+   One observer, a debounced scan on DOM changes, a plain src when the browser has no observer. */
+window.OTPLazy = window.OTPLazy || (function () {
+  var io = ('IntersectionObserver' in window) ? new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { var im = e.target; if (im.dataset.src) { im.src = im.dataset.src; im.removeAttribute('data-src'); } io.unobserve(im); } }); }, { rootMargin: '400px 0px' }) : null;
+  function watch(im) { if (!im.dataset.src) return; if (!io) { im.src = im.dataset.src; im.removeAttribute('data-src'); return; } io.observe(im); }
+  function scan(root) { var list = (root || document).querySelectorAll('img[data-src]'); for (var i = 0; i < list.length; i++) watch(list[i]); }
+  var t = 0; try { new MutationObserver(function () { if (t) return; t = requestAnimationFrame(function () { t = 0; scan(); }); }).observe(document.documentElement, { childList: true, subtree: true }); } catch (e) {}
+  if (document.readyState !== 'loading') scan(); else document.addEventListener('DOMContentLoaded', function () { scan(); });
+  return { watch: watch, scan: scan };
+})();
+</script>
+<script src="assets/js/binder.js?v=1d2dddf5" defer></script>
 <script src="assets/js/cathedral.js?v=e7ea127f" defer></script>
 <script src="assets/js/lounge.js?v=0c53cf30" defer></script>
 <script src="assets/js/music.js?v=ce46d8f9" defer></script>
@@ -5109,7 +5122,7 @@
           // the same middle slice of the same chair with the burned-in line cut in half. The tile is
           // 9:16 now (cathedral.css); a cut shot wide is letterboxed into it, never cropped.
           '<span class="shot' + ((v.w | 0) > (v.h | 0) ? ' wide' : '') + '">' +
-            '<img src="' + esc(cover) + '" alt="" width="' + ((v.w | 0) || 520) + '" height="' + ((v.h | 0) || 924) + '" loading="lazy">' +
+            '<img data-src="' + esc(cover) + '" alt="" width="' + ((v.w | 0) || 520) + '" height="' + ((v.h | 0) || 924) + '" loading="lazy">' +
             '<span class="n">' + esc(v.dur || 'clip') + '</span>' +
           '</span>' +
           // THE CUT'S OWN NAME IS THE HEADLINE (10/4), and its own line of copy sits under it.
@@ -5158,7 +5171,7 @@
         const cover = safeUrl(v.cover || '');
         a.innerHTML =
           '<span class="shot">' +
-            (cover ? '<img src="' + esc(cover) + '" alt="" loading="lazy">' : '') +
+            (cover ? '<img data-src="' + esc(cover) + '" alt="" loading="lazy">' : '') +
             '<span class="pv">' + esc(v.provider) + '</span>' +
             '<span class="ply">&#9654;</span>' +
           '</span>' +
@@ -6377,8 +6390,8 @@
       const href = inArchive ? 'work/#' + encodeURIComponent(String(it.src).split('/').pop()) : 'work/';
       return `
       <a class="work-item${tall ? ' tall' : ''}" href="${esc(href)}">
-        ${tall ? `<img class="bed" src="${img}" alt="" aria-hidden="true" loading="lazy" decoding="async">` : ''}
-        <img class="main" src="${img}" alt="${esc(it.alt || it.label || '')}"${w && h ? ` width="${w}" height="${h}"` : ''} loading="lazy" decoding="async">
+        ${tall ? `<img class="bed" data-src="${img}" alt="" aria-hidden="true" loading="lazy" decoding="async">` : ''}
+        <img class="main" data-src="${img}" alt="${esc(it.alt || it.label || '')}"${w && h ? ` width="${w}" height="${h}"` : ''} loading="lazy" decoding="async">
         <figcaption>${esc(it.label || '')}</figcaption>
       </a>`;
     }).join('') + (work.length > FEATURED ? `
