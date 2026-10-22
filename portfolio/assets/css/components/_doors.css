@@ -12,7 +12,7 @@
 .door:focus-visible{outline:2px solid var(--rose-deep);outline-offset:3px}
 .door .d-q{font-family:var(--disp);font-weight:660;font-variation-settings:'SOFT' 100,'WONK' 0,'opsz' 120;font-size:clamp(26px,3.3vw,34px);line-height:1;color:var(--rose-deep)}
 .door .d-t{font-size:14px;font-weight:600;color:var(--ink);line-height:1.35}
-.door .d-go{margin-top:auto;font-family:var(--mono);font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--dim)}
+.door .d-go{margin-top:auto;font-family:var(--mono);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--dim)}
 .door:hover .d-go{color:var(--rose-deep)}
 @media(max-width:400px){.doors{gap:10px}.door{min-height:114px;padding:15px 13px 13px}.door .d-t{font-size:13px}}
 

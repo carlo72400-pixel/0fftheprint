@@ -34,7 +34,7 @@
    bubble keys with one purple cartoon line, RPG dialog boxes (the script name is the name tab), READY? GO! and STAGE
    CLEAR! pop-ups. Light on purpose: color-scheme light keeps phone dark modes off the pastels. Works with no signal (sw.js). */
 :root{
-  --ink:#4a2a6e;--line:#5b3d8e;--soft:#6a4f9c;--muted:#6b5a96;
+  --ink:#4a2a6e;--line:#5b3d8e;--soft:#563c8a;--muted:#4f3d80;
   --pink:#ff8cc6;--pink-2:#ffc8e4;--pink-deep:#d63a8c;--lilac:#c9b3ff;--lilac-2:#ebe2ff;--sky:#8fd0ff;--sky-2:#d9f0ff;
   --mint:#a6f0d0;--lemon:#fff3a0;--peach:#ffcaa8;--cream:#fffafd;--red:#ff4f7a;--red-deep:#a8203f;--amber:#8f4c0a;--green-t:#1f7a52;--blue-t:#235d97;--pink-t:#b02a72;
   --rainbow:linear-gradient(90deg,#ff9ecb,#ffc29e 20%,#fff09a 40%,#a8f0c6 60%,#9fd8ff 80%,#c9b3ff);
@@ -104,7 +104,7 @@ textarea.in[readonly]{opacity:.6}
 input[type=time].in{min-height:62px;font:400 25px/1 var(--f-px);color:var(--line);-webkit-appearance:none;appearance:none;background:linear-gradient(180deg,#fff,#f0fbff)}
 .row{display:flex;flex-wrap:wrap;gap:8px}
 .row>.btn{flex:1}
-.hint{margin:0;font:500 14px/1.5 var(--f-body);color:var(--soft)}
+.hint{margin:0;font:500 15px/1.5 var(--f-body);color:var(--soft)}
 .hint b{color:var(--line);font-weight:800}
 .seg{display:flex;gap:6px}
 .seg button{flex:1;min-height:44px;border:3px solid var(--line);border-radius:12px;background:linear-gradient(180deg,#fff,#efe6ff);color:var(--soft);font:400 14px/1 var(--f-ui);box-shadow:0 3px 0 var(--line)}
@@ -115,7 +115,7 @@ input[type=time].in{min-height:62px;font:400 25px/1 var(--f-px);color:var(--line
 .step output{display:grid;place-items:center;min-height:50px;border:3px solid var(--line);border-radius:12px;background:#fff;color:var(--line);font:400 19px/1 var(--f-px)}
 .toggle{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center}
 .toggle b{display:block;font:400 13px/1.3 var(--f-ui);letter-spacing:.03em;text-transform:uppercase;color:var(--line)}
-.toggle small{display:block;font-size:14px;color:var(--muted)}
+.toggle small{display:block;font-size:15px;color:var(--muted)}
 .toggle .btn{min-width:76px;margin:0}
 
 /* set up */
@@ -146,7 +146,7 @@ details.more .inner{display:grid;gap:18px;padding:2px 14px 16px}
 .verdict small{font:400 13px/1.45 var(--f-ui);letter-spacing:.05em;text-transform:uppercase;color:var(--line)}
 .verdict.hot{background:linear-gradient(180deg,#fff2f8,#ffd0e6)}
 .verdict.hot b{text-shadow:var(--ol),0 4px 0 var(--pink-deep)}
-.why{margin:0 0 6px;color:var(--soft);font-size:14px;line-height:1.5}
+.why{margin:0 0 6px;color:var(--soft);font-size:15px;line-height:1.5}
 .sec{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:20px 0 10px;padding:7px 12px;border:3px solid var(--line);border-radius:999px;background:var(--line);font:400 13px/1.2 var(--f-ui);letter-spacing:.04em;text-transform:uppercase;color:#fff}
 .sec span{font-size:11px;font-weight:400;letter-spacing:.02em;color:#e6dcff;text-align:right}
 .srow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:stretch;margin:0 0 10px}
@@ -166,7 +166,8 @@ details.more .inner{display:grid;gap:18px;padding:2px 14px 16px}
 .sl small{display:block;margin-top:3px;font:400 11.5px/1.35 var(--f-ui);letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
 .sl .row{justify-content:flex-end;gap:6px}
 .sl .btn{min-height:44px;margin:0 0 3px;padding:0 9px;font-size:11.5px;border-radius:11px}
-.dock{position:sticky;bottom:0;z-index:15;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr) 58px;align-items:center;gap:8px;margin:18px -16px 0;padding:14px 16px calc(var(--sab) + 12px);background:linear-gradient(180deg,rgba(220,239,255,0),#dcefff 30%)}
+.dock{position:sticky;bottom:0;z-index:15;pointer-events:none;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr) 58px;align-items:center;gap:8px;margin:18px -16px 0;padding:14px 16px calc(var(--sab) + 12px);background:linear-gradient(180deg,rgba(220,239,255,0),#dcefff 30%)}
+.dock>*{pointer-events:auto}
 .dock .btn{margin:0;min-height:60px;font-size:12px;letter-spacing:.02em}
 .dock .btn.primary{font:400 21px/1 var(--f-pop);letter-spacing:0;text-transform:none;white-space:nowrap}
 .dock .btn.primary small{position:relative;display:block;margin:0 0 5px;font:400 11px/1 var(--f-ui);font-style:normal;letter-spacing:.03em;text-transform:uppercase;text-shadow:none;color:#a12a62}
@@ -254,7 +255,7 @@ body[data-scr="run"] .bar{display:none}
 .lclk span{display:grid;gap:4px}
 .lclk b{font:400 22px/1 var(--f-px);color:var(--line);font-variant-numeric:tabular-nums;white-space:nowrap}
 .lclk b.long{font-size:16px}
-.lclk small{font:400 10.5px/1 var(--f-ui);letter-spacing:.02em;text-transform:uppercase;color:var(--soft);white-space:nowrap}
+.lclk small{font:400 11px/1 var(--f-ui);letter-spacing:.02em;text-transform:uppercase;color:var(--soft);white-space:nowrap}
 .lclk.warn .pr{stroke:#ffbe4f}.lclk.warn b{color:var(--amber)}
 .lclk.over{background:#ffe3ea;animation:pulse 1s steps(2,end) infinite}
 .lclk.over .pr{stroke:var(--red)}.lclk.over b,.lclk.over small{color:var(--red-deep)}
@@ -316,7 +317,7 @@ label.toggle{cursor:pointer}
 /* the report: a results screen */
 #rep-v{padding-right:92px}
 .rank{position:absolute;right:12px;top:50%;width:70px;height:70px;margin-top:-35px;border:3px solid var(--line);border-radius:50%;display:grid;place-items:center;background:#fff;box-shadow:inset 0 0 0 5px #ffe36e,0 4px 0 var(--line);font:400 34px/1 var(--f-pop);font-style:normal;color:var(--pink-deep)}
-.rank::before{content:"rank";position:absolute;top:8px;font:400 10px/1 var(--f-ui);letter-spacing:.04em;text-transform:uppercase;color:var(--soft)}
+.rank::before{content:"rank";position:absolute;top:8px;font:400 11px/1 var(--f-ui);letter-spacing:.04em;text-transform:uppercase;color:var(--soft)}
 .rank:empty{display:none}
 .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 12px}
 .stat{display:grid;gap:5px;padding:10px;border:3px solid var(--line);border-radius:14px;box-shadow:0 3px 0 rgba(91,61,142,.3)}
@@ -358,7 +359,7 @@ label.toggle{cursor:pointer}
    whole app (taps go through it). Show-it-big sits above it, so the talent's line stays clean. Off in Settings. */
 #crt{position:fixed;inset:0;z-index:92;pointer-events:none;display:none;overflow:hidden}
 body.crt #crt{display:block}
-#crt::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(180deg,rgba(43,23,69,0) 0 2px,rgba(43,23,69,.1) 2px 3px),radial-gradient(ellipse 120% 100% at 50% 50%,rgba(43,23,69,0) 55%,rgba(43,23,69,.26) 100%)}
+#crt::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(180deg,rgba(43,23,69,0) 0 2px,rgba(43,23,69,.06) 2px 3px),radial-gradient(ellipse 120% 100% at 50% 50%,rgba(43,23,69,0) 60%,rgba(43,23,69,.14) 100%)}
 #crt::after{content:"";position:absolute;left:0;right:0;top:-30%;height:30%;background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.08) 50%,rgba(255,255,255,0));animation:crt-roll 9s linear infinite}
 @keyframes crt-roll{to{transform:translateY(433%)}}
 #crt i,#crt b{position:absolute;inset:0;opacity:0}
@@ -497,14 +498,14 @@ img[src*="art/m/"]{image-rendering:-webkit-optimize-contrast;image-rendering:cri
 .mk span{position:relative;min-width:0}
 .mk b{display:block;font:400 16px/1.05 var(--f-pop)}
 .mk.go img{width:48px;height:48px}
-.mk small{display:block;margin-top:4px;font:400 10px/1.25 var(--f-ui);letter-spacing:.03em;text-transform:uppercase;color:var(--soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mk small{display:block;margin-top:4px;font:400 11px/1.25 var(--f-ui);letter-spacing:.03em;text-transform:uppercase;color:var(--soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .mk.wide{grid-column:1/-1}
 .mk.go{background:linear-gradient(180deg,#ffc6e4,#ff7dbd);color:#fff}
 .mk.go b{font-size:24px;text-shadow:var(--olp)}
 .mk.go small{color:#7d1a4c}
 .t-small{grid-column:1/-1;display:flex;justify-content:center}
 .t-small .btn{min-width:150px;margin:0 0 5px;min-height:44px;font-size:12px}
-.t-foot{margin:6px 0 calc(var(--sab) + 12px);text-align:center;font:400 10.5px/1.4 var(--f-ui);letter-spacing:.06em;text-transform:uppercase;color:var(--line);opacity:.8}
+.t-foot{margin:6px 0 calc(var(--sab) + 12px);text-align:center;font:400 11px/1.4 var(--f-ui);letter-spacing:.05em;text-transform:uppercase;color:var(--line)}
 @media (max-height:720px){.mk{min-height:54px}.mk img{width:36px;height:36px}.mk b{font-size:15px}.mk.go b{font-size:20px}.t-menu{gap:9px 10px}.t-hero{min-height:160px}}
 @media (prefers-reduced-motion:reduce){.mk{transition:none}}
 /* Load game: one file per day */
@@ -538,9 +539,9 @@ img[src*="art/m/"]{image-rendering:-webkit-optimize-contrast;image-rendering:cri
 .lvpick button:nth-child(3){background:linear-gradient(180deg,#fff,#d8c9ff)}
 .lvpick button.down{transform:translateY(4px);box-shadow:0 0 0 var(--line);transition-duration:0s}
 .lvpick b{font:400 19px/1 var(--f-pop)}
-.lvpick small{font:400 9.5px/1.2 var(--f-ui);letter-spacing:.03em;text-transform:uppercase;color:var(--soft);text-align:center}
+.lvpick small{font:400 11px/1.2 var(--f-ui);letter-spacing:.03em;text-transform:uppercase;color:var(--soft);text-align:center}
 .lvpick em{position:absolute;top:-11px;right:-7px;padding:3px 6px;border:2px solid var(--line);border-radius:10px;background:#fff9c4;font:400 11px/1 var(--f-pop);font-style:normal;color:var(--line);white-space:nowrap}
-@media (max-width:360px){.lvpick b{font-size:15.5px}.lvpick small{font-size:8.5px}}
+@media (max-width:360px){.lvpick b{font-size:15.5px}.lvpick small{font-size:11px}}
 /* Training, round 2 (10/21): the rank card opens your stats, today's practice, the pro move, the stats screen */
 .starcard[role=button]{cursor:pointer;transition:transform .18s cubic-bezier(.3,1.4,.6,1),box-shadow .18s}
 .starcard[role=button].down{transform:translateY(3px);box-shadow:0 2px 0 rgba(91,61,142,.3);transition-duration:0s}
@@ -551,7 +552,7 @@ img[src*="art/m/"]{image-rendering:-webkit-optimize-contrast;image-rendering:cri
 .today img{justify-self:center;height:70px;width:auto;margin:-6px 0}
 .today i{display:block;font:400 11px/1 var(--f-ui);font-style:normal;letter-spacing:.06em;text-transform:uppercase;color:var(--pink-t)}
 .today b{display:block;margin-top:4px;font:400 18px/1.1 var(--f-pop);color:var(--line)}
-.today small{display:block;margin-top:4px;font:400 10.5px/1.3 var(--f-ui);letter-spacing:.03em;text-transform:uppercase;color:var(--soft)}
+.today small{display:block;margin-top:4px;font:400 11px/1.3 var(--f-ui);letter-spacing:.03em;text-transform:uppercase;color:var(--soft)}
 .today .btn{margin:0;min-height:52px;padding:0 14px;font-size:17px}
 @media (max-width:360px){.today{grid-template-columns:44px minmax(0,1fr) auto;gap:8px}.today img{height:58px}.today b{font-size:16px}.today .btn{padding:0 10px;font-size:15px}}
 .dlg .pro{margin:0;padding:10px 12px;border:3px dashed var(--line);border-radius:14px;background:#fff9c4;font:600 14px/1.4 var(--f-body);color:var(--ink)}
@@ -566,7 +567,7 @@ img[src*="art/m/"]{image-rendering:-webkit-optimize-contrast;image-rendering:cri
 .troph{display:grid;justify-items:center;align-content:start;gap:3px;padding:8px 4px 10px;border:3px solid var(--line);border-radius:16px;background:#f3eefb;text-align:center;box-shadow:0 3px 0 rgba(91,61,142,.25)}
 .troph img{height:64px;width:auto;filter:grayscale(1) brightness(1.15) opacity(.45)}
 .troph b{font:400 13px/1.1 var(--f-pop);color:var(--soft)}
-.troph small{font:400 9.5px/1.3 var(--f-ui);letter-spacing:.02em;text-transform:uppercase;color:var(--muted)}
+.troph small{font:400 11px/1.3 var(--f-ui);letter-spacing:.02em;text-transform:uppercase;color:var(--muted)}
 .troph.won{background:linear-gradient(180deg,#fff,#fff4c2)}
 .troph.won img{filter:none}
 .troph.won b{color:var(--line)}
@@ -577,7 +578,7 @@ img[src*="art/m/"]{image-rendering:-webkit-optimize-contrast;image-rendering:cri
 .steps img{justify-self:center;height:92px;width:auto}
 .steps i{display:block;font:400 11px/1 var(--f-ui);font-style:normal;letter-spacing:.06em;text-transform:uppercase;color:var(--pink-t)}
 .steps b{display:block;margin-top:4px;font:400 19px/1.1 var(--f-pop);color:var(--line)}
-.steps p{margin:6px 0 0;font:500 15px/1.45 var(--f-body);color:var(--ink)}
+.steps p{margin:6px 0 0;font:500 16px/1.45 var(--f-body);color:var(--ink)}
 /* Settings */
 .filebtn{display:grid;place-items:center}
 .card>.btn{width:100%;margin:0 0 5px}
@@ -600,7 +601,7 @@ img[src*="art/m/"]{image-rendering:-webkit-optimize-contrast;image-rendering:cri
 #slate i.b{top:auto;bottom:0}
 @media (prefers-reduced-motion:reduce){#slate.on{animation:none;transition:opacity 0s;opacity:1;visibility:visible}#slate.on.off{opacity:0;visibility:hidden}}
 /* the operative word: the one to hit, marked wherever the line shows */
-.op{color:var(--pink-deep);text-decoration:underline;text-decoration-thickness:.12em;text-underline-offset:.14em;text-decoration-color:var(--pink)}
+.op{color:var(--pink-t);text-decoration:underline;text-decoration-thickness:.12em;text-underline-offset:.14em;text-decoration-color:var(--pink)}
 #show .op{color:#ffb3d6;text-decoration-color:#ff8cc6}
 /* the shot size: a chip on the line card that cycles wide / medium / close (a tap, so it never leaves the thumb's path) */
 .size-chip{display:inline-flex;align-items:center;gap:5px;min-height:44px;margin:-7px 0;padding:0 9px;border:2px solid var(--line);border-radius:999px;background:var(--sky-2);color:var(--line);font:400 11px/1 var(--f-ui);letter-spacing:.04em;text-transform:uppercase;box-shadow:0 2px 0 var(--line)}
@@ -612,7 +613,7 @@ img[src*="art/m/"]{image-rendering:-webkit-optimize-contrast;image-rendering:cri
 .chip.size{background:var(--sky-2)}
 .linecard .tag .hard{display:inline-block;margin-right:6px;padding:3px 8px;border:2px solid var(--line);border-radius:999px;background:#ffd6e2;color:var(--red-deep)}
 /* why a take missed: four small keys in the ticker for ten seconds after a B */
-.tk-keys .btn.why{min-width:0;padding:0 6px;font-size:10.5px;letter-spacing:.01em}
+.tk-keys .btn.why{min-width:0;padding:0 6px;font-size:11px;letter-spacing:.01em}
 .tk-keys .btn.sm{min-width:0;padding:0 8px;font-size:11px}
 /* breathe: the flash as a calm card with a countdown */
 #flash.breathe{background:rgba(236,246,255,.97)}
@@ -622,7 +623,7 @@ img[src*="art/m/"]{image-rendering:-webkit-optimize-contrast;image-rendering:cri
 /* the post sheet: every kept take with its clock */
 .ps{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;align-items:center;padding:8px 12px;margin:0 0 8px;border:3px solid var(--line);border-radius:14px;background:#fff;box-shadow:0 3px 0 rgba(91,61,142,.25)}
 .ps em{grid-row:1/3;display:grid;gap:3px;font:400 13px/1 var(--f-px);font-style:normal;color:var(--line);white-space:nowrap}
-.ps em small{font:400 9.5px/1 var(--f-ui);letter-spacing:.03em;text-transform:uppercase;color:var(--muted)}
+.ps em small{font:400 11px/1 var(--f-ui);letter-spacing:.03em;text-transform:uppercase;color:var(--muted)}
 .ps b{font:600 14.5px/1.3 var(--f-body);color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .ps small{font:400 11px/1.4 var(--f-ui);letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
 .ps small i{font-style:normal;padding:1px 6px;border:2px solid var(--line);border-radius:999px;background:var(--sky-2);color:var(--line);margin-right:4px}
@@ -691,11 +692,11 @@ img[src*="art/m/"]{image-rendering:-webkit-optimize-contrast;image-rendering:cri
     <canvas id="t-scene" aria-hidden="true"></canvas>
     <div class="t-hero"><h1 class="vh">Sweet Takes</h1></div>
     <nav class="t-menu" aria-label="Main menu">
-      <button type="button" class="mk go wide" id="h-cont" data-act="cont" hidden><img src="art/m/f-go.webp" alt=""><span><b>Continue</b><small id="h-cont-s"></small></span></button>
-      <button type="button" class="mk" data-act="newGame"><img src="art/m/f-idle.webp" alt=""><span><b>New game</b><small>a new day</small></span></button>
-      <button type="button" class="mk" data-act="toLoad"><img src="art/m/f-wrap.webp" alt=""><span><b>Load game</b><small id="h-load-s">your days</small></span></button>
-      <button type="button" class="mk" data-act="toTrain"><img src="art/m/f-take.webp" alt=""><span><b>Training</b><small id="h-tr-s">practice lines</small></span></button>
-      <button type="button" class="mk" data-act="toHelp"><img src="art/m/f-got.webp" alt=""><span><b>How to play</b><small>9 steps</small></span></button>
+      <button type="button" class="mk go wide" id="h-cont" data-act="cont" hidden><img src="art/m/f-go.webp" alt="" width="53" height="53"><span><b>Continue</b><small id="h-cont-s"></small></span></button>
+      <button type="button" class="mk" data-act="newGame"><img src="art/m/f-idle.webp" alt="" width="53" height="53"><span><b>New game</b><small>a new day</small></span></button>
+      <button type="button" class="mk" data-act="toLoad"><img src="art/m/f-wrap.webp" alt="" width="56" height="56"><span><b>Load game</b><small id="h-load-s">your days</small></span></button>
+      <button type="button" class="mk" data-act="toTrain"><img src="art/m/f-take.webp" alt="" width="58" height="58"><span><b>Training</b><small id="h-tr-s">practice lines</small></span></button>
+      <button type="button" class="mk" data-act="toHelp"><img src="art/m/f-got.webp" alt="" width="58" height="58"><span><b>How to play</b><small>9 steps</small></span></button>
       <div class="t-small"><button type="button" class="btn" data-act="toSettings">Settings</button></div>
     </nav>
     <p class="t-foot">your bestie on set &middot; 0FF THE PRINT &middot; <span class="ver"></span></p>
@@ -756,7 +757,7 @@ img[src*="art/m/"]{image-rendering:-webkit-optimize-contrast;image-rendering:cri
         <b id="r-left">0:00</b><small id="r-left-l">left</small>
       </div>
       <div class="who"><span id="r-who"></span><span id="r-at"></span></div>
-      <div class="linecard" id="r-card" role="button" tabindex="0" data-act="show"><span class="tag" id="r-tag"></span><img class="card-art" id="r-art" src="art/m/drive.webp" alt="" decoding="async"><span class="txtbox" id="r-box"><span class="txt" id="r-txt"></span></span><span class="card-foot"><span class="do-chip" id="r-do"></span><button type="button" class="size-chip none" id="r-size" data-act="size" aria-label="Shot size" hidden></button><span class="tap" id="r-tap">tap for big</span></span><i class="more-cue" aria-hidden="true">more</i></div>
+      <div class="linecard" id="r-card" role="button" tabindex="0" data-act="show"><span class="tag" id="r-tag"></span><img class="card-art" id="r-art" src="art/m/drive.webp" alt="" decoding="async" width="84" height="96"><span class="txtbox" id="r-box"><span class="txt" id="r-txt"></span></span><span class="card-foot"><span class="do-chip" id="r-do"></span><button type="button" class="size-chip none" id="r-size" data-act="size" aria-label="Shot size" hidden></button><span class="tap" id="r-tap">tap for big</span></span><i class="more-cue" aria-hidden="true">more</i></div>
       <div class="trow" id="r-mid">
         <div class="takes"><b id="r-take">Take 1</b><div class="pips" id="r-pips"></div></div>
         <img class="face" id="r-face" src="art/m/f-idle.webp" alt="" width="52" height="52" decoding="async">
@@ -783,7 +784,7 @@ img[src*="art/m/"]{image-rendering:-webkit-optimize-contrast;image-rendering:cri
 
   <!-- ===== 4. THE REPORT ===== -->
   <section id="s-report" class="scr" hidden>
-    <img class="rep-m" id="rep-m" src="art/m/wrap.webp" alt="" decoding="async"><div class="verdict lcd" id="rep-v"><b></b><small></small><i class="rank" id="rep-rank"></i></div>
+    <img class="rep-m" id="rep-m" src="art/m/wrap.webp" alt="" decoding="async" width="75" height="95"><div class="verdict lcd" id="rep-v"><b></b><small></small><i class="rank" id="rep-rank"></i></div>
     <div class="stats" id="rep-stats"></div>
     <div id="rep-body"></div>
     <div class="dock" id="rdock"></div>
@@ -892,7 +893,7 @@ img[src*="art/m/"]{image-rendering:-webkit-optimize-contrast;image-rendering:cri
   <button type="button" class="btn primary big" data-act="closeOpt">Back</button>
 </div></div>
 <div id="lesson" class="ovl" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="ls-t">
-  <img class="coach-m" id="ls-m" src="art/m/smile.webp" alt="" decoding="async">
+  <img class="coach-m" id="ls-m" src="art/m/smile.webp" alt="" decoding="async" width="64" height="96">
   <b class="dlg-t" id="ls-t">Lesson</b><small class="dlg-s" id="ls-s"></small>
   <ol class="coach" id="ls-tips"></ol>
   <p class="pro" id="ls-pro"></p>
@@ -939,7 +940,7 @@ img[src*="art/m/"]{image-rendering:-webkit-optimize-contrast;image-rendering:cri
 <div id="crt" aria-hidden="true"><i></i><b></b></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="core.js?v=d381627a"></script>
+<script src="core.js?v=d2c4cbf2"></script>
 <script>
 /* ---------- the shell ---------- */
 const C = window.ADCore;
@@ -3031,6 +3032,8 @@ window.addEventListener('hashchange', () => { const h = location.hash; if (h.sta
   $$('.ver').forEach(e => { e.textContent = VER ? 'v' + VER : ''; });
   // mid-shoot (a tap in the last 45 min), a relaunch goes straight back to the set; any other time, the title screen
   if (D.run && !wrappedAt()) { const E = D.run.events, last = E.length ? E[E.length - 1].t : D.run.at; if (Date.now() - last < 45 * 6e4) { go('run'); return; } }
+  // a deep link to a screen with no day behind it (Training, How to play, Settings, Load game, a new day) opens there
+  const deep = h.slice(1); if (/^(?:train|help|settings|load|setup)$/.test(deep)) { if (deep === 'setup' && hasContent(D)) useFile(newId(), fresh()); go(deep); return; }
   go('home');
   if (P.crt !== false) { document.body.classList.add('crt-boot'); setTimeout(() => document.body.classList.remove('crt-boot'), 900); }   // the old TV switching on
 })();

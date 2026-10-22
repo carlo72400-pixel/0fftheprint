@@ -36,10 +36,10 @@ padding:0;position:relative;transition:transform .12s,border-color .12s}
 .sw-acid{background:#a3e635}.sw-gold{background:#ffd479}.sw-ember{background:#ff8a5c}
 .sw-pink{background:#ff79c6}.sw-violet{background:#c084fc}.sw-ice{background:#a0e6ff}
 
-.door-note{font-family:var(--f-mono);font-size:11.5px;line-height:1.75;color:var(--muted);margin-top:10px;max-width:46ch}
+.door-note{font-family:var(--f-mono);font-size:13px;line-height:1.75;color:var(--muted);margin-top:10px;max-width:46ch}
 .door-note + .door-note{margin-top:4px}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;margin-top:22px}
-label{display:block;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px}
+label{display:block;font-family:var(--f-mono);font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px}
 /* ⛔ 16px, NOT 15px. iOS Safari zooms the whole page in on focus for any form
    control under 16px, so /join/ and /reset/, the two doors a card holder walks
    through from a DM link on a phone, scaled up about 7% and jumped the moment
@@ -64,7 +64,7 @@ text-transform:uppercase;padding:13px 20px;cursor:pointer;transition:transform .
 .btn.ok{background:linear-gradient(180deg,var(--ok),#4bbd5c);color:#06210b}
 .btn.bad{background:transparent;border:1px solid rgba(255,93,126,.5);color:var(--bad)}
 .row{display:flex;gap:8px;flex-wrap:wrap}
-.note{font-family:var(--f-mono);font-size:11px;color:var(--muted);margin-top:12px;line-height:1.7}
+.note{font-family:var(--f-mono);font-size:13px;color:var(--muted);margin-top:12px;line-height:1.7}
 .note a{color:var(--pink-glow)}
 .msg{margin-top:16px;padding:12px 14px;border-radius:9px;font-size:13.5px;display:none}
 .msg.show{display:block}
@@ -77,8 +77,8 @@ font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;text-transform:upp
 .person{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
 padding:13px 4px;border-bottom:1px solid var(--line)}
 .person b{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:18px;text-transform:uppercase}
-.person .meta{font-family:var(--f-mono);font-size:10.5px;color:var(--muted);letter-spacing:.12em;margin-top:3px}
-.pill{font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;
+.person .meta{font-family:var(--f-mono);font-size:11px;color:var(--muted);letter-spacing:.12em;margin-top:3px}
+.pill{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
 border:1px solid var(--line);border-radius:3px;padding:2px 6px;color:var(--muted)}
 .pill.ok{color:var(--ok);border-color:rgba(126,231,135,.4)}
 .pill.wait{color:#ffd479;border-color:rgba(255,212,121,.4)}

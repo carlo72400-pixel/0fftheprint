@@ -32,7 +32,7 @@ background:linear-gradient(180deg,#fff 10%,var(--pink) 45%,#8f8a97 60%,var(--pin
 .meta{font-family:var(--f-mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-top:10px}
 .meta b{color:var(--pink-glow);font-weight:500}
 .filters{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
-.fpill{font-family:var(--f-mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);
+.fpill{font-family:var(--f-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);
 background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:7px 14px;cursor:pointer}
 .fpill:hover{border-color:var(--pink-deep);color:var(--ink)}
 .fpill.on{background:rgba(255,121,198,.14);border-color:var(--pink-glow);color:var(--pink)}
@@ -41,7 +41,7 @@ background:var(--panel);border:1px solid var(--line);border-radius:999px;padding
 border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--panel);cursor:zoom-in}
 .tile img{width:100%;height:100%;object-fit:cover;display:block}
 .tile figcaption{position:absolute;left:0;right:0;bottom:0;padding:22px 10px 8px;font-family:var(--f-mono);
-font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--pink);
+font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--pink);
 background:linear-gradient(180deg,transparent,rgba(10,10,13,.88))}
 .tile.hid{display:none}
 .foot{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);
@@ -63,8 +63,10 @@ color:var(--ink);width:44px;height:44px;border-radius:50%;font-size:20px;cursor:
 .lb-p{left:12px;top:50%;transform:translateY(-50%)}
 .lb-n{right:12px;top:50%;transform:translateY(-50%)}
 @media(max-width:640px){.lb-p,.lb-n{bottom:14px;top:auto;transform:none}.lb-p{left:14px}.lb-n{right:14px}}
+/* 10/22 UX sweep: the venue filters are 44 px targets */
+.filters>*{min-height:44px;display:inline-flex;align-items:center}
 </style>
-<link rel="stylesheet" href="../assets/css/binder.css?v=f47d0aee">
+<link rel="stylesheet" href="../assets/css/binder.css?v=ce577337">
 <script src="../assets/js/binder.js?v=a9913f49" defer></script>
 </head>
 <body>
@@ -126,7 +128,7 @@ color:var(--ink);width:44px;height:44px;border-radius:50%;font-size:20px;cursor:
     const w = Number(it.w) || 0, h = Number(it.h) || 0;
     const thumb = '../' + it.src.replace(/^assets\//, 'assets/grid/');
     return `<figure class="tile" data-i="${i}"${w && h ? ` style="aspect-ratio:${w}/${h}"` : ''}>
-      <img src="${esc(thumb)}" alt="${esc(it.alt || it.label || '')}"${w && h ? ` width="${w}" height="${h}"` : ''} loading="lazy" decoding="async">
+      <img src="${esc(thumb)}" alt="${esc(it.alt || it.label || '')}"${w && h ? ` width="${w}" height="${h}"` : ''} loading="${(window.__kN = (window.__kN || 0) + 1) <= 4 ? \'eager\' : \'lazy\'}" decoding="async">
       <figcaption>${esc(it.label || '')}</figcaption>
     </figure>`;
   }).join('');

@@ -245,6 +245,8 @@
     transition:color .15s;
     position:relative;
   }
+  nav.site a{min-height:44px;display:inline-flex;align-items:center;padding:0 8px;margin:0 -8px;}   /* a 44 px hit area around every word (KIT measured 29 px wide) */
+  nav.site a.cta,nav.site a.key{margin:0;}
   nav.site a:hover{color:var(--pink-glow);}
   nav.site a::after{
     content:'';
@@ -1744,6 +1746,7 @@
       display:inline-flex;
       align-items:center;
       padding:0 4px;
+      padding-left:11px;padding-right:11px;margin-left:-11px;margin-right:-11px;   /* 10/22: a 44 px wide hit area on KIT and PLAY too */
     }
     nav.site a::after{bottom:8px;}
 
@@ -1826,7 +1829,7 @@
          nothing was constraining the width any more. */
       flex:0 1 auto;
     }
-    .section-head .sub{font-size:10px;letter-spacing:.24em;}
+    .section-head .sub{font-size:11px;letter-spacing:.2em;}
 
     /* Take posts: photo on top, content below — already at 720, but tighten more */
     .post{padding:16px 18px;gap:14px;}
@@ -1888,7 +1891,7 @@
     footer.site .mark{font-size:18px;}
 
     /* Ticker — let the pink read at a reasonable size */
-    .ticker{font-size:10px;letter-spacing:.16em;padding:8px 0;}
+    .ticker{font-size:11px;letter-spacing:.16em;padding:8px 0;}
 
     /* Deco overlay tones down on mobile so type stays crisp */
     body::before{
@@ -1907,7 +1910,7 @@
       gap:8px;
     }
     .wrap{padding:14px 12px 26px;}
-    nav.site a{font-size:10px;letter-spacing:.16em;}
+    nav.site a{font-size:11px;letter-spacing:.14em;}
     .brand-card img{max-width:240px;}
     .voice .body{padding:8px 10px 10px;}
     .voice .name{font-size:13px;}
@@ -3825,6 +3828,7 @@
     .post-who b{font-size:15px;}
     .post-body{font-size:14.5px;}
   }
+  .pk-head #pk-sub{font-size:11px !important}
 </style>
 <style id="tabs-css">
   /* ============ TABS (10/3: "make the timeline the first thing and then the others are like tabs") ============
@@ -3972,9 +3976,9 @@
 </style>
 <!-- THE CATHEDRAL (10/3): the homepage skin. Scoped under html.cath, loaded last on purpose. -->
 <link rel="stylesheet" href="assets/css/pack.css?v=19b679bc">
-<link rel="stylesheet" href="assets/css/binder.css?v=f47d0aee">
+<link rel="stylesheet" href="assets/css/binder.css?v=ce577337">
 <link rel="stylesheet" href="assets/css/cathedral.css?v=d1de4c7e">
-<link rel="stylesheet" href="assets/css/lounge.css?v=2d07e1fc">
+<link rel="stylesheet" href="assets/css/lounge.css?v=b5a4060f">
 <link rel="stylesheet" href="assets/css/music.css?v=815cfdc9">
 <link rel="stylesheet" href="assets/css/people.css?v=85ce71bf">
 <link rel="stylesheet" href="assets/css/photos.css?v=e51bc605">

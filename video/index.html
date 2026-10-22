@@ -25,7 +25,7 @@
   .sub{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.2em;
     text-transform:uppercase;color:var(--muted)}
   .tabs{display:flex;gap:8px;margin:24px 0 22px;flex-wrap:wrap}
-  .tab{background:transparent;color:var(--muted);border:1px solid var(--line);border-radius:999px;
+  .tab{background:transparent;color:var(--muted);border:1px solid var(--line);border-radius:999px;min-height:44px;display:inline-flex;align-items:center;
     padding:9px 16px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;
     text-transform:uppercase;cursor:pointer;min-height:38px}
   .tab.on{color:#12070f;background:var(--pink);border-color:var(--pink);font-weight:600}
@@ -70,15 +70,15 @@
   .ply{position:absolute;inset:0;display:grid;place-items:center;font-size:30px;
     color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.65);opacity:.92}
   .dur{position:absolute;right:7px;bottom:7px;background:rgba(8,6,10,.82);
-    font-family:'JetBrains Mono',monospace;font-size:10.5px;padding:3px 7px;border-radius:5px;color:#fff}
-  .kd{position:absolute;left:7px;top:7px;font-family:'JetBrains Mono',monospace;font-size:9.5px;
+    font-family:'JetBrains Mono',monospace;font-size:11px;padding:3px 7px;border-radius:5px;color:#fff}
+  .kd{position:absolute;left:7px;top:7px;font-family:'JetBrains Mono',monospace;font-size:11px;
     letter-spacing:.16em;padding:3px 7px;border-radius:5px;background:rgba(8,6,10,.82);color:var(--pink)}
   .ti{display:block;margin-top:9px;font-family:'Saira Condensed',sans-serif;font-style:italic;
     font-weight:900;text-transform:uppercase;font-size:16px;line-height:1.04}
-  .fr{display:block;margin-top:3px;font-family:'JetBrains Mono',monospace;font-size:9.5px;
+  .fr{display:block;margin-top:3px;font-family:'JetBrains Mono',monospace;font-size:11px;
     letter-spacing:.12em;text-transform:uppercase;color:var(--muted);line-height:1.45}
   .empty{color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:12px;padding:30px 0}
-  .railnote{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.18em;
+  .railnote{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;
     text-transform:uppercase;color:var(--muted);margin-top:12px}
   /* ---- lightbox ---- */
   .lb{position:fixed;inset:0;background:rgba(6,5,8,.96);display:none;z-index:60;
@@ -99,11 +99,11 @@
     background:transparent;border:0;cursor:pointer;padding:10px 14px;opacity:.75}
   .nav:hover{opacity:1}.pv{left:2px}.nx{right:2px}
   .foot{margin-top:46px;padding-top:20px;border-top:1px solid var(--line);
-    font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;
     text-transform:uppercase;color:var(--muted);line-height:2}
   .foot a{color:var(--pink);text-decoration:none}
 </style>
-<link rel="stylesheet" href="../assets/css/binder.css?v=f47d0aee">
+<link rel="stylesheet" href="../assets/css/binder.css?v=ce577337">
 <script src="../assets/js/binder.js?v=a9913f49" defer></script>
 </head>
 <body>
@@ -163,7 +163,7 @@ function draw(kind){
     return '<button class="card" data-i="'+i+'" type="button">'
       + '<span class="shot' + (wide ? ' wide' : '') + '">'
         + (p ? (wide ? '<img class="bed" src="'+esc(p)+'" alt="" aria-hidden="true" loading="lazy">' : '')
-             + '<img class="main" src="'+esc(p)+'" alt="" loading="lazy" width="'+(m.w||520)+'" height="'+(m.h||924)+'">' : '')
+             + '<img class="main" src="'+esc(p)+'" alt="" loading="'+((window.__vN=(window.__vN||0)+1)<=6?'eager':'lazy')+'" width="'+(m.w||520)+'" height="'+(m.h||924)+'">' : '')
         + '<span class="kd">'+esc(m.kind)+'</span>'
         + (m.dur ? '<span class="dur">'+esc(m.dur)+'</span>' : '')
         + '<span class="ply">&#9654;</span>'

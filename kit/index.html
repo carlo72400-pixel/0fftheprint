@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>KIT · 0FF THE PRINT</title>
 <meta name="description" content="Filmmaker tools from the house: teleprompter, slate, take log, release, golden hour, viewfinder, exposure, screens. Works offline.">
 <meta name="robots" content="noindex">
@@ -17,13 +17,13 @@
 <style>
 /* the house fonts, self-hosted (10/15): Samsung's custom font and an offline open used to swap them out */
 @font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:url(../assets/fonts/inter-400.woff2) format('woff2')}
-@font-face{font-family:'Inter';font-style:normal;font-weight:500;font-display:swap;src:url(../assets/fonts/inter-500.woff2) format('woff2')}
-@font-face{font-family:'Inter';font-style:normal;font-weight:600;font-display:swap;src:url(../assets/fonts/inter-600.woff2) format('woff2')}
-@font-face{font-family:'Inter';font-style:normal;font-weight:700;font-display:swap;src:url(../assets/fonts/inter-700.woff2) format('woff2')}
-@font-face{font-family:'Inter';font-style:normal;font-weight:800;font-display:swap;src:url(../assets/fonts/inter-800.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:500;font-display:swap;src:url(../assets/fonts/inter-400.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:600;font-display:swap;src:url(../assets/fonts/inter-400.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:700;font-display:swap;src:url(../assets/fonts/inter-400.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:800;font-display:swap;src:url(../assets/fonts/inter-400.woff2) format('woff2')}
 @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400;font-display:swap;src:url(../assets/fonts/jetbrains-mono-400.woff2) format('woff2')}
-@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:500;font-display:swap;src:url(../assets/fonts/jetbrains-mono-500.woff2) format('woff2')}
-@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:700;font-display:swap;src:url(../assets/fonts/jetbrains-mono-700.woff2) format('woff2')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:500;font-display:swap;src:url(../assets/fonts/jetbrains-mono-400.woff2) format('woff2')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:700;font-display:swap;src:url(../assets/fonts/jetbrains-mono-400.woff2) format('woff2')}
 @font-face{font-family:'Gloria Hallelujah';font-style:normal;font-weight:400;font-display:swap;src:url(../assets/fonts/gloria-hallelujah-400.woff2) format('woff2')}
 @font-face{font-family:'Saira Condensed';font-style:normal;font-weight:700;font-display:swap;src:url(../assets/fonts/saira-condensed-700.woff2) format('woff2')}
 @font-face{font-family:'Saira Condensed';font-style:normal;font-weight:900;font-display:swap;src:url(../assets/fonts/saira-condensed-900.woff2) format('woff2')}
@@ -32,7 +32,7 @@
 /* THE KIT (10/15): eight tools for one hand in the dark. The house skin: page black, pink glow, square corners, big type.
    Every tool is one screen; the controls live at the bottom where the thumb is. Works with no signal (sw.js). */
 :root{
-  --bg:#0a0a0d;--panel:#121218;--panel-2:#1a1921;--line:#26252f;--ink:#f4eef2;--muted:#9a93a3;--dim:#6d6775;
+  --bg:#0a0a0d;--panel:#121218;--panel-2:#1a1921;--line:#26252f;--ink:#f4eef2;--muted:#a9a5b2;--dim:#8e8898;
   --pink:#f7b9dd;--pink-deep:#f48fc8;--glow:#ff79c6;--ok:#7ee787;--bad:#ff5d7e;--gold:#ffd479;--ice:#a0e6ff;
   --f-display:'Saira Condensed','Arial Narrow',Impact,sans-serif;--f-body:'Inter',system-ui,-apple-system,sans-serif;--f-mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
   --sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);color-scheme:dark;
@@ -52,12 +52,12 @@ a{color:var(--pink)}
 .bar{display:flex;align-items:center;gap:10px;min-height:48px;margin-bottom:8px}
 .bar .back{display:none;width:44px;height:44px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:700 20px/1 var(--f-mono);align-items:center;justify-content:center;flex:0 0 auto}
 body[data-tool]:not([data-tool="home"]) .bar .back{display:flex}
-.bar .wm{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--ink);min-width:0}
+.bar .wm{display:flex;align-items:center;gap:9px;min-height:44px;text-decoration:none;color:var(--ink);min-width:0}
 .bar .wm img{width:30px;height:30px}
 .bar .wm b{font:900 italic 22px/1 var(--f-display);text-transform:uppercase;letter-spacing:.02em}
-.bar .wm small{display:block;font:700 9.5px/1.2 var(--f-mono);letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.bar .wm small{display:block;font:700 11px/1.2 var(--f-mono);letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
 .bar .sp{flex:1}
-.bar .ins{min-height:36px;padding:0 11px;border:1px dashed var(--line);background:none;color:var(--muted);font:700 10.5px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase}
+.bar .ins{min-height:44px;padding:0 11px;border:1px dashed var(--line);background:none;color:var(--muted);font:700 11px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase}
 
 /* home: the eight doors */
 .hero{position:relative;overflow:hidden;margin:6px -16px 14px;aspect-ratio:1200/462;background:#0d0c11}
@@ -65,14 +65,14 @@ body[data-tool]:not([data-tool="home"]) .bar .back{display:flex}
 .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,13,0) 30%,rgba(10,10,13,.9) 100%)}
 .hero-t{position:absolute;left:16px;right:16px;bottom:12px;z-index:1;display:flex;align-items:baseline;justify-content:space-between;gap:12px}
 .hero-t h1{margin:0;font:900 italic clamp(38px,11vw,56px)/.9 var(--f-display);text-transform:uppercase;text-shadow:0 2px 14px rgba(255,121,198,.45)}
-.hero-t span{font:700 10.5px/1.3 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--pink);text-align:right}
+.hero-t span{font:700 11px/1.3 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--pink);text-align:right}
 .doors{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .door{position:relative;display:grid;grid-template-columns:48px minmax(0,1fr);gap:4px 12px;align-items:center;min-height:86px;padding:12px 12px 12px 10px;border:1px solid var(--line);background:var(--panel);color:var(--ink);text-align:left;transition:transform .15s,border-color .2s}
 .door:active{transform:scale(.97);border-color:var(--glow)}
 .door img{grid-row:span 2;width:48px;height:48px;object-fit:contain;filter:drop-shadow(0 0 10px rgba(255,121,198,.35))}
 .door b{font:900 italic 20px/1 var(--f-display);text-transform:uppercase;letter-spacing:.01em}
-.door span{font:600 10.5px/1.3 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-.door em{position:absolute;top:6px;right:8px;font:700 9px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--glow);font-style:normal}
+.door span{font:600 11px/1.3 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.door em{position:absolute;top:6px;right:8px;font:700 11px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--glow);font-style:normal}
 .foot{margin-top:28px;font:500 11px/1.6 var(--f-mono);letter-spacing:.04em;color:var(--dim);text-transform:uppercase}
 .foot a{color:var(--muted)}
 
@@ -81,7 +81,7 @@ body[data-tool]:not([data-tool="home"]) .bar .back{display:flex}
 .tool h2{margin:4px 0 0;font:900 italic 32px/.95 var(--f-display);text-transform:uppercase}
 .tool .sub{margin:-6px 0 2px;font:600 11px/1.4 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .card{border:1px solid var(--line);background:var(--panel);padding:12px}
-.lbl{display:block;font:700 10.5px/1.3 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.lbl{display:block;font:700 11px/1.3 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
 .in{width:100%;min-height:50px;padding:0 13px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:500 17px/1 var(--f-body);border-radius:0}
 textarea.in{min-height:140px;padding:12px 13px;line-height:1.45;resize:vertical}
 select.in{appearance:none;-webkit-appearance:none;background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' fill='none' stroke='%23ff79c6' stroke-width='2'/%3E%3C/svg%3E") right 13px center no-repeat;padding-right:36px}
@@ -105,13 +105,13 @@ input[type=range]{width:100%;accent-color:var(--glow);height:44px}
 .num{display:grid;grid-template-columns:64px minmax(0,1fr) 64px;gap:0;border:1px solid var(--line);background:var(--bg)}
 .num button{border:0;background:var(--panel-2);color:var(--ink);font:700 26px/1 var(--f-mono);min-height:58px}
 .num b{display:flex;align-items:baseline;justify-content:center;gap:10px;font:900 italic 30px/1 var(--f-display)}
-.num small{font:700 10px/1 var(--f-mono);letter-spacing:.16em;color:var(--muted);text-transform:uppercase}
+.num small{font:700 11px/1 var(--f-mono);letter-spacing:.16em;color:var(--muted);text-transform:uppercase}
 .list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
 .empty{padding:16px;border:1px dashed var(--line);color:var(--muted);text-align:center;font-size:14px}
 .note{font:500 12.5px/1.5 var(--f-body);color:var(--muted)}
 .note b{color:var(--ink)}
 .stat{display:grid;gap:2px;padding:10px 12px;border:1px solid var(--line);background:var(--panel)}
-.stat i{font:700 9.5px/1.2 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-style:normal}
+.stat i{font:700 11px/1.2 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-style:normal}
 .stat b{font:900 italic 28px/1 var(--f-display);text-transform:uppercase}
 .stat small{font:500 11.5px/1.3 var(--f-mono);color:var(--muted)}
 .stat.hot{border-color:rgba(255,121,198,.5);background:linear-gradient(180deg,rgba(255,121,198,.14),rgba(255,121,198,.02))}
@@ -138,7 +138,7 @@ input[type=range]{width:100%;accent-color:var(--glow);height:44px}
 .slate{display:grid;gap:8px;padding:14px;border:2px solid var(--ink);background:#000}
 .slate .srow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 .slate .sc{display:grid;gap:2px;padding:8px 10px;border:1px solid var(--line);background:#0a0a0d}
-.slate .sc i{font:700 9px/1 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-style:normal}
+.slate .sc i{font:700 11px/1 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-style:normal}
 .slate .sc b{font:900 italic 40px/1 var(--f-display);text-transform:uppercase;overflow-wrap:anywhere}
 .slate .sc.t b{color:var(--glow)}
 .slate .stripe{height:14px;background:repeating-linear-gradient(135deg,#f4eef2 0 14px,#0a0a0d 14px 28px)}
@@ -152,7 +152,7 @@ input[type=range]{width:100%;accent-color:var(--glow);height:44px}
 /* take log */
 .take{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--line);background:var(--panel)}
 .take .id{font:900 italic 20px/1 var(--f-display);color:var(--glow);white-space:nowrap}
-.take .id small{display:block;font:600 9.5px/1.3 var(--f-mono);letter-spacing:.1em;color:var(--muted)}
+.take .id small{display:block;font:600 11px/1.3 var(--f-mono);letter-spacing:.1em;color:var(--muted)}
 .take .tx{min-width:0;display:grid;gap:3px}
 .take .tx input{width:100%;border:0;border-bottom:1px dashed var(--line);background:none;padding:4px 0;font:500 14px/1.3 var(--f-body);color:var(--ink)}
 .take .tx small{font:500 11px/1.3 var(--f-mono);color:var(--muted)}
@@ -162,7 +162,7 @@ input[type=range]{width:100%;accent-color:var(--glow);height:44px}
 /* release */
 .sig{position:relative;height:160px;border:1px solid var(--line);background:#fff;touch-action:none}
 .sig canvas{display:block;width:100%;height:100%}
-.sig .hint{position:absolute;left:12px;bottom:10px;font:700 10px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:#aaa;pointer-events:none}
+.sig .hint{position:absolute;left:12px;bottom:10px;font:700 11px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:#aaa;pointer-events:none}
 .sig .line{position:absolute;left:12px;right:12px;bottom:34px;border-top:1px solid #bbb;pointer-events:none}
 .legal{max-height:150px;overflow:auto;padding:10px 12px;border:1px solid var(--line);background:var(--bg);font:400 12.5px/1.5 var(--f-body);color:var(--muted)}
 .rel{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--line);background:var(--panel)}
@@ -172,12 +172,12 @@ input[type=range]{width:100%;accent-color:var(--glow);height:44px}
 /* golden hour */
 .sunline{position:relative;height:84px;margin:4px 0;border:1px solid var(--line);background:linear-gradient(90deg,#0a0a0d 0%,#2a1a3a 18%,#ffb86b 24%,#ffe0a3 30%,#ffe0a3 70%,#ffb86b 76%,#2a1a3a 82%,#0a0a0d 100%);overflow:hidden}
 .sunline i{position:absolute;top:0;bottom:0;width:2px;background:var(--ink);box-shadow:0 0 8px #fff}
-.sunline i::after{content:attr(data-l);position:absolute;top:6px;left:6px;font:700 9px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink);white-space:nowrap;text-shadow:0 1px 3px #000}
+.sunline i::after{content:attr(data-l);position:absolute;top:6px;left:6px;font:700 11px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink);white-space:nowrap;text-shadow:0 1px 3px #000}
 .sunline i:nth-child(even)::after{top:auto;bottom:6px}
 .sunline i.now{background:var(--glow);box-shadow:0 0 10px var(--glow)}
 .sunline i.now::after{top:auto;bottom:30px;color:var(--glow)}
 .compass{position:relative;width:140px;height:140px;margin:0 auto;border:1px solid var(--line);border-radius:50%;background:var(--panel)}
-.compass span{position:absolute;font:700 10px/1 var(--f-mono);color:var(--muted)}
+.compass span{position:absolute;font:700 11px/1 var(--f-mono);color:var(--muted)}
 .compass .n{top:8px;left:50%;transform:translateX(-50%);color:var(--ink)}.compass .s{bottom:8px;left:50%;transform:translateX(-50%)}.compass .e{right:8px;top:50%;transform:translateY(-50%)}.compass .w{left:8px;top:50%;transform:translateY(-50%)}
 .compass .arm{position:absolute;left:50%;top:50%;width:4px;height:58px;margin-left:-2px;background:linear-gradient(180deg,var(--gold),transparent);transform-origin:50% 0;transform:rotate(0deg)}
 .compass .arm::before{content:"";position:absolute;top:-8px;left:-6px;width:16px;height:16px;border-radius:50%;background:var(--gold);box-shadow:0 0 12px var(--gold)}
@@ -197,7 +197,7 @@ input[type=range]{width:100%;accent-color:var(--glow);height:44px}
 #sc-full.on{display:block}
 #sc-full .bars{position:absolute;inset:0;display:grid;grid-template-columns:repeat(7,1fr)}
 #sc-full .bars i{display:block}
-#sc-full .tip{position:absolute;left:0;right:0;bottom:calc(16px + var(--sab));text-align:center;font:700 10px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(128,128,128,.8)}
+#sc-full .tip{position:absolute;left:0;right:0;bottom:calc(16px + var(--sab));text-align:center;font:700 11px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(128,128,128,.8)}
 @media (min-width:560px){.doors{grid-template-columns:repeat(4,minmax(0,1fr))}.door{grid-template-columns:1fr;justify-items:center;text-align:center;min-height:120px}.door img{grid-row:auto}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
@@ -210,7 +210,7 @@ body{background:radial-gradient(140% 60% at var(--lx) -10%,rgba(255,255,255,.10)
 .bar{margin:0 -16px 10px;padding:calc(var(--sat) + 6px) 14px 8px;min-height:56px;background:repeating-linear-gradient(180deg,rgba(255,255,255,.035) 0 1px,transparent 1px 3px),linear-gradient(180deg,#4a4654,#2d2a35 60%,#221f28);box-shadow:0 2px 0 #0b0a0e,0 3px 0 rgba(255,255,255,.08),0 6px 14px rgba(0,0,0,.5)}
 .app{padding-top:0}
 .bar .wm b{color:#eee8f2;text-shadow:0 1px 0 rgba(255,255,255,.2),0 -1px 0 #000}
-.bar .wm small{color:#8d8a96;text-shadow:0 1px 0 rgba(0,0,0,.8)}
+.bar .wm small{color:#a9a5b2;text-shadow:0 1px 0 rgba(0,0,0,.8)}
 .bar .back{border:0;border-radius:4px;background:linear-gradient(180deg,#3a3642,#25222b);color:#e9e3ee;box-shadow:0 1px 0 rgba(255,255,255,.15),0 3px 0 #0b0a0e,0 5px 8px rgba(0,0,0,.6)}
 .bar .back:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(255,255,255,.15),0 1px 0 #0b0a0e}
 .bar .ins{border:0;border-radius:3px;background:linear-gradient(180deg,#0a150e,var(--lcd));color:var(--lcdink);box-shadow:inset 0 0 0 1px #000,inset 0 2px 6px rgba(0,0,0,.8),0 1px 0 rgba(255,255,255,.1);text-shadow:0 0 6px rgba(158,240,176,.5)}
@@ -226,9 +226,9 @@ body{background:radial-gradient(140% 60% at var(--lx) -10%,rgba(255,255,255,.10)
 .foot{color:#7c7786;text-shadow:0 1px 0 rgba(0,0,0,.8)}
 /* shared: panels set into the body, LCD fields, keys with travel, rails, counters */
 .tool h2{color:#efe8f3;text-shadow:0 1px 0 rgba(255,255,255,.2),0 -1px 0 #000}
-.tool .sub{color:#8d8a96;text-shadow:0 1px 0 rgba(0,0,0,.8)}
+.tool .sub{color:#a9a5b2;text-shadow:0 1px 0 rgba(0,0,0,.8)}
 .card{border:0;border-radius:6px;background:linear-gradient(180deg,#201d26,#18161d);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),inset 0 0 0 1px rgba(0,0,0,.6),0 2px 4px rgba(0,0,0,.4)}
-.lbl{color:#8d8a96;text-shadow:0 1px 0 rgba(0,0,0,.8)}
+.lbl{color:#a9a5b2;text-shadow:0 1px 0 rgba(0,0,0,.8)}
 .in{border:0;border-radius:4px;background:linear-gradient(180deg,#0a150e,var(--lcd));color:#dffbe4;box-shadow:inset 0 0 0 1px #000,inset 0 2px 8px rgba(0,0,0,.8),0 1px 0 rgba(255,255,255,.1);text-shadow:0 0 6px rgba(158,240,176,.35);caret-color:var(--lcdink)}
 .in::placeholder{color:rgba(158,240,176,.45)}
 textarea.in{font-family:var(--f-mono);font-size:15px}
@@ -241,10 +241,10 @@ select.in{background:linear-gradient(180deg,#0a150e,var(--lcd)) padding-box,url(
 .btn.bad{color:#ff9bb0}
 .mark.tail{background:linear-gradient(180deg,#ffe29a,var(--gold) 55%,#d9a93a);color:#3a2a00;box-shadow:0 1px 0 rgba(255,255,255,.35),0 4px 0 #6b5114,0 7px 10px rgba(0,0,0,.6)}
 .seg{border:0;border-radius:4px;padding:2px;background:#0b0a0e;box-shadow:inset 0 1px 3px rgba(0,0,0,.9),0 1px 0 rgba(255,255,255,.1)}
-.seg button{border-radius:3px;color:#8d8a96}
+.seg button{border-radius:3px;color:#a9a5b2}
 .seg button+button{border-left:0}
 .seg button[aria-pressed="true"]{background:linear-gradient(180deg,#5a5665,#3a3642);color:var(--gold);box-shadow:0 1px 0 rgba(255,255,255,.2),0 2px 4px rgba(0,0,0,.7)}
-.slider{color:#8d8a96}
+.slider{color:#a9a5b2}
 .slider output{color:var(--lcdink);text-shadow:0 0 6px rgba(158,240,176,.5);font-family:var(--f-mono)}
 input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;height:44px}
 input[type=range]::-webkit-slider-runnable-track{height:8px;border-radius:4px;background:#0b0a0e;box-shadow:inset 0 1px 3px rgba(0,0,0,.9),0 1px 0 rgba(255,255,255,.1)}
@@ -263,7 +263,7 @@ input[type=range]::-moz-range-thumb{width:30px;height:30px;border:0;border-radiu
 .stat.hot{background:linear-gradient(180deg,#1a0d16,#140a11);box-shadow:inset 0 0 0 1px #000,inset 0 2px 8px rgba(0,0,0,.8),0 0 14px rgba(255,121,198,.25)}
 .stat.hot b{color:#ffb5de;text-shadow:0 0 8px rgba(255,121,198,.6)}
 .stat.hot i,.stat.hot small{color:rgba(255,181,222,.7)}
-.empty{border:1px dashed rgba(255,255,255,.15);border-radius:4px;color:#8d8a96}
+.empty{border:1px dashed rgba(255,255,255,.15);border-radius:4px;color:#a9a5b2}
 .note{color:#9b95a6}
 .note b{color:#e9e3ee}
 .take,.rel{border:0;border-radius:5px;background:linear-gradient(180deg,#201d26,#18161d);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),inset 0 0 0 1px rgba(0,0,0,.6),0 2px 4px rgba(0,0,0,.4)}
@@ -282,11 +282,11 @@ input[type=range]::-moz-range-thumb{width:30px;height:30px;border:0;border-radiu
 /* ---------- the sky (10/15): the sun's day as a picture ---------- */
 .skybox{position:relative;border-radius:6px;overflow:hidden;box-shadow:inset 0 0 0 4px #0b0a0e,inset 0 0 0 6px #3b3844,inset 0 0 0 7px #121117,0 0 0 1px rgba(255,255,255,.08),0 10px 24px rgba(0,0,0,.6)}
 .sky{display:block;width:100%;height:auto}
-.skyread{position:absolute;left:10px;top:10px;padding:6px 9px;border-radius:3px;background:linear-gradient(180deg,#0a150e,var(--lcd));color:var(--lcdink);font:700 10.5px/1.4 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;box-shadow:inset 0 0 0 1px #000,inset 0 2px 6px rgba(0,0,0,.8);text-shadow:0 0 6px rgba(158,240,176,.5)}
+.skyread{position:absolute;left:10px;top:10px;padding:6px 9px;border-radius:3px;background:linear-gradient(180deg,#0a150e,var(--lcd));color:var(--lcdink);font:700 11px/1.4 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;box-shadow:inset 0 0 0 1px #000,inset 0 2px 6px rgba(0,0,0,.8);text-shadow:0 0 6px rgba(158,240,176,.5)}
 .skyread b{color:#dffbe4}
 /* ---------- the back key (10/15, his right thumb), the dark-mode guard on the full screens ---------- */
 #back-fab{position:fixed;right:14px;bottom:calc(16px + var(--sab));z-index:60;width:60px;height:60px;border:0;border-radius:50%;display:none;place-items:center;color:#f1ecf5;font:900 26px/1 var(--f-mono);background:radial-gradient(circle at 50% 30%,#4b4754,#201e26 70%);box-shadow:0 0 0 3px #0b0a0e,0 0 0 5px #4b4754,0 0 0 6px #0b0a0e,0 8px 16px rgba(0,0,0,.7),inset 0 2px 2px rgba(255,255,255,.2),inset 0 -5px 8px rgba(0,0,0,.7);transition:transform .08s}
-#back-fab::after{content:"back";position:absolute;left:50%;bottom:-16px;transform:translateX(-50%);font:700 8.5px/1 var(--f-mono);letter-spacing:.2em;text-transform:uppercase;color:#8d8a96}
+#back-fab::after{content:"back";position:absolute;left:50%;bottom:-16px;transform:translateX(-50%);font:700 11px/1 var(--f-mono);letter-spacing:.2em;text-transform:uppercase;color:#a9a5b2}
 #back-fab:active{transform:scale(.92)}
 body[data-tool]:not([data-tool="home"]) #back-fab{display:grid}
 body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 110px)}
@@ -295,7 +295,7 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
 /* ---------- the QR key and its full screen (10/15) ---------- */
 .qrkey{display:grid;grid-template-columns:44px minmax(0,1fr);gap:0 12px;align-items:center;text-align:left;margin:0 0 14px;padding:10px 14px;min-height:64px;font-size:20px}
 .qrkey img{width:44px;height:44px;border-radius:4px;background:#fff;padding:2px}
-.qrkey small{display:block;font:700 9.5px/1.3 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(42,10,30,.7)}
+.qrkey small{display:block;font:700 11px/1.3 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:#3a0f27}
 .adkey{color:#f1ecf5}.adkey img{background:none;padding:0;object-fit:contain;filter:drop-shadow(0 0 8px rgba(255,121,198,.35))}.adkey small{color:#9b95a6}
 .qrfull{position:fixed;inset:0;z-index:95;background:#0a0a0d url(../assets/cathedral/shot/qr_wall.webp) center/cover no-repeat;display:grid;place-items:center;padding:24px}
 .qrfull::before{content:"";position:absolute;inset:0;background:radial-gradient(70% 55% at 50% 60%,transparent 40%,rgba(0,0,0,.55) 100%)}
@@ -321,7 +321,7 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
 .qrfull .ask-roll{z-index:6}
 .qrbox .putty .code{z-index:7}
 .qrbox b{text-shadow:0 2px 0 #000,-2px 0 0 rgba(255,0,80,.55),2px 0 0 rgba(0,220,255,.55),0 0 24px rgba(255,121,198,.6)}
-.qrfull .tip{position:absolute;left:0;right:0;bottom:calc(16px + var(--sab));text-align:center;font:700 10px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:#8d8a96}
+.qrfull .tip{position:absolute;left:0;right:0;bottom:calc(16px + var(--sab));text-align:center;font:700 11px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:#a9a5b2}
 /* ---------- THE ASK (10/15 late): the sign he holds up instead of shouting "can I take your photo". Built for people who are
    drunk: ONE question, Bala with the camera up and the sign, TWO giant keys for THEIR thumb (YES / NOT TONIGHT), nothing else to read.
    Swipe for the other cards (you two, film, the room, Spanish). YES = white LOOK HERE 3-2-1 then the QR. Portrait = held up like a
@@ -338,7 +338,7 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
 .askfull>*{position:relative;z-index:1}
 .ask-top{display:flex;align-items:center;justify-content:space-between;padding:0 14px;min-height:34px}
 .ask-top{min-height:30px}
-.ask-top .x,.ask-top .lk{border:0;background:rgba(10,10,13,.55);color:#f1ecf5;font:700 10px/1 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;padding:9px 11px;border-radius:4px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+.ask-top .x,.ask-top .lk{border:0;background:rgba(10,10,13,.55);color:#f1ecf5;font:700 11px/1 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;padding:9px 11px;border-radius:4px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
 .ask-top .lk.on{background:var(--glow);color:#2a0a1e}
 .ask-top .dots{display:flex;gap:6px}
 .ask-top .dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.3)}
@@ -384,7 +384,7 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
 .ask-k i{display:grid;place-items:center;width:64px;height:64px;border-radius:50%;font:900 40px/1 var(--f-display);font-style:normal;background:rgba(0,0,0,.22);box-shadow:inset 0 2px 4px rgba(0,0,0,.5),0 1px 0 rgba(255,255,255,.2)}
 .ask-k.yes i{background:#2a0a1e;color:#ff9fd6}
 .ask-k b{display:block;font:900 italic clamp(28px,8vw,40px)/.95 var(--f-display);text-transform:uppercase}
-.ask-k span{display:block;margin-top:3px;font:700 10.5px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;opacity:.7}
+.ask-k span{display:block;margin-top:3px;font:700 11px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;opacity:1}
 /* landscape: Bala + the wide board on the left, the two keys stacked on the right */
 [data-o="l"].askfull{grid-template-rows:auto minmax(0,1fr);grid-template-columns:minmax(0,1fr) 38%;padding-top:calc(var(--sat) + 4px)}
 [data-o="l"] .ask-top{grid-column:1/-1}
@@ -406,7 +406,7 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
 /* ---------- exposure visuals, slow-mo, the stopwatch (10/15) ---------- */
 .drag{display:grid;gap:8px;padding:10px;border-radius:4px;background:#0f0e13;box-shadow:inset 0 0 0 1px #000,inset 0 2px 8px rgba(0,0,0,.6)}
 .drag .lane{position:relative;height:44px;border-radius:3px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 1px,transparent 1px 10%);overflow:hidden}
-.drag .lane .tag{position:absolute;left:8px;bottom:4px;font:700 8.5px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:#8d8a96}
+.drag .lane .tag{position:absolute;left:8px;bottom:4px;font:700 11px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:#a9a5b2}
 /* the ball crosses the lane once a second; its smear is the shutter: the open fraction of one frame at 24, stretched so a phone can see it */
 .drag .ball{position:absolute;top:8px;left:-24px;width:20px;height:20px;border-radius:50%;background:var(--glow);box-shadow:0 0 10px var(--glow);animation:cross 1.6s linear infinite;filter:blur(0)}
 .drag .ball::before{content:"";position:absolute;top:0;right:100%;height:20px;width:calc(var(--smear,.5) * 160px);border-radius:10px 0 0 10px;background:linear-gradient(90deg,rgba(255,121,198,0),rgba(255,121,198,.75));filter:blur(1px)}
@@ -416,23 +416,23 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
 @keyframes cross{from{left:-24px}to{left:calc(100% + 24px)}}
 .lamps .stat b,#ex-camcard .row3 .stat b,#sm-out2 .stat b{font-size:19px;line-height:1.1}
 #ex-dof .stat b,#ex-shutter .stat b,#ex-ndout .stat b,#sm-out1 .stat b{font-size:21px;line-height:1.1}
-#ex-camcard .row3 .stat i,.lamps .stat i{font-size:8.5px}
+#ex-camcard .row3 .stat i,.lamps .stat i{font-size:11px}
 .ndstrip{display:flex;align-items:center;gap:4px;padding:8px;border-radius:4px;background:#0f0e13;box-shadow:inset 0 0 0 1px #000}
 .ndstrip i{flex:1;display:grid;place-items:center;height:34px;border-radius:3px;background:#ffe9a8;color:#2a1a00;font:700 11px/1 var(--f-mono);font-style:normal;opacity:1;transition:opacity .2s,background .2s}
-.ndstrip i.on{background:#3a3642;color:#8d8a96;opacity:calc(1 - var(--k) * .07)}
-.ndstrip span{font:700 9px/1.2 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--lcdink);text-align:right;min-width:52px}
+.ndstrip i.on{background:#3a3642;color:#a9a5b2;opacity:calc(1 - var(--k) * .07)}
+.ndstrip span{font:700 11px/1.2 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--lcdink);text-align:right;min-width:52px}
 .dofmap{display:block;width:100%;height:auto;border-radius:4px;background:#0f0e13;box-shadow:inset 0 0 0 1px #000,inset 0 2px 8px rgba(0,0,0,.6)}
 .smtab{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:8px}
 .smtab div{display:grid;gap:2px;padding:8px 6px;border-radius:4px;background:linear-gradient(180deg,#201d26,#18161d);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),inset 0 0 0 1px rgba(0,0,0,.6);text-align:center;cursor:pointer}
 .smtab div.on{box-shadow:inset 0 0 0 1px var(--glow),0 0 12px rgba(255,121,198,.3)}
 .smtab b{font:900 italic 22px/1 var(--f-display);color:#f1ecf5}
-.smtab span{font:700 10px/1.2 var(--f-mono);color:var(--lcdink)}
-.smtab small{font:600 8.5px/1.2 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:#8d8a96}
+.smtab span{font:700 11px/1.2 var(--f-mono);color:var(--lcdink)}
+.smtab small{font:600 11px/1.2 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:#a9a5b2}
 /* the stopwatch: a knurled bezel, a cream dial, a sweep hand, a 30-minute sub-dial, an LCD window, the crown and a pusher */
 .watch{position:relative;width:min(84vw,330px);margin:26px auto 10px;padding-top:34px}
 .watch .crown{position:absolute;left:50%;top:0;transform:translateX(-50%);width:84px;height:46px;border:0;border-radius:8px 8px 2px 2px;background:repeating-linear-gradient(90deg,#5a5665 0 3px,#2c2933 3px 6px);color:#f1ecf5;font:900 11px/1 var(--f-mono);letter-spacing:.2em;box-shadow:0 2px 0 rgba(255,255,255,.15) inset,0 -4px 8px rgba(0,0,0,.5) inset,0 6px 10px rgba(0,0,0,.6);z-index:2}
 .watch .crown:active{transform:translate(-50%,3px)}
-.watch .pusher{position:absolute;right:8%;top:14px;transform:rotate(32deg);width:58px;height:34px;border:0;border-radius:6px 6px 2px 2px;background:repeating-linear-gradient(90deg,#5a5665 0 3px,#2c2933 3px 6px);color:#f1ecf5;font:900 9.5px/1 var(--f-mono);letter-spacing:.16em;box-shadow:0 2px 0 rgba(255,255,255,.15) inset,0 6px 10px rgba(0,0,0,.6);z-index:2}
+.watch .pusher{position:absolute;right:8%;top:14px;transform:rotate(32deg);width:58px;height:34px;border:0;border-radius:6px 6px 2px 2px;background:repeating-linear-gradient(90deg,#5a5665 0 3px,#2c2933 3px 6px);color:#f1ecf5;font:900 11px/1 var(--f-mono);letter-spacing:.16em;box-shadow:0 2px 0 rgba(255,255,255,.15) inset,0 6px 10px rgba(0,0,0,.6);z-index:2}
 .watch .pusher:active{transform:rotate(32deg) translateY(3px)}
 .watch .face{position:relative;width:100%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 50% 40%,#fbf6ea,#e9e1cf 70%,#cfc6b1);box-shadow:0 0 0 10px #2c2933,0 0 0 13px #0b0a0e,0 0 0 22px #3a3642,0 0 0 24px #0b0a0e,0 18px 40px rgba(0,0,0,.7),inset 0 6px 14px rgba(0,0,0,.25)}
 .watch .face::before{content:"";position:absolute;inset:-22px;border-radius:50%;background:repeating-conic-gradient(from 0deg,#5a5665 0 2deg,#2c2933 2deg 4deg);z-index:-1}
@@ -442,7 +442,7 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
 .watch .nums i{transform:rotate(calc(var(--a) * 1deg)) translateY(-108px) rotate(calc(var(--a) * -1deg))}
 @media (max-width:380px){.watch .nums i{transform:rotate(calc(var(--a) * 1deg)) translateY(-96px) rotate(calc(var(--a) * -1deg))}}
 .watch .sub{position:absolute;left:50%;top:26%;width:26%;aspect-ratio:1;transform:translateX(-50%);border-radius:50%;background:#efe7d6;box-shadow:inset 0 2px 6px rgba(0,0,0,.25),0 0 0 1px rgba(0,0,0,.2)}
-.watch .sub span{position:absolute;left:50%;top:4px;transform:translateX(-50%);font:700 9px/1 var(--f-mono);color:#1a1921}
+.watch .sub span{position:absolute;left:50%;top:4px;transform:translateX(-50%);font:700 11px/1 var(--f-mono);color:#1a1921}
 .watch .subticks{position:absolute;inset:3px;border-radius:50%;background:repeating-conic-gradient(from -1deg,#1a1921 0 2deg,transparent 2deg 12deg);-webkit-mask:radial-gradient(circle,transparent 0 calc(50% - 6px),#000 calc(50% - 6px));mask:radial-gradient(circle,transparent 0 calc(50% - 6px),#000 calc(50% - 6px))}
 .watch .hand{position:absolute;left:50%;bottom:50%;transform-origin:50% 100%;border-radius:2px}
 .watch .hand.sec{width:4px;height:44%;margin-left:-2px;background:linear-gradient(180deg,var(--glow) 0 70%,#1a1921 70%);box-shadow:0 0 6px rgba(255,121,198,.6);transition:none}
@@ -469,20 +469,20 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
     <!-- THE QR (10/15): the thing he holds up after the flash. Full screen, white, the code to /shot/ (the "you got shot"
          page: follow, leave your @, wait for the pack). The PNG is in the worker, so it shows with no signal. -->
     <button type="button" class="btn primary big qrkey" id="qr-show"><img src="qr-shot.png" alt="" width="44" height="44"><span>Show the QR<small>you got shot · 0fftheprint.com/shot</small></span></button>
-    <button type="button" class="btn primary big qrkey askkey" id="ask-show"><img src="../assets/cathedral/shot/ask_p.webp?v=3" alt="" width="44" height="44" style="object-fit:contain;object-position:top;background:#2a0a1e"><span>The Ask<small>can I get a photo? · they tap YES</small></span></button>
+    <button type="button" class="btn primary big qrkey askkey" id="ask-show"><img src="../assets/cathedral/shot/ask_p_s.webp" alt="" width="44" height="44" style="object-fit:contain;object-position:top;background:#2a0a1e"><span>The Ask<small>can I get a photo? · they tap YES</small></span></button>
     <!-- THE AD (10/21): his pocket assistant director, its own page and its own home-screen icon (../ad/) -->
     <a class="btn big qrkey adkey" href="../ad/"><img src="../assets/cathedral/w/ad.webp" alt="" width="44" height="44"><span>Sweet Takes<small>run a shoot day on the clock · lines, takes, wrap</small></span></a>
     <div class="doors">
-      <button type="button" class="door" data-go="prompter"><img src="../assets/cathedral/w/screen.webp" alt=""><b>Prompter</b><span>read to camera</span></button>
-      <button type="button" class="door" data-go="slate"><img src="../assets/cathedral/w/film.webp" alt=""><b>Slate</b><span>beep + flash to sync</span></button>
-      <button type="button" class="door" data-go="takes"><img src="../assets/cathedral/w/all.webp" alt=""><b>Take log</b><span>circle takes, CSV</span><em id="takes-n"></em></button>
-      <button type="button" class="door" data-go="release"><img src="../assets/cathedral/w/going.webp" alt=""><b>Release</b><span>sign on the spot</span></button>
-      <button type="button" class="door" data-go="sun"><img src="../assets/cathedral/w/tonight.webp" alt=""><b>Golden hour</b><span>SA · SMTX · ATX</span></button>
-      <button type="button" class="door" data-go="vf"><img src="../assets/cathedral/w/pin.webp" alt=""><b>Viewfinder</b><span>frame guides</span></button>
-      <button type="button" class="door" data-go="expo"><img src="../assets/cathedral/w/deal.webp" alt=""><b>Exposure</b><span>FX6 · Luna · shutter · ND · depth</span></button>
-      <button type="button" class="door" data-go="slowmo"><img src="../assets/cathedral/w/fest.webp" alt=""><b>Slow-mo</b><span>rates · shutter · how slow</span></button>
-      <button type="button" class="door" data-go="watch"><img src="../assets/cathedral/a/coming.webp" alt=""><b>Stopwatch</b><span>start · lap · it keeps going</span></button>
-      <button type="button" class="door" data-go="screens"><img src="../assets/cathedral/w/lock.webp" alt=""><b>Screens</b><span>grey · bars · tone</span></button>
+      <button type="button" class="door" data-go="prompter"><img src="../assets/cathedral/w/screen.webp" alt="" width="192" height="192"><b>Prompter</b><span>read to camera</span></button>
+      <button type="button" class="door" data-go="slate"><img src="../assets/cathedral/w/film.webp" alt="" width="192" height="192"><b>Slate</b><span>beep + flash to sync</span></button>
+      <button type="button" class="door" data-go="takes"><img src="../assets/cathedral/w/all.webp" alt="" width="192" height="192"><b>Take log</b><span>circle takes, CSV</span><em id="takes-n"></em></button>
+      <button type="button" class="door" data-go="release"><img src="../assets/cathedral/w/going.webp" alt="" width="192" height="192"><b>Release</b><span>sign on the spot</span></button>
+      <button type="button" class="door" data-go="sun"><img src="../assets/cathedral/w/tonight.webp" alt="" width="192" height="192"><b>Golden hour</b><span>SA · SMTX · ATX</span></button>
+      <button type="button" class="door" data-go="vf"><img src="../assets/cathedral/w/pin.webp" alt="" width="192" height="192"><b>Viewfinder</b><span>frame guides</span></button>
+      <button type="button" class="door" data-go="expo"><img src="../assets/cathedral/w/deal.webp" alt="" width="192" height="192"><b>Exposure</b><span>FX6 · Luna · shutter · ND · depth</span></button>
+      <button type="button" class="door" data-go="slowmo"><img src="../assets/cathedral/w/fest.webp" alt="" width="192" height="192"><b>Slow-mo</b><span>rates · shutter · how slow</span></button>
+      <button type="button" class="door" data-go="watch"><img src="../assets/cathedral/a/coming.webp" alt="" width="192" height="192"><b>Stopwatch</b><span>start · lap · it keeps going</span></button>
+      <button type="button" class="door" data-go="screens"><img src="../assets/cathedral/w/lock.webp" alt="" width="192" height="192"><b>Screens</b><span>grey · bars · tone</span></button>
     </div>
     <p class="foot">Built by <a href="../">0FF THE PRINT</a> · San Antonio · add it to your home screen and it opens with no signal · <a href="../wall/">the Crypt</a></p>
   </section>
@@ -706,17 +706,17 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
   </section>
   <div id="sc-full"><div class="tip">tap to leave</div></div>
 <button type="button" id="back-fab" aria-label="Back to the kit">&lsaquo;</button>
-<div id="qr-full" class="qrfull" hidden><div class="ask-roll" aria-hidden="true"></div><img class="qp a" src="../assets/cathedral/shot/qp_heart.webp" alt="" decoding="async"><img class="qp b" src="../assets/cathedral/shot/qp_star.webp" alt="" decoding="async"><img class="qp c" src="../assets/cathedral/shot/qp_cam.webp" alt="" decoding="async"><img class="qp d" src="../assets/cathedral/shot/qp_print.webp" alt="" decoding="async"><img class="qp e" src="../assets/cathedral/shot/qp_film.webp" alt="" decoding="async"><img class="qp f" src="../assets/cathedral/shot/qp_bat.webp" alt="" decoding="async"><div class="qrbox"><div class="putty"><img class="who" src="../assets/cathedral/shot/putty_sign.webp" alt="" decoding="async"><img class="code" src="qr-shot.png" alt="QR code to 0fftheprint.com/shot" style="left:7.44%;top:27.13%;width:84.85%;height:26.37%"></div><b>You got shot.</b><span>scan it · follow · your pack drops in a few days</span><small>0fftheprint.com/shot</small></div><div class="tip">tap to leave</div></div>
+<div id="qr-full" class="qrfull" hidden><div class="ask-roll" aria-hidden="true"></div><img class="qp a" src="../assets/cathedral/shot/qp_heart.webp" alt="" decoding="async" width="520" height="317"><img class="qp b" src="../assets/cathedral/shot/qp_star.webp" alt="" decoding="async" width="520" height="502"><img class="qp c" src="../assets/cathedral/shot/qp_cam.webp" alt="" decoding="async" width="520" height="394"><img class="qp d" src="../assets/cathedral/shot/qp_print.webp" alt="" decoding="async" width="493" height="520"><img class="qp e" src="../assets/cathedral/shot/qp_film.webp" alt="" decoding="async" width="426" height="520"><img class="qp f" src="../assets/cathedral/shot/qp_bat.webp" alt="" decoding="async" width="520" height="378"><div class="qrbox"><div class="putty"><img class="who" src="../assets/cathedral/shot/putty_sign.webp" alt="" decoding="async" width="363" height="914"><img class="code" src="qr-shot.png" alt="QR code to 0fftheprint.com/shot" style="left:7.44%;top:27.13%;width:84.85%;height:26.37%" width="888" height="888"></div><b>You got shot.</b><span>scan it · follow · your pack drops in a few days</span><small>0fftheprint.com/shot</small></div><div class="tip">tap to leave</div></div>
 <div id="ask-full" class="askfull" data-o="p" hidden>
-  <img class="ask-wall p" src="../assets/cathedral/shot/ask_wall_p.webp?v=3" alt="" decoding="async"><img class="ask-wall l" src="../assets/cathedral/shot/ask_wall_l.webp?v=3" alt="" decoding="async">
+  <img class="ask-wall p" src="../assets/cathedral/shot/ask_wall_p.webp?v=3" alt="" decoding="async" width="614" height="768"><img class="ask-wall l" src="../assets/cathedral/shot/ask_wall_l.webp?v=3" alt="" decoding="async" width="1376" height="768">
   <div class="ask-roll" aria-hidden="true"></div>
   <div class="ask-top"><button type="button" class="x" id="ask-x">&lsaquo; leave</button><span class="dots" id="ask-dots"></span><button type="button" class="lk" id="ask-lock">lock</button></div>
   <div class="ask-stage" id="ask-stage">
     <b class="ask-h" id="ask-h">Can I get a photo?</b>
-    <div class="ask-who p"><img src="../assets/cathedral/shot/ask_p.webp?v=3" alt="" decoding="async"><div class="board" id="ask-bp" style="left:2.14%;top:15.74%;width:47.50%;height:23.80%;transform:rotate(-0.95deg)"></div></div>
-    <div class="ask-who l"><img src="../assets/cathedral/shot/ask_l.webp?v=4" alt="" decoding="async"><div class="board" id="ask-bl" style="left:33.62%;top:4.49%;width:64.84%;height:88.44%;transform:rotate(-0.08deg)"></div></div>
-    <img class="ask-st a" src="../assets/cathedral/shot/qp_heart.webp" alt="" decoding="async"><img class="ask-st b" src="../assets/cathedral/shot/qp_star.webp" alt="" decoding="async"><img class="ask-st c" src="../assets/cathedral/shot/qp_film.webp" alt="" decoding="async"><img class="ask-st e" src="../assets/cathedral/shot/qp_bat.webp" alt="" decoding="async"><img class="ask-st f" src="../assets/cathedral/shot/qp_print.webp" alt="" decoding="async">
-    <img class="ask-burst" id="ask-burst" src="../assets/cathedral/shot/t_flash.webp" alt="" style="right:6%;top:14%">
+    <div class="ask-who p"><img src="../assets/cathedral/shot/ask_p_s.webp" alt="" decoding="async" width="132" height="178"><div class="board" id="ask-bp" style="left:2.14%;top:15.74%;width:47.50%;height:23.80%;transform:rotate(-0.95deg)"></div></div>
+    <div class="ask-who l"><img src="../assets/cathedral/shot/ask_l.webp?v=4" alt="" decoding="async" width="1360" height="778"><div class="board" id="ask-bl" style="left:33.62%;top:4.49%;width:64.84%;height:88.44%;transform:rotate(-0.08deg)"></div></div>
+    <img class="ask-st a" src="../assets/cathedral/shot/qp_heart.webp" alt="" decoding="async" width="520" height="317"><img class="ask-st b" src="../assets/cathedral/shot/qp_star.webp" alt="" decoding="async" width="520" height="502"><img class="ask-st c" src="../assets/cathedral/shot/qp_film.webp" alt="" decoding="async" width="426" height="520"><img class="ask-st e" src="../assets/cathedral/shot/qp_bat.webp" alt="" decoding="async" width="520" height="378"><img class="ask-st f" src="../assets/cathedral/shot/qp_print.webp" alt="" decoding="async" width="493" height="520">
+    <img class="ask-burst" id="ask-burst" src="../assets/cathedral/shot/t_flash.webp" alt="" style="right:6%;top:14%" width="877" height="900">
   </div>
   <div class="ask-body">
     <button type="button" class="ask-k yes" id="ask-yes"><i>&#10003;</i><span class="t"><b id="ask-yes-b">Yes</b><span id="ask-yes-s">shoot me</span></span></button>

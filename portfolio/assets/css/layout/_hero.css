@@ -32,16 +32,16 @@ h1 .sp{display:inline-block;width:.3em}
 .polaroid:hover{transform:rotate(0deg) translateY(-5px);transition:transform .3s var(--spring)}
 .polaroid img.cam{width:100%;height:auto;display:block;border-radius:8px}
 .polaroid .washi{position:absolute;top:-16px;left:50%;transform:translateX(-50%) rotate(-4deg);width:130px;z-index:3;opacity:.94}
-.polaroid .cap{font-family:var(--mono);font-size:10px;letter-spacing:1.4px;color:var(--dim);text-align:center;margin-top:9px}
+.polaroid .cap{font-family:var(--mono);font-size:11px;letter-spacing:1.4px;color:var(--dim);text-align:center;margin-top:9px}
 .polaroid .cap b{color:var(--rose-deep)}
 @media(max-width:760px){
   nav ul{gap:10px}
-  nav ul a{font-size:10px}
-  .kicker{font-size:10px;letter-spacing:2px}
+  nav ul a{font-size:11px}
+  .kicker{font-size:11px;letter-spacing:2px}
 }
 @media(max-width:560px){
   nav ul{gap:8px}
-  nav ul a{font-size:10px;letter-spacing:.5px;padding:10px 3px}
+  nav ul a{font-size:11px;letter-spacing:.5px;padding:0 3px}
 }
 @media(max-width:480px){
   .logo{font-size:19px}
@@ -54,3 +54,6 @@ h1 .sp{display:inline-block;width:.3em}
 .mq-track span{padding:0 14px}
 .mq-track b{color:var(--rose);font-weight:600}
 @keyframes mq{to{transform:translateX(-50%)}}
+
+/* 10/22 UX sweep: the sound key is a 44 px target */
+button.sound{min-height:44px}
