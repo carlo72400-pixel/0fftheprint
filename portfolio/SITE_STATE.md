@@ -39,6 +39,20 @@ cuts, one client-credits paragraph. Hand-kept (not a nightsblock marker: the day
   into ten screens. Stamp `?v=20261021a` on all five pages that load `_tapes.css`. index.html and index-kawaii.html stay byte-identical.
 - Checked on a scratch mirror at 375 and 1280: 2 and 5 columns, no overflow, posters load, a clip plays (readyState 4).
 
+## 0FF THE PRINT reads as his own project, not a business (Oct 22 2026, later the same day)
+
+His ask, after talking to the Thrift owner: the owner had not sent an offer "because he thought I owned a business and that I would go
+away real quick". He told the owner 0FF THE PRINT is how he fills his portfolio, unpaid. "fix all my resume and stuff to ... make it look like I'm open."
+- HIRING about: Thrift first, then "On my own time I shoot 0FF THE PRINT, a nightlife photo project that keeps the portfolio growing",
+  and a new last line "I'm looking for a team to grow with for the long run." Credits: "Photographer + editor · My own nightlife photo
+  project". The 0TP block label is MY OWN PROJECT, BUILT END TO END and its paragraph opens "My own nightlife photo project since August,
+  shot to build the portfolio."
+- Meta description: "Founder of 0FF THE PRINT" became "On the content team at Thrift @ The Warehouse".
+- Footer on all five pages: FOUNDER, 0FF THE PRINT became SHOOTER, EDITOR, COLORIST.
+- Resumes rebuilt the same way (no Founder or publication anywhere, freelance reads part-time, header "open to full-time roles").
+- Not touched: the BOOKING door and /rates/ (his freelance side stays public), `index-camera.html` (an old unlinked variant that still
+  says Vamppsych founder).
+
 ## HIRING: the store posted two of the promos (Oct 22 2026)
 
 His ask: "with the experience we did for Thrift ... we've basically directed an actress ... apply that to our resume and our portfolio."

@@ -7,7 +7,7 @@ Read this before changing anything on 0fftheprint.com/portfolio. SITE_STATE.md i
 - He shoots it and cuts it fast. Almost every job on the page went out the next morning or the next day. That speed, plus being good in dark rooms, is the edge.
 - Every dollar so far came from a private client: Bethel, Sari-Sari plus the 80th, Andrew E. (label + venue), the Oct 16 wedding, Thrift @ The Warehouse. Bars and clubs paid $0.
 - The wedding film (ALL YOUR'N, 0:58, song only) is the piece the events lane was missing.
-- Facts follow the 10/6 resume rules: three years editing (not four-plus), 0FF THE PRINT as the publication he founded, no Vamppsych as a brand or employer, Alamodome security not current, the Ye stadium credit stays off. Kit = FX6 + 2x Luna Ultra + X6 (the Ace Pro 2 and GO Ultra went to his mom 10/14, the X4 was sold in August).
+- Facts follow the 10/6 resume rules: three years editing (not four-plus), 0FF THE PRINT as his own nightlife photo project shot for the portfolio (10/22, his call: never a business and never "Founder", because the Thrift owner held back an offer thinking it was a company he would leave for), no Vamppsych as a brand or employer, Alamodome security not current, the Ye stadium credit stays off. Kit = FX6 + 2x Luna Ultra + X6 (the Ace Pro 2 and GO Ultra went to his mom 10/14, the X4 was sold in August).
 
 ## 2. PURPOSE (who it's for)
 
