@@ -39,6 +39,21 @@ cuts, one client-credits paragraph. Hand-kept (not a nightsblock marker: the day
   into ten screens. Stamp `?v=20261021a` on all five pages that load `_tapes.css`. index.html and index-kawaii.html stay byte-identical.
 - Checked on a scratch mirror at 375 and 1280: 2 and 5 columns, no overflow, posters load, a clip plays (readyState 4).
 
+## HIRING: the store posted two of the promos (Oct 22 2026)
+
+His ask: "with the experience we did for Thrift ... we've basically directed an actress ... apply that to our resume and our portfolio."
+Found through his DMs with the model: @thriftatthewarehouseatx posted B (BUY SELL TRADE, `instagram.com/p/DexHzrGPJnx/`, Oct 21 2:09 PM,
+2,082 plays on Oct 22) and C (NOW YOU DO, `instagram.com/p/DexMjoKv5dZ/`, Oct 21 2:51 PM, 304 plays), the masters unchanged (38.74 s and
+35.47 s, the same as `04_EDITS`). Both are reels kept OFF the store's grid and Reels tab (`is_in_profile_grid` false, likely trial reels),
+so only the direct links find them. Nothing from Fill-a-Bag was posted by the store.
+- THRIFT1020 paragraph: "I directed her line by line ..." (from his DAY REPORT) plus the two links; tapes 02 and 03 carry the t-foot
+  POSTED BY THE STORE (t-foot is hidden under 640px, so on phones the paragraph carries it).
+- HIRING credits: the Thrift line reads "Scripted promos + sale days · Oct 2026 to now".
+- index-kawaii.html had drifted (it lacked index.html's `<link rel="preload" ... allyourn_poster.jpg>` from the Oct 22 UX sweep); the cp
+  put it back, the twins are byte-identical again.
+- Resume PDFs in `assets/docs/` rebuilt Oct 22 (new THRIFT_PROMO bullet on every variant; Content and Operator trimmed to stay one page).
+- Play counts are an Oct 22 snapshot; "past 2,000 plays" stays true as it grows.
+
 ## 🗑 DELETED 2026-10-01 (his call, cleanup pass)
 Removed: `portfolio/photoshoots/ theplan/ sarisari/ bethel/ brujas/ rise/ gateway/ dream/ steel/`, plus the hit
 list (`/hitlist/` + `/desk/targets/`) and its links on the board, the desk and the goals page. All recoverable
