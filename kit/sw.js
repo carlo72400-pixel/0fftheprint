@@ -1,7 +1,7 @@
 /* THE KIT offline worker (10/15): the page, its icons and the house art it uses are cached on install, so the kit opens with no
    signal. Bump BUILD when the page changes; the old cache is dropped on activate. Same-origin only; fonts just fall back. The 500 to 800 Inter and the 500/700 Mono files are the same bytes as
    the 400 ones (variable fonts), so only the 400s are cached (10/22). */
-const BUILD = 'kit-20261022c';
+const BUILD = 'kit-20261022d';
 const FILES = ['./', './index.html', './qr-shot.png', '../assets/cathedral/shot/putty_sign.webp', '../assets/cathedral/shot/ask_p_s.webp', '../assets/cathedral/shot/ask_p.webp?v=3', '../assets/cathedral/shot/ask_l.webp?v=4', '../assets/cathedral/shot/ask_wall_p.webp?v=3', '../assets/cathedral/shot/ask_wall_l.webp?v=3', '../assets/cathedral/shot/qp_heart.webp', '../assets/cathedral/shot/qp_star.webp', '../assets/cathedral/shot/qp_cam.webp', '../assets/cathedral/shot/qp_print.webp', '../assets/cathedral/shot/qp_film.webp', '../assets/cathedral/shot/qp_bat.webp', '../assets/cathedral/shot/t_flash.webp', '../assets/cathedral/shot/qr_wall.webp', '../assets/fonts/saira-condensed-700.woff2', '../assets/fonts/saira-condensed-900.woff2', '../assets/fonts/inter-400.woff2', '../assets/fonts/jetbrains-mono-400.woff2', '../assets/fonts/gloria-hallelujah-400.woff2', './manifest.webmanifest', './icon-192.png', './icon-512.png',
   '../assets/cathedral/mark.webp', '../assets/cathedral/w/stage.webp', '../assets/cathedral/w/screen.webp', '../assets/cathedral/w/film.webp',
   '../assets/cathedral/w/all.webp', '../assets/cathedral/w/going.webp', '../assets/cathedral/w/tonight.webp', '../assets/cathedral/w/pin.webp',
