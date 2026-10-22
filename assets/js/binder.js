@@ -1,8 +1,8 @@
-/* 10/22 UX sweep: images under the fold hold their src in data-src until they come within 400 px of the screen
+/* 10/22 UX sweep: images under the fold hold their src in data-src until they come within 160 px of the screen
    (Chrome's own loading=lazy still pulls everything within about 2500 px on a slow line, which was the 2.8 MB first load).
    One observer, a debounced scan on DOM changes, a plain src when the browser has no observer. */
 window.OTPLazy = window.OTPLazy || (function () {
-  var io = ('IntersectionObserver' in window) ? new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { var im = e.target; if (im.dataset.src) { im.src = im.dataset.src; im.removeAttribute('data-src'); } io.unobserve(im); } }); }, { rootMargin: '400px 0px' }) : null;
+  var io = ('IntersectionObserver' in window) ? new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { var im = e.target; if (im.dataset.src) { im.src = im.dataset.src; im.removeAttribute('data-src'); } io.unobserve(im); } }); }, { rootMargin: '160px 0px' }) : null;
   function watch(im) { if (!im.dataset.src) return; if (!io) { im.src = im.dataset.src; im.removeAttribute('data-src'); return; } io.observe(im); }
   function scan(root) { var list = (root || document).querySelectorAll('img[data-src]'); for (var i = 0; i < list.length; i++) watch(list[i]); }
   var t = 0; try { new MutationObserver(function () { if (t) return; t = requestAnimationFrame(function () { t = 0; scan(); }); }).observe(document.documentElement, { childList: true, subtree: true }); } catch (e) {}
