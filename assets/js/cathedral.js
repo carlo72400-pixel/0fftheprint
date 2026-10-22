@@ -177,7 +177,7 @@
             var pp = el('span', 'pp');
             var im = el('img', 'pp-w'); im.alt = ''; im.width = 520; im.height = 878; im.decoding = 'async';
             im.addEventListener('error', function () { im.src = 'assets/cathedral/pack-house.webp'; }, { once: true });
-            im.src = h + 'pack.webp';
+            if (window.OTPLazy) { im.dataset.src = h + 'pack.webp'; window.OTPLazy.watch(im); } else im.src = h + 'pack.webp';   // 10/22: the three covers wait for the scroll
             var t = el('span', 'pp-t' + (tt.length <= 7 ? ' short' : tt.length > 16 ? ' long' : ''), tt);
             var dd = el('span', 'pp-d', n.date_short || '');
             pp.appendChild(im); pp.appendChild(t); pp.appendChild(dd);
