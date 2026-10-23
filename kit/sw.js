@@ -1,5 +1,5 @@
 /* THE KIT offline worker (10/15): the page, its icons and the house art it uses are cached on install, so the kit opens with no
-   signal. Bump BUILD when the page changes; the old cache is dropped on activate. Same-origin only; fonts just fall back. The 500 to 800 Inter and the 500/700 Mono files are the same bytes as
+   signal. Bump BUILD when the page changes; the old cache is dropped on activate, and only kit-* caches are ever dropped here, so the other pages' offline copies on this domain (the SNW planner, the Crypt, the AD) live through a Kit update (10/23). Same-origin only; fonts just fall back. The 500 to 800 Inter and the 500/700 Mono files are the same bytes as
    the 400 ones (variable fonts), so only the 400s are cached (10/22). */
 const BUILD = 'kit-20261022d';
 const FILES = ['./', './index.html', './qr-shot.png', '../assets/cathedral/shot/putty_sign.webp', '../assets/cathedral/shot/ask_p_s.webp', '../assets/cathedral/shot/ask_p.webp?v=3', '../assets/cathedral/shot/ask_l.webp?v=4', '../assets/cathedral/shot/ask_wall_p.webp?v=3', '../assets/cathedral/shot/ask_wall_l.webp?v=3', '../assets/cathedral/shot/qp_heart.webp', '../assets/cathedral/shot/qp_star.webp', '../assets/cathedral/shot/qp_cam.webp', '../assets/cathedral/shot/qp_print.webp', '../assets/cathedral/shot/qp_film.webp', '../assets/cathedral/shot/qp_bat.webp', '../assets/cathedral/shot/t_flash.webp', '../assets/cathedral/shot/qr_wall.webp', '../assets/fonts/saira-condensed-700.woff2', '../assets/fonts/saira-condensed-900.woff2', '../assets/fonts/inter-400.woff2', '../assets/fonts/jetbrains-mono-400.woff2', '../assets/fonts/gloria-hallelujah-400.woff2', './manifest.webmanifest', './icon-192.png', './icon-512.png',
@@ -7,7 +7,7 @@ const FILES = ['./', './index.html', './qr-shot.png', '../assets/cathedral/shot/
   '../assets/cathedral/w/all.webp', '../assets/cathedral/w/going.webp', '../assets/cathedral/w/tonight.webp', '../assets/cathedral/w/pin.webp',
   '../assets/cathedral/w/deal.webp', '../assets/cathedral/w/lock.webp', '../assets/cathedral/w/fest.webp', '../assets/cathedral/a/coming.webp', '../assets/cathedral/w/ad.webp'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(BUILD).then(c => c.addAll(FILES)).then(() => self.skipWaiting())); });
-self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== BUILD).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
+self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k.startsWith('kit-') && k !== BUILD).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
 self.addEventListener('fetch', e => {
   const u = new URL(e.request.url);
   if (u.origin !== location.origin || e.request.method !== 'GET') return;
