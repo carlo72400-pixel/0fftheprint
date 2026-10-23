@@ -5,7 +5,7 @@
    when the signal works, the saved copy within a few seconds when it doesn't); files are cache-first. Requests to the
    database never touch this worker: the engine already queues edits made offline. Only caches named snw-sw-* are ever
    deleted here; other pages on this domain keep theirs. Bump VERSION to force a fresh copy on every phone. */
-const VERSION = 'snw-sw-20261020';
+const VERSION = 'snw-sw-20261023';
 const PAGE = new URL('./', self.location).href;
 const PAGE_PATH = new URL(PAGE).pathname;
 const NET_TIMEOUT = 3500;
