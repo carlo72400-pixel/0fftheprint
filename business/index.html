@@ -1,0 +1,610 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Videos for your business · Gianni Ortiz</title>
+<meta name="description" content="I write it, film it, direct it and edit it. San Antonio and Austin, by the hour.">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#fbf5f8">
+<meta name="color-scheme" content="light">
+<link rel="canonical" href="https://0fftheprint.com/business/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://0fftheprint.com/business/">
+<meta property="og:title" content="Videos for your business · Gianni Ortiz">
+<meta property="og:description" content="I write it, film it, direct it and edit it. San Antonio and Austin.">
+<meta property="og:image" content="https://0fftheprint.com/business/preview.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="media/icon-192.png">
+<link rel="apple-touch-icon" href="media/icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Biz videos">
+<link rel="preload" as="image" href="media/hello.jpg" fetchpriority="high">
+<link rel="preload" href="/assets/fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,500..700,0..100&display=swap" rel="stylesheet">
+<script>document.documentElement.className+=' js'</script>
+<style>
+@font-face{font-family:Inter;src:url(/assets/fonts/inter-400.woff2) format('woff2');font-weight:100 900;font-display:swap}
+@font-face{font-family:Mono;src:url(/assets/fonts/jetbrains-mono-400.woff2) format('woff2');font-weight:100 800;font-display:swap}
+:root{--bg:#fbf5f8;--ink:#4b3d49;--dim:#5b4a58;--night:#241b23;--rose:#e86a86;--deep:#c23a5c;--deeper:#962843;
+  --pink:#f5b6cf;--lilac:#cdbdea;--mint:#b6e3cf;--butter:#f6e2a4;--peach:#f7c9b2;--line2:#e8d2e0;
+  --disp:'Fraunces',Georgia,serif;--mono:Mono,ui-monospace,Menlo,monospace;--keys:86px;color-scheme:light}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg)}
+body{font:400 17px/1.42 Inter,system-ui,-apple-system,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;overscroll-behavior:none}
+a{color:inherit}
+[hidden]{display:none!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;color:#fff}
+
+/* the deck: one phone screen, six cards, one idea each */
+.deck{position:relative;height:100vh;height:100dvh;max-width:440px;margin:0 auto;overflow:hidden;background:var(--night);touch-action:pan-y pinch-zoom;user-select:none;-webkit-user-select:none}
+@media (min-width:600px){
+  body{display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 28% 18%,#fde3ef,var(--bg) 62%)}
+  .deck{width:100%;height:min(calc(100dvh - 48px),900px);border-radius:30px;box-shadow:0 40px 90px -40px rgba(75,61,73,.6)}
+}
+.card{position:relative;display:flex;flex-direction:column;min-height:100vh}
+.js .card{position:absolute;inset:0;z-index:0;min-height:0;opacity:0;visibility:hidden;transition:opacity .22s ease,visibility 0s linear .22s}
+.js .card.on{z-index:1;opacity:1;visibility:visible;transition:opacity .22s ease}
+.js .card:not(.on):not(.leaving){content-visibility:hidden}
+
+/* picture on top: a loop behind the card, or the card's own visual */
+.media{position:absolute;inset:0;overflow:hidden;background:var(--night)}
+.media video{position:absolute;top:calc(-1 * var(--shift,0%));left:50%;height:115%;width:auto;min-width:100%;aspect-ratio:9/16;object-fit:cover;transform:translateX(-50%)}
+.c-get .media{--shift:17%}
+.media::after,.vis::after{content:'';position:absolute;left:0;right:0;top:0;height:110px;background:linear-gradient(rgba(20,12,18,.5),rgba(20,12,18,0));pointer-events:none}
+.vis{position:relative;flex:1;min-height:0;overflow:hidden}
+
+/* the words: a white sheet, always in the same place */
+.sheet{position:relative;z-index:2;margin-top:auto;max-height:100%;overflow:auto;background:#fff;
+  padding:18px 20px calc(var(--keys) + 12px + env(safe-area-inset-bottom));
+  border-top:5px solid var(--acc);box-shadow:0 -22px 44px -28px rgba(20,12,18,.75)}
+.k{font:700 13px/1.35 var(--mono);letter-spacing:.03em;text-transform:uppercase;color:var(--acc-ink)}
+.k::before{content:'';display:inline-block;width:10px;height:10px;margin:0 8px 1px 0;border-radius:50%;background:var(--acc);vertical-align:middle}
+.k span{white-space:nowrap}
+h1,h2{margin-top:8px;font-family:var(--disp);font-weight:650;font-variation-settings:'SOFT' 100,'opsz' 96;font-feature-settings:'lnum';
+  font-size:clamp(30px,8.6vw,40px);line-height:1.02;letter-spacing:-.012em;color:var(--night)}
+.l{margin-top:8px;color:var(--dim)}
+.l b{color:var(--ink);font-weight:600}
+.small{font-size:15px}
+.small a{color:var(--deep);font-weight:600}
+
+.c-hello{--acc:var(--pink);--acc-ink:#a3284a}
+.c-real{--acc:var(--lilac);--acc-ink:#553b8f}
+.c-get{--acc:var(--mint);--acc-ink:#23634a}
+.c-color{--acc:var(--butter);--acc-ink:#74490c}
+.c-price{--acc:var(--peach);--acc-ink:#8e3a20}
+.c-book{--acc:var(--rose);--acc-ink:#a3284a}
+
+/* progress: six bars, so they know it's short */
+.bars{position:absolute;z-index:8;top:calc(10px + env(safe-area-inset-top));left:12px;right:12px;display:flex;gap:5px;pointer-events:none}
+.bars i{flex:1;height:4px;border-radius:3px;background:rgba(255,255,255,.38);box-shadow:0 1px 4px rgba(0,0,0,.3);transition:background .2s}
+.bars i.done,.bars i.now{background:#fff}
+.deck[data-light] .bars i{background:rgba(75,61,73,.18);box-shadow:none}
+.deck[data-light] .bars i.done,.deck[data-light] .bars i.now{background:var(--ink)}
+
+/* keys: big, physical, they press down */
+.key{appearance:none;border:0;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:58px;padding:0 18px;border-radius:16px;
+  font:700 18px/1.1 Inter,system-ui,sans-serif;text-decoration:none;transition:transform .07s ease-out,box-shadow .07s ease-out}
+.key svg{width:22px;height:22px;flex:none}
+.key.go{background:var(--deep);color:#fff;box-shadow:0 5px 0 var(--deeper),0 14px 24px -12px rgba(150,40,67,.75)}
+.key.go.down{transform:translateY(4px);box-shadow:0 1px 0 var(--deeper),0 6px 12px -8px rgba(150,40,67,.75)}
+.key.soft{background:#fff;color:var(--ink);border:2px solid var(--line2);box-shadow:0 5px 0 var(--line2)}
+.key.soft.down{transform:translateY(4px);box-shadow:0 1px 0 var(--line2)}
+.key:focus-visible{outline:3px solid var(--night);outline-offset:3px}
+.key[disabled]{opacity:.35;cursor:default;transform:none;box-shadow:none}
+.keys{position:absolute;z-index:9;left:0;right:0;bottom:0;display:flex;gap:10px;padding:12px 16px calc(14px + env(safe-area-inset-bottom));pointer-events:none}
+.keys .key{pointer-events:auto}
+#next{flex:1}
+#back{flex:none;width:58px;padding:0}
+#back[aria-disabled=true]{visibility:hidden}
+#next.again{background:#fff;color:var(--deep);border:2px solid var(--pink);box-shadow:0 5px 0 var(--pink)}
+#next.again.down{box-shadow:0 1px 0 var(--pink)}
+#next.nudge{animation:nudge 1.1s ease-out 2}
+@keyframes nudge{0%{box-shadow:0 5px 0 var(--deeper),0 0 0 0 rgba(232,106,134,.7)}100%{box-shadow:0 5px 0 var(--deeper),0 0 0 16px rgba(232,106,134,0)}}
+
+/* 2: the real one, shown whole */
+.c-real .vis{background:var(--night)}
+.c-real .vis video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.sound{position:absolute;z-index:3;right:14px;bottom:14px;min-height:48px;padding:0 16px;border-radius:999px;font-size:15px}
+.sound.live{color:var(--deep);border-color:var(--pink);box-shadow:0 5px 0 var(--pink)}
+.chip{display:inline-flex;align-items:center;gap:7px;margin-top:12px;padding:8px 12px;border-radius:999px;background:#f3eefc;color:#5b3f96;font:700 13px/1 var(--mono);letter-spacing:.05em}
+.chip svg{width:14px;height:14px}
+
+/* 3: what you get */
+.rows{list-style:none;margin-top:14px;display:grid;gap:11px}
+.rows li{display:grid;grid-template-columns:42px 1fr;gap:12px;align-items:center}
+.rows .ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:#e6f5ee;color:#2f7a5c}
+.rows .ic svg{width:22px;height:22px}
+.rows b{display:block;font-size:16px;line-height:1.2;color:var(--night)}
+.rows span{display:block;font-size:15px;line-height:1.3;color:var(--dim)}
+
+/* 4: the color, wiping between off the camera and graded */
+@property --x{syntax:'<percentage>';inherits:true;initial-value:50%}
+.wipe{position:absolute;inset:0;--x:50%;background:var(--night);cursor:ew-resize}
+.wipe img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 38%;pointer-events:none}
+.wipe .after{clip-path:inset(0 0 0 var(--x))}
+.wipe .seam{position:absolute;top:0;bottom:0;left:var(--x);width:3px;margin-left:-1.5px;background:#fff;box-shadow:0 0 16px rgba(0,0,0,.45)}
+.wipe .seam::after{content:'';position:absolute;top:56%;left:50%;width:36px;height:36px;margin:-18px 0 0 -18px;border-radius:50%;
+  background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23241b23' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 7l-5 5 5 5M15 7l5 5-5 5'/%3E%3C/svg%3E") center/20px no-repeat;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+.card.on .wipe:not(.drag){animation:wipe 5.6s cubic-bezier(.45,0,.55,1) infinite}
+@keyframes wipe{0%,10%{--x:88%}45%,60%{--x:12%}95%,100%{--x:88%}}
+.tag{position:absolute;z-index:2;bottom:14px;font:700 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#fff;padding:8px 10px;border-radius:8px;background:rgba(36,27,35,.72);pointer-events:none}
+.tag.b{left:14px}
+.tag.a{right:14px;background:var(--deep)}
+
+/* 5: the price */
+.price{display:flex;align-items:baseline;gap:10px;margin-top:4px}
+.price strong{font-family:var(--disp);font-weight:700;font-variation-settings:'SOFT' 100,'opsz' 144;font-feature-settings:'lnum';font-size:66px;line-height:1;letter-spacing:-.02em;color:var(--night)}
+.price span{font-size:19px;font-weight:600;color:var(--ink)}
+.calc{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;padding:12px;border-radius:18px;background:#fff5ef;border:2px solid #f9dccd}
+.step{display:flex;align-items:center;gap:8px}
+.step .key{width:52px;min-height:52px;padding:0;border-radius:14px}
+.hrs{min-width:58px;text-align:center}
+.hrs b{display:block;font-family:var(--disp);font-weight:700;font-feature-settings:'lnum';font-size:32px;line-height:1;color:var(--night)}
+.hrs small,.tot small{display:block;margin-top:3px;font:700 11px/1.2 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.tot{text-align:right}
+.tot b{display:block;font-family:var(--disp);font-weight:700;font-feature-settings:'lnum';font-size:34px;line-height:1;color:var(--deep)}
+.tot small{text-transform:none;letter-spacing:0;font:600 13px/1.25 Inter,system-ui,sans-serif}
+.terms{margin-top:12px;font-size:14.5px;line-height:1.42;color:var(--dim)}
+.terms b{color:var(--ink);font-weight:600}
+
+/* 6: more work, tap one and it plays */
+.c-work{--acc:var(--lilac);--acc-ink:#553b8f;background:var(--night)}
+.c-work .scroll{position:absolute;inset:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+  padding:calc(36px + env(safe-area-inset-top)) 16px calc(var(--keys) + 40px + env(safe-area-inset-bottom))}
+.c-work::before{content:'';position:absolute;z-index:3;left:0;right:0;top:0;height:calc(34px + env(safe-area-inset-top));background:linear-gradient(var(--night) 40%,rgba(36,27,35,0));pointer-events:none}
+.c-work::after{content:'';position:absolute;z-index:3;left:0;right:0;bottom:0;height:calc(var(--keys) + 36px + env(safe-area-inset-bottom));background:linear-gradient(rgba(36,27,35,0),var(--night) 55%);pointer-events:none}
+.c-work .k{color:var(--pink)}
+.c-work h2{color:#fff;margin-bottom:16px}
+.reels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.tile{position:relative;display:block;width:100%;padding:0;border:0;border-radius:16px;overflow:hidden;background:#1a1319;cursor:pointer;color:#fff;font:inherit;text-align:left;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;box-shadow:0 0 0 1px rgba(255,255,255,.09),0 14px 30px -18px rgba(0,0,0,.85);transition:transform .08s ease-out}
+.tile.down{transform:scale(.97)}
+.tile:focus-visible,.packs a:focus-visible{outline:3px solid var(--pink);outline-offset:3px}
+.tile.tall{aspect-ratio:9/14}
+.tile.wide{grid-column:1/-1;aspect-ratio:16/9}
+.tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tile::after{content:'';position:absolute;left:0;right:0;bottom:0;height:62%;background:linear-gradient(rgba(18,12,17,0),rgba(18,12,17,.9));pointer-events:none}
+.tile .cap{position:absolute;z-index:2;left:12px;right:12px;bottom:11px}
+.tile .cap b{display:block;font-family:var(--disp);font-weight:650;font-variation-settings:'SOFT' 100,'opsz' 72;font-size:22px;line-height:1.05}
+.tile .cap small{display:block;margin-top:5px;font:700 11px/1.3 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:#f6dfe9}
+.tile .pl{position:absolute;z-index:2;top:10px;right:10px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.94);color:var(--deep);display:grid;place-items:center;box-shadow:0 6px 16px -6px rgba(0,0,0,.6)}
+.tile .pl svg{width:16px;height:16px;margin-left:2px}
+.stack{background:radial-gradient(circle at 50% 30%,#4a3346,#1a1319 70%)}
+.stack img{width:58%;height:auto;aspect-ratio:9/16;inset:auto;top:7%;border-radius:10px;box-shadow:0 10px 22px -8px rgba(0,0,0,.75)}
+.stack img:nth-child(1){left:3%;transform:rotate(-9deg)}
+.stack img:nth-child(2){left:39%;transform:rotate(8deg)}
+.stack img:nth-child(3){left:21%;top:4%;z-index:1;transform:rotate(-1deg)}
+.ph{margin:24px 2px 10px;font:700 13px/1.3 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:#fff}
+.ph small{margin-left:6px;font:400 13px/1.3 Inter,system-ui,sans-serif;letter-spacing:0;text-transform:none;color:#d9c6d2}
+.packs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.packs a{position:relative;display:block;border-radius:10px;overflow:hidden;aspect-ratio:520/878;background:#1a1319;-webkit-tap-highlight-color:transparent;
+  box-shadow:0 10px 22px -12px rgba(0,0,0,.85);transition:transform .08s ease-out}
+.packs a.down{transform:scale(.96)}
+.packs img{width:100%;height:100%;object-fit:cover;display:block}
+.packs .all{display:grid;place-items:center;align-content:center;gap:8px;padding:10px;text-align:center;text-decoration:none;color:#fff;
+  background:linear-gradient(160deg,#3d2d3b,#241b23);border:2px dashed rgba(245,182,207,.55);font:700 13px/1.3 var(--mono);letter-spacing:.05em;text-transform:uppercase}
+.packs .all i{font-style:normal;font-family:var(--disp);font-size:30px;line-height:1;color:var(--pink)}
+
+/* the player: one tap on a tile, full screen, sound on */
+.player{position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;background:#120d11}
+.ptop{flex:none;padding:calc(14px + env(safe-area-inset-top)) 18px 10px;color:#fff}
+.ptop b{display:block;font-family:var(--disp);font-weight:650;font-variation-settings:'SOFT' 100,'opsz' 72;font-size:24px;line-height:1.1}
+.ptop span{display:block;margin-top:5px;font:700 12px/1.25 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:#f6dfe9}
+.player video{flex:1;min-height:0;width:100%;object-fit:contain;background:#000}
+.pkeys{flex:none;display:flex;gap:10px;padding:12px 16px calc(14px + env(safe-area-inset-bottom))}
+.pkeys #pdone{flex:1}
+.pkeys .key.soft{width:58px;padding:0}
+
+/* 7: set a day */
+.c-book .vis{background:var(--night)}
+.wall{position:absolute;left:0;right:0;top:calc(34px + env(safe-area-inset-top));bottom:16px;display:flex;flex-direction:column;gap:14px}
+.wall p{position:relative;z-index:1;font:700 12px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:#fff;text-align:center}
+.gridbox{flex:1;min-height:0;container-type:size;display:flex;align-items:center;justify-content:center}
+.grid{flex:none;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;width:calc(92cqh * 45 / 33);transform:rotate(-3deg)}
+.me .c-book .vis::after{display:none}
+.grid img{width:100%;height:auto;aspect-ratio:9/16;object-fit:cover;border-radius:8px;display:block;opacity:0;transform:translateY(8px)}
+.card.on .grid img{opacity:1;transform:none;transition:opacity .3s ease,transform .3s cubic-bezier(.2,.9,.3,1)}
+.big{display:grid;gap:12px;margin-top:14px}
+.big .key{width:100%;min-height:60px}
+.qr{display:none;position:absolute;inset:0;background:var(--bg);place-items:center;padding-top:30px}
+.qr figure{display:grid;justify-items:center;gap:10px}
+.qr img{width:min(62vw,250px);height:auto;aspect-ratio:1;padding:10px;background:#fff;border-radius:18px;box-shadow:0 18px 40px -20px rgba(75,61,73,.6)}
+.qr figcaption{font:700 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink)}
+.only-me{display:none}
+.me .only-me{display:block}
+.me .only-them{display:none}
+.me .qr{display:grid}
+
+@media (max-height:700px){h1,h2{font-size:clamp(27px,7.6vw,34px)}.rows{gap:8px}.rows .ic{width:38px;height:38px}.price strong{font-size:56px}.l{font-size:16px}}
+@media (prefers-reduced-motion:reduce){
+  .js .card,.js .card.on{transition:opacity .12s linear}
+  .card.on .wipe:not(.drag){animation:none}
+  #next.nudge{animation:none}
+  .key,.grid img,.card.on .grid img{transition:none;transform:none}
+}
+</style>
+</head>
+<body>
+<main class="deck" id="deck" aria-roledescription="carousel" aria-label="Videos for your business, 7 cards">
+  <div class="bars" aria-hidden="true"><i class="now"></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <p class="sr" id="live" aria-live="polite"></p>
+
+  <section class="card c-hello on" data-id="hello" data-title="What I do" aria-roledescription="slide" aria-label="1 of 7">
+    <div class="media" aria-hidden="true"><video src="media/hello.mp4" poster="media/hello.jpg" muted playsinline loop autoplay preload="auto"></video></div>
+    <div class="vis"></div>
+    <div class="sheet">
+      <p class="k">Gianni Ortiz <span>· San Antonio + Austin</span></p>
+      <h1>Videos for your business.</h1>
+      <p class="l">I write it, film it, direct it and edit it. <b>You post it.</b></p>
+    </div>
+  </section>
+
+  <section class="card c-real" data-id="real" data-title="A real one" data-next="See a real one" aria-roledescription="slide" aria-label="2 of 7" aria-hidden="true">
+    <div class="vis">
+      <video id="promo" src="https://carlo72400-pixel.github.io/0tp-media-2/video/2026-10-20-tatw-model-day/tatw-1020-buy-sell-trade.mp4" poster="/video/thrift-1020/tatw-1020-buy-sell-trade.jpg" muted playsinline loop preload="none" aria-label="BUY SELL TRADE, a promo for Thrift @ The Warehouse, 39 seconds"></video>
+      <button class="key soft sound" id="sound" type="button" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path class="w" d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg><span>Sound on</span></button>
+    </div>
+    <div class="sheet">
+      <p class="k">A real one <span>· Thrift @ The Warehouse</span></p>
+      <h2>One evening. 10&nbsp;videos.</h2>
+      <p class="l">Delivered the next day. The store posted this one that afternoon.</p>
+      <span class="chip"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg>2,000+ plays</span>
+    </div>
+  </section>
+
+  <section class="card c-get" data-id="get" data-title="What you get" data-next="What you get" aria-roledescription="slide" aria-label="3 of 7" aria-hidden="true">
+    <div class="media" aria-hidden="true"><video src="media/found-it.mp4" poster="media/found-it.jpg" muted playsinline loop preload="none"></video></div>
+    <div class="vis"></div>
+    <div class="sheet">
+      <p class="k">What you get</p>
+      <h2>Finished videos, ready to post.</h2>
+      <ul class="rows">
+        <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></span><div><b>Script</b><span>I write it, or you bring one.</span></div></li>
+        <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10h18v10H3z"/><path d="M3 10l3-5h4l-3 5M10 5h4l-3 5M14 5h4l-3 5"/></svg></span><div><b>Directing</b><span>You, your staff or a model.</span></div></li>
+        <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.3-4.9L4 8"/><path d="M4 4v4h4"/><path d="M4 13a8 8 0 0 0 14.3 4.9L20 16"/><path d="M20 20v-4h-4"/></svg></span><div><b>Changes</b><span>2 rounds on every video.</span></div></li>
+        <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="M7.5 10.5L12 15l4.5-4.5"/><path d="M4 17v3h16v-3"/></svg></span><div><b>Files</b><span>In 3 business days. Yours to post anywhere.</span></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="card c-color" data-id="color" data-title="The color" data-next="The color" aria-roledescription="slide" aria-label="4 of 7" aria-hidden="true">
+    <div class="vis">
+      <div class="wipe" id="wipe" role="img" aria-label="The same frame off the camera, flat and grey, and graded, with full color">
+        <img src="media/grade-before.jpg" alt="" width="720" height="1280" loading="lazy" decoding="async">
+        <img class="after" src="media/grade-after.jpg" alt="" width="720" height="1280" loading="lazy" decoding="async">
+        <span class="seam" aria-hidden="true"></span>
+      </div>
+      <span class="tag b" aria-hidden="true">Off the camera</span>
+      <span class="tag a" aria-hidden="true">Graded</span>
+    </div>
+    <div class="sheet">
+      <p class="k">The color</p>
+      <h2>Graded like a film.</h2>
+      <p class="l">Same frame, outside the store. Every video gets this.</p>
+    </div>
+  </section>
+
+  <section class="card c-price" data-id="price" data-title="The price" data-next="The price" aria-roledescription="slide" aria-label="5 of 7" aria-hidden="true">
+    <div class="media" aria-hidden="true"><video src="media/counter.mp4" poster="media/counter.jpg" muted playsinline loop preload="none"></video></div>
+    <div class="vis"></div>
+    <div class="sheet">
+      <p class="k">The price</p>
+      <p class="price"><strong>$450</strong><span>an hour</span></p>
+      <p class="l">2 hour minimum. We film as many as we can.</p>
+      <div class="calc">
+        <div class="step">
+          <button class="key soft" id="minus" type="button" aria-label="One hour less"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg></button>
+          <p class="hrs" aria-live="polite"><b id="hrs">2</b><small id="hrsu">hours</small></p>
+          <button class="key soft" id="plus" type="button" aria-label="One hour more"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+        </div>
+        <p class="tot" aria-live="polite"><b id="tot">$900</b><small id="est">about 4 to 6 videos</small></p>
+      </div>
+      <p class="terms"><b>Half holds the date.</b> The rest is due 15 days after your files. Austin adds $200 for the drive.</p>
+    </div>
+  </section>
+
+  <section class="card c-work" data-id="work" data-title="More work" data-next="More work" aria-roledescription="slide" aria-label="6 of 7" aria-hidden="true">
+    <div class="scroll">
+      <p class="k">More of my work</p>
+      <h2>Tap one. It plays.</h2>
+      <div class="reels">
+        <button class="tile tall stack" type="button" data-reel="thrift" aria-label="Play the 10 promos for Thrift @ The Warehouse">
+          <img src="media/t01.jpg" alt="" width="216" height="384" loading="lazy" decoding="async">
+          <img src="media/t03.jpg" alt="" width="216" height="384" loading="lazy" decoding="async">
+          <img src="media/t02.jpg" alt="" width="216" height="384" loading="lazy" decoding="async">
+          <span class="pl" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l12.5-7.5z"/></svg></span>
+          <span class="cap"><b>10 promos</b><small>Thrift @ The Warehouse</small></span>
+        </button>
+        <button class="tile tall" type="button" data-reel="launch" aria-label="Play the grand opening cuts for Pixel Pulpit">
+          <img src="media/launch-collage.jpg" alt="" width="360" height="640" loading="lazy" decoding="async">
+          <span class="pl" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l12.5-7.5z"/></svg></span>
+          <span class="cap"><b>Grand opening</b><small>2 cuts · Pixel Pulpit</small></span>
+        </button>
+        <button class="tile wide" type="button" data-reel="wedding" aria-label="Play the wedding film, song only">
+          <img src="media/wedding.jpg" alt="" width="640" height="360" loading="lazy" decoding="async">
+          <span class="pl" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l12.5-7.5z"/></svg></span>
+          <span class="cap"><b>Wedding film</b><small>Song only · 1 min</small></span>
+        </button>
+      </div>
+      <h3 class="ph">Photo packs <small>Tap one to open it</small></h3>
+      <div class="packs">
+        <a href="/events/2026-10-17-fill-a-bag/" target="_blank" rel="noopener"><img src="/events/2026-10-17-fill-a-bag/pack.webp" alt="Fill-a-Bag, a sale day at Thrift @ The Warehouse" width="520" height="878" loading="lazy" decoding="async"></a>
+        <a href="/events/2026-10-03-pulse-angels-3/" target="_blank" rel="noopener"><img src="/events/2026-10-03-pulse-angels-3/pack.webp" alt="Pulse Angels 3" width="520" height="878" loading="lazy" decoding="async"></a>
+        <a href="/events/2026-09-13-burlesque-night/" target="_blank" rel="noopener"><img src="/events/2026-09-13-burlesque-night/pack.webp" alt="Burlesque Night" width="520" height="878" loading="lazy" decoding="async"></a>
+        <a href="/events/2026-09-24-harambe-4-ever/" target="_blank" rel="noopener"><img src="/events/2026-09-24-harambe-4-ever/pack.webp" alt="Harambe 4 Ever" width="520" height="878" loading="lazy" decoding="async"></a>
+        <a href="/events/2026-08-30-clown-church/" target="_blank" rel="noopener"><img src="/events/2026-08-30-clown-church/pack.webp" alt="Clown Church" width="520" height="878" loading="lazy" decoding="async"></a>
+        <a href="/events/2026-09-25-wap/" target="_blank" rel="noopener"><img src="/events/2026-09-25-wap/pack.webp" alt="WAP" width="520" height="878" loading="lazy" decoding="async"></a>
+        <a href="/events/2026-09-16-sadboyz-club/" target="_blank" rel="noopener"><img src="/events/2026-09-16-sadboyz-club/pack.webp" alt="Sadboyz Club" width="520" height="878" loading="lazy" decoding="async"></a>
+        <a href="/events/2026-08-14-blade-rave/" target="_blank" rel="noopener"><img src="/events/2026-08-14-blade-rave/pack.webp" alt="Blade Rave" width="520" height="878" loading="lazy" decoding="async"></a>
+        <a class="all" href="/events/" target="_blank" rel="noopener"><i>21</i>Every night I shot</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="card c-book" data-id="book" data-title="Set a day" data-next="Set a day" aria-roledescription="slide" aria-label="7 of 7" aria-hidden="true">
+    <div class="vis">
+      <div class="wall only-them">
+        <p>Recent work</p>
+        <div class="gridbox"><div class="grid">
+          <img src="media/t02.jpg" alt="" width="216" height="384" loading="lazy" decoding="async" style="transition-delay:0ms">
+          <img src="/events/2026-10-17-fill-a-bag/pack.webp" alt="" width="520" height="878" loading="lazy" decoding="async" style="transition-delay:40ms">
+          <img src="media/launch-collage.jpg" alt="" width="360" height="640" loading="lazy" decoding="async" style="transition-delay:80ms">
+          <img src="media/t01.jpg" alt="" width="216" height="384" loading="lazy" decoding="async" style="transition-delay:120ms">
+          <img src="/events/2026-10-03-pulse-angels-3/pack.webp" alt="" width="520" height="878" loading="lazy" decoding="async" style="transition-delay:160ms">
+          <img src="/events/2026-09-13-burlesque-night/pack.webp" alt="" width="520" height="878" loading="lazy" decoding="async" style="transition-delay:200ms">
+          <img src="media/t04.jpg" alt="" width="216" height="384" loading="lazy" decoding="async" style="transition-delay:240ms">
+          <img src="/events/2026-09-24-harambe-4-ever/pack.webp" alt="" width="520" height="878" loading="lazy" decoding="async" style="transition-delay:280ms">
+          <img src="media/t09.jpg" alt="" width="216" height="384" loading="lazy" decoding="async" style="transition-delay:320ms">
+          <img src="/events/2026-09-25-wap/pack.webp" alt="" width="520" height="878" loading="lazy" decoding="async" style="transition-delay:360ms">
+        </div></div>
+      </div>
+      <div class="qr"><figure><img src="media/qr.svg" alt="QR code for 0fftheprint.com/business" width="250" height="250"><figcaption>Scan me</figcaption></figure></div>
+    </div>
+    <div class="sheet only-them">
+      <p class="k">Set a day</p>
+      <h2>Want this for your business?</h2>
+      <div class="big">
+        <a class="key go" href="https://ig.me/m/vamppsych" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none"/></svg>DM me on Instagram</a>
+        <a class="key soft" id="mail" href="mailto:offtheprintcollective@gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3.5 7l8.5 6.5L20.5 7"/></svg>Email me</a>
+      </div>
+      <p class="l small">I answer within a day. <a href="/portfolio/">More of my work</a></p>
+    </div>
+    <div class="sheet only-me">
+      <p class="k">Take it with you</p>
+      <h2>Scan to keep this.</h2>
+      <p class="l">Open your camera and point it at the code.</p>
+      <div class="big"><button class="key go" id="share" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V4"/><path d="M7.5 8.5L12 4l4.5 4.5"/><path d="M5 12v7h14v-7"/></svg><span>Send them the link</span></button></div>
+      <p class="l small">or DM @vamppsych</p>
+    </div>
+  </section>
+
+  <div class="keys">
+    <button class="key soft" id="back" type="button" aria-label="Back" aria-disabled="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <button class="key go" id="next" type="button"><span>See a real one</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+  </div>
+
+  <div class="player" id="player" role="dialog" aria-modal="true" aria-labelledby="ptitle" hidden>
+    <div class="ptop"><b id="ptitle"></b><span id="pcount"></span></div>
+    <video id="pv" playsinline controls preload="none"></video>
+    <div class="pkeys">
+      <button class="key soft" id="pprev" type="button" aria-label="Last video"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <button class="key go" id="pdone" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>Done</button>
+      <button class="key soft" id="pnext" type="button" aria-label="Next video"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
+  </div>
+</main>
+
+<script>
+(function(){
+  var d=document, deck=d.getElementById('deck');
+  var cards=[].slice.call(deck.querySelectorAll('.card'));
+  var bars=[].slice.call(deck.querySelectorAll('.bars i'));
+  var back=d.getElementById('back'), next=d.getElementById('next'), nextLabel=next.querySelector('span');
+  var live=d.getElementById('live');
+  var ME=/[?&]me(=|&|$)/.test(location.search)||matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+  if(ME) d.documentElement.classList.add('me');
+  var at=-1, nudgeT=0, warmT=0;
+
+  function vids(c){return [].slice.call(c.querySelectorAll('video'))}
+  function play(v){ if(v.preload!=='auto') v.preload='auto'; var p=v.play(); if(p&&p.catch) p.catch(function(){}); }
+  // fetch the next card's pictures ahead, once this card's own loop is in
+  function warm(c){
+    if(!c||c.warmed) return; c.warmed=true;
+    vids(c).forEach(function(v){ if(v.poster) (new Image()).src=v.poster; if(v.preload==='none') v.preload='auto' });
+    [].forEach.call(c.querySelectorAll('img'), function(im){ (new Image()).src=im.getAttribute('src') });
+  }
+
+  function show(n, dir){
+    n=Math.max(0,Math.min(cards.length-1,n));
+    if(n===at) return;
+    if(at>=0){
+      var o=cards[at];
+      o.classList.remove('on'); o.classList.add('leaving'); o.setAttribute('aria-hidden','true'); o.inert=true;
+      setTimeout(function(){ o.classList.remove('leaving') }, 260);
+      vids(o).forEach(function(v){v.pause()});
+      if(o.querySelector('#promo')) mute(true);
+      var w=o.querySelector('.wipe'); if(w){w.classList.remove('drag'); w.style.removeProperty('--x')}
+    }
+    at=n;
+    var c=cards[n];
+    c.classList.remove('leaving'); c.classList.add('on'); c.removeAttribute('aria-hidden'); c.inert=false;
+    warm(c); vids(c).forEach(play);
+    clearTimeout(warmT);
+    var nx=cards[n+1], mv=c.querySelector('video');
+    if(nx){
+      if(!mv || mv.readyState>=4) warm(nx);
+      else { var fire=function(){ clearTimeout(warmT); warm(nx) }; warmT=setTimeout(fire, 1800); mv.addEventListener('canplaythrough', fire, {once:true}) }
+    }
+    bars.forEach(function(b,k){ b.className = k<n ? 'done' : (k===n ? 'now' : '') });
+    back.setAttribute('aria-disabled', n===0 ? 'true' : 'false');
+    var last = n===cards.length-1;
+    next.classList.toggle('again', last);
+    nextLabel.textContent = last ? 'Start over' : cards[n+1].getAttribute('data-next');
+    if(last && ME) deck.setAttribute('data-light',''); else deck.removeAttribute('data-light');
+    next.classList.remove('nudge'); clearTimeout(nudgeT);
+    if(n===0) nudgeT=setTimeout(function(){ if(at===0) next.classList.add('nudge') }, 2600);
+    live.textContent = (n+1)+' of '+cards.length+'. '+c.getAttribute('data-title');
+  }
+  function go(step){ show(at+step, step) }
+
+  next.addEventListener('click', function(){ at===cards.length-1 ? show(0,-1) : go(1) });
+  back.addEventListener('click', function(){ go(-1) });
+  d.addEventListener('keydown', function(e){
+    if(e.metaKey||e.ctrlKey||e.altKey) return;
+    if(!player.hidden){
+      if(e.key==='Escape'){ closeReel(); e.preventDefault() }
+      else if(e.key==='ArrowRight' && reel.clips.length>1){ load(ri+1); e.preventDefault() }
+      else if(e.key==='ArrowLeft' && reel.clips.length>1){ load(ri-1); e.preventDefault() }
+      return;
+    }
+    if(e.key==='ArrowRight'||e.key==='PageDown'){ go(1); e.preventDefault() }
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){ go(-1); e.preventDefault() }
+  });
+
+  // keys press down on touch (iPhone skips :active on buttons)
+  function up(){ [].forEach.call(d.querySelectorAll('.down'), function(k){ k.classList.remove('down') }) }
+  d.addEventListener('pointerdown', function(e){ var k=e.target.closest('.key,.tile,.packs a'); if(k && !k.disabled) k.classList.add('down') }, {passive:true});
+  d.addEventListener('pointerup', up, {passive:true});
+  d.addEventListener('pointercancel', up, {passive:true});
+
+  // tap the picture: left third goes back, the rest goes on; swipe works too; drag the color seam
+  var g=null, swallow=0;
+  deck.addEventListener('pointerdown', function(e){
+    if(e.button>0 || e.target.closest('.player')){ g=null; return }
+    g={x:e.clientX, y:e.clientY, key:e.target.closest('a,button'), sheet:e.target.closest('.sheet,.scroll'), wipe:e.target.closest('.wipe'), drag:false};
+  });
+  // a sideways swipe that starts on a tile turns the card, and the tile stays shut
+  d.addEventListener('click', function(e){ if(Date.now()<swallow){ e.preventDefault(); e.stopPropagation() } }, true);
+  deck.addEventListener('pointermove', function(e){
+    if(!g||!g.wipe) return;
+    if(!g.drag && Math.abs(e.clientX-g.x)<6) return;
+    g.drag=true; g.wipe.classList.add('drag');
+    var r=g.wipe.getBoundingClientRect();
+    g.wipe.style.setProperty('--x', Math.max(0,Math.min(100,(e.clientX-r.left)/r.width*100))+'%');
+  });
+  deck.addEventListener('pointerup', function(e){
+    if(!g) return;
+    var s=g, dx=e.clientX-s.x, dy=e.clientY-s.y; g=null;
+    if(s.drag) return;
+    if(Math.abs(dx)>45 && Math.abs(dx)>Math.abs(dy)*1.3){
+      if(s.key){ if(!s.key.closest('.tile,.packs')) return; swallow=Date.now()+450 }
+      go(dx<0 ? 1 : -1); return;
+    }
+    if(s.key||s.sheet) return;
+    if(Math.abs(dx)<10 && Math.abs(dy)<10){
+      var r=deck.getBoundingClientRect();
+      go((e.clientX-r.left) < r.width/3 ? -1 : 1);
+    }
+  });
+  deck.addEventListener('pointercancel', function(){ g=null });
+
+  // the real one: muted until they ask
+  var promo=d.getElementById('promo'), snd=d.getElementById('sound'), sndLabel=snd.querySelector('span'), wave=snd.querySelector('.w');
+  function mute(m){
+    promo.muted=m; snd.setAttribute('aria-pressed', m ? 'false' : 'true');
+    sndLabel.textContent = m ? 'Sound on' : 'Sound off';
+    snd.classList.toggle('live', !m); wave.style.opacity = m ? '.35' : '1';
+  }
+  snd.addEventListener('click', function(){ mute(!promo.muted); if(promo.paused) play(promo) });
+  mute(true);
+
+  // the price: two hours up to eight
+  var h=2, MIN=2, MAX=8, RATE=450;
+  var hrs=d.getElementById('hrs'), hrsu=d.getElementById('hrsu'), tot=d.getElementById('tot'), est=d.getElementById('est');
+  var minus=d.getElementById('minus'), plus=d.getElementById('plus'), mail=d.getElementById('mail');
+  function money(n){ return '$'+n.toLocaleString('en-US') }
+  function upd(){
+    hrs.textContent=h; hrsu.textContent='hours';
+    tot.textContent=money(h*RATE); est.textContent='about '+(h*2)+' to '+(h*3)+' videos';
+    minus.disabled = h<=MIN; plus.disabled = h>=MAX;
+    mail.href='mailto:offtheprintcollective@gmail.com?subject='+encodeURIComponent('Videos for my business')+
+      '&body='+encodeURIComponent('Business: \nHours: '+h+' ('+money(h*RATE)+')\nDate: \nBest way to reach you: \n');
+  }
+  minus.addEventListener('click', function(){ if(h>MIN){ h--; upd() } });
+  plus.addEventListener('click', function(){ if(h<MAX){ h++; upd() } });
+  upd();
+
+  // on his phone: hand them the link
+  var share=d.getElementById('share'), shareLabel=share.querySelector('span'), URL_='https://0fftheprint.com/business/';
+  share.addEventListener('click', function(){
+    if(navigator.share){ navigator.share({title:'Videos for your business', text:'Videos for your business, from Gianni Ortiz', url:URL_}).catch(function(){}); return }
+    if(navigator.clipboard){ navigator.clipboard.writeText(URL_).then(function(){ shareLabel.textContent='Link copied'; setTimeout(function(){ shareLabel.textContent='Send them the link' }, 2200) }) }
+  });
+
+  // more work: one tap on a tile plays it full screen with sound, Done goes back
+  var MEDIA='https://carlo72400-pixel.github.io/0tp-media-2/video/2026-10-20-tatw-model-day/tatw-1020-';
+  function tatw(slug, title, note){ return {s:MEDIA+slug+'.mp4', p:'/video/thrift-1020/tatw-1020-'+slug+'.jpg', t:title, n:note} }
+  var REELS={
+    thrift:{name:'Thrift @ The Warehouse', clips:[
+      tatw('right-by-ut','Right by UT','34th Street store'),
+      tatw('buy-sell-trade','Buy, sell, trade','Posted by the store'),
+      tatw('now-you-do','Now you do','Posted by the store'),
+      tatw('your-closet','Your closet','South Congress'),
+      tatw('first-friday','First Friday','The night market'),
+      tatw('walk-in-34th','Walk in','34th Street store'),
+      tatw('walk-in-soco','Walk in','South Congress'),
+      tatw('new-on-the-rack','New on the rack','Just the clothes'),
+      tatw('come-thrift','Come thrift','One trip through the racks'),
+      tatw('soco-racks','SoCo racks','South Congress')]},
+    launch:{name:'Pixel Pulpit grand opening', clips:[
+      {s:'media/launch-collage.mp4', p:'media/launch-collage.jpg', t:'The collage cut', n:'0:57'},
+      {s:'media/launch-recap.mp4', p:'media/launch-recap.jpg', t:'The recap', n:'1:51'}]},
+    wedding:{name:'Wedding film', clips:[
+      {s:'/portfolio/assets/wedding/cuts/allyourn_web.mp4', p:'/portfolio/assets/wedding/cuts/allyourn_poster.jpg', t:'Wedding film', n:'Song only · 0:58'}]}
+  };
+  var player=d.getElementById('player'), pv=d.getElementById('pv'), ptitle=d.getElementById('ptitle'), pcount=d.getElementById('pcount');
+  var pprev=d.getElementById('pprev'), pnext=d.getElementById('pnext'), pdone=d.getElementById('pdone');
+  var reel=null, ri=0, opener=null;
+  function load(i){
+    var n=reel.clips.length; ri=(i+n)%n;
+    var c=reel.clips[ri];
+    pv.poster=c.p; pv.src=c.s; pv.muted=false;
+    ptitle.textContent=c.t;
+    pcount.textContent=reel.name+(n>1 ? ' · '+(ri+1)+' of '+n : '')+(c.n ? ' · '+c.n : '');
+    var p=pv.play(); if(p&&p.catch) p.catch(function(){});
+  }
+  function openReel(key, from){
+    reel=REELS[key]; opener=from;
+    vids(cards[at]).forEach(function(v){v.pause()});
+    var multi=reel.clips.length>1; pprev.hidden=!multi; pnext.hidden=!multi;
+    player.hidden=false; load(0); pdone.focus();
+    try{ history.pushState({reel:1}, '') }catch(e){}
+  }
+  function closeReel(fromHistory){
+    if(player.hidden) return;
+    pv.pause(); pv.removeAttribute('src'); pv.load();
+    player.hidden=true;
+    if(opener) opener.focus();
+    if(!fromHistory){ try{ if(history.state && history.state.reel) history.back() }catch(e){} }
+  }
+  [].forEach.call(d.querySelectorAll('[data-reel]'), function(b){ b.addEventListener('click', function(){ openReel(b.getAttribute('data-reel'), b) }) });
+  pdone.addEventListener('click', function(){ closeReel(false) });
+  pprev.addEventListener('click', function(){ load(ri-1) });
+  pnext.addEventListener('click', function(){ load(ri+1) });
+  pv.addEventListener('ended', function(){ if(reel && ri<reel.clips.length-1) load(ri+1) });
+  window.addEventListener('popstate', function(){ closeReel(true) });
+
+  // pause when the phone locks; on his phone, start over after a minute away
+  var hidAt=0;
+  d.addEventListener('visibilitychange', function(){
+    if(d.hidden){ hidAt=Date.now(); vids(cards[at]).forEach(function(v){v.pause()}); pv.pause(); mute(true); return }
+    if(ME && Date.now()-hidAt>60000){ closeReel(false); if(at!==0){ show(0,-1); return } }
+    if(player.hidden) vids(cards[at]).forEach(play);
+  });
+
+  var start=0, want=location.hash.slice(1);
+  cards.forEach(function(c,k){ if(c.getAttribute('data-id')===want) start=k });
+  cards.forEach(function(c,k){ if(k!==start){ c.classList.remove('on'); c.setAttribute('aria-hidden','true'); c.inert=true } });
+  show(start, 1);
+})();
+</script>
+</body>
+</html>
