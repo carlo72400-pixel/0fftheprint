@@ -1,7 +1,7 @@
 # Image credits — THE WORD
 
 Every story cover, where it came from, and what the licence actually lets us do.
-Sourced and licence-verified 2026-08-27, extended 2026-09-02, 2026-09-14, 2026-10-04, 2026-10-07 and 2026-10-21. The credit line also appears on each
+Sourced and licence-verified 2026-08-27, extended 2026-09-02, 2026-09-14, 2026-10-04, 2026-10-07, 2026-10-21 and 2026-10-27. The credit line also appears on each
 story page itself, under the cover, which is where attribution legally belongs.
 
 ⛔ **Do not swap a cover without updating this file and the page's credit line.**
@@ -10,6 +10,7 @@ All of these are cropped, so all of them say "Cropped."
 
 | № | Story | Image | Source | Licence |
 |---|---|---|---|---|
+| 0TP-044 | Half A Reign In Blood | Slayer's fire at Wacken Open Air, Germany, Aug 2019 (tile: the skull between the flames) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Slayer_-_2019214224757_2019-08-02_Wacken_-_3723_-_AK8I4546.jpg) · Sven Mandel | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
 | 0TP-043 | The Item Shop Is The New MTV | The Fortnite Pro-Am at E3, Los Angeles, Jun 2018 (tile: the FORT seats) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Fortnite_Pro-Am_stadium_at_E3_2018_3.jpg) · Sergey Galyonkin | [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/) |
 | 0TP-042 | Nobody Knows What A Streamer Is | IShowSpeed and his videographer at Trifecta Somerset, Singapore, Sep 2024 (tile: Speed alone) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:IShowSpeed_at_Trifecta_Somerset,_Singapore.jpg) · Aerodynamically | [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
 | 0TP-041 | Horror's Farm League Is The Internet | An empty office, Sep 2011, filed on Commons as a Backrooms level | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Empty_office.jpg) · Ged Carroll | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/) |
