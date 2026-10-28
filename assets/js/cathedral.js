@@ -563,35 +563,106 @@
     root.style.setProperty('--house-pack', 'url("' + u + '")');
   }
 
-  /* ---------- the six icons, turning. Wide screens only, and only once the page is settled. ---------- */
-  var SLOW = '28deg', FAST = '95deg';
+  /* ---------- the six icons, turning. Wide screens only, and only once the page is settled. ----------
+     10/28, ONE TURN THEN REST (WCAG 2.2.2: motion that starts by itself and runs past 5 s needs a stop key, and the
+     old slow turn never ended). Once they have landed the six turn once, 4.2 s each (eased up, the old hover pace,
+     eased down), rippling down the hand 80 ms apart, and rest facing front (REST). A mouse on a card, or the keyboard
+     on it, spins it for as long as it stays; let go and it finishes the turn and rests. A tap, or a card that becomes
+     the current tab, gets one turn. Nothing turns under reduced motion, even when it is switched on mid-visit.
+     ⛔ SELF-HOSTED (10/28): model-viewer 4.4.0 (jsDelivr, sha256-GLLnEQNapHBe4oFTClXcIzj/Be7T1wrhbVQQUoKnXtU=) and the
+        Draco 1.5.6 decoder it used to side-load from gstatic. The version is in the folder name: a new version is a
+        new folder, never a file swapped in place under the same URL. */
+  var MV = 'assets/vendor/model-viewer-4.4.0/model-viewer.min.js', DRACO = 'assets/vendor/draco-1.5.6/';
+  var CRUISE = 100 / 360, ACC = CRUISE / 0.6;   // turns a second (100 deg/s, hover was 95) and how fast it gets there (0.6 s)
   var UPRIGHT = { home: '0deg 90deg 0deg', stories: '0deg 90deg 0deg' };   // these two meshes came out lying on their backs
+  // where each one rests: facing front, turned 15 deg off dead-on, like its flat icon. The old start angles (i * 55)
+  // only worked while they never stopped: at rest they left the key edge-on and the vinyl and the cap backwards.
+  // The book sits the other way round after UPRIGHT, so its front is at 150.
+  var REST = { stories: 150 };
   function threeD() {
     var cards = d.querySelectorAll('#hero-hand .hcard');
     if (!cards.length) return;
     if (!w.matchMedia || !w.matchMedia('(min-width:821px)').matches) return;
-    if (w.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+    var still = w.matchMedia('(prefers-reduced-motion:reduce)');
+    if (still.matches) return;
     if (navigator.connection && navigator.connection.saveData) return;
     var probe = d.createElement('canvas');
     if (!(probe.getContext && (probe.getContext('webgl2') || probe.getContext('webgl')))) return;
+    // ⛔ BEFORE the first <model-viewer> exists: each one reads this as it is made, or the decoder comes off Google again
+    w.ModelViewerElement = w.ModelViewerElement || {};
+    try { w.ModelViewerElement.dracoDecoderLocation = new URL(DRACO, d.baseURI).href; } catch (e) {}
     var s = d.createElement('script');
     s.type = 'module';
-    s.src = 'https://cdn.jsdelivr.net/npm/@google/model-viewer@4.0.0/dist/model-viewer.min.js';
+    s.src = MV;
     s.onerror = function () {};
     d.head.appendChild(s);
-    Array.prototype.forEach.call(cards, function (a, i) {
+    // one clock for all six, running only while one of them moves
+    var all = [], raf = 0, last = 0;
+    function frame(now) {
+      var dt = last ? Math.min(0.1, (now - last) / 1000) : 1 / 60, more = false; last = now;
+      all.forEach(function (t) { if (t.step(dt)) more = true; });
+      if (more) raf = w.requestAnimationFrame(frame); else raf = last = 0;
+    }
+    function wake() { if (!raf) raf = w.requestAnimationFrame(frame); }
+    // one icon: pos in turns (a whole number is its own angle, so it always rests there), vel in turns a second
+    function turner(mv) {
+      var pos = 0, vel = 0, goal = 0, held = false, ready = false, brake = null;
+      function rest() { pos = vel = goal = 0; brake = null; mv.resetTurntableRotation(0); }
+      return {
+        ready: function () { ready = true; },
+        once: function () { if (!ready) return; goal = Math.max(goal, Math.floor(pos) + 1); wake(); },
+        hold: function (on) {
+          if (!ready || on === held) return;
+          held = on;
+          if (on) brake = null; else goal = Math.max(goal, Math.ceil(pos + vel * vel / (2 * ACC) - 1e-6));
+          wake();
+        },
+        step: function (dt) {
+          if (still.matches) { if (pos || vel) rest(); return false; }
+          if (brake) {
+            var t = brake.t = Math.min(brake.T, brake.t + dt);
+            if (t >= brake.T) { rest(); return false; }
+            pos = brake.p + brake.v * t - brake.a * t * t / 2; vel = brake.v - brake.a * t;
+          } else if (held || pos < goal) {
+            vel = Math.min(CRUISE, vel + ACC * dt); pos += vel * dt;
+            // near the goal: plan the stop so it lands exactly on the whole turn
+            var left = goal - pos;
+            if (!held && left <= vel * vel / (2 * ACC)) {
+              if (left <= 0) { rest(); return false; }
+              brake = { p: pos, v: vel, a: vel * vel / (2 * left), t: 0, T: 2 * left / vel };
+            }
+          } else return false;
+          mv.resetTurntableRotation(pos * 2 * Math.PI);
+          return true;
+        }
+      };
+    }
+    // the first turn waits for all six (3 s at most after the first lands) and ripples down the hand 80 ms apart:
+    // 4.2 s + 5 x 80 ms, so the whole hand has moved once and stopped inside 5 s
+    var landed = 0, dealt = false;
+    function deal() { if (dealt) return; dealt = true; all.forEach(function (t, j) { setTimeout(t.once, j * 80); }); }
+    Array.prototype.forEach.call(cards, function (a) {
       var k = a.getAttribute('data-tab-link'); if (!/^[a-z]+$/.test(k || '')) return;
-      var mv = d.createElement('model-viewer');
+      var mv = d.createElement('model-viewer'), t = turner(mv), hov = false, foc = false;
       mv.setAttribute('src', 'assets/cathedral/i-' + k + '.glb');
-      mv.setAttribute('auto-rotate', ''); mv.setAttribute('auto-rotate-delay', '0'); mv.setAttribute('interaction-prompt', 'none');
-      mv.setAttribute('camera-orbit', (i * 55) + 'deg 76deg 100%'); mv.setAttribute('field-of-view', '20deg');
+      mv.setAttribute('interaction-prompt', 'none');
+      mv.setAttribute('camera-orbit', (k in REST ? REST[k] : 15) + 'deg 76deg 100%'); mv.setAttribute('field-of-view', '20deg');
       mv.setAttribute('exposure', '1.15'); mv.setAttribute('shadow-intensity', '0'); mv.setAttribute('aria-hidden', 'true');
+      mv.setAttribute('inert', '');   // ⛔ 10/28: the viewer is a Tab stop of its own; without this, Tab lands inside each hidden icon
       if (UPRIGHT[k]) mv.setAttribute('orientation', UPRIGHT[k]);
-      var pace = function () { mv.setAttribute('rotation-per-second', (a.getAttribute('aria-current') === 'page' || a.matches(':hover')) ? FAST : SLOW); };
-      mv.addEventListener('load', function () { a.classList.add('m3'); });
-      a.addEventListener('mouseenter', pace); a.addEventListener('mouseleave', pace);
-      try { new MutationObserver(pace).observe(a, { attributes: true, attributeFilter: ['aria-current'] }); } catch (e) {}
-      pace();
+      all.push(t);
+      function feel() { t.hold(hov || foc); }
+      mv.addEventListener('load', function () {
+        a.classList.add('m3'); t.ready(); feel();
+        if (++landed === all.length) deal(); else if (landed === 1) setTimeout(deal, 3000);
+      });
+      // a mouse holds the spin; a finger or a pen gets one turn (a tapped card on an iPad would otherwise spin until the next tap)
+      a.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') { hov = true; feel(); } else t.once(); });
+      a.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') { hov = false; feel(); } });
+      // keyboard focus only: a mouse click leaves focus on the card in Chrome, and that card would spin until the next click
+      a.addEventListener('focus', function () { try { foc = a.matches(':focus-visible'); } catch (e) { foc = true; } feel(); });
+      a.addEventListener('blur', function () { foc = false; feel(); });
+      try { new MutationObserver(function () { if (a.getAttribute('aria-current') === 'page') t.once(); }).observe(a, { attributes: true, attributeFilter: ['aria-current'] }); } catch (e) {}
       a.appendChild(mv);
     });
   }
