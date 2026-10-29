@@ -24,6 +24,13 @@
            b:'One more step.',
            s:'Put your Instagram in at the Crypt and you can post, react and comment. One account per Instagram.',
            foot:'One more step →'},
+    // 049: the door looks first. A new @ waits until the desk has looked at it (a no is never announced, so
+    // somebody turned away reads the same). `st` stays 'wait' for the stylesheet; `at` tells the Roll apart.
+    door: {st:'wait', at:'door', label:'At the door', href:'wall/', cal:'dates/', on:false,
+           title:'Your Instagram is waiting to be looked at.',
+           b:'You are at the door.',
+           s:'Every Instagram gets looked at before the Crypt opens. Once you are in, you post, react and comment here.',
+           foot:'At the door →'},
     // Wave 2 naming: /my/ is 'Your account' for every role (W1's 'Your desk' label is gone)
     in:   {st:'in', label:'Your account', href:'my/#account', cal:'wall/#cal', on:true,
            title:'Your account.',
@@ -92,6 +99,7 @@
       key.textContent = s.label;           // also clears any old count chip
       key.classList.toggle('on', !!s.on);
       if (s.st) key.setAttribute('data-st', s.st);
+      if (s.at) key.setAttribute('data-at', s.at); else key.removeAttribute('data-at');
       if (s.n > 0){
         const n = document.createElement('span');
         n.className = 'n'; n.textContent = s.n;
@@ -157,6 +165,8 @@
           // A banned login is refused by the database, and a database without 035 has no such door.
           const j = await OTP.sb().rpc('wall_join', {p_ig: null});
           if (j && !j.error && j.data === 'in') s = S.wall;
+          // 049: waiting for the desk to look at their @
+          else if (j && !j.error && j.data === 'wait') s = S.door;
           // Wave 2 (044): a closed account. 'closed' they can open again, 'shut' the desk closed; one lock for both.
           else if (j && !j.error && (j.data === 'closed' || j.data === 'shut')) s = S.closed;
         }

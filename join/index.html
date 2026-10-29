@@ -60,7 +60,7 @@ a.btn{text-decoration:none}
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" integrity="sha384-Rj26LVGvoeRVR6+mwQmFfcR3QOBEwT+ZmuCWpuiqeTzJpCs0ER4ITAWGb4Hiy3Ok" crossorigin="anonymous"></script>
 <script src="../supabase-config.js?v=f1348482"></script>
-<script src="../assets/js/desk.js?v=12f3e9e0"></script>
+<script src="../assets/js/desk.js?v=92efb57d"></script>
 <script>
 (async () => {
   const $ = id => document.getElementById(id);
@@ -121,6 +121,12 @@ a.btn{text-decoration:none}
     if (word === 'closed' || word === 'shut') {
       $('panel').innerHTML = `<b style="font-family:var(--f-display);font-style:italic;font-size:26px;text-transform:uppercase">This account is closed.</b>
         <div class="note">Signed in as ${esc(me.user.email)}. <a href="../my/#account">Your account</a> has the rest.</div>
+        <button class="btn ghost" id="out" type="button">Sign out</button>`;
+    } else if (word === 'wait') {
+      // 049: the door looks first. Somebody turned away reads this too (a no is never announced).
+      $('panel').innerHTML = `<b style="font-family:var(--f-display);font-style:italic;font-size:26px;text-transform:uppercase">You are at the door.</b>
+        <div class="note">Signed in as ${esc(me.user.email)}. Every Instagram gets looked at before the Crypt opens.
+        <a href="../wall/" style="color:var(--pink-glow)">The Crypt</a> opens for you once you are in.</div>
         <button class="btn ghost" id="out" type="button">Sign out</button>`;
     } else if (word === 'banned') {
       $('panel').innerHTML = `<b style="font-family:var(--f-display);font-style:italic;font-size:26px;text-transform:uppercase">The Crypt is closed to this account.</b>

@@ -2428,6 +2428,8 @@
     var queue = function (kind) { return function () { openQueue(kind); }; };
     if (wt) {
       [
+        // 049 + 050: new @s to look at come first (waiting at the door, or let in and not looked at yet)
+        ['door', 'new @ to check', 'new @s to check', function () { setView('members', { filter: 'check' }); }],
         ['asks', 'wants a card', 'want a card', function () { setView('members', { filter: 'asks' }); }],
         ['packs', 'pack waiting', 'packs waiting', queue('packs')],
         ['rooms', 'room waiting', 'rooms waiting', queue('rooms')],
@@ -2947,6 +2949,8 @@
       // card is out.
       people: OTP.deskMembers(),
       waiting: OTP.deskWaiting(),
+      // 050: who walked in through the open door and still needs a look (the Members tab's TO CHECK box)
+      fresh: OTP.deskFresh ? OTP.deskFresh() : Promise.resolve([]),
       takedowns: OTP.frameTakedowns(),
       dark: OTP.darkSeats(),
       cards: OTP.cards(),

@@ -201,14 +201,26 @@
 
   /* ============================== chips ============================== */
 
-  var ROLE = { card: ['CARD HOLDER', 'card'], member: ['MEMBER', 'live'], login: ['ALMOST IN', 'hidden'], desk: ['DESK', 'git'] };
-  var ROLE_WORD = { card: 'card holder', member: 'member', login: 'almost in', desk: 'the desk' };
+  // 049: 'door' = a new @ waiting for him to look; state 'turned' = he turned them away (they are never told)
+  var ROLE = { card: ['CARD HOLDER', 'card'], member: ['MEMBER', 'live'], login: ['ALMOST IN', 'hidden'], desk: ['DESK', 'git'],
+    door: ['AT THE DOOR', 'wait'] };
+  var ROLE_WORD = { card: 'card holder', member: 'member', login: 'almost in', desk: 'the desk', door: 'at the door' };
   function pill(t, cls) { return '<b class="mpill' + (cls ? ' ' + cls : '') + '">' + esc(t) + '</b>'; }
+  // 050, LOOK AFTER: the board's DB.fresh (desk_fresh) is who walked in through the open door and still needs a look
+  function freshAt(p) {
+    var b = B(), f = b && b.DB && Array.isArray(b.DB.fresh) ? b.DB.fresh : [];
+    for (var i = 0; i < f.length; i++) if (f[i] && f[i].id === p.id) return f[i].at || true;
+    return null;
+  }
+  // to check = waiting at the door (049, the look-first mode) or in already and fresh (050, the live mode)
+  function toCheck(p) { return p.state === 'active' && (p.role === 'door' || (p.role === 'member' && !!freshAt(p))); }
   function tagsHtml(p) {
     var t = [], r = ROLE[p.role] || ROLE.login, nr = +p.n_reports || 0;
-    t.push(pill(r[0], r[1]));
+    if (p.state !== 'turned') t.push(pill(r[0], r[1]));     // turned away is not "almost in": its own pill says it
+    if (p.role === 'member' && p.state === 'active' && freshAt(p)) t.push(pill('NEW, CHECK THEIR @', 'wait'));
     if (p.state === 'banned') t.push(pill('BANNED', 'bad'));
     if (p.state === 'closed') t.push(pill('CLOSED', 'dark'));
+    if (p.state === 'turned') t.push(pill('TURNED AWAY', 'hidden'));
     if (p.asks) t.push(pill('WANTS A CARD', 'wait'));
     if (nr > 0) t.push(pill(nr + (nr === 1 ? ' REPORT' : ' REPORTS'), 'bad'));
     if (p.said_no) t.push(pill('SAID NO', 'hidden'));
@@ -224,19 +236,23 @@
      Everyone with a login, one list. All filtering is client side: the board
      already read desk_members, and a search is one keystroke, not a request. */
 
-  var WHO = [['all', 'Everyone'], ['card', 'Card holders'], ['member', 'Crypt members'], ['login', 'Almost in'], ['desk', 'Desk']];
-  var STAND = [['any', 'Any'], ['asks', 'Wants a card'], ['reported', 'Reported'], ['banned', 'Banned'], ['closed', 'Closed'], ['said_no', 'Said no']];
+  var WHO = [['all', 'Everyone'], ['door', 'At the door'], ['card', 'Card holders'], ['member', 'Crypt members'], ['login', 'Almost in'], ['desk', 'Desk']];
+  var STAND = [['any', 'Any'], ['check', 'To check'], ['asks', 'Wants a card'], ['reported', 'Reported'], ['banned', 'Banned'],
+    ['closed', 'Closed'], ['turned', 'Turned away'], ['said_no', 'Said no']];
   var SORTS = [['new', 'Newest'], ['seen', 'Last seen'], ['stuff', 'Most stuff'], ['az', 'A to Z']];
   var PAGE = 60;
   var L = { q: '', who: 'all', stand: 'any', sort: 'new', shown: PAGE, optsFilter: null, fresh: false, mount: null };
 
-  function whoOk(p, who) { return who === 'all' || p.role === who; }
+  // 049: somebody turned away is a login, but not "almost in" (Turned away under the standing chips finds them)
+  function whoOk(p, who) { return who === 'all' || (p.role === who && !(who === 'login' && p.state === 'turned')); }
   function standOk(p, st) {
     switch (st) {
       case 'asks': return !!p.asks;
       case 'reported': return (+p.n_reports || 0) > 0;
       case 'banned': return p.state === 'banned';
       case 'closed': return p.state === 'closed';
+      case 'turned': return p.state === 'turned';
+      case 'check': return toCheck(p);
       case 'said_no': return !!p.said_no;
       default: return true;
     }
@@ -292,12 +308,16 @@
 
   function countLine(all) {
     var n = function (f) { return all.filter(f).length; };
+    var check = n(toCheck);
+    var turned = n(function (p) { return p.state === 'turned'; });
     return plural(all.length, 'person', 'people') + DOT +
+      (check ? check + ' to check' + DOT : '') +
       plural(n(function (p) { return p.role === 'card'; }), 'card holder', 'card holders') + DOT +
       n(function (p) { return p.role === 'member'; }) + ' in the Crypt' + DOT +
-      n(function (p) { return p.role === 'login'; }) + ' almost in' + DOT +
+      n(function (p) { return p.role === 'login' && p.state !== 'turned'; }) + ' almost in' + DOT +
       n(function (p) { return p.state === 'banned'; }) + ' banned' + DOT +
-      n(function (p) { return p.state === 'closed'; }) + ' closed';
+      n(function (p) { return p.state === 'closed'; }) + ' closed' +
+      (turned ? DOT + turned + ' turned away' : '');
   }
   function chipRow(name, list, on, count) {
     return '<div class="mm-chips" role="group" aria-label="' + esc(name) + '">' + list.map(function (c) {
@@ -332,6 +352,7 @@
       '<div class="mm">' +
         '<h2 class="bh mm-h">MEMBERS <span>everyone with a login, one list</span></h2>' +
         '<div class="mm-count"></div>' +
+        '<div class="mm-door" aria-live="polite"></div>' +
         '<input type="search" class="mm-q" placeholder="Find someone: name, @, card" aria-label="Find someone: name, @, card"' +
           ' autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="search">' +
         '<div class="mm-who"></div><div class="mm-stand"></div><div class="mm-sort"></div>' +
@@ -353,6 +374,85 @@
       paintList();
     });
     paintList();
+    paintDoor();
+  }
+
+  /* ============================== TO CHECK ==============================
+     049 + 050, his asks 10/29: "make sure they're real people", then "let them in first
+     ... we'll do a vet afterwards". The door is open: a new @ walks in and lands here as
+     NEW until he looks (KEEP, or REMOVE = Close the account). If the door is ever set to
+     look first (049), a new @ waits here instead (LET IN / TURN AWAY, and a no is never
+     told). One card each, oldest first: their @ opens their Instagram (the app on his
+     phone), then two keys. The red one takes two taps. */
+  async function rereadFresh() {
+    var b = B();
+    if (b && b.DB && w.OTP && OTP.deskFresh) { try { b.DB.fresh = await OTP.deskFresh(); } catch (e) {} }
+  }
+  function doorKey(p, letIn) {
+    return async function () {
+      var got = await OTP.deskDoor(p.id, letIn);
+      await rereadFresh();
+      await touch(p.id);
+      paintDoor();
+      if (p.role === 'member') return firstName(p.name) + ' stays. Checked.';
+      return got === 'in' ? firstName(p.name) + ' is in.' : 'Turned away. They are not told.';
+    };
+  }
+  function removeKey(p) {
+    return async function () {
+      await OTP.deskClose(p.id, 'Instagram check: not a real page');
+      await rereadFresh();
+      await touch(p.id);
+      paintDoor();
+      return { msg: 'Removed. Their account is closed.', undo: async function () {
+        await OTP.deskReopen(p.id);
+        await rereadFresh();
+        await touch(p.id);
+        paintDoor();
+        return 'Open again. Still to check.';
+      } };
+    };
+  }
+  function igLink(ig, cls, label) {
+    return '<a class="' + cls + '" href="https://instagram.com/' + encodeURIComponent(ig) + '/" target="_blank" rel="noopener noreferrer">' +
+      label + '</a>';
+  }
+  function doorCard(p, reg) {
+    var ig = String(p.ig || ''), inAlready = p.role === 'member';
+    var when = inAlready ? 'in since ' + agoShort(freshAt(p) === true ? p.crypt_joined : freshAt(p)) + ', not checked yet'
+      : 'waiting since ' + agoShort(p.joined);
+    return '<div class="dr" data-id="' + esc(p.id) + '">' +
+      '<a class="dr-who" href="#members/' + encodeURIComponent(keyOf(p)) + '">' + faceHtml(p.pic, p.name) +
+        '<span class="mbody"><span class="mname">' + esc(p.name || 'Member') + '</span>' +
+        '<span class="mline">' + esc(when) + '</span></span></a>' +
+      (ig && IG_OK.test(ig) ? igLink(ig, 'dr-ig', '@' + esc(ig) + '<small>open their Instagram</small>')
+        : '<span class="dr-ig none">no @ on this login</span>') +
+      '<div class="dr-keys">' +
+        (inAlready
+          ? mk(reg, 'KEEP', doorKey(p, true), { cls: 'btn ok dr-in' }) +
+            mk(reg, 'REMOVE', removeKey(p), { sure: 'Tap again', cls: 'btn bad dr-no' })
+          : mk(reg, 'LET IN', doorKey(p, true), { cls: 'btn ok dr-in' }) +
+            mk(reg, 'TURN AWAY', doorKey(p, false), { sure: 'Tap again', cls: 'btn bad dr-no' })) +
+      '</div></div>';
+  }
+  function paintDoor() {
+    var m = L.mount;
+    if (!m || !m.isConnected) return;
+    var box = m.querySelector('.mm-door');
+    if (!box) return;
+    var t = function (v) { var x = Date.parse(v); return isFinite(x) ? x : 0; };
+    var since = function (p) { var f = freshAt(p); return p.role === 'member' && f !== true ? t(f) : t(p.joined); };
+    var list = people().filter(toCheck).sort(function (a, b) { return since(a) - since(b); });
+    if (!list.length) { box.innerHTML = ''; return; }
+    var reg = [], says = [];
+    if (list.some(function (p) { return p.role === 'member'; }))
+      says.push('NEW ones are in already. Open their Instagram: KEEP the real ones, REMOVE the fakes (it closes the account, and you can open it back up).');
+    if (list.some(function (p) { return p.role === 'door'; }))
+      says.push('Waiting ones are not in until you LET IN. Turned away, they are never told.');
+    box.innerHTML = '<h3 class="bh dr-h">TO CHECK <span>' + esc(list.length) + '</span></h3>' +
+      '<div class="note dr-note">' + esc(says.join(' ')) + '</div>' +
+      list.map(function (p) { return doorCard(p, reg); }).join('');
+    wire(box, reg, { say: null, repaint: paintDoor, after: function () { return waiting(); } });
   }
 
   function paintCounts() {
@@ -409,6 +509,7 @@
       el.parentNode.replaceChild(t.firstChild, el);
     }
     paintCounts();
+    paintDoor();
   }
 
   // the badge and the tab count (BOARD.loadWaiting re-reads desk_waiting and repaints the bar)
@@ -530,7 +631,7 @@
   }
 
   function whyOf(r) {
-    var bits = [ROLE_WORD[r.role] || 'member'];
+    var bits = [r.state === 'turned' ? 'turned away at the door' : (ROLE_WORD[r.role] || 'member')];
     if ((r.role === 'card' || r.role === 'desk') && r.card_slug) bits.push(r.card_slug);
     if (r.state === 'banned') bits.push('banned');
     if (r.state === 'closed') bits.push('closed');
@@ -649,7 +750,7 @@
     if (why) why.textContent = whyOf(r);
     var html = headHtml(p);
     if (!s) html += note(p.err || 'reading their things…', p.err ? 'warn' : '');
-    else html += waitHtml(p, reg) + roleHtml(p, reg) + standHtml(p, reg) + fixHtml(p, reg) +
+    else html += doorHtml(p, reg) + waitHtml(p, reg) + roleHtml(p, reg) + standHtml(p, reg) + fixHtml(p, reg) +
                  stuffHtml(p, reg) + reportsHtml(p, reg) + histHtml(p) +
                  note('Their messages stay private. You only see a chat somebody in it reported.', 'mp-foot');
     p.el.innerHTML = html;
@@ -667,13 +768,13 @@
       : '<span class="mp-ig">@' + esc(ig) + '</span>';
     var bits = [];
     if (r.joined) bits.push('Joined ' + day(r.joined) + '.');
-    if (r.role !== 'login' && r.crypt_joined) bits.push('In the Crypt since ' + day(r.crypt_joined) + '.');
+    if (r.role !== 'login' && r.role !== 'door' && r.crypt_joined) bits.push('In the Crypt since ' + day(r.crypt_joined) + '.');
     var seen = seenAt(r);
     bits.push(seen ? 'Seen ' + agoLong(seen) + '.' : 'Not seen yet.');
     var links = [];
     if ((r.role === 'card' || r.role === 'desk') && r.card_slug)
       links.push('<a class="btn ghost sm" href="../c/?s=' + encodeURIComponent(r.card_slug) + '" target="_blank" rel="noopener">Their card page</a>');
-    if (r.role !== 'login' && SID_OK.test(String(r.sid || '')))
+    if (r.role !== 'login' && r.role !== 'door' && SID_OK.test(String(r.sid || '')))
       links.push('<a class="btn ghost sm" href="../wall/#s-' + encodeURIComponent(r.sid) + '" target="_blank" rel="noopener">Their Crypt page</a>');
     var out = '<div class="mp-top">' + faceHtml(r.pic, r.name, true) +
       '<div class="mp-who">' + igHtml + '<span class="mtags">' + tagsHtml(r) + '</span></div></div>' +
@@ -682,6 +783,67 @@
     if (r.role === 'card' && SEATS && !seatOf(r.card_slug) && !seatByName(r.card_slug))
       out += note('No roster card yet. Their card art goes on at the laptop.');
     return out;
+  }
+
+  /* ---- THE DOOR (049) ---- */
+  function doorHtml(p, reg) {
+    var r = p.row, ig = String(r.ig || '');
+    // 050: in already through the open door, not looked at yet
+    if (r.role === 'member' && r.state === 'active' && freshAt(r)) {
+      var f = freshAt(r);
+      return sec('TO CHECK', 'wait') +
+        line('In since ' + agoLong(f === true ? r.crypt_joined : f) + ' through the open door. Nobody has looked at their Instagram yet.') +
+        (ig && IG_OK.test(ig) ? row(igLink(ig, 'btn ghost sm', 'Open @' + esc(ig) + ' on Instagram'))
+          : note('No @ on this login.')) +
+        '<div class="dr-keys">' +
+          mk(reg, 'KEEP', async function () {
+            await OTP.deskDoor(r.id, true);
+            await rereadFresh();
+            return firstName(r.name) + ' stays. Checked.';
+          }, { cls: 'btn ok dr-in' }) +
+          mk(reg, 'REMOVE', async function () {
+            await OTP.deskClose(r.id, 'Instagram check: not a real page');
+            await rereadFresh();
+            return { msg: 'Removed. Their account is closed.', undo: async function () {
+              await OTP.deskReopen(r.id);
+              await rereadFresh();
+              await touch(r.id);
+              return 'Open again. Still to check.';
+            } };
+          }, { sure: 'Tap again', cls: 'btn bad dr-no' }) +
+        '</div>' +
+        note('REMOVE closes the account: everything they made is hidden, nothing is deleted, and Open it back up undoes it.') +
+        '</section>';
+    }
+    if (r.role === 'door' && r.state === 'active') {
+      return sec('AT THE DOOR', 'wait') +
+        line('Signed up ' + agoLong(r.joined) + '. They are not in until you let them in.') +
+        (ig && IG_OK.test(ig) ? row(igLink(ig, 'btn ghost sm', 'Open @' + esc(ig) + ' on Instagram'))
+          : note('No @ on this login. Fix it below, or turn them away.')) +
+        '<div class="dr-keys">' +
+          mk(reg, 'LET IN', async function () {
+            await OTP.deskDoor(r.id, true);
+            return firstName(r.name) + ' is in.';
+          }, { cls: 'btn ok dr-in' }) +
+          mk(reg, 'TURN AWAY', async function () {
+            await OTP.deskDoor(r.id, false);
+            return 'Turned away. They are not told.';
+          }, { sure: 'Tap again', cls: 'btn bad dr-no' }) +
+        '</div>' +
+        note('Turned away, they are never told. Their side keeps saying they are at the door.') + '</section>';
+    }
+    if (r.state === 'turned') {
+      var h = ((p.st && p.st.history) || []).filter(function (x) { return x.action === 'door_no'; })[0];
+      return sec('TURNED AWAY') +
+        line('You turned them away at the door' + (h ? ' on ' + day(h.at) : '') + '. They are not told.') +
+        row(mk(reg, 'Let them in after all', async function () {
+          await OTP.deskDoor(r.id, true);
+          return firstName(r.name) + ' is in.';
+        }, { cls: 'btn sm' })) +
+        note('Their @ stays on this login so you know who it was. If the real owner of that @ signs up, clear it under Fix their info.') +
+        '</section>';
+    }
+    return '';
   }
 
   /* ---- WAITING (an open ask) ---- */
@@ -769,7 +931,8 @@
   }
   function roleHtml(p, reg) {
     var r = p.row;
-    if (r.role === 'desk' || (r.asks && r.role !== 'card')) return '';
+    // 049: nobody at the door (or turned away) is handed a card before the door has let them in
+    if (r.role === 'desk' || r.role === 'door' || r.state === 'turned' || (r.asks && r.role !== 'card')) return '';
     var out = sec('ROLE');
     if (r.role === 'card') {
       var slug = String(r.card_slug || '');
@@ -848,7 +1011,7 @@
     var unban = function () {
       return mk(reg, 'Unban', async function () { return unbanSaid(await OTP.ban(r.id, false)); }, { cls: 'btn sm' });
     };
-    if (r.state === 'active') {
+    if (r.state === 'active' || r.state === 'turned') {
       out += '<label>Why, for you only</label>' + field('note', '', { max: 280, label: 'Why, for you only', ph: 'spam, threats, a second account' }) +
         row(mk(reg, 'Ban', async function () {
           var n = String(val(p, 'note') || '').trim();
@@ -1358,6 +1521,9 @@
       case 'card_off': return 'card taken back';
       case 'card_no': return 'you said no to a card';
       case 'card_unno': return 'you took back the no';
+      case 'door_in': return 'let in at the door' + (dt.was === 'no' ? ' after all' : '') + (dt.ig ? ' (@' + dt.ig + ')' : '');
+      case 'door_no': return 'turned away at the door' + (dt.ig ? ' (@' + dt.ig + ')' : '');
+      case 'door_keep': return 'you looked at their @ and kept them' + (dt.ig ? ' (@' + dt.ig + ')' : '');
       case 'name': return you ? 'renamed by you' : dt.old ? 'changed their name' : 'picked a name';
       case 'ig': return you ? '@ fixed by you' : 'changed their @';
       case 'frame': return dt.frame ? 'frame ' + frameLabel(dt.frame) + ' handed out' : 'house frame taken back';

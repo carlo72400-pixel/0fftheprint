@@ -78,6 +78,7 @@
 .chip.desk{color:#f7d046;border-color:rgba(247,208,70,.45)}
 .chip.card{color:var(--pink-glow);border-color:rgba(255,121,198,.45)}
 .chip.member{color:#9db9ff;border-color:rgba(157,185,255,.45)}
+.chip.door{color:#ffd479;border-color:rgba(255,212,121,.4)}
 .aset{border-top:1px solid var(--line);margin-top:16px;padding-top:14px}
 .ak{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
 .av{font-size:16px;font-weight:600;margin-bottom:4px;overflow-wrap:anywhere}
@@ -317,7 +318,7 @@ a.btn{text-decoration:none}
 
 <script src="../supabase-config.js?v=f1348482"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" integrity="sha384-Rj26LVGvoeRVR6+mwQmFfcR3QOBEwT+ZmuCWpuiqeTzJpCs0ER4ITAWGb4Hiy3Ok" crossorigin="anonymous"></script>
-<script src="../assets/js/desk.js?v=12f3e9e0" defer></script>
+<script src="../assets/js/desk.js?v=92efb57d" defer></script>
 <script src="../assets/js/calendar.js?v=2cd5da5c" defer></script>
 <script defer>
 document.addEventListener('DOMContentLoaded', async () => {
@@ -413,7 +414,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     $('account').style.display = '';
     const whoLine = () => { $('a-who').innerHTML = email ? 'Signed in as <b>' + esc(email) + '</b>' : 'Signed in'; };
     whoLine();
-    const CHIP = { desk: 'THE DESK', card: 'CARD HOLDER', member: 'IN THE CRYPT', pending: 'ALMOST IN' };
+    const CHIP = { desk: 'THE DESK', card: 'CARD HOLDER', member: 'IN THE CRYPT', pending: 'ALMOST IN', door: 'AT THE DOOR' };
     // a banned login is not in the Crypt, so it gets no chip rather than a wrong one
     if (CHIP[kind] && !(acct && acct.banned)) {
       const chip = $('a-role');
@@ -560,6 +561,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       box.innerHTML = '<div class="sec">One more step.</div>' +
         "<p class=\"hint\">Put your Instagram in at the Crypt and you're in.</p>" +
         '<a class="btn" href="../wall/">Go to the Crypt</a>';
+    } else if (kind === 'door') {
+      // 049: the desk looks at every new @ first (turned away reads the same: a no is never announced)
+      box.innerHTML = '<div class="sec">You are at the door.</div>' +
+        '<p class="hint">Every Instagram gets looked at before the Crypt opens. Your page, your Kin and your messages ' +
+        'are there once you are in.</p>';
     } else {
       // doorLine is written for a card holder page ("This part is for card
       // holders"). This is their own page, so a member who never asked gets the

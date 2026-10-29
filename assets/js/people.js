@@ -109,12 +109,18 @@
     var k = d.getElementById('nav-key');
     return root.getAttribute('data-door') === 'wait' && !!k && /(^|\/)my\/#account$/.test(k.getAttribute('href') || '');
   }
+  // 049: a new @ waiting for the desk to look at it (door.js marks the key data-at="door")
+  function atDoor() {
+    var k = d.getElementById('nav-key');
+    return root.getAttribute('data-door') === 'wait' && !!k && k.getAttribute('data-at') === 'door';
+  }
   function doorCard(state) {
     mount.innerHTML = '';
     var c = el('div', 'rl-door');
     c.innerHTML = '<img src="assets/cathedral/a/join.webp" alt="" width="96" height="96" decoding="async">' +
       '<b>Members only.</b><p>The Roll is where the people in the house post their photos. It stays behind the door.</p>' +
       (state === 'wait' && closedDoor() ? '<p class="rl-door-l">This account is closed. <a href="my/#account">Your account &rarr;</a></p>'
+        : state === 'wait' && atDoor() ? '<p class="rl-door-l">You are at the door. Every Instagram gets looked at before the Crypt opens.</p>'
         : state === 'wait' ? '<p class="rl-door-l"><a href="wall/">One more step at the Crypt</a> and you are in.</p>'
         : '<p class="rl-door-l"><a href="join/?next=home">Log in</a> or <a href="wall/">join the Crypt</a>. All it takes is an Instagram.</p>');
     mount.appendChild(c);
@@ -127,7 +133,11 @@
     var mine = seatOf(prof.card_slug);
     var meP = { name: prof.display_name || 'You', photo: casual ? '' : (av(mine && mine.photo) || av(prof.card_photo)), accent: '' };
     box.className = 'rl-post';
-    if (!canPost) { box.innerHTML = '<p class="rl-note">Put your Instagram in at <a href="wall/">the Crypt</a> and you can post here.</p>'; return; }
+    if (!canPost) {
+      box.innerHTML = atDoor() ? '<p class="rl-note">You are at the door. Once you are in, you post here.</p>'
+        : '<p class="rl-note">Put your Instagram in at <a href="wall/">the Crypt</a> and you can post here.</p>';
+      return;
+    }
     box.innerHTML = '<div class="rl-post-top"></div>' +
       '<label class="rl-pick"><input type="file" accept="' + (casual ? 'image/*' : 'image/*,video/*') + '" hidden><span class="rl-pick-b">&#43; ' + (casual ? 'Post a photo' : 'Post a photo or clip') + '</span></label>' +
       '<div class="rl-draft" hidden><div class="rl-prev"></div><textarea maxlength="800" rows="2" placeholder="A line, if you want one" aria-label="Your line"></textarea>' +

@@ -78,12 +78,13 @@
   // 035: the door is an Instagram. A login that carries one and is not on The Wall yet is let in here
   // (same quiet ask door.js makes; whichever runs first wins, the other is told 'in').
   // Wave 2 (044): a closed account hears 'closed' (they closed it) or 'shut' (the desk did). Same line for both.
-  let closed = false;
+  let closed = false, atDoor = false;
   if (!canPost && OTP.sb) {
     try {
       const j = await OTP.sb().rpc('wall_join', { p_ig: null });
       if (j && !j.error && j.data === 'in') canPost = true;
       else if (j && !j.error && (j.data === 'closed' || j.data === 'shut')) closed = true;
+      else if (j && !j.error && j.data === 'wait') atDoor = true;     // 049: the desk has not looked at their @ yet
     } catch (e) {}
   }
 
@@ -91,6 +92,14 @@
   if (closed) {
     line(`<span class="cav plain"></span>
       <div class="cgrow"><span class="clink">This account is closed. <a href="my/#account">Your account</a></span></div>`);
+    return;
+  }
+
+  // ---------- signed in, at the door (049) ----------
+  if (atDoor) {
+    line(`<span class="cav plain"></span>
+      <div class="cgrow"><b class="clink">You are at the door.</b>
+        <div class="cnote">Every Instagram gets looked at before the Crypt opens. Once you are in, you post here.</div></div>`);
     return;
   }
 

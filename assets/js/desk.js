@@ -2348,12 +2348,18 @@
     async deskWaiting() {
       const KEYS = ["asks", "sources", "reports", "packs", "rooms", "picks", "comments", "stories", "house", "photos_up", "total"];
       const z = {}; KEYS.forEach(k => { z[k] = 0; });
+      z.door = 0;
       const c = sb(); if (!c) return z;
       let r;
+      // 049: the door is its own count (desk_waiting keeps its shape), asked alongside and added to the total.
+      // A database without 049 answers PGRST202 and the door stays 0.
+      const door = c.rpc("desk_door_waiting").then(q => (q && !q.error ? Number(q.data) || 0 : 0), () => 0);
       try { r = await c.rpc("desk_waiting"); } catch (e) { return z; }
       if (!r.error) {
         const row = Array.isArray(r.data) ? r.data[0] : r.data;
         if (row && typeof row === "object") KEYS.forEach(k => { z[k] = Number(row[k]) || 0; });
+        z.door = await door;
+        z.total += z.door;
         return z;
       }
       if (r.error.code !== "PGRST202") return z;
@@ -2402,6 +2408,17 @@
 
     // Close somebody (a hide, undoable). A desk close shows them the shut lock.
     async deskClose(id, note) { return await call("desk_close", { p_user: id, p_note: noteOf(note) }); },
+    // 049, THE DOOR: the desk's two keys for a new @. true lets them in ('in'), false turns them away ('no'),
+    // quietly: they keep hearing "at the door". true on somebody turned away lets them in after all.
+    async deskDoor(id, letIn) { return await call("desk_door", { p_user: id, p_in: !!letIn }); },
+    // 050, LOOK AFTER (his call 10/29: "let them in first ... we'll do a vet afterwards"): who walked in through the
+    // open door and has not been looked at yet, oldest first, [{id, at}]. KEEP is deskDoor(id, true); REMOVE is
+    // deskClose. A database without 050 answers PGRST202: nobody to check. Never throws.
+    async deskFresh() {
+      const c = sb(); if (!c) return [];
+      try { const r = await c.rpc("desk_fresh"); return r.error ? [] : (Array.isArray(r.data) ? r.data : []); }
+      catch (e) { return []; }
+    },
     async deskReopen(id) { return await call("desk_reopen", { p_user: id }); },
 
     // Fix their info (power b). The database cleans and checks, and logs it.
