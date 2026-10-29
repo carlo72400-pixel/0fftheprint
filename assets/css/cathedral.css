@@ -520,7 +520,9 @@ html.cath .hs-what ul{margin:0;padding:0 0 0 16px;font:12.5px/1.5 Verdana,Geneva
 html.cath .hs-keys{display:grid;gap:8px;min-width:170px;}
 html.cath .hs-key{display:block;text-align:center;padding:12px 16px;border:1px solid rgba(244,238,242,.22);border-radius:3px;background:var(--box);color:var(--ink);text-decoration:none;font-family:var(--f-display);font-style:italic;font-weight:900;font-size:18px;line-height:1;text-transform:uppercase;}
 html.cath .hs-key.primary{background:var(--pink-glow);border-color:var(--pink-glow);color:#0a0a0d;}
-@media (max-width:820px){
+/* 10/29: to 1140 wide, not 820. From 821 up the page is two columns and the feed beside the 320 px sidebar is only 393 to 712 px
+   (an iPad held upright: 406), a phone's width, so the strip keeps its phone shape there or the names wrap letter by letter. */
+@media (max-width:1140px){
   html.cath .hs-rail{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
   html.cath .hk{grid-template-columns:minmax(0,1fr);justify-items:start;padding:9px 10px;min-height:0;}
   html.cath .hk img{grid-row:auto;width:30px;height:30px;margin-bottom:2px;}
@@ -566,7 +568,7 @@ html.cath .tear-new{position:absolute;right:10px;top:8px;padding:4px 8px;border:
    name under, and only the short line (.pk-more drops). */
 .keydeck{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0 16px}
 .keydeck .playkey{margin:0}
-@media (max-width:760px){
+@media (max-width:760px), (min-width:821px) and (max-width:1140px){   /* 10/29: the two-column page's feed is phone-wide to 1140 (see the house strip above) */
   .keydeck .playkey{grid-template-columns:auto minmax(0,1fr);align-items:center;gap:10px 8px;padding:11px 11px 13px}
   .keydeck .pk-gem{grid-row:1;grid-column:1;width:52px;height:52px;padding:6px}
   .keydeck .pk-go{grid-row:1;grid-column:2;justify-self:end}
