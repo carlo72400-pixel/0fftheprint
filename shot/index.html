@@ -166,7 +166,7 @@ h1.big{font-size:clamp(58px,19vw,112px);line-height:.86;margin-top:6px;color:#ef
   <span class="tag" id="stage-tag">the booth · 0FF THE PRINT</span>
 </div>
 
-<div class="kick" id="kick">San Antonio · tonight</div>
+<div class="kick" id="kick">Tonight</div>
 <h1 class="big" id="h1">You got<br>shot.</h1>
 <p class="lead" id="lead">Your photos land here in a few days.</p>
 
@@ -234,7 +234,8 @@ h1.big{font-size:clamp(58px,19vw,112px);line-height:.86;margin-top:6px;color:#ef
   const KEY = 'otp-shot'; let mine = []; try { mine = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) {}
   if (!slug && !mine.includes(date)) { mine.unshift(date); mine = mine.slice(0, 12); try { localStorage.setItem(KEY, JSON.stringify(mine)); } catch (e) {} }
   $('#wait-s').textContent = 'you were shot ' + nice(date) + (kname ? ' at ' + kname.replace(/-/g, ' ') : '');
-  $('#kick').textContent = 'San Antonio · ' + nice(date) + (kname ? ' · ' + kname.replace(/-/g, ' ') : '');
+  // no city in the kicker (10/29): the QR is the same in every city and the nights carry no city, so an Austin scan read 'San Antonio'
+  $('#kick').textContent = nice(date) + (kname ? ' · ' + kname.replace(/-/g, ' ') : '');
 
   let items = [];
   try { items = ((await (await fetch('../events/events.json', {cache: 'no-cache'})).json()) || {}).items || []; } catch (e) {}
@@ -262,7 +263,7 @@ h1.big{font-size:clamp(58px,19vw,112px);line-height:.86;margin-top:6px;color:#ef
     $('#up-title').textContent = night.title; $('#up-meta').textContent = [night.venue, night.date_short, (night.count | 0) + ' frames'].filter(Boolean).join(' · ');
     $('#h1').innerHTML = 'It&rsquo;s<br>up.'; $('#lead').innerHTML = 'The night you were shot at is live. <b>Pull your pack:</b> tear the frames you&rsquo;re in, keep them, share them. Nothing goes up raw.';
     $('#wait').hidden = true; $('#st-pull').href = '../events/' + night.slug + '/'; $('#st-pull').classList.add('primary'); $('#st-follow').classList.remove('primary');
-    $('#kick').textContent = 'San Antonio · ' + nice(night.date); $('#stage-tag').textContent = night.title.toLowerCase() + ' · ' + (night.venue || '').toLowerCase();
+    $('#kick').textContent = nice(night.date); $('#stage-tag').textContent = night.title.toLowerCase() + ' · ' + (night.venue || '').toLowerCase();
   }
 
   // the @: kept on this phone, and handed to the desk when the database has a door for it (shot_list_add); a quiet no is fine
