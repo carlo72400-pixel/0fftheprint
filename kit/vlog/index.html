@@ -406,6 +406,13 @@ body.hand .plate,body.hand #modes,body.hand #sections,body.hand #cutWell,body.ha
 .row small{display:block;margin-top:3px;font:500 13px/1.3 var(--f-b);color:var(--dim)}
 .del{min-width:56px}
 .del.armed{--e:#5c1515;--hl:rgba(255,255,255,.3);color:#fff;background:linear-gradient(180deg,#e05757,#b83232)}
+/* Delete eps: the cards turn into rows with a ✕ Del each; a deleted one leaves a dashed row with Undo */
+.epbar{display:flex;justify-content:flex-end;margin-top:12px}
+.epnote{margin:0 0 12px;color:var(--dim);font-size:14px}
+.row.epdrow{grid-template-columns:auto minmax(0,1fr) auto}
+.epdrow .epn{min-width:34px;font:900 italic 30px/1 var(--f-d);color:var(--lcdink);text-shadow:0 0 10px var(--glow)}
+.row.gone{background:none;box-shadow:none;border:1.5px dashed #4a4653}
+.row.gone .epn,.row.gone b{color:var(--mute);text-shadow:none}
 .empty{margin:0;color:var(--dim);font-size:14px}
 .copyrow{display:grid;gap:10px;margin-top:12px}
 .copyrow.top{margin:0 0 12px}
@@ -1285,6 +1292,8 @@ let PBX = null, SEENX = null, PBZ = !!UI.pb && Date.now() >= UI.pb.end, PBUP = P
 let SAY = null, sayT = null, TOP = '', WRAP = '';
 const SPIN = { on: false, at: 0, stop: 0 };
 const DIE = { on: false, at: 0, stop: 0, run: 0 };   /* the dice's throw, run like the spin's reel */
+/* Delete eps on the Season list (EPDEL), and the last deleted episode with every row it took, for its 5 s Undo (EPX) */
+let EPDEL = false, EPX = null, epxT = null;
 
 /* ---------- episodes ---------- */
 const eps = () => store.data('episodes');
@@ -1665,12 +1674,25 @@ function delBtn(kind, id, label) {
   const armed = ARM && ARM.kind === kind && ARM.id === id;
   return '<button class="key mini del' + (armed ? ' armed' : '') + '" type="button" data-act="del" data-kind="' + kind + '" data-id="' + esc(id) + '" aria-label="' + (armed ? 'Tap again to delete ' : 'Delete ') + esc(label) + '">' + (armed ? 'Delete?' : '✕ Del') + '</button>';
 }
+const epShots = e => { const s = model(e).tiles.filter(vshot); return s.filter(t => stIn(e.id, t.id) === 'got').length + '/' + s.length; };
 function epCardHTML(e, cur) {
-  const m = model(e), shots = m.tiles.filter(vshot), n = shots.filter(t => stIn(e.id, t.id) === 'got').length;
+  const m = model(e);
   return '<button type="button" class="epcard' + (cur ? ' cur' : '') + '" data-act="openep" data-id="' + e.id + '">' +
     '<span class="epn">' + pad(e.n) + '</span>' + pg(m.tp.g, 'stk', 'badge') +
     '<span class="epi"><b>' + esc(e.title) + '</b><small>' + esc(md(T(e.at)) + (e.title !== m.tp.name ? ' · ' + m.tp.name : '')) + '</small><small>' + esc(e.mission || 'No mission yet') + '</small></span>' +
-    '<span class="eps"><b>' + n + '/' + shots.length + '</b>' + (e.posted ? '<b class="posted">Posted</b><small>' + (isTime(e.postedAt) ? md(T(e.postedAt)) : '') + '</small>' : '<small>Not posted</small>') + '</span></button>';
+    '<span class="eps"><b>' + epShots(e) + '</b>' + (e.posted ? '<b class="posted">Posted</b><small>' + (isTime(e.postedAt) ? md(T(e.postedAt)) : '') + '</small>' : '<small>Not posted</small>') + '</span></button>';
+}
+/* the Episodes well. Delete eps swaps the cards for rows with a two-tap ✕ Del (a card is a key, so no key fits on one) */
+function epsWellHTML(ep) {
+  const x = EPDEL && EPX && !has(eps(), EPX.id) ? EPX : null;
+  const list = epList().concat(x ? [Object.assign({ id: x.id, gone: 1 }, x.e)] : []).sort((a, b) => b.n - a.n || T(b.at) - T(a.at));
+  if (!list.length) return '<p class="empty">No episodes yet. Hit New episode up top.</p>';
+  const key = UI.newStep ? '' : '<div class="epbar"><button class="key mini ' + (EPDEL ? 'pink' : 'bone') + '" type="button" data-act="epdel" aria-pressed="' + EPDEL + '">' + (EPDEL ? '✓ Done' : '✕ Delete eps') + '</button></div>';
+  if (!EPDEL) return '<div class="eplist">' + list.map(e => epCardHTML(e, !!ep && e.id === ep.id)).join('') + '</div>' + key;
+  return '<p class="epnote">An episode goes with its shots, marks and @s.</p><ul class="rows">' + list.map(e => e.gone
+    ? '<li class="row epdrow gone"><span class="epn">' + pad(e.n) + '</span><span><b class="txt">Deleted</b><small>' + esc(e.title) + '</small></span><button class="key mini bone" type="button" data-act="epundo">Undo</button></li>'
+    : (k => '<li class="row epdrow"><span class="epn">' + pad(e.n) + '</span><span><b class="txt">' + esc(e.title) + '</b><small>' + esc(md(T(e.at)) + ' · ' + epShots(e) + ' shots' + (k ? ' · ' + k + (k > 1 ? ' @s' : ' @') : '') + (e.posted ? ' · posted' : '')) + '</small></span>' +
+      delBtn('ep', e.id, 'EP ' + pad(e.n) + ' ' + e.title) + '</li>')(rowsOf('tags').filter(v => v.ep === e.id).length)).join('') + '</ul>' + key;
 }
 function ideasWellHTML() {
   const list = rowsOf('ideas').sort((a, b) => T(b.at) - T(a.at)), open = list.filter(v => !v.used).length;
@@ -1699,9 +1721,7 @@ function renderSections() {
             '<span class="tt">' + esc(tp.name) + '</span><span class="ts">' + esc(tp.line) + '</span>' + (had ? '<span class="tier">Your ' + ord(had + 1) + '</span>' : '') + '</span><span class="tstate">' + shots + ' shots · ' + esc(QSETBY[tp.qset].name) + '</span></button>';
         }).join('') + '</div></section>';
     } else {
-      const list = epList().reverse();
-      h += '<section class="well"><div class="etch"><span>Episodes</span><b>' + list.length + '</b></div>' +
-        (list.length ? '<div class="eplist">' + list.map(e => epCardHTML(e, !!ep && e.id === ep.id)).join('') + '</div>' : '<p class="empty">No episodes yet. Hit New episode up top.</p>') + '</section>';
+      h += '<section class="well"><div class="etch"><span>' + (EPDEL ? 'Delete episodes' : 'Episodes') + '</span><b>' + epList().length + '</b></div>' + epsWellHTML(ep) + '</section>';
     }
     const segs = seasonSegs();
     h += '<section class="well"><div class="etch"><span>Your segments</span><b>This episode + new ones</b></div><div class="segchips">' +
@@ -1837,6 +1857,8 @@ function render() {
   if (epId() && UI.ask.ep !== epId()) { resetAsk(); saveUI(); }
   if (UI.over === 'spin' && !UI.card) UI.over = '';
   if (UI.over === 'dice' && !UI.dice) UI.over = '';
+  /* Delete eps lasts while the Season list is up and has a row: leaving it (or New ep) ends it, a pending Undo stays done */
+  if (effMode() !== 'season' || UI.newStep || !(EPX || epList().length)) { EPDEL = false; EPX = null; }
   TOP = '';
   /* a stranger holds the phone: only the NOW card, no banner */
   if (document.body.classList.toggle('hand', handoff())) $('#banner').hidden = true;
@@ -2294,6 +2316,31 @@ function togglePosted() {
   if (on) { sfx('posted'); banner('EP ' + pad(ep.n) + ' posted', runLine(), pg(model(ep).tp.g, 'stk', 'badge'), 'big'); }
   else { clearTimeout(bannerT); $('#banner').hidden = true; sfx('undo'); say('Not posted', '', '', { plain: true }); }   /* turning it off is quiet: the key itself flips back */
 }
+/* Delete? on an episode: it goes with its shots, marks and @s, and its row holds an Undo for 5 s. A break or a
+   hand-off on it ends; the plate falls back to the newest episode left */
+function delEp(id) {
+  const e = eps()[id]; if (!e) return;
+  const x = { id, e, cur: epId() === id, at: Date.now(), rows: [] };
+  for (const k of Object.keys(store.data('shots'))) if (k.indexOf(id + '.') === 0) x.rows.push(['shots', k, store.data('shots')[k]]);
+  for (const c of ['marks', 'tags']) for (const v of rowsOf(c)) if (v.ep === id) x.rows.push([c, v.id, store.data(c)[v.id]]);
+  store.write('episodes', id, null);
+  for (const r of x.rows) store.write(r[0], r[1], null);
+  if (UI.ep === id) UI.ep = '';
+  if (UI.pb && UI.pb.ep === id) { UI.pb = null; PBX = null; PBUP = false; }
+  if (x.cur) { UI.hand = ''; UI.bank = null; UI.handN = 0; if (UI.over === 'mission') UI.over = ''; }
+  if (LAST && LAST.ep === id) { LAST = null; SEENX = null; }
+  EPX = x; clearTimeout(epxT); epxT = setTimeout(() => { EPX = null; render(); }, 5000);
+  saveUI(); render(); buzz(20); sfx('undo');
+}
+/* a second tap on Delete? that lands on Undo (same spot) waits out 650 ms like any key that redraws under the thumb */
+function epUndo() {
+  const x = EPX; if (!x || has(eps(), x.id) || Date.now() - x.at < 650) return;
+  EPX = null; clearTimeout(epxT);
+  store.write('episodes', x.id, x.e);
+  for (const r of x.rows) store.write(r[0], r[1], r[2]);
+  if (x.cur) UI.ep = x.id;
+  saveUI(); render(); sfx('tick');
+}
 function segToggle(id) {
   if (!has(SEGBY, id)) return;
   const cur = seasonSegs(), next = SEGS.map(s => s.id).filter(x => x === id ? !cur.includes(x) : cur.includes(x));
@@ -2473,6 +2520,7 @@ function armed(kind, id) {
   render(); sfx('tick'); return false;
 }
 function armDel(kind, id) {
+  if (kind === 'ep') { if (armed(kind, id)) delEp(id); return; }
   const col = kind === 'mark' ? 'marks' : kind === 'tag' ? 'tags' : kind === 'idea' ? 'ideas' : '';
   if (!col || !armed(kind, id)) return;
   store.write(col, id, null);
@@ -2588,6 +2636,8 @@ document.addEventListener('click', e => {
     case 'newback': UI.newStep = 'tpl'; saveUI(); render(); sfx('tick'); break;
     case 'newcancel': UI.newStep = ''; UI.newTpl = ''; saveUI(); render(); sfx('tick'); break;
     case 'openep': openEp(el.dataset.id); break;
+    case 'epdel': EPDEL = !EPDEL; EPX = null; ARM = null; render(); sfx('tick'); break;
+    case 'epundo': epUndo(); break;
     case 'segtoggle': segToggle(el.dataset.id); break;
   }
 });
