@@ -52,3 +52,6 @@
 .tapes.watch.ten{grid-template-columns:repeat(5,minmax(0,1fr));max-width:1010px;gap:12px}
 @media(max-width:860px){.tapes.watch.ten{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:640px){.tapes.watch.ten{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}}
+/* .eight (10/30, the second Thrift model day): the same tiles, four across, so eight cuts sit in two clean rows on a laptop and four on a phone. */
+.tapes.watch.eight{grid-template-columns:repeat(4,minmax(0,1fr));max-width:808px;gap:12px}
+@media(max-width:640px){.tapes.watch.eight{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}}

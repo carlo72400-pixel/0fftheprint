@@ -28,6 +28,19 @@ He locked three calls: **both readers, two doors** · **keep the look, cut the g
 - Checked: 1280 and 375 in the Browser pane, 0 overflow offenders on all four pages, every image loads, no console errors, film preview plays, sound swap works, old `#design` lands on `archive/#design`.
 
 
+## HIRING: round two of the scripted promos on top, round one folded (Oct 30 2026)
+
+His ask: "those look way better than last week's edit. So let's update our business page on Off the Print and update portfolio and etc."
+`<!-- THRIFT1029 -->` sits under "The newest job", above everything else: clip-label SCRIPTED PROMOS, ROUND TWO, eight `.tape.play` cuts in the NEW
+`.tapes.watch.eight` (4 across, 2 under 640px; stamp `?v=20261030a` on all five pages), one client-credits paragraph. Hand-kept, like THRIFT1020.
+`<!-- THRIFT1020 -->` now lives inside a `details.more` ("ROUND ONE · OCT 20"), closed: nothing deleted, one tap deep. The two posted-by-the-store
+facts moved into the new paragraph so the proof stays on screen.
+- 8 of the 14 edits show. ⛔ B, D and F (full cuts) stay off the site: a friend with no release on file is on screen (clips 027, 063, 042). B15 and D15
+  stand in for them and neither has her. A15, C15 and E15 repeat A, C and E, so they stay off too. C15 is only the /business/ proof video.
+- Clips play from 0tp-media-2 `video/2026-10-29-tatw-model-day/`, posters `/video/thrift-1029/`, the same files as THE TAPE. Built by the shoot's
+  `_web/tape_1029.py` + `tape_1029_posters.py`. No `.t-foot` on these tiles: it sat right on the store's own headline.
+- ⛔ "Finished", never "delivered", for this round until the folder has really gone to Daniela. The resumes are unchanged for the same reason.
+
 ## HIRING grew the SCRIPTED PROMOS block, the Thrift model day (Oct 21 2026)
 
 His ask: "add them to the portfolio too" (right after the 10 model-day edits went on THE TAPE). `<!-- THRIFT1020 -->` sits under

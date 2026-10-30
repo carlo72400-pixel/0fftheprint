@@ -57,7 +57,7 @@ a{color:inherit}
 .media{position:absolute;inset:0;overflow:hidden;background:var(--night)}
 .media video{position:absolute;top:calc(-1 * var(--shift,0%));left:50%;height:115%;width:auto;min-width:100%;aspect-ratio:9/16;object-fit:cover;transform:translateX(-50%)}
 .c-get .media{--shift:17%}
-.c-price .media{--shift:20%}
+.c-price .media{--shift:41%}
 .media::after,.vis::after{content:'';position:absolute;left:0;right:0;top:0;height:110px;background:linear-gradient(rgba(20,12,18,.5),rgba(20,12,18,0));pointer-events:none}
 .vis{position:relative;flex:1;min-height:0;overflow:hidden}
 
@@ -263,14 +263,14 @@ h1,h2{margin-top:8px;font-family:var(--disp);font-weight:650;font-variation-sett
 
   <section class="card c-real" data-id="real" data-title="A real one" data-next="See a real one" aria-roledescription="slide" aria-label="2 of 7" aria-hidden="true">
     <div class="vis">
-      <video id="promo" src="https://carlo72400-pixel.github.io/0tp-media-2/video/2026-10-20-tatw-model-day/tatw-1020-buy-sell-trade.mp4" poster="/video/thrift-1020/tatw-1020-buy-sell-trade.jpg" muted playsinline loop preload="none" aria-label="BUY SELL TRADE, a promo for Thrift @ The Warehouse, 39 seconds"></video>
+      <video id="promo" src="media/real.mp4" poster="media/real.jpg" muted playsinline loop preload="none" aria-label="A 15-second promo for the Y2K night market at Thrift @ The Warehouse"></video>
       <button class="key soft sound" id="sound" type="button" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path class="w" d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg><span>Sound on</span></button>
     </div>
     <div class="sheet">
       <p class="k">A real one <span>· Thrift @ The Warehouse</span></p>
-      <h2>One evening. 10&nbsp;videos.</h2>
-      <p class="l">Delivered the next day. The store posted this one that afternoon.</p>
-      <span class="chip"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg>2,000+ plays</span>
+      <h2>One evening. 14&nbsp;videos.</h2>
+      <p class="l">My third shoot for this store. All 14 finished in 4K by the next morning.</p>
+      <span class="chip"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg>Last shoot: 2,000+ plays</span>
     </div>
   </section>
 
@@ -291,7 +291,7 @@ h1,h2{margin-top:8px;font-family:var(--disp);font-weight:650;font-variation-sett
 
   <section class="card c-color" data-id="color" data-title="The color" data-next="The color" aria-roledescription="slide" aria-label="4 of 7" aria-hidden="true">
     <div class="vis">
-      <div class="wipe" id="wipe" role="img" aria-label="The same frame off the camera, flat and grey, and graded, with full color">
+      <div class="wipe" id="wipe" role="img" aria-label="The same frame off the camera, flat and grey, and graded, true to life">
         <img src="media/grade-before.jpg" alt="" width="720" height="1280" loading="lazy" decoding="async">
         <img class="after" src="media/grade-after.jpg" alt="" width="720" height="1280" loading="lazy" decoding="async">
         <span class="seam" aria-hidden="true"></span>
@@ -301,13 +301,13 @@ h1,h2{margin-top:8px;font-family:var(--disp);font-weight:650;font-variation-sett
     </div>
     <div class="sheet">
       <p class="k">The color</p>
-      <h2>Graded like a film.</h2>
-      <p class="l">Same frame, outside the store. Every video gets this.</p>
+      <h2>Your place, true to life.</h2>
+      <p class="l">Same frame, inside the store. Every video gets this.</p>
     </div>
   </section>
 
   <section class="card c-price" data-id="price" data-title="The price" data-next="The price" aria-roledescription="slide" aria-label="5 of 7" aria-hidden="true">
-    <div class="media" aria-hidden="true"><video src="media/counter.mp4" poster="media/counter.jpg" muted playsinline loop preload="none"></video></div>
+    <div class="media" aria-hidden="true"><video src="media/racks.mp4" poster="media/racks.jpg" muted playsinline loop preload="none"></video></div>
     <div class="vis"></div>
     <div class="sheet">
       <p class="k">The price</p>
@@ -334,12 +334,12 @@ h1,h2{margin-top:8px;font-family:var(--disp);font-weight:650;font-variation-sett
       <p class="k">More of my work</p>
       <h2>Tap one. It plays.</h2>
       <div class="reels">
-        <button class="tile tall stack" type="button" data-reel="thrift" aria-label="Play the 10 promos for Thrift @ The Warehouse">
+        <button class="tile tall stack" type="button" data-reel="thrift" aria-label="Play the new promos for Thrift @ The Warehouse">
           <img src="media/t01.jpg" alt="" width="216" height="384" loading="lazy" decoding="async">
           <img src="media/t03.jpg" alt="" width="216" height="384" loading="lazy" decoding="async">
           <img src="media/t02.jpg" alt="" width="216" height="384" loading="lazy" decoding="async">
           <span class="pl" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l12.5-7.5z"/></svg></span>
-          <span class="cap"><b>10 promos</b><small>Thrift @ The Warehouse</small></span>
+          <span class="cap"><b>New promos</b><small>Thrift @ The Warehouse</small></span>
         </button>
         <button class="tile tall" type="button" data-reel="launch" aria-label="Play the grand opening cuts for Pixel Pulpit">
           <img src="media/launch-collage.jpg" alt="" width="360" height="640" loading="lazy" decoding="async">
@@ -538,7 +538,7 @@ h1,h2{margin-top:8px;font-family:var(--disp);font-weight:650;font-variation-sett
   snd.addEventListener('click', function(){ mute(!promo.muted); if(promo.paused) play(promo) });
   mute(true);
 
-  // the price: $250 for two hours, $125 each hour after, up to eight; the video estimate tops out at about 12 a day (his record: 10 in one evening)
+  // the price: $250 for two hours, $125 each hour after, up to eight; the video estimate tops out at about 12 a day (his record is 14 in one evening now, the cap moves on his word)
   var h=2, MIN=2, MAX=8, RATE=125;
   var hrs=d.getElementById('hrs'), hrsu=d.getElementById('hrsu'), tot=d.getElementById('tot'), est=d.getElementById('est');
   var minus=d.getElementById('minus'), plus=d.getElementById('plus'), mail=d.getElementById('mail');
@@ -563,20 +563,20 @@ h1,h2{margin-top:8px;font-family:var(--disp);font-weight:650;font-variation-sett
   });
 
   // more work: one tap on a tile plays it full screen with sound, Done goes back
-  var MEDIA='https://carlo72400-pixel.github.io/0tp-media-2/video/2026-10-20-tatw-model-day/tatw-1020-';
-  function tatw(slug, title, note){ return {s:MEDIA+slug+'.mp4', p:'/video/thrift-1020/tatw-1020-'+slug+'.jpg', t:title, n:note} }
+  var MEDIA='https://carlo72400-pixel.github.io/0tp-media-2/video/';
+  function tatw(mmdd, slug, title, note){ var n='tatw-'+mmdd+'-'+slug; return {s:MEDIA+'2026-10-'+mmdd.slice(2)+'-tatw-model-day/'+n+'.mp4', p:'/video/thrift-'+mmdd+'/'+n+'.jpg', t:title, n:note} }
   var REELS={
     thrift:{name:'Thrift @ The Warehouse', clips:[
-      tatw('right-by-ut','Right by UT','34th Street store'),
-      tatw('buy-sell-trade','Buy, sell, trade','Posted by the store'),
-      tatw('now-you-do','Now you do','Posted by the store'),
-      tatw('your-closet','Your closet','South Congress'),
-      tatw('first-friday','First Friday','The night market'),
-      tatw('walk-in-34th','Walk in','34th Street store'),
-      tatw('walk-in-soco','Walk in','South Congress'),
-      tatw('new-on-the-rack','New on the rack','Just the clothes'),
-      tatw('come-thrift','Come thrift','One trip through the racks'),
-      tatw('soco-racks','SoCo racks','South Congress')]},
+      tatw('1029','which-fit','Which fit?','South Congress'),
+      tatw('1029','y2k-night-market','Y2K night market','First Friday'),
+      tatw('1029','3-dollar-sale','$3 sale','34th Street store'),
+      tatw('1029','fall-market','Fall market','Second Saturday'),
+      tatw('1029','3-dollar-finds','$3 finds','34th Street store'),
+      tatw('1029','cancel-your-plans','Cancel your plans','34th Street store'),
+      tatw('1029','going-thrifting','Going thrifting','Short cut'),
+      tatw('1029','fit-check','Fit check','Short cut'),
+      tatw('1020','buy-sell-trade','Buy, sell, trade','Last shoot, posted by the store'),
+      tatw('1020','now-you-do','Now you do','Last shoot, posted by the store')]},
     launch:{name:'Pixel Pulpit grand opening', clips:[
       {s:'media/launch-collage.mp4', p:'media/launch-collage.jpg', t:'The collage cut', n:'0:57'},
       {s:'media/launch-recap.mp4', p:'media/launch-recap.jpg', t:'The recap', n:'1:51'}]},

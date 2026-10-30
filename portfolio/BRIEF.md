@@ -26,7 +26,7 @@ The 10-second test, for every screen: who he is, one piece of proof for THEIR ne
 ## THE BUILD THAT CAME OUT OF IT
 
 - First screen: name you can read, one line, two doors (HIRING / BOOKING), the newest film playing.
-- HIRING: credits, the newest job (Thrift @ The Warehouse: the scripted promos day, 10 edits, then Fill-a-Bag + its three edits), 48 HOURS, VOLUME, the color A/B, 0FF THE PRINT, the tools, both resumes.
+- HIRING: credits, the newest job (Thrift @ The Warehouse: round two of the scripted promos, 14 edits, 8 shown; round one folded under it; then Fill-a-Bag + its three edits), 48 HOURS, VOLUME, the color A/B, 0FF THE PRINT, the tools, both resumes.
 - BOOKING: the wedding, how it works in three steps, three prices, Book a date.
 - NIGHTS: the best six, then every night on /portfolio/nights/ (newest first).
 - One tap deep, nothing deleted: /portfolio/archive/ (SA Current, portraits, Legion Ink, the stadium photos, design, VOLUME BTS) and /portfolio/rates/ (the full card).
