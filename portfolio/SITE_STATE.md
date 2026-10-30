@@ -39,7 +39,7 @@ facts moved into the new paragraph so the proof stays on screen.
   stand in for them and neither has her. A15, C15 and E15 repeat A, C and E, so they stay off too. C15 is only the /business/ proof video.
 - Clips play from 0tp-media-2 `video/2026-10-29-tatw-model-day/`, posters `/video/thrift-1029/`, the same files as THE TAPE. Built by the shoot's
   `_web/tape_1029.py` + `tape_1029_posters.py`. No `.t-foot` on these tiles: it sat right on the store's own headline.
-- ⛔ "Finished", never "delivered", for this round until the folder has really gone to Daniela. The resumes are unchanged for the same reason.
+- The folder went to Daniela Oct 30 (his "Sent it"), so the block says "went out in 4K the next day", the same words as round one, and the THRIFT_PROMO resume bullet now covers both rounds (11 scripts, 24 edits).
 
 ## HIRING grew the SCRIPTED PROMOS block, the Thrift model day (Oct 21 2026)
 
