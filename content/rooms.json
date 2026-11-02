@@ -354,6 +354,21 @@
    "lat": 30.30329,
    "lng": -97.74581,
    "city_only": false
+  },
+  {
+   "name": "Justine's Brasserie",
+   "key": "justines brasserie",
+   "aliases": [
+    "justine's",
+    "justines",
+    "justine's brasserie austin",
+    "justinesbrasserie"
+   ],
+   "city": "Austin",
+   "address": "4710 E 5th St, Austin, TX 78702",
+   "lat": 30.25292,
+   "lng": -97.70029,
+   "city_only": false
   }
  ]
 }

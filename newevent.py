@@ -1054,6 +1054,12 @@ def main():
     # Page is on disk and correct at this point, so an upload failure is
     # recoverable: fix whatever broke and re-upload the same staging folder.
     vidstage = locals().get("vidstage")
+    # ⛔ A RELEASE STOPS AT ABOUT 1000 ASSETS (The Odd Ball, 2040 files, stalled at 995).
+    if len(os.listdir(stage)) > 950:
+        if not a.no_upload:
+            sys.exit(f"\n  ⛔ {len(os.listdir(stage))} files will not fit on one release. The page is built. "
+                     f"Run release_split.py {slug}, then upload_release.py per release.")
+        print(f"\n  ⛔ {len(os.listdir(stage))} files will not fit on one release: run release_split.py {slug} before the upload")
     if a.no_upload:
         print(f"\n  --no-upload: {len(os.listdir(stage))} files left in {stage}")
         if vidstage and os.path.isdir(vidstage):

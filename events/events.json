@@ -1,6 +1,16 @@
 {
  "items": [
   {
+   "slug": "2026-10-31-the-odd-ball",
+   "title": "THE ODD BALL",
+   "venue": "Justine's Brasserie",
+   "date": "2026-10-31",
+   "date_short": "10.31.26",
+   "count": 255,
+   "cover": "2026-10-31-the-odd-ball/media/001_t.jpg",
+   "up": "2026-11-01"
+  },
+  {
    "slug": "2026-10-17-fill-a-bag",
    "title": "FILL-A-BAG",
    "venue": "Thrift @ The Warehouse SoCo \u00b7 Thrift @ The Warehouse 34th St",
