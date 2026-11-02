@@ -55,3 +55,13 @@
 /* .eight (10/30, the second Thrift model day): the same tiles, four across, so eight cuts sit in two clean rows on a laptop and four on a phone. */
 .tapes.watch.eight{grid-template-columns:repeat(4,minmax(0,1fr));max-width:808px;gap:12px}
 @media(max-width:640px){.tapes.watch.eight{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}}
+/* .five4 (11/1, The Odd Ball): these reels are 5:4, so the 9:16 cover crop above would cut the sides off. Three across, one on a phone. */
+.tapes.watch.five4{grid-template-columns:repeat(3,minmax(0,1fr));max-width:1010px;gap:12px}
+.tapes.watch.five4 .tape video{aspect-ratio:5/4;object-fit:contain}
+@media(max-width:640px){.tapes.watch.five4{grid-template-columns:minmax(0,1fr)}}
+/* .swipe = a carousel the way it posts: one picture cut into squares, no gaps, so sliding pans across it. Two squares on a laptop, one on a phone. */
+.swipe{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;max-width:1010px;margin-top:24px;
+  background:#000;border:2px solid #fff;border-radius:16px;box-shadow:var(--shadow-sm)}
+.swipe img{flex:0 0 50%;width:50%;height:auto;aspect-ratio:1/1;object-fit:cover;scroll-snap-align:start;display:block}
+@media(max-width:640px){.swipe img{flex-basis:100%;width:100%}}
+.swipe:focus-visible{outline:2px solid var(--pink);outline-offset:3px}

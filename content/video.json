@@ -5,6 +5,48 @@
   ],
   "items": [
     {
+      "slug": "oddball-the-odd-ball",
+      "title": "The Odd Ball",
+      "kind": "CUT",
+      "line": "The pagoda was breathing and we kept dancing.",
+      "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-10-31-the-odd-ball/oddball-the-odd-ball.mp4",
+      "poster": "oddball-1031/oddball-the-odd-ball.jpg",
+      "w": 900,
+      "h": 720,
+      "dur": "0:30",
+      "from": "The Odd Ball · Oct 31",
+      "date": "2026-10-31",
+      "up": "2026-11-01"
+    },
+    {
+      "slug": "oddball-creature-corner",
+      "title": "Creature Corner",
+      "kind": "CUT",
+      "line": "Girl meets eyeball. Eyeball wins.",
+      "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-10-31-the-odd-ball/oddball-creature-corner.mp4",
+      "poster": "oddball-1031/oddball-creature-corner.jpg",
+      "w": 900,
+      "h": 720,
+      "dur": "0:20",
+      "from": "The Odd Ball · Oct 31",
+      "date": "2026-10-31",
+      "up": "2026-11-01"
+    },
+    {
+      "slug": "oddball-obsessed",
+      "title": "Obsessed",
+      "kind": "CUT",
+      "line": "She held me up for 22 photos. That one.",
+      "src": "https://carlo72400-pixel.github.io/0tp-media-2/video/2026-10-31-the-odd-ball/oddball-obsessed.mp4",
+      "poster": "oddball-1031/oddball-obsessed.jpg",
+      "w": 900,
+      "h": 720,
+      "dur": "0:12",
+      "from": "The Odd Ball · Oct 31",
+      "date": "2026-10-31",
+      "up": "2026-11-01"
+    },
+    {
       "slug": "tatw-1029-which-fit",
       "title": "Which Fit?",
       "kind": "CUT",

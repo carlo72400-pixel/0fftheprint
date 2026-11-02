@@ -28,6 +28,16 @@ He locked three calls: **both readers, two doors** · **keep the look, cut the g
 - Checked: 1280 and 375 in the Browser pane, 0 overflow offenders on all four pages, every image loads, no console errors, film preview plays, sound swap works, old `#design` lands on `archive/#design`.
 
 
+## HIRING: ONE NIGHT, EVERY FORMAT, The Odd Ball (Nov 1 2026)
+
+His ask: "how can we add this to our resume slash ... portfolio website ... on the job section", about the Halloween carousel and reels he posted.
+`<!-- ODDBALL1101 -->` sits under `<!-- /THRIFT -->`, sub-k "The newest night": the Saturday carousel as `.swipe` (ten squares in `assets/oddball/car_*.jpg`, 900px; two across on a laptop, one on a phone, no gaps so sliding pans the picture), three reels in the NEW `.tapes.watch.five4` (these cuts are 5:4, the 9:16 cover crop would cut them), one client-credits paragraph. Hand-kept. `_tapes.css` stamp `?v=20261101a` on all five pages.
+- Clips play from 0tp-media-2 `video/2026-10-31-the-odd-ball/`, the 900x720 phone copies, posters `/video/oddball-1031/`, the same files as THE TAPE (three CUTS with `up` 2026-11-01, so they reach the timeline; no portfolio.json row).
+- ⛔ Wording: "art-directed" and "delivered", never designed or edited by hand. The pieces came out of the pipeline on his notes.
+- ⛔ Friday's high-rise party stays off the site (his call 11/1), so the block is Saturday only.
+- `<!-- ODDBALL -->` tops the six (nightsblock, config in the shoot's `_web/nights_oddball.json`); BLADERAVE came off the main page and stays on /nights/. 24 blocks now.
+- "remote" is gone from every page (he dropped it 10/28).
+
 ## HIRING: round two of the scripted promos on top, round one folded (Oct 30 2026)
 
 His ask: "those look way better than last week's edit. So let's update our business page on Off the Print and update portfolio and etc."
