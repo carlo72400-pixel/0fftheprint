@@ -2,6 +2,11 @@
 
 > NEW SESSION START HERE: read `BRIEF.md` (why the page is shaped this way), then the Oct 18 section right below, then the rest of this file as history. Live at **https://0fftheprint.com/portfolio/** (this folder is `portfolio/` inside the 0fftheprint repo; the old carlo72400-pixel.github.io root only redirects here). CSS lives in `assets/css/`, JS in `assets/js/`, pages are markup only. Edit the file that owns the thing, bump its `?v=` stamp on EVERY page that links it (home, `index-kawaii.html`, `nights/`, `archive/`, `rates/`), `cp index.html index-kawaii.html` after home edits, commit only your own paths (other sessions keep uncommitted work in this repo), push.
 
+## 11/4 (Bunni's site audit, his calls in chat)
+- Hero tag `NEWEST` is now `WEDDING FILM` (index + the kawaii twin): The Odd Ball (10/31) is newer, his call "Wedding film, retag it". The film stays the hero.
+- Price cards: his "Keep ranges, make small": `.rate` is a flex column and `.rate .mk` (the SA MARKET line) has `order:9`, so it sits as a 9.5 px footnote under a dashed rule at the foot of every card (main page + /rates/, 15 cards checked). `_rates.css?v=20261104a` on all five pages (hand stamps).
+- Email stays `carlo72400@gmail.com` on this page (his call again 11/4, the 8/20 carve-out).
+
 ## 🚪 THE TWO-DOOR REBUILD (Oct 18 2026, his ask: "update our portfolio... foundation to purpose to what it's trying to accomplish")
 
 He locked three calls: **both readers, two doors** · **keep the look, cut the gimmicks** · **best six nights up front, the rest one tap deep**. Plus "make sure all the info is up to date." The why lives in `BRIEF.md`.
