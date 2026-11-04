@@ -453,6 +453,12 @@ html.cath #tape-rail .drop .cap .d{margin-top:auto;padding-top:7px;}
 /* ---------------- the plain line (10/14): what the house line means, said plain ---------------- */
 html.cath .hero .hero-plain{margin:12px auto 0;max-width:520px;font:13px/1.5 Verdana,Geneva,Tahoma,sans-serif;color:#e9e3ec;text-shadow:0 0 12px #0a0a0d,0 0 4px #0a0a0d,0 1px 2px #0a0a0d;text-wrap:balance;}
 @media (max-width:560px){ html.cath .hero .hero-plain{margin-top:9px;font-size:12px;max-width:300px;} }
+/* THE BOOK KEY (11/4, his "Button only" on Bunni's site audit): the money lane on the first screen, at the top of the Home
+   column right under the picture (inside it, the key sat on the lounge's faces at 390 and 1024 wide). A framed square key
+   like the house strip's, 44 px tall for a thumb, never an arch; it opens More at Book the house (#book). */
+html.cath .feed-book{display:flex;width:100%;justify-content:center;align-items:center;gap:10px;min-height:44px;box-sizing:border-box;margin:0 0 14px;padding:0 16px;border:1px solid rgba(244,238,242,.34);border-radius:3px;background:var(--box);color:var(--ink);text-decoration:none;font-family:var(--f-display);font-style:italic;font-weight:900;font-size:15px;line-height:1;text-transform:uppercase;}
+html.cath .feed-book small{font:400 11px/1 Verdana,Geneva,Tahoma,sans-serif;text-transform:none;color:#e9e3ec;}
+html.cath .feed-book:hover,html.cath .feed-book:focus-visible{border-color:var(--pink-glow);color:var(--pink-glow);}
 /* the hand's cards say what they open */
 html.cath .hcard u{bottom:-34px;line-height:1.3;}
 html.cath .hcard u small{display:block;font-size:8.5px;letter-spacing:.14em;text-transform:none;color:#8f8a97;}
