@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>What The Director Whispered · 0FF THE PRINT</title>
 <meta name="description" content="Lumet would not call cut. Eastwood prints the first take. And the two most famous take counts in film history shrink the second somebody opens the logs.">
+<link rel="canonical" href="https://0fftheprint.com/word/what-the-director-whispered/">
 <meta property="og:title" content="What The Director Whispered">
 <meta property="og:description" content="Lumet would not call cut. Eastwood prints the first take. And the two most famous take counts in film history shrink the second somebody opens the logs.">
 <meta property="og:image" content="https://0fftheprint.com/word/what-the-director-whispered/cover.jpg">
@@ -90,7 +91,7 @@
 <p>Lumet rehearsed two to three weeks before shooting. Lines learned. No scripts in hand. Blocked like theater. Then he guarded the first takes. "The early takes are not imperfect. They are usually the freshest, truest."</p>
 <p>Clint Eastwood goes further. He told Film Comment in 2005 he tries to get it the very first time, so every line sounds like the first time it's said.</p>
 <p>Richard Linklater rehearses three weeks and calls it essential. He finds the movie in the writing and the rehearsing. The shoot is the last phase. He never does reshoots.</p>
-<figure><img src="direct_chaplin.jpg" alt="Charlie Chaplin in his Tramp bowler, a blanket over his shoulders, sits in the snow beside two cameramen at a film camera" loading="lazy"><figcaption>Charlie Chaplin with his camera crew on The Gold Rush (1925), public domain, via <a href="https://commons.wikimedia.org/wiki/File:Charlie_Chaplin_and_camera_crew_in_The_Gold_Rush.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>.</figcaption></figure>
+<figure><img data-src="direct_chaplin.jpg" alt="Charlie Chaplin in his Tramp bowler, a blanket over his shoulders, sits in the snow beside two cameramen at a film camera" width="1400" height="1099" decoding="async"><figcaption>Charlie Chaplin with his camera crew on The Gold Rush (1925), public domain, via <a href="https://commons.wikimedia.org/wiki/File:Charlie_Chaplin_and_camera_crew_in_The_Gold_Rush.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>.</figcaption></figure>
 <h2>Give them a verb, not a feeling</h2>
 <p>Never tell anybody to be sad. Judith Weston's book Directing Actors came out in 1996, and she says work the process, not the result. Her tools are verbs, facts, images and events. Ask questions. Build on what they bring.</p>
 <p>When the note's personal, give it alone. On The Verdict, Lumet kept Paul Newman back after a flat run-through. He told him part of the man was still missing, and only Newman could choose to show it. He said he wouldn't invade his privacy. The next rehearsal came alive.</p>
@@ -116,5 +117,34 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" integrity="sha384-Rj26LVGvoeRVR6+mwQmFfcR3QOBEwT+ZmuCWpuiqeTzJpCs0ER4ITAWGb4Hiy3Ok" crossorigin="anonymous"></script>
 <script src="../../assets/js/desk.js?v=92efb57d" defer></script>
 <script src="../../assets/js/word.js?v=bd4e6159" defer></script>
+<script>
+/* Pictures under the fold wait until they are 160px from the screen.
+   Chrome's loading=lazy still pulls a long page on a fast connection. */
+(function () {
+  var io = ("IntersectionObserver" in window) ? new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      var im = e.target;
+      if (im.dataset.src) im.src = im.dataset.src;
+      if (im.dataset.srcset) im.srcset = im.dataset.srcset;
+      if (im.dataset.sizes) im.sizes = im.dataset.sizes;
+      if (im.dataset.poster) im.poster = im.dataset.poster;
+      im.removeAttribute("data-src");
+      io.unobserve(im);
+    });
+  }, { rootMargin: "160px 0px" }) : null;
+  document.querySelectorAll("img[data-src], video[data-poster]").forEach(function (im) {
+    if (!io) {
+      if (im.dataset.src) im.src = im.dataset.src;
+      if (im.dataset.srcset) im.srcset = im.dataset.srcset;
+      if (im.dataset.sizes) im.sizes = im.dataset.sizes;
+      if (im.dataset.poster) im.poster = im.dataset.poster;
+      im.removeAttribute("data-src");
+      return;
+    }
+    io.observe(im);
+  });
+})();
+</script>
 </body>
 </html>

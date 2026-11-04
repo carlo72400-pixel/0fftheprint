@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Every Light Needs An Alibi · 0FF THE PRINT</title>
 <meta name="description" content="Lubezki built a wall to hide the moon. Deakins faked a burning church with 2,000 bulbs. Every light on screen is lying about where it really comes from.">
+<link rel="canonical" href="https://0fftheprint.com/word/every-light-needs-an-alibi/">
 <meta property="og:title" content="Every Light Needs An Alibi">
 <meta property="og:description" content="Lubezki built a wall to hide the moon. Deakins faked a burning church with 2,000 bulbs. Every light on screen is lying about where it really comes from.">
 <meta property="og:image" content="https://0fftheprint.com/word/every-light-needs-an-alibi/cover.jpg">
@@ -90,12 +91,12 @@
 <p>Roger Deakins lit the night town in 1917 with two things. Flares on crane wires that burned 22 to 30 seconds each, and a fake burning church. The church was a rig 50 feet high with about 2,000 bulbs on dimmers. He told American Cinematographer the fire and a few flares were the only sources.</p>
 <p>But his fire trick is cheap. A plain tungsten bulb run at 20 to 30 percent goes orange and reads as flame. If you've ever turned an old bulb way down on a dimmer, you've seen it.</p>
 <p>Vittorio Storaro says his eye changed in a small church in Rome, in front of Caravaggio. One beam across the room. Everything else left dark.</p>
-<figure><img src="light_caravaggio.jpg" alt="A shaft of light from the upper right cuts across a dark room onto men counting money at a table" loading="lazy"><figcaption>The Calling of Saint Matthew, Caravaggio, 1599 to 1600, public domain, via <a href="https://commons.wikimedia.org/wiki/File:The_Calling_of_Saint_Matthew-Caravaggo_%281599-1600%29.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>.</figcaption></figure>
+<figure><img data-src="light_caravaggio.jpg" alt="A shaft of light from the upper right cuts across a dark room onto men counting money at a table" width="1400" height="1438" decoding="async"><figcaption>The Calling of Saint Matthew, Caravaggio, 1599 to 1600, public domain, via <a href="https://commons.wikimedia.org/wiki/File:The_Calling_of_Saint_Matthew-Caravaggo_%281599-1600%29.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>.</figcaption></figure>
 <h2>But don't repeat what you heard</h2>
 <p>You heard Kubrick shot Barry Lyndon on a lens NASA built for the dark side of the moon. Zeiss made that lens, and Zeiss says "There is no evidence to support the myth". Ten were made. Six went to NASA. Kubrick ended up with three.</p>
 <p>The candles were real, though. Three wicks each. A key around 3 foot-candles. The whole film pushed a stop in the lab. But a lot of the famous daylight in those rooms was movie lamps outside the windows, shining through tracing paper.</p>
 <p>You heard The Revenant was natural light only. Lubezki says natural light for the vast majority. But at one windy campfire he slipped in a steady light on a dimmer and let the real fire flicker over it.</p>
-<figure><img src="light_latour.jpg" alt="A young woman sits in near darkness, chin in her hand, gazing at a single candle burning on the table" loading="lazy"><figcaption>The Magdalen with the Smoking Flame, Georges de La Tour, circa 1635 to 1637, public domain, via <a href="https://commons.wikimedia.org/wiki/File:Georges_de_La_Tour_-_The_Magdalen_with_the_Smoking_Flame_-_Google_Art_Project.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>.</figcaption></figure>
+<figure><img data-src="light_latour.jpg" alt="A young woman sits in near darkness, chin in her hand, gazing at a single candle burning on the table" width="1255" height="1600" decoding="async"><figcaption>The Magdalen with the Smoking Flame, Georges de La Tour, circa 1635 to 1637, public domain, via <a href="https://commons.wikimedia.org/wiki/File:Georges_de_La_Tour_-_The_Magdalen_with_the_Smoking_Flame_-_Google_Art_Project.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>.</figcaption></figure>
 <h2>So be early</h2>
 <p>Days of Heaven is set in the Texas Panhandle in 1916, and most of it was shot as the day ran out. Its cinematographer, Néstor Almendros, wrote that sunset to full dark is only about 20 minutes. So they shot about 20 minutes a day.</p>
 <p>In San Antonio on Saturday, October 17, the sun sets at 7:01 PM and civil twilight runs out at 7:25. Be framed by 6:30. That's your window.</p>
@@ -114,5 +115,34 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" integrity="sha384-Rj26LVGvoeRVR6+mwQmFfcR3QOBEwT+ZmuCWpuiqeTzJpCs0ER4ITAWGb4Hiy3Ok" crossorigin="anonymous"></script>
 <script src="../../assets/js/desk.js?v=92efb57d" defer></script>
 <script src="../../assets/js/word.js?v=bd4e6159" defer></script>
+<script>
+/* Pictures under the fold wait until they are 160px from the screen.
+   Chrome's loading=lazy still pulls a long page on a fast connection. */
+(function () {
+  var io = ("IntersectionObserver" in window) ? new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      var im = e.target;
+      if (im.dataset.src) im.src = im.dataset.src;
+      if (im.dataset.srcset) im.srcset = im.dataset.srcset;
+      if (im.dataset.sizes) im.sizes = im.dataset.sizes;
+      if (im.dataset.poster) im.poster = im.dataset.poster;
+      im.removeAttribute("data-src");
+      io.unobserve(im);
+    });
+  }, { rootMargin: "160px 0px" }) : null;
+  document.querySelectorAll("img[data-src], video[data-poster]").forEach(function (im) {
+    if (!io) {
+      if (im.dataset.src) im.src = im.dataset.src;
+      if (im.dataset.srcset) im.srcset = im.dataset.srcset;
+      if (im.dataset.sizes) im.sizes = im.dataset.sizes;
+      if (im.dataset.poster) im.poster = im.dataset.poster;
+      im.removeAttribute("data-src");
+      return;
+    }
+    io.observe(im);
+  });
+})();
+</script>
 </body>
 </html>

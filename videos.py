@@ -146,6 +146,7 @@ PAGE = """<!DOCTYPE html>
 <meta property="og:title" content="The Tape · 0FF THE PRINT">
 <meta property="og:description" content="__COUNT__ pieces. Cuts, interviews and clips straight off the nights.">
 <meta property="og:image" content="SITEURL/video/preview.jpg">
+<link rel="canonical" href="SITEURL/video/">
 <meta name="theme-color" content="#0a0a0d">
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">

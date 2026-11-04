@@ -4,6 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Vlog kit, season 1. This week's talking points.">
+<meta property="og:title" content="Vlog kit · 0FF THE PRINT">
+<meta property="og:description" content="Vlog kit, season 1. This week's talking points.">
+<meta property="og:image" content="https://0fftheprint.com/assets/preview.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Vlog kit · 0FF THE PRINT">
+<meta name="twitter:description" content="Vlog kit, season 1. This week's talking points.">
+<meta name="twitter:image" content="https://0fftheprint.com/assets/preview.jpg">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#1c1a22">
 <title>Vlog kit · 0FF THE PRINT</title>
@@ -22,12 +30,13 @@
 @font-face{font-family:'Saira Condensed';font-style:normal;font-weight:700;font-display:swap;src:url(../../assets/fonts/saira-condensed-700.woff2) format('woff2')}
 @font-face{font-family:'Saira Condensed';font-style:normal;font-weight:900;font-display:swap;src:url(../../assets/fonts/saira-condensed-900.woff2) format('woff2')}
 :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}
-.kithome{position:absolute;z-index:5;top:env(safe-area-inset-top,0px);left:16px;display:flex;align-items:center;gap:5px;height:24px;padding:0 10px 0 8px;
+.kithomes{position:absolute;z-index:5;top:env(safe-area-inset-top,0px);left:16px;display:flex;gap:8px}
+.kithome{position:relative;display:flex;align-items:center;gap:5px;height:24px;padding:0 10px 0 8px;
   background:#0b0a0e;border:1px solid rgba(255,255,255,.14);border-top:0;border-radius:0 0 6px 6px;color:#c9c3d3;text-decoration:none;
   font:700 11px/1 'JetBrains Mono',ui-monospace,Menlo,monospace;letter-spacing:.14em;text-transform:uppercase;-webkit-tap-highlight-color:transparent}
 .kithome::before{content:"";position:absolute;inset:0 -6px -6px}
 .kithome b{font:900 17px/1 'Saira Condensed','Arial Narrow',sans-serif;letter-spacing:0;margin-top:-2px}
-body.hand .kithome{display:none}</style>
+body.hand .kithomes{display:none}</style>
 <script>/* The site copy keeps everything on this phone: no account here, so the store stays local and every tap waits in its
    outbox for a sync added later. The week's talking points (deck.json next to this page) are laid under the store's
    deck before the page reads it: the copy fetched on the last visit or the one baked in at build time, whichever is
@@ -61,7 +70,7 @@ body.hand .kithome{display:none}</style>
 })();</script>
 </head>
 <body>
-<a class="kithome" href="../" aria-label="Back to the Kit"><b>‹</b>Kit</a>
+<div class="kithomes"><a class="kithome" href="../../" aria-label="0FF THE PRINT, home"><b>‹</b>Home</a><a class="kithome" href="../" aria-label="Back to the Kit"><b>‹</b>Kit</a></div>
 <style>
 /* One-column handheld in his camera-body skin: brushed plate with the episode and its mission, amber LCD for the one
    next thing, keys with travel, and a grip bar pinned to the bottom (Luna timer + MARK) that never moves.

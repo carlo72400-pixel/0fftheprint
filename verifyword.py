@@ -47,7 +47,7 @@ EXPECT = {                       # dept -> (frame w, frame h) or None for free
     "allnight": None,
 }
 THUMB = (900, 1125)
-SRC_RE = re.compile(r'<img[^>]+src="([^"]+)"')
+SRC_RE = re.compile(r'<img[^>]+\b(?:data-src|src)="([^"]+)"')
 
 
 def dept_slugs():

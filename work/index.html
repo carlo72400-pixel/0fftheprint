@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>The Work · 0FF THE PRINT</title>
 <meta name="description" content="Every frame the house has put its name on. Nights, shops, stages, back rooms. San Antonio.">
+<link rel="canonical" href="https://0fftheprint.com/work/">
 <meta name="theme-color" content="#0a0a0d">
 <meta property="og:type" content="website">
 <meta property="og:title" content="The Work · 0FF THE PRINT">
@@ -133,11 +134,35 @@ color:var(--ink);width:44px;height:44px;border-radius:50%;font-size:20px;cursor:
   grid.innerHTML = items.map((it, i) => {
     const w = Number(it.w) || 0, h = Number(it.h) || 0;
     const thumb = '../' + it.src.replace(/^assets\//, 'assets/grid/');
+    const narrow = thumb.replace(/\.jpe?g$/i, '-480.jpg');
+    const n = (window.__kN = (window.__kN || 0) + 1);
+    const set = esc(narrow) + ' 480w, ' + esc(thumb) + ' 840w';
+    const sizes = '(max-width: 640px) calc(100vw - 36px), 320px';
+    const ref = n <= 2
+      ? 'src="' + esc(thumb) + '" srcset="' + set + '" sizes="' + sizes + '"'
+      : 'data-src="' + esc(thumb) + '" data-srcset="' + set + '" data-sizes="' + sizes + '"';
     return `<figure class="tile" data-i="${i}"${w && h ? ` style="aspect-ratio:${w}/${h}"` : ''}>
-      <img src="${esc(thumb)}" alt="${esc(it.alt || it.label || '')}"${w && h ? ` width="${w}" height="${h}"` : ''} loading="${(window.__kN = (window.__kN || 0) + 1) <= 4 ? 'eager' : 'lazy'}" decoding="async">
+      <img ${ref} alt="${esc(it.alt || it.label || '')}"${w && h ? ` width="${w}" height="${h}"` : ''} decoding="async">
       <figcaption>${esc(it.label || '')}</figcaption>
     </figure>`;
   }).join('');
+  (function () {
+    var io = ('IntersectionObserver' in window) ? new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var im = e.target;
+        if (im.dataset.src) im.src = im.dataset.src;
+        if (im.dataset.srcset) im.srcset = im.dataset.srcset;
+        if (im.dataset.sizes) im.sizes = im.dataset.sizes;
+        im.removeAttribute('data-src');
+        io.unobserve(im);
+      });
+    }, { rootMargin: '160px 0px' }) : null;
+    document.querySelectorAll('#grid img[data-src]').forEach(function (im) {
+      if (!io) { im.src = im.dataset.src; if (im.dataset.srcset) im.srcset = im.dataset.srcset; if (im.dataset.sizes) im.sizes = im.dataset.sizes; im.removeAttribute('data-src'); return; }
+      io.observe(im);
+    });
+  })();
 
   // lightbox opens the full 1400px source, arrows respect the active filter
   const lb = document.getElementById('lb'), lbi = document.getElementById('lbi'), lbc = document.getElementById('lbc'), lbNight = document.getElementById('lbnight');

@@ -62,8 +62,8 @@ window.OTPLazy = window.OTPLazy || (function () {
 </script>
 <script src="assets/js/binder.js?v=55079fed" defer></script>
 <script src="assets/js/cathedral.js?v=7b620f50" defer></script>
-<script src="assets/js/lounge.js?v=0c53cf30" defer></script>
-<script src="assets/js/music.js?v=ce46d8f9" defer></script>
+<script src="assets/js/lounge.js?v=059eb0eb" defer></script>
+<script src="assets/js/music.js?v=528cb700" defer></script>
 <script src="assets/js/people.js?v=d0c7a6d1" defer></script>
 <script src="assets/js/photos.js?v=70a522f9" defer></script>
 <script>/* tabs: pick the page before first paint, off the #hash. Old links like /#desk still land right.
@@ -5843,6 +5843,8 @@ window.OTPLazy = window.OTPLazy || (function () {
       const bodyTxt = String(p.text || p.body || '').trim();
       const body = bodyTxt ? md(bodyTxt) : '';   // 038: a photo alone is a whole post
       const imgUrl = safeUrl(p.image);
+      const cap = String(p.image_alt || '').trim();
+      const photoName = cap || ('Photo from ' + (who.name || 'the house'));
       const vid = imgUrl && (window.OTP && OTP.isVideo ? OTP.isVideo(imgUrl)
                              : /\.(mp4|mov|webm|m4v)(\?|#|$)/i.test(imgUrl));
       const img = !imgUrl ? ''
@@ -5851,8 +5853,8 @@ window.OTPLazy = window.OTPLazy || (function () {
           // clips all firing at once on a phone is a data bill and a headache.
           ? `<div class="post-img post-vid"><video src="${esc(imgUrl)}" controls playsinline
                preload="metadata" ${p.image_alt ? `aria-label="${esc(p.image_alt)}"` : ''}></video></div>`
-          : `<a class="post-img" href="${esc(imgUrl)}" target="_blank" rel="noopener">
-               <img src="${esc(imgUrl)}" alt="${esc(p.image_alt || '')}" loading="lazy" decoding="async"></a>`;
+          : `<a class="post-img" href="${esc(imgUrl)}" target="_blank" rel="noopener" aria-label="${esc(photoName)}">
+               <img src="${esc(imgUrl)}" alt="${esc(cap)}" loading="lazy" decoding="async"></a>`;
       const pin = p.pinned ? `<span class="pin"><img src="assets/cathedral/r/pin.webp" alt="" width="14" height="14" decoding="async">PINNED</span>` : '';
       // live post's own accent, else the accent sitting on their card, else house
       // EDIT MODE reads both of these. A seeded post from take.json has no id,
@@ -5861,7 +5863,7 @@ window.OTPLazy = window.OTPLazy || (function () {
       // lookup above slugifies it, so the two can never disagree.
       const pid = p.id != null ? ` data-pid="${esc(String(p.id))}"` : '';
       return `<article class="post-t${p.pinned ? ' pinned' : ''}${accClass(p.accent || who.accent)}"${pid} data-author="${esc(slugify(p.author || ''))}" data-ts="${esc(String(p.date || p.ts || ''))}">
-        <a class="post-av" href="${esc(avHref)}" ${isExt ? 'target="_blank" rel="noopener"' : ''}>${av}</a>
+        <a class="post-av" href="${esc(avHref)}" ${isExt ? 'target="_blank" rel="noopener"' : ''} aria-label="${esc(who.name || 'Profile')}">${av}</a>
         <div class="post-main">
           <div class="post-who">
             ${(() => { const pg = isMember ? (p.sid ? 'wall/#s-' + p.sid : '') : pageFor(p.author || who.name);
@@ -7144,18 +7146,15 @@ window.OTPLazy = window.OTPLazy || (function () {
         }
       });
     });
-    // Best-effort real titles via Spotify's oEmbed (title + cover, no auth). If
-    // CORS or the network says no, the numbered labels stand; nothing depends
-    // on this resolving.
+    // Titles baked in content/music.json. A browser fetch of Spotify's oEmbed is
+    // blocked and still prints net::ERR_FAILED when the promise is caught, so this
+    // never asks. No saved title: the "Opening song" / "Featured" label stays.
+    const savedTitles = (window.__OTP_MUSIC && window.__OTP_MUSIC.music && window.__OTP_MUSIC.music.titles) || {};
     (root || modalCardMount).querySelectorAll('.stat-track[data-oembed]').forEach(btn => {
-      fetch('https://open.spotify.com/oembed?url=https://open.spotify.com/track/' + btn.dataset.oembed)
-        .then(r => r.ok ? r.json() : null)
-        .then(j => {
-          if (!j || !j.title) return;
-          const tt = btn.querySelector('.tt');
-          if (tt) tt.textContent = j.title;
-        })
-        .catch(() => {});
+      const saved = savedTitles[btn.dataset.oembed];
+      if (!saved || !saved.title) return;
+      const tt = btn.querySelector('.tt');
+      if (tt) tt.textContent = String(saved.title).replace(/\u2014/g, '-').slice(0, 60);
     });
     }
     // Actions — primary OPEN IG (full width) + secondary row (FLIP / SHARE / CLOSE)

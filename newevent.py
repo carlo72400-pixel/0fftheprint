@@ -558,6 +558,7 @@ PAGE = """<!DOCTYPE html>
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://0fftheprint.com/events/__SLUG__/preview.jpg">
+<link rel="canonical" href="https://0fftheprint.com/events/__SLUG__/">
 <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/css/sealed.css">
@@ -667,9 +668,23 @@ const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>'
 const grid = document.getElementById('grid');
 grid.innerHTML = MEDIA.map((m,i) =>
   `<a class="tile${m.type==='video'?' vid':''}" data-i="${i}" href="${m.src}">
-     <img src="${m.thumb}" alt="Frame ${i+1}" loading="lazy" decoding="async"
+     <img ${i < 4 ? 'src' : 'data-src'}="${m.thumb}" alt="Frame ${i+1}" decoding="async"
           width="${m.w||16}" height="${m.h||9}">${m.look?`<span class="lk">${esc(m.look)}</span>`:''}
    </a>`).join('');
+(function () {
+  var io = ('IntersectionObserver' in window) ? new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      var im = e.target;
+      if (im.dataset.src) { im.src = im.dataset.src; im.removeAttribute('data-src'); }
+      io.unobserve(im);
+    });
+  }, { rootMargin: '160px 0px' }) : null;
+  document.querySelectorAll('#grid img[data-src]').forEach(function (im) {
+    if (!io) { im.src = im.dataset.src; im.removeAttribute('data-src'); return; }
+    io.observe(im);
+  });
+})();
 const lb=document.getElementById('lb'), stage=document.getElementById('lbstage'), count=document.getElementById('lbc');
 const chips=document.getElementById('lblooks');
 let cur=0, pref=null;   // pref = the grade the viewer last tapped; it sticks across frames

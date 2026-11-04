@@ -186,7 +186,14 @@ def md_to_html(md, story_dir, src_dir):
                 name = os.path.basename(src)
                 copy_in(src_path, story_dir, name)
                 src = name
-            out.append(f'<figure><img src="{html.escape(src)}" alt="{html.escape(alt)}" loading="lazy">'
+            wh = ""
+            if not src.startswith("http"):
+                try:
+                    with Image.open(os.path.join(story_dir, src)) as imf:
+                        wh = f' width="{imf.width}" height="{imf.height}"'
+                except Exception:
+                    wh = ""
+            out.append(f'<figure><img data-src="{html.escape(src)}" alt="{html.escape(alt)}"{wh} decoding="async">'
                        + (f"<figcaption>{inline(cap)}</figcaption>" if cap else "") + "</figure>")
         else:
             out.append(f"<p>{inline(' '.join(ln.strip() for ln in b.splitlines()))}</p>")
@@ -203,6 +210,7 @@ PAGE = """<!DOCTYPE html>
 <meta property="og:description" content="{dek}">
 <meta property="og:image" content="https://0fftheprint.com/word/{slug}/cover.jpg">
 <meta property="og:type" content="article">
+<link rel="canonical" href="https://0fftheprint.com/word/{slug}/">
 <meta name="theme-color" content="#0a0a0d">{story_meta}
 <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -274,7 +282,7 @@ PAGE = """<!DOCTYPE html>
   <h1>{title}</h1>
   <div class="dek">{dek}</div>
   <div class="byline">{num} &nbsp;·&nbsp; <b>{author}</b> &nbsp;·&nbsp; San Antonio &nbsp;·&nbsp; {datestr}</div>
-  <div class="cover"><img src="cover.jpg" alt=""></div>
+  <div class="cover">{cover_img}</div>
 {credit}
   <article data-stamp="{stamp}">
 {body}
@@ -416,7 +424,23 @@ def main():
     story_dir = os.path.join(WORD, slug)
     os.makedirs(story_dir, exist_ok=True)
     img = ImageOps.exif_transpose(Image.open(a.cover)).convert("RGB")
-    img.save(os.path.join(story_dir, "cover.jpg"), quality=90)
+    # the column is 680px, so 1600 is past 2x and the phone gets the 800 file
+    cw, ch = img.size
+    if cw > 1600:
+        ch = max(1, round(ch * 1600 / cw))
+        img = img.resize((1600, ch), Image.LANCZOS)
+        cw = 1600
+    img.save(os.path.join(story_dir, "cover.jpg"), quality=90, optimize=True, progressive=True)
+    if cw > 800:
+        h8 = max(1, round(ch * 800 / cw))
+        img.resize((800, h8), Image.LANCZOS).save(
+            os.path.join(story_dir, "cover-800.jpg"), quality=86, optimize=True, progressive=True)
+        cover_img = (
+            '<img src="cover.jpg" srcset="cover-800.jpg 800w, cover.jpg %dw" '
+            'sizes="(max-width: 760px) calc(100vw - 40px), 680px" '
+            'alt="" width="%d" height="%d" decoding="async">' % (cw, cw, ch))
+    else:
+        cover_img = '<img src="cover.jpg" alt="" width="%d" height="%d" decoding="async">' % (cw, ch)
     # ⛔ THE TILE IS 4:5, THE HERO IS 16:9, AND THEY ARE NOT THE SAME PICTURE.
     #    .desk-thumb is background-size:cover in a 4:5 box, so a 16:9 thumb gets
     #    centre cropped AND upscaled. This used to emit 640x360 and every tile on
@@ -460,7 +484,31 @@ def main():
                            datestr=datestr, body=body, slug=slug, stamp=stamp,
                            author=html.escape(no_dash(a.author)),
                            supabase_js=SUPABASE_JS, supabase_sri=SUPABASE_SRI,
+                           cover_img=cover_img,
                            story_meta=("\n" + STORY_META.format(a.story_id)) if a.story_id else "")
+        if 'data-src="' in page and 'img[data-src]' not in page:
+            page = page.replace("</body>", """<script>
+(function () {
+  var io = ("IntersectionObserver" in window) ? new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      var im = e.target;
+      if (im.dataset.src) { im.src = im.dataset.src; im.removeAttribute("data-src"); }
+      if (im.dataset.poster) im.poster = im.dataset.poster;
+      io.unobserve(im);
+    });
+  }, { rootMargin: "160px 0px" }) : null;
+  document.querySelectorAll("img[data-src], video[data-poster]").forEach(function (im) {
+    if (!io) {
+      if (im.dataset.src) { im.src = im.dataset.src; im.removeAttribute("data-src"); }
+      if (im.dataset.poster) im.poster = im.dataset.poster;
+      return;
+    }
+    io.observe(im);
+  });
+})();
+</script>
+</body>""", 1)
         with open(os.path.join(story_dir, "index.html"), "w") as f:
             f.write(page)
         # source.md is the editor's base text: the phone editor seeds from it,

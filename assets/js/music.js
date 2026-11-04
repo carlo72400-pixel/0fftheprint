@@ -137,25 +137,14 @@
     });
   }
 
-  // Spotify's oEmbed: title + cover, no key, no artist. Cached for the visit.
-  // Two cards can carry the same song (VAMPPSYCH and VIRGOSGATEWAY both open on 2 HI): one fetch, every waiter answered.
-  var META = {};
+  // Song names come from content/music.json `titles`, written when the music file is built.
+  // A browser fetch of open.spotify.com/oembed is blocked (net::ERR_FAILED) and Chrome prints
+  // that failure even when the promise is caught, so this never asks. No saved title: the
+  // label already on the tile stays, and the lounge player still opens.
   function fill(id, cb) {
-    // titles saved at build time (music.json `titles`) first: Spotify throttles a burst of oEmbed calls
     var saved = M.titles && M.titles[id];
-    if (saved && saved.title) { cb(saved); return; }
-    var m = META[id];
-    if (m && m.title) { cb(m); return; }
-    if (m) { m.wait.push(cb); return; }
-    m = META[id] = { wait: [cb] };
-    fetch('https://open.spotify.com/oembed?url=' + encodeURIComponent(spLink(id)))
-      .then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (j) {
-        if (!j || !j.title) return;
-        m.title = String(j.title).replace(/\u2014/g, '-').slice(0, 60); m.thumb = j.thumbnail_url || '';
-        m.wait.splice(0).forEach(function (f) { try { f(m); } catch (e) {} });
-      })
-      .catch(function () {});
+    if (!saved || !saved.title) return;
+    try { cb(saved); } catch (e) {}
   }
 
   /* ================= 0TP RADIO ================= */
