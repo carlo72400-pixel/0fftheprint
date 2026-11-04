@@ -130,7 +130,7 @@ color:var(--ink);width:44px;height:44px;border-radius:50%;font-size:20px;cursor:
     const w = Number(it.w) || 0, h = Number(it.h) || 0;
     const thumb = '../' + it.src.replace(/^assets\//, 'assets/grid/');
     return `<figure class="tile" data-i="${i}"${w && h ? ` style="aspect-ratio:${w}/${h}"` : ''}>
-      <img src="${esc(thumb)}" alt="${esc(it.alt || it.label || '')}"${w && h ? ` width="${w}" height="${h}"` : ''} loading="${(window.__kN = (window.__kN || 0) + 1) <= 4 ? \'eager\' : \'lazy\'}" decoding="async">
+      <img src="${esc(thumb)}" alt="${esc(it.alt || it.label || '')}"${w && h ? ` width="${w}" height="${h}"` : ''} loading="${(window.__kN = (window.__kN || 0) + 1) <= 4 ? 'eager' : 'lazy'}" decoding="async">
       <figcaption>${esc(it.label || '')}</figcaption>
     </figure>`;
   }).join('');
