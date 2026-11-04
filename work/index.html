@@ -47,6 +47,10 @@ background:linear-gradient(180deg,transparent,rgba(10,10,13,.88))}
 .foot{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);
 font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
 .foot a{color:var(--pink-glow);text-decoration:none}
+/* 11/4: footer and contact links keep their type size. On a phone the hit area is 44px. */
+@media(max-width:900px){
+  .foot a,a[href^="mailto:"]{display:inline-block;max-width:100%;line-height:1.25;padding:16px 3px;margin:0 -3px;vertical-align:middle}
+}
 .lb{position:fixed;inset:0;z-index:200;background:rgba(6,6,9,.96);display:none;
 align-items:center;justify-content:center;flex-direction:column;padding:16px}
 .lb.open{display:flex}

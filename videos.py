@@ -296,6 +296,10 @@ PAGE = """<!DOCTYPE html>
     font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;
     text-transform:uppercase;color:var(--muted);line-height:2}
   .foot a{color:var(--pink);text-decoration:none}
+  /* 11/4: footer and contact links keep their type size. On a phone the hit area is 44px. */
+  @media(max-width:900px){
+    .foot a,a[href^="mailto:"]{display:inline-block;max-width:100%;line-height:1.25;padding:16px 3px;margin:0 -3px;vertical-align:middle}
+  }
 </style>
 <link rel="stylesheet" href="../assets/css/binder.css">
 <script src="../assets/js/binder.js" defer></script>
