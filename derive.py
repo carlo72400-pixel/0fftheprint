@@ -18,8 +18,9 @@ original is touched.
     assets/av/<path>.jpg      96px   timeline avatars (42 CSS px at DPR 2 = 84)
     assets/thumb/<path>.jpg  440px   catalog desk thumbs (169 CSS px = 338)
     assets/card/<path>.jpg   760px   roster + curator cards in the GRID
-    assets/grid/<path>.jpg  1000px   THE WORK grid (named grid, not work: the
+    assets/grid/<path>.jpg       1000px  THE WORK grid (named grid, not work: the
                                      source frames already live in assets/work/)
+    assets/grid/<path>-480.jpg   480px   the phone srcset next to that grid file
 
 THE WORK frames ship at 1400px to fill a 349 CSS px column, and there is no
 lightbox, so the extra pixels are never looked at by anybody. 1000px still
@@ -110,6 +111,15 @@ def stale(src, dst):
     return os.path.getmtime(src) > os.path.getmtime(dst)
 
 
+def save_max(im, dst, width, quality):
+    """JPEG no wider than `width`. Shorter sources stay at their own width."""
+    out = im
+    if im.width > width:
+        h = max(1, round(im.height * width / im.width))
+        out = im.resize((width, h), Image.LANCZOS)
+    out.save(dst, "JPEG", quality=quality, optimize=True, progressive=True)
+
+
 def build(force=False):
     made, skipped, missing = 0, 0, []
     saved_from, saved_to = 0, 0
@@ -135,8 +145,15 @@ def build(force=False):
             dst = os.path.join(outdir, base)
             os.makedirs(os.path.dirname(dst), exist_ok=True)
 
-            if not force and not stale(src, dst):
-                skipped += 1
+            # The work page srcset names both widths. A fresh 1000px file with
+            # no 480 sibling is a broken phone image, so the small one is its own target.
+            outs = [(dst, width, quality)]
+            if folder == "grid":
+                outs.append((os.path.splitext(dst)[0] + "-480.jpg", 480, 84))
+
+            pending = [(p, w, q) for p, w, q in outs if force or stale(src, p)]
+            if not pending:
+                skipped += len(outs)
                 continue
 
             with Image.open(src) as im:
@@ -152,16 +169,12 @@ def build(force=False):
                 else:
                     im = im.convert("RGB")
 
-                if im.width > width:
-                    h = round(im.height * width / im.width)
-                    im = im.resize((width, h), Image.LANCZOS)
-
-                im.save(dst, "JPEG", quality=quality, optimize=True,
-                        progressive=True)
-
-            saved_from += os.path.getsize(src)
-            saved_to += os.path.getsize(dst)
-            made += 1
+                for out_path, out_w, out_q in pending:
+                    save_max(im, out_path, out_w, out_q)
+                    saved_to += os.path.getsize(out_path)
+                    made += 1
+                saved_from += os.path.getsize(src)
+            skipped += len(outs) - len(pending)
 
     print("built %d, up to date %d" % (made, skipped))
     if made:

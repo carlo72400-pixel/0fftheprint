@@ -136,7 +136,11 @@ color:var(--ink);width:44px;height:44px;border-radius:50%;font-size:20px;cursor:
     const thumb = '../' + it.src.replace(/^assets\//, 'assets/grid/');
     const narrow = thumb.replace(/\.jpe?g$/i, '-480.jpg');
     const n = (window.__kN = (window.__kN || 0) + 1);
-    const set = esc(narrow) + ' 480w, ' + esc(thumb) + ' 840w';
+    // derive.py caps the grid file at 1000px and the phone file at 480px, and it
+    // does not upscale a smaller source. it.w is that source width.
+    const wide = Math.min(1000, w || 1000);
+    const phone = Math.min(480, wide);
+    const set = esc(narrow) + ' ' + phone + 'w, ' + esc(thumb) + ' ' + wide + 'w';
     const sizes = '(max-width: 640px) calc(100vw - 36px), 320px';
     const ref = n <= 2
       ? 'src="' + esc(thumb) + '" srcset="' + set + '" sizes="' + sizes + '"'

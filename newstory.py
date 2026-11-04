@@ -452,8 +452,14 @@ def main():
     scale = max(TW / sw, TH / sh)
     r = tile_src.resize((max(TW, round(sw * scale)), max(TH, round(sh * scale))), Image.LANCZOS)
     left, top = (r.width - TW) // 2, int((r.height - TH) * a.tile_y)
-    r.crop((left, top, left + TW, top + TH)).save(
-        os.path.join(story_dir, "thumb.jpg"), quality=82, optimize=True)
+    thumb_im = r.crop((left, top, left + TW, top + TH))
+    thumb_im.save(os.path.join(story_dir, "thumb.jpg"), quality=82, optimize=True)
+    # /word/ asks for these two, not the 900px tile. A story that only ships
+    # thumb.jpg 404s in the issue list.
+    for tw, tq, tname in ((320, 86, "thumb-320.jpg"), (160, 84, "thumb-160.jpg")):
+        th = max(1, round(thumb_im.height * tw / thumb_im.width))
+        thumb_im.resize((tw, th), Image.LANCZOS).save(
+            os.path.join(story_dir, tname), quality=tq, optimize=True, progressive=True)
 
     if a.link:
         link = a.link
