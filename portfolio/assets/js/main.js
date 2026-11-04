@@ -27,10 +27,22 @@ const SAVEDATA = !!(navigator.connection && navigator.connection.saveData);
    The silent preview (allyourn_preview.mp4, data-preview) is the same cut at about 5MB.
    Playing it on load was most of /portfolio/'s first transfer. The poster is a frame of
    that film, so the picture on the first screen is unchanged. The button still swaps in
-   the full file with sound. The preview file stays on disk for that one job. */
+   the full file with sound.
+   11/4 review (Claude): the hero still moves the way it was signed off on 10/18, but only
+   AFTER the page has loaded and only on a fast link, so the first load stays light.
+   Reduced motion, data saver or a slow connection keep the poster. */
 (function(){
   const v = document.getElementById('heroFilm'), b = document.getElementById('heroSound');
   if(!v || !b) return;
+  const c = navigator.connection;
+  const fast = !c || (!c.saveData && (!c.effectiveType || c.effectiveType === '4g'));
+  const preview = () => {
+    if(REDUCED || SAVEDATA || !fast || !v.dataset.preview) return;
+    if(v.getAttribute('src')) return;                       // the sound button already swapped the full film in
+    v.muted = true; v.src = v.dataset.preview; v.play().catch(()=>{});
+  };
+  const later = () => ('requestIdleCallback' in window) ? requestIdleCallback(preview, {timeout: 3000}) : setTimeout(preview, 1500);
+  if(document.readyState === 'complete') later(); else window.addEventListener('load', later, {once: true});
   b.addEventListener('click',()=>{
     v.pause();
     if(v.dataset.full){ v.src = v.dataset.full; }
