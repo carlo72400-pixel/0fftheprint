@@ -23,14 +23,14 @@ const SAVEDATA = !!(navigator.connection && navigator.connection.saveData);
   });
 })();
 
-/* ---- the newest film: a small muted preview plays itself, one tap swaps in the full file with sound ----
-   The preview is the same cut re-encoded small and silent (allyourn_preview.mp4), so the first
-   screen does not pull the 13 MB film. Reduced motion or data saver = poster only, button still works. */
+/* ---- the newest film: poster first, full cut on the sound button ----
+   The silent preview (allyourn_preview.mp4, data-preview) is the same cut at about 5MB.
+   Playing it on load was most of /portfolio/'s first transfer. The poster is a frame of
+   that film, so the picture on the first screen is unchanged. The button still swaps in
+   the full file with sound. The preview file stays on disk for that one job. */
 (function(){
   const v = document.getElementById('heroFilm'), b = document.getElementById('heroSound');
-  if(!v) return;
-  if(!REDUCED && !SAVEDATA){ v.muted = true; v.play().catch(()=>{}); }
-  if(!b) return;
+  if(!v || !b) return;
   b.addEventListener('click',()=>{
     v.pause();
     if(v.dataset.full){ v.src = v.dataset.full; }
@@ -39,6 +39,32 @@ const SAVEDATA = !!(navigator.connection && navigator.connection.saveData);
     v.load(); v.play().catch(()=>{});
     b.hidden = true;
   });
+})();
+
+/* ---- below-fold posters and stickers ----
+   A poster attribute downloads with the document. data-poster is applied when the
+   tape nears the screen, so the first load does not pull every thumbnail.
+   .reel-frame and .sacp stickers (ribbon frame, washi) are the same idea: the CSS
+   url() only matches once .bg-ready is on, which happens near the viewport. */
+(function(){
+  const posters = document.querySelectorAll('video[data-poster]');
+  if(posters.length){
+    const pio = new IntersectionObserver(es=>es.forEach(e=>{
+      if(!e.isIntersecting) return;
+      const v = e.target;
+      if(v.dataset.poster && !v.getAttribute('poster')) v.setAttribute('poster', v.dataset.poster);
+      pio.unobserve(v);
+    }), {rootMargin:'700px 0px'});
+    posters.forEach(v=>pio.observe(v));
+  }
+  const decos = document.querySelectorAll('.reel-frame, .sacp');
+  if(!decos.length) return;
+  const dio = new IntersectionObserver(es=>es.forEach(e=>{
+    if(!e.isIntersecting) return;
+    e.target.classList.add('bg-ready');
+    dio.unobserve(e.target);
+  }), {rootMargin:'800px 0px'});
+  decos.forEach(el=>dio.observe(el));
 })();
 
 /* ---- grade A/B slider ---- */
