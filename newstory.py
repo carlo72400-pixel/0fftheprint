@@ -233,7 +233,7 @@ PAGE = """<!DOCTYPE html>
     padding-bottom:18px;border-bottom:1px solid var(--line)}}
   .byline b{{color:var(--ink)}}
   .cover{{margin:0 0 8px;border-radius:14px;overflow:hidden;border:1px solid var(--line)}}
-  .cover img{{width:100%;display:block}}
+  .cover img{{width:100%;height:auto;display:block}}
   .cover-credit{{font-family:'JetBrains Mono',monospace;font-size:10px;
     letter-spacing:.06em;color:var(--muted);margin:8px 0 30px;line-height:1.5}}
   .cover-credit a{{color:var(--muted);text-decoration:underline}}
@@ -247,7 +247,7 @@ PAGE = """<!DOCTYPE html>
     font-size:26px;line-height:1.2;text-transform:uppercase;color:var(--pink);
     border-left:3px solid var(--pink);padding-left:18px;margin:32px 0}}
   article figure{{margin:30px -20px}}
-  article figure img,article figure video{{width:100%;display:block;border-radius:0;background:#000}}
+  article figure img,article figure video{{width:100%;height:auto;display:block;border-radius:0;background:#000}}
   article figure.clip video{{width:auto;max-width:100%;max-height:82vh;aspect-ratio:9/16;margin:0 auto}}
   article figcaption{{font-family:'JetBrains Mono',monospace;font-size:10.5px;
     letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
