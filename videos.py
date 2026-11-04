@@ -263,6 +263,35 @@ PAGE = """<!DOCTYPE html>
   .lb .nav:hover{opacity:1}
   .lb .nav:disabled{opacity:.18;cursor:default}
   .pv{left:4px}.nx{right:4px}
+  /* the end of a piece is not a dead stop (11/4, his ask: "it shows the rest of my work at the end").
+     When a clip ends, MORE WORK covers the strip: four pieces across the work, keep watching, see it all.
+     The close stays on top of it. */
+  .lb .lb-x{z-index:3}
+  .lb-end{position:absolute;inset:0;z-index:2;display:none;align-items:center;justify-content:center;
+    padding:calc(64px + env(safe-area-inset-top,0px)) 16px calc(20px + env(safe-area-inset-bottom,0px));
+    background:rgba(6,5,8,.88);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);overflow-y:auto}
+  .lb-end.on{display:flex}
+  .lb-end-in{width:100%;max-width:720px;display:grid;gap:16px;margin:auto}
+  .lb-end-h{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--pink)}
+  .lb-end-g{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+  /* phones: the buttons come before the tiles so Keep watching never needs a scroll */
+  @media (max-width:560px){.lb-end-g{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .lb .lb-end-g img{aspect-ratio:4/5;object-position:50% 25%}.lb-end-h{order:-2}.lb-end-a{order:-1}}
+  .lb .lb-end-g button{display:grid;gap:6px;min-width:0;padding:0;border:0;background:transparent;
+    color:#fff;cursor:pointer;text-align:left;font:inherit}
+  .lb-end-g img{width:100%;aspect-ratio:9/16;object-fit:cover;border-radius:8px;background:#111;display:block}
+  .lb-end-g b{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
+    text-transform:uppercase;font-size:15px;line-height:1.1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .lb-end-g small{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .lb .lb-end-g button:focus-visible,.lb .lb-end-a button:focus-visible,.lb-end-a a:focus-visible{
+    outline:2px solid var(--pink);outline-offset:3px}
+  .lb-end-a{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  .lb .lb-end-a button,.lb-end-a a{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;min-height:44px;padding:0 16px;border-radius:999px;border:1px solid var(--pink);
+    background:transparent;color:#fff;cursor:pointer;display:inline-flex;align-items:center;text-decoration:none}
+  .lb .lb-end-a button.p{background:var(--pink);color:#060508;font-weight:700}
   .foot{margin-top:46px;padding-top:20px;border-top:1px solid var(--line);
     font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;
     text-transform:uppercase;color:var(--muted);line-height:2}
@@ -289,6 +318,17 @@ PAGE = """<!DOCTYPE html>
 <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="The Tape">
   <div class="lb-track" id="lbtrack"></div>
   <div class="lb-top" aria-live="polite"><span class="lb-c" id="lbc"></span><span class="lb-g" id="lbg"></span></div>
+  <div class="lb-end" id="lbe" role="group" aria-label="More work">
+    <div class="lb-end-in">
+      <div class="lb-end-h">More work</div>
+      <div class="lb-end-g" id="lbeg"></div>
+      <div class="lb-end-a">
+        <button type="button" class="p" id="lbe-next">Keep watching &rarr;</button>
+        <button type="button" id="lbe-all">See all the work</button>
+        <a href="https://www.youtube.com/watch?v=pQ0W-conqwE" target="_blank" rel="noopener">Short film: VOLUME &#8599;</a>
+      </div>
+    </div>
+  </div>
   <button class="lb-x" id="lbx" type="button" aria-label="Close">&times;</button>
   <button class="nav pv" id="lbp" type="button" aria-label="Previous">&#8249;</button>
   <button class="nav nx" id="lbn" type="button" aria-label="Next">&#8250;</button>
@@ -403,7 +443,7 @@ function label(i){
 function play(i){
   const s = track.children[i], m = view[i];
   if (!s || !m) return;
-  at = i; held = false; label(i);
+  at = i; held = false; label(i); endHide();
   lbv.pause();
   s.querySelector('.lb-f').appendChild(lbv);
   lbv.poster = safeUrl(m.poster) || '';
@@ -426,7 +466,7 @@ function show(i){
 }
 /* ⛔ clear src on close or the clip keeps downloading behind the closed lightbox */
 function hide(){
-  clearTimeout(settleT);
+  clearTimeout(settleT); endHide();
   lb.classList.remove('on'); lbv.pause(); lbv.removeAttribute('src'); lbv.load();
   document.documentElement.style.overflow = '';
   /* the rail waits on the piece the strip stopped at */
@@ -500,6 +540,46 @@ lb.addEventListener('wheel', e => {
 addEventListener('resize', () => {
   if (at >= 0 && lb.classList.contains('on')) track.scrollLeft = at * W();
 });
+
+/* ---- the end of a piece: MORE WORK (11/4) ----
+   The next piece in the same run first, then a spread across the work: the newest concept cut,
+   the Andrew E. interview piece and a club night. Missing slugs drop out; the rail fills the rest. */
+const END_PICKS = ['oddball-the-odd-ball', 'ae-loudest', '2026-09-12-lucha-night-01'];
+const lbe = document.getElementById('lbe'), lbeg = document.getElementById('lbeg');
+function endPick(i){
+  const out = [], cur = view[i];
+  if (view[i + 1] && view[i + 1].from === cur.from) out.push(i + 1);
+  END_PICKS.forEach(s => {
+    const k = view.findIndex(m => m.slug === s);
+    if (k >= 0 && k !== i && !out.includes(k) && out.length < 4) out.push(k);
+  });
+  for (let k = i + 1; k < view.length && out.length < 4; k++) if (!out.includes(k)) out.push(k);
+  for (let k = 0; k < i && out.length < 4; k++) if (!out.includes(k)) out.push(k);
+  return out;
+}
+function endShow(){
+  if (!lb.classList.contains('on') || at < 0 || !view[at]) return;
+  lbeg.innerHTML = endPick(at).map(k => {
+    const m = view[k], p = safeUrl(m.poster);
+    return '<button type="button" data-k="' + k + '">'
+      + '<img alt="" src="' + esc(p) + '">'
+      + '<b>' + esc(m.title) + '</b><small>' + esc(m.from) + '</small></button>';
+  }).join('');
+  lbe.classList.add('on');
+  const first = lbeg.querySelector('button'); if (first) first.focus({ preventScroll: true });
+}
+function endHide(){ if (lbe) lbe.classList.remove('on'); }
+lbv.addEventListener('ended', endShow);
+lbv.addEventListener('play', endHide);
+lbeg.addEventListener('click', e => {
+  const b = e.target.closest('button[data-k]'); if (b) show(+b.dataset.k);
+});
+document.getElementById('lbe-next').addEventListener('click', () => {
+  endHide(); if (at < view.length - 1) go(1); else show(0);
+});
+document.getElementById('lbe-all').addEventListener('click', hide);
+/* a tap on the dark around the panel puts the last frame back */
+lbe.addEventListener('click', e => { if (e.target === lbe) endHide(); });
 
 /* ---- a link straight to one piece: video/#<slug> (10/4) ----
    The homepage's tape rail sends every card here by its slug, so a tap on a cut opens THAT cut
