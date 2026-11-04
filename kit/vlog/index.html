@@ -30,11 +30,17 @@
 body.hand .kithome{display:none}</style>
 <script>/* The site copy keeps everything on this phone: no account here, so the store stays local and every tap waits in its
    outbox for a sync added later. The week's talking points (deck.json next to this page) are laid under the store's
-   deck before the page reads it: the copy fetched on the last visit, or the one baked in at build time. */
+   deck before the page reads it: the copy fetched on the last visit or the one baked in at build time, whichever is
+   the newer week (11/4: a first visit used to get the build's week forever; deck_push.py re-bakes it every Monday). */
 (function () {
-  var BAKED = {"week":"Oct 26 to Nov 1","cards":[{"id":"w44-01","lane":"takes","text":"Anime skins in Fortnite. Which show should get one next, and who's the pick?","week":"Oct 26 to Nov 1"},{"id":"w44-02","lane":"takes","text":"Rappers keep getting Fortnite skins. Whose would you actually buy?","week":"Oct 26 to Nov 1"},{"id":"w44-03","lane":"takes","text":"One artist you'd drive to Dallas or Austin for this winter. Who and why?","week":"Oct 26 to Nov 1"},{"id":"w44-04","lane":"work","text":"Hardest part of shooting a Halloween party. Go.","week":"Oct 26 to Nov 1"},{"id":"w44-05","lane":"scene","text":"Best costume you saw this weekend and why it worked.","week":"Oct 26 to Nov 1"}]};
+  var BAKED = {"week":"Nov 2 to Nov 8","cards":[{"id":"w45-01","lane":"takes","text":"Nettspend dropped Virginia Creeper, six songs. One listen take: skip or keeper?","week":"Nov 2 to Nov 8"},{"id":"w45-02","lane":"takes","text":"One Piece is in Fortnite and leaves Dec 4. Which anime crew would you actually run?","week":"Nov 2 to Nov 8"},{"id":"w45-03","lane":"takes","text":"Joe Bartolozzi is up for Streamer of the Year. Does a YouTuber deserve that trophy?","week":"Nov 2 to Nov 8"},{"id":"w45-04","lane":"work","text":"Two nights, one card, 321 photos. What would you cut from your own Halloween shoot?","week":"Nov 2 to Nov 8"},{"id":"w45-05","lane":"stuff","text":"Halloween is over. What piece of the costume are you still wearing this week?","week":"Nov 2 to Nov 8"}]};
+  /* the ISO week in the card ids (w45-01); a year's turn (w52 to w01) counts as newer */
+  function wk(x) { var n = 0; if (x && Array.isArray(x.cards)) x.cards.forEach(function (c) { var m = /^w(\d{1,2})-/.exec((c && c.id) || ''); if (m && +m[1] > n) n = +m[1]; }); return n; }
+  function newer(x, y) { return x === y || (x > y ? x - y < 27 : y - x > 26); }
   try {
-    var d = JSON.parse(localStorage.getItem('vlogkit-site-deck') || 'null') || BAKED;
+    var c = JSON.parse(localStorage.getItem('vlogkit-site-deck') || 'null');
+    var a = wk(c), b = wk(BAKED);
+    var d = (c && Array.isArray(c.cards) && (!b || (a && newer(a, b)))) ? c : BAKED;
     if (!d || !Array.isArray(d.cards)) return;
     var s = JSON.parse(localStorage.getItem('vlogkit-store-v1') || 'null');
     if (!s || typeof s !== 'object') s = {};
