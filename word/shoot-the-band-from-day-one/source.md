@@ -6,7 +6,7 @@ Most music documentaries wait until the story is safe. This one started before t
 
 Texas Standard, November 2. Andrew Morgan directed Bleeding Hearts. A friend in Nashville sent him an unfinished demo of the band's first song, also called Bleeding Hearts. He told Texas Standard it got him before he'd finished the first chorus. The friend said these people were starting a relationship and starting a band. Morgan pitched a film about the start of a band.
 
-He told Texas Standard the usual music documentary is "decades later looking back," and he wanted to follow "this beautiful, fragile thing right from day one."
+He told Texas Standard the usual music doc looks back from decades later, and he wanted to follow "this beautiful, fragile thing right from day one."
 
 That's the note if you shoot bands. The legend is the easy film. Day one doesn't know if the band survives the year. You don't get a reunion speech. You get a demo that isn't finished, and you roll anyway.
 

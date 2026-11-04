@@ -8,7 +8,7 @@ GameSpot, November 3. Treasure Hunters, the mini-season, started November 1. A r
 
 GameSpot calls the prize Pirate Shop Access. Almost everything in the shop goes free for 14 days. Redeem it by December 15, 2026. The same find comes with a second token, for a two-week window you pick in 2027.
 
-The haul they're counting: 100 plus songs in the shop at $5 each, and dozens of emotes, skins and cosmetics rotating every day. Two weeks of that would've cost hundreds, if not thousands, of dollars.
+The haul they're counting: 100 plus songs in the shop at $5 each, and dozens of emotes, skins and cosmetics rotating every day. GameSpot's math: two weeks of that would've cost hundreds, if not thousands, of dollars.
 
 ## What stays paid
 
@@ -18,7 +18,7 @@ Real money stays real money. V-Bucks, some skin bundles, and battle pass levels 
 
 GTA VI is out November 19. GameSpot reads the whole promo as Epic's answer to Rockstar. The second token is how the free shop reaches into 2027, after that game is already out.
 
-GameSpot also clocked the rooms. About 2 million people in the battle royale modes during daytime US hours, about four times the October average, plus a One Piece tie-in.
+GameSpot also clocked the rooms. About 2 million people in the battle royale modes during daytime US hours, about four times the October average, plus a One Piece tie-in. GameSpot says it is unclear how many players will win the prize. The hunt stays open until Epic turns that faucet off.
 
 ## What you heard and what's on the record
 
@@ -26,17 +26,7 @@ In October we still had November 1 as a guess. That's [The Item Shop Is The New 
 
 ## Crew changes December 5
 
-This part is Epic's own post, not a read of it.
-
-Fortnite Crew on December 5. The monthly V-Bucks were 800. Every subscriber now gets at least 1,000, and the number climbs if you stay. Core, months 1 and 2, is 1,000. Bronze, months 3 through 5, is 1,200. Silver, months 6 through 11, is 1,400. Gold, 12 months and after, is 1,600. The price stays $11.99. The Battle Pass, the Music Pass, the LEGO Pass and Rocket Pass Premium stay in.
-
-Crew members get 20 percent more Fortnite XP. A squadmate who isn't on Crew gets 10 percent while they're in your party. The boosts don't stack.
-
-Crew Pack outfits end. December's pack is the last one, and subscribers get it through the month. Legacy styles for packs you already own, outfits, pickaxes and back blings, get granted in December whether or not you're still subscribed.
-
-Same day, the OG Pass ends, at the close of Chapter 1: OG Season X. Epic says the next era of Fortnite OG is late 2027. December 5 is also a LEGO Mini-Pass and a Fortnite Battle Pass. The Music Mini-Pass is November 12.
-
-If you're already on Crew, Epic says you don't have to do anything. The new tab in the game on December 5 shows your tier. If you lapsed, resubscribe between December 6 and December 31, at 11:59 p.m. ET, and the tier follows your most recent continuous stretch in the past 12 months. After that you start at Core.
+Epic's own post. Monthly V-Bucks go from 800 to 1,000 and climb by tier up to 1,600 if you stay. The price stays $11.99, and Crew Packs end in December.
 
 ## So mark your own calendar
 
