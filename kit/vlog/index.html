@@ -31,16 +31,21 @@ body.hand .kithome{display:none}</style>
 <script>/* The site copy keeps everything on this phone: no account here, so the store stays local and every tap waits in its
    outbox for a sync added later. The week's talking points (deck.json next to this page) are laid under the store's
    deck before the page reads it: the copy fetched on the last visit or the one baked in at build time, whichever is
-   the newer week (11/4: a first visit used to get the build's week forever; deck_push.py re-bakes it every Monday). */
+   newer: the later week, and inside one week the later push (its stamp). 11/4: a first visit used to get the build's
+   week forever (deck_push.py re-bakes it every Monday), and a same-week re-run kept the phone's old copy because a
+   tie went to it; a tie with no stamps now goes to this page's own copy. */
 (function () {
   var BAKED = {"week":"Nov 2 to Nov 8","cards":[{"id":"w45-01","lane":"takes","text":"Fortnite made A$AP Rocky a boss you have to beat. Flex for him or kinda weird?","week":"Nov 2 to Nov 8"},{"id":"w45-02","lane":"takes","text":"People are selling Fortnite accounts for $10k to get the free shop. Ever paid for game stuff you regret?","week":"Nov 2 to Nov 8"},{"id":"w45-03","lane":"takes","text":"The ØWAY crew is on every song together. Who in the underground actually moves like a real group?","week":"Nov 2 to Nov 8"},{"id":"w45-04","lane":"work","text":"Dark room, one light. Do you hit the flash or crank the ISO and pray?","week":"Nov 2 to Nov 8"},{"id":"w45-05","lane":"scene","text":"Best night you went to this fall. What made it hit harder than the rest?","week":"Nov 2 to Nov 8"}]};
   /* the ISO week in the card ids (w45-01); a year's turn (w52 to w01) counts as newer */
   function wk(x) { var n = 0; if (x && Array.isArray(x.cards)) x.cards.forEach(function (c) { var m = /^w(\d{1,2})-/.exec((c && c.id) || ''); if (m && +m[1] > n) n = +m[1]; }); return n; }
   function newer(x, y) { return x === y || (x > y ? x - y < 27 : y - x > 26); }
+  /* when deck_push.py wrote it (UTC, ISO), so two pushes in the same week still order */
+  function st(x) { return x && typeof x.stamp === 'string' ? x.stamp : ''; }
   try {
     var c = JSON.parse(localStorage.getItem('vlogkit-site-deck') || 'null');
     var a = wk(c), b = wk(BAKED);
-    var d = (c && Array.isArray(c.cards) && (!b || (a && newer(a, b)))) ? c : BAKED;
+    var useC = !!(c && Array.isArray(c.cards)) && (!b || (!!a && (a !== b ? newer(a, b) : st(c) > st(BAKED))));
+    var d = useC ? c : BAKED;
     if (!d || !Array.isArray(d.cards)) return;
     var s = JSON.parse(localStorage.getItem('vlogkit-store-v1') || 'null');
     if (!s || typeof s !== 'object') s = {};
@@ -2721,7 +2726,7 @@ if (cl && typeof cl.use === 'function') {
   try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(function () {}); } catch (e) {}
   fetch('deck.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
     if (d && Array.isArray(d.cards)) {
-      try { localStorage.setItem('vlogkit-site-deck', JSON.stringify({ week: String(d.week || ''), cards: d.cards.slice(0, 12) })); } catch (e) {}
+      try { localStorage.setItem('vlogkit-site-deck', JSON.stringify({ week: String(d.week || ''), stamp: String(d.stamp || ''), cards: d.cards.slice(0, 12) })); } catch (e) {}
     }
   }).catch(function () {});
 })();</script>
