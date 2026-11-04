@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>And Then Nothing Happened · 0FF THE PRINT</title>
 <meta name="description" content="Trey Parker gave an NYU class one rule. Aristotle had it first. Chekhov never said act three. How the masters build a story, and which rules nobody wrote.">
+<link rel="canonical" href="https://0fftheprint.com/word/and-then-nothing-happened/">
 <meta property="og:title" content="And Then Nothing Happened">
 <meta property="og:description" content="Trey Parker gave an NYU class one rule. Aristotle had it first. Chekhov never said act three. How the masters build a story, and which rules nobody wrote.">
 <meta property="og:image" content="https://0fftheprint.com/word/and-then-nothing-happened/cover.jpg">
@@ -31,7 +32,7 @@
     padding-bottom:18px;border-bottom:1px solid var(--line)}
   .byline b{color:var(--ink)}
   .cover{margin:0 0 8px;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
-  .cover img{width:100%;display:block}
+  .cover img{width:100%;height:auto;display:block}
   .cover-credit{font-family:'JetBrains Mono',monospace;font-size:10px;
     letter-spacing:.06em;color:var(--muted);margin:8px 0 30px;line-height:1.5}
   .cover-credit a{color:var(--muted);text-decoration:underline}
@@ -45,7 +46,7 @@
     font-size:26px;line-height:1.2;text-transform:uppercase;color:var(--pink);
     border-left:3px solid var(--pink);padding-left:18px;margin:32px 0}
   article figure{margin:30px -20px}
-  article figure img,article figure video{width:100%;display:block;border-radius:0;background:#000}
+  article figure img,article figure video{width:100%;height:auto;display:block;border-radius:0;background:#000}
   article figure.clip video{width:auto;max-width:100%;max-height:82vh;aspect-ratio:9/16;margin:0 auto}
   article figcaption{font-family:'JetBrains Mono',monospace;font-size:10.5px;
     letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
@@ -90,13 +91,13 @@
 <h2>Show them the bomb</h2>
 <p>Hitchcock to Truffaut, August 1962. Two people talk at a table and a bomb goes off. That's 15 seconds of surprise. Now show the audience the bomb first. And the clock. Same boring chat, 15 minutes of suspense.</p>
 <p>But Hitchcock said on the tapes it wasn't new either. David Bordwell traced it back to Lessing's notes on drama from 1767. Buster Keaton put a bomb on a pool table in 1924.</p>
-<figure><img src="story_sherlockjr.jpg" alt="Black and white close-up of billiard balls scattered on felt, the striped 13 ball at the center" loading="lazy"><figcaption>The exploding 13 ball in Sherlock Jr., Buster Keaton, 1924, public domain, via <a href="https://commons.wikimedia.org/wiki/File:Sherlock_Jr._%281924%29.webm" target="_blank" rel="noopener">Wikimedia Commons</a>.</figcaption></figure>
+<figure><img data-src="story_sherlockjr.jpg" alt="Black and white close-up of billiard balls scattered on felt, the striped 13 ball at the center" width="1400" height="1050" decoding="async"><figcaption>The exploding 13 ball in Sherlock Jr., Buster Keaton, 1924, public domain, via <a href="https://commons.wikimedia.org/wiki/File:Sherlock_Jr._%281924%29.webm" target="_blank" rel="noopener">Wikimedia Commons</a>.</figcaption></figure>
 <h2>Every scene wants something</h2>
 <p>David Mamet once sent a memo to the writers of The Unit. In all caps. Ask every scene three things. Who wants what. What happens if they don't get it. Why now.</p>
 <p>Aaron Sorkin says the same thing, shorter. "I worship at the altar of intention and obstacle." He told Interview in 2012 he can't write a scene until he knows what somebody wants and what's stopping them.</p>
 <h2>But don't repeat what you heard</h2>
 <p>You heard Chekhov said a gun on the wall in act one has to go off in act three. What he actually wrote, in a letter in 1889, is that you don't put a loaded rifle on stage if nobody means to fire it. The pistol on the wall is how a friend, Ilia Gurlyand, remembered a talk with him. That got printed in 1904. None of the versions say act three.</p>
-<figure><img src="story_chekhov.jpg" alt="Chekhov in pince-nez reads from a small book at a table while a dozen actors crowd around him, listening" loading="lazy"><figcaption>Anton Chekhov reads The Seagull to the Moscow Art Theatre company, unknown photographer, 1899, public domain, via <a href="https://commons.wikimedia.org/wiki/File:Chekhov_and_the_Moscow_Art_Theatre_1899.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>.</figcaption></figure>
+<figure><img data-src="story_chekhov.jpg" alt="Chekhov in pince-nez reads from a small book at a table while a dozen actors crowd around him, listening" width="1400" height="906" decoding="async"><figcaption>Anton Chekhov reads The Seagull to the Moscow Art Theatre company, unknown photographer, 1899, public domain, via <a href="https://commons.wikimedia.org/wiki/File:Chekhov_and_the_Moscow_Art_Theatre_1899.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>.</figcaption></figure>
 <p>You heard about Pixar's 22 rules. They're tweets. Emma Coats posted them in 2011, when she was a Pixar story artist. She never called them rules. Or Pixar's.</p>
 <h2>So go write in Austin</h2>
 <p>Wes Anderson and Owen Wilson met in a playwriting class at UT Austin in 1989. Their Bottle Rocket short played Sundance in 1993. Festival staff took Anderson for a volunteer. He was hanging his own poster.</p>
@@ -116,5 +117,34 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" integrity="sha384-Rj26LVGvoeRVR6+mwQmFfcR3QOBEwT+ZmuCWpuiqeTzJpCs0ER4ITAWGb4Hiy3Ok" crossorigin="anonymous"></script>
 <script src="../../assets/js/desk.js?v=92efb57d" defer></script>
 <script src="../../assets/js/word.js?v=bd4e6159" defer></script>
+<script>
+/* Pictures under the fold wait until they are 160px from the screen.
+   Chrome's loading=lazy still pulls a long page on a fast connection. */
+(function () {
+  var io = ("IntersectionObserver" in window) ? new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      var im = e.target;
+      if (im.dataset.src) im.src = im.dataset.src;
+      if (im.dataset.srcset) im.srcset = im.dataset.srcset;
+      if (im.dataset.sizes) im.sizes = im.dataset.sizes;
+      if (im.dataset.poster) im.poster = im.dataset.poster;
+      im.removeAttribute("data-src");
+      io.unobserve(im);
+    });
+  }, { rootMargin: "160px 0px" }) : null;
+  document.querySelectorAll("img[data-src], video[data-poster]").forEach(function (im) {
+    if (!io) {
+      if (im.dataset.src) im.src = im.dataset.src;
+      if (im.dataset.srcset) im.srcset = im.dataset.srcset;
+      if (im.dataset.sizes) im.sizes = im.dataset.sizes;
+      if (im.dataset.poster) im.poster = im.dataset.poster;
+      im.removeAttribute("data-src");
+      return;
+    }
+    io.observe(im);
+  });
+})();
+</script>
 </body>
 </html>

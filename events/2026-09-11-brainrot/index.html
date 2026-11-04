@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Brainrot · New Guild Co-op · 0FF THE PRINT</title>
 <meta name="description" content="120 frames from Brainrot at New Guild Co-op, Sep 11, 2026. Shot by 0FF THE PRINT.">
+<link rel="canonical" href="https://0fftheprint.com/events/2026-09-11-brainrot/">
 <meta name="theme-color" content="#0a0a0d">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Brainrot · New Guild Co-op">
@@ -122,9 +123,23 @@ const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>'
 const grid = document.getElementById('grid');
 grid.innerHTML = MEDIA.map((m,i) =>
   `<a class="tile${m.type==='video'?' vid':''}" data-i="${i}" href="${m.src}">
-     <img src="${m.thumb}" alt="Frame ${i+1}" loading="lazy" decoding="async"
+     <img ${i < 4 ? 'src' : 'data-src'}="${m.thumb}" alt="Frame ${i+1}" decoding="async"
           width="${m.w||16}" height="${m.h||9}">${m.look?`<span class="lk">${esc(m.look)}</span>`:''}
    </a>`).join('');
+(function () {
+  var io = ('IntersectionObserver' in window) ? new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      var im = e.target;
+      if (im.dataset.src) { im.src = im.dataset.src; im.removeAttribute('data-src'); }
+      io.unobserve(im);
+    });
+  }, { rootMargin: '160px 0px' }) : null;
+  document.querySelectorAll('#grid img[data-src]').forEach(function (im) {
+    if (!io) { im.src = im.dataset.src; im.removeAttribute('data-src'); return; }
+    io.observe(im);
+  });
+})();
 const lb=document.getElementById('lb'), stage=document.getElementById('lbstage'), count=document.getElementById('lbc');
 const chips=document.getElementById('lblooks');
 let cur=0, pref=null;   // pref = the grade the viewer last tapped; it sticks across frames

@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>It Was Never One Take · 0FF THE PRINT</title>
 <meta name="description" content="Birdman hid about 100 stitches. Rope could not be one take. Karl Freund rode a bicycle. How the masters move a camera, and why they mostly leave it alone.">
+<link rel="canonical" href="https://0fftheprint.com/word/it-was-never-one-take/">
 <meta property="og:title" content="It Was Never One Take">
 <meta property="og:description" content="Birdman hid about 100 stitches. Rope could not be one take. Karl Freund rode a bicycle. How the masters move a camera, and why they mostly leave it alone.">
 <meta property="og:image" content="https://0fftheprint.com/word/it-was-never-one-take/cover.jpg">
@@ -31,7 +32,7 @@
     padding-bottom:18px;border-bottom:1px solid var(--line)}
   .byline b{color:var(--ink)}
   .cover{margin:0 0 8px;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
-  .cover img{width:100%;display:block}
+  .cover img{width:100%;height:auto;display:block}
   .cover-credit{font-family:'JetBrains Mono',monospace;font-size:10px;
     letter-spacing:.06em;color:var(--muted);margin:8px 0 30px;line-height:1.5}
   .cover-credit a{color:var(--muted);text-decoration:underline}
@@ -45,7 +46,7 @@
     font-size:26px;line-height:1.2;text-transform:uppercase;color:var(--pink);
     border-left:3px solid var(--pink);padding-left:18px;margin:32px 0}
   article figure{margin:30px -20px}
-  article figure img,article figure video{width:100%;display:block;border-radius:0;background:#000}
+  article figure img,article figure video{width:100%;height:auto;display:block;border-radius:0;background:#000}
   article figure.clip video{width:auto;max-width:100%;max-height:82vh;aspect-ratio:9/16;margin:0 auto}
   article figcaption{font-family:'JetBrains Mono',monospace;font-size:10.5px;
     letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
@@ -89,11 +90,11 @@
 <h2>Move it for a reason or leave it alone</h2>
 <p>"If the camera moves it's got to be for a reason." That's Roger Deakins, talking to Hazlitt in 2015. Then he told everybody to go watch Bresson.</p>
 <p>When the camera does move, it follows something. Kubrick needed to chase a kid on a Big Wheel through the Overlook Hotel, so Garrett Brown ran the Steadicam from a wheelchair to keep up.</p>
-<figure><img src="camera_steadicam.jpg" alt="A camera operator in a harness vest carries a TV camera on a Steadicam arm while an assistant hauls a coil of red cable" loading="lazy"><figcaption>A Steadicam operator and his cable assistant at a football match, by Runner1616, via <a href="https://commons.wikimedia.org/wiki/File:Steady_Sport.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0" target="_blank" rel="noopener">CC BY-SA 4.0</a>. Resized.</figcaption></figure>
+<figure><img data-src="camera_steadicam.jpg" alt="A camera operator in a harness vest carries a TV camera on a Steadicam arm while an assistant hauls a coil of red cable" width="1400" height="933" decoding="async"><figcaption>A Steadicam operator and his cable assistant at a football match, by Runner1616, via <a href="https://commons.wikimedia.org/wiki/File:Steady_Sport.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0" target="_blank" rel="noopener">CC BY-SA 4.0</a>. Resized.</figcaption></figure>
 <h2>Center it on purpose</h2>
 <p>You were told never to center anything. Put it on a third. But James Cutting at Cornell went through almost 14,000 frames from 48 popular movies, 1935 to 2010. Single characters landed in the thirds zones 19 percent of the time. He wrote that the numbers aren't strong evidence for the rule.</p>
 <p>Wes Anderson centers everything. His cinematographer, Robert Yeoman, has an assistant measure from the lens to the corners of the room so the camera sits dead center. Yeoman figures at least 90 percent of Rushmore and The Royal Tenenbaums was one 40mm lens.</p>
-<figure><img src="camera_metropolis.jpg" alt="A huge symmetrical machine spouting steam, with a staircase up its center and lines of workers filing in" loading="lazy"><figcaption>The machine set of Metropolis, Horst von Harbou, 1926, public domain, via <a href="https://commons.wikimedia.org/wiki/File:Horst_von_Harbou_-_Metropolis_set_photograph_20.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>.</figcaption></figure>
+<figure><img data-src="camera_metropolis.jpg" alt="A huge symmetrical machine spouting steam, with a staircase up its center and lines of workers filing in" width="1400" height="971" decoding="async"><figcaption>The machine set of Metropolis, Horst von Harbou, 1926, public domain, via <a href="https://commons.wikimedia.org/wiki/File:Horst_von_Harbou_-_Metropolis_set_photograph_20.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>.</figcaption></figure>
 <h2>But don't repeat what you heard</h2>
 <p>You heard Birdman was one take. Its cinematographer, Emmanuel Lubezki, told ARRI he didn't want to do the movie in one shot. Rodeo FX built around 100 stitches between the long takes.</p>
 <p>You heard Hitchcock shot Rope in one take. A magazine of film back then held a little over 10 minutes. So one take was physically impossible. Every other join hides on the back of a jacket. Same trick as the hand-over-the-lens outfit change.</p>
@@ -116,5 +117,34 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" integrity="sha384-Rj26LVGvoeRVR6+mwQmFfcR3QOBEwT+ZmuCWpuiqeTzJpCs0ER4ITAWGb4Hiy3Ok" crossorigin="anonymous"></script>
 <script src="../../assets/js/desk.js?v=92efb57d" defer></script>
 <script src="../../assets/js/word.js?v=bd4e6159" defer></script>
+<script>
+/* Pictures under the fold wait until they are 160px from the screen.
+   Chrome's loading=lazy still pulls a long page on a fast connection. */
+(function () {
+  var io = ("IntersectionObserver" in window) ? new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      var im = e.target;
+      if (im.dataset.src) im.src = im.dataset.src;
+      if (im.dataset.srcset) im.srcset = im.dataset.srcset;
+      if (im.dataset.sizes) im.sizes = im.dataset.sizes;
+      if (im.dataset.poster) im.poster = im.dataset.poster;
+      im.removeAttribute("data-src");
+      io.unobserve(im);
+    });
+  }, { rootMargin: "160px 0px" }) : null;
+  document.querySelectorAll("img[data-src], video[data-poster]").forEach(function (im) {
+    if (!io) {
+      if (im.dataset.src) im.src = im.dataset.src;
+      if (im.dataset.srcset) im.srcset = im.dataset.srcset;
+      if (im.dataset.sizes) im.sizes = im.dataset.sizes;
+      if (im.dataset.poster) im.poster = im.dataset.poster;
+      im.removeAttribute("data-src");
+      return;
+    }
+    io.observe(im);
+  });
+})();
+</script>
 </body>
 </html>

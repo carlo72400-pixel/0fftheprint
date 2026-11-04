@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Member and private pages send noindex on the page itself.
+# They are left out of the sitemap, and they stay crawlable so a
+# crawler can read that noindex tag.
+
+Sitemap: https://0fftheprint.com/sitemap.xml

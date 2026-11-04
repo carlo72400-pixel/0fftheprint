@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>One Clown Per Five Civilians · 0FF THE PRINT</title>
 <meta name="description" content="A Sunday craft market at Rah Rah Room became a comedy stage, then a band, then a wrestling match on the patio.">
+<link rel="canonical" href="https://0fftheprint.com/word/one-clown-per-five-civilians/">
 <meta property="og:title" content="One Clown Per Five Civilians">
 <meta property="og:description" content="A Sunday craft market at Rah Rah Room became a comedy stage, then a band, then a wrestling match on the patio.">
 <meta property="og:image" content="https://0fftheprint.com/word/one-clown-per-five-civilians/cover.jpg">
@@ -31,7 +32,7 @@
     padding-bottom:18px;border-bottom:1px solid var(--line)}
   .byline b{color:var(--ink)}
   .cover{margin:0 0 30px;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
-  .cover img{width:100%;display:block}
+  .cover img{width:100%;height:auto;display:block}
   article{font-size:17.5px;line-height:1.85}
   article p{margin:0 0 22px}
   article h2{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
@@ -42,7 +43,7 @@
     font-size:26px;line-height:1.2;text-transform:uppercase;color:var(--pink);
     border-left:3px solid var(--pink);padding-left:18px;margin:32px 0}
   article figure{margin:30px -20px}
-  article figure img,article figure video{width:100%;display:block;border-radius:0;background:#000}
+  article figure img,article figure video{width:100%;height:auto;display:block;border-radius:0;background:#000}
   article figure.clip video{width:auto;max-width:100%;max-height:82vh;aspect-ratio:9/16;margin:0 auto}
   article figcaption{font-family:'JetBrains Mono',monospace;font-size:10.5px;
     letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
@@ -81,14 +82,14 @@
   <article data-stamp="64bbb4db">
 <p>Rah Rah Room on a Sunday night. A vendor market, with hand painted skate decks and prints and earrings on folding tables. The usual Sunday craft fair setup. Except roughly one person in six is in full clown paint, and nobody's treating that as remarkable.</p>
 <p>That ratio is the whole thing. A room full of clowns is a circus, and you already know how to feel about a circus. But a room where most people came in a t-shirt and a handful came in greasepaint is something else. It reads like a pep rally. Everybody's in on it, and nobody's performing at you.</p>
-<figure><img src="cc-market.jpg" alt="Two vendors behind a table of prints, stickers and earrings at Rah Rah Room" loading="lazy"></figure>
+<figure><img data-src="cc-market.jpg" alt="Two vendors behind a table of prints, stickers and earrings at Rah Rah Room" width="1400" height="788" decoding="async"></figure>
 <h2>The market came first</h2>
 <p>Two hours of tables. Sticker sheets, decks painted edge to edge, jewelry hung off pegboard. A print booth run by somebody in full white face, who was also, clearly, just working their booth. People buying things, people not buying things, people leaning on the bar at the back.</p>
 <p>The paint stops at the jaw on most of them. That's what it looks like when somebody did it themselves in a bathroom, instead of getting made up for a job.</p>
-<figure><img src="cc-tables.jpg" alt="Hand painted skate decks laid out across a vendor table" loading="lazy"></figure>
+<figure><img data-src="cc-tables.jpg" alt="Hand painted skate decks laid out across a vendor table" width="1400" height="788" decoding="async"></figure>
 <h2>Then it turned into a show</h2>
 <p>At some point the tables came down. A banner went up across the back of the stage that read GO CLOWNS GO. The same crowd that had been shopping sat down to watch a comedy set. One person on a mic under a magenta wash, then two, then a bit that needed a lawn chair.</p>
-<figure><img src="cc-stage.jpg" alt="A performer on the mic under the GO CLOWNS GO banner" loading="lazy"></figure>
+<figure><img data-src="cc-stage.jpg" alt="A performer on the mic under the GO CLOWNS GO banner" width="1400" height="788" decoding="async"></figure>
 <p>Later the whole cast came out and lined up across the stage. Nine people. Most in shorts and a shirt they already owned, one in full paint at the end of the row, everybody holding a drink. It's the single most accurate photo of the night. So it's at the top of this page.</p>
 <h2>Then a band</h2>
 <p>Fog, a guitar, red on everything. The room went from seated to standing without anybody announcing it. This is the part where the night stops being a market and remembers it's a bar.</p>
@@ -110,5 +111,34 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" integrity="sha384-Rj26LVGvoeRVR6+mwQmFfcR3QOBEwT+ZmuCWpuiqeTzJpCs0ER4ITAWGb4Hiy3Ok" crossorigin="anonymous"></script>
 <script src="../../assets/js/desk.js?v=92efb57d" defer></script>
 <script src="../../assets/js/word.js?v=bd4e6159" defer></script>
+<script>
+/* Pictures under the fold wait until they are 160px from the screen.
+   Chrome's loading=lazy still pulls a long page on a fast connection. */
+(function () {
+  var io = ("IntersectionObserver" in window) ? new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      var im = e.target;
+      if (im.dataset.src) im.src = im.dataset.src;
+      if (im.dataset.srcset) im.srcset = im.dataset.srcset;
+      if (im.dataset.sizes) im.sizes = im.dataset.sizes;
+      if (im.dataset.poster) im.poster = im.dataset.poster;
+      im.removeAttribute("data-src");
+      io.unobserve(im);
+    });
+  }, { rootMargin: "160px 0px" }) : null;
+  document.querySelectorAll("img[data-src], video[data-poster]").forEach(function (im) {
+    if (!io) {
+      if (im.dataset.src) im.src = im.dataset.src;
+      if (im.dataset.srcset) im.srcset = im.dataset.srcset;
+      if (im.dataset.sizes) im.sizes = im.dataset.sizes;
+      if (im.dataset.poster) im.poster = im.dataset.poster;
+      im.removeAttribute("data-src");
+      return;
+    }
+    io.observe(im);
+  });
+})();
+</script>
 </body>
 </html>

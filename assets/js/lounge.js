@@ -318,7 +318,13 @@
   }
   function label() {
     var t = JB.tracks[JB.i], b = JB.bar && JB.bar.querySelector('.lg-now b');
-    if (b) b.textContent = JB.name + ' · ' + (JB.i + 1) + ' of ' + JB.tracks.length + (t && t.artist ? ' · ' + t.artist : '');
+    if (!b) return;
+    // title and artist are already on the queue (the tile, or music.json). Nothing here
+    // asks Spotify. A track with neither still names the station and where it sits.
+    var bits = [JB.name, (JB.i + 1) + ' of ' + JB.tracks.length];
+    if (t && t.title) bits.push(t.title);
+    if (t && t.artist && t.artist !== t.title) bits.push(t.artist);
+    b.textContent = bits.join(' · ');
   }
   function load(i, play) {
     JB.i = (i + JB.tracks.length) % JB.tracks.length; JB.adv = false; label();
