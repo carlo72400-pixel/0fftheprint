@@ -924,7 +924,13 @@ function nightKey(t){
   const key = n.getFullYear() + '-' + pad2(n.getMonth() + 1) + '-' + pad2(n.getDate());
   return {key, label: n.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'})};
 }
-const takesName = () => 'takes-' + nightKey(new Date()).key + '.csv';
+/* the file is named for the nights the log holds, not the moment it is saved: archiving Wednesday's takes on Thursday afternoon still says Wednesday */
+const takesName = () => {
+  const ts = TAKES.map(x => +new Date(x.t)).filter(n => n === n);
+  if (!ts.length) return 'takes-' + nightKey(new Date()).key + '.csv';
+  const a = nightKey(Math.min(...ts)).key, b = nightKey(Math.max(...ts)).key;
+  return 'takes-' + (a === b ? a : a + '_to_' + b) + '.csv';
+};
 function tkPaint(){
   const ul = $('#tk-list');
   const cap = $('#tk-cap');
