@@ -10,36 +10,32 @@ Album of the Year has the same date. It's an LP, on Atlantic and Motion. No trac
 
 So it isn't Thanksgiving night. Neither page gives an hour. It's the day after. We'll call that the underground's Thanksgiving. The pages call it November 27.
 
-## Where the name comes from
+## The first taste
 
-He is Amari Deshawn Adham Middleton, born May 20, 2003, in Columbus, Ohio, and raised in Goose Creek, South Carolina, and Columbus. Wikipedia says OsamaSon comes from his father's name, Osama. An uncle, a Geechee musician, taught him FL Studio. He started in 2020 as PradaUMari. By 2021 he was OsamaSon.
+The FADER, May 20. He put out "off that!" for his birthday, and The FADER called it possibly the first piece of Nocturnal. That's their hedge, not a track list. The track list is still blank.
 
-## The records before this one
+Same post, the run up to it. Jump Out, then Psykotic, and a tour behind each. The FADER had Psykotic in its top albums of 2025.
 
-Osama Season was July 21, 2023. Flex Musix, the debut studio album, was December 8, 2023, on Motion and Atlantic. Jump Out was January 24, 2025, 18 songs on Apple Music, Atlantic and Motion. Wikipedia says it was his first Billboard 200 album, peaking at number 151 on February 8. Psykotic was October 10, 2025, 17 tracks, with Che on it. Wikipedia's discography table has that one at number 81 on the Billboard 200 and number 20 on the R&B and hip-hop chart. Che was one of the seven names in [Seven Seats At The Back Of The List](https://0fftheprint.com/word/seven-seats-at-the-back-of-the-list/).
+## Texas already had him
 
-The FADER, on his 23rd birthday, May 20, 2026, called "off that!" possibly the first offering from Nocturnal. The track list is still blank.
-
-## He already played Texas
-
-Pitchfork and Live Nation posted the Psykotic dates on August 20, 2025. November 26, 713 Music Hall, Houston. November 28, South Side Ballroom, Dallas. November 29, the Aztec Theatre, San Antonio. setlist.fm has House of Blues Houston on May 6, 2025, 23 songs. MusicBrainz has House of Blues Dallas on May 5.
+Pitchfork, August 20, 2025, the Psykotic tour dates. November 26, 713 Music Hall, Houston. November 28, South Side Ballroom, Dallas. November 29, the Aztec Theatre, San Antonio. That's a year ago this month.
 
 ## The rest of the slate
 
 November 11, a Wednesday. Bruiser Wolf and Conductor Williams, The Dealer Wins.
 
-November 13, a Friday, and it's two records, not one. ZelooperZ and Black Noi$e, Pinbreakers. Westside Gunn, HEELMATIC. HotNewHipHop also parks Offset's GMFU on that line, and says the original delay means you shouldn't bet the date.
+November 13, a Friday, is seven records deep on HotNewHipHop's list. We're watching two. ZelooperZ and Black Noi$e, Pinbreakers. Westside Gunn, HEELMATIC. HotNewHipHop also parks Offset's GMFU on that line, and says the original delay means you shouldn't bet the date.
 
 November 19 on the same list is a GTA VI official soundtrack. The list doesn't say more than the title.
 
 ## What we already wrote
 
-The label that spent five years not wanting to be looked at took a convention floor. That's [Opium Bought The Whole Convention](https://0fftheprint.com/word/opium-bought-the-whole-convention/). OsamaSon isn't on it. November is a different list.
+The label that spent five years not wanting to be looked at took a convention floor. That's [Opium Bought The Whole Convention](https://0fftheprint.com/word/opium-bought-the-whole-convention/). Seven names from the new underground were sitting in the back half of Complex's 100. That's [Seven Seats At The Back Of The List](https://0fftheprint.com/word/seven-seats-at-the-back-of-the-list/). OsamaSon isn't on either page. November is a different list.
 
 ## So mark your own calendar
 
-November 11, November 13, November 27. Nocturnal doesn't add a San Antonio date. The last one was the Aztec, November 29, 2025.
+November 11, November 13, November 27. None of these pages puts Nocturnal in San Antonio. The last date we can point to is the Aztec, November 29, 2025.
 
-HotNewHipHop and Album of the Year. Wednesday, November 4, 2026.
+HotNewHipHop, Album of the Year, The FADER and Pitchfork. Wednesday, November 4, 2026.
 
 Spotted something? [Tell the desk](https://0fftheprint.com/#take). Off the record stays off the record.

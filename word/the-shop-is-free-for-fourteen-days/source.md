@@ -4,7 +4,7 @@ You used to wait for the skin. For 14 days, a chest can hand it to you.
 
 ## Here's the token
 
-GameSpot, November 3. Treasure Hunters, the mini-season, started November 1. A rare Item Shop Token sits in chests during any round of battle royale. Build or Zero Build, ranked or not, the team size doesn't matter. A squad is the better way to hunt. Find the token and everybody in that round gets one.
+GameSpot, November 3. Treasure Hunters, the mini-season, started November 1. A rare Item Shop Token sits in chests during any round of battle royale. Build or Zero Build, ranked or not, the team size doesn't matter. A squad is the better way to hunt. Find the token and your teammates in that round get one too.
 
 GameSpot calls the prize Pirate Shop Access. Almost everything in the shop goes free for 14 days. Redeem it by December 15, 2026. The same find comes with a second token, for a two-week window you pick in 2027.
 
