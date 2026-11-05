@@ -917,6 +917,14 @@ function mark(tail){
 }
 $('#sl-mark').addEventListener('click', () => mark(false));
 $('#sl-tail').addEventListener('click', () => mark(true));
+/* 11/5: a shoot night rolls at 6 AM local, so 1:20 AM sits under the night before. Archive and Share name the CSV with that local night, not UTC. */
+function nightKey(t){
+  const n = new Date(t);
+  if (n.getHours() < 6) n.setDate(n.getDate() - 1);
+  const key = n.getFullYear() + '-' + pad2(n.getMonth() + 1) + '-' + pad2(n.getDate());
+  return {key, label: n.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'})};
+}
+const takesName = () => 'takes-' + nightKey(new Date()).key + '.csv';
 function tkPaint(){
   const ul = $('#tk-list');
   const cap = $('#tk-cap');
@@ -932,9 +940,8 @@ function tkPaint(){
   const rows = TAKES.map((x, n) => ({x, n})).filter(r => TKF === 'all' || r.x.circ).reverse();
   if (!rows.length) { ul.innerHTML = '<li class="empty">No circled takes yet.</li>'; return; }
   let day = '', html = '';
-  rows.forEach(({x, n}) => { const d = new Date(x.t);
-    const key = d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate());
-    if (key !== day) { day = key; html += `<li class="tk-day">${esc(d.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'}))}</li>`; }
+  rows.forEach(({x, n}) => { const d = new Date(x.t); const nk = nightKey(d);
+    if (nk.key !== day) { day = nk.key; html += `<li class="tk-day">${esc(nk.label)}</li>`; }
     html += `<li class="take"><div class="id">${esc(x.scene)}${esc(x.shot)}<small>take ${esc(x.take)}${x.tail ? ' · tail' : ''}</small></div>
       <div class="tx"><input value="${esc(x.note)}" placeholder="note" data-tknote="${n}" maxlength="140"><small>${esc(x.roll)} · ${esc(x.cam)} · ${d.toLocaleTimeString('en-US', {hour12:false})} · <button type="button" data-tkdel="${n}" style="border:0;background:none;padding:0;color:var(--bad);font:inherit">delete</button></small></div>
       <button type="button" class="circ" data-tkcirc="${n}" aria-pressed="${x.circ}" aria-label="Circle take">${x.circ ? '●' : '○'}</button></li>`;
@@ -952,14 +959,14 @@ async function shareFile(file, title, fallbackText){
   if (fallbackText) { try { await navigator.clipboard.writeText(fallbackText); toast('Copied instead.'); return true; } catch(e){} }
   return false;
 }
-$('#tk-share').addEventListener('click', async () => { if (!TAKES.length) { toast('Nothing to share yet.'); return; } const name = 'takes-' + new Date().toISOString().slice(0, 10) + '.csv'; await shareFile(new File([csvOf()], name, {type: 'text/csv'}), 'Take log', csvOf()); });
+$('#tk-share').addEventListener('click', async () => { if (!TAKES.length) { toast('Nothing to share yet.'); return; } await shareFile(new File([csvOf()], takesName(), {type: 'text/csv'}), 'Take log', csvOf()); });
 $('#tk-copy').addEventListener('click', async () => { if (!TAKES.length) { toast('Nothing to copy yet.'); return; } try { await navigator.clipboard.writeText(csvOf()); toast('CSV copied.'); } catch(e){ toast('Could not copy here.'); } });
 $('#tk-clear').addEventListener('click', () => { if (!TAKES.length) return; if (!confirm('Clear every take on this phone?')) return; TAKES = []; save('takes', TAKES); tkPaint(); slPaint(); });
 $('#tk-night').addEventListener('click', () => {
   if (!TAKES.length) { toast('Nothing to archive yet.'); return; }
   if (!confirm('Download the CSV and clear the log on this phone?')) return;
   try {
-    const name = 'takes-' + new Date().toISOString().slice(0, 10) + '.csv';
+    const name = takesName();
     const u = URL.createObjectURL(new Blob([csvOf()], {type: 'text/csv'}));
     const a = document.createElement('a'); a.href = u; a.download = name; document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(u), 4000);
