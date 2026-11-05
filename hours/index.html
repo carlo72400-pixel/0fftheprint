@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Gio Punch Clock</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Personal punch clock for Giancarlo Ortiz. Hours stay on this phone.">
+<meta name="theme-color" content="#0B0B0B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Gio Punch">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Barlow:wght@400;600;700&family=Special+Elite&family=Monoton&display=swap">
+<style>
+/* Personal time recorder. Black enamel, stripe rings, white key, chrome screws, drums, paper card.
+   Solo hours for Giancarlo Ortiz. Not the shop clock. */
+:root {
+  color-scheme: dark;
+  --wall: #0B0B0B;
+  --wall-line: rgba(255, 255, 255, .035);
+  --body: #1D1D1D;
+  --body-hi: #3C3C3C;
+  --body-lo: #080808;
+  --white: #FAFAF7;
+  --black: #0D0D0D;
+  --chrome-hi: #F4F6F7;
+  --chrome: #C3C9CC;
+  --chrome-lo: #767E82;
+  --chrome-dk: #3E4447;
+  --paper: #F7F7F3;
+  --rule: #B9B9B2;
+  --ink: #141414;
+  --ink-soft: #55554F;
+  --fix: #C0262A;
+  --lamp-g: #3DFF8F;
+  --lamp-a: #FFB02E;
+  --drum: #0C0D0E;
+  --drum-hi: #2B2E30;
+  --digit: #F2F2EC;
+  --text: #F1F1EE;
+  --dim: #A3A3A0;
+  --rings: 0 0 0 2px var(--white), 0 0 0 4px var(--black), 0 0 0 5px var(--white);
+  --f-brand: "Monoton", "Big Shoulders Display", sans-serif;
+  --f-label: "Big Shoulders Display", "Arial Narrow", sans-serif;
+  --f-type: "Special Elite", "Courier New", monospace;
+  --f-ui: "Barlow", "Helvetica Neue", Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { background: var(--wall); }
+body {
+  margin: 0;
+  color: var(--text);
+  font-family: var(--f-ui);
+  font-size: 16px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 22px, var(--wall-line) 22px 24px),
+    var(--wall);
+}
+button, input { font: inherit; color: inherit; }
+button { touch-action: manipulation; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--lamp-a); outline-offset: 3px; }
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.wrap {
+  max-width: 470px;
+  margin: 0 auto;
+  display: grid;
+  gap: 0;
+  padding-block: 14px 72px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 12px;
+  color: var(--dim);
+  font-family: var(--f-label);
+  font-weight: 800;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  font-size: 13px;
+}
+.eng { font-family: var(--f-label); font-weight: 800; text-transform: uppercase; letter-spacing: .18em; }
+.tape {
+  display: inline-block;
+  background: linear-gradient(180deg, #1C1F21, #0E1011);
+  color: #F4F4EF;
+  font-family: var(--f-label);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  padding: 3px 8px 2px;
+  border-radius: 2px;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, .7), 0 -1px 0 rgba(255, 255, 255, .16);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .1), 0 1px 2px rgba(0, 0, 0, .6);
+}
+.machine {
+  position: relative;
+  z-index: 1;
+  container-type: inline-size;
+  display: grid;
+  gap: 14px;
+  padding: 26px 18px 18px;
+  border-radius: 30px 30px 22px 22px;
+  background:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .09 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>"),
+    radial-gradient(130% 70% at 22% 0%, var(--body-hi), transparent 62%),
+    linear-gradient(180deg, var(--body), var(--body-lo));
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, .14),
+    inset 0 -5px 0 rgba(0, 0, 0, .55),
+    0 0 0 3px var(--white),
+    0 0 0 6px var(--black),
+    0 0 0 8px var(--white),
+    0 0 0 11px var(--black),
+    0 0 0 12px #2E2E2E,
+    0 28px 52px rgba(0, 0, 0, .75);
+}
+.machine.shake { animation: shake .3s; }
+@keyframes shake {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(0, 3px); }
+  45% { transform: translate(-1px, -1px); }
+  70% { transform: translate(1px, 1px); }
+}
+.screw {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--chrome-hi), var(--chrome-lo) 70%, var(--chrome-dk));
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .85), inset 0 -1px 1px rgba(0, 0, 0, .4);
+}
+.screw::after {
+  content: "";
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  top: 50%;
+  height: 2px;
+  margin-top: -1px;
+  border-radius: 1px;
+  background: var(--chrome-dk);
+  transform: rotate(var(--r, 35deg));
+}
+.screw.tl { top: 11px; left: 11px; --r: 28deg; }
+.screw.tr { top: 11px; right: 11px; --r: -52deg; }
+.screw.bl { bottom: 11px; left: 11px; --r: 78deg; }
+.screw.br { bottom: 11px; right: 11px; --r: 12deg; }
+.plate {
+  justify-self: center;
+  display: grid;
+  justify-items: center;
+  gap: 1px;
+  max-width: 100%;
+  padding: 8px 22px 7px;
+  border-radius: 5px;
+  color: var(--white);
+  text-align: center;
+  text-transform: uppercase;
+  font-family: var(--f-label);
+  background: var(--black);
+  box-shadow: 0 0 0 2px var(--white), 0 0 0 4px var(--black), 0 0 0 5px var(--white), 0 4px 10px rgba(0, 0, 0, .8);
+}
+.plate b {
+  font-family: var(--f-brand);
+  font-weight: 400;
+  font-size: clamp(42px, 14vw, 64px);
+  letter-spacing: .04em;
+  line-height: 1;
+}
+.plate .co { font-weight: 900; font-size: 15px; letter-spacing: .2em; line-height: 1.1; }
+.plate small { font-weight: 700; font-size: 11px; letter-spacing: .28em; color: var(--dim); }
+.stripes {
+  height: 11px;
+  margin: -4px 10px -6px;
+  background: repeating-linear-gradient(180deg, var(--white) 0 2px, transparent 2px 4.5px);
+  opacity: .9;
+}
+.window {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: 14px 10px 12px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #050606, #121515);
+  box-shadow: inset 0 4px 10px #000, inset 0 -2px 4px rgba(255, 255, 255, .04), var(--rings);
+}
+.window::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 56% 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, .09), rgba(255, 255, 255, 0));
+  pointer-events: none;
+}
+.bigtime {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 4px;
+  max-width: 100%;
+}
+.bigtime .drums { font-size: clamp(36px, 15cqi, 58px); }
+.ampm {
+  flex: none;
+  font-family: var(--f-label);
+  font-weight: 800;
+  font-size: clamp(14px, 4.5cqi, 18px);
+  letter-spacing: .08em;
+  color: var(--dim);
+  padding-bottom: .35em;
+}
+.dateline {
+  font-family: var(--f-type);
+  font-size: 14px;
+  letter-spacing: .12em;
+  color: #C9D0CD;
+}
+.drums { display: inline-flex; align-items: center; font-family: var(--f-label); font-weight: 800; line-height: 1; }
+.dr {
+  position: relative;
+  display: inline-block;
+  width: .58em;
+  height: 1.1em;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #000 0%, var(--drum-hi) 20%, var(--drum) 50%, var(--drum-hi) 80%, #000 100%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06);
+}
+.dr .strip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(calc(var(--n, 0) * -1.1em));
+}
+.dr.set .strip { transition: transform .45s cubic-bezier(.2, .8, .2, 1); }
+.dr .strip span {
+  display: block;
+  height: 1.1em;
+  line-height: 1.1em;
+  text-align: center;
+  color: var(--digit);
+}
+.dr::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, .6), transparent 32%, transparent 68%, rgba(0, 0, 0, .6));
+  pointer-events: none;
+}
+.sep { display: inline-block; min-width: .2em; text-align: center; color: var(--digit); }
+.drums.blink .sep { opacity: .35; }
+.status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 36px;
+  text-align: left;
+}
+.jewel {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, .5), transparent 26%), radial-gradient(circle, #3a4842, #1b2420);
+  box-shadow: 0 0 0 3px var(--chrome), 0 0 0 4px var(--chrome-dk), inset 0 -3px 5px rgba(0, 0, 0, .6);
+}
+.jewel.on {
+  background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, .8), transparent 26%), radial-gradient(circle, #a8ffd0, var(--lamp-g) 45%, #0c8645);
+  box-shadow: 0 0 0 3px var(--chrome), 0 0 0 4px var(--chrome-dk), 0 0 22px var(--lamp-g);
+  animation: glow 2.4s ease-in-out infinite;
+}
+@keyframes glow {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.15); }
+}
+#status-text {
+  margin: 0;
+  font-family: var(--f-label);
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-size: 15px;
+  line-height: 1.2;
+}
+.flash {
+  min-height: 1.2em;
+  margin: -6px 0 0;
+  text-align: center;
+  color: var(--lamp-a);
+  font-family: var(--f-type);
+  font-size: 14px;
+}
+.bay {
+  padding: 10px;
+  border-radius: 16px;
+  background: repeating-linear-gradient(180deg, #fafaf7 0 3px, #0d0d0d 3px 6px);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, .55), var(--rings);
+}
+.key {
+  width: 100%;
+  min-height: 92px;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #ffffff 0%, #f4f4ef 42%, #d9d9d2 100%);
+  color: #141414;
+  box-shadow: inset 0 1px 0 #fff, 0 8px 0 #8d8d88, 0 12px 16px rgba(0, 0, 0, .45);
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 2px;
+}
+.key-kicker {
+  font-family: var(--f-label);
+  font-weight: 800;
+  letter-spacing: .22em;
+  font-size: 12px;
+  text-transform: uppercase;
+  color: #55554f;
+}
+.key-word {
+  font-family: var(--f-label);
+  font-weight: 900;
+  letter-spacing: .1em;
+  font-size: clamp(28px, 8vw, 36px);
+  text-transform: uppercase;
+  line-height: 1;
+}
+.key:active {
+  transform: translateY(6px);
+  box-shadow: inset 0 1px 0 #fff, 0 2px 0 #8d8d88, 0 4px 8px rgba(0, 0, 0, .4);
+}
+.machine.on .key { box-shadow: inset 0 0 0 2px #147a45, inset 0 1px 0 #fff, 0 8px 0 #8d8d88, 0 12px 16px rgba(0, 0, 0, .45); }
+.machine.on .key:active { box-shadow: inset 0 0 0 2px #147a45, inset 0 1px 0 #fff, 0 2px 0 #8d8d88; }
+.note { display: grid; gap: 4px; }
+.note span {
+  font-family: var(--f-label);
+  font-weight: 800;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  font-size: 12px;
+  color: var(--dim);
+}
+.note input {
+  width: 100%;
+  min-height: 44px;
+  border: 0;
+  border-radius: 8px;
+  padding: 8px 12px;
+  background: #0c0d0e;
+  color: var(--text);
+  box-shadow: inset 0 2px 6px #000, 0 0 0 1px #2a2a2a;
+  font-family: var(--f-type);
+  font-size: 16px;
+}
+.throat {
+  height: 18px;
+  margin: 2px 22px -6px;
+  border-radius: 0 0 10px 10px;
+  background: linear-gradient(180deg, #050505, #161616 40%, #2a2a2a);
+  box-shadow: inset 0 8px 8px #000, 0 0 0 2px #3a3a3a;
+}
+.warn {
+  margin: 14px 0 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #3a1212;
+  color: #ffd2ce;
+  font-size: 14px;
+}
+.card {
+  position: relative;
+  z-index: 0;
+  margin-top: -10px;
+  padding: 28px 16px 18px 22px;
+  color: var(--ink);
+  background:
+    linear-gradient(90deg, rgba(192, 38, 42, .45) 0 1px, transparent 1px) 12px 0 / 100% 100% no-repeat,
+    var(--paper);
+  border-radius: 2px 2px 6px 6px;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, .7) inset, 0 16px 28px rgba(0, 0, 0, .4);
+  font-family: var(--f-type);
+}
+.cardhead { text-align: center; margin-bottom: 6px; }
+.cardhead h1 {
+  margin: 0;
+  font-family: var(--f-type);
+  font-weight: 400;
+  font-size: 20px;
+  letter-spacing: .22em;
+}
+.cardhead .who {
+  margin: 2px 0 0;
+  font-family: var(--f-label);
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  font-size: 18px;
+}
+.cardhead .sub { margin: 0; color: var(--ink-soft); font-size: 13px; }
+.pager {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 8px;
+  align-items: center;
+  margin: 10px 0 4px;
+}
+.pagerbtn, .mini, .solid {
+  min-height: 44px;
+  border: 1px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--f-label);
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  font-size: 14px;
+  border-radius: 2px;
+}
+.pagerbtn { min-width: 64px; padding: 8px 10px; }
+.pagerbtn:disabled { opacity: .35; }
+.weeklabel { margin: 0; text-align: center; line-height: 1.25; }
+.weeklabel b {
+  font-family: var(--f-label);
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  font-size: 14px;
+}
+.day { margin-top: 4px; }
+.dayhead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 10px;
+  font-family: var(--f-label);
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.dayname { font-size: 18px; }
+.stamp {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--f-label);
+  font-size: 11px;
+  letter-spacing: .16em;
+  padding: 2px 6px 1px;
+}
+.dayhrs { margin-left: auto; font-size: 20px; font-variant-numeric: tabular-nums; }
+.is-today .dayhead { box-shadow: inset 0 2px 0 var(--ink); }
+.empty { margin: 4px 0 8px; color: var(--ink-soft); }
+.shift { padding: 2px 0 6px; }
+.punchline {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+  grid-template-areas:
+    "kind when side"
+    "actions actions actions";
+  gap: 2px 8px;
+  align-items: center;
+  padding: 8px 0 4px;
+  border-bottom: 1px solid rgba(185, 185, 178, .85);
+}
+.kind { grid-area: kind; font-family: var(--f-label); font-weight: 800; letter-spacing: .12em; font-size: 13px; }
+.when { grid-area: when; font-size: 18px; min-width: 0; }
+.side { grid-area: side; display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
+.hrs {
+  font-family: var(--f-label);
+  font-weight: 800;
+  font-size: 18px;
+  font-variant-numeric: tabular-nums;
+}
+.actions { grid-area: actions; display: flex; justify-content: flex-end; gap: 6px; }
+.mini { min-width: 44px; padding: 8px 10px; }
+.mini.armed { background: var(--ink); color: var(--paper); }
+.mark {
+  font-family: var(--f-label);
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  font-size: 12px;
+  color: var(--fix);
+}
+.is-void .when { text-decoration: line-through; color: var(--ink-soft); }
+.pnote { margin: 0 0 4px 36px; color: var(--ink-soft); font-size: 14px; }
+.weektotal {
+  display: grid;
+  justify-items: center;
+  gap: 0;
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 2px solid var(--ink);
+}
+.weektotal .eng { font-size: 13px; }
+.weektotal strong {
+  font-family: var(--f-label);
+  font-weight: 900;
+  font-size: 56px;
+  line-height: .9;
+  letter-spacing: .02em;
+  font-variant-numeric: tabular-nums;
+}
+.weektotal .hm { color: var(--ink-soft); font-size: 14px; }
+.export {
+  width: 100%;
+  margin-top: 14px;
+  min-height: 58px;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #fff, #deded8);
+  color: #141414;
+  font-family: var(--f-label);
+  font-weight: 900;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  font-size: 18px;
+  box-shadow: inset 0 1px 0 #fff, 0 0 0 2px #0d0d0d, 0 6px 0 #9a9a94;
+}
+.export:active { transform: translateY(4px); box-shadow: inset 0 1px 0 #fff, 0 0 0 2px #0d0d0d, 0 2px 0 #9a9a94; }
+.filehint, .fine { margin: 8px 0 0; text-align: center; color: var(--ink-soft); font-size: 13px; }
+.filehint.tight { margin-top: 0; }
+.fine { font-family: var(--f-ui); font-size: 12px; letter-spacing: .01em; }
+dialog {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  max-width: calc(100vw - 32px);
+  color: var(--ink);
+}
+dialog::backdrop { background: rgba(0, 0, 0, .72); }
+dialog form {
+  width: min(360px, 86vw);
+  padding: 16px;
+  background: var(--paper);
+  color: var(--ink);
+  color-scheme: light;
+  box-shadow: 0 0 0 3px var(--white), 0 0 0 6px var(--black), 0 18px 40px rgba(0, 0, 0, .55);
+  font-family: var(--f-ui);
+}
+dialog h2 {
+  margin: 0 0 12px;
+  font-family: var(--f-label);
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-size: 28px;
+}
+.dlg-kicker {
+  margin: 0;
+  font-family: var(--f-label);
+  font-weight: 800;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+dialog label {
+  display: grid;
+  gap: 4px;
+  margin: 0 0 10px;
+  font-family: var(--f-label);
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  font-size: 13px;
+}
+dialog input {
+  min-height: 44px;
+  border: 1px solid var(--ink);
+  border-radius: 2px;
+  padding: 8px 10px;
+  background: white;
+  color: var(--ink);
+  font-family: var(--f-ui);
+  font-size: 16px;
+  letter-spacing: 0;
+  text-transform: none;
+  font-weight: 400;
+}
+.dlg-error { min-height: 1.2em; margin: 0 0 8px; color: var(--fix); font-family: var(--f-type); font-size: 14px; }
+.dlg-actions { display: flex; justify-content: flex-end; gap: 8px; }
+.solid { background: var(--ink); color: var(--paper); }
+@media (prefers-reduced-motion: reduce) {
+  .jewel.on { animation: none; }
+  .dr.set .strip, .machine.shake { transition: none; animation: none; }
+}
+@media print {
+  body { background: white; }
+  .machine, .eyebrow, .warn, .pager, .actions, .export, .filehint, .fine { display: none !important; }
+  .card { margin: 0; box-shadow: none; }
+}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <p class="eyebrow"><span class="tape">Solo</span> Chicago</p>
+    <section class="machine" id="machine" aria-label="Time recorder">
+      <i class="screw tl" aria-hidden="true"></i>
+      <i class="screw tr" aria-hidden="true"></i>
+      <i class="screw bl" aria-hidden="true"></i>
+      <i class="screw br" aria-hidden="true"></i>
+      <div class="plate">
+        <b>GIO</b>
+        <span class="co">Giancarlo Ortiz</span>
+        <small>Personal</small>
+      </div>
+      <div class="stripes" aria-hidden="true"></div>
+      <div class="window">
+        <div class="bigtime">
+          <div class="drums" id="drums" aria-hidden="true"></div>
+          <div class="ampm" id="ampm" aria-hidden="true">--</div>
+        </div>
+        <div class="dateline" id="dateline">Chicago</div>
+        <p class="sr" id="clock-label"></p>
+      </div>
+      <div class="status">
+        <div class="jewel" id="jewel" aria-hidden="true"></div>
+        <p id="status-text" role="status">Off the clock</p>
+      </div>
+      <p class="flash" id="flash" role="status"></p>
+      <div class="bay">
+        <button type="button" class="key" id="punch" aria-pressed="false" aria-describedby="status-text">
+          <span class="key-kicker" id="key-kicker">You are off</span>
+          <span class="key-word" id="key-word">Punch In</span>
+        </button>
+      </div>
+      <label class="note">
+        <span>Note for this punch</span>
+        <input id="note" type="text" maxlength="140" autocomplete="off" enterkeyhint="done" placeholder="Optional">
+      </label>
+      <div class="throat" aria-hidden="true"></div>
+    </section>
+    <p class="warn" id="save-warning" hidden>This browser is not storing punches. They will disappear if you leave this page.</p>
+    <article class="card" id="card" aria-label="Time card"></article>
+  </div>
+
+  <dialog id="edit-dialog" aria-labelledby="edit-title">
+    <form id="edit-form">
+      <p class="dlg-kicker" id="edit-kind">In punch</p>
+      <h2 id="edit-title">Correct this punch</h2>
+      <label>Date <input id="edit-date" type="date" required></label>
+      <label>Time <input id="edit-time" type="time" step="60" required></label>
+      <label>Note <input id="edit-note" type="text" maxlength="140" autocomplete="off" placeholder="Optional"></label>
+      <p class="dlg-error" id="edit-error" role="alert"></p>
+      <div class="dlg-actions">
+        <button type="button" class="mini" id="edit-cancel">Cancel</button>
+        <button type="submit" class="mini solid">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <noscript><p style="color:#F1F1EE;text-align:center;padding:24px">This punch clock needs JavaScript. Hours stay on this phone.</p></noscript>
+  <script src="punch.js"></script>
+  <script>
+  (function () {
+    var G = window.GioPunch;
+    if (!G) return;
+
+    var memory = {
+      map: {},
+      getItem: function (k) { return Object.prototype.hasOwnProperty.call(this.map, k) ? this.map[k] : null; },
+      setItem: function (k, v) { this.map[k] = String(v); }
+    };
+    var storage = memory;
+    var persistent = false;
+    try {
+      localStorage.setItem('gio-punch-probe', '1');
+      localStorage.removeItem('gio-punch-probe');
+      storage = localStorage;
+      persistent = true;
+    } catch (e) { /* private mode */ }
+
+    var state = G.load(storage);
+    var viewWeek = G.weekStart(Date.now());
+    var stateRev = 1;
+    var cardStamp = '';
+    var drums = [];
+    var drumsReady = false;
+    var armed = null;
+    var lastPunchAt = 0;
+    var editingId = null;
+    var flashTimer = 0;
+
+    var machine = document.getElementById('machine');
+    var jewel = document.getElementById('jewel');
+    var punchBtn = document.getElementById('punch');
+    var noteInput = document.getElementById('note');
+    var card = document.getElementById('card');
+    var dialog = document.getElementById('edit-dialog');
+    var drumsHost = document.getElementById('drums');
+
+    if (!persistent) document.getElementById('save-warning').hidden = false;
+
+    function persist() {
+      try {
+        G.save(storage, state);
+      } catch (e) {
+        persistent = false;
+        document.getElementById('save-warning').hidden = false;
+      }
+    }
+
+    function flash(text) {
+      var node = document.getElementById('flash');
+      node.textContent = text;
+      clearTimeout(flashTimer);
+      flashTimer = setTimeout(function () { node.textContent = ''; }, 2800);
+    }
+
+    function shake() {
+      machine.classList.remove('shake');
+      void machine.offsetWidth;
+      machine.classList.add('shake');
+    }
+
+    function el(tag, attrs, kids) {
+      var node = document.createElement(tag);
+      if (attrs) {
+        Object.keys(attrs).forEach(function (k) {
+          var value = attrs[k];
+          if (value == null || value === false) return;
+          if (k === 'class') node.className = value;
+          else node.setAttribute(k, value === true ? '' : String(value));
+        });
+      }
+      (kids || []).forEach(function (kid) {
+        if (kid == null || kid === false) return;
+        node.append(kid.nodeType ? kid : document.createTextNode(String(kid)));
+      });
+      return node;
+    }
+
+    function buildDrums() {
+      drumsHost.replaceChildren();
+      drums = [];
+      var spec = ['h', 'h', ':', 'm', 'm', ':', 's', 's'];
+      spec.forEach(function (type) {
+        if (type === ':') {
+          drumsHost.append(el('span', { class: 'sep' }, [':']));
+          return;
+        }
+        var strip = el('span', { class: 'strip' });
+        for (var n = 0; n <= 9; n++) strip.append(el('span', null, [String(n)]));
+        var drum = el('span', { class: 'dr' }, [strip]);
+        drumsHost.append(drum);
+        drums.push(drum);
+      });
+    }
+
+    function paintClock(now) {
+      var parts = G.clockParts(now);
+      if (parts.digits.length === drums.length) {
+        for (var i = 0; i < drums.length; i++) {
+          drums[i].style.setProperty('--n', String(Number(parts.digits[i])));
+          if (!drumsReady) drums[i].classList.add('set');
+        }
+        drumsReady = true;
+      }
+      document.getElementById('ampm').textContent = parts.dayPeriod || '';
+      document.getElementById('dateline').textContent = G.formatDateLine(now);
+      document.getElementById('clock-label').textContent = parts.hour + ':' + parts.minute + ':' + parts.second + ' ' + parts.dayPeriod + ', Chicago';
+      drumsHost.classList.toggle('blink', Number(parts.second) % 2 === 1);
+    }
+
+    function paintStatus(now) {
+      var on = G.isOnClock(state.punches);
+      machine.classList.toggle('on', on);
+      jewel.classList.toggle('on', on);
+      punchBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      document.getElementById('key-kicker').textContent = on ? 'You are on' : 'You are off';
+      document.getElementById('key-word').textContent = on ? 'Punch Out' : 'Punch In';
+      var open = G.openPunch(state.punches);
+      var text = 'Off the clock';
+      if (on && open) {
+        var mins = Math.max(0, Math.round((now - open.at) / 60000));
+        var h = Math.floor(mins / 60);
+        var m = String(mins % 60).padStart(2, '0');
+        text = 'On the clock since ' + G.formatTime(open.at) + ' · ' + h + 'h ' + m + 'm';
+      }
+      document.getElementById('status-text').textContent = text;
+    }
+
+    function cardNote(note) {
+      return String(note || '').split('; ').filter(function (part) {
+        return part && part !== 'edited';
+      }).join('; ');
+    }
+
+    function hoursText(row) {
+      return row.hours == null ? '—' : G.centsToFixed(G.toCents(row.hours));
+    }
+
+    function punchLine(punch, kind, whenText, row) {
+      var line = el('div', { class: 'punchline' + (punch && punch.edited ? ' is-edited' : '') });
+      line.append(el('span', { class: 'kind' }, [kind === 'in' ? 'In' : 'Out']));
+      var label = whenText || (kind === 'out' && row.open ? 'Still in' : '—');
+      line.append(el('span', { class: 'when' }, [label]));
+      var side = el('span', { class: 'side' });
+      if (kind === 'out') side.append(el('span', { class: 'hrs', 'data-total': 'row-' + row.key }, [hoursText(row)]));
+      if (punch && punch.edited) side.append(el('span', { class: 'mark' }, ['Edited']));
+      line.append(side);
+      if (punch) {
+        var actions = el('span', { class: 'actions' });
+        var edit = el('button', { type: 'button', class: 'mini' }, ['Edit']);
+        edit.setAttribute('aria-label', 'Edit ' + kind + ' punch' + (whenText ? ' at ' + whenText : ''));
+        edit.addEventListener('click', function () { openEdit(punch.id); });
+        var voidBtn = el('button', { type: 'button', class: 'mini' }, ['Void']);
+        voidBtn.setAttribute('aria-label', 'Void ' + kind + ' punch' + (whenText ? ' at ' + whenText : ''));
+        voidBtn.addEventListener('click', function () { onVoid(punch.id, voidBtn); });
+        actions.append(edit, voidBtn);
+        line.append(actions);
+      }
+      return line;
+    }
+
+    function paintCard(now) {
+      var view = G.weekView(state.punches, viewWeek, now);
+      var todayKey = G.formatYMD(G.chicagoYMD(now));
+      var currentKey = G.formatYMD(G.weekStart(now));
+      var isCurrent = G.formatYMD(viewWeek) === currentKey;
+      card.replaceChildren();
+
+      card.append(el('header', { class: 'cardhead' }, [
+        el('h1', null, ['Time card']),
+        el('p', { class: 'who' }, ['Giancarlo Ortiz']),
+        el('p', { class: 'sub' }, ['Chicago · Monday start'])
+      ]));
+
+      var prev = el('button', { type: 'button', class: 'pagerbtn' }, ['Prev']);
+      prev.setAttribute('aria-label', 'Previous week');
+      prev.addEventListener('click', function () {
+        viewWeek = G.addDays(viewWeek, -7);
+        stateRev++;
+        paintAll(Date.now());
+      });
+      var next = el('button', { type: 'button', class: 'pagerbtn' }, ['Next']);
+      next.setAttribute('aria-label', 'Next week');
+      next.disabled = isCurrent;
+      next.addEventListener('click', function () {
+        var upcoming = G.addDays(viewWeek, 7);
+        if (G.formatYMD(upcoming) > G.formatYMD(G.weekStart(Date.now()))) return;
+        viewWeek = upcoming;
+        stateRev++;
+        paintAll(Date.now());
+      });
+      card.append(el('div', { class: 'pager' }, [
+        prev,
+        el('p', { class: 'weeklabel' }, [
+          el('b', null, [isCurrent ? 'This week' : 'Earlier week']),
+          el('br'),
+          view.label
+        ]),
+        next
+      ]));
+
+      view.days.forEach(function (day) {
+        var dayEl = el('section', { class: 'day' + (day.key === todayKey ? ' is-today' : '') });
+        dayEl.append(el('div', { class: 'dayhead' }, [
+          el('span', { class: 'dayname' }, [day.head]),
+          day.key === todayKey ? el('span', { class: 'stamp' }, ['Today']) : null,
+          el('span', { class: 'dayhrs', 'data-total': 'day-' + day.key }, [day.hasHours ? G.centsToFixed(day.cents) : '—'])
+        ]));
+        if (!day.rows.length && !day.voided.length && day.key === todayKey) {
+          dayEl.append(el('p', { class: 'empty' }, ['No punches yet today.']));
+        }
+        day.rows.forEach(function (row) {
+          var block = el('div', { class: 'shift' });
+          block.append(punchLine(row.inn, 'in', row.inText, row));
+          block.append(punchLine(row.out, 'out', row.outText, row));
+          var note = cardNote(row.note);
+          if (note) block.append(el('p', { class: 'pnote' }, [note]));
+          dayEl.append(block);
+        });
+        day.voided.forEach(function (p) {
+          var line = el('div', { class: 'punchline is-void' });
+          line.append(el('span', { class: 'kind' }, [p.kind === 'in' ? 'In' : 'Out']));
+          line.append(el('span', { class: 'when' }, [G.formatTime(p.at)]));
+          line.append(el('span', { class: 'side' }, [el('span', { class: 'mark' }, ['Void'])]));
+          var restore = el('button', { type: 'button', class: 'mini' }, ['Restore']);
+          restore.setAttribute('aria-label', 'Restore voided ' + p.kind + ' punch at ' + G.formatTime(p.at));
+          restore.addEventListener('click', function () {
+            G.restorePunch(state, p.id);
+            persist();
+            stateRev++;
+            flash('Punch restored.');
+            paintAll(Date.now());
+          });
+          line.append(el('span', { class: 'actions' }, [restore]));
+          dayEl.append(line);
+        });
+        card.append(dayEl);
+      });
+
+      card.append(el('footer', { class: 'weektotal' }, [
+        el('span', { class: 'eng' }, ['Week']),
+        el('strong', { 'data-total': 'week' }, [G.centsToFixed(view.cents)]),
+        el('span', { class: 'hm', 'data-total': 'week-hm' }, [G.formatHM(view.cents)])
+      ]));
+
+      var exportBtn = el('button', { type: 'button', class: 'export' }, ['Export this week']);
+      exportBtn.addEventListener('click', function () { exportWeek(); });
+      card.append(exportBtn);
+      card.append(el('p', { class: 'filehint' }, [G.exportFilename(viewWeek)]));
+      card.append(el('p', { class: 'filehint tight' }, ['date, in, out, hours, note']));
+      card.append(el('p', { class: 'fine' }, ['Saved on this phone only. This is not the shop clock.']));
+    }
+
+    function paintLiveHours(now) {
+      var view = G.weekView(state.punches, viewWeek, now);
+      var week = card.querySelector('[data-total="week"]');
+      if (week) week.textContent = G.centsToFixed(view.cents);
+      var hm = card.querySelector('[data-total="week-hm"]');
+      if (hm) hm.textContent = G.formatHM(view.cents);
+      view.days.forEach(function (day) {
+        var dayEl = card.querySelector('[data-total="day-' + day.key + '"]');
+        if (dayEl) dayEl.textContent = day.hasHours ? G.centsToFixed(day.cents) : '—';
+        day.rows.forEach(function (row) {
+          var rowEl = card.querySelector('[data-total="row-' + row.key + '"]');
+          if (rowEl) rowEl.textContent = hoursText(row);
+        });
+      });
+    }
+
+    function paintAll(now) {
+      paintClock(now);
+      paintStatus(now);
+      var stamp = stateRev + '|' + G.formatYMD(viewWeek) + '|' + G.formatYMD(G.chicagoYMD(now));
+      if (stamp !== cardStamp) {
+        cardStamp = stamp;
+        paintCard(now);
+      } else {
+        paintLiveHours(now);
+      }
+    }
+
+    function onVoid(id, btn) {
+      var now = Date.now();
+      if (armed && armed.id === id && now < armed.until) {
+        G.voidPunch(state, id);
+        armed = null;
+        persist();
+        stateRev++;
+        flash('Punch voided. It stays on the card and does not count.');
+        paintAll(now);
+        return;
+      }
+      armed = { id: id, until: now + 3500 };
+      btn.textContent = 'Void?';
+      btn.classList.add('armed');
+      setTimeout(function () {
+        if (!armed || armed.id !== id) return;
+        if (Date.now() < armed.until - 20) return;
+        armed = null;
+        if (btn.isConnected) {
+          btn.textContent = 'Void';
+          btn.classList.remove('armed');
+        }
+      }, 3600);
+    }
+
+    function openEdit(id) {
+      var punch = null;
+      for (var i = 0; i < state.punches.length; i++) {
+        if (state.punches[i].id === id) punch = state.punches[i];
+      }
+      if (!punch || punch.voided) return;
+      editingId = id;
+      var parts = G.chicagoParts(punch.at);
+      document.getElementById('edit-kind').textContent = punch.kind === 'in' ? 'In punch' : 'Out punch';
+      document.getElementById('edit-date').value = G.formatYMD(G.chicagoYMD(punch.at));
+      document.getElementById('edit-time').value = String(parts.h).padStart(2, '0') + ':' + String(parts.mi).padStart(2, '0');
+      document.getElementById('edit-note').value = punch.note || '';
+      document.getElementById('edit-error').textContent = '';
+      dialog.showModal();
+    }
+
+    document.getElementById('edit-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var date = G.parseYMD(document.getElementById('edit-date').value);
+      var time = /^(\d{2}):(\d{2})(?::(\d{2}))?$/.exec(document.getElementById('edit-time').value);
+      var error = document.getElementById('edit-error');
+      if (!date || !time) {
+        error.textContent = 'Enter a date and a time.';
+        return;
+      }
+      var at = G.wallToInstant(date.y, date.m, date.d, Number(time[1]), Number(time[2]), 0);
+      if (at == null) {
+        error.textContent = 'That time does not exist in Chicago. Daylight saving skipped it.';
+        return;
+      }
+      var result = G.editPunch(state, editingId, { at: at, note: document.getElementById('edit-note').value });
+      if (!result.ok) {
+        error.textContent = result.error;
+        return;
+      }
+      persist();
+      stateRev++;
+      dialog.close();
+      flash(result.punch.edited ? 'Punch corrected.' : 'No change.');
+      paintAll(Date.now());
+    });
+
+    document.getElementById('edit-cancel').addEventListener('click', function () { dialog.close(); });
+    dialog.addEventListener('click', function (e) {
+      if (e.target === dialog) dialog.close();
+    });
+
+    function exportWeek() {
+      var now = Date.now();
+      var csv = G.buildCsv(state.punches, viewWeek, now);
+      var name = G.exportFilename(viewWeek);
+      var blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
+      flash('Saved ' + name);
+    }
+
+    punchBtn.addEventListener('click', function () {
+      var now = Date.now();
+      if (now - lastPunchAt < 700) return;
+      lastPunchAt = now;
+      var kind = G.nextKind(state.punches);
+      G.addPunch(state, kind, now, noteInput.value);
+      noteInput.value = '';
+      persist();
+      stateRev++;
+      viewWeek = G.weekStart(now);
+      flash((kind === 'in' ? 'Punched in' : 'Punched out') + ' · ' + G.formatTime(now));
+      shake();
+      if (navigator.vibrate) navigator.vibrate(12);
+      paintAll(now);
+    });
+
+    noteInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        punchBtn.click();
+      }
+    });
+
+    window.addEventListener('storage', function (e) {
+      if (e.key && e.key !== G.STORAGE_KEY) return;
+      state = G.load(storage);
+      stateRev++;
+      paintAll(Date.now());
+    });
+
+    document.addEventListener('visibilitychange', function () {
+      if (!document.hidden) paintAll(Date.now());
+    });
+
+    if (navigator.storage && navigator.storage.persist) {
+      navigator.storage.persist().catch(function () {});
+    }
+    if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
+      navigator.serviceWorker.register('sw.js').catch(function () {});
+    }
+
+    buildDrums();
+    paintAll(Date.now());
+    setInterval(function () { paintAll(Date.now()); }, 1000);
+  })();
+  </script>
+</body>
+</html>
