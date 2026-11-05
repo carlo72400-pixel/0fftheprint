@@ -345,9 +345,11 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
 .ask-stage{transform:translate(calc(var(--px) * 10px),calc(var(--py) * 6px)) rotateY(calc(var(--px) * -4deg)) rotateX(calc(var(--py) * 3deg));transform-style:preserve-3d;transition:transform .08s linear}
 .ask-who{transform:translateZ(40px)}
 .askfull[hidden]{display:none}
-/* 11/5: cold open holds a solid plate and the CRT until the art's decode() resolves. Multiply on #1a0a10 hides the scanlines, so the wait state paints them in normal blend. */
+/* 11/5: cold open holds a solid plate and the CRT until the art's decode() resolves. Multiply on #1a0a10 hides the scanlines, so the wait state paints them in normal blend.
+   The question stays up while the art waits: it is live text, and without it the plate is only YES and NOT TONIGHT. */
 .askfull.wait .ask-stage,
 .askfull.wait > .ask-wall{visibility:hidden}
+.askfull.wait .ask-h{visibility:visible}
 .askfull.wait::after{mix-blend-mode:normal}
 .askfull>*{position:relative;z-index:1}
 .ask-top{display:flex;align-items:center;justify-content:space-between;padding:0 14px;min-height:34px}
@@ -580,11 +582,12 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
     <h2>Take log</h2><p class="sub">tap the circle on the keeper · notes stick · share the CSV</p>
     <div class="row"><button type="button" class="btn primary" id="tk-share">Share CSV</button><button type="button" class="btn" id="tk-copy">Copy CSV</button></div>
     <button type="button" class="btn" id="tk-night">Archive the night</button>
+    <button type="button" class="btn ghost" id="tk-back" hidden>No file? Bring the night back</button>
     <p class="note" id="tk-cap" hidden></p>
     <div class="seg"><button type="button" data-tkf="all" aria-pressed="true">Every take</button><button type="button" data-tkf="circ" aria-pressed="false">Circles only</button></div>
     <ul class="list" id="tk-list"></ul>
     <button type="button" class="btn ghost bad" id="tk-clear">Clear the log</button>
-    <p class="note">One row per mark: time, roll, scene, shot, take, circle, note. Drop the CSV next to the footage and the keepers are already picked when you sit down in Resolve. Archive the night downloads that CSV and clears this phone. Past 500 marks, the oldest drops off.</p>
+    <p class="note">One row per mark: time, roll, scene, shot, take, circle, note. Drop the CSV next to the footage and the keepers are already picked when you sit down in Resolve. Archive the night downloads that CSV and clears this phone. No file? Bring the night back puts it on the log again. Past 500 marks, the oldest drops off.</p>
   </section>
 
   <!-- ===== RELEASE ===== -->
@@ -923,6 +926,8 @@ function tkPaint(){
       ? TAKE_CAP + ' marks. The oldest drops off on the next mark. Archive the night to keep them.'
       : TAKES.length + ' of ' + TAKE_CAP + ' marks on this phone. Archive the night before the oldest start dropping.';
   }
+  const back = $('#tk-back');
+  if (back) { const last = load('takesLast', []); back.hidden = !(Array.isArray(last) && last.length); }
   if (!TAKES.length) { ul.innerHTML = '<li class="empty">No takes yet. Mark one on the Slate.</li>'; return; }
   const rows = TAKES.map((x, n) => ({x, n})).filter(r => TKF === 'all' || r.x.circ).reverse();
   if (!rows.length) { ul.innerHTML = '<li class="empty">No circled takes yet.</li>'; return; }
@@ -959,7 +964,20 @@ $('#tk-night').addEventListener('click', () => {
     const a = document.createElement('a'); a.href = u; a.download = name; document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(u), 4000);
   } catch(e) { toast('Could not save the CSV. Log kept.'); return; }
-  TAKES = []; save('takes', TAKES); tkPaint(); slPaint(); toast('Night archived. Log cleared.');
+  /* 11/5 (desktop Claude): a.click() can't tell us the file landed. iPhone asks "Download?" and a tap outside cancels it, Chrome can ask
+     where to save, and the home-screen app can drop a blob download. So the night moves to kit-takesLast instead of vanishing, and
+     Bring the night back puts it on the log again. The next archive replaces it. */
+  const night = TAKES; TAKES = []; save('takes', TAKES);
+  if (!save('takesLast', night)) { TAKES = night; save('takes', TAKES); tkPaint(); slPaint(); toast('No room to keep a copy, so the log stays. Check the CSV, then Clear the log.'); return; }
+  tkPaint(); slPaint(); toast('Night archived. No file? Bring it back below.');
+});
+$('#tk-back').addEventListener('click', () => {
+  const last = load('takesLast', []);
+  if (!Array.isArray(last) || !last.length) { tkPaint(); return; }
+  const both = last.concat(TAKES);   /* the archived night goes back in front of anything marked since */
+  try { localStorage.removeItem('kit-takesLast'); } catch(e){}
+  if (!save('takes', both)) { save('takesLast', last); toast('No room to bring it back. Share or clear what is on the log first.'); return; }
+  TAKES = both; buzz(); tkPaint(); slPaint(); toast('The night is back on the log.');
 });
 
 /* ---------- RELEASE ---------- */
