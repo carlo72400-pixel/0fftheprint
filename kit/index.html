@@ -19,6 +19,11 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" href="icon-192.png">
+<!-- 11/5: warm the Ask art from the home page, before anyone taps it. Same URLs the worker already precaches. -->
+<link rel="preload" as="image" href="../assets/cathedral/shot/ask_p.webp?v=3">
+<link rel="preload" as="image" href="../assets/cathedral/shot/ask_l.webp?v=4">
+<link rel="preload" as="image" href="../assets/cathedral/shot/ask_wall_p.webp?v=3">
+<link rel="preload" as="image" href="../assets/cathedral/shot/ask_wall_l.webp?v=3">
 <style>
 /* the house fonts, self-hosted (10/15): Samsung's custom font and an offline open used to swap them out */
 @font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:url(../assets/fonts/inter-400.woff2) format('woff2')}
@@ -74,7 +79,7 @@ body[data-tool]:not([data-tool="home"]) .bar .back{display:flex}
 .doors{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .door{position:relative;display:grid;grid-template-columns:48px minmax(0,1fr);gap:4px 12px;align-items:center;min-height:86px;padding:12px 12px 12px 10px;border:1px solid var(--line);background:var(--panel);color:var(--ink);text-align:left;transition:transform .15s,border-color .2s}
 .door:active{transform:scale(.97);border-color:var(--glow)}
-.door img{grid-row:span 2;width:48px;height:48px;object-fit:contain;filter:drop-shadow(0 0 10px rgba(255,121,198,.35))}
+.door img{grid-row:span 2;width:48px;height:auto;object-fit:contain;filter:drop-shadow(0 0 10px rgba(255,121,198,.35))}
 .door b{font:900 italic 20px/1 var(--f-display);text-transform:uppercase;letter-spacing:.01em}
 .door span{font:600 11px/1.3 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .door em{position:absolute;top:6px;right:8px;font:700 11px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--glow);font-style:normal}
@@ -163,6 +168,7 @@ input[type=range]{width:100%;accent-color:var(--glow);height:44px}
 .take .tx small{font:500 11px/1.3 var(--f-mono);color:var(--muted)}
 .take .circ{width:46px;height:46px;border-radius:50%;border:2px solid var(--line);background:none;color:var(--muted);font:900 16px/1 var(--f-display)}
 .take .circ[aria-pressed="true"]{border-color:var(--ok);color:var(--ok);box-shadow:0 0 0 3px rgba(126,231,135,.2)}
+.tk-day{padding:10px 2px 0;font:700 11px/1.2 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--pink)}
 
 /* release */
 .sig{position:relative;height:160px;border:1px solid var(--line);background:#fff;touch-action:none}
@@ -339,6 +345,12 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
 .ask-stage{transform:translate(calc(var(--px) * 10px),calc(var(--py) * 6px)) rotateY(calc(var(--px) * -4deg)) rotateX(calc(var(--py) * 3deg));transform-style:preserve-3d;transition:transform .08s linear}
 .ask-who{transform:translateZ(40px)}
 .askfull[hidden]{display:none}
+/* 11/5: cold open holds a solid plate and the CRT until the art's decode() resolves. Multiply on #1a0a10 hides the scanlines, so the wait state paints them in normal blend.
+   The question stays up while the art waits: it is live text, and without it the plate is only YES and NOT TONIGHT. */
+.askfull.wait .ask-stage,
+.askfull.wait > .ask-wall{visibility:hidden}
+.askfull.wait .ask-h{visibility:visible}
+.askfull.wait::after{mix-blend-mode:normal}
 .askfull>*{position:relative;z-index:1}
 .ask-top{display:flex;align-items:center;justify-content:space-between;padding:0 14px;min-height:34px}
 .ask-top{min-height:30px}
@@ -496,7 +508,8 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
       <button type="button" class="door" data-go="vf"><img src="../assets/cathedral/w/pin.webp" alt="" width="192" height="192"><b>Viewfinder</b><span>frame guides</span></button>
       <button type="button" class="door" data-go="expo"><img src="../assets/cathedral/w/deal.webp" alt="" width="192" height="192"><b>Exposure</b><span>FX6 · Luna · shutter · ND · depth</span></button>
       <button type="button" class="door" data-go="slowmo"><img src="../assets/cathedral/w/fest.webp" alt="" width="192" height="192"><b>Slow-mo</b><span>rates · shutter · how slow</span></button>
-      <button type="button" class="door" data-go="watch"><img src="../assets/cathedral/a/coming.webp" alt="" width="192" height="192"><b>Stopwatch</b><span>start · lap · it keeps going</span></button>
+      <!-- hourglass: the set has no stopwatch tile, and a/coming.webp is the calendar mark -->
+      <button type="button" class="door" data-go="watch"><img src="../assets/cathedral/k/other.webp" alt="" width="192" height="192"><b>Stopwatch</b><span>start · lap · it keeps going</span></button>
       <button type="button" class="door" data-go="screens"><img src="../assets/cathedral/w/lock.webp" alt="" width="192" height="192"><b>Screens</b><span>grey · bars · tone</span></button>
     </div>
     <p class="foot">Built by <a href="../">0FF THE PRINT</a> · San Antonio · add it to your home screen and it opens with no signal · <a href="../wall/">the Crypt</a></p>
@@ -568,10 +581,13 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
   <section id="t-takes" class="tool" hidden>
     <h2>Take log</h2><p class="sub">tap the circle on the keeper · notes stick · share the CSV</p>
     <div class="row"><button type="button" class="btn primary" id="tk-share">Share CSV</button><button type="button" class="btn" id="tk-copy">Copy CSV</button></div>
+    <button type="button" class="btn" id="tk-night">Archive the night</button>
+    <button type="button" class="btn ghost" id="tk-back" hidden>No file? Bring the night back</button>
+    <p class="note" id="tk-cap" hidden></p>
     <div class="seg"><button type="button" data-tkf="all" aria-pressed="true">Every take</button><button type="button" data-tkf="circ" aria-pressed="false">Circles only</button></div>
     <ul class="list" id="tk-list"></ul>
     <button type="button" class="btn ghost bad" id="tk-clear">Clear the log</button>
-    <p class="note">One row per mark: time, roll, scene, shot, take, circle, note. Drop the CSV next to the footage and the keepers are already picked when you sit down in Resolve.</p>
+    <p class="note">One row per mark: time, roll, scene, shot, take, circle, note. Drop the CSV next to the footage and the keepers are already picked when you sit down in Resolve. Archive the night downloads that CSV and clears this phone. No file? Bring the night back puts it on the log again. Past 500 marks, the oldest drops off.</p>
   </section>
 
   <!-- ===== RELEASE ===== -->
@@ -745,9 +761,28 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const load = (k, d) => { try { const v = localStorage.getItem('kit-' + k); return v == null ? d : JSON.parse(v); } catch(e){ return d; } };
-const save = (k, v) => { try { localStorage.setItem('kit-' + k, JSON.stringify(v)); } catch(e){} };
+const save = (k, v) => { try { localStorage.setItem('kit-' + k, JSON.stringify(v)); return true; } catch(e){ return false; } };
 let toastT; function toast(m){ const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 2200); }
 const buzz = () => { try { navigator.vibrate && navigator.vibrate(12); } catch(e){} };
+/* 11/5: one screen wake lock for every full-screen tool. The slate used to write PR.lock, which orphaned the prompter's
+   sentinel and let one close release the other's. A refcount, and a fresh request when the phone comes back: the browser drops the lock while the page is hidden. */
+let wakeN = 0, wakeLock = null, wakeP = null;
+function wakeHold(){ wakeN++; wakeAcquire(); }
+function wakeDrop(){
+  wakeN = Math.max(0, wakeN - 1);
+  if (wakeN) return;
+  wakeP = null;
+  const l = wakeLock; wakeLock = null;
+  try { l && l.release(); } catch(e){}
+}
+function wakeAcquire(){
+  if (!wakeN || wakeLock || wakeP || document.hidden || !('wakeLock' in navigator)) return;
+  const p = wakeP = navigator.wakeLock.request('screen').then(l => {
+    if (wakeP !== p || !wakeN) { if (wakeP === p) wakeP = null; try { l.release(); } catch(e){} return; }
+    wakeP = null; wakeLock = l;
+    l.addEventListener('release', () => { if (wakeLock === l) wakeLock = null; });
+  }).catch(() => { if (wakeP === p) wakeP = null; });
+}
 const TOOLS = ['home','prompter','slate','takes','release','sun','vf','expo','slowmo','watch','screens'];
 const NAMES = {home:'KIT', prompter:'Prompter', slate:'Slate', takes:'Take log', release:'Release', sun:'Golden hour', vf:'Viewfinder', expo:'Exposure', slowmo:'Slow-mo', watch:'Stopwatch', screens:'Screens'};
 function go(t, push){
@@ -773,6 +808,7 @@ if (!matchMedia('(display-mode: standalone)').matches && !navigator.standalone &
   setTimeout(() => { toast('Share → Add to Home Screen puts the kit on your phone'); save('iosHint', 1); }, 2500);
 }
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {}); } catch(e){}
 
 /* ---------- audio: the beep and the tone ---------- */
 let AC = null; const ac = () => { if (!AC) { try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){} } if (AC && AC.state === 'suspended') AC.resume(); return AC; };
@@ -785,7 +821,7 @@ function beep(ms, freq, gain){
 }
 
 /* ---------- TELEPROMPTER ---------- */
-const PR = {y: 0, run: false, last: 0, speed: load('prSpeed', 55), size: load('prSize', 42), mirror: load('prMirror', false), count: load('prCount', true), raf: 0, hudT: 0, lock: null};
+const PR = {y: 0, run: false, last: 0, speed: load('prSpeed', 55), size: load('prSize', 42), mirror: load('prMirror', false), count: load('prCount', true), raf: 0, hudT: 0};
 $('#pr-src').value = load('prText', '');
 $('#pr-speed').value = PR.speed; $('#pr-speed-o').value = PR.speed; $('#pr-size').value = PR.size; $('#pr-size-o').value = PR.size;
 $('#pr-mirror').setAttribute('aria-pressed', String(PR.mirror)); $('#pr-count').setAttribute('aria-pressed', String(PR.count));
@@ -814,18 +850,19 @@ function prTick(now){
 function prPlay(){ PR.run = true; PR.last = performance.now(); $('#pr-state').textContent = 'Rolling'; $('#pr-toggle').textContent = 'Pause'; cancelAnimationFrame(PR.raf); PR.raf = requestAnimationFrame(prTick); }
 function prPause(label){ PR.run = false; cancelAnimationFrame(PR.raf); $('#pr-state').textContent = label || 'Paused'; $('#pr-toggle').textContent = label === 'End' ? 'Again' : 'Play'; }
 function prHud(){ $('#pr-hud').classList.remove('hide'); clearTimeout(PR.hudT); PR.hudT = setTimeout(() => { if (PR.run) $('#pr-hud').classList.add('hide'); }, 2600); }
-async function prOpen(){
+function prOpen(){
   const txt = $('#pr-src').value.trim(); if (!txt) { toast('Paste a script first.'); return; }
   $('#pr-text').textContent = txt; $('#pr-text').style.setProperty('--pr-size', PR.size + 'px'); $('#pr-text').style.font = `700 ${PR.size}px/1.3 var(--f-body)`;
   $('#pr-scroll').classList.toggle('mirror', PR.mirror);
   PR.y = 0; $('#pr-text').style.transform = 'translateY(0)';
+  const fresh = !$('#pr-full').classList.contains('on');
   $('#pr-full').classList.add('on'); prHud();
-  try { PR.lock = await navigator.wakeLock.request('screen'); } catch(e){}
+  if (fresh) wakeHold();
   if (PR.count) { let n = 3; $('#pr-state').textContent = String(n); prCdStop(); PR.cd = setInterval(() => { n--; if (n <= 0) { prCdStop(); prPlay(); } else $('#pr-state').textContent = String(n); }, 1000); }
   else prPlay();
 }
 function prCdStop(){ if (PR.cd) { clearInterval(PR.cd); PR.cd = 0; } }
-function prClose(){ prCdStop(); prPause(); $('#pr-full').classList.remove('on'); try { PR.lock && PR.lock.release(); } catch(e){} PR.lock = null; }
+function prClose(){ prCdStop(); prPause(); const el = $('#pr-full'); if (!el.classList.contains('on')) return; el.classList.remove('on'); wakeDrop(); }
 $('#pr-go').addEventListener('click', prOpen);
 $('#pr-full').addEventListener('click', e => {
   if (e.target.closest('[data-prx]')) { prClose(); return; }
@@ -839,6 +876,9 @@ $('#pr-full').addEventListener('click', e => {
 /* ---------- SLATE + TAKE LOG ---------- */
 const SL = Object.assign({prod: '0TP', roll: 'A001', cam: 'FX6', scene: 1, shot: 'A', take: 1, note: ''}, load('slate', {}));
 let TAKES = load('takes', []);
+if (!Array.isArray(TAKES)) TAKES = [];
+const TAKE_CAP = 500;
+if (TAKES.length > TAKE_CAP) { TAKES = TAKES.slice(-TAKE_CAP); save('takes', TAKES); }
 const LET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 function slPaint(){
   $('#sl-prod').textContent = SL.prod || '0TP'; $('#sl-roll').textContent = SL.roll || 'A001'; $('#sl-cam').textContent = SL.cam || 'FX6';
@@ -849,10 +889,9 @@ function slPaint(){
   $('#takes-n').textContent = TAKES.length ? TAKES.length + ' takes' : '';
   ['prod', 'roll', 'cam', 'scene', 'shot', 'take', 'date'].forEach(k => { const el = $('#f-' + k); if (el) el.textContent = $('#sl-' + k).textContent; });
 }
-$('#sl-full').addEventListener('click', async () => { slPaint(); $('#sl-fullv').classList.add('on'); try { PR.lock = await navigator.wakeLock.request('screen'); } catch(e){} });
-$('#sl-fullx').addEventListener('click', () => { $('#sl-fullv').classList.remove('on'); try { PR.lock && PR.lock.release(); } catch(e){} });
+$('#sl-full').addEventListener('click', () => { slPaint(); const el = $('#sl-fullv'); if (el.classList.contains('on')) return; el.classList.add('on'); wakeHold(); });
+$('#sl-fullx').addEventListener('click', () => { const el = $('#sl-fullv'); if (!el.classList.contains('on')) return; el.classList.remove('on'); wakeDrop(); });
 $('#f-mark').addEventListener('click', () => mark(false)); $('#f-tail').addEventListener('click', () => mark(true));
-document.addEventListener('visibilitychange', async () => { if (document.hidden) return; if ($('#pr-full').classList.contains('on') || $('#sl-fullv').classList.contains('on')) { try { PR.lock = await navigator.wakeLock.request('screen'); } catch(e){} } });
 setInterval(() => { const t = new Date().toLocaleTimeString('en-US', {hour12:false}); $('#sl-clock').textContent = t; const f = $('#f-clock'); if (f) f.textContent = t; }, 500);
 ['prod','roll','cam','note'].forEach(k => $('#in-' + k).addEventListener('input', e => { SL[k] = e.target.value; save('slate', SL); slPaint(); }));
 document.addEventListener('click', e => {
@@ -870,21 +909,50 @@ function mark(tail){
   beep(tail ? 500 : 250, 1000, .6); buzz();
   const now = new Date();
   TAKES.push({t: now.toISOString(), roll: SL.roll, scene: SL.scene, shot: SL.shot, take: SL.take, tail: !!tail, circ: false, note: SL.note || '', cam: SL.cam, prod: SL.prod});
-  save('takes', TAKES);
-  toast(`${tail ? 'Tail ' : ''}Sc ${SL.scene} ${SL.shot} take ${SL.take} marked`);
+  let dropped = false;
+  if (TAKES.length > TAKE_CAP) { TAKES.splice(0, TAKES.length - TAKE_CAP); dropped = true; }
+  const kept = save('takes', TAKES);
+  toast(kept ? `${tail ? 'Tail ' : ''}Sc ${SL.scene} ${SL.shot} take ${SL.take} marked${dropped ? ' · oldest mark dropped' : ''}` : 'This phone is full. Archive the night, then mark again.');
   SL.take += 1; SL.note = ''; save('slate', SL); slPaint();
 }
 $('#sl-mark').addEventListener('click', () => mark(false));
 $('#sl-tail').addEventListener('click', () => mark(true));
+/* 11/5: a shoot night rolls at 6 AM local, so 1:20 AM sits under the night before. Archive and Share name the CSV with that local night, not UTC. */
+function nightKey(t){
+  const n = new Date(t);
+  if (n.getHours() < 6) n.setDate(n.getDate() - 1);
+  const key = n.getFullYear() + '-' + pad2(n.getMonth() + 1) + '-' + pad2(n.getDate());
+  return {key, label: n.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'})};
+}
+/* the file is named for the nights the log holds, not the moment it is saved: archiving Wednesday's takes on Thursday afternoon still says Wednesday */
+const takesName = () => {
+  const ts = TAKES.map(x => +new Date(x.t)).filter(n => n === n);
+  if (!ts.length) return 'takes-' + nightKey(new Date()).key + '.csv';
+  const a = nightKey(Math.min(...ts)).key, b = nightKey(Math.max(...ts)).key;
+  return 'takes-' + (a === b ? a : a + '_to_' + b) + '.csv';
+};
 function tkPaint(){
   const ul = $('#tk-list');
+  const cap = $('#tk-cap');
+  if (cap) {
+    cap.hidden = TAKES.length < 450;
+    cap.textContent = TAKES.length >= TAKE_CAP
+      ? TAKE_CAP + ' marks. The oldest drops off on the next mark. Archive the night to keep them.'
+      : TAKES.length + ' of ' + TAKE_CAP + ' marks on this phone. Archive the night before the oldest start dropping.';
+  }
+  const back = $('#tk-back');
+  if (back) { const last = load('takesLast', []); back.hidden = !(Array.isArray(last) && last.length); }
   if (!TAKES.length) { ul.innerHTML = '<li class="empty">No takes yet. Mark one on the Slate.</li>'; return; }
   const rows = TAKES.map((x, n) => ({x, n})).filter(r => TKF === 'all' || r.x.circ).reverse();
   if (!rows.length) { ul.innerHTML = '<li class="empty">No circled takes yet.</li>'; return; }
-  ul.innerHTML = rows.map(({x, n}) => { const d = new Date(x.t);
-    return `<li class="take"><div class="id">${esc(x.scene)}${esc(x.shot)}<small>take ${esc(x.take)}${x.tail ? ' · tail' : ''}</small></div>
+  let day = '', html = '';
+  rows.forEach(({x, n}) => { const d = new Date(x.t); const nk = nightKey(d);
+    if (nk.key !== day) { day = nk.key; html += `<li class="tk-day">${esc(nk.label)}</li>`; }
+    html += `<li class="take"><div class="id">${esc(x.scene)}${esc(x.shot)}<small>take ${esc(x.take)}${x.tail ? ' · tail' : ''}</small></div>
       <div class="tx"><input value="${esc(x.note)}" placeholder="note" data-tknote="${n}" maxlength="140"><small>${esc(x.roll)} · ${esc(x.cam)} · ${d.toLocaleTimeString('en-US', {hour12:false})} · <button type="button" data-tkdel="${n}" style="border:0;background:none;padding:0;color:var(--bad);font:inherit">delete</button></small></div>
-      <button type="button" class="circ" data-tkcirc="${n}" aria-pressed="${x.circ}" aria-label="Circle take">${x.circ ? '●' : '○'}</button></li>`; }).join('');
+      <button type="button" class="circ" data-tkcirc="${n}" aria-pressed="${x.circ}" aria-label="Circle take">${x.circ ? '●' : '○'}</button></li>`;
+  });
+  ul.innerHTML = html;
 }
 let TKF = 'all';
 $('#tk-list').addEventListener('click', e => { const d = e.target.closest('[data-tkdel]'); if (d) { TAKES.splice(+d.dataset.tkdel, 1); save('takes', TAKES); tkPaint(); slPaint(); return; } const b = e.target.closest('[data-tkcirc]'); if (!b) return; const x = TAKES[+b.dataset.tkcirc]; x.circ = !x.circ; save('takes', TAKES); buzz(); tkPaint(); });
@@ -897,9 +965,33 @@ async function shareFile(file, title, fallbackText){
   if (fallbackText) { try { await navigator.clipboard.writeText(fallbackText); toast('Copied instead.'); return true; } catch(e){} }
   return false;
 }
-$('#tk-share').addEventListener('click', async () => { if (!TAKES.length) { toast('Nothing to share yet.'); return; } const name = 'takes-' + new Date().toISOString().slice(0, 10) + '.csv'; await shareFile(new File([csvOf()], name, {type: 'text/csv'}), 'Take log', csvOf()); });
+$('#tk-share').addEventListener('click', async () => { if (!TAKES.length) { toast('Nothing to share yet.'); return; } await shareFile(new File([csvOf()], takesName(), {type: 'text/csv'}), 'Take log', csvOf()); });
 $('#tk-copy').addEventListener('click', async () => { if (!TAKES.length) { toast('Nothing to copy yet.'); return; } try { await navigator.clipboard.writeText(csvOf()); toast('CSV copied.'); } catch(e){ toast('Could not copy here.'); } });
 $('#tk-clear').addEventListener('click', () => { if (!TAKES.length) return; if (!confirm('Clear every take on this phone?')) return; TAKES = []; save('takes', TAKES); tkPaint(); slPaint(); });
+$('#tk-night').addEventListener('click', () => {
+  if (!TAKES.length) { toast('Nothing to archive yet.'); return; }
+  if (!confirm('Download the CSV and clear the log on this phone?')) return;
+  try {
+    const name = takesName();
+    const u = URL.createObjectURL(new Blob([csvOf()], {type: 'text/csv'}));
+    const a = document.createElement('a'); a.href = u; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(u), 4000);
+  } catch(e) { toast('Could not save the CSV. Log kept.'); return; }
+  /* 11/5 (desktop Claude): a.click() can't tell us the file landed. iPhone asks "Download?" and a tap outside cancels it, Chrome can ask
+     where to save, and the home-screen app can drop a blob download. So the night moves to kit-takesLast instead of vanishing, and
+     Bring the night back puts it on the log again. The next archive replaces it. */
+  const night = TAKES; TAKES = []; save('takes', TAKES);
+  if (!save('takesLast', night)) { TAKES = night; save('takes', TAKES); tkPaint(); slPaint(); toast('No room to keep a copy, so the log stays. Check the CSV, then Clear the log.'); return; }
+  tkPaint(); slPaint(); toast('Night archived. No file? Bring it back below.');
+});
+$('#tk-back').addEventListener('click', () => {
+  const last = load('takesLast', []);
+  if (!Array.isArray(last) || !last.length) { tkPaint(); return; }
+  const both = last.concat(TAKES);   /* the archived night goes back in front of anything marked since */
+  try { localStorage.removeItem('kit-takesLast'); } catch(e){}
+  if (!save('takes', both)) { save('takesLast', last); toast('No room to bring it back. Share or clear what is on the log first.'); return; }
+  TAKES = both; buzz(); tkPaint(); slPaint(); toast('The night is back on the log.');
+});
 
 /* ---------- RELEASE ---------- */
 /* the words are templates: {P} = who is shooting, filled from the producer block so anybody can use this, not just the house */
@@ -1073,7 +1165,16 @@ $('#sun-date').addEventListener('change', sunPaint); $('#sun-time').addEventList
 $('#sun-t').addEventListener('input', e => { const v = +e.target.value; $('#sun-time').value = `${pad2(Math.floor(v / 60))}:${pad2(v % 60)}`; sunPaint(); });
 
 /* ---------- VIEWFINDER ---------- */
-const VF = {ar: 1.7778, fl: 24, thirds: false, stream: null};
+const VFL = load('vf', {}) || {};
+const VF_ARS = [2.39, 1.85, 1.7778, 1.3333, 1, 0.8, 0.5625];
+const VF_FLS = [24, 35, 50, 85];
+const VF = {ar: VF_ARS.find(n => n === +VFL.ar) || 1.7778, fl: VF_FLS.includes(+VFL.fl) ? +VFL.fl : 24, thirds: false, stream: null, facing: VFL.facing === 'user' ? 'user' : 'environment'};
+function vfSave(){ save('vf', {ar: VF.ar, fl: VF.fl, facing: VF.facing}); }
+function vfSync(){
+  $$('#vf-ar button').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.ar === VF.ar)));
+  $$('#vf-fl button').forEach(b => { if (b.dataset.fl === 't') return; b.setAttribute('aria-pressed', String(+b.dataset.fl === VF.fl)); });
+}
+vfSync();
 function vfLayout(){
   const W = innerWidth, H = innerHeight, m = $('#vf-mask'); let w = W, h = W / VF.ar; if (h > H) { h = H; w = H * VF.ar; }
   const x = (W - w) / 2, y = (H - h) / 2;
@@ -1083,7 +1184,6 @@ function vfLayout(){
   const arName = {2.39: '2.39', 1.85: '1.85', 1.7778: '16:9', 1.3333: '4:3', 1: '1:1', 0.8: '4:5', 0.5625: '9:16'}[VF.ar] || String(VF.ar);
   $('#vf-tag').textContent = `${arName} · ${VF.fl}mm`;
 }
-VF.facing = 'environment';
 async function vfOpen(){
   try { VF.stream = await navigator.mediaDevices.getUserMedia({video: {facingMode: {ideal: VF.facing}, width: {ideal: 1920}, height: {ideal: 1080}}, audio: false}); }
   catch(e){ $('#vf').classList.remove('on'); toast('Camera said no. Allow it in Settings and try again.'); return; }
@@ -1091,10 +1191,10 @@ async function vfOpen(){
 }
 function vfClose(){ $('#vf').classList.remove('on'); if (VF.stream) VF.stream.getTracks().forEach(t => t.stop()); VF.stream = null; }
 $('#vf-open').addEventListener('click', vfOpen); $('#vf-x').addEventListener('click', vfClose);
-$('#vf-ar').addEventListener('click', e => { const b = e.target.closest('[data-ar]'); if (!b) return; VF.ar = +b.dataset.ar; $$('#vf-ar button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); vfLayout(); });
-$('#vf-fl').addEventListener('click', e => { const b = e.target.closest('[data-fl]'); if (!b) return; if (b.dataset.fl === 't') { VF.thirds = !VF.thirds; b.setAttribute('aria-pressed', String(VF.thirds)); } else { VF.fl = +b.dataset.fl; $$('#vf-fl button[data-fl]:not([data-fl="t"])').forEach(x => x.setAttribute('aria-pressed', String(x === b))); } vfLayout(); });
+$('#vf-ar').addEventListener('click', e => { const b = e.target.closest('[data-ar]'); if (!b) return; VF.ar = +b.dataset.ar; $$('#vf-ar button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); vfSave(); vfLayout(); });
+$('#vf-fl').addEventListener('click', e => { const b = e.target.closest('[data-fl]'); if (!b) return; if (b.dataset.fl === 't') { VF.thirds = !VF.thirds; b.setAttribute('aria-pressed', String(VF.thirds)); } else { VF.fl = +b.dataset.fl; $$('#vf-fl button[data-fl]:not([data-fl="t"])').forEach(x => x.setAttribute('aria-pressed', String(x === b))); vfSave(); } vfLayout(); });
 window.addEventListener('resize', () => { if ($('#vf').classList.contains('on')) vfLayout(); });
-$('#vf-flip').addEventListener('click', async () => { VF.facing = VF.facing === 'environment' ? 'user' : 'environment'; if (VF.stream) VF.stream.getTracks().forEach(t => t.stop()); await vfOpen(); });
+$('#vf-flip').addEventListener('click', async () => { VF.facing = VF.facing === 'environment' ? 'user' : 'environment'; vfSave(); if (VF.stream) VF.stream.getTracks().forEach(t => t.stop()); await vfOpen(); });
 $('#vf-grab').addEventListener('click', async () => {
   const v = $('#vf-video'); if (!v.videoWidth) { toast('No picture yet.'); return; }
   const W = innerWidth, H = innerHeight, vs = Math.max(W / v.videoWidth, H / v.videoHeight) * (VF.fl / 24); const vw = v.videoWidth * vs, vh = v.videoHeight * vs, ox = (W - vw) / 2, oy = (H - vh) / 2;
@@ -1107,7 +1207,25 @@ function flashWhite(a){ const f = $('#flash'); f.style.opacity = a; f.classList.
 function click(){ const c = ac(); if (!c) return; const n = c.createBufferSource(), b = c.createBuffer(1, c.sampleRate * .05, c.sampleRate), d = b.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 3); n.buffer = b; const g = c.createGain(); g.gain.value = .4; n.connect(g); g.connect(c.destination); n.start(); }
 
 /* ---------- EXPOSURE ---------- */
-const EX = {cam: 'fx6', fps: 23.976, nd: 3, sensor: 'ff', ang: 180};
+const EXL = load('expo', {}) || {};
+const EX = {
+  cam: EXL.cam === 'luna' ? 'luna' : 'fx6',
+  fps: [23.976, 25, 29.97, 50, 59.94, 120].find(n => n === +EXL.fps) || 23.976,
+  nd: Math.min(10, Math.max(1, Math.round(+EXL.nd) || 3)),
+  sensor: ['ff', 's35', 'luna1', 'luna3'].includes(EXL.sensor) ? EXL.sensor : 'ff',
+  ang: [45, 90, 172.8, 180, 270, 360].find(n => n === +EXL.ang) || 180
+};
+if (EX.cam === 'luna' && !/luna/.test(EX.sensor)) EX.sensor = 'luna1';
+if (EX.cam === 'fx6' && /luna/.test(EX.sensor)) EX.sensor = 'ff';
+function exSave(){ save('expo', {cam: EX.cam, fps: EX.fps, ang: EX.ang, nd: EX.nd, sensor: EX.sensor}); }
+function exSync(){
+  $$('#ex-cam button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.cam === EX.cam)));
+  $$('#ex-fps button').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.fps === EX.fps)));
+  $$('#ex-ang button').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.ang === EX.ang)));
+  $$('#ex-sensor button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.s === EX.sensor)));
+  const nd = $('#ex-nd'); if (nd) { nd.value = EX.nd; $('#ex-nd-o').value = EX.nd; }
+}
+exSync();
 // sensor width mm, circle of confusion mm, name, and for the Luna's fixed lenses: the full-frame feel (focal equiv, f-stop equiv)
 const SENS = {ff: [35.7, .029, 'FX6 full frame'], s35: [23.5, .02, 'FX6 Super 35'], luna1: [35.7, .029, 'Luna 1x, the 1-inch', 20, 4.9], luna3: [35.7, .029, 'Luna 3x, the tele', 60, 7.4]};
 const FX6ND = [[2, '1/4'], [3, '1/8'], [4, '1/16'], [5, '1/32'], [6, '1/64'], [7, '1/128']];
@@ -1143,6 +1261,7 @@ function exPaint(){
   $('#ex-dof').innerHTML = `<div class="stat hot"><i>In focus</i><b>${ft(near_)} to ${ft(far)}</b><small>${far === Infinity ? 'everything past ' + ft(near_) : 'total ' + ft(far - near_)}</small></div><div class="stat"><i>Hyperfocal</i><b>${ft(H)}</b><small>focus here, sharp to infinity</small></div><div class="stat"><i>Field of view</i><b>${Math.round(fov)}°</b><small>${sname} · ${lunaLens ? f + 'mm equiv' : f + 'mm'}</small></div><div class="stat"><i>${lunaLens ? 'Feels like' : 'Full-frame equivalent'}</i><b>${lunaLens ? 'f/' + a + ' on FF' : Math.round(f * 35.7 / sw) + 'mm'}</b><small>${lunaLens ? 'the real glass is ' + (EX.sensor === 'luna1' ? 'F1.8' : 'F2.0') + ', the small sensor deepens it' : 'what it feels like on the FX6'}</small></div>`;
   $('#ex-dofnote').textContent = lunaLens ? 'The Luna cannot open up or close down, so depth is set by distance and the lens you pick. Autofocus is its weakest system: tap-focus on the phone app and lock it.' : 'Near limit, the subject, far limit, to scale. Drag the numbers: a wider lens or a smaller stop pushes the far limit to infinity fast.';
   dofMap(near_ / 304.8, dft, far === Infinity ? Infinity : far / 304.8, H / 304.8);
+  exSave();
 }
 function dofMap(nearFt, subjFt, farFt, hFt){
   const c = $('#ex-dofmap'); if (!c) return; const x = c.getContext('2d'); const W = c.width, Hh = c.height; x.clearRect(0, 0, W, Hh);
@@ -1172,10 +1291,18 @@ $('#ex-sensor').addEventListener('click', e => { const b = e.target.closest('[da
 /* ---------- SLOW-MO ---------- */
 // every rate each body shoots, with the ceiling it costs: the FX6 does 4K to 120 and HD to 240 (S&Q); the Luna does 4K to 120
 // and 1080p at 240, and its 8K has no slow-mo at all. Thermal: the Luna at 4K120 shuts down around 44 minutes.
-const SM = {cam: 'fx6', rate: 60, out: 24};
+const SML = load('slowmo', {}) || {};
+const SM = {
+  cam: SML.cam === 'luna' ? 'luna' : 'fx6',
+  rate: [24, 25, 30, 48, 50, 60, 100, 120, 200, 240].includes(+SML.rate) ? +SML.rate : 60,
+  out: [24, 25, 30, 60].includes(+SML.out) ? +SML.out : 24
+};
+function smSave(){ save('slowmo', {cam: SM.cam, rate: SM.rate, out: SM.out}); }
 const RATES = {fx6: [[24, '4K'], [25, '4K'], [30, '4K'], [50, '4K'], [60, '4K'], [100, 'UHD, not DCI'], [120, 'UHD, not DCI'], [200, 'HD, full frame'], [240, 'HD, full frame']], luna: [[24, '8K · 4K'], [25, '8K · 4K'], [30, '8K · 4K'], [48, '4K'], [60, '4K'], [100, '4K · 2.7K'], [120, '4K · 44 min'], [200, '1080p only'], [240, '1080p only']]};
 function smRates(){ $('#sm-rate').innerHTML = RATES[SM.cam].map(r => `<button type="button" data-rate="${r[0]}" aria-pressed="${r[0] === SM.rate}">${r[0]}</button>`).join(''); }
 function smPaint(){
+  $$('#sm-cam button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.cam === SM.cam)));
+  $$('#sm-out button').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.out === SM.out)));
   const rates = RATES[SM.cam]; if (!rates.some(r => r[0] === SM.rate)) SM.rate = 60; smRates();
   const r = rates.filter(x => x[0] === SM.rate)[0]; const k = SM.rate / SM.out; const sh = SM.rate * 2; const stops = Math.log2(SM.rate / 24);
   const slow = k > 1.01;
@@ -1183,6 +1310,7 @@ function smPaint(){
   $('#sm-drag').style.setProperty('--k', String(Math.max(1, k))); $('#sm-tag').textContent = slow ? 'the same move at ' + k.toFixed(1) + 'x slower' : 'the same move, real time';
   $('#sm-out2').innerHTML = `<div class="stat"><i>Light</i><b>${stops <= 0 ? 'same as 24' : '-' + stops.toFixed(1) + ' stop' + (stops === 1 ? '' : 's')}</b><small>${stops > 0 ? 'the shutter is ' + Math.round(SM.rate / 24) + 'x shorter than at 24' : 'nothing to pay'}</small></div><div class="stat"><i>Resolution</i><b>${r[1]}</b><small>${SM.rate >= 200 ? (SM.cam === 'fx6' ? 'HD only, and full frame only, not S35' : '1080p only, a real quality hit') : SM.rate >= 100 && SM.cam === 'luna' ? '1x and 3x only, no continuous zoom · 4K120 shuts down near 44 min' : SM.rate >= 100 ? 'UHD only: DCI 4K stops at 60' : 'full quality'}</small></div>`;
   $('#sm-note').innerHTML = SM.cam === 'luna' ? 'Luna: Slow-Mo is its own mode on the body (4K and 2.7K at 120/100, 1080p at 240/200/120/100), not a timeline trick. At 4K120 the zoom is 1x or 3x, nothing in between. ISO climbs fast at 120 and 240 in a club (the shutter is 1/240 and 1/480): lock ISO by hand, expose to the right on the phone histogram, and expect PureVideo to turn I-Log off when it gets dark. 8K has no high rates and no in-camera filters.' : 'FX6: S&Q Motion with the project at ' + SM.out + ' and the shooting rate at ' + SM.rate + '. Shutter angle stays at 180 and the camera does the math (angle runs 5.6° to 360° in S&Q). Audio does not record in S&Q: slate it, or shoot the sound separately. Autofocus holds to 100 on a 25 base and 120 on a 29.97 base. Base ISO 12800 is the move when the shutter gets short.';
+  smSave();
   $('#sm-table').innerHTML = `<span class="lbl">Every rate on the ${CAMS[SM.cam].name}, delivered at ${SM.out}</span><div class="smtab">` + rates.map(x => { const kk = x[0] / SM.out; return `<div class="${x[0] === SM.rate ? 'on' : ''}" data-rate="${x[0]}"><b>${x[0]}</b><span>${kk > 1.01 ? kk.toFixed(kk < 3 ? 2 : 1) + 'x' : kk < .99 ? 'speeds up' : 'real'}</span><span>1/${x[0] * 2}</span><small>${x[1]}</small></div>`; }).join('') + '</div>';
 }
 $('#sm-cam').addEventListener('click', e => { const b = e.target.closest('[data-cam]'); if (!b) return; SM.cam = b.dataset.cam; $$('#sm-cam button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); smPaint(); });
@@ -1194,7 +1322,8 @@ $('#sm-out').addEventListener('click', e => { const b = e.target.closest('[data-
 // a real stopwatch: the crown starts and stops, the pusher laps while running and resets when stopped. The clock is wall time,
 // so leaving the tool, the app or the phone does not lose it (kit-watch keeps the start and the laps).
 const SW = Object.assign({run: false, t0: 0, acc: 0, laps: []}, load('watch', {}));
-let swLock = null, swRaf = 0;
+let swRaf = 0;
+if (SW.run) wakeHold();
 function swNow(){ return SW.acc + (SW.run ? Date.now() - SW.t0 : 0); }
 function swFmt(ms){ const t = Math.max(0, ms); const m = Math.floor(t / 60000), s = Math.floor(t / 1000) % 60, c = Math.floor(t / 10) % 100; return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0') + '<small>.' + String(c).padStart(2, '0') + '</small>'; }
 function swPaint(){
@@ -1204,20 +1333,21 @@ function swPaint(){
   $('#sw-laps').innerHTML = SW.laps.map((l, i) => `<div class="take"><span class="id">${SW.laps.length - i}<small>lap</small></span><span class="tx"><b>${swFmt(l.t)}</b><small>split ${swFmt(l.d)}</small></span></div>`).join('');
   cancelAnimationFrame(swRaf); if (SW.run) swRaf = requestAnimationFrame(swPaint);
 }
-async function swLockOn(){ try { if ('wakeLock' in navigator && !swLock) swLock = await navigator.wakeLock.request('screen'); } catch(e){} }
-function swLockOff(){ try { if (swLock) { swLock.release(); swLock = null; } } catch(e){} }
-$('#sw-crown').addEventListener('click', () => { if (SW.run) { SW.acc = swNow(); SW.run = false; swLockOff(); } else { SW.t0 = Date.now(); SW.run = true; swLockOn(); } save('watch', SW); buzz(); tick(); swPaint(); });
+$('#sw-crown').addEventListener('click', () => { if (SW.run) { SW.acc = swNow(); SW.run = false; wakeDrop(); } else { SW.t0 = Date.now(); SW.run = true; wakeHold(); } save('watch', SW); buzz(); tick(); swPaint(); });
 $('#sw-push').addEventListener('click', () => { if (SW.run) { const t = swNow(); const last = SW.laps.length ? SW.laps[0].t : 0; SW.laps.unshift({t, d: t - last}); if (SW.laps.length > 40) SW.laps.length = 40; } else { SW.acc = 0; SW.laps = []; } save('watch', SW); buzz(); swPaint(); });
 function tick(){ const c = ac(); if (!c) return; const o = c.createOscillator(), g = c.createGain(); o.type = 'square'; o.frequency.value = 2200; g.gain.value = .04; o.connect(g); g.connect(c.destination); o.start(); g.gain.linearRampToValueAtTime(0, c.currentTime + .03); o.stop(c.currentTime + .04); }
-document.addEventListener('visibilitychange', () => { if (!document.hidden && SW.run) { swLockOn(); swPaint(); } });
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) { wakeP = null; const l = wakeLock; wakeLock = null; try { l && l.release(); } catch(e){} return; }
+  wakeAcquire();
+  if (SW.run) swPaint();
+});
 
 /* ---------- THE QR ---------- */
 /* iPhone: deviceorientation stays silent until the page asks inside a tap (Safari 13+); asked once per load, on the first QR or Ask tap */
 let DOP = false;
 function askTiltPerm(){ if (DOP) return; DOP = true; try { if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') DeviceOrientationEvent.requestPermission().catch(() => {}); } catch(e){} }
-let QRL = null;
-function qrOpen(){ $('#qr-full').hidden = false; try { if ('wakeLock' in navigator) navigator.wakeLock.request('screen').then(l => { QRL = l; }).catch(() => {}); } catch(e){} }
-function qrClose(){ $('#qr-full').hidden = true; try { QRL && QRL.release(); } catch(e){} QRL = null; }
+function qrOpen(){ const f = $('#qr-full'); if (!f.hidden) return; f.hidden = false; wakeHold(); }
+function qrClose(){ const f = $('#qr-full'); if (f.hidden) return; f.hidden = true; wakeDrop(); }
 $('#qr-show').addEventListener('click', () => { buzz(); askTiltPerm(); qrOpen(); });
 $('#qr-full').addEventListener('click', qrClose);
 addEventListener('deviceorientation', e => { const f = $('#qr-full'); if (!f || f.hidden || e.gamma == null) return; const g = Math.max(-25, Math.min(25, e.gamma)); f.style.backgroundPosition = `calc(50% + ${(-g * 1.2).toFixed(1)}px) center`; const p = f.querySelector('.putty'); if (p) p.style.transform = `translateX(${(g * .6).toFixed(1)}px)`; f.querySelectorAll('.qp').forEach(q => { q.style.marginLeft = (-g * 1.4).toFixed(1) + 'px'; }); });
@@ -1230,7 +1360,27 @@ const ASK = [
   {h:'Mind if I shoot the room?', b:'The room?', yes:'Go',  ys:'shoot it',  no:'Not now',     ns:'all good'},
   {h:'\u00bfTe tomo una foto?', b:'\u00bfFoto?', yes:'S\u00ed', ys:'dale', no:'Hoy no',      ns:'todo bien'}
 ];
-const AK = {i: Math.min(load('ask', 0) || 0, ASK.length - 1), lock: false, lockO: 'p', lockHold: null};
+const AK = {i: Math.min(load('ask', 0) || 0, ASK.length - 1), lock: false, lockO: 'p'};
+/* 11/5: decode the Ask art while the kit is still on home. display:none skips the <img>s, so these Image()s do the work the preload links started. */
+['../assets/cathedral/shot/ask_p.webp?v=3', '../assets/cathedral/shot/ask_l.webp?v=4', '../assets/cathedral/shot/ask_wall_p.webp?v=3', '../assets/cathedral/shot/ask_wall_l.webp?v=3'].forEach(src => { const im = new Image(); im.src = src; if (im.decode) im.decode().catch(() => {}); });
+const askDecoded = new Set();
+let askShellN = 0;
+function askShell(){
+  const f = $('#ask-full'); if (f.hidden) return;
+  const o = f.dataset.o === 'l' ? 'l' : 'p';
+  const imgs = [...f.querySelectorAll(o === 'l' ? '.ask-who.l .art, .ask-wall.l' : '.ask-who.p .art, .ask-wall.p')];
+  if (imgs.length && imgs.every(img => askDecoded.has(img.src))) { f.classList.remove('wait'); return; }
+  f.classList.add('wait');
+  const token = ++askShellN;
+  const one = img => new Promise(res => {
+    if (askDecoded.has(img.src)) { res(); return; }
+    const done = () => { (img.decode ? img.decode() : Promise.resolve()).then(() => { if (img.naturalWidth) askDecoded.add(img.src); res(); }, res); };
+    if (img.complete) { done(); return; }
+    img.addEventListener('load', done, {once: true});
+    img.addEventListener('error', res, {once: true});
+  });
+  Promise.race([Promise.all(imgs.map(one)), new Promise(r => setTimeout(r, 4000))]).then(() => { if (token === askShellN && !f.hidden) f.classList.remove('wait'); });
+}
 function askFit(el){ /* biggest size whose text fits the board */
   let lo = 12, hi = 220; el.style.fontSize = hi + 'px';
   while (hi - lo > 1) { const m = (lo + hi) >> 1; el.style.fontSize = m + 'px'; (el.scrollWidth <= el.clientWidth + 1 && el.scrollHeight <= el.clientHeight + 1) ? lo = m : hi = m; }
@@ -1243,6 +1393,7 @@ function askPaint(){
   const f = $('#ask-full'); f.dataset.o = AK.lock ? AK.lockO : (matchMedia('(orientation: landscape)').matches ? 'l' : 'p');
   $('#ask-lock').classList.toggle('on', AK.lock); $('#ask-lock').textContent = AK.lock ? 'locked ' + (AK.lockO === 'l' ? 'wide' : 'tall') : 'lock';
   requestAnimationFrame(() => { askSize(); askFit($('#ask-bp')); askFit($('#ask-bl')); });
+  askShell();
 }
 const ASK_AR = {p: 849 / 1148, l: 1360 / 778};   /* the art's own width / height (ask.json) */
 function askSize(){
@@ -1254,8 +1405,8 @@ function askSize(){
   let h = H * grow, w = h * ar; if (w > W * wide) { w = W * wide; h = w / ar; }
   who.style.width = Math.floor(w) + 'px'; who.style.height = Math.floor(h) + 'px';
 }
-function askOpen(){ askTiltPerm(); $('#ask-full').hidden = false; buzz(); askPaint(); try { if ('wakeLock' in navigator) navigator.wakeLock.request('screen').then(l => { AK.lockHold = l; }).catch(() => {}); } catch(e){} }
-function askClose(){ $('#ask-full').hidden = true; try { AK.lockHold && AK.lockHold.release(); } catch(e){} AK.lockHold = null; }
+function askOpen(){ askTiltPerm(); const f = $('#ask-full'); if (f.hidden) { f.hidden = false; wakeHold(); } buzz(); askPaint(); }
+function askClose(){ const f = $('#ask-full'); if (f.hidden) return; f.hidden = true; f.classList.remove('wait'); wakeDrop(); }
 $('#ask-show').addEventListener('click', askOpen);
 $('#ask-x').addEventListener('click', () => { buzz(); askClose(); });
 $('#ask-lock').addEventListener('click', () => { buzz(); AK.lock = !AK.lock; AK.lockO = $('#ask-full').dataset.o; askPaint(); });
@@ -1280,7 +1431,7 @@ $('#ask-yes').addEventListener('click', () => {
   const g = $('#ask-go'); g.classList.remove('no'); $('#ask-go-b').textContent = ASK[AK.i].h.startsWith('\u00bf') ? 'Mira aqu\u00ed' : 'Look here'; g.hidden = false;
   let n = 3; const el = $('#ask-go-n'); el.textContent = n; try { tick(); } catch(e){}
   const iv = setInterval(() => { n--; if (n > 0) { el.textContent = n; try { tick(); } catch(e){} return; } clearInterval(iv); el.textContent = '\u2605';
-    setTimeout(() => { g.hidden = true; askClose(); qrOpen(); AK.busy = false; }, 700); }, 800);
+    setTimeout(() => { g.hidden = true; qrOpen(); askClose(); AK.busy = false; }, 700); }, 800);
 });
 $('#ask-no').addEventListener('click', () => {
   if (AK.busy) return; AK.busy = true;
@@ -1304,9 +1455,8 @@ document.addEventListener('click', e => {
   f.querySelector('.tip').style.color = k === 'white' || k === 'grey' ? 'rgba(0,0,0,.45)' : 'rgba(255,255,255,.5)';
   f.classList.add('on');
 });
-const SCT = {t0: 0, laps: [], iv: null, hold: null};
-$('#sc-full').addEventListener('pointerdown', () => { SCT.hold = setTimeout(() => { SCT.hold = null; clearInterval(SCT.iv); $('#sc-full').classList.remove('on'); }, 700); });
-$('#sc-full').addEventListener('pointerup', () => { if (!SCT.hold) return; clearTimeout(SCT.hold); SCT.hold = null; $('#sc-full').classList.remove('on'); });
+/* 11/5: tap leaves. The old hold timer and the pointerup both dismissed, so a tap could close the screen and then the click fell through onto the door underneath and opened it again. */
+$('#sc-full').addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); $('#sc-full').classList.remove('on'); });
 $('#sc-tone').addEventListener('click', e => {
   if (toneOsc) { try { toneOsc.stop(); } catch(x){} toneOsc = null; e.currentTarget.textContent = '1 kHz tone: off'; e.currentTarget.setAttribute('aria-pressed', 'false'); return; }
   const c = ac(); if (!c) { toast('No audio here.'); return; } const o = c.createOscillator(), g = c.createGain(); o.frequency.value = 1000; g.gain.value = .3; o.connect(g); g.connect(c.destination); o.start(); toneOsc = o;
