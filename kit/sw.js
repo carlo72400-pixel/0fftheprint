@@ -3,12 +3,13 @@
    the 400 ones (variable fonts), so only the 400s are cached (10/22).
    The vlog kit (10/29) lives at ./vlog/ inside this scope: its page and its talking points (deck.json) go network first like
    the Kit page, so a new build or a new week lands, and fall back to the cached copy with no signal. Only a good answer is
-   ever cached over a page. */
-const BUILD = 'kit-20261029a';
+   ever cached over a page.
+   11/5: the stopwatch door uses the hourglass (k/other.webp) instead of the coming-soon calendar, so the precache list changed. Ask art was already in this list. */
+const BUILD = 'kit-20261105a';
 const FILES = ['./', './index.html', './qr-shot.png', '../business/media/icon-192.png', '../assets/cathedral/shot/putty_sign.webp', '../assets/cathedral/shot/ask_p_s.webp', '../assets/cathedral/shot/ask_p.webp?v=3', '../assets/cathedral/shot/ask_l.webp?v=4', '../assets/cathedral/shot/ask_wall_p.webp?v=3', '../assets/cathedral/shot/ask_wall_l.webp?v=3', '../assets/cathedral/shot/qp_heart.webp', '../assets/cathedral/shot/qp_star.webp', '../assets/cathedral/shot/qp_cam.webp', '../assets/cathedral/shot/qp_print.webp', '../assets/cathedral/shot/qp_film.webp', '../assets/cathedral/shot/qp_bat.webp', '../assets/cathedral/shot/t_flash.webp', '../assets/cathedral/shot/qr_wall.webp', '../assets/fonts/saira-condensed-700.woff2', '../assets/fonts/saira-condensed-900.woff2', '../assets/fonts/inter-400.woff2', '../assets/fonts/jetbrains-mono-400.woff2', '../assets/fonts/gloria-hallelujah-400.woff2', './manifest.webmanifest', './icon-192.png', './icon-512.png',
   '../assets/cathedral/mark.webp', '../assets/cathedral/w/stage.webp', '../assets/cathedral/w/screen.webp', '../assets/cathedral/w/film.webp',
   '../assets/cathedral/w/all.webp', '../assets/cathedral/w/going.webp', '../assets/cathedral/w/tonight.webp', '../assets/cathedral/w/pin.webp',
-  '../assets/cathedral/w/deal.webp', '../assets/cathedral/w/lock.webp', '../assets/cathedral/w/fest.webp', '../assets/cathedral/a/coming.webp', '../assets/cathedral/w/ad.webp',
+  '../assets/cathedral/w/deal.webp', '../assets/cathedral/w/lock.webp', '../assets/cathedral/w/fest.webp', '../assets/cathedral/k/other.webp', '../assets/cathedral/w/ad.webp',
   './vlog/', './vlog/deck.json', './vlog/icon.webp', './vlog/vlog-192.png'];
 const FRESH = ['/kit/', '/kit/index.html', '/kit/vlog/', '/kit/vlog/index.html', '/kit/vlog/deck.json'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(BUILD).then(c => c.addAll(FILES)).then(() => self.skipWaiting())); });
