@@ -1,7 +1,7 @@
 # Image credits — THE WORD
 
 Every story cover, where it came from, and what the licence actually lets us do.
-Sourced and licence-verified 2026-08-27, extended 2026-09-02, 2026-09-14, 2026-10-04, 2026-10-07, 2026-10-21, 2026-10-27 and 2026-10-29. The credit line also appears on each
+Sourced and licence-verified 2026-08-27, extended 2026-09-02, 2026-09-14, 2026-10-04, 2026-10-07, 2026-10-21, 2026-10-27, 2026-10-29 and 2026-11-04. The credit line also appears on each
 story page itself, under the cover, which is where attribution legally belongs.
 
 ⛔ **Do not swap a cover without updating this file and the page's credit line.**
@@ -10,6 +10,10 @@ All of these are cropped, so all of them say "Cropped."
 
 | № | Story | Image | Source | Licence |
 |---|---|---|---|---|
+| 0TP-049 | The Shop Is Free For Fourteen Days | The Fortnite booth at E3, Los Angeles, June 12, 2018 (tile: the battle bus under the sign) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Fortnite_at_E3_2018_side_2.jpg) · Sergey Galyonkin | [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/) |
+| 0TP-048 | Nocturnal Lands November 27 | OsamaSon at Racket, New York, March 2, 2024 (tile: him with the mic) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:OsamaSon,_NY.jpg) · Ninecalling | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| 0TP-047 | San Antonio, Pick Your Night | Acid Bath at the Rebel, Toronto, October 11, 2025 (tile: the logo over the crowd) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Acid_Bath_at_the_Rebel,_Toronto_2025.jpg) · Chicken4War | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
+| 0TP-046 | Shoot The Band From Day One | Zella Day at ACL Live, Austin, December 17, 2015 (tile: her with the guitar, a decade before Chaparelle) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Zella_Day_(Austin,_Texas,_2015-12-17)_(23864820351).jpg) · Ralph Arvesen | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/) |
 | 0TP-045 | Halloween Got Its Saturday | Three Hocus Pocus witches in Salem, Massachusetts, Sat Oct 31, 2015 (tile: the three of them; a child at the right edge is cropped out of both) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Halloween_in_Salem_-_Three_Witches.jpg) · Michelle Callahan | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/) |
 | 0TP-044 | Half A Reign In Blood | Slayer's fire at Wacken Open Air, Germany, Aug 2019 (tile: the skull between the flames) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Slayer_-_2019214224757_2019-08-02_Wacken_-_3723_-_AK8I4546.jpg) · Sven Mandel | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
 | 0TP-043 | The Item Shop Is The New MTV | The Fortnite Pro-Am at E3, Los Angeles, Jun 2018 (tile: the FORT seats) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Fortnite_Pro-Am_stadium_at_E3_2018_3.jpg) · Sergey Galyonkin | [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/) |
@@ -73,9 +77,9 @@ in the 9/2 pass: a Ken Carson live shot tagged "License review needed" (an unrev
 frame), and an Elizabeth Bathory painting claiming CC BY-SA as "own work", which does not hold up
 for a historical portrait. Neither shipped.
 
-**SHARE-ALIKE.** 0TP-038, 0TP-032, 0TP-029, 0TP-018, 0TP-008 and 0TP-006 are CC BY-SA. Our cropped version of those six
-images carries the same licence, meaning somebody else may reuse those six covers
-under BY-SA. It stops at those six images. It does not touch the writing, the rest
+**SHARE-ALIKE.** 0TP-049, 0TP-047, 0TP-044, 0TP-043, 0TP-038, 0TP-037, 0TP-035, 0TP-033, 0TP-032, 0TP-029, 0TP-018, 0TP-008 and 0TP-006 are CC BY-SA. Our cropped versions of those
+images carry the same licence, meaning somebody else may reuse those covers
+under BY-SA. It stops at those images. It does not touch the writing, the rest
 of the site, or anything else in this repo.
 
 **PERSONALITY RIGHTS.** The Kane Parsons, Young Thug and Aaron Taylor-Johnson files carry a personality-rights notice on

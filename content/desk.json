@@ -1,6 +1,62 @@
 {
   "items": [
     {
+      "title": "The Shop Is Free For Fourteen Days",
+      "kicker": "THE SHOP",
+      "dek": "A rare chest token makes almost the whole Item Shop free for 14 days, with a second window in 2027. Treasure Hunters started November 1. GTA VI is November 19.",
+      "date": "11.04.26",
+      "lanes": [
+        "story"
+      ],
+      "dept": "story",
+      "platform": "SITE",
+      "thumb": "word/the-shop-is-free-for-fourteen-days/thumb.jpg",
+      "link": "word/the-shop-is-free-for-fourteen-days/",
+      "num": "0TP-049"
+    },
+    {
+      "title": "Nocturnal Lands November 27",
+      "kicker": "THE RECORD",
+      "dek": "OsamaSon's Nocturnal is dated November 27, the day after Thanksgiving. Bruiser Wolf and Conductor Williams are November 11. Westside Gunn and ZelooperZ are the 13th.",
+      "date": "11.04.26",
+      "lanes": [
+        "story"
+      ],
+      "dept": "story",
+      "platform": "SITE",
+      "thumb": "word/nocturnal-lands-november-27/thumb.jpg",
+      "link": "word/nocturnal-lands-november-27/",
+      "num": "0TP-048"
+    },
+    {
+      "title": "San Antonio, Pick Your Night",
+      "kicker": "THE CALENDAR",
+      "dek": "Friday, November 6 puts Acid Bath at Tech Port, Doja Cat at Frost Bank and Dinosaur Jr. at Paper Tiger. The Current filed two of them under Thursday. Pick one.",
+      "date": "11.04.26",
+      "lanes": [
+        "story"
+      ],
+      "dept": "story",
+      "platform": "SITE",
+      "thumb": "word/san-antonio-pick-your-night/thumb.jpg",
+      "link": "word/san-antonio-pick-your-night/",
+      "num": "0TP-047"
+    },
+    {
+      "title": "Shoot The Band From Day One",
+      "kicker": "THE CRAFT",
+      "dek": "Bleeding Hearts follows Chaparelle from an unfinished first demo, not from decades later. AFF wraps November 5, and the band was billed to play after the screening.",
+      "date": "11.04.26",
+      "lanes": [
+        "story"
+      ],
+      "dept": "story",
+      "platform": "SITE",
+      "thumb": "word/shoot-the-band-from-day-one/thumb.jpg",
+      "link": "word/shoot-the-band-from-day-one/",
+      "num": "0TP-046"
+    },
+    {
       "title": "Halloween Got Its Saturday",
       "kicker": "THE COUNTDOWN",
       "dek": "Halloween's on a Saturday for the first time since 2020, and 2020 didn't count. The next one's 2037. Here's what people are wearing and which night to pick.",
