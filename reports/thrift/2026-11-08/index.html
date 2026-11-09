@@ -48,9 +48,11 @@ h1{font-family:var(--display);font-stretch:125%;font-weight:800;font-size:clamp(
 .tile.accent{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)} .tile.accent .k,.tile.accent .n{color:inherit;opacity:.85}
 h2{font-family:var(--display);font-stretch:125%;font-weight:800;font-size:20px;margin:30px 0 10px;text-wrap:balance}
 .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--card)}
-table{border-collapse:collapse;width:100%;min-width:520px;font-size:15px}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:15px;font-variant-numeric:tabular-nums}
 th,td{text-align:left;padding:10px 14px;border-top:1px solid var(--line);vertical-align:top} thead th{border-top:0;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 td.t{white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--accent);font-weight:600;width:1%}
+.tc td.n,.tc th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tc td{white-space:nowrap} .tc td:nth-child(4){white-space:normal} .tc tfoot td{background:color-mix(in srgb,var(--accent) 10%,transparent)}
 ol,ul{padding-left:22px;margin:6px 0} li{margin:4px 0} li ul{margin:2px 0 6px}
 .note{color:var(--muted);font-size:14px}
 .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
@@ -99,6 +101,30 @@ footer{margin-top:34px;color:var(--muted);font-size:13px;border-top:1px solid va
       <tr><td class="t">10:50–11:20 PM</td><td>Song swaps (3 new songs prepped), shot re-casts, 4 extra tour versions, final rebuild of 17 videos started.</td></tr>
       <tr><td class="t">11:27 PM</td><td>Clock out. The last renders finish on their own.</td></tr>
     </tbody>
+  </table></div>
+
+
+  <h2>Time card, week of Nov 2</h2>
+  <p class="note" style="margin:0 0 10px">As punched on the Thrift time clock. Sunday's out time closes when the last render finishes.</p>
+  <div class="tablewrap"><table class="tc">
+    <thead><tr><th>Day</th><th>In</th><th>Out</th><th>Task</th><th style="text-align:right">Hrs</th></tr></thead>
+    <tbody>
+      <tr><td>Fri 11/6</td><td>1:20 PM</td><td>2:50 PM</td><td>Drive · 50 mi</td><td class="n">1.50</td></tr>
+      <tr><td></td><td>3:01 PM</td><td>3:42 PM</td><td>Drive · 40 mi</td><td class="n">0.68</td></tr>
+      <tr><td></td><td>5:29 PM</td><td>10:07 PM</td><td>Shoot, SoCo night market</td><td class="n">4.63</td></tr>
+      <tr><td></td><td>10:07 PM</td><td>11:57 PM</td><td>Drive · 94 mi</td><td class="n">1.83</td></tr>
+      <tr><td>Sat 11/7</td><td>8:07 AM</td><td>10:00 AM</td><td>Drive · 100 mi</td><td class="n">1.88</td></tr>
+      <tr><td></td><td>10:00 AM</td><td>10:08 AM</td><td>Shoot, Campus $3 sale</td><td class="n">0.13</td></tr>
+      <tr><td></td><td>10:08 AM</td><td>4:32 PM</td><td>Shoot, Campus $3 sale</td><td class="n">6.40</td></tr>
+      <tr><td></td><td>4:32 PM</td><td>7:01 PM</td><td>Drive · 127 mi</td><td class="n">2.48</td></tr>
+      <tr><td>Sun 11/8</td><td>9:28 AM</td><td>open</td><td>Edit (this report)</td><td class="n">13.98+</td></tr>
+    </tbody>
+    <tfoot>
+      <tr><td colspan="4">Hours</td><td class="n">33.53</td></tr>
+      <tr><td colspan="4">Rate</td><td class="n">× $20.00</td></tr>
+      <tr><td colspan="4"><strong>Pay</strong></td><td class="n"><strong>$670.60</strong></td></tr>
+      <tr><td colspan="4">Miles driven</td><td class="n">411.0</td></tr>
+    </tfoot>
   </table></div>
 
   <h2>What's done</h2>
