@@ -3,82 +3,148 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Reports & Hours · Gio</title>
-<meta name="description" content="Client reports and hours: every day logged, with timestamps.">
+<title>Time Cards & Reports · Gio</title>
+<meta name="description" content="Gio's time cards and daily reports for Thrift @ The Warehouse: hours by task, miles, pay, and what got done each day.">
 <meta name="robots" content="noindex,nofollow">
-<meta name="theme-color" content="#0a0a0a">
+<meta name="theme-color" content="#0b0b0b">
 <link rel="canonical" href="https://0fftheprint.com/reports/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://0fftheprint.com/reports/">
-<meta property="og:title" content="Reports & Hours · Gio">
-<meta property="og:description" content="Client reports and hours, one page per day, with timestamps.">
+<meta property="og:title" content="Time Cards & Reports · Gio">
+<meta property="og:description" content="Hours by task, miles, pay, and a report page for every day.">
 <meta property="og:image" content="https://0fftheprint.com/reports/thrift/2026-11-08/preview.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,400;100,700;125,800&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Barlow:wght@400;600;700&family=Special+Elite&display=swap">
 <style>
-/* Thrift register: the zebra wall, the neon-blue sign, black, white. Hours are the content; the ledger is the page. */
+/* The punch clock's own register: the black wall, a white card, typewriter print, the red of a manager's fix. Charts in thin marks on the card. */
 *{box-sizing:border-box}
-:root{--bg:#f4f4f1;--fg:#121212;--muted:#5d5d59;--line:#d8d8d2;--card:#ffffff;--blue:#0b7fd6;--blue-ink:#fff;--glow:#67c3ff;--pink:#ff4fa3;
-  --disp:"Archivo","Arial Narrow",Arial,sans-serif;--body:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif}
-@media (prefers-color-scheme:dark){:root{--bg:#0f0f0f;--fg:#f2f2ee;--muted:#a3a39c;--line:#2a2a2a;--card:#181818;--blue:#3aa6ff;--blue-ink:#061018;color-scheme:dark}}
+:root{--wall:#0b0b0b;--wall-line:rgba(255,255,255,.035);--paper:#f7f7f3;--paper-band:#e9e9e4;--ink:#141414;--ink-soft:#55554f;--rule:#b9b9b2;--red:#c0262a;--chrome:#c3c9cc;--chrome-lo:#767e82;--blue:#0b7fd6;--gold:#b7860b;
+  --f-brand:"Big Shoulders Display","Arial Narrow",Arial,sans-serif;--f-type:"Special Elite","Courier New",monospace;--f-ui:"Barlow","Helvetica Neue",Arial,sans-serif;color-scheme:light}
 html{padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
-body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 var(--body)}
-.zebra{background:#0a0a0a;color:#fff;padding:34px max(16px,env(safe-area-inset-left,0px)) 30px max(16px,env(safe-area-inset-right,0px));position:relative;overflow:hidden}
-.zebra::before{content:"";position:absolute;inset:0;background:
-  repeating-linear-gradient(108deg,transparent 0 70px,#f4f4f1 70px 96px,transparent 96px 150px,#f4f4f1 150px 164px);
-  opacity:.14;transform:skewY(-3deg) scale(1.2)}
-.in{max-width:900px;margin:0 auto;position:relative}
-.eyebrow{font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#bfe3ff}
-h1{font-family:var(--disp);font-stretch:125%;font-weight:800;font-size:clamp(32px,6vw,54px);line-height:1;margin:10px 0 8px;color:#fff;
-  text-shadow:0 0 18px rgba(103,195,255,.75),0 0 2px #fff}
-.sub{margin:0;color:#d6d6d0;max-width:60ch}
-.wrap{max-width:900px;margin:0 auto;padding:26px max(16px,env(safe-area-inset-left,0px)) 56px max(16px,env(safe-area-inset-right,0px))}
-.client{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 16px;margin:0 0 12px}
-h2{font-family:var(--disp);font-stretch:125%;font-weight:800;font-size:22px;margin:0}
-.pill{font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.1em;text-transform:uppercase;background:var(--blue);color:var(--blue-ink);border-radius:999px;padding:4px 10px}
-.totals{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:0 0 16px}
-.tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;min-width:0}
-.tile .k{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.tile .v{font-family:var(--disp);font-stretch:125%;font-weight:800;font-size:32px;line-height:1.1;margin-top:4px;font-variant-numeric:tabular-nums}
-.tile.blue{background:var(--blue);border-color:var(--blue);color:var(--blue-ink)} .tile.blue .k{color:inherit;opacity:.85}
-.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--card)}
-table{border-collapse:collapse;width:100%;min-width:560px;font-size:15px;font-variant-numeric:tabular-nums}
-th,td{text-align:left;padding:12px 14px;border-top:1px solid var(--line);vertical-align:top}
-thead th{border-top:0;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-td.n{text-align:right;white-space:nowrap} th.n{text-align:right}
-tfoot td{font-weight:600;background:color-mix(in srgb,var(--blue) 10%,transparent)}
-a.day{color:var(--blue);font-weight:600;text-decoration:none} a.day:hover,a.day:focus-visible{text-decoration:underline;outline:none}
-.note{color:var(--muted);font-size:14px;margin:12px 0 0}
-footer{margin-top:40px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:12px}
+body{margin:0;background:var(--wall) repeating-linear-gradient(0deg,var(--wall-line) 0 1px,transparent 1px 7px);color:#f1f1ee;font:16px/1.5 var(--f-ui)}
+.shell{max-width:920px;margin:0 auto;padding:26px max(16px,env(safe-area-inset-left,0px)) 56px max(16px,env(safe-area-inset-right,0px))}
+.plate{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;margin:0 0 18px;padding:10px 14px;border-radius:8px;background:linear-gradient(180deg,#e7ebed,#aeb6ba 60%,#8d969b);color:#101214;box-shadow:inset 0 1px 0 #fff,0 6px 18px rgba(0,0,0,.6)}
+.plate .name{font-family:var(--f-brand);font-weight:900;font-size:22px;letter-spacing:.06em;text-transform:uppercase}
+.plate .model{font-family:var(--f-ui);font-weight:600;font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.8}
+.card{background:var(--paper);color:var(--ink);border-radius:12px;box-shadow:0 18px 40px rgba(0,0,0,.65),inset 0 0 0 1px rgba(0,0,0,.06);overflow:hidden}
+.card+.card{margin-top:18px}
+.bar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 14px;background:var(--ink);color:#f7f7f3;padding:12px 18px;font-family:var(--f-brand);font-weight:900;letter-spacing:.1em;text-transform:uppercase;font-size:18px}
+.bar small{font-family:var(--f-ui);font-weight:600;font-size:12px;letter-spacing:.14em;opacity:.8}
+.body{padding:16px 18px 18px}
+.emp{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px 18px;font-family:var(--f-type);font-size:15px;color:var(--ink);margin:0 0 14px}
+.emp .k{font-family:var(--f-ui);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+.emp .v{border-bottom:1px solid var(--rule);padding-bottom:3px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:0 0 16px}
+.tile{background:var(--paper-band);border-radius:8px;padding:10px 12px;min-width:0;box-shadow:inset 0 1px 0 #fff,inset 0 -1px 0 rgba(0,0,0,.06)}
+.tile .k{font-family:var(--f-ui);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+.tile .v{font-family:var(--f-type);font-size:26px;line-height:1.1;margin-top:2px;font-variant-numeric:tabular-nums}
+.tile.red .v{color:var(--red)}
+h2{font-family:var(--f-brand);font-weight:900;font-size:16px;letter-spacing:.12em;text-transform:uppercase;margin:18px 0 8px;color:var(--ink)}
+.chart{background:#fff;border:1px solid var(--rule);border-radius:8px;padding:12px 12px 8px}
+.chart svg{display:block;width:100%;height:auto;max-width:100%}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin:8px 2px 0;font-size:13px;color:var(--ink-soft)}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px;background:var(--c)}
+.tablewrap{overflow-x:auto;border:1px solid var(--rule);border-radius:8px;background:#fff}
+table{border-collapse:collapse;width:100%;min-width:600px;font-family:var(--f-type);font-size:15px;font-variant-numeric:tabular-nums}
+thead th{background:var(--ink);color:#f7f7f3;font-family:var(--f-ui);font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;text-align:left;padding:10px 12px}
+td{padding:11px 12px;border-top:1px dashed var(--rule);vertical-align:top}
+tbody tr:first-child td{border-top:0}
+td.n,th.n{text-align:right;white-space:nowrap}
+td.day{font-family:var(--f-ui);font-weight:700;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+td.day small{display:block;font-weight:400;letter-spacing:0;text-transform:none;color:var(--ink-soft)}
+tr.open td{background:#e6f5ec}
+tfoot td{border-top:2px solid var(--ink);font-weight:600}
+a.link{display:inline-block;font-family:var(--f-ui);font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;background:var(--ink);color:#f7f7f3;border-radius:6px;padding:5px 9px;text-decoration:none;margin-top:6px;box-shadow:0 2px 0 #000}
+a.link:hover,a.link:focus-visible{background:var(--blue);outline:none} a.link:active{transform:translateY(1px);box-shadow:0 1px 0 #000}
+.stamp{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:4px 24px;margin:14px 0 0;font-family:var(--f-type);font-size:15px}
+.stamp .pay{font-size:30px;color:var(--ink)}
+.sig{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-top:22px;font-family:var(--f-ui);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+.sig div{border-top:1px solid var(--ink);padding-top:6px} .sig b{display:block;font-family:var(--f-type);font-size:17px;color:var(--red);letter-spacing:0;text-transform:none;margin-bottom:4px}
+.note{color:var(--ink-soft);font-size:13px;margin:10px 0 0}
+footer{color:#8d968f;font-size:12px;margin-top:18px;text-align:center;font-family:var(--f-ui);letter-spacing:.06em}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
-<div class="zebra"><div class="in">
-  <div class="eyebrow">Gio · reports & hours</div>
-  <h1>Hours, with receipts.</h1>
-  <p class="sub">Every day on a job gets a page: the hours, the timestamps, what got done. The ledger below is the running total per client.</p>
-</div></div>
-<div class="wrap">
-  <div class="client"><h2>Thrift @ The Warehouse</h2><span class="pill">Content · on call</span></div>
-  <div class="totals">
-    <div class="tile blue"><div class="k">Week of Nov 2, total</div><div class="v">33.53 h</div></div>
-    <div class="tile"><div class="k">Shooting</div><div class="v">11.16 h</div></div>
-    <div class="tile"><div class="k">Driving</div><div class="v">8.37 h · 411 mi</div></div>
-    <div class="tile"><div class="k">Editing</div><div class="v">13.98 h</div></div>
-  </div>
-  <div class="tablewrap"><table>
-    <thead><tr><th>Day</th><th>Work</th><th class="n">Shoot</th><th class="n">Drive</th><th class="n">Edit</th><th class="n">Day total</th></tr></thead>
-    <tbody>
-      <tr><td>Fri Nov 6</td><td>SoCo Vintage Night Market shoot (with Aleya), 5:29–10:07 PM · drives 184 mi</td><td class="n">4.63</td><td class="n">4.01</td><td class="n">—</td><td class="n">8.64</td></tr>
-      <tr><td>Sat Nov 7</td><td>$3 Sale at Campus shoot, 10:00 AM–4:32 PM · drives 227 mi</td><td class="n">6.53</td><td class="n">4.36</td><td class="n">—</td><td class="n">10.89</td></tr>
-      <tr><td><a class="day" href="/reports/thrift/2026-11-08/">Sun Nov 8</a></td><td>Edit day, 9:28 AM–11:27 PM: 17 videos cut, 27 photos finished, captions written</td><td class="n">—</td><td class="n">—</td><td class="n">13.98</td><td class="n">13.98</td></tr>
-    </tbody>
-    <tfoot><tr><td>Total</td><td>Hours as punched on the Thrift time clock</td><td class="n">11.16</td><td class="n">8.37</td><td class="n">13.98</td><td class="n">33.53</td></tr></tfoot>
-  </table></div>
-  <p class="note">Hours match the Thrift time clock. Uploading is logged on its own when it happens, never as editing.</p>
-  <footer>0fftheprint.com/reports · Gio · updated Nov 8, 2026, 11:27 PM</footer>
+<div class="shell">
+  <div class="plate"><span class="name">Time Recorder</span><span class="model">Giancarlo Ortiz · Content · Thrift @ The Warehouse</span></div>
+
+  <section class="card" aria-labelledby="wk">
+    <div class="bar"><span id="wk">Time card</span><small>Week of Mon Nov 2, 2026</small></div>
+    <div class="body">
+      <div class="emp">
+        <div><div class="k">Employee</div><div class="v">Giancarlo Ortiz</div></div>
+        <div><div class="k">Role</div><div class="v">Content Creator (on call)</div></div>
+        <div><div class="k">Rate</div><div class="v">$20.00 / hr</div></div>
+        <div><div class="k">Status</div><div class="v">Sun 11/8 still punched in (editing)</div></div>
+      </div>
+      <div class="tiles">
+        <div class="tile"><div class="k">Hours</div><div class="v">33.53</div></div>
+        <div class="tile"><div class="k">Shoot</div><div class="v">11.16</div></div>
+        <div class="tile"><div class="k">Drive</div><div class="v">8.37</div></div>
+        <div class="tile"><div class="k">Edit</div><div class="v">13.98</div></div>
+        <div class="tile red"><div class="k">Pay so far</div><div class="v">$670.60</div></div>
+      </div>
+
+      <h2>Hours by day and task</h2>
+      <div class="chart" role="img" aria-label="Stacked bars: Friday 8.64 hours (4.63 shoot, 4.01 drive), Saturday 10.89 hours (6.53 shoot, 4.36 drive), Sunday 13.98 hours editing.">
+        <svg viewBox="0 0 640 170" xmlns="http://www.w3.org/2000/svg" font-family="Barlow, Arial, sans-serif" font-size="12">
+          <!-- scale: 1 h = 36 px, x0 = 90 -->
+          <g stroke="#e3e3dd" stroke-width="1"><line x1="90" y1="8" x2="90" y2="150"/><line x1="234" y1="8" x2="234" y2="150"/><line x1="378" y1="8" x2="378" y2="150"/><line x1="522" y1="8" x2="522" y2="150"/></g>
+          <g fill="#55554f" text-anchor="middle"><text x="90" y="164">0 h</text><text x="234" y="164">4 h</text><text x="378" y="164">8 h</text><text x="522" y="164">12 h</text></g>
+          <g fill="#141414" font-weight="700" text-anchor="end"><text x="78" y="36">FRI 11/6</text><text x="78" y="86">SAT 11/7</text><text x="78" y="136">SUN 11/8</text></g>
+          <!-- Fri: shoot 4.63 = 166.7px, drive 4.01 = 144.4px -->
+          <rect x="90" y="22" width="165" height="22" fill="#c0262a"><title>Fri 11/6 · Shoot · 4.63 h</title></rect>
+          <rect x="257" y="22" width="143" height="22" rx="3" fill="#767e82"><title>Fri 11/6 · Drive · 4.01 h · 184 mi</title></rect>
+          <text x="406" y="37" fill="#141414" font-weight="600">8.64 h</text>
+          <!-- Sat: shoot 6.53 = 235px, drive 4.36 = 157px -->
+          <rect x="90" y="72" width="233" height="22" fill="#c0262a"><title>Sat 11/7 · Shoot · 6.53 h</title></rect>
+          <rect x="325" y="72" width="156" height="22" rx="3" fill="#767e82"><title>Sat 11/7 · Drive · 4.36 h · 227 mi</title></rect>
+          <text x="487" y="87" fill="#141414" font-weight="600">10.89 h</text>
+          <!-- Sun: edit 13.98 = 503px -->
+          <rect x="90" y="122" width="503" height="22" rx="3" fill="#0b7fd6"><title>Sun 11/8 · Edit · 13.98 h and counting</title></rect>
+          <text x="560" y="137" fill="#ffffff" font-weight="600" text-anchor="end">13.98 h</text>
+          <g fill="#ffffff" font-weight="600"><text x="96" y="37">shoot</text><text x="263" y="37">drive</text><text x="96" y="87">shoot</text><text x="331" y="87">drive</text><text x="96" y="137">edit</text></g>
+        </svg>
+        <div class="legend"><span style="--c:#c0262a">Shoot</span><span style="--c:#767e82">Drive</span><span style="--c:#0b7fd6">Edit</span></div>
+      </div>
+
+      <h2>Punches</h2>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Day</th><th>In</th><th>Out</th><th>Task</th><th class="n">Hrs</th></tr></thead>
+        <tbody>
+          <tr><td class="day">Fri<small>11/6</small></td><td>1:20 PM</td><td>2:50 PM</td><td>Drive · 50.0 mi</td><td class="n">1.50</td></tr>
+          <tr><td></td><td>3:01 PM</td><td>3:42 PM</td><td>Drive · 40.0 mi</td><td class="n">0.68</td></tr>
+          <tr><td></td><td>5:29 PM</td><td>10:07 PM</td><td>Shoot · SoCo Vintage Night Market</td><td class="n">4.63</td></tr>
+          <tr><td></td><td>10:07 PM</td><td>11:57 PM</td><td>Drive · 94.0 mi</td><td class="n">1.83</td></tr>
+          <tr><td class="day">Sat<small>11/7</small></td><td>8:07 AM</td><td>10:00 AM</td><td>Drive · 100.0 mi</td><td class="n">1.88</td></tr>
+          <tr><td></td><td>10:00 AM</td><td>10:08 AM</td><td>Shoot · Campus $3 sale</td><td class="n">0.13</td></tr>
+          <tr><td></td><td>10:08 AM</td><td>4:32 PM</td><td>Shoot · Campus $3 sale</td><td class="n">6.40</td></tr>
+          <tr><td></td><td>4:32 PM</td><td>7:01 PM</td><td>Drive · 127.0 mi</td><td class="n">2.48</td></tr>
+          <tr class="open"><td class="day">Sun<small>11/8</small></td><td>9:28 AM</td><td>open</td><td>Edit · both shoots<br><a class="link" href="/reports/thrift/2026-11-08/">Report →</a></td><td class="n">13.98+</td></tr>
+        </tbody>
+        <tfoot><tr><td colspan="4">Hours this week</td><td class="n">33.53</td></tr></tfoot>
+      </table></div>
+      <div class="stamp"><span>Rate × $20.00</span><span>Miles 411.0</span><span class="pay">Pay $670.60</span></div>
+      <p class="note">Hours as punched on the time clock. Sunday closes when the last render finishes. Uploading is punched on its own, never as editing.</p>
+      <div class="sig"><div><b>Giancarlo Ortiz</b>Employee</div><div><b>&nbsp;</b>Approved</div></div>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="rp">
+    <div class="bar"><span id="rp">Daily reports</span><small>what got done, with timestamps</small></div>
+    <div class="body">
+      <div class="tablewrap"><table>
+        <thead><tr><th>Day</th><th>Report</th><th class="n">Hrs</th></tr></thead>
+        <tbody>
+          <tr><td class="day">Sun<small>11/8</small></td><td>Night market + $3 sale edit day: 17 videos cut, 27 photos finished, captions written.<br><a class="link" href="/reports/thrift/2026-11-08/">Open report →</a></td><td class="n">13.98+</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </section>
+  <footer>0fftheprint.com/reports · updated Nov 8, 2026</footer>
 </div>
 </body>
 </html>
