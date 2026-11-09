@@ -32,11 +32,12 @@ img{max-width:100%}
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --bg:#121212; --fg:#f2f2ee; --muted:#a7a7a0; --line:#2b2b2b; --card:#1b1b1b; --accent:#4fb4ff; --accent-ink:#0b0b0b; --zebra:#000000; color-scheme:dark } }
 :root[data-theme="dark"]{ --bg:#121212; --fg:#f2f2ee; --muted:#a7a7a0; --line:#2b2b2b; --card:#1b1b1b; --accent:#4fb4ff; --accent-ink:#0b0b0b; --zebra:#000000; color-scheme:dark }
 body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5;margin:0}
-.band{background:var(--zebra);color:#fff;padding-block:28px 26px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
-  background-image:repeating-linear-gradient(100deg,transparent 0 46px,rgba(255,255,255,.07) 46px 58px)}
+.band{background:#0a0a0a;color:#fff;padding-block:30px 28px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));position:relative;overflow:hidden}
+.band::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(108deg,transparent 0 70px,#f4f4f1 70px 96px,transparent 96px 150px,#f4f4f1 150px 164px);opacity:.14;transform:skewY(-3deg) scale(1.2)}
+.band .in{position:relative}
 .band .in,.wrap{max-width:860px;margin:0 auto}
 .eyebrow{font-family:var(--display);font-stretch:100%;font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#bfe3ff}
-h1{font-family:var(--display);font-stretch:125%;font-weight:800;font-size:clamp(28px,5vw,42px);line-height:1.05;margin:8px 0 6px;text-wrap:balance}
+h1{font-family:var(--display);font-stretch:125%;font-weight:800;font-size:clamp(28px,5vw,44px);line-height:1.05;margin:8px 0 6px;text-wrap:balance;text-shadow:0 0 18px rgba(103,195,255,.75),0 0 2px #fff}
 .sub{margin:0;color:#d8d8d2;font-size:15px}
 .wrap{padding-block:22px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .hours{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:0 0 26px}
@@ -61,7 +62,7 @@ footer{margin-top:34px;color:var(--muted);font-size:13px;border-top:1px solid va
 </head>
 <body>
 <div class="band"><div class="in">
-  <div class="eyebrow">Thrift @ The Warehouse · Content</div>
+  <div class="eyebrow"><a href="/reports/" style="color:inherit;text-decoration:none">← Reports & hours</a> · Thrift @ The Warehouse</div>
   <h1>Tonight's report, Sunday Nov 8</h1>
   <p class="sub">Gio · the Nov 6 night market and Nov 7 $3 sale shoots, edited today. Hours and timestamps below.</p>
 </div></div>

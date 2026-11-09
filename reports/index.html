@@ -3,37 +3,79 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Reports · Gio</title>
-<meta name="description" content="Client reports: hours, timestamps, what got done.">
+<title>Reports & Hours · Gio</title>
+<meta name="description" content="Client reports and hours: every day logged, with timestamps.">
 <meta name="robots" content="noindex,nofollow">
-<meta name="theme-color" content="#111111">
+<meta name="theme-color" content="#0a0a0a">
 <link rel="canonical" href="https://0fftheprint.com/reports/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://0fftheprint.com/reports/">
+<meta property="og:title" content="Reports & Hours · Gio">
+<meta property="og:description" content="Client reports and hours, one page per day, with timestamps.">
+<meta property="og:image" content="https://0fftheprint.com/reports/thrift/2026-11-08/preview.jpg">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,800&family=IBM+Plex+Sans:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,400;100,700;125,800&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <style>
+/* Thrift register: the zebra wall, the neon-blue sign, black, white. Hours are the content; the ledger is the page. */
 *{box-sizing:border-box}
-:root{--bg:#f6f6f3;--fg:#141414;--muted:#5b5b57;--line:#d9d9d3;--card:#fff;--accent:#0b7fd6}
-@media (prefers-color-scheme:dark){:root{--bg:#121212;--fg:#f2f2ee;--muted:#a7a7a0;--line:#2b2b2b;--card:#1b1b1b;--accent:#4fb4ff;color-scheme:dark}}
+:root{--bg:#f4f4f1;--fg:#121212;--muted:#5d5d59;--line:#d8d8d2;--card:#ffffff;--blue:#0b7fd6;--blue-ink:#fff;--glow:#67c3ff;--pink:#ff4fa3;
+  --disp:"Archivo","Arial Narrow",Arial,sans-serif;--body:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif}
+@media (prefers-color-scheme:dark){:root{--bg:#0f0f0f;--fg:#f2f2ee;--muted:#a3a39c;--line:#2a2a2a;--card:#181818;--blue:#3aa6ff;--blue-ink:#061018;color-scheme:dark}}
 html{padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
-body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 "IBM Plex Sans","Helvetica Neue",Arial,sans-serif}
-.band{background:#111;color:#fff;padding:28px max(16px,env(safe-area-inset-left,0px)) 26px max(16px,env(safe-area-inset-right,0px));background-image:repeating-linear-gradient(100deg,transparent 0 46px,rgba(255,255,255,.07) 46px 58px)}
-.in{max-width:860px;margin:0 auto}
-h1{font-family:"Archivo",Arial,sans-serif;font-stretch:125%;font-weight:800;font-size:clamp(28px,5vw,40px);margin:0 0 4px}
-.sub{color:#d8d8d2;margin:0}
-.wrap{max-width:860px;margin:0 auto;padding:22px max(16px,env(safe-area-inset-left,0px)) 48px max(16px,env(safe-area-inset-right,0px))}
-h2{font-family:"Archivo",Arial,sans-serif;font-stretch:125%;font-weight:800;font-size:18px;margin:22px 0 10px}
-a.r{display:block;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;color:inherit;text-decoration:none;margin:0 0 10px}
-a.r:hover,a.r:focus-visible{border-color:var(--accent);outline:none}
-a.r .t{font-weight:600} a.r .m{color:var(--muted);font-size:14px}
-a.r .h{color:var(--accent);font-weight:600;font-variant-numeric:tabular-nums}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 var(--body)}
+.zebra{background:#0a0a0a;color:#fff;padding:34px max(16px,env(safe-area-inset-left,0px)) 30px max(16px,env(safe-area-inset-right,0px));position:relative;overflow:hidden}
+.zebra::before{content:"";position:absolute;inset:0;background:
+  repeating-linear-gradient(108deg,transparent 0 70px,#f4f4f1 70px 96px,transparent 96px 150px,#f4f4f1 150px 164px);
+  opacity:.14;transform:skewY(-3deg) scale(1.2)}
+.in{max-width:900px;margin:0 auto;position:relative}
+.eyebrow{font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#bfe3ff}
+h1{font-family:var(--disp);font-stretch:125%;font-weight:800;font-size:clamp(32px,6vw,54px);line-height:1;margin:10px 0 8px;color:#fff;
+  text-shadow:0 0 18px rgba(103,195,255,.75),0 0 2px #fff}
+.sub{margin:0;color:#d6d6d0;max-width:60ch}
+.wrap{max-width:900px;margin:0 auto;padding:26px max(16px,env(safe-area-inset-left,0px)) 56px max(16px,env(safe-area-inset-right,0px))}
+.client{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 16px;margin:0 0 12px}
+h2{font-family:var(--disp);font-stretch:125%;font-weight:800;font-size:22px;margin:0}
+.pill{font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.1em;text-transform:uppercase;background:var(--blue);color:var(--blue-ink);border-radius:999px;padding:4px 10px}
+.totals{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:0 0 16px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;min-width:0}
+.tile .k{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.tile .v{font-family:var(--disp);font-stretch:125%;font-weight:800;font-size:32px;line-height:1.1;margin-top:4px;font-variant-numeric:tabular-nums}
+.tile.blue{background:var(--blue);border-color:var(--blue);color:var(--blue-ink)} .tile.blue .k{color:inherit;opacity:.85}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:15px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:12px 14px;border-top:1px solid var(--line);vertical-align:top}
+thead th{border-top:0;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+td.n{text-align:right;white-space:nowrap} th.n{text-align:right}
+tfoot td{font-weight:600;background:color-mix(in srgb,var(--blue) 10%,transparent)}
+a.day{color:var(--blue);font-weight:600;text-decoration:none} a.day:hover,a.day:focus-visible{text-decoration:underline;outline:none}
+.note{color:var(--muted);font-size:14px;margin:12px 0 0}
+footer{margin-top:40px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:12px}
 </style>
 </head>
 <body>
-<div class="band"><div class="in"><h1>Reports</h1><p class="sub">Hours, timestamps, what got done. One page per day.</p></div></div>
+<div class="zebra"><div class="in">
+  <div class="eyebrow">Gio · reports & hours</div>
+  <h1>Hours, with receipts.</h1>
+  <p class="sub">Every day on a job gets a page: the hours, the timestamps, what got done. The ledger below is the running total per client.</p>
+</div></div>
 <div class="wrap">
-  <h2>Thrift @ The Warehouse</h2>
-  <a class="r" href="/reports/thrift/2026-11-08/"><div class="t">Sunday, Nov 8, 2026 · Night market + $3 sale edit day</div><div class="m">17 videos cut, 27 photos finished · <span class="h">14 h 02 m</span> editing</div></a>
+  <div class="client"><h2>Thrift @ The Warehouse</h2><span class="pill">Content · on call</span></div>
+  <div class="totals">
+    <div class="tile blue"><div class="k">Editing, total</div><div class="v">14 h 02 m</div></div>
+    <div class="tile"><div class="k">Upload time, total</div><div class="v">0 h</div></div>
+    <div class="tile"><div class="k">Days logged</div><div class="v">1</div></div>
+  </div>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Day</th><th>Work</th><th class="n">Editing</th><th class="n">Upload</th><th class="n">Day total</th></tr></thead>
+    <tbody>
+      <tr><td><a class="day" href="/reports/thrift/2026-11-08/">Sun Nov 8, 2026</a></td><td>Night market + $3 sale edit day: 17 videos cut, 27 photos finished, captions written</td><td class="n">14 h 02 m</td><td class="n">0 h</td><td class="n">14 h 02 m</td></tr>
+    </tbody>
+    <tfoot><tr><td>Total</td><td></td><td class="n">14 h 02 m</td><td class="n">0 h</td><td class="n">14 h 02 m</td></tr></tfoot>
+  </table></div>
+  <p class="note">Editing and uploading are logged separately. Shoot days (Nov 6 SoCo night market, Nov 7 Campus $3 sale) get their own rows once their hours are entered.</p>
+  <footer>0fftheprint.com/reports · Gio · updated Nov 8, 2026, 11:30 PM</footer>
 </div>
 </body>
 </html>
