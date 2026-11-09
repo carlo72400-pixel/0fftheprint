@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Content Report · Nov 8, 2026 · Thrift @ The Warehouse</title>
+<meta name="description" content="Gio's editing report for Thrift @ The Warehouse: hours, timestamps, what's done, delivery.">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#111111">
+<link rel="canonical" href="https://0fftheprint.com/reports/thrift/2026-11-08/">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://0fftheprint.com/reports/thrift/2026-11-08/">
+<meta property="og:title" content="Content Report · Nov 8 · Thrift @ The Warehouse">
+<meta property="og:description" content="14 h 02 m of editing, timestamped. 17 videos cut, 27 photos finished.">
+<meta property="og:image" content="https://0fftheprint.com/reports/thrift/2026-11-08/preview.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,400;100,700;125,800&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+*{box-sizing:border-box}
+html{padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
+img{max-width:100%}
+
+/* Layout: one column report, a zebra-stripe band at the top, the hours as the first thing you read, then the timestamp table. */
+:root{
+  --bg:#f6f6f3; --fg:#141414; --muted:#5b5b57; --line:#d9d9d3; --card:#ffffff; --accent:#0b7fd6; --accent-ink:#ffffff; --zebra:#111111;
+  --display:"Archivo","Arial Narrow",Arial,sans-serif; --body:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --bg:#121212; --fg:#f2f2ee; --muted:#a7a7a0; --line:#2b2b2b; --card:#1b1b1b; --accent:#4fb4ff; --accent-ink:#0b0b0b; --zebra:#000000; color-scheme:dark } }
+:root[data-theme="dark"]{ --bg:#121212; --fg:#f2f2ee; --muted:#a7a7a0; --line:#2b2b2b; --card:#1b1b1b; --accent:#4fb4ff; --accent-ink:#0b0b0b; --zebra:#000000; color-scheme:dark }
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5;margin:0}
+.band{background:var(--zebra);color:#fff;padding-block:28px 26px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  background-image:repeating-linear-gradient(100deg,transparent 0 46px,rgba(255,255,255,.07) 46px 58px)}
+.band .in,.wrap{max-width:860px;margin:0 auto}
+.eyebrow{font-family:var(--display);font-stretch:100%;font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#bfe3ff}
+h1{font-family:var(--display);font-stretch:125%;font-weight:800;font-size:clamp(28px,5vw,42px);line-height:1.05;margin:8px 0 6px;text-wrap:balance}
+.sub{margin:0;color:#d8d8d2;font-size:15px}
+.wrap{padding-block:22px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.hours{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:0 0 26px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-width:0}
+.tile .k{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.tile .v{font-family:var(--display);font-stretch:125%;font-weight:800;font-size:30px;line-height:1.1;margin-top:4px;font-variant-numeric:tabular-nums}
+.tile .n{color:var(--muted);font-size:13px;margin-top:2px}
+.tile.accent{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)} .tile.accent .k,.tile.accent .n{color:inherit;opacity:.85}
+h2{font-family:var(--display);font-stretch:125%;font-weight:800;font-size:20px;margin:30px 0 10px;text-wrap:balance}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:15px}
+th,td{text-align:left;padding:10px 14px;border-top:1px solid var(--line);vertical-align:top} thead th{border-top:0;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+td.t{white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--accent);font-weight:600;width:1%}
+ol,ul{padding-left:22px;margin:6px 0} li{margin:4px 0} li ul{margin:2px 0 6px}
+.note{color:var(--muted);font-size:14px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-width:0}
+.card h3{font-family:var(--display);font-stretch:125%;font-weight:800;font-size:15px;margin:0 0 6px;letter-spacing:.02em}
+footer{margin-top:34px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:12px}
+
+</style>
+</head>
+<body>
+<div class="band"><div class="in">
+  <div class="eyebrow">Thrift @ The Warehouse · Content</div>
+  <h1>Tonight's report, Sunday Nov 8</h1>
+  <p class="sub">Gio · the Nov 6 night market and Nov 7 $3 sale shoots, edited today. Hours and timestamps below.</p>
+</div></div>
+<div class="wrap">
+  <div class="hours">
+    <div class="tile accent"><div class="k">Editing today</div><div class="v">14 h 02 m</div><div class="n">9:28 AM to 11:30 PM</div></div>
+    <div class="tile"><div class="k">Upload time</div><div class="v">0 h</div><div class="n">nothing uploaded yet, logged separately</div></div>
+    <div class="tile"><div class="k">Videos cut</div><div class="v">17</div><div class="n">the deck's 7 + 10 extras</div></div>
+    <div class="tile"><div class="k">Photos finished</div><div class="v">27</div><div class="n">Nov 6 night market</div></div>
+  </div>
+
+  <h2>Timestamps</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Time</th><th>Done</th></tr></thead>
+    <tbody>
+      <tr><td class="t">9:28 AM</td><td>Clock in.</td></tr>
+      <tr><td class="t">9:48–10:27</td><td>Both camera cards copied and verified (checksums), deck re-read.</td></tr>
+      <tr><td class="t">10:30–11:46</td><td>Photos: first color passes on the 27, RAW decode tests on the hard ones (#04, #19).</td></tr>
+      <tr><td class="t">11:50–12:25 PM</td><td>Photos: full pass on all 27, matched to the camera.</td></tr>
+      <tr><td class="t">12:02–2:48 PM</td><td>Video: every clip measured, white balance set, transcripts made, stills scanned, the 360 camera reframed to overheads, her voice isolated per take.</td></tr>
+      <tr><td class="t">12:42–2:04 PM</td><td>Photos: correction pass, the 27 finals exported (the delivered set).</td></tr>
+      <tr><td class="t">2:07–3:04 PM</td><td>All 137 clips color graded, previews rendered, 95 stills exported.</td></tr>
+      <tr><td class="t">3:06–3:17 PM</td><td>Deck videos, first cuts of all 7.</td></tr>
+      <tr><td class="t">3:20–3:56 PM</td><td>Photo QA pass (one white-balance fix on #14).</td></tr>
+      <tr><td class="t">3:58–4:09 PM</td><td>Deck videos v3/v4: per-shot framing to the deck's head line.</td></tr>
+      <tr><td class="t">4:34–5:01 PM</td><td>Deck videos v5: creative pass (cards, transitions).</td></tr>
+      <tr><td class="t">5:05–5:21 PM</td><td>Music review, song shortlist, selection checklist.</td></tr>
+      <tr><td class="t">5:37–6:37 PM</td><td>Music prep: 7 songs pulled, stems split, beat maps and clean maps.</td></tr>
+      <tr><td class="t">7:10–7:55 PM</td><td>Facts settled (dates, locations), hook font chosen and loaded.</td></tr>
+      <tr><td class="t">7:16–8:10 PM</td><td>Music placed, v6/v7 builds.</td></tr>
+      <tr><td class="t">8:45–9:25 PM</td><td>Full redo from scratch: new cut lists, all 7 rebuilt and previewed twice.</td></tr>
+      <tr><td class="t">9:46–9:57 PM</td><td>360 camera selects stabilized and reframed (4 clips).</td></tr>
+      <tr><td class="t">10:00–10:40 PM</td><td>Notes rounds 2 and 3: audio cleanup, split-screens, beat matching to the drum hits, captions re-placed, levels.</td></tr>
+      <tr><td class="t">10:50–11:20 PM</td><td>Song swaps (3 new songs prepped), shot re-casts, 4 extra tour versions, final rebuild of 17 videos started.</td></tr>
+      <tr><td class="t">11:30 PM</td><td>Clock out. The last renders finish on their own.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>What's done</h2>
+  <div class="grid2">
+    <div class="card"><h3>Photos</h3><ul><li>27 night-market photos, color corrected and cleaned up, matched to the camera.</li></ul></div>
+    <div class="card"><h3>Footage</h3><ul><li>Every clip from both days color corrected, true to life, nothing stylized.</li><li>4 stabilized selects from the 360 camera (the pile from above, the shoppers at the table).</li></ul></div>
+    <div class="card"><h3>The deck's 7 videos</h3><ol>
+      <li>Fall Vintage Market talking head (Sat Nov 14, 12–5 PM, 3820 S Congress)</li><li>$15 Fill-a-Bag talking head A</li><li>$15 Fill-a-Bag talking head B</li>
+      <li>Snapchat-style market tour</li><li>Day Market montage</li><li>Night Market montage 1 (November to Remember, Fri Nov 27, West Campus)</li><li>Night Market montage 2</li></ol></div>
+    <div class="card"><h3>Extras</h3><ul>
+      <li>"Two markets this month" talking head (Nov 14 + Nov 27)</li><li>"Everything out here is $3" sale montage (with the 360 shots)</li><li>"How much did $3 get them?" haul reel</li>
+      <li>Pick Your Aisle (racks by style)</li><li>Meet the Vendors</li><li>The security dog (Story-size)</li><li>Four more takes on the market tour: walk-in POV, the people, day to night, and a hosted "welcome to the market" tour</li></ul></div>
+    <div class="card"><h3>Captions</h3><ul><li>A caption for every post, ready to paste, in Thrift's shape: hook, offer, pin, date, hours, one call to action.</li></ul></div>
+  </div>
+
+  <h2>Notes</h2>
+  <ul>
+    <li>Hook text is set in Obviously Wide Black, the closest match to the deck's Druk Wide Bold (no Druk license on our side).</li>
+    <li>On-screen dates and addresses are only the confirmed ones: Nov 14 SoCo market, Nov 27 West Campus night market. The $15 Fill-a-Bag and the next $3 sale carry no date.</li>
+    <li>Vendor tagging is on your side.</li>
+  </ul>
+
+  <h2>Delivery</h2>
+  <p>Files: 4K masters and phone copies of every video, the 27 photos, and the captions in one text file. The upload happens next session and is logged on its own, not as editing. The drive link comes with it.</p>
+  <footer>Gio · Content Creator (on-call), Thrift @ The Warehouse · Report for Sunday, November 8, 2026</footer>
+</div>
+</body>
+</html>
