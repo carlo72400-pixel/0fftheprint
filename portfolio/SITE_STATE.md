@@ -43,6 +43,20 @@ His ask: "how can we add this to our resume slash ... portfolio website ... on t
 - `<!-- ODDBALL -->` tops the six (nightsblock, config in the shoot's `_web/nights_oddball.json`); BLADERAVE came off the main page and stays on /nights/. 24 blocks now.
 - "remote" is gone from every page (he dropped it 10/28).
 
+## HIRING: round three on top (the Nov 6 night market + Nov 7 $3 sale), rounds two and one folded (Nov 9 2026)
+
+His ask: "i finished all my work from thrift at the warehouse. lets update the website and portfolio and the pitch".
+`<!-- THRIFT1106 -->` sits under "The newest job", above everything else: clip-label SCRIPTED PROMOS, ROUND THREE, eight `.tape.play` cuts in
+`.tapes.watch.eight`, then THE CAROUSELS as two `.swipe.tall` rows (NEW: 4:5 pages, three across, one under 640px; `assets/thrift1106/catalog_01-08.jpg`
++ `tags_01-08.jpg`, 864x1080 web copies of the delivered pages), one client-credits paragraph. Stamp `?v=20261109a` on all five pages. Hand-kept.
+`<!-- THRIFT1029 -->` now lives inside its own `details.more` ("ROUND TWO · OCT 29"), closed, above ROUND ONE.
+- 8 of the 18 delivered edits show here; 14 are on THE TAPE. Built by the shoot's `_web/folio_1106.py` (re-run safe) + `site_1106.py` (the Tape rows).
+- ⛔ Held off his site, web copies exist: "$15 Fill-a-Bag Is Back" + "POV - You Pulled Up" (the model's friend walks beside her, no release on file,
+  the 10/30 rule) and "Austin Vintage Night Market" + "The People" (the man in the white cap, his 11/9 "OUT of everything"). Flip one on = add its
+  row in `site_1106.py`.
+- Clips play from 0tp-media-2 `video/2026-11-06-tatw-markets/`, posters `/video/thrift-1106/`, the same files as THE TAPE.
+- The carousels are portfolio-only, so `content/portfolio.json` carries a THRIFT1106 row for the homepage timeline.
+
 ## HIRING: round two of the scripted promos on top, round one folded (Oct 30 2026)
 
 His ask: "those look way better than last week's edit. So let's update our business page on Off the Print and update portfolio and etc."

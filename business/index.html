@@ -267,14 +267,14 @@ h1,h2{margin-top:8px;font-family:var(--disp);font-weight:650;font-variation-sett
 
   <section class="card c-real" data-id="real" data-title="A real one" data-next="See a real one" aria-roledescription="slide" aria-label="2 of 7" aria-hidden="true">
     <div class="vis">
-      <video id="promo" src="media/real.mp4" poster="media/real.jpg" muted playsinline loop preload="none" aria-label="A 15-second promo for the Y2K night market at Thrift @ The Warehouse"></video>
+      <video id="promo" src="media/real.mp4" poster="media/real.jpg" muted playsinline loop preload="none" aria-label="A 12-second promo for two vintage markets at Thrift @ The Warehouse"></video>
       <button class="key soft sound" id="sound" type="button" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path class="w" d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg><span>Sound on</span></button>
     </div>
     <div class="sheet">
       <p class="k">A real one <span>· Thrift @ The Warehouse</span></p>
-      <h2>One evening. 14&nbsp;videos.</h2>
-      <p class="l">My third shoot for this store. All 14 delivered in 4K the next day.</p>
-      <span class="chip"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg>Last shoot: 2,000+ plays</span>
+      <h2>One weekend. 18&nbsp;videos.</h2>
+      <p class="l">A night market and a sale day for this store. All 18 delivered in 4K, plus 27 photos.</p>
+      <span class="chip"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg>An earlier promo: 2,000+ plays</span>
     </div>
   </section>
 
@@ -568,19 +568,22 @@ h1,h2{margin-top:8px;font-family:var(--disp);font-weight:650;font-variation-sett
 
   // more work: one tap on a tile plays it full screen with sound, Done goes back
   var MEDIA='https://carlo72400-pixel.github.io/0tp-media-2/video/';
+  function mkt(slug, title, note){ var n='tatw-1106-'+slug; return {s:MEDIA+'2026-11-06-tatw-markets/'+n+'.mp4', p:'/video/thrift-1106/'+n+'.jpg', t:title, n:note} }
   function tatw(mmdd, slug, title, note){ var n='tatw-'+mmdd+'-'+slug; return {s:MEDIA+'2026-10-'+mmdd.slice(2)+'-tatw-model-day/'+n+'.mp4', p:'/video/thrift-'+mmdd+'/'+n+'.jpg', t:title, n:note} }
   var REELS={
     thrift:{name:'Thrift @ The Warehouse', clips:[
-      tatw('1029','which-fit','Which fit?','South Congress'),
-      tatw('1029','y2k-night-market','Y2K night market','First Friday'),
-      tatw('1029','3-dollar-sale','$3 sale','34th Street store'),
-      tatw('1029','fall-market','Fall market','Second Saturday'),
-      tatw('1029','3-dollar-finds','$3 finds','34th Street store'),
-      tatw('1029','cancel-your-plans','Cancel your plans','34th Street store'),
-      tatw('1029','going-thrifting','Going thrifting','Short cut'),
-      tatw('1029','fit-check','Fit check','Short cut'),
-      tatw('1020','buy-sell-trade','Buy, sell, trade','Last shoot, posted by the store'),
-      tatw('1020','now-you-do','Now you do','Last shoot, posted by the store')]},
+      mkt('fall-market','Fall vintage market','Scripted promo'),
+      mkt('two-markets','Two markets this month','Scripted promo'),
+      mkt('how-much-can-15-get-you','How much can $15 get you?','Scripted promo'),
+      mkt('fall-market-montage','One of ones','Night market'),
+      mkt('meet-the-vendors','Meet the vendors','Night market'),
+      mkt('night-market','Vintage night market','Night market'),
+      mkt('everything-is-3','Everything out here is $3','Sale day'),
+      mkt('the-haul','How much did $3 get them?','Sale day'),
+      tatw('1029','which-fit','Which fit?','October shoot'),
+      tatw('1029','y2k-night-market','Y2K night market','October shoot'),
+      tatw('1020','buy-sell-trade','Buy, sell, trade','Posted by the store'),
+      tatw('1020','now-you-do','Now you do','Posted by the store')]},
     launch:{name:'Pixel Pulpit grand opening', clips:[
       {s:'media/launch-collage.mp4', p:'media/launch-collage.jpg', t:'The collage cut', n:'0:57'},
       {s:'media/launch-recap.mp4', p:'media/launch-recap.jpg', t:'The recap', n:'1:51'}]},

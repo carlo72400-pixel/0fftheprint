@@ -65,4 +65,8 @@
   background:#000;border:2px solid #fff;border-radius:16px;box-shadow:var(--shadow-sm)}
 .swipe img{flex:0 0 50%;width:50%;height:auto;aspect-ratio:1/1;object-fit:cover;scroll-snap-align:start;display:block}
 @media(max-width:640px){.swipe img{flex-basis:100%;width:100%}}
+/* .swipe.tall (11/9, the Thrift market carousels): 4:5 pages that stand alone, not one cut picture. Three across on a laptop, one on a phone. */
+.swipe.tall{background:#f2efe8}
+.swipe.tall img{flex:0 0 33.3334%;width:33.3334%;aspect-ratio:4/5}
+@media(max-width:640px){.swipe.tall img{flex-basis:100%;width:100%}}
 .swipe:focus-visible{outline:2px solid var(--pink);outline-offset:3px}
