@@ -1,4 +1,4 @@
-WAP was a Friday in a backyard in San Marcos. Private Park, down Nicola Alley by the tracks. Doors at eight, music at nine, out at one, ten dollars, 18 and up, 21 and up to bring your own. Plus a DIY slip n slide on the flyer. The hosts were superhellarad and youreyesandearss. For My Angelite, Blue Navy, Henry J and Cybersonic Sense were on the bill. DJ sets between, sound by CCM Stereo. Cybersonic Sense is GABO, playing the night after the GABO live band's last show at Paper Tiger. House rules on the flyer. No tagging, no littering, no breaking anything.
+WAP was a Friday in a backyard in San Marcos. Private Park, by the tracks. Doors at eight, music at nine, out at one, ten dollars, 18 and up, 21 and up to bring your own. Plus a DIY slip n slide on the flyer. The hosts were superhellarad and youreyesandearss. For My Angelite, Blue Navy, Henry J and Cybersonic Sense were on the bill. DJ sets between, sound by CCM Stereo. Cybersonic Sense is GABO, playing the night after the GABO live band's last show at Paper Tiger. House rules on the flyer. No tagging, no littering, no breaking anything.
 
 For light, the yard has string bulbs in the trees. Everything else is the flash. It caught one guest pushing another around the dirt in a kid's ride-on car. A haircut happening by the string lights with a comb and scissors. A horse mask. A captain's hat and a salute.
 
@@ -28,4 +28,4 @@ One frame in the gallery isn't a photo that was taken. We pulled it out of a liv
 
 [The cleared frames from WAP](https://0fftheprint.com/events/2026-09-25-wap/) are up, all four versions of each, full quality, free to download. Four independent reviewers read every candidate first, same as every night here. At a swimsuit party in a backyard, they read it slowly.
 
-Private Park, 313 Nicola Alley, San Marcos. Friday, September 25, 2026.
+Private Park, San Marcos. Friday, September 25, 2026.
