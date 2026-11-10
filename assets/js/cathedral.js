@@ -112,6 +112,17 @@
       .catch(function () { return []; });
     return folioP;
   }
+  // DROPS for the timeline (11/10, the wallpaper page): content/drops.json, one row per stand-alone drop page that is not a
+  // night, a story, a cut or portfolio work (his 10/21 rule: everything new shows on the timeline). `link` = the drop's own
+  // folder ("wallpapers/"), `thumb` = a 16:9 card inside it, `up` = the day it went up, `go` = the call to action (optional).
+  var dropsP = null, DROP = /^[a-z0-9][a-z0-9-]{0,60}\/$/, DTHUMB = /^[a-z0-9][a-z0-9-]{0,60}\/[a-z0-9._-]{1,80}\.(?:jpe?g|webp|png)$/i;
+  function drops() {
+    if (!dropsP) dropsP = fetch('content/drops.json', { cache: 'no-cache' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) { return ((j && j.items) || []).filter(function (x) { return x && x.title && DROP.test(x.link || '') && DTHUMB.test(x.thumb || '') && ymd(x.up); }); })
+      .catch(function () { return []; });
+    return dropsP;
+  }
   // THE CRYPT for the timeline (10/21): the weekly flyer build stamps wall/build.txt (yyyymmddhhmmss). Members only, like
   // its nav link (his call 10/2): the card is built for everyone and cathedral.css shows it only on html[data-door="in"].
   var cryptP = null;
@@ -313,7 +324,7 @@
      portfolio-only work, the Crypt's weekly flyers (members only) and the packs on the shelf, dated, slotted between the posts. A media house that shot 18 nights
      and wrote 28 stories should not have a timeline that reads as one person talking to himself.
      ⛔ These are links, not posts: no reactions, no author, never mistaken for something a member said. */
-  var HOUSE_CAP = 8;   // the newest eight, across nights, mini packs, stories, cuts, the portfolio, the Crypt and the packs (10/21: 6 -> 8)
+  var HOUSE_CAP = 8;   // the newest eight, across nights, mini packs, stories, cuts, the portfolio, the Crypt, the packs and drops (10/21: 6 -> 8)
   function houseFeed() {
     var mount = d.getElementById('take-mount'); if (!mount) return;
     var placed = false;
@@ -407,6 +418,9 @@
       var pic = FTHUMB.test(x.thumb || '') ? x.thumb : 'portfolio/assets/preview.jpg';
       return wideCard('folio', x.link, 'new on the portfolio', dt, pic, x.title, String(x.line || '').slice(0, 160), 'see it \u2192');
     }
+    function dropCard(x, dt) {
+      return wideCard('drop', x.link, 'new drop', dt, x.thumb, x.title, String(x.line || '').slice(0, 160), (x.go ? String(x.go).slice(0, 30) : 'see it') + ' →');
+    }
     function cryptCard(dt) {
       return wideCard('crypt', 'wall/', 'new flyers', dt, 'wall/preview.jpg', 'This week in the Crypt', 'The week\u2019s flyers are up. See who\u2019s going.', 'open the Crypt \u2192');
     }
@@ -427,7 +441,7 @@
       return a;
     }
     var built = null, placing = false, seenPosts = 0;
-    function place(ns, st, tp, mi, fo, cr, ap) {
+    function place(ns, st, tp, mi, fo, cr, ap, dr) {
       // built once, placed again whenever the timeline grows (Show older posts), so the order stays true
       if (built) { slot(); return; }
       var items = [];
@@ -443,6 +457,7 @@
         (tb[k] = tb[k] || { t: dt.getTime() + 10 * 36e5, kind: 't', list: [], dt: dt, from: v.from || '' }).list.push(v); });
       Object.keys(tb).forEach(function (k) { items.push(tb[k]); });
       (fo || []).forEach(function (x) { var dt = ymd(x.up); if (dt) items.push({ t: dt.getTime() + 11 * 36e5, kind: 'f', x: x, dt: dt }); });
+      (dr || []).forEach(function (x) { var dt = ymd(x.up); if (dt) items.push({ t: dt.getTime() + 12 * 36e5, kind: 'd', x: x, dt: dt }); });
       if (cr) items.push({ t: cr.getTime(), kind: 'c', dt: cr });
       var pb = {};
       (ap || []).forEach(function (p) { var c = new Date(Date.parse(p.created_at)), dt = new Date(c.getFullYear(), c.getMonth(), c.getDate(), 12), k = dt.getTime();
@@ -450,7 +465,8 @@
       Object.keys(pb).forEach(function (k) { items.push(pb[k]); });
       items.sort(function (a, b) { return b.t - a.t; });
       var CARD = { n: function (it) { return nightCard(it.e, it.dt); }, t: function (it) { return tapeCard(it, it.dt); }, s: function (it) { return storyCard(it.list, it.dt); },
-                   f: function (it) { return folioCard(it.x, it.dt); }, c: function (it) { return cryptCard(it.dt); }, a: function (it) { return apackCard(it, it.dt); } };
+                   f: function (it) { return folioCard(it.x, it.dt); }, c: function (it) { return cryptCard(it.dt); }, a: function (it) { return apackCard(it, it.dt); },
+                   d: function (it) { return dropCard(it.x, it.dt); } };
       built = items.slice(0, HOUSE_CAP).map(function (it) { return { t: it.t, node: CARD[it.kind](it) }; });
       slot();
       // a member's binder moves: the night cards say so
@@ -496,7 +512,7 @@
       pinFold();
       if (placed) { if (built && mount.querySelectorAll('.post-t').length !== seenPosts) slot(); return; }
       placed = true;
-      Promise.all([nights(), stories(), tape(), minis(), folio(), crypt(), apacks()]).then(function (got) { try { place(got[0], got[1], got[2], got[3], got[4], got[5], got[6]); } catch (e) {} });
+      Promise.all([nights(), stories(), tape(), minis(), folio(), crypt(), apacks(), drops()]).then(function (got) { try { place(got[0], got[1], got[2], got[3], got[4], got[5], got[6], got[7]); } catch (e) {} });
     }
     go();
     try { new MutationObserver(go).observe(mount, { childList: true }); } catch (e) {}

@@ -1,0 +1,13 @@
+{
+  "_about": "Stand-alone drop pages for the homepage timeline (cathedral.js drops(), 11/10). One row each: up = the day it went up, link = the drop's own folder, thumb = a 16:9 card inside it, go = the call to action.",
+  "items": [
+    {
+      "up": "2026-11-10",
+      "title": "Pick your lock screen",
+      "line": "10 free lock screens of the crew, night and day. Tap one and save it.",
+      "link": "wallpapers/",
+      "thumb": "wallpapers/card.jpg",
+      "go": "grab one"
+    }
+  ]
+}
