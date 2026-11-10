@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>VP Deadeye, a free font · VAMPPSYCH</title>
+<meta name="description" content="VP Deadeye is VAMPPSYCH's hand lettering made into a font: chunky brush caps with X dead eyes. Free for personal use. Download the OTF, TTF and web font.">
+<link rel="canonical" href="https://0fftheprint.com/font/">
+<meta name="theme-color" content="#ffffff">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="0FF THE PRINT">
+<meta property="og:title" content="VP Deadeye, a free font by VAMPPSYCH">
+<meta property="og:description" content="Type in my handwriting. Every letter inked by hand. Free for your own stuff.">
+<meta property="og:url" content="https://0fftheprint.com/font/">
+<meta property="og:image" content="https://0fftheprint.com/font/preview.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="FREE FONT written in VP Deadeye, black brush caps with X eyes and a red heart, on blue tracing-sheet lines.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="apple-touch-icon" href="../assets/icon-180.png">
+<link rel="preload" href="fonts/vpdeadeye.woff2" as="font" type="font/woff2" crossorigin>
+<!-- Built 2026-11-10: VP Deadeye v1.3, the first public release of his font.
+     The fonts, the zip, preview.jpg and card.jpg come from the font workbench (build/package.py --site <repo>);
+     this page is kept by hand. Self-contained: no shared CSS/JS, no stamp needed.
+     The look is his tracing sheet (the pale-blue guide sheets he inked every letter on). -->
+<style>
+@font-face{font-family:"VP Deadeye";src:url(fonts/vpdeadeye.woff2) format("woff2");font-display:block;ascent-override:83%;descent-override:21%;line-gap-override:0%}
+:root{--ink:#0b0b0b;--text:#16202a;--mute:#4a5b6b;--blue:#46aaff;--pale:#afdcff;--faint:#cde8ff;--wash:#f1f8ff;--label:#1769c9;--red:#e3121a;--deep:#7a0006;
+  --mid11:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 1000' preserveAspectRatio='none'%3E%3Crect y='446' width='8' height='24' fill='%23cde8ff'/%3E%3C/svg%3E");
+  --mid13:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 1000' preserveAspectRatio='none'%3E%3Crect y='453' width='8' height='24' fill='%23cde8ff'/%3E%3C/svg%3E")}
+*{box-sizing:border-box}
+html{background:#fff;color-scheme:light;-webkit-text-size-adjust:100%;font-synthesis:none}
+body{margin:0;background:#fff;color:var(--text);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif}
+a{color:inherit}
+a:focus-visible,.dl:focus-visible,.tt:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+.sheet{position:relative;max-width:1060px;margin:0 auto;padding:0 16px}
+.top{padding:calc(10px + env(safe-area-inset-top)) 0 0}
+.home{display:inline-flex;align-items:center;min-height:44px;font-weight:800;font-size:13px;letter-spacing:.16em;color:var(--mute);text-decoration:none}
+.tag{margin:0;font-size:13px;font-weight:600;line-height:1.35;letter-spacing:.07em;text-transform:uppercase;color:var(--label)}
+.tag span{color:var(--blue);margin:0 .35em}
+.dead{font-family:"VP Deadeye",Impact,"Arial Black",sans-serif;font-weight:400;font-style:normal;font-kerning:normal;font-feature-settings:"kern" 1}
+/* his sheet's rules under the ink: pale cap line, faint dashed middle, blue baseline. Metrics: ascent .83em, descent .21em, caps .712em */
+.ruled{--L:1.3;--m:var(--mid13);--b:calc((var(--L) - 1.04) * .5em + .83em);--c:calc(var(--b) - .712em);line-height:calc(var(--L) * 1em);
+  background-image:linear-gradient(transparent calc(var(--c) - 1px),var(--pale) 0,var(--pale) calc(var(--c) + 1px),transparent 0),
+    var(--m),
+    linear-gradient(transparent var(--b),var(--blue) 0,var(--blue) calc(var(--b) + 2px),transparent 0);
+  background-size:100% calc(var(--L) * 1em),16px calc(var(--L) * 1em),100% calc(var(--L) * 1em);
+  background-repeat:repeat-y,repeat,repeat-y;background-origin:content-box;background-clip:content-box}
+h1.hero{--L:1.1;--m:var(--mid11);margin:8px 0 14px;color:var(--ink);font-size:min(calc((100vw - 32px) / 4.8),240px)}
+h1.hero .ln{display:block}
+@media (min-width:700px){h1.hero{font-size:min(calc((100vw - 32px) / 6.2),170px)}h1.hero .ln{display:inline}}
+.lead{margin:0;font-size:clamp(21px,5.6vw,28px);font-weight:800;line-height:1.2;color:var(--ink)}
+.sub{margin:6px 0 0;font-size:17px;color:var(--mute)}
+.hrt{color:var(--red)}
+.sub .hrt{font-size:1.3em;line-height:0}
+.dl{display:flex;align-items:center;justify-content:center;width:100%;max-width:440px;min-height:66px;margin:22px 0 0;padding:12px 22px 10px;border-radius:16px;
+  background:var(--red);color:#fff;text-decoration:none;font-size:min(34px,calc((100vw - 76px) / 8.2));line-height:1;white-space:nowrap;text-align:center;box-shadow:0 6px 0 var(--deep);-webkit-tap-highlight-color:transparent}
+.dl:active{transform:translateY(3px);box-shadow:0 3px 0 var(--deep)}
+.dlm{margin:12px 0 0;font-size:14px;color:var(--mute)}
+.dlm a{color:var(--label);font-weight:600}
+.igb{display:none;margin:14px 0 0;padding:11px 14px;border-radius:12px;background:var(--wash);border:2px solid var(--pale);color:var(--text);font-size:15px;line-height:1.4}
+html.inapp .igb{display:block}
+.sec{margin:44px 0 0;padding:12px 0 0;border-top:2px solid var(--blue)}
+.sec>.tag{margin:0 0 14px}
+.lb{position:absolute;left:6px;top:3px;font-size:11px;line-height:1.3;font-weight:600;letter-spacing:.04em;color:var(--label)}
+/* try it */
+.tbox{position:relative;border:2px solid var(--blue);padding:24px 12px 10px}
+.tbox:focus-within{box-shadow:0 0 0 4px var(--faint)}
+.tt{display:block;width:100%;min-height:2.6em;margin:0;padding:0;border:0;border-radius:0;outline:0;resize:none;overflow:hidden;background-color:transparent;
+  color:var(--ink);font-size:56px;-webkit-appearance:none;appearance:none}
+.ctl{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;margin:12px 0 0}
+.sz{display:flex;align-items:center;gap:10px;flex:1 1 220px;min-height:44px;font-size:13px;font-weight:700;letter-spacing:.07em;color:var(--label)}
+.sz input{flex:1;min-width:0;height:32px;margin:0;accent-color:var(--red)}
+.inks{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;border:0;min-width:0}
+.inks label{position:relative;display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:0 14px;border:2px solid var(--faint);border-radius:999px;
+  font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--text);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.inks label.on{border-color:var(--blue);background:var(--wash)}
+.inks input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
+.inks label:has(input:focus-visible){outline:3px solid var(--blue);outline-offset:2px}
+.inks i{width:14px;height:14px;border-radius:50%}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* the set, cells like his sheet */
+.cells{--cols:5;list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(var(--cols),minmax(0,1fr));border-left:2px solid var(--blue);border-top:2px solid var(--blue)}
+@media (min-width:370px){.cells{--cols:6}}
+@media (min-width:640px){.cells{--cols:10}}
+@media (min-width:1000px){.cells{--cols:12}}
+.cells li{position:relative;min-width:0;padding:20px 0 2px;border-right:2px solid var(--blue);border-bottom:2px solid var(--blue);text-align:center}
+.cells .g{display:block;color:var(--ink);font-size:calc(min(100vw - 32px, 1028px) / var(--cols) * .56)}
+.cells .hrt .g{color:var(--red)}
+.note{margin:12px 0 0;font-size:15px;color:var(--mute)}
+.note .ch{font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--text);white-space:nowrap}
+/* install + rules */
+.steps{margin:0}
+.steps>div{padding:12px 0;border-bottom:1px solid var(--faint)}
+.steps>div:first-child{padding-top:0}
+.steps dt{font-size:13px;font-weight:700;letter-spacing:.07em;color:var(--label)}
+.steps dd{margin:3px 0 0}
+code{font:600 .9em ui-monospace,Menlo,Consolas,monospace;background:var(--wash);padding:1px 5px;border-radius:5px;overflow-wrap:anywhere}
+.rl{list-style:none;margin:0;padding:0}
+.rl li{display:grid;grid-template-columns:46px minmax(0,1fr);gap:10px;align-items:start;padding:12px 0;border-bottom:1px solid var(--faint)}
+.rl li:first-child{padding-top:2px}
+.rl .mk{font-size:40px;line-height:1;text-align:center;color:var(--ink)}
+.rl .no .mk{color:var(--red)}
+.rl p{margin:4px 0 0}
+.rl strong{color:var(--ink)}
+.rl a{color:var(--label);font-weight:700}
+.tagme{margin:16px 0 0;font-size:17px;font-weight:700;color:var(--ink)}
+.tagme a{color:var(--label)}
+.fine{margin:6px 0 0;font-size:14px;color:var(--mute)}
+.foot{margin:44px 0 0;padding:14px 0 calc(28px + env(safe-area-inset-bottom));border-top:2px solid var(--blue);color:var(--mute);font-size:15px}
+.foot p{margin:0 0 12px}
+.foot .go{display:flex;align-items:center;min-height:52px;border-top:1px solid var(--faint);color:var(--ink);font-weight:700;text-decoration:none}
+.foot .go:last-child{border-bottom:1px solid var(--faint)}
+/* crop marks, only where the page has a margin to sit in */
+.crop{display:none}
+@media (min-width:1140px){
+  .crop{display:block;position:absolute;width:26px;height:26px;pointer-events:none}
+  .crop::before,.crop::after{content:"";position:absolute;background:var(--blue)}
+  .crop::before{left:0;right:0;top:12px;height:2px}
+  .crop::after{top:0;bottom:0;left:12px;width:2px}
+  .crop.tl{left:-34px;top:14px}.crop.tr{right:-34px;top:14px}.crop.bl{left:-34px;bottom:14px}.crop.br{right:-34px;bottom:14px}
+}
+@media (prefers-reduced-motion:reduce){.dl:active{transform:none}}
+</style>
+</head>
+<body>
+<div class="sheet">
+  <i class="crop tl" aria-hidden="true"></i><i class="crop tr" aria-hidden="true"></i>
+  <header class="top">
+    <a class="home" href="../">0FF THE PRINT</a>
+    <p class="tag">VP Deadeye<span>/</span>a font by VAMPPSYCH</p>
+    <h1 class="hero dead ruled"><span class="ln">VP</span> <span class="ln">DEADEYE</span></h1>
+    <p class="lead">Type in my handwriting.</p>
+    <p class="sub">Every letter inked by hand. Free for your own stuff <span class="hrt dead" aria-hidden="true">&hearts;</span></p>
+    <a class="dl dead" href="VP-Deadeye-v1.3.zip" download="VP-Deadeye-v1.3.zip">GET THE FONT</a>
+    <p class="dlm">.zip · 375 KB · OTF + TTF + web font · v1.3 · <a href="#license">the rules</a></p>
+    <p class="igb">In Instagram or TikTok? Tap ⋯ (top right), then <b>Open in browser</b>. Downloads work there.</p>
+  </header>
+
+  <section class="sec try" aria-labelledby="try-h">
+    <h2 class="tag" id="try-h">Try it<span>/</span>type anything</h2>
+    <div class="tbox">
+      <span class="lb" aria-hidden="true">TYPE HERE</span>
+      <textarea id="tt" class="tt dead ruled" rows="2" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="characters" aria-label="Type here to try the font">LATE NIGHT TAKEOVER</textarea>
+    </div>
+    <div class="ctl">
+      <label class="sz">SIZE <input type="range" id="sz" min="24" max="220" step="1" value="56"></label>
+      <fieldset class="inks"><legend class="vh">Ink colour</legend>
+        <label class="on"><input type="radio" name="ink" value="#0b0b0b" checked><i style="background:#0b0b0b"></i>INK</label>
+        <label><input type="radio" name="ink" value="#e3121a"><i style="background:#e3121a"></i>RED</label>
+        <label><input type="radio" name="ink" value="#1769c9"><i style="background:#1769c9"></i>BLUE</label>
+      </fieldset>
+    </div>
+  </section>
+
+  <section class="sec set" aria-labelledby="set-h">
+    <h2 class="tag" id="set-h">The set<span>/</span>A to Z, 0 to 9, 23 marks + a heart</h2>
+    <ul class="cells">
+      <li><span class="lb">A</span><span class="g dead ruled" aria-hidden="true">A</span></li>
+      <li><span class="lb">B</span><span class="g dead ruled" aria-hidden="true">B</span></li>
+      <li><span class="lb">C</span><span class="g dead ruled" aria-hidden="true">C</span></li>
+      <li><span class="lb">D</span><span class="g dead ruled" aria-hidden="true">D</span></li>
+      <li><span class="lb">E</span><span class="g dead ruled" aria-hidden="true">E</span></li>
+      <li><span class="lb">F</span><span class="g dead ruled" aria-hidden="true">F</span></li>
+      <li><span class="lb">G</span><span class="g dead ruled" aria-hidden="true">G</span></li>
+      <li><span class="lb">H</span><span class="g dead ruled" aria-hidden="true">H</span></li>
+      <li><span class="lb">I</span><span class="g dead ruled" aria-hidden="true">I</span></li>
+      <li><span class="lb">J</span><span class="g dead ruled" aria-hidden="true">J</span></li>
+      <li><span class="lb">K</span><span class="g dead ruled" aria-hidden="true">K</span></li>
+      <li><span class="lb">L</span><span class="g dead ruled" aria-hidden="true">L</span></li>
+      <li><span class="lb">M</span><span class="g dead ruled" aria-hidden="true">M</span></li>
+      <li><span class="lb">N</span><span class="g dead ruled" aria-hidden="true">N</span></li>
+      <li><span class="lb">O</span><span class="g dead ruled" aria-hidden="true">O</span></li>
+      <li><span class="lb">P</span><span class="g dead ruled" aria-hidden="true">P</span></li>
+      <li><span class="lb">Q</span><span class="g dead ruled" aria-hidden="true">Q</span></li>
+      <li><span class="lb">R</span><span class="g dead ruled" aria-hidden="true">R</span></li>
+      <li><span class="lb">S</span><span class="g dead ruled" aria-hidden="true">S</span></li>
+      <li><span class="lb">T</span><span class="g dead ruled" aria-hidden="true">T</span></li>
+      <li><span class="lb">U</span><span class="g dead ruled" aria-hidden="true">U</span></li>
+      <li><span class="lb">V</span><span class="g dead ruled" aria-hidden="true">V</span></li>
+      <li><span class="lb">W</span><span class="g dead ruled" aria-hidden="true">W</span></li>
+      <li><span class="lb">X</span><span class="g dead ruled" aria-hidden="true">X</span></li>
+      <li><span class="lb">Y</span><span class="g dead ruled" aria-hidden="true">Y</span></li>
+      <li><span class="lb">Z</span><span class="g dead ruled" aria-hidden="true">Z</span></li>
+      <li><span class="lb">0</span><span class="g dead ruled" aria-hidden="true">0</span></li>
+      <li><span class="lb">1</span><span class="g dead ruled" aria-hidden="true">1</span></li>
+      <li><span class="lb">2</span><span class="g dead ruled" aria-hidden="true">2</span></li>
+      <li><span class="lb">3</span><span class="g dead ruled" aria-hidden="true">3</span></li>
+      <li><span class="lb">4</span><span class="g dead ruled" aria-hidden="true">4</span></li>
+      <li><span class="lb">5</span><span class="g dead ruled" aria-hidden="true">5</span></li>
+      <li><span class="lb">6</span><span class="g dead ruled" aria-hidden="true">6</span></li>
+      <li><span class="lb">7</span><span class="g dead ruled" aria-hidden="true">7</span></li>
+      <li><span class="lb">8</span><span class="g dead ruled" aria-hidden="true">8</span></li>
+      <li><span class="lb">9</span><span class="g dead ruled" aria-hidden="true">9</span></li>
+      <li><span class="lb">.</span><span class="g dead ruled" aria-hidden="true">.</span></li>
+      <li><span class="lb">,</span><span class="g dead ruled" aria-hidden="true">,</span></li>
+      <li><span class="lb">!</span><span class="g dead ruled" aria-hidden="true">!</span></li>
+      <li><span class="lb">?</span><span class="g dead ruled" aria-hidden="true">?</span></li>
+      <li><span class="lb">&#x27;</span><span class="g dead ruled" aria-hidden="true">&#x27;</span></li>
+      <li><span class="lb">&quot;</span><span class="g dead ruled" aria-hidden="true">&quot;</span></li>
+      <li><span class="lb">-</span><span class="g dead ruled" aria-hidden="true">-</span></li>
+      <li><span class="lb">:</span><span class="g dead ruled" aria-hidden="true">:</span></li>
+      <li><span class="lb">;</span><span class="g dead ruled" aria-hidden="true">;</span></li>
+      <li><span class="lb">&amp;</span><span class="g dead ruled" aria-hidden="true">&amp;</span></li>
+      <li><span class="lb">@</span><span class="g dead ruled" aria-hidden="true">@</span></li>
+      <li><span class="lb">#</span><span class="g dead ruled" aria-hidden="true">#</span></li>
+      <li><span class="lb">$</span><span class="g dead ruled" aria-hidden="true">$</span></li>
+      <li><span class="lb">%</span><span class="g dead ruled" aria-hidden="true">%</span></li>
+      <li><span class="lb">/</span><span class="g dead ruled" aria-hidden="true">/</span></li>
+      <li><span class="lb">(</span><span class="g dead ruled" aria-hidden="true">(</span></li>
+      <li><span class="lb">)</span><span class="g dead ruled" aria-hidden="true">)</span></li>
+      <li><span class="lb">+</span><span class="g dead ruled" aria-hidden="true">+</span></li>
+      <li><span class="lb">=</span><span class="g dead ruled" aria-hidden="true">=</span></li>
+      <li><span class="lb">*</span><span class="g dead ruled" aria-hidden="true">*</span></li>
+      <li><span class="lb">&lt;</span><span class="g dead ruled" aria-hidden="true">&lt;</span></li>
+      <li><span class="lb">&gt;</span><span class="g dead ruled" aria-hidden="true">&gt;</span></li>
+      <li class="hrt"><span class="lb">&hearts;</span><span class="g dead ruled" aria-hidden="true">&hearts;</span></li>
+      <li><span class="lb">_</span><span class="g dead ruled" aria-hidden="true">_</span></li>
+    </ul>
+    <p class="note">All caps, so lowercase types the same caps. The heart comes out when you type <span class="ch">&hearts;</span> or <span class="ch">&#10084;</span>. Not in it yet: accents and <span class="ch">[ ] { } \ | ~ ^</span></p>
+  </section>
+
+  <section class="sec how" aria-labelledby="how-h">
+    <h2 class="tag" id="how-h">Install it</h2>
+    <dl class="steps">
+      <div><dt>MAC</dt><dd>Unzip it, double-click <code>VPDeadeye-Regular.otf</code>, then click Install.</dd></div>
+      <div><dt>WINDOWS</dt><dd>Unzip it, right-click <code>VPDeadeye-Regular.otf</code>, then Install.</dd></div>
+      <div><dt>IPAD / IPHONE</dt><dd>Tap the zip in Files to open it. In Procreate: add text, tap Aa, then Import Font and pick the .ttf.</dd></div>
+      <div><dt>ANYTHING ELSE</dt><dd>Canva, CapCut, Photoshop: install it on your computer, or upload the .ttf with the app's own upload a font button.</dd></div>
+    </dl>
+  </section>
+
+  <section class="sec rules" id="license" aria-labelledby="rules-h">
+    <h2 class="tag" id="rules-h">The rules</h2>
+    <ul class="rl">
+      <li class="ok"><b class="mk dead" aria-hidden="true">+</b><p><strong>Free</strong> for your own stuff: posts, edits, school work, a flyer for your own party.</p></li>
+      <li class="pay"><b class="mk dead" aria-hidden="true">$</b><p><strong>Getting paid with it?</strong> Merch, logos, ads, client work or a flyer for a paid event: DM <a href="https://www.instagram.com/vamppsych/" rel="noopener">@vamppsych</a> for a license first.</p></li>
+      <li class="no"><b class="mk dead" aria-hidden="true">X</b><p><strong>Don't</strong> sell the font, rename it or re-upload the files. Send people here instead.</p></li>
+    </ul>
+    <p class="tagme">Used it? Tag <a href="https://www.instagram.com/vamppsych/" rel="noopener">@vamppsych</a>, I wanna see it.</p>
+    <p class="fine">The full terms are in LICENSE.txt inside the zip.</p>
+  </section>
+
+  <footer class="foot">
+    <p>VP Deadeye v1.3. Hand lettered by VAMPPSYCH, 2026.</p>
+    <a class="go" href="https://www.instagram.com/vamppsych/" rel="noopener">@vamppsych on Instagram →</a>
+    <a class="go" href="../wallpapers/">Free lock screens of the crew →</a>
+    <a class="go" href="../">More from 0FF THE PRINT →</a>
+  </footer>
+  <i class="crop bl" aria-hidden="true"></i><i class="crop br" aria-hidden="true"></i>
+</div>
+<script>
+(function () {
+  'use strict';
+  var d = document, root = d.documentElement;
+  if (/Instagram|FBAN|FBAV|BytedanceWebview|musical_ly|TikTok/i.test(navigator.userAgent || '')) root.classList.add('inapp');
+  var tt = d.getElementById('tt'), sz = d.getElementById('sz');
+  if (!tt || !sz) return;
+  // the red heart emoji arrives as heart + an emoji switch; drop the switch so his heart shows instead of the emoji
+  var VS16 = String.fromCharCode(0xFE0F);
+  function fit() { tt.style.height = 'auto'; tt.style.height = tt.scrollHeight + 'px'; }
+  function size(v) { tt.style.fontSize = v + 'px'; fit(); }
+  var w = window.innerWidth || 390, start = w < 600 ? 56 : (w < 1000 ? 88 : 112);
+  sz.value = String(start); size(start);
+  sz.addEventListener('input', function () { size(+sz.value); });
+  tt.addEventListener('input', function () {
+    if (tt.value.indexOf(VS16) >= 0) {
+      var p = tt.selectionStart, cut = tt.value.slice(0, p).split(VS16).length - 1;
+      tt.value = tt.value.split(VS16).join('');
+      try { tt.setSelectionRange(p - cut, p - cut); } catch (e) {}
+    }
+    fit();
+  });
+  var inks = d.querySelectorAll('.inks input');
+  Array.prototype.forEach.call(inks, function (r) {
+    r.addEventListener('change', function () {
+      tt.style.color = r.value;
+      Array.prototype.forEach.call(inks, function (o) { o.parentNode.classList.toggle('on', o.checked); });
+    });
+  });
+  window.addEventListener('resize', fit);
+  if (d.fonts && d.fonts.ready) d.fonts.ready.then(fit);
+})();
+</script>
+</body>
+</html>
