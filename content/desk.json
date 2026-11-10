@@ -1,6 +1,62 @@
 {
   "items": [
     {
+      "title": "Friday The 13th, Pick Your Night",
+      "kicker": "THE CALENDAR",
+      "dek": "Friday the 13th has a backyard party with buckets of fake blood, a horror con with a real Jason and a new horror movie. Saturday's stacked too.",
+      "date": "11.09.26",
+      "lanes": [
+        "story"
+      ],
+      "dept": "story",
+      "platform": "SITE",
+      "thumb": "word/friday-the-13th-pick-your-night/thumb.jpg",
+      "link": "word/friday-the-13th-pick-your-night/",
+      "num": "0TP-053"
+    },
+    {
+      "title": "Both Bands Left Town",
+      "kicker": "THE RUN",
+      "dek": "Blue Navy put out 6 songs and landed on a college radio flyer. Street Lamp booked 7 Texas shows in 11 days. We shot both in September. Here's where they go.",
+      "date": "11.09.26",
+      "lanes": [
+        "story"
+      ],
+      "dept": "story",
+      "platform": "SITE",
+      "thumb": "word/both-bands-left-town/thumb.jpg",
+      "link": "word/both-bands-left-town/",
+      "num": "0TP-052"
+    },
+    {
+      "title": "The Next Headliner Was A Prank",
+      "kicker": "THE SHOP",
+      "dek": "Fortnite Festival's next star is Kasane Teto, a fake Vocaloid made as an April Fools joke in 2008. Her season starts November 12. Her own bio says she can't sing.",
+      "date": "11.09.26",
+      "lanes": [
+        "story"
+      ],
+      "dept": "story",
+      "platform": "SITE",
+      "thumb": "word/the-next-headliner-was-a-prank/thumb.jpg",
+      "link": "word/the-next-headliner-was-a-prank/",
+      "num": "0TP-051"
+    },
+    {
+      "title": "Black Punk Is A Label Now",
+      "kicker": "THE RECORD",
+      "dek": "Molly Santana signed to Epic under her own imprint, Black Punk Music, 3 months after her tour with North West got pulled 6 days out. No Texas date yet.",
+      "date": "11.09.26",
+      "lanes": [
+        "story"
+      ],
+      "dept": "story",
+      "platform": "SITE",
+      "thumb": "word/black-punk-is-a-label-now/thumb.jpg",
+      "link": "word/black-punk-is-a-label-now/",
+      "num": "0TP-050"
+    },
+    {
       "title": "The Shop Is Free For Fourteen Days",
       "kicker": "THE SHOP",
       "dek": "A rare chest token makes almost the whole Item Shop free for 14 days, with a second window in 2027. Treasure Hunters started November 1. GTA VI is November 19.",

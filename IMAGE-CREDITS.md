@@ -1,7 +1,7 @@
 # Image credits — THE WORD
 
 Every story cover, where it came from, and what the licence actually lets us do.
-Sourced and licence-verified 2026-08-27, extended 2026-09-02, 2026-09-14, 2026-10-04, 2026-10-07, 2026-10-21, 2026-10-27, 2026-10-29 and 2026-11-04. The credit line also appears on each
+Sourced and licence-verified 2026-08-27, extended 2026-09-02, 2026-09-14, 2026-10-04, 2026-10-07, 2026-10-21, 2026-10-27, 2026-10-29, 2026-11-04 and 2026-11-09. The credit line also appears on each
 story page itself, under the cover, which is where attribution legally belongs.
 
 ⛔ **Do not swap a cover without updating this file and the page's credit line.**
@@ -10,6 +10,10 @@ All of these are cropped, so all of them say "Cropped."
 
 | № | Story | Image | Source | Licence |
 |---|---|---|---|---|
+| 0TP-053 | Friday The 13th, Pick Your Night | A black cat at night, April 30, 2015 (tile: the cat, centred) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Black_Cat_in_Darkness.JPG) · Luke Rogers | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
+| 0TP-052 | Both Bands Left Town | The backline at WAP, Private Park, San Marcos, Sep 25, 2026 (gallery frame 024, no people) | **Ours.** Shot by the house | House |
+| 0TP-051 | The Next Headliner Was A Prank | Vocaloid cosplayers at Fancy Frontier 19, Taiwan, Feb 4, 2012, Kasane Teto in red at the top right (tile: the right half of the group) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:FF19_DSC2309_85.jpg) · kxz Chen (Flickr, licence machine-reviewed) | [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/) |
+| 0TP-050 | Black Punk Is A Label Now | Molly Santana backstage at Splash! Festival, July 3, 2026 (tile: the full frame) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:MollySantana.jpg) · Tristanstlws (self-published, the licence is the uploader's own claim) | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
 | 0TP-049 | The Shop Is Free For Fourteen Days | The Fortnite booth at E3, Los Angeles, June 12, 2018 (tile: the battle bus under the sign) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Fortnite_at_E3_2018_side_2.jpg) · Sergey Galyonkin | [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/) |
 | 0TP-048 | Nocturnal Lands November 27 | OsamaSon at Racket, New York, March 2, 2024 (tile: him with the mic) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:OsamaSon,_NY.jpg) · Ninecalling | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
 | 0TP-047 | San Antonio, Pick Your Night | Acid Bath at the Rebel, Toronto, October 11, 2025 (tile: the logo over the crowd) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Acid_Bath_at_the_Rebel,_Toronto_2025.jpg) · Chicken4War | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
