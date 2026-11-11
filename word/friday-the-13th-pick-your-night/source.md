@@ -14,8 +14,6 @@ Anywhere. Victorian Psycho opens Friday from Bleecker Street. Zachary Wigon dire
 
 ## But Saturday's stacked too
 
-Noon to 5, Thrift @ The Warehouse runs its Fall Vintage Market at 3820 S Congress in Austin.
-
 11 to 5, Saturday and Sunday, TAYO NA launches its third issue at the Millennium Youth Entertainment Complex in Austin. It's a magazine about Austin's Filipino artists and makers, and the launch comes with a two-day indoor market and a gallery. It's free. The page says about 200 free parking spots.
 
 6:30 to 9, The Down Market puts on The Creative Mass II at Legacy Park in downtown San Antonio. Poetry, live music, art and DJs. Street Lamp's tour post puts their San Antonio date there.

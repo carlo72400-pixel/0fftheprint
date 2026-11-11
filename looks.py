@@ -11,8 +11,13 @@ Run it after a new multi-look night lands, before the commit.
 import glob, json, os
 ROOT = os.path.dirname(os.path.abspath(__file__))
 out = {"v": 1, "nights": []}
+# only nights listed in events.json: an unlisted night folder (kept up for one direct link, like
+# 2026-10-17-fill-a-bag for /business/ since 11/11) stays off the strip too
+LISTED = {e["slug"] for e in json.load(open(os.path.join(ROOT, "events", "events.json"), encoding="utf-8"))["items"]}
 for f in sorted(glob.glob(os.path.join(ROOT, "events", "*", "data.json"))):
     d = json.load(open(f, encoding="utf-8"))
+    if d.get("slug") not in LISTED:
+        continue
     looks = d.get("looks") or []
     if len(looks) < 2:
         continue

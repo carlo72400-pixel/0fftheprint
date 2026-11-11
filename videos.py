@@ -247,7 +247,7 @@ PAGE = """<!DOCTYPE html>
   .lb-bar a{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;
     text-transform:uppercase;color:var(--pink);text-decoration:none;display:inline-flex;
     align-items:center;min-height:44px;padding:0 2px}
-  /* where you are in the run that went up together: 3 / 10 · THRIFT @ THE WAREHOUSE */
+  /* where you are in the run that went up together: 3 / 10 · THE RUN'S NAME */
   .lb-top{position:absolute;top:env(safe-area-inset-top,0px);left:0;right:64px;min-height:56px;
     display:flex;align-items:center;gap:12px;padding:0 18px;pointer-events:none;white-space:nowrap;
     overflow:hidden;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;
