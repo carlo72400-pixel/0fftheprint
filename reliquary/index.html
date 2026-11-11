@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RELIQUARY: the lore · VAMPPSYCH</title>
+<meta name="description" content="The church owns every miracle in Santa Ossa. Twelve misfits rob it for a living. Three carousels: the crew, the saints and the rules.">
+<link rel="canonical" href="https://0fftheprint.com/reliquary/">
+<meta name="theme-color" content="#120709">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="0FF THE PRINT">
+<meta property="og:title" content="RELIQUARY: the lore">
+<meta property="og:description" content="The church owns every miracle in Santa Ossa. Twelve misfits rob it for a living. Swipe the crew, the saints and the rules.">
+<meta property="og:url" content="https://0fftheprint.com/reliquary/">
+<meta property="og:image" content="https://0fftheprint.com/reliquary/preview.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Three carousel covers fanned out: a navy blueprint of twelve chairs, a gold shrine of patron saints, and a game manual cover of the crew.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="apple-touch-icon" href="../assets/icon-180.png">
+<link rel="preload" href="fonts/vpdeadeye.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/pottaone.woff2" as="font" type="font/woff2" crossorigin>
+<!-- Built 2026-11-10 from Drive 03_PROJECTS/reliquary/carousels (make_site_page.py + captions.json). The three RELIQUARY lore carousels
+     (v4 lanes: THE PLAN, THE SHRINE, THE MANUAL), one caption per slide. Self-contained: no shared CSS/JS, no stamp needed. -->
+<style>
+@font-face{font-family:"VP Deadeye";src:url(fonts/vpdeadeye.woff2) format("woff2");font-display:swap}
+@font-face{font-family:"Potta One";src:url(fonts/pottaone.woff2) format("woff2");font-display:swap}
+:root{--bg:#120709;--ink:#f7f2ea;--mute:#cbbcc0;--red:#e3121a;--gold:#ffd23f;--line:#3a2329}
+*{box-sizing:border-box}
+html{background:var(--bg);-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;color:var(--ink);background:var(--bg);font:17px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  background-image:linear-gradient(rgba(214,162,46,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(214,162,46,.05) 1px,transparent 1px);background-size:44px 44px}
+a{color:inherit}
+.wrap{max-width:1060px;margin:0 auto;padding:0 16px}
+.top{padding:calc(10px + env(safe-area-inset-top)) 0 0}
+.home{display:inline-flex;align-items:center;min-height:44px;font-weight:800;font-size:13px;letter-spacing:.16em;color:var(--mute);text-decoration:none}
+.home:hover{color:var(--ink)}
+.hero{text-align:center;padding:18px 0 8px}
+.hero h1{margin:0;font:400 clamp(58px,15vw,132px)/.95 "VP Deadeye",Impact,sans-serif;color:var(--gold);letter-spacing:.01em;
+  text-shadow:1px 1px 0 #96081a,2px 2px 0 #96081a,3px 3px 0 #96081a,4px 4px 0 #96081a,5px 5px 0 #5a0610,6px 6px 0 #5a0610,7px 7px 0 #5a0610,0 12px 26px rgba(0,0,0,.6)}
+.hero .sub{margin:14px auto 0;max-width:640px;font:400 clamp(19px,4.6vw,24px)/1.35 "Potta One",sans-serif;color:var(--ink)}
+.hero .punch{margin:10px 0 0;font:400 clamp(28px,7vw,44px)/1 "VP Deadeye",Impact,sans-serif;color:var(--red)}
+.hero .how{margin:16px auto 0;max-width:560px;color:var(--mute);font-size:16px}
+.tabs{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:22px 0 6px}
+.tab{display:inline-flex;align-items:center;min-height:48px;padding:0 18px;background:var(--lane);color:var(--laneink);text-decoration:none;
+  font:400 22px/1 "VP Deadeye",Impact,sans-serif;letter-spacing:.02em;border:3px solid #000;box-shadow:4px 4px 0 #000}
+.tab:active{transform:translate(2px,2px);box-shadow:2px 2px 0 #000}
+.deck{max-width:572px;margin:0 auto;padding:40px 16px 8px;scroll-margin-top:8px}
+.deckhead{margin-bottom:12px}
+.kicker{margin:0;color:var(--mute);font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.chip{display:inline-block;padding:3px 9px;margin-right:6px;background:var(--lane);color:var(--laneink);border:2px solid #000;font-weight:800;letter-spacing:.1em}
+.deck h2{margin:6px 0 2px;font:400 clamp(44px,12vw,64px)/1 "VP Deadeye",Impact,sans-serif;color:var(--ink);text-shadow:3px 3px 0 var(--lane),5px 5px 0 #000}
+.post{margin:4px 0 0;font-size:18px;color:var(--ink)}
+.frame{position:relative;border:3px solid #000;background:#000;box-shadow:6px 6px 0 var(--lane),12px 12px 0 #000}
+.track{display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;outline:none}
+.track::-webkit-scrollbar{display:none}
+.track:focus-visible{box-shadow:inset 0 0 0 4px var(--gold)}
+.slide{flex:0 0 100%;margin:0;scroll-snap-align:center;scroll-snap-stop:always;background:#0b0507}
+.slide img{display:block;width:100%;height:auto;aspect-ratio:3/4;background:#1c0d10}
+.slide figcaption{padding:12px 14px 14px;font-size:18px;line-height:1.4;color:var(--ink);background:#0b0507;min-height:76px}
+.slide figcaption b{display:inline-block;min-width:34px;margin-right:6px;padding:1px 6px;background:var(--lane);color:var(--laneink);border:2px solid #000;font:400 15px/1.3 "Potta One",sans-serif;text-align:center}
+.nav{position:absolute;top:calc((100% - 76px) / 2);transform:translateY(-50%);width:48px;height:64px;border:3px solid #000;background:rgba(247,242,234,.92);color:#000;
+  font:700 40px/1 system-ui,sans-serif;cursor:pointer;box-shadow:3px 3px 0 #000;display:flex;align-items:center;justify-content:center;padding:0 0 4px}
+.nav.prev{left:8px}.nav.next{right:8px}
+.nav[disabled]{opacity:0;pointer-events:none}
+.bar{display:flex;justify-content:space-between;align-items:center;margin:12px 0 10px}
+.count,.share{min-height:40px;display:inline-flex;align-items:center;padding:0 12px;background:#000;color:#fff;border:2px solid var(--lane);font:700 15px/1 system-ui,sans-serif;letter-spacing:.04em}
+.share{cursor:pointer}
+.dots{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin:20px 0 0}
+.dots button{width:12px;height:12px;padding:0;border-radius:50%;border:2px solid var(--mute);background:transparent;cursor:pointer}
+.dots button[aria-current="true"]{background:var(--gold);border-color:var(--gold)}
+@media (hover:none){.nav{display:none}}
+@media (min-width:760px){.nav.prev{left:-76px}.nav.next{right:-76px}}
+.more{max-width:640px;margin:56px auto 0;padding:0 16px;text-align:center}
+.more h3{margin:0 0 12px;font:400 30px/1 "VP Deadeye",Impact,sans-serif;color:var(--gold)}
+.more .links{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.more a{display:inline-flex;align-items:center;min-height:48px;padding:0 16px;border:2px solid var(--line);background:#1c0d10;text-decoration:none;font-weight:800}
+.more a:hover{border-color:var(--gold)}
+footer{padding:40px 16px calc(36px + env(safe-area-inset-bottom));text-align:center;color:var(--mute);font-size:14px}
+footer b{color:var(--ink)}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translateX(-50%);padding:12px 16px;background:#000;color:#fff;border:2px solid var(--gold);font-weight:800;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.on{opacity:1}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="wrap top"><a class="home" href="../">&larr; 0FF THE PRINT</a></div>
+<header class="wrap hero">
+  <h1>RELIQUARY</h1>
+  <p class="sub">The church owns every miracle in Santa Ossa. Twelve misfits rob it for a living.</p>
+  <p class="punch">We own a crowbar.</p>
+  <p class="how">Three carousels, 41 slides. Swipe through each one. A heist comedy by @vamppsych.</p>
+  <nav class="tabs" aria-label="The carousels"><a class="tab" href="#12-chairs" style="--lane:#16346a;--laneink:#d2e4ff">12 CHAIRS</a><a class="tab" href="#patron-saints" style="--lane:#96162a;--laneink:#ffd23f">PATRON SAINTS</a><a class="tab" href="#how-to-play" style="--lane:#ffd23f;--laneink:#111012">HOW TO PLAY</a></nav>
+</header>
+<main>
+<section class="deck" id="12-chairs" style="--lane:#16346a;--laneink:#d2e4ff">
+  <header class="deckhead">
+    <p class="kicker"><span class="chip">the plan</span> 16 slides</p>
+    <h2>12 CHAIRS</h2>
+    <p class="post">she set out twelve chairs. one of them is a rat 🐀</p>
+  </header>
+  <div class="bar" hidden><span class="count">1 / 16</span><button class="share" type="button" aria-label="Share this slide">share this slide</button></div>
+  <div class="frame">
+    <div class="track" tabindex="0" role="region" aria-roledescription="carousel" aria-label="12 Chairs carousel, 16 slides. Swipe or use the arrow keys.">
+      <figure class="slide" id="12-chairs-1"><img src="12-chairs/01-720.webp" srcset="12-chairs/01-720.webp 720w, 12-chairs/01-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="eager" fetchpriority="high" decoding="async" alt="12 Chairs, slide 1 of 16: she set out twelve chairs. seven showed up"><figcaption><b>01</b> she set out twelve chairs. seven showed up 🪑</figcaption></figure>
+      <figure class="slide" id="12-chairs-2"><img src="12-chairs/02-720.webp" srcset="12-chairs/02-720.webp 720w, 12-chairs/02-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="12 Chairs, slide 2 of 16: plans every job. can&#x27;t touch the loot. still the boss"><figcaption><b>02</b> plans every job. can&#x27;t touch the loot. still the boss 🖤</figcaption></figure>
+      <figure class="slide" id="12-chairs-3"><img src="12-chairs/03-720.webp" srcset="12-chairs/03-720.webp 720w, 12-chairs/03-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="12 Chairs, slide 3 of 16: their first steal walked out with them"><figcaption><b>03</b> their first steal walked out with them 🐯</figcaption></figure>
+      <figure class="slide" id="12-chairs-4"><img src="12-chairs/04-720.webp" srcset="12-chairs/04-720.webp 720w, 12-chairs/04-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="12 Chairs, slide 4 of 16: she shoots first. that&#x27;s how half the crew got here"><figcaption><b>04</b> she shoots first. that&#x27;s how half the crew got here 📸</figcaption></figure>
+      <figure class="slide" id="12-chairs-5"><img src="12-chairs/05-720.webp" srcset="12-chairs/05-720.webp 720w, 12-chairs/05-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="12 Chairs, slide 5 of 16: her fake is still in their vault. nobody noticed"><figcaption><b>05</b> her fake is still in their vault. nobody noticed 💅</figcaption></figure>
+      <figure class="slide" id="12-chairs-6"><img src="12-chairs/06-720.webp" srcset="12-chairs/06-720.webp 720w, 12-chairs/06-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="12 Chairs, slide 6 of 16: picks locks with her nails. named relic as a joke"><figcaption><b>06</b> picks locks with her nails. named relic as a joke 🥤</figcaption></figure>
+      <figure class="slide" id="12-chairs-7"><img src="12-chairs/07-720.webp" srcset="12-chairs/07-720.webp 720w, 12-chairs/07-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="12 Chairs, slide 7 of 16: the church&#x27;s security guard. our favorite inside man"><figcaption><b>07</b> the church&#x27;s security guard. our favorite inside man 🔑</figcaption></figure>
+      <figure class="slide" id="12-chairs-8"><img src="12-chairs/08-720.webp" srcset="12-chairs/08-720.webp 720w, 12-chairs/08-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="12 Chairs, slide 8 of 16: came to fix the pipes. fixed nothing. has the polo"><figcaption><b>08</b> came to fix the pipes. fixed nothing. has the polo 🚐</figcaption></figure>
+      <figure class="slide" id="12-chairs-9"><img src="12-chairs/09-720.webp" srcset="12-chairs/09-720.webp 720w, 12-chairs/09-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="12 Chairs, slide 9 of 16: five seats left. they don&#x27;t stay empty long"><figcaption><b>09</b> five seats left. they don&#x27;t stay empty long 🕯️</figcaption></figure>
+      <figure class="slide" id="12-chairs-10"><img src="12-chairs/10-720.webp" srcset="12-chairs/10-720.webp 720w, 12-chairs/10-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="12 Chairs, slide 10 of 16: she loops their cameras live. smile, you&#x27;re on stream"><figcaption><b>10</b> she loops their cameras live. smile, you&#x27;re on stream 📺</figcaption></figure>
+      <figure class="slide" id="12-chairs-11"><img src="12-chairs/11-720.webp" srcset="12-chairs/11-720.webp 720w, 12-chairs/11-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="12 Chairs, slide 11 of 16: every gun she carries is a camera. still owes dulce"><figcaption><b>11</b> every gun she carries is a camera. still owes dulce 💸</figcaption></figure>
+      <figure class="slide" id="12-chairs-12"><img src="12-chairs/12-720.webp" srcset="12-chairs/12-720.webp 720w, 12-chairs/12-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="12 Chairs, slide 12 of 16: watches from the roofs. can&#x27;t stop flying at the fire"><figcaption><b>12</b> watches from the roofs. can&#x27;t stop flying at the fire 🦋</figcaption></figure>
+      <figure class="slide" id="12-chairs-13"><img src="12-chairs/13-720.webp" srcset="12-chairs/13-720.webp 720w, 12-chairs/13-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="12 Chairs, slide 13 of 16: every witness remembers a clown. that&#x27;s the whole plan"><figcaption><b>13</b> every witness remembers a clown. that&#x27;s the whole plan 🤡</figcaption></figure>
+      <figure class="slide" id="12-chairs-14"><img src="12-chairs/14-720.webp" srcset="12-chairs/14-720.webp 720w, 12-chairs/14-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="12 Chairs, slide 14 of 16: zero chrome. scans clean. sweetest face in the room"><figcaption><b>14</b> zero chrome. scans clean. sweetest face in the room 🌻</figcaption></figure>
+      <figure class="slide" id="12-chairs-15"><img src="12-chairs/15-720.webp" srcset="12-chairs/15-720.webp 720w, 12-chairs/15-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="12 Chairs, slide 15 of 16: twelve chairs. one of them talks to the church"><figcaption><b>15</b> twelve chairs. one of them talks to the church 🐀</figcaption></figure>
+      <figure class="slide" id="12-chairs-16"><img src="12-chairs/16-720.webp" srcset="12-chairs/16-720.webp 720w, 12-chairs/16-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="12 Chairs, slide 16 of 16: the chancery owns every miracle. we own a crowbar"><figcaption><b>16</b> the chancery owns every miracle. we own a crowbar 🩸</figcaption></figure>
+    </div>
+    <button class="nav prev" type="button" aria-label="Previous slide" hidden>&#8249;</button>
+    <button class="nav next" type="button" aria-label="Next slide" hidden>&#8250;</button>
+  </div>
+  <div class="dots" hidden></div>
+</section>
+<section class="deck" id="patron-saints" style="--lane:#96162a;--laneink:#ffd23f">
+  <header class="deckhead">
+    <p class="kicker"><span class="chip">the shrine</span> 12 slides</p>
+    <h2>PATRON SAINTS</h2>
+    <p class="post">they rented her out. she still walks you home 🕯️</p>
+  </header>
+  <div class="bar" hidden><span class="count">1 / 12</span><button class="share" type="button" aria-label="Share this slide">share this slide</button></div>
+  <div class="frame">
+    <div class="track" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Patron Saints carousel, 12 slides. Swipe or use the arrow keys.">
+      <figure class="slide" id="patron-saints-1"><img src="patron-saints/01-720.webp" srcset="patron-saints/01-720.webp 720w, patron-saints/01-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="Patron Saints, slide 1 of 12: patron saints for your worst night out"><figcaption><b>01</b> patron saints for your worst night out 🕯️</figcaption></figure>
+      <figure class="slide" id="patron-saints-2"><img src="patron-saints/02-720.webp" srcset="patron-saints/02-720.webp 720w, patron-saints/02-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="Patron Saints, slide 2 of 12: for the earring you lost at the function"><figcaption><b>02</b> for the earring you lost at the function 💎</figcaption></figure>
+      <figure class="slide" id="patron-saints-3"><img src="patron-saints/03-720.webp" srcset="patron-saints/03-720.webp 720w, patron-saints/03-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="Patron Saints, slide 3 of 12: for the morning after. drink water, babe"><figcaption><b>03</b> for the morning after. drink water, babe 💧</figcaption></figure>
+      <figure class="slide" id="patron-saints-4"><img src="patron-saints/04-720.webp" srcset="patron-saints/04-720.webp 720w, patron-saints/04-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="Patron Saints, slide 4 of 12: for one bar of signal at the club"><figcaption><b>04</b> for one bar of signal at the club 📶</figcaption></figure>
+      <figure class="slide" id="patron-saints-5"><img src="patron-saints/05-720.webp" srcset="patron-saints/05-720.webp 720w, patron-saints/05-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="Patron Saints, slide 5 of 12: for the bouncer who lets you skip the line"><figcaption><b>05</b> for the bouncer who lets you skip the line 🚪</figcaption></figure>
+      <figure class="slide" id="patron-saints-6"><img src="patron-saints/06-720.webp" srcset="patron-saints/06-720.webp 720w, patron-saints/06-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="Patron Saints, slide 6 of 12: imagine paying rent on a miracle. santa ossa does"><figcaption><b>06</b> imagine paying rent on a miracle. santa ossa does 🧾</figcaption></figure>
+      <figure class="slide" id="patron-saints-7"><img src="patron-saints/07-720.webp" srcset="patron-saints/07-720.webp 720w, patron-saints/07-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="Patron Saints, slide 7 of 12: she was the patron saint of getting home safe"><figcaption><b>07</b> she was the patron saint of getting home safe 🕊️</figcaption></figure>
+      <figure class="slide" id="patron-saints-8"><img src="patron-saints/08-720.webp" srcset="patron-saints/08-720.webp 720w, patron-saints/08-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="Patron Saints, slide 8 of 12: they rented her out. rich kids never had a bad night"><figcaption><b>08</b> they rented her out. rich kids never had a bad night 💍</figcaption></figure>
+      <figure class="slide" id="patron-saints-9"><img src="patron-saints/09-720.webp" srcset="patron-saints/09-720.webp 720w, patron-saints/09-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="Patron Saints, slide 9 of 12: one rental too many. her halo split into horns"><figcaption><b>09</b> one rental too many. her halo split into horns 🥀</figcaption></figure>
+      <figure class="slide" id="patron-saints-10"><img src="patron-saints/10-720.webp" srcset="patron-saints/10-720.webp 720w, patron-saints/10-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="Patron Saints, slide 10 of 12: she still hears every 3am prayer. she can&#x27;t answer one"><figcaption><b>10</b> she still hears every 3am prayer. she can&#x27;t answer one 🌙</figcaption></figure>
+      <figure class="slide" id="patron-saints-11"><img src="patron-saints/11-720.webp" srcset="patron-saints/11-720.webp 720w, patron-saints/11-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="Patron Saints, slide 11 of 12: so she walks you home. roof to roof"><figcaption><b>11</b> so she walks you home. roof to roof 🗝️</figcaption></figure>
+      <figure class="slide" id="patron-saints-12"><img src="patron-saints/12-720.webp" srcset="patron-saints/12-720.webp 720w, patron-saints/12-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="Patron Saints, slide 12 of 12: they own the saints. we own a crowbar"><figcaption><b>12</b> they own the saints. we own a crowbar 🩸</figcaption></figure>
+    </div>
+    <button class="nav prev" type="button" aria-label="Previous slide" hidden>&#8249;</button>
+    <button class="nav next" type="button" aria-label="Next slide" hidden>&#8250;</button>
+  </div>
+  <div class="dots" hidden></div>
+</section>
+<section class="deck" id="how-to-play" style="--lane:#ffd23f;--laneink:#111012">
+  <header class="deckhead">
+    <p class="kicker"><span class="chip">the manual</span> 13 slides</p>
+    <h2>HOW TO PLAY</h2>
+    <p class="post">read the manual before you rob a church 🎮</p>
+  </header>
+  <div class="bar" hidden><span class="count">1 / 13</span><button class="share" type="button" aria-label="Share this slide">share this slide</button></div>
+  <div class="frame">
+    <div class="track" tabindex="0" role="region" aria-roledescription="carousel" aria-label="How To Play carousel, 13 slides. Swipe or use the arrow keys.">
+      <figure class="slide" id="how-to-play-1"><img src="how-to-play/01-720.webp" srcset="how-to-play/01-720.webp 720w, how-to-play/01-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="How To Play, slide 1 of 13: the instruction manual for robbing a church"><figcaption><b>01</b> the instruction manual for robbing a church 🎮</figcaption></figure>
+      <figure class="slide" id="how-to-play-2"><img src="how-to-play/02-720.webp" srcset="how-to-play/02-720.webp 720w, how-to-play/02-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="How To Play, slide 2 of 13: side effects include a warm feeling and giving it all away"><figcaption><b>02</b> side effects include a warm feeling and giving it all away 😇</figcaption></figure>
+      <figure class="slide" id="how-to-play-3"><img src="how-to-play/03-720.webp" srcset="how-to-play/03-720.webp 720w, how-to-play/03-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="How To Play, slide 3 of 13: rob the church. give it away. go home broke"><figcaption><b>03</b> rob the church. give it away. go home broke 💸</figcaption></figure>
+      <figure class="slide" id="how-to-play-4"><img src="how-to-play/04-720.webp" srcset="how-to-play/04-720.webp 720w, how-to-play/04-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="How To Play, slide 4 of 13: pick your apostate. rin shoots first"><figcaption><b>04</b> pick your apostate. rin shoots first 📸</figcaption></figure>
+      <figure class="slide" id="how-to-play-5"><img src="how-to-play/05-720.webp" srcset="how-to-play/05-720.webp 720w, how-to-play/05-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="How To Play, slide 5 of 13: a relic does whatever its saint was patron of"><figcaption><b>05</b> a relic does whatever its saint was patron of ✨</figcaption></figure>
+      <figure class="slide" id="how-to-play-6"><img src="how-to-play/06-720.webp" srcset="how-to-play/06-720.webp 720w, how-to-play/06-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="How To Play, slide 6 of 13: brass and stained glass, installed. it glows when it works"><figcaption><b>06</b> brass and stained glass, installed. it glows when it works 🔆</figcaption></figure>
+      <figure class="slide" id="how-to-play-7"><img src="how-to-play/07-720.webp" srcset="how-to-play/07-720.webp 720w, how-to-play/07-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="How To Play, slide 7 of 13: one install each. stacking is how you fall"><figcaption><b>07</b> one install each. stacking is how you fall ⚠️</figcaption></figure>
+      <figure class="slide" id="how-to-play-8"><img src="how-to-play/08-720.webp" srcset="how-to-play/08-720.webp 720w, how-to-play/08-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="How To Play, slide 8 of 13: white plate, gold fire. only smart tricks work on them"><figcaption><b>08</b> white plate, gold fire. only smart tricks work on them 🔥</figcaption></figure>
+      <figure class="slide" id="how-to-play-9"><img src="how-to-play/09-720.webp" srcset="how-to-play/09-720.webp 720w, how-to-play/09-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="How To Play, slide 9 of 13: the scanners read chrome. june has none"><figcaption><b>09</b> the scanners read chrome. june has none 🌻</figcaption></figure>
+      <figure class="slide" id="how-to-play-10"><img src="how-to-play/10-720.webp" srcset="how-to-play/10-720.webp 720w, how-to-play/10-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="How To Play, slide 10 of 13: demons can&#x27;t step on holy ground. so they bought a dead one"><figcaption><b>10</b> demons can&#x27;t step on holy ground. so they bought a dead one ⛪</figcaption></figure>
+      <figure class="slide" id="how-to-play-11"><img src="how-to-play/11-720.webp" srcset="how-to-play/11-720.webp 720w, how-to-play/11-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="How To Play, slide 11 of 13: watch your gold. wings mean it&#x27;s over"><figcaption><b>11</b> watch your gold. wings mean it&#x27;s over 🖤</figcaption></figure>
+      <figure class="slide" id="how-to-play-12"><img src="how-to-play/12-720.webp" srcset="how-to-play/12-720.webp 720w, how-to-play/12-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="How To Play, slide 12 of 13: how to win: you don&#x27;t. that&#x27;s the game"><figcaption><b>12</b> how to win: you don&#x27;t. that&#x27;s the game 🏆</figcaption></figure>
+      <figure class="slide" id="how-to-play-13"><img src="how-to-play/13-720.webp" srcset="how-to-play/13-720.webp 720w, how-to-play/13-1080.webp 1080w" sizes="(max-width: 572px) calc(100vw - 32px), 540px" width="1080" height="1440" loading="lazy" decoding="async" alt="How To Play, slide 13 of 13: press start. bring a crowbar"><figcaption><b>13</b> press start. bring a crowbar 🕹️</figcaption></figure>
+    </div>
+    <button class="nav prev" type="button" aria-label="Previous slide" hidden>&#8249;</button>
+    <button class="nav next" type="button" aria-label="Next slide" hidden>&#8250;</button>
+  </div>
+  <div class="dots" hidden></div>
+</section>
+</main>
+<section class="more">
+  <h3>More of the crew</h3>
+  <div class="links"><a href="../wallpapers/">Lock screens of the crew</a><a href="../font/">My handwriting font</a><a href="https://www.instagram.com/vamppsych/" rel="noopener">@vamppsych on Instagram</a></div>
+</section>
+<footer><b>RELIQUARY</b> is a heist comedy by VAMPPSYCH. Every saint in Santa Ossa is made up.</footer>
+<div class="toast" role="status" aria-live="polite"></div>
+<script>
+(function(){
+  var toast=document.querySelector('.toast'),tt;
+  function say(m){toast.textContent=m;toast.classList.add('on');clearTimeout(tt);tt=setTimeout(function(){toast.classList.remove('on')},1600)}
+  var decks=[].slice.call(document.querySelectorAll('.deck'));
+  decks.forEach(function(deck){
+    var track=deck.querySelector('.track'),slides=[].slice.call(track.children),n=slides.length,cur=0,ht;
+    var prev=deck.querySelector('.prev'),next=deck.querySelector('.next'),bar=deck.querySelector('.bar'),count=deck.querySelector('.count'),dots=deck.querySelector('.dots');
+    prev.hidden=next.hidden=bar.hidden=dots.hidden=false;
+    slides.forEach(function(s,i){var b=document.createElement('button');b.type='button';b.setAttribute('aria-label','Slide '+(i+1));b.onclick=function(){go(i,true)};dots.appendChild(b)});
+    function w(){return track.clientWidth||1}
+    function go(i,smooth){i=Math.max(0,Math.min(n-1,i));track.scrollTo({left:i*w(),behavior:smooth?'smooth':'auto'})}
+    deck.go=go;
+    function paint(){
+      var i=Math.round(track.scrollLeft/w());if(i<0)i=0;if(i>n-1)i=n-1;cur=i;
+      count.textContent=(i+1)+' / '+n;prev.disabled=(i===0);next.disabled=(i===n-1);
+      [].forEach.call(dots.children,function(d,k){d.setAttribute('aria-current',k===i?'true':'false')});
+      var img=slides[i+1]&&slides[i+1].querySelector('img');if(img)img.loading='eager';
+    }
+    track.addEventListener('scroll',function(){requestAnimationFrame(paint);clearTimeout(ht);ht=setTimeout(function(){
+      if(location.hash.indexOf('#'+deck.id)===0||cur>0)history.replaceState(null,'','#'+deck.id+(cur?'-'+(cur+1):''));},250)},{passive:true});
+    prev.onclick=function(){go(cur-1,true)};next.onclick=function(){go(cur+1,true)};
+    track.addEventListener('keydown',function(e){if(e.key==='ArrowRight'){go(cur+1,true);e.preventDefault()}else if(e.key==='ArrowLeft'){go(cur-1,true);e.preventDefault()}});
+    deck.querySelector('.share').onclick=function(){
+      var url=location.origin+location.pathname+'#'+deck.id+'-'+(cur+1),cap=slides[cur].querySelector('figcaption').textContent.replace(/^\d+\s*/,'');
+      if(navigator.share){navigator.share({title:'RELIQUARY',text:cap,url:url}).catch(function(){})}
+      else if(navigator.clipboard){navigator.clipboard.writeText(url).then(function(){say('Link copied')},function(){say(url)})}
+      else say(url);
+    };
+    window.addEventListener('resize',function(){go(cur,false)});
+    paint();
+  });
+  function fromHash(){
+    var m=location.hash.match(/^#(12-chairs|patron-saints|how-to-play)(?:-(\d+))?$/);if(!m)return;
+    var deck=document.getElementById(m[1]);if(!deck||!deck.go)return;
+    deck.scrollIntoView({block:'start'});if(m[2])deck.go(parseInt(m[2],10)-1,false);
+  }
+  window.addEventListener('hashchange',fromHash);
+  if(location.hash)setTimeout(fromHash,60);
+})();
+</script>
+</body>
+</html>

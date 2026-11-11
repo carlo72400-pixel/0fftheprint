@@ -3,6 +3,14 @@
   "items": [
     {
       "up": "2026-11-10",
+      "title": "RELIQUARY: the lore",
+      "line": "The church owns every miracle in Santa Ossa. Twelve misfits rob it for a living. Three carousels, 41 slides, a caption on every one.",
+      "link": "reliquary/",
+      "thumb": "reliquary/card.jpg",
+      "go": "swipe the lore"
+    },
+    {
+      "up": "2026-11-10",
       "title": "Type in my handwriting",
       "line": "VP Deadeye, my hand lettering made into a font. Every letter inked by hand. Free for anything, even paid work.",
       "link": "font/",
