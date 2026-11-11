@@ -3,6 +3,14 @@
   "items": [
     {
       "up": "2026-11-11",
+      "title": "RELIQUARY origins #1: Rin",
+      "line": "Rin's origin, told in her texts with CINDER (NO). Months of 3am favors before night one. 10 slides, read top to bottom.",
+      "link": "reliquary/rin/",
+      "thumb": "reliquary/rin/card.jpg",
+      "go": "read rin's origin"
+    },
+    {
+      "up": "2026-11-11",
       "title": "RELIQUARY ep. 1",
       "line": "The manhwa starts here. 3:07 AM in Santa Ossa, printed on one long church receipt. 20 slides, read top to bottom.",
       "link": "reliquary/ep1/",
