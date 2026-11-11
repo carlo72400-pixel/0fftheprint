@@ -2,6 +2,14 @@
   "_about": "Stand-alone drop pages for the homepage timeline (cathedral.js drops(), 11/10). One row each: up = the day it went up, link = the drop's own folder, thumb = a 16:9 card inside it, go = the call to action.",
   "items": [
     {
+      "up": "2026-11-11",
+      "title": "RELIQUARY ep. 1",
+      "line": "The manhwa starts here. 3:07 AM in Santa Ossa, printed on one long church receipt. 20 slides, read top to bottom.",
+      "link": "reliquary/ep1/",
+      "thumb": "reliquary/ep1/card.jpg",
+      "go": "read episode 1"
+    },
+    {
       "up": "2026-11-10",
       "title": "RELIQUARY: the lore",
       "line": "The church owns every miracle in Santa Ossa. Twelve misfits rob it for a living. Three carousels, 41 slides, a caption on every one.",
