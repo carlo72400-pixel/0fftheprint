@@ -583,5 +583,5 @@ html.cath .tear-new{position:absolute;right:10px;top:8px;padding:4px 8px;border:
   .keydeck .pk-t small{font-size:9.5px;letter-spacing:.12em}
   .keydeck .pk-more{display:none}
 }
-.keydeck .pk-gem.pk-ad{padding:3px}   /* the stopwatch is square with air around it, so it sits bigger in the gem to weigh what the shutter does */
+.pk-gem.pk-ad{padding:3px}   /* the stopwatch is square with air around it, so it sits bigger in the gem to weigh what the shutter does */
 @media (max-width:360px){ .keydeck .pk-gem{width:46px;height:46px} .keydeck .pk-go{letter-spacing:.12em;padding:8px 7px} }   /* 320 wide: START cleared the gem by -2px */

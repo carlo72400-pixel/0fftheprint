@@ -296,8 +296,6 @@
       if (st === 'wait') txt('hs-sub', 'one more step: your Instagram at the Crypt');
       // the binder: this phone's packs (no login needed, so a member on a new phone sees zero until they pull)
       packs(); try { if (w.OTPBinder && !fill.sub) { fill.sub = 1; w.OTPBinder.on(packs); } } catch (e) {}
-      // Get the Shot banks pulls in localStorage; a sealed night in the Crypt spends them
-      try { var p = parseInt(w.localStorage.getItem('otp-play-pulls') || '0', 10) || 0; badge('hk-pulls', p); txt('hk-play-s', p ? p + (p === 1 ? ' pull' : ' pulls') + ' to spend' : 'shoot for pulls'); } catch (e) {}
       if (filled || !w.OTP || !w.OTP.configured || st !== 'in') return; filled = true;
       var c; try { c = w.OTP.sb(); } catch (e) { c = null; } if (!c) return;
       // Messages unread, Kin asks, nights going (from today): three independent asks, none waits on another
