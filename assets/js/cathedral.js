@@ -115,7 +115,10 @@
   // DROPS for the timeline (11/10, the wallpaper page): content/drops.json, one row per stand-alone drop page that is not a
   // night, a story, a cut or portfolio work (his 10/21 rule: everything new shows on the timeline). `link` = the drop's own
   // folder ("wallpapers/"), `thumb` = a 16:9 card inside it, `up` = the day it went up, `go` = the call to action (optional).
-  var dropsP = null, DROP = /^[a-z0-9][a-z0-9-]{0,60}\/$/, DTHUMB = /^[a-z0-9][a-z0-9-]{0,60}\/[a-z0-9._-]{1,80}\.(?:jpe?g|webp|png)$/i;
+  // 11/11: a drop can live one folder down ("reliquary/ep1/", the manhwa's episode pages), so link and thumb take an optional
+  // second folder, same characters.
+  var dropsP = null, DROP = /^[a-z0-9][a-z0-9-]{0,60}\/(?:[a-z0-9][a-z0-9-]{0,60}\/)?$/,
+      DTHUMB = /^[a-z0-9][a-z0-9-]{0,60}\/(?:[a-z0-9][a-z0-9-]{0,60}\/)?[a-z0-9._-]{1,80}\.(?:jpe?g|webp|png)$/i;
   function drops() {
     if (!dropsP) dropsP = fetch('content/drops.json', { cache: 'no-cache' })
       .then(function (r) { return r.ok ? r.json() : null; })
