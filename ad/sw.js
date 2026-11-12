@@ -1,7 +1,7 @@
 /* THE AD offline worker (10/21): the page, the core, the icons and the house fonts are cached on install, so it opens
    on set with no signal. Bump BUILD when anything here changes (and the core.js ?v= in the page and below). */
-const BUILD = 'ad-20261021-106fb5e9';
-const FILES = ['./', './index.html', './core.js?v=106fb5e9', './manifest.webmanifest', './icon-192.png', './icon-512.png', './art/icon.webp',
+const BUILD = 'ad-20261021-9c414e0b';
+const FILES = ['./', './index.html', './core.js?v=9c414e0b', './manifest.webmanifest', './icon-192.png', './icon-512.png', './art/icon.webp',
   '../assets/fonts/mochiy-pop-one-400.woff2', '../assets/fonts/silkscreen-400.woff2', '../assets/fonts/silkscreen-700.woff2',
   '../assets/fonts/inter-400.woff2', '../assets/fonts/inter-500.woff2', '../assets/fonts/inter-600.woff2', '../assets/fonts/inter-700.woff2', '../assets/fonts/inter-800.woff2'];
 // THE AD herself (10/21): her poses and faces, so she shows up with no signal too
@@ -10,6 +10,8 @@ FILES.push(...['go', 'take', 'got', 'clear', 'hearts', 'long', 'over', 'drive', 
 FILES.push('./art/logo-sm.webp', './preview.jpg');   // the Sweet Takes logo in the top bar, the link card (10/21)
 // 10/21 PIXEL: the title is a moving pixel scene now (her blink frame + the pixel logo); the painted key art is gone
 FILES.push('./art/m/smile-blink.webp', './art/logo-px.webp');
+// 11/12: the street's strip rides in the page itself; only its two faces are files (the place's name, the screen headings)
+FILES.push('../reliquary/fonts/pottaone.woff2', '../reliquary/fonts/vpdeadeye.woff2');
 // one file that will not load never blocks the rest from going offline; 'reload' skips the browser's own cache, so a new
 // build never re-saves the old art it fetched a few minutes ago (10/21)
 self.addEventListener('install', e => { e.waitUntil(caches.open(BUILD).then(c => Promise.all(FILES.map(f => c.add(new Request(f, { cache: 'reload' })).catch(() => {})))).then(() => self.skipWaiting())); });

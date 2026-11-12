@@ -10,9 +10,13 @@ pages that keep a bag). The look is assets/css/street-skin.css, the sound and th
     apply_all()            every inner page in PAGES below, written only when it changed. stamp.py runs this first,
                            so a page any generator writes gets the strip before the commit even if the generator forgot.
 
-Generators call skin_text() on what they write (newevent.py, newstory.py, videos.py, maketake.py). The Kit and Sweet
-Takes are offline apps with their own cache lists, so they carry the back key's few rules inline instead of the shared
-files (INLINE below). kit/vlog/ is built outside the repo and is not touched here.
+Generators call skin_text() on what they write (newevent.py, newstory.py, videos.py). The Kit is an offline app with
+its own cache list, so it carries the back key's few rules inline instead of the shared files (INLINE below). Sweet
+Takes (ad/) is offline too and takes the WHOLE strip inline: the key, the place's name, the one sound switch, on every
+one of its screens (OFFLINE below, his 11/12 "lets not forget about sweet takes"). After a change to ad/ run its own
+stamper too (the-ad-tests/stamp_ad.py <repo>/ad): it gives the page's offline worker a new cache name.
+The vlog kit (kit/vlog/) is BUILT outside the repo (03_PROJECTS/vlogs/kit/build.py) and takes the same inline strip
+here, after its build: a fresh build comes out without it, and the next stamp.py puts it back.
 
 ⛔ Never skin: portfolio/, business/, board/, desk/, goals/, hours/, seats/, shot/, snw-*/, allnight/, interview/,
    reliquary/read/, reliquary/vault/, index.html (the street itself), wall/ (the Crypt has its own build).
@@ -46,15 +50,14 @@ RULES = [
     (r"^(?:work|press)/index\.html$", "street"),
     (r"^404\.html$", "street"),
     (r"^(?:kit|ad)/index\.html$", "kit"),
+    (r"^kit/vlog/index\.html$", "kit"),
 ]
 INLINE = ("kit/index.html",)                          # an offline app: the key's rules ride in the page, no shared files
-# Sweet Takes is a full-screen offline game with its own back key in the top left corner of its own bar. Its old "Home"
-# link in that bar becomes the way back to the Kit on the street; nothing else of it is touched (AD below).
-AD = "ad/index.html"
 GLOBS = ["events/index.html", "events/*/index.html", "c/index.html", "c/*/index.html", "word/index.html", "word/*/index.html",
          "video/index.html", "ink/index.html", "dates/index.html", "join/index.html", "reset/index.html", "my/index.html",
          "compose/index.html", "card/index.html", "take/index.html", "reliquary/index.html", "font/index.html",
-         "wallpapers/index.html", "work/index.html", "press/index.html", "404.html", "kit/index.html", "ad/index.html"]
+         "wallpapers/index.html", "work/index.html", "press/index.html", "404.html", "kit/index.html", "ad/index.html",
+         "kit/vlog/index.html"]
 
 KEY_CSS = (".sk-back{position:fixed;left:max(12px,env(safe-area-inset-left,0px));top:max(6px,env(safe-area-inset-top,0px));z-index:9000;"
            "display:inline-flex;align-items:center;gap:6px;min-width:82px;min-height:44px;padding:0 14px;border-radius:999px;"
@@ -68,6 +71,87 @@ KEY_CSS = (".sk-back{position:fixed;left:max(12px,env(safe-area-inset-left,0px))
            "#back-fab{display:none!important}"
            # the Kit's own title, in the Kit's colour (11/12, header only)
            ".bar .wm b{color:#7fd3ff;text-shadow:0 0 12px rgba(127,211,255,.65),0 0 2px rgba(127,211,255,.9)}")
+
+
+# ---- an offline app that takes the whole strip inline (no shared file to cache, nothing to fall out of step) ----
+# The strip is the same pill in the same spot, the place's name in the place's colour, and the one sound switch
+# (localStorage 'st-snd', the street's own setting). It stays at the top of the page while the page scrolls, on a dark
+# plate of its own so it reads the same on a light page, and it sits UNDER the app's own pop ups (z-index 30), so it
+# covers nothing. --skh is its height: the app's fit rules below start everything that used the top of the screen
+# under it. {up} is the way to the site's root from the page.
+FULL_CSS = (
+    '@font-face{font-family:"Potta One";src:url({up}reliquary/fonts/pottaone.woff2) format("woff2");font-display:swap}'
+    ":root{--sk:{colour};--skh:calc(56px + env(safe-area-inset-top,0px))}"
+    ".sk-top{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:10px;box-sizing:border-box;width:100%;min-height:var(--skh);"
+    "padding:max(6px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) 6px calc(max(12px,env(safe-area-inset-left,0px)) + 92px);"
+    "background:#150b14;box-shadow:inset 0 -2px 0 #08070b;color-scheme:dark}"
+    ".sk-back{position:fixed;left:max(12px,env(safe-area-inset-left,0px));top:max(6px,env(safe-area-inset-top,0px));z-index:31;"
+    "display:inline-flex;align-items:center;gap:6px;box-sizing:border-box;min-width:82px;min-height:44px;padding:0 14px;border-radius:999px;"
+    "background:linear-gradient(#3d3b45,#25232b);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 4px 0 #08070b,0 6px 12px rgba(0,0,0,.5);"
+    'color:#f1eef6;font:700 12px/1 system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;'
+    "-webkit-tap-highlight-color:transparent;touch-action:manipulation}"
+    ".sk-back span{font-size:18px;line-height:1}"
+    ".sk-back:active{transform:translateY(2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 2px 0 #08070b}"
+    ".sk-back:focus-visible,.sk-snd:focus-visible{outline:2px solid #fff;outline-offset:2px}"
+    '.sk-place{flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font:400 15px/1 "Potta One",system-ui,sans-serif;'
+    "letter-spacing:.03em;color:var(--sk);text-shadow:0 0 10px color-mix(in srgb,var(--sk) 55%,transparent),0 1px 0 #000}"
+    ".sk-keys{flex:none;display:inline-flex;align-items:center;gap:8px}"
+    ".sk-snd{display:inline-flex;align-items:center;justify-content:center;gap:5px;box-sizing:border-box;min-width:44px;min-height:44px;margin:0;padding:0 10px;"
+    "border:0;border-radius:12px;background:linear-gradient(#3d3b45,#25232b);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 4px 0 #08070b;"
+    'color:#f1eef6;font:700 11px/1 system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}'
+    ".sk-snd svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}"
+    '.sk-snd[aria-pressed="false"]{color:#a79fb3}.sk-snd[aria-pressed="false"] .on{display:none}'
+    ".sk-snd:active{transform:translateY(2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 2px 0 #08070b}"
+    "@media (prefers-reduced-motion:reduce){.sk-back:active,.sk-snd:active{transform:none}}"
+)
+# the sound key, the same one street-skin.js draws: one setting for the whole site, ON unless he turned it off. The
+# app's own sounds ask the same setting (ad/: its beep at the redline reads 'st-snd' itself).
+FULL_JS = (
+    "(function(w,d){var K='st-snd',h=d.getElementById('sk-keys');if(!h)return;"
+    "function on(){try{return w.localStorage.getItem(K)!=='off'}catch(e){return true}}"
+    "var b=d.createElement('button');b.type='button';b.className='sk-snd';"
+    """b.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path class="on" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/></svg><small></small>';"""
+    "function paint(){var v=on();b.setAttribute('aria-pressed',String(v));b.setAttribute('aria-label',v?'Sound on. Tap to mute the whole site.':'Sound off. Tap to turn it on.');b.querySelector('small').textContent=v?'On':'Off'}"
+    "function hello(){try{var C=w.AudioContext||w.webkitAudioContext;if(!C)return;var a=new C(),t=a.currentTime;[[1047,0],[1568,.07]].forEach(function(p){var o=a.createOscillator(),g=a.createGain();"
+    "o.type='sine';o.frequency.value=p[0];g.gain.setValueAtTime(0,t+p[1]);g.gain.linearRampToValueAtTime(.05,t+p[1]+.008);g.gain.exponentialRampToValueAtTime(.0001,t+p[1]+.14);"
+    "o.connect(g);g.connect(a.destination);o.start(t+p[1]);o.stop(t+p[1]+.18)});setTimeout(function(){a.close()},700)}catch(e){console.warn('street skin: no sound on this phone',e)}}"
+    "b.addEventListener('click',function(){var v=!on();try{w.localStorage.setItem(K,v?'on':'off')}catch(e){console.warn('street skin: the sound setting would not save',e)}paint();if(v)hello()});"
+    "w.addEventListener('storage',function(e){if(e.key===K)paint()});h.appendChild(b);paint()})(window,document);"
+)
+# Sweet Takes: where its own layout used the top of the screen, it starts under the strip instead (the title still fits
+# a 375x667 phone with no scroll, the set still fills the screen exactly); its own "Kit" link leaves its bar, the strip's
+# key is the one way out. The Kit's colour is its accent where it already had a sky blue (focus rings, the blue end of
+# its bar); its screen headings take the street's face. Its keys, its pixel art and what every control does are its own.
+AD_FIT = (
+    '@font-face{font-family:"VP Deadeye";src:url({up}reliquary/fonts/vpdeadeye.woff2) format("woff2");font-display:swap}'
+    ":root{--sky:{colour}}"
+    ".app{min-height:calc(100vh - var(--skh));min-height:calc(100dvh - var(--skh))}"
+    ".bar{top:var(--skh);padding-top:8px;background:linear-gradient(180deg,rgba(255,255,255,.6),rgba(255,255,255,0) 55%),linear-gradient(90deg,#ffa8d6,#d8b8ff 55%,{colour})}"
+    'body[data-scr="run"] .app{height:calc(100vh - var(--skh));height:calc(100dvh - var(--skh));padding-top:10px}'
+    'body[data-scr="run"] .toast{top:calc(var(--skh) + 8px)}'
+    "#pop{top:calc(var(--skh) + 70px)}"
+    "#s-home{min-height:calc(100vh - var(--skh));min-height:calc(100dvh - var(--skh))}"
+    ".t-hero{padding-top:0}"
+    '.intro h1,.intro h2{font-family:"VP Deadeye",var(--f-pop)}'
+)
+# The vlog kit: its two small chips (Home, Kit) give way to the one key. The page keeps a 16 px gutter on the body, so
+# the strip reaches out over it; its banner drops under the strip. While the phone is handed to a guest (body.hand) the
+# page already hid its ways out on purpose, and the strip hides with them. Its own sounds ask the one setting first
+# (a line put into its sfx() here, between the two marks, because its builder lives outside the repo).
+VLOG_FIT = (
+    ":root{padding-top:0}"
+    "html body{padding-top:0}"                       # the page's own sheet sits in its body, after this one: one step more exact
+    ".sk-top{width:auto;margin:0 calc(-1 * max(16px,env(safe-area-inset-right,0px))) 16px calc(-1 * max(16px,env(safe-area-inset-left,0px)))}"
+    "body.hand .sk-top,body.hand .sk-back{display:none}"
+    "html body.hand{padding-top:calc(16px + env(safe-area-inset-top,0px))}"
+    "html .banner{top:calc(var(--skh) + 8px)}"
+)
+MUTE = "/*sk*/try{if(localStorage.getItem('st-snd')==='off')return}catch(e){}/*/sk*/"
+# rel -> (its fit rules, the old way back it gives up, the start of its own sound function or None)
+OFFLINE = {
+    "ad/index.html": (AD_FIT, r'[ \t]*<a class="home" href="[^"]*"[^>]*>.*?</a>\n?', None),      # its beep asks 'st-snd' in its own source
+    "kit/vlog/index.html": (VLOG_FIT, r'[ \t]*<div class="kithomes">.*?</div>\n?', "function sfx(kind) {"),
+}
 
 
 def place_of(rel):
@@ -97,6 +181,9 @@ def strip(rel, text):
     back = f'<a class="sk-back" href="{up}{to}" aria-label="Back to {name.title()} on the street"><span aria-hidden="true">&lsaquo;</span>{word}</a>'
     if rel in INLINE:
         return up, f'<!--sk-->{back}<div class="sk-pad" aria-hidden="true"></div><!--/sk-->'
+    if rel in OFFLINE:
+        return up, (f'<!--sk--><div class="sk-top">{back}<b class="sk-place">{name}</b><span class="sk-keys" id="sk-keys"></span></div>'
+                    f'<script data-sk>{FULL_JS}</script><!--/sk-->')
     return up, f'<!--sk--><div class="sk-top">{back}<b class="sk-place">{name}</b><span class="sk-keys" id="sk-keys"></span></div><!--/sk-->'
 
 
@@ -104,12 +191,6 @@ def skin_text(text, rel):
     place = place_of(rel)
     if not place:
         return text
-    if rel == AD:
-        text, n = re.subn(r'<a class="home" href="[^"]*"[^>]*>.*?</a>', '<a class="home" href="../#in-kit" aria-label="Back to The Kit on the street">&lsaquo; Kit</a>', text, count=1, flags=re.S)
-        assert n == 1, "ad/index.html: its Home link is not where it was"
-        m = re.search(r"<html\b[^>]*>", text)
-        tag = re.sub(r'\sdata-place="[^"]*"', "", m.group(0))[:-1] + ' data-place="kit">'
-        return text[:m.start()] + tag + text[m.end():]
     up, bar = strip(rel, text)
     assets = "/" if rel == "404.html" else ("" if up == "./" else up)
     # 1. the place, on <html>
@@ -120,6 +201,15 @@ def skin_text(text, rel):
     # 2. the old ways back: the "<- 0FF THE PRINT" link at the top of a page, a "Home" key in a header
     text = re.sub(r'[ \t]*<a class="back" href="[^"]*"[^>]*>.*?</a>\n?', "", text, count=1, flags=re.S)
     text = re.sub(r'[ \t]*<a class="home" href="\.\./"[^>]*>.*?</a>\n?', "", text, count=1, flags=re.S)
+    if rel in OFFLINE:
+        text = re.sub(OFFLINE[rel][1], "", text, count=1, flags=re.S)
+        fn = OFFLINE[rel][2]
+        if fn:
+            text = text.replace(MUTE, "")
+            if text.count(fn) == 1:
+                text = text.replace(fn, fn + MUTE, 1)
+            else:
+                print(f"  street skin: {rel} has no '{fn}' any more, so its sounds do not ask the sound key (tell its builder)")
     # 3. our own strip and tags, taken out first so a second run changes nothing
     text = re.sub(r"<!--sk-->.*?<!--/sk-->\n?", "", text, flags=re.S)
     text = re.sub(r'<link rel="stylesheet" href="[^"]*assets/css/street-skin\.css[^"]*">\n?', "", text)
@@ -130,6 +220,9 @@ def skin_text(text, rel):
     text = text[:m.end()] + bar + "\n" + text[m.end():]
     if rel in INLINE:
         head = f"<style data-sk>{KEY_CSS}</style>\n"
+    elif rel in OFFLINE:
+        css = (FULL_CSS + OFFLINE[rel][0]).replace("{up}", up).replace("{colour}", PLACES[place][3])
+        head = f"<style data-sk>{css}</style>\n"
     else:
         head = (f'<link rel="stylesheet" href="{assets}assets/css/street-skin.css">\n'
                 f'<script src="{assets}assets/js/street-skin.js" defer></script>\n')
