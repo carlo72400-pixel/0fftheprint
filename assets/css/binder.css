@@ -132,24 +132,6 @@ html.bn-open-sheet,html.bn-open-sheet body{overflow:hidden}
 .bn-fine{margin:18px 0 0;font:11px/1.5 Verdana,Geneva,Tahoma,sans-serif;color:var(--muted,#9a93a3)}
 .bn-face .bn-glyph{display:grid;place-items:center;aspect-ratio:1;border:1px solid rgba(244,238,242,.25);background:#0a0a0d;
   font-family:var(--f-display,'Saira Condensed',sans-serif);font-style:italic;font-weight:900;font-size:16px;color:var(--muted,#9a93a3)}
-/* the packs this phone opened, and the cards a member kept (Wave 2): square thumbs, three across */
-.bn-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 8px}
-.bn-tile{display:block;min-width:0;text-decoration:none;color:var(--ink,#f4eef2)}
-.bn-sq{position:relative;display:block;aspect-ratio:1;border:1px solid rgba(244,238,242,.25);background:#0a0a0d;overflow:hidden}
-.bn-sq img{display:block;width:100%;height:100%;object-fit:cover}
-.bn-sq.none::after{content:'';position:absolute;inset:28%;background:url(../cathedral/mark.webp) center/contain no-repeat;opacity:.35}
-.bn-sq i{position:absolute;left:4px;bottom:4px;padding:2px 5px;font-style:normal;font-family:var(--f-mono,monospace);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:rgba(10,10,13,.8)}
-.bn-tile:hover .bn-sq{border-color:var(--pink-glow,#ff79c6)}
-.bn-tile.hit .bn-sq{border-color:#f7d046;box-shadow:0 0 10px rgba(247,208,70,.45)}
-.bn-tile.r-hit .bn-sq{border-color:var(--pink-glow,#ff79c6);box-shadow:0 0 10px rgba(255,121,198,.5)}
-.bn-tile.r-hit .bn-sq i{background:var(--pink-glow,#ff79c6);color:#0a0a0d}
-.bn-tile b{display:block;margin-top:5px;font-family:var(--f-display,'Saira Condensed',sans-serif);font-style:italic;font-weight:900;text-transform:uppercase;font-size:14px;line-height:1.05;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bn-tile > span{display:block;margin-top:3px;font-family:var(--f-mono,monospace);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted,#9a93a3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bn-tile.done > span{color:var(--pink,#f7b9dd)}
-.bn-tile > .bn-hitf{color:#f7d046}
-.bn-empty{margin:4px 0 0;font:12px/1.5 Verdana,Geneva,Tahoma,sans-serif;color:var(--muted,#9a93a3)}
-.bn-empty a{color:var(--pink-glow,#ff79c6);text-decoration:underline;text-underline-offset:2px}
 @media (max-width:560px){
   /* a sheet off the bottom edge, under the thumb */
   .bn-sheet{place-items:end center;padding:0}

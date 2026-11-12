@@ -306,7 +306,7 @@ a.btn{text-decoration:none}
 
     <details class="aset close" id="a-close" hidden>
       <summary>Close your account</summary>
-      <p class="hint">Closing hides you everywhere: your page, posts, comments, packs, rooms, frame tags
+      <p class="hint">Closing hides you everywhere: your page, posts, comments, rooms, frame tags
         and your name on going lists. Your messages stay with the people you sent them to, under Closed
         account. Nothing is deleted, so you can open it again by logging back in. A card ask still
         waiting goes, and so do your own events and watchlist on this phone.</p>
@@ -590,7 +590,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         '<p class="hint">Your page, your Kin and your messages live in the Crypt.</p>' +
         '<a class="btn" href="../wall/#me">Open your page</a>' +
         '<p class="hint" style="margin-top:12px">' + esc(line) + '</p>' +
-        '<div class="quick"><a href="../compose/">Your posts</a><a href="../packs/">Packs</a>' +
+        '<div class="quick"><a href="../compose/">Your posts</a>' +
         '<a href="../#rooms">Rooms</a></div>';
     }
     jump();
@@ -788,23 +788,22 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
 
   // ---- everything waiting, everything live, everything pulled ------------
-  // Rooms (038) and packs (037) come off their own lists, which mark yours
-  // (mine). They are managed where they live (Take it down on the Music tab,
-  // edit on /packs/), so here they are a line and a link, no Withdraw.
+  // Rooms (038) come off their own list, which marks yours (mine). They are
+  // managed where they live (Take it down on the Music tab), so here they
+  // are a line and a link, no Withdraw.
   // 045: their own stories, lines, picks and videos come down whenever they
   // like (a story until it is baked into the catalog). Stories and videos go up
   // on add (023), so one that is not published is one the desk pulled.
   const mineOf = n => Promise.resolve(OTP.sb().rpc(n))
     .then(q => (q && !q.error && Array.isArray(q.data)) ? q.data.filter(x => x && x.mine) : [])
     .catch(() => []);
-  const [stories, tracks, entries, posts, vids, rooms, packs] = await Promise.all([
+  const [stories, tracks, entries, posts, vids, rooms] = await Promise.all([
     OTP.myStories ? OTP.myStories().catch(() => []) : [],
     OTP.myRotation ? OTP.myRotation().catch(() => []) : [],
     OTP.myEntriesAll ? OTP.myEntriesAll().catch(() => []) : [],
     OTP.myPosts ? OTP.myPosts(3).catch(() => []) : [],
     OTP.myVideos ? OTP.myVideos().catch(() => []) : [],
     mineOf('rooms_list'),
-    mineOf('packs_list'),
   ]);
   const roomLabel = r => (r.name || 'A room') + (r.label ? ' · ' + r.label : '');
   const storyHref = x => '../word/live/?s=' + encodeURIComponent(x.slug);
@@ -815,7 +814,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     ...tracks.filter(x => !x.published).map(x => ({ kind: 'SONG', label: x.title + ' · ' + x.artist, wd: () => OTP.withdrawTrack(x.id) })),
     ...entries.filter(x => !x.published).map(x => ({ kind: 'ENTRY', label: 'on ' + x.story_slug + ': ' + String(x.text || '').slice(0, 40), wd: () => OTP.withdrawEntry(x.id) })),
     ...rooms.filter(x => !x.published).map(x => ({ kind: 'ROOM', label: roomLabel(x), href: '../#rooms' })),
-    ...packs.filter(x => !x.published).map(x => ({ kind: 'PACK', label: x.title || 'A pack', href: '../packs/?edit=' + encodeURIComponent(x.slug) })),
   ];
   const live = [
     ...stories.filter(x => x.published).map(x => x.baked
@@ -826,7 +824,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     ...vids.filter(x => x.published).map(x => ({ kind: x.featured ? 'ON YOUR PAGE · FEATURED' : 'ON YOUR PAGE', label: vidLabel(x), href: reel, cls: x.featured ? 'gold' : '',
       fix: '../compose/#vids', down: () => OTP.deleteVideo(x.id) })),
     ...rooms.filter(x => x.published).map(x => ({ kind: 'ROOM', label: roomLabel(x), href: '../#rooms' })),
-    ...packs.filter(x => x.published).map(x => ({ kind: 'PACK', label: x.title || 'A pack', href: '../packs/?p=' + encodeURIComponent(x.slug) })),
   ];
   // A pulled story that is already in the catalog is the desk's to fix, so it gets no buttons.
   const pulled = [

@@ -56,13 +56,13 @@ TRACKED = ["assets/js/desk.js", "assets/js/door.js", "assets/js/composer.js",
            "assets/js/edit.js", "assets/js/board.js", "assets/js/cardback.js",
            "assets/js/dates.js", "assets/js/calendar.js", "assets/js/sealed.js",
            "assets/js/word.js", "assets/js/cathedral.js", "assets/js/binder.js",
-           "assets/js/lounge.js", "assets/js/music.js", "assets/js/people.js", "assets/js/packs.js", "assets/js/photos.js",
+           "assets/js/lounge.js", "assets/js/music.js", "assets/js/people.js", "assets/js/photos.js",
            "assets/js/board-members.js", "supabase-config.js"]
 
 # stylesheet path (relative to ROOT)  ->  how it appears in href="..."
 TRACKED_CSS = ["assets/css/cathedral.css", "assets/css/pack.css",
                "assets/css/sealed.css", "assets/css/calendar.css",
-               "assets/css/binder.css", "assets/css/lounge.css", "assets/css/music.css", "assets/css/people.css", "assets/css/packs.css", "assets/css/photos.css",
+               "assets/css/binder.css", "assets/css/lounge.css", "assets/css/music.css", "assets/css/people.css", "assets/css/photos.css",
                "assets/css/auth.css", "assets/css/board-members.css"]
 
 # THE PIN (10/13): one exact supabase-js release, with the sha384 of that exact file (fetched once from this URL)
@@ -77,7 +77,7 @@ FLOATING = "supabase-js@" + "2/"   # split so a repo grep for the floating tag n
 PIN_TWINS = {"newstory.py": (PIN_URL, PIN_SRI), "assets/js/sealed.js": (PIN_URL, PIN_SRI)}
 
 # every document that loads them
-DOCS = ["index.html", "join/index.html", "compose/index.html", "desk/index.html", "packs/index.html",
+DOCS = ["index.html", "join/index.html", "compose/index.html", "desk/index.html",
         "board/index.html", "c/index.html", "dates/index.html", "events/index.html",
         "desk/goals/index.html",
         # Any page that loads desk.js belongs here. A page left off this list

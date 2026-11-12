@@ -1,9 +1,7 @@
-/* THE PHOTOS TAB (10/11): find yourself, the set list, artist packs, the looks, tape pills, the map, take it down.
+/* THE PHOTOS TAB (10/11): find yourself, the set list, the looks, tape pills, the map.
    Drawn by assets/js/photos.js. ⛔ Run stamp.py after editing. ⛔ Squares and circles, no arches. */
 
 .ph-note{margin:8px 0;font-size:13px;color:var(--muted);} .ph-note a{color:var(--pink-glow);}
-.ph-btn{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 16px;border-radius:999px;border:1px solid transparent;cursor:pointer;text-decoration:none;
-  background:linear-gradient(180deg,var(--pink-glow),var(--pink-deep));color:#0a0a0d;font-family:var(--f-body);font-weight:800;font-size:11px;letter-spacing:.16em;text-transform:uppercase;box-shadow:0 0 14px rgba(255,121,198,.35);}
 .ph-link{background:none;border:0;padding:0;color:var(--pink-glow);font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;}
 .ph-pills,.ph-look-c{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px;}
 .ph-pill{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);background:#0d0c11;border:1px solid var(--line);border-radius:999px;padding:6px 11px;cursor:pointer;transition:color .2s,border-color .2s;}
@@ -13,15 +11,6 @@
 .ph-credit a{color:var(--pink-glow);text-decoration:none;}
 
 /* ---- FIND YOURSELF ---- */
-.ph-bar{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 10px;}
-.ph-bar label{display:flex;flex-direction:column;gap:5px;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
-.ph-bar select{font:400 16px/1.3 var(--f-body);color:var(--ink);background:#0d0c11;border:1px solid var(--line);border-radius:10px;padding:10px 12px;}
-.ph-bar select:focus{outline:none;border-color:var(--pink-glow);}
-.ph-chips{grid-column:1 / -1;display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin;scrollbar-color:var(--pink-deep) transparent;}
-.ph-chip{flex:none;display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:7px 12px;border:1px solid var(--line);border-radius:10px;background:#0d0c11;color:var(--ink);cursor:pointer;
-  font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;font-size:14px;line-height:1;}
-.ph-chip span{font-family:var(--f-mono);font-style:normal;font-weight:400;font-size:8.5px;letter-spacing:.18em;color:var(--muted);}
-.ph-chip:hover{border-color:var(--pink-glow);} .ph-chip.on{border-color:var(--pink-glow);background:rgba(255,121,198,.14);}
 .ph-binder{margin:6px 0 14px;font-size:13px;color:var(--muted);} .ph-binder b{color:var(--pink-glow);font-weight:700;} .ph-binder .ph-link{margin-left:8px;}
 .ph-set{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;}
 .ph-pack{display:flex;flex-direction:column;gap:3px;text-decoration:none;color:inherit;}
@@ -36,20 +25,6 @@
 .ph-pack.hit .ph-badge,.ph-pack.done .ph-badge{border-style:solid;border-color:var(--pink-glow);}
 .ph-pack b{font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;font-size:15px;line-height:1.02;color:#fff;margin-top:6px;}
 .ph-pack span{font-family:var(--f-mono);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
-.ph-none{margin:12px 0;font-size:13px;color:var(--muted);}
-
-/* ---- ARTIST PACKS ---- */
-.ph-packs{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(150px,170px);gap:14px;overflow-x:auto;padding-bottom:10px;scroll-snap-type:x proximity;scrollbar-width:thin;scrollbar-color:var(--pink-deep) transparent;}
-.ph-packs::-webkit-scrollbar{height:6px;} .ph-packs::-webkit-scrollbar-thumb{background:var(--pink-deep);border-radius:999px;}
-.ph-apack{scroll-snap-align:start;display:flex;flex-direction:column;gap:3px;text-decoration:none;color:inherit;}
-.ph-apack-img{display:block;aspect-ratio:4/5;border-radius:12px;overflow:hidden;background:#16151c;border:1px solid var(--line);transition:transform .3s,border-color .25s;}
-.ph-apack-img img{display:block;width:100%;height:100%;object-fit:cover;}
-.ph-apack:hover .ph-apack-img{transform:translateY(-4px);border-color:var(--pink-glow);}
-.ph-apack.has-hit .ph-apack-img{box-shadow:0 0 0 1px rgba(255,121,198,.4);}
-.ph-apack b{font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;font-size:15px;line-height:1.02;color:#fff;margin-top:6px;}
-.ph-apack span{font-family:var(--f-mono);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
-.ph-packs-foot{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:8px;}
-.ph-packs-foot .drops-more{margin:0 0 0 auto;}
 
 /* ---- THE LOOKS ---- */
 .ph-looks{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;}
@@ -83,18 +58,6 @@
 .ph-map .leaflet-control-attribution{background:rgba(10,10,13,.7);color:var(--muted);font-size:9px;} .ph-map .leaflet-control-attribution a{color:var(--pink-glow);}
 .ph-map .leaflet-bar a{background:#121218;color:var(--ink);border-color:var(--line);}
 
-/* ---- TAKE IT DOWN ---- */
-.ph-td{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:640px;}
-.ph-td label{display:flex;flex-direction:column;gap:5px;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
-.ph-td label.wide{grid-column:1 / -1;}
-.ph-td input,.ph-td select,.ph-td textarea{font:400 16px/1.3 var(--f-body);color:var(--ink);background:#0d0c11;border:1px solid var(--line);border-radius:8px;padding:10px 12px;resize:vertical;}
-.ph-td input:focus,.ph-td select:focus,.ph-td textarea:focus{outline:none;border-color:var(--pink-glow);}
-/* the longest night title would push the column past the gutter on a 320px phone: let it shrink */
-.ph-td label{min-width:0;} .ph-td input,.ph-td select,.ph-td textarea{width:100%;min-width:0;}
-.ph-td-row{grid-column:1 / -1;display:flex;align-items:center;justify-content:space-between;gap:12px;}
-.ph-td-row small{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.06em;color:var(--muted);}
-.ph-td-msg{grid-column:1 / -1;margin:0;min-height:1em;font-size:12.5px;color:var(--pink-glow);}
-@media (max-width:520px){.ph-td,.ph-bar{grid-template-columns:1fr;} .ph-td-row{flex-direction:column;align-items:stretch;}}
 /* THE MINI PACK (10/16): a small night on the set list, the smaller pouch on the same line as the full ones
    (37.1% = the height it gave up, in the tile's width) and a MINI sticker inside the art (the box clips its edges). */
 .ph-pack.mini .ph-pack-img{width:78%;margin:37.1% auto 0}

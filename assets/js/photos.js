@@ -1,31 +1,27 @@
-/* THE PHOTOS TAB (10/11). His picks off the brainstorm: find yourself by room or date, the pack game, the craft,
+/* THE PHOTOS TAB (10/11). His picks off the brainstorm: find yourself, the pack game, the craft,
  * housekeeping, the wildcards.
  *
- *   FIND YOURSELF   pick a room, a month or one of the last nights, and THE SET LIST shows those packs. Every night
- *                   is a pack tile with where this phone stands on it (the binder: sealed, opened n of N, hit found,
+ *   FIND YOURSELF   THE SET LIST: every night, newest first (11/12: the room, month and night filters came out).
+ *                   A night is a pack tile with where this phone stands on it (the binder: sealed, opened n of N, hit found,
  *                   complete). Tap = the night's gallery. The binder line counts the lot. The last line goes to
  *                   events/, every night in one list (Wave 2: Home's Drops rail is gone, this is the way there).
- *   ARTIST PACKS    packs made by the house and its artists (packs_list, migration 037): the shelf, Make a pack.
  *   THE LOOKS       nights printed more than one way (content/looks.json, looks.py): one frame, two prints, a handle
  *                   to drag between them, chips for the other prints. Credits under each.
  *   THE TAPE        pills over the rail: all, or one source at a time (video.json `from`).
  *   THE MAP         every room we shot, pinned (content/rooms.json), nights in the popup. Leaflet, loaded only when
  *                   the map scrolls near. Homes and private spaces sit on the city, never an address.
- *   TAKE IT DOWN    anyone in a frame asks for it to come down: opens mail, nothing stored here.
  *
  * Everything fails quiet. ⛔ Run stamp.py after editing. ⛔ No em dashes in copy. ⛔ No arch shapes.
  */
 (function (w, d) {
   'use strict';
   var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   function el(tag, cls, html) { var e = d.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function tight(s) { return String(s || '').toLowerCase().replace(/[^a-z0-9]/g, ''); }
   function ymd(s) { var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(s || '')); return m ? new Date(+m[1], +m[2] - 1, +m[3], 12) : null; }
   function getJSON(url) { return fetch(url, { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }); }
   function head(sec, title, accent, sub) { sec.appendChild(el('div', 'section-head', '<h2>' + esc(title) + (accent ? ' <span class="accent">' + esc(accent) + '</span>' : '') + '</h2>' + (sub ? '<div class="sub">' + esc(sub) + '</div>' : ''))); }
-  function member() { return d.documentElement.getAttribute('data-door') === 'in'; }
   function slugOk(s) { return /^[a-z0-9][a-z0-9-]{0,80}$/.test(String(s || '')); }
   var NIGHTS = [];
 
@@ -33,24 +29,11 @@
   function setList() {
     var sec = d.getElementById('find'); if (!sec) return;
     if (!NIGHTS.length) { sec.remove(); return; }
-    head(sec, 'Find Yourself', 'by room or by date', 'every night we shot is a sealed pack · pick yours · tear it open');
-    var bar = el('div', 'ph-bar');
-    var rooms = [], months = [], seenR = {}, seenM = {};
-    NIGHTS.forEach(function (n) {
-      String(n.venue || '').split('·').map(function (v) { return v.trim(); }).filter(Boolean).forEach(function (v) { if (!seenR[tight(v)]) { seenR[tight(v)] = 1; rooms.push(v); } });
-      var dt = ymd(n.date); if (dt) { var k = dt.getFullYear() + '-' + dt.getMonth(); if (!seenM[k]) { seenM[k] = 1; months.push({ k: k, l: MONTHS[dt.getMonth()] + ' ' + dt.getFullYear() }); } }
-    });
-    rooms.sort(function (a, b) { return a.localeCompare(b); });
-    bar.innerHTML = '<label>Room<select data-k="room"><option value="">Every room</option>' + rooms.map(function (r) { return '<option value="' + esc(tight(r)) + '">' + esc(r) + '</option>'; }).join('') + '</select></label>' +
-      '<label>Month<select data-k="month"><option value="">Every month</option>' + months.map(function (m) { return '<option value="' + esc(m.k) + '">' + esc(m.l) + '</option>'; }).join('') + '</select></label>' +
-      '<div class="ph-chips">' + NIGHTS.filter(function (n) { return !n.mini; }).slice(0, 5).map(function (n) { var dt = ymd(n.date); return '<button type="button" class="ph-chip" data-slug="' + esc(n.slug) + '">' + esc(n.title) + '<span>' + (dt ? MON[dt.getMonth()] + ' ' + dt.getDate() : '') + '</span></button>'; }).join('') + '</div>';
-    sec.appendChild(bar);
+    head(sec, 'Find Yourself', 'by night', 'every night we shot is a sealed pack · pick yours · tear it open');
     var line = el('p', 'ph-binder'); sec.appendChild(line);
     var grid = el('div', 'ph-set'); sec.appendChild(grid);
-    var none = el('p', 'ph-none', 'Nothing shot there that month. Yet.'); none.hidden = true; sec.appendChild(none);
     // the last line (Wave 2, call 4): the Drops rail came off Home, so this is the way to the whole list of nights
     sec.appendChild(el('div', 'ph-all', '<a class="drops-more" href="events/">Every night, one list &rarr;</a>'));
-    var state = { room: '', month: '', slug: '' };
     function stateOf(slug) { try { return (w.OTPBinder && w.OTPBinder.night) ? w.OTPBinder.night(slug) : null; } catch (e) { return null; } }
     function tile(n) {
       var dt = ymd(n.date), st = stateOf(n.slug) || {};
@@ -64,61 +47,16 @@
     }
     function paint() {
       grid.innerHTML = '';
-      var list = NIGHTS.filter(function (n) {
-        if (state.slug) return n.slug === state.slug;
-        if (state.room && !String(n.venue || '').split('·').some(function (v) { return tight(v) === state.room; })) return false;
-        if (state.month) { var dt = ymd(n.date); if (!dt || (dt.getFullYear() + '-' + dt.getMonth()) !== state.month) return false; }
-        return true;
-      });
-      list.forEach(function (n) { grid.appendChild(tile(n)); });
-      none.hidden = list.length > 0;
-      bar.querySelectorAll('.ph-chip').forEach(function (c) { c.classList.toggle('on', c.dataset.slug === state.slug); });
+      NIGHTS.forEach(function (n) { grid.appendChild(tile(n)); });
       var t = null; try { t = w.OTPBinder && w.OTPBinder.totals ? w.OTPBinder.totals() : null; } catch (e) {}
       line.innerHTML = t && t.frames ? 'Your binder: <b>' + t.frames + '</b> frames · <b>' + t.hits + '</b> ' + (t.hits === 1 ? 'hit' : 'hits') + ' · <b>' + t.opened + '</b> of ' + NIGHTS.length + ' packs opened' + (t.done ? ' · <b>' + t.done + '</b> complete' : '') + ' <button type="button" class="ph-link" data-binder>Open the binder</button>'
         : 'Your binder is empty. Tear a pack open and what you pull is yours to keep, on this phone.';
     }
-    bar.addEventListener('change', function (ev) { var s = ev.target.closest('select'); if (!s) return; state[s.dataset.k] = s.value; state.slug = ''; paint(); });
-    bar.addEventListener('click', function (ev) { var c = ev.target.closest('.ph-chip'); if (!c) return; state.slug = state.slug === c.dataset.slug ? '' : c.dataset.slug; paint(); });
     line.addEventListener('click', function (ev) { if (ev.target.closest('[data-binder]')) { try { w.OTPBinder && w.OTPBinder.open && w.OTPBinder.open(); } catch (e) {} } });
     paint();
     try { if (w.OTPBinder && w.OTPBinder.on) w.OTPBinder.on(paint); } catch (e) {}
     // binder.js can land after this file
     var t0 = Date.now(); (function later() { if (w.OTPBinder) { paint(); try { w.OTPBinder.on(paint); } catch (e) {} return; } if (Date.now() - t0 < 6000) setTimeout(later, 200); })();
-  }
-
-  /* ================= ARTIST PACKS ================= */
-  function artPacks() {
-    var sec = d.getElementById('artpacks'); if (!sec) return;
-    head(sec, 'Packs', 'by the house and its artists', 'photo packs with their own rarities · tear one open · keep what you like');
-    var rail = el('div', 'ph-packs'); sec.appendChild(rail);
-    var foot = el('div', 'ph-packs-foot'); sec.appendChild(foot);
-    function paintFoot() {
-      // signed in with no Instagram yet ("Almost in") gets the one step: join/ sends anybody signed in straight on,
-      // so a Log in link only bounced them back to the timeline
-      var st = d.documentElement.getAttribute('data-door');
-      // a closed account paints 'wait' too, with its key on Your account (door.js); banned stays the quiet step
-      var key = d.getElementById('nav-key'), closed = st === 'wait' && !!key && /(^|\/)my\/#account$/.test(key.getAttribute('href') || '');
-      foot.innerHTML = (member() ? '<a class="ph-btn" href="packs/#new">&#43; Make a pack</a>'
-        : closed ? '<span class="ph-note">Members make packs. This account is closed. <a href="my/#account">Your account &rarr;</a></span>'
-        : st === 'wait' ? '<span class="ph-note">Members make packs. <a href="wall/">One more step at the Crypt</a> and you are in.</span>'
-        : '<span class="ph-note">Members make packs. <a href="join/?next=home">Log in</a> or <a href="wall/">join the Crypt</a>.</span>') +
-        '<a class="drops-more" href="packs/">every pack &rarr;</a>';
-    }
-    paintFoot();
-    try { new MutationObserver(paintFoot).observe(d.documentElement, { attributes: true, attributeFilter: ['data-door'] }); } catch (e) {}
-    if (!(w.OTP && OTP.configured && OTP.sb)) { rail.appendChild(el('p', 'ph-note', 'The shelf is resting with the backend.')); return; }
-    var pub = function (key) { try { return OTP.packPhotoUrl ? OTP.packPhotoUrl(key) : ''; } catch (e) { return ''; } };
-    Promise.resolve(OTP.sb().rpc('packs_list')).then(function (r) {
-      var list = (r && !r.error && Array.isArray(r.data)) ? r.data.filter(function (p) { return p.published; }) : [];
-      if (!list.length) { rail.appendChild(el('p', 'ph-note', 'No packs out yet. The first one is waiting to be made.')); return; }
-      list.slice(0, 12).forEach(function (p) {
-        var a = el('a', 'ph-apack' + (p.has_hit ? ' has-hit' : ''));
-        a.href = 'packs/?p=' + encodeURIComponent(p.slug);
-        a.innerHTML = '<span class="ph-apack-img">' + (p.cover ? '<img src="' + esc(pub(p.cover)) + '" alt="" loading="lazy" decoding="async">' : '') + '</span>' +
-          '<b>' + esc(p.title) + '</b><span>' + esc(p.author) + ' · ' + p.cards + ' cards' + (p.has_hit ? ' · one hit' : '') + (p.faves ? ' · ' + p.faves + ' ♥' : '') + '</span>';
-        rail.appendChild(a);
-      });
-    }).catch(function () { rail.appendChild(el('p', 'ph-note', 'The shelf did not load. Try again in a minute.')); });
   }
 
   /* ================= THE LOOKS ================= */
@@ -240,34 +178,10 @@
     });
   }
 
-  /* ================= TAKE IT DOWN ================= */
-  function takeDown() {
-    var sec = d.getElementById('takedown'); if (!sec) return;
-    head(sec, 'Take It Down', 'your face, your call', 'in one of our frames and you want it gone? say which one');
-    var f = el('form', 'ph-td'); f.setAttribute('novalidate', '');
-    f.innerHTML = '<label>The night<select name="night"><option value="">Pick the night</option>' + NIGHTS.map(function (n) { var dt = ymd(n.date); return '<option value="' + esc(n.slug) + '">' + esc(n.title) + (dt ? ' · ' + MON[dt.getMonth()] + ' ' + dt.getDate() : '') + '</option>'; }).join('') + '</select></label>' +
-      '<label>Frame number<input name="frame" inputmode="numeric" maxlength="4" placeholder="the number under the photo"></label>' +
-      '<label>How we reach you<input name="reach" maxlength="80" placeholder="Instagram or email"></label>' +
-      '<label class="wide">Anything else<textarea name="note" rows="2" maxlength="500" placeholder="which person, or anything we should know"></textarea></label>' +
-      '<div class="ph-td-row"><small>It opens your email app. The desk takes it down and tells you when it is gone.</small><button type="submit" class="ph-btn">Ask for it</button></div><p class="ph-td-msg" role="status"></p>';
-    f.addEventListener('submit', function (ev) {
-      ev.preventDefault();
-      var v = function (k) { return String((f.elements[k] && f.elements[k].value) || '').trim(); }, msg = f.querySelector('.ph-td-msg');
-      if (!v('night')) { msg.textContent = 'Pick the night.'; f.elements.night.focus(); return; }
-      if (!/^\d{1,4}$/.test(v('frame'))) { msg.textContent = 'Put the frame number, it is under the photo.'; f.elements.frame.focus(); return; }
-      if (!v('reach')) { msg.textContent = 'Leave a way to reach you, so we can say when it is down.'; f.elements.reach.focus(); return; }
-      msg.textContent = '';
-      var n = NIGHTS.find(function (x) { return x.slug === v('night'); }) || { title: v('night') };
-      var body = 'TAKE IT DOWN\n\nNight: ' + n.title + ' (' + v('night') + ')\nFrame: ' + v('frame') + '\nLink: https://0fftheprint.com/events/' + v('night') + '/#f' + v('frame') + '\nReach me: ' + v('reach') + '\n\n' + (v('note') || '') + '\n\n(sent from 0fftheprint.com, Photos tab)';
-      w.location.href = 'mailto:offtheprintcollective@gmail.com?subject=' + encodeURIComponent('TAKE IT DOWN · ' + n.title + ' · frame ' + v('frame')) + '&body=' + encodeURIComponent(body.slice(0, 1800));
-    });
-    sec.appendChild(f);
-  }
-
   function go() {
     getJSON('events/events.json').then(function (E) {
       NIGHTS = ((E && E.items) || []).filter(function (n) { return n && slugOk(n.slug) && n.date; });
-      [setList, artPacks, looks, tapePills, map, takeDown].forEach(function (fn) { try { fn(); } catch (e) { try { console.warn('photos:', fn.name, e.message); } catch (x) {} } });
+      [setList, looks, tapePills, map].forEach(function (fn) { try { fn(); } catch (e) { try { console.warn('photos:', fn.name, e.message); } catch (x) {} } });
       d.documentElement.setAttribute('data-photos', 'ready');
     });
   }

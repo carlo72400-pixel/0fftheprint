@@ -23,19 +23,14 @@ window.OTPLazy = window.OTPLazy || (function () {
  *
  * WHERE IT SHOWS.
  *   - the chip in the nav (home), or in the house bar this file puts on every other page that loads it
- *   - the sheet the chip opens: where you stand, every night, the roster, the packs this phone opened (packs.js
- *     writes otp-packs) and the cards a member kept (my_faves, Wave 2)
+ *   - the sheet the chip opens: where you stand, every night, the roster
  *   - under every pack tile (the /events/ shelf; Home's Drops rail came out in Wave 2): how far in you are, NEW on a fresh one
  *   - on a night's own page: sealed.js deals what you have NOT pulled first and says where you stand
  *   - under a night: the packs on either side of it, so a night is never a dead end
  *
  * ⛔ IT FAILS QUIET. Private mode, storage full, this file 404s: the packs still tear and the
  *    pages still read. Nothing waits on the binder.
- * ⛔ THE BINDER IS THIS PHONE. Pulls and packs live here; nothing claims a sync or a leaderboard. The one thing
- *    that follows a login is Cards you kept (Wave 2, call 16): the hearts a member gave (a member by is_wall_member,
- *    not any login), read from the database (OTP.myFaves) where desk.js is on the page and kept in otp-kept {uid, rows}
- *    for the pages without it, shown only to that same login. It never holds the sheet: the section fills in when
- *    the database answers. signOut() clears otp-kept.
+ * ⛔ THE BINDER IS THIS PHONE. Pulls live here; nothing claims a sync or a leaderboard.
  * ⛔ NO innerHTML WITH DATA. Titles and venues come out of events.json as textContent, and a
  *    slug only becomes a URL after it matches the shape newevent.py writes.
  */
@@ -144,22 +139,6 @@ window.OTPLazy = window.OTPLazy || (function () {
       .then(function (l) { l = (Array.isArray(l) ? l : []).filter(function (c) { return c && rkey(c); }); return l.length ? l : houseRoster(); },
             function () { return houseRoster(); });
   }
-  /* ---------- the packs this phone opened (packs.js, localStorage otp-packs) ----------
-     { v: 1, p: { <pack slug>: { f: [flipped photo keys], t: first opened (ms), n: cards, ti: title, cv: cover URL,
-       h: the hit is face up } } }. Entries from before Wave 2 carry f and t only. */
-  var PACK_SLUG = /^[a-z0-9][a-z0-9-]{2,60}$/;
-  // a cover is a photo in the house's packs bucket and nothing else (a preview serves its stand-ins from this site,
-  // the bucket path riding in the query, so this site's own address passes too)
-  var PACK_IMG = /\/storage\/v1\/object\/public\/packs\/[A-Za-z0-9][A-Za-z0-9._\/-]{0,200}$/;
-  function packImg(u) {
-    u = String(u || '');
-    if (!u || u.length > 600 || u.indexOf('..') >= 0 || !PACK_IMG.test(u)) return '';
-    try {
-      var x = new URL(u);
-      if ((x.protocol === 'https:' && /\.supabase\.co$/.test(x.hostname)) || x.origin === location.origin) return x.href;
-    } catch (e) {}
-    return '';
-  }
   // a card holder's photo on the binder's roster: their card or page photo in the house's storage, nothing else
   var CARD_IMG = /\/storage\/v1\/object\/public\/(cards|spaces)\/[A-Za-z0-9][A-Za-z0-9._\/-]{0,200}$/;
   function cardImg(u) {
@@ -170,93 +149,6 @@ window.OTPLazy = window.OTPLazy || (function () {
       if ((x.protocol === 'https:' && /\.supabase\.co$/.test(x.hostname)) || x.origin === location.origin) return x.href;
     } catch (e) {}
     return '';
-  }
-  function packsOpened() {
-    var j = null; try { j = JSON.parse(w.localStorage.getItem('otp-packs') || 'null'); } catch (e) {}
-    if (!j || typeof j !== 'object' || !j.p || typeof j.p !== 'object') return [];
-    return Object.keys(j.p).filter(function (k) { return PACK_SLUG.test(k) && j.p[k] && Array.isArray(j.p[k].f); }).map(function (k) {
-      var e = j.p[k], total = (e.n | 0) > 0 && (e.n | 0) <= 99 ? e.n | 0 : 0;
-      return { slug: k, flipped: total ? Math.min(e.f.length, total) : e.f.length, total: total,
-        title: (typeof e.ti === 'string' && e.ti.trim()) ? e.ti.trim().slice(0, 60) : 'A pack',
-        cover: packImg(e.cv), hit: e.h === true, t: +e.t || 0 };
-    }).sort(function (a, b) { return b.t - a.t; });
-  }
-
-  /* ---------- the cards a member kept (Wave 2, call 16) ----------
-     The hearts follow the login, so they come from the database (OTP.myFaves) wherever desk.js is on the page, newest
-     24, and are kept in otp-kept { uid, rows: [{ s: pack slug, t: pack title, u: photo URL, r: rarity }] } for the pages
-     that never load it (a night, /events/). The cache shows only while the same login is saved on this phone.
-     ⛔ A MEMBER IS WHAT THE CRYPT'S DOOR SAYS (is_wall_member, the desk included), never just a login. A pending, banned
-        or closed login gets the stranger's line, the way the pack shelf hides its kept row from them. otp-kept is
-        written only after that yes and dropped on a plain no, so on a page with no database a list for the saved login
-        is a member's; with none on file the page cannot tell, and says only what is true for both. */
-  var KEPT = 'otp-kept', KEPT_N = 24, keptP = null;
-  var STRANGER = { who: 'stranger', rows: [] };
-  function soon(p, ms) { return Promise.race([p, new Promise(function (ok) { setTimeout(function () { ok(null); }, ms); })]); }
-  var RAR = { common: 'Common', rare: 'Rare', holo: 'Holo', fullart: 'Full art', hit: 'The hit' };
-  // the saved login on this phone, read the way sealed.js spots one (supabase-js keeps it in sb-<project>-auth-token)
-  function savedUid() {
-    try {
-      for (var i = 0; i < w.localStorage.length; i++) {
-        var k = w.localStorage.key(i) || '';
-        if (!/^sb-.*-auth-token$/.test(k)) continue;
-        var j = JSON.parse(w.localStorage.getItem(k) || 'null'), u = j && (j.user || (j.currentSession && j.currentSession.user));
-        if (u && typeof u.id === 'string') return u.id;
-      }
-    } catch (e) {}
-    return null;
-  }
-  function keptCache(uid) {
-    try {
-      var j = JSON.parse(w.localStorage.getItem(KEPT) || 'null');
-      if (!uid || !j || j.uid !== uid || !Array.isArray(j.rows)) return null;
-      return j.rows.filter(function (x) { return x && PACK_SLUG.test(x.s || '') && packImg(x.u); }).slice(0, KEPT_N)
-        .map(function (x) { return { s: x.s, t: String(x.t || '').slice(0, 60), u: x.u, r: RAR.hasOwnProperty(x.r) ? x.r : 'common' }; });
-    } catch (e) { return null; }
-  }
-  // the database said this login is not a member: its list leaves the phone
-  function dropKept(uid) {
-    try { var j = JSON.parse(w.localStorage.getItem(KEPT) || 'null'); if (j && j.uid === uid) w.localStorage.removeItem(KEPT); } catch (e) {}
-  }
-  // { who: 'member' | 'unknown' | 'stranger', rows, cached }. Never throws. Only a member's full answer is kept for the
-  // page; anything else asks again on the next open (a door still being read, a slow database, desk.js still loading).
-  function kept() {
-    if (keptP) return keptP;
-    var O = w.OTP;
-    if (!(O && O.configured && O.sb && typeof O.myFaves === 'function')) {
-      // no database on this page, or not yet (sealed.js may still be loading desk.js)
-      var uid0 = savedUid(), c0 = uid0 ? keptCache(uid0) : null;
-      return Promise.resolve(c0 ? { who: 'member', rows: c0, cached: true } : uid0 ? { who: 'unknown', rows: [] } : STRANGER);
-    }
-    var door = d.documentElement.getAttribute('data-door');
-    var p = keptP = (async function () {
-      var s = null; try { s = await O.sb().auth.getSession(); } catch (e) {}
-      var uid = s && s.data && s.data.session && s.data.session.user ? s.data.session.user.id : null;
-      // signed out, or (on Home, which knows) signed in but not through the Crypt's door: pending or closed
-      if (!uid || door === 'wait') { keptP = null; return STRANGER; }
-      // everywhere else the door is asked. No answer: the list on file, if this login has one, or the line for both.
-      var m = null; try { m = await soon(O.sb().rpc('is_wall_member'), 4000); } catch (e) {}
-      if (!m || m.error) { keptP = null; var c1 = keptCache(uid); return c1 ? { who: 'member', rows: c1, cached: true } : { who: 'unknown', rows: [] }; }
-      if (m.data !== true) { keptP = null; if (m.data === false) dropKept(uid); return STRANGER; }
-      var got = await soon(O.myFaves(), 4000);
-      if (!Array.isArray(got)) { keptP = null; return { who: 'member', rows: keptCache(uid) || [], cached: true }; }
-      // myFaves answers [] for none and for any error alike. With a list on file, ask once in a way that tells them
-      // apart, and keep the list when it was an error.
-      var had = got.length ? null : keptCache(uid);
-      if (had && had.length) {
-        var r = null; try { r = await soon(O.sb().rpc('my_faves'), 4000); } catch (e) {}
-        if (!r || r.error || !Array.isArray(r.data)) { keptP = null; return { who: 'member', rows: had, cached: true }; }
-        got = r.data;
-      }
-      var rows = got.filter(function (x) { return x && typeof x === 'object'; }).sort(function (a, b) { return String(b.created_at || '').localeCompare(String(a.created_at || '')); })
-        .slice(0, KEPT_N).map(function (x) {
-          var u = ''; try { u = O.packPhotoUrl ? O.packPhotoUrl(x.image) : ''; } catch (e) {}
-          return { s: String(x.pack_slug || ''), t: String(x.pack_title || '').slice(0, 60), u: u, r: RAR.hasOwnProperty(x.rarity) ? x.rarity : 'common' };
-        }).filter(function (x) { return PACK_SLUG.test(x.s) && packImg(x.u); });
-      try { w.localStorage.setItem(KEPT, JSON.stringify({ uid: uid, rows: rows })); } catch (e) {}
-      return { who: 'member', rows: rows };
-    })().catch(function () { keptP = null; return STRANGER; });
-    return p;
   }
 
   // a night's slug opens with its date. Fresh = shot in the last two weeks.
@@ -398,8 +290,6 @@ window.OTPLazy = window.OTPLazy || (function () {
     if (!sheet) return;
     var body = sheet.querySelector('.bn-body'); if (!body) return;
     var my = ++drawN;
-    // the kept cards ask the database (the door, then the hearts), so they never hold the sheet: it draws from what
-    // this phone and the site's files know, and the kept section fills in when its answer lands
     Promise.all([events(), roster()]).then(function (got) {
       if (my !== drawN) return;                // a newer draw is on its way
       var list = got[0], cards = got[1], t = totals();
@@ -472,70 +362,7 @@ window.OTPLazy = window.OTPLazy || (function () {
         op.addEventListener('click', closeSheet);
         body.appendChild(op);
       }
-
-      // THE PACKS (Wave 2, call 16): the artist packs this phone tore open, newest first, from packs.js's otp-packs
-      var pk = packsOpened();
-      var hp = el('h3', '', 'The packs'); hp.appendChild(el('small', '', pk.length + ' opened'));
-      body.appendChild(hp);
-      if (!pk.length) {
-        var e0 = el('p', 'bn-empty', 'No packs opened on this phone yet. ');
-        var o0 = el('a', '', 'Open one'); o0.href = BASE + 'packs/'; e0.appendChild(o0);
-        body.appendChild(e0);
-      } else {
-        var pg = el('div', 'bn-tiles');
-        pk.forEach(function (p) {
-          var a = el('a', 'bn-tile' + (p.hit ? ' hit' : '') + (p.total && p.flipped >= p.total ? ' done' : ''));
-          a.href = BASE + 'packs/?p=' + encodeURIComponent(p.slug);
-          var sq = el('span', 'bn-sq' + (p.cover ? '' : ' none'));     // no cover on file: the house mark stands in
-          if (p.cover) { var im = el('img'); im.alt = ''; im.loading = 'lazy'; im.decoding = 'async'; im.width = 120; im.height = 120;
-            im.addEventListener('error', function () { im.remove(); sq.classList.add('none'); }, { once: true }); im.src = p.cover; sq.appendChild(im); }
-          a.appendChild(sq);
-          a.appendChild(el('b', '', p.title));
-          a.appendChild(el('span', '', !p.total ? p.flipped + ' flipped' : p.flipped >= p.total ? 'all ' + p.total + ' flipped' : p.flipped + ' of ' + p.total + ' flipped'));
-          if (p.hit) a.appendChild(el('span', 'bn-hitf', 'hit found'));
-          pg.appendChild(a);
-        });
-        body.appendChild(pg);
-      }
-
-      // CARDS YOU KEPT: the hearts follow the login (OTP.myFaves, cached in otp-kept for pages without desk.js). The
-      // heading and a slot go in now; the slot fills when kept() answers, if this is still the sheet on screen.
-      var hk = el('h3', '', 'Cards you kept');
-      var ks = el('div', 'bn-keptslot'); ks.setAttribute('aria-live', 'polite');
-      body.appendChild(hk); body.appendChild(ks);
-      body.appendChild(el('p', 'bn-fine', 'Pulls and packs live on this phone. The cards you keep follow your login.'));
-      var slow = setTimeout(function () { if (my === drawN && !ks.firstChild) ks.appendChild(el('p', 'bn-empty bn-wait', 'Looking up the cards you kept.')); }, 300);
-      kept().then(function (keep) {
-        clearTimeout(slow);
-        if (my !== drawN || !body.contains(ks)) return;
-        keep = keep || STRANGER;
-        ks.textContent = '';
-        if (keep.who === 'member' && keep.rows.length) hk.appendChild(el('small', '', keep.rows.length + ' kept'));
-        if (keep.who === 'stranger') {
-          var e1 = el('p', 'bn-empty', 'Members keep the cards they like. ');
-          var j1 = el('a', '', 'Get in at the Crypt'); j1.href = BASE + 'wall/'; e1.appendChild(j1); e1.appendChild(d.createTextNode('.'));
-          ks.appendChild(e1);
-        } else if (keep.who !== 'member' || !keep.rows.length) {
-          // a login this page cannot check reads the line that is true either way
-          var e2 = el('p', 'bn-empty', keep.who !== 'member' ? 'Members keep the cards they like. ' : keep.cached ? 'Tap the heart on a card you like in a pack and it shows here. ' : 'No cards kept yet. Tap the heart on one you like in a pack. ');
-          var j2 = el('a', '', 'The packs'); j2.href = BASE + 'packs/'; e2.appendChild(j2);
-          ks.appendChild(e2);
-        } else {
-          var kg = el('div', 'bn-tiles bn-kept');
-          keep.rows.forEach(function (x) {
-            var a = el('a', 'bn-tile r-' + x.r);
-            a.href = BASE + 'packs/?p=' + encodeURIComponent(x.s);
-            var sq = el('span', 'bn-sq');
-            var im = el('img'); im.alt = ''; im.loading = 'lazy'; im.decoding = 'async'; im.width = 120; im.height = 120;
-            im.addEventListener('error', function () { im.remove(); }, { once: true }); im.src = packImg(x.u); sq.appendChild(im);
-            sq.appendChild(el('i', '', RAR[x.r] || 'Common'));
-            a.appendChild(sq);
-            a.appendChild(el('span', '', x.t || 'A pack'));
-            kg.appendChild(a);
-          });
-          ks.appendChild(kg);
-        }
-      });
+      body.appendChild(el('p', 'bn-fine', 'Your binder lives on this phone. Nothing to log in to. Clear your browser and it starts over.'));
     });
   }
   function buildSheet() {

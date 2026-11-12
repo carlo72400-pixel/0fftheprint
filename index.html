@@ -60,16 +60,16 @@ window.OTPLazy = window.OTPLazy || (function () {
   return { watch: watch, scan: scan };
 })();
 </script>
-<script src="assets/js/binder.js?v=55079fed" defer></script>
-<script src="assets/js/cathedral.js?v=00e6ca1e" defer></script>
+<script src="assets/js/binder.js?v=5ec9844b" defer></script>
+<script src="assets/js/cathedral.js?v=71af5a7c" defer></script>
 <script src="assets/js/lounge.js?v=059eb0eb" defer></script>
 <script src="assets/js/music.js?v=528cb700" defer></script>
 <script src="assets/js/people.js?v=d0c7a6d1" defer></script>
-<script src="assets/js/photos.js?v=70a522f9" defer></script>
+<script src="assets/js/photos.js?v=a529592b" defer></script>
 <script>/* tabs: pick the page before first paint, off the #hash. Old links like /#desk still land right.
    ⛔ M has to name every main.feed > section[id] (the router below the body only corrects it after the
    page has painted, so a missing id flashes Home first: /#roll from the Crypt did). Add new sections here. */
-(function(){var M={do:'home',frames:'home',take:'home',dates:'home',find:'photos',drops:'photos',artpacks:'photos',tape:'photos',videos:'photos',looks:'photos',work:'photos',map:'photos',takedown:'photos',slate:'stories',desk:'stories',catalog:'stories',music:'music',battle:'music',played:'music',holders:'music',texas:'music',lineage:'music',lineup:'music',releases:'music',rooms:'music',putuson:'music',roll:'people',open:'people',roster:'people','acct-strip':'more',pitch:'more',experts:'more'},T=['home','photos','stories','music','people','more'],h=(location.hash||'').slice(1),d=document.documentElement;d.className+=' tabs';d.setAttribute('data-tab',T.indexOf(h)>=0?h:(M[h]||'home'));})();</script>
+(function(){var M={do:'home',frames:'home',take:'home',dates:'home',find:'photos',drops:'photos',tape:'photos',videos:'photos',looks:'photos',work:'photos',map:'photos',slate:'stories',desk:'stories',catalog:'stories',music:'music',battle:'music',played:'music',holders:'music',texas:'music',lineage:'music',lineup:'music',releases:'music',rooms:'music',putuson:'music',roll:'people',open:'people',roster:'people','acct-strip':'more',pitch:'more',experts:'more'},T=['home','photos','stories','music','people','more'],h=(location.hash||'').slice(1),d=document.documentElement;d.className+=' tabs';d.setAttribute('data-tab',T.indexOf(h)>=0?h:(M[h]||'home'));})();</script>
 <style>
   :root{
     --bg:#0a0a0d;
@@ -3989,12 +3989,12 @@ window.OTPLazy = window.OTPLazy || (function () {
 </style>
 <!-- THE CATHEDRAL (10/3): the homepage skin. Scoped under html.cath, loaded last on purpose. -->
 <link rel="stylesheet" href="assets/css/pack.css?v=19b679bc">
-<link rel="stylesheet" href="assets/css/binder.css?v=ce577337">
-<link rel="stylesheet" href="assets/css/cathedral.css?v=f1564885">
+<link rel="stylesheet" href="assets/css/binder.css?v=76e5f787">
+<link rel="stylesheet" href="assets/css/cathedral.css?v=3329ef2e">
 <link rel="stylesheet" href="assets/css/lounge.css?v=4caff60f">
 <link rel="stylesheet" href="assets/css/music.css?v=815cfdc9">
 <link rel="stylesheet" href="assets/css/people.css?v=85ce71bf">
-<link rel="stylesheet" href="assets/css/photos.css?v=e51bc605">
+<link rel="stylesheet" href="assets/css/photos.css?v=15bb5b14">
 </head>
 <body>
 
@@ -4396,15 +4396,13 @@ window.OTPLazy = window.OTPLazy || (function () {
       </a>
     </section>
 
-    <!-- ===== THE PHOTOS TAB, rebuilt 10/11 (his picks: find yourself by room or date, the pack game, the craft,
-         housekeeping, the wildcards). assets/js/photos.js draws #find, #artpacks, #looks, the tape pills, #map and
-         #takedown from events.json, looks.json (looks.py), rooms.json, video.json and packs_list (migration 037).
+    <!-- ===== THE PHOTOS TAB, rebuilt 10/11 (his picks: find yourself, the pack game, the craft,
+         housekeeping, the wildcards). assets/js/photos.js draws #find, #looks, the tape pills and #map
+         from events.json, looks.json (looks.py), rooms.json and video.json.
          The Reel came out: it had been hidden and empty since the roster stopped featuring videos.
          THE DROPS came out in Wave 2 (call 4): Find Yourself is the one way to your photos. An old #drops link
          opens #find (the router below). .drops-rail stays in the stylesheet: the tape and the stories use it. ===== -->
     <section id="find" data-tab="photos"></section>
-
-    <section id="artpacks" data-tab="photos"></section>
 
     <!-- ===== THE TAPE — the house's own video. THE REEL below is different on
          purpose: that one is the roster's links out, this one is our footage. ===== -->
@@ -4429,7 +4427,6 @@ window.OTPLazy = window.OTPLazy || (function () {
     </section>
 
     <section id="map" data-tab="photos"></section>
-    <section id="takedown" data-tab="photos"></section>
 
     <!-- ===== THE COVER: the newest house story, picked by the page (10/10).
          The desk can pin slate.next over it; the pin holds until a newer story is out. ===== -->

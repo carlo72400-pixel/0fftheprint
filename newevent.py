@@ -626,12 +626,6 @@ color:var(--ink);width:46px;height:46px;border-radius:50%;cursor:pointer;font-si
 font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#f7b9dd;text-decoration:none;
 border:1px solid rgba(255,121,198,.45);border-radius:999px;padding:8px 14px;background:rgba(10,10,13,.75)}
 .lb-dl:hover{color:#0a0a0d;background:#f7b9dd}
-/* take it down: top left, across from the close button, so it never fights the
-   bottom row (full res, the counter, the looks, "I'm in this one") on a phone */
-.lb-td{position:fixed;left:18px;top:18px;z-index:12;font-family:var(--f-mono,monospace);
-font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);text-decoration:none;
-border:1px solid var(--line);border-radius:999px;padding:8px 14px;background:rgba(10,10,13,.75)}
-.lb-td:hover{color:#f7b9dd;border-color:rgba(255,121,198,.45)}
 .lb-count{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);
 font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;color:var(--muted)}
 @media (max-width:640px){.grid{columns:2 150px;column-gap:8px}.tile{margin-bottom:8px}
@@ -649,7 +643,6 @@ __LOOKSLINE__
   <div class="foot">Shot by 0FF THE PRINT &nbsp;·&nbsp;
     <a href="https://instagram.com/vamppsych" target="_blank" rel="noopener">@vamppsych</a>
     &nbsp;·&nbsp; Tagged in one of these? DM for the full-res file.<br>
-    In one you want gone? Open it and tap take it down. Your face, your call.<br>
     Want your own night shot? DM, or <a href="mailto:offtheprintcollective@gmail.com">offtheprintcollective@gmail.com</a>.</div>
 </div>
 <div class="lb" id="lb">
@@ -660,7 +653,6 @@ __LOOKSLINE__
   <div class="lb-looks" id="lblooks" hidden></div>
   <div class="lb-count" id="lbc"></div>
   <a class="lb-dl" id="lbdl" href="#" target="_blank" rel="noopener">full res &darr;</a>
-  <a class="lb-td" id="lbtd" href="mailto:offtheprintcollective@gmail.com">take it down</a>
 </div>
 <script>
 const MEDIA = __MEDIA__;
@@ -703,18 +695,6 @@ function show(i){
   // so it saves rather than navigating anyway.
   const dl=document.getElementById('lbdl');
   if(v.full){dl.href=v.full;dl.style.display='';}else{dl.style.display='none';}
-  // Take it down: the same email the Photos tab form writes, this frame filled in.
-  // OTPNight is set on the last line of this script, before anyone can tap a tile.
-  // Photo is the file name (media/017_t.jpg -> 017): the frame number shifts when an
-  // earlier photo comes down, the name never does, and takedown.py --stem takes it as is.
-  const nt=window.OTPNight||{}, fr=cur+1, dot=' '+String.fromCharCode(183)+' ';
-  const stem=String(m.thumb||'').split('/').pop().replace('_t.jpg','');
-  document.getElementById('lbtd').href='mailto:offtheprintcollective@gmail.com?subject='+
-    encodeURIComponent('TAKE IT DOWN'+dot+(nt.title||'')+dot+'frame '+fr)+'&body='+
-    encodeURIComponent(['TAKE IT DOWN','','Night: '+(nt.title||'')+' ('+(nt.slug||'')+')','Frame: '+fr,
-      'Photo: '+stem,
-      'Link: https://0fftheprint.com/events/'+(nt.slug||'')+'/#f'+fr,'Reach me: ','',
-      '(sent from 0fftheprint.com, the night page)'].join(String.fromCharCode(10)));
   const multi = m.looks && m.looks.length>1;
   if(multi){
     chips.innerHTML = m.looks.map(x=>`<button type="button"${x.name===v.name?' class="on"':''} data-look="${esc(x.name)}">${esc(x.name)}</button>`).join('');
