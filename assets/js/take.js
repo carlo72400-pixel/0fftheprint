@@ -6,11 +6,10 @@
  *   THE FEED   OTP.feed() answers with roll_feed(60, every post) (045): every post a member may see, the public ones
  *              and the members-only ones, newest first, in the shape the timeline's own renderer already draws.
  *              Nobody signed in gets nothing here (the Roll's door card shows instead).
- *   A POST     a post with a photo is members only, the way the Roll's own box posts (membersOnly, and the photo goes
- *              up as a Roll photo). A post with NO photo cannot be members only yet: the database refuses it ("A post
- *              on the Roll needs a photo", 045), so words alone go up the way the timeline's box always posted them,
- *              where everyone can see them, and the line under the box says so. Putting words behind the door too is
- *              a database change (a migration, his click), not something this page can do.
+ *   A POST     a post with a photo is sent members only, the way the Roll's own box posts (membersOnly, and the photo
+ *              goes up as a Roll photo). Since migration 053 the database decides anyway: every new post by a member
+ *              goes behind the door, words alone included, whatever this page sends, and the line under the box says
+ *              so. Only the desk's own posts stay public unless the desk flags them.
  *   LINKS      the page lives one folder down with <base href="../">, so a bare #link would leave for the front
  *              page. Bare #links stay here; a link to one of the old home's tabs goes to that place on the street.
  *
@@ -59,7 +58,7 @@
     card.querySelectorAll('a[href="join/?next=home"]').forEach(function (a) { a.setAttribute('href', 'join/?next=take'); });
   }
   /* the box's own line, and the Roll's heading, in the one timeline's words */
-  var NOTE = 'Photos stay behind the door. A post with no photo can be seen by everyone.';
+  var NOTE = 'What you post here stays behind the door. Members only.';
   function words() {
     d.querySelectorAll('.rl-door').forEach(reword);
     var n = d.querySelector('#composer .cnote'); if (n && n.textContent !== NOTE) n.textContent = NOTE;
