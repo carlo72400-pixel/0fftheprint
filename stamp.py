@@ -77,7 +77,9 @@ FLOATING = "supabase-js@" + "2/"   # split so a repo grep for the floating tag n
 PIN_TWINS = {"newstory.py": (PIN_URL, PIN_SRI), "assets/js/sealed.js": (PIN_URL, PIN_SRI)}
 
 # every document that loads them
-DOCS = ["index.html", "join/index.html", "compose/index.html", "desk/index.html",
+# 11/12 home swap: the old home is home.html. index.html is the street (built by the street kit in Drive); it keeps the
+# login scripts in a <template>, and those two tags are the only thing here that matches in it.
+DOCS = ["home.html", "index.html", "join/index.html", "compose/index.html", "desk/index.html",
         "board/index.html", "c/index.html", "dates/index.html", "events/index.html",
         "desk/goals/index.html",
         # Any page that loads desk.js belongs here. A page left off this list

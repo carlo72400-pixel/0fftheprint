@@ -86,7 +86,7 @@ def referenced(only=None):
     if only:
         targets = [os.path.join(content, f) for f in only]
     else:
-        targets = [os.path.join(HERE, "index.html")]
+        targets = [os.path.join(HERE, "home.html")]      # the old home (11/12: index.html is the street, it names no assets/ art)
         if os.path.isdir(content):
             targets += [
                 os.path.join(content, f)
