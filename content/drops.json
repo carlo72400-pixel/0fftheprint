@@ -3,6 +3,14 @@
   "items": [
     {
       "up": "2026-11-11",
+      "title": "RELIQUARY origins #3: Lena",
+      "line": "Lena's origin, told on the certificates she writes for every fake she sells. Every fake got one. The real one didn't. 10 slides, read top to bottom.",
+      "link": "reliquary/lena/",
+      "thumb": "reliquary/lena/card.jpg",
+      "go": "read lena's origin"
+    },
+    {
+      "up": "2026-11-11",
       "title": "RELIQUARY origins #2: Relic",
       "line": "Relic's origin, seen through the glass of her display case. Everybody looked at her. Nobody saw her. 10 slides, read top to bottom.",
       "link": "reliquary/relic/",
