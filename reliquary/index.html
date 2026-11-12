@@ -104,6 +104,9 @@ footer b{color:var(--ink)}
 .card .m{font-size:13px;color:var(--mute)}
 .card .start{display:inline-block;margin:0 4px 4px 0;padding:3px 6px;background:var(--gold);color:#000;font:800 11px/1.1 system-ui,sans-serif;
   letter-spacing:.12em;border:2px solid #000;box-shadow:2px 2px 0 #000}
+.vault-note{margin:12px auto 0;max-width:560px;text-align:center;color:var(--gold);font-size:14px;font-weight:700}
+.card .offsite{display:inline-block;margin:0 5px 2px 0;padding:2px 5px;background:var(--red);color:#fff;font:800 10px/1.2 system-ui,sans-serif;
+  letter-spacing:.12em;border:2px solid #000}
 .lorehead{text-align:center;padding-top:56px;scroll-margin-top:8px}
 .private{max-width:760px;margin:0 auto;padding:14px 16px 16px;border-bottom:3px solid #000;background:#0b0507;box-shadow:0 4px 0 var(--red)}
 .private p{margin:0 0 8px;font-size:15px;color:var(--ink)}
@@ -222,6 +225,7 @@ footer b{color:var(--ink)}
 </section>
 <footer><b>RELIQUARY</b> is a heist comedy by VAMPPSYCH. Every saint in Santa Ossa is made up.</footer>
 <div class="toast" role="status" aria-live="polite"></div>
+<script src="read/vault.js" data-mode="shelf" data-root="./" defer></script>
 <script>
 (function(){
   var toast=document.querySelector('.toast'),tt;

@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>RELIQUARY</title>
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+<!-- RELIQUARY's private reader (11/12). Source: Drive reliquary/manhwa/_release/site/read/ (release.py copies it here).
+     For the desk only: vault.js opens a comic that isn't out yet when his login is on the phone; anybody else reads the line below. -->
+<style id="vault-shell">
+html{background:#120709;color:#f7f2ea;font:17px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+body{margin:0;min-height:100vh;display:grid;place-items:center;text-align:center;padding:24px max(16px,env(safe-area-inset-left)) 24px max(16px,env(safe-area-inset-right))}
+main{display:flex;flex-direction:column;gap:14px;align-items:center}
+p{margin:0}
+a{display:inline-flex;align-items:center;min-height:48px;padding:0 18px;border:3px solid #000;background:#ffd23f;color:#000;font-weight:800;text-decoration:none;box-shadow:4px 4px 0 #000}
+</style>
+</head>
+<body>
+<main>
+  <p id="vault-msg">Opening&hellip;</p>
+  <p><a href="../">Back to RELIQUARY</a></p>
+</main>
+<script src="vault.js" data-mode="read" data-root="../" defer></script>
+</body>
+</html>
