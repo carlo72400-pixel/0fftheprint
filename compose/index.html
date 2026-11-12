@@ -67,7 +67,7 @@
   <a class="back" href="../">&larr; 0FF THE PRINT</a>
   <h1>Your posts</h1>
   <!-- 045 (call 1): the Take on Home is everyone, the Roll on the Coven tab is members only, and this page lists what you put on both -->
-  <div class="sub" id="sub">everything you posted &nbsp;·&nbsp; <a href="../home.html#take">the Take</a> is everyone, <a href="../home.html#roll">the Roll</a> is members only<span id="links" hidden> &nbsp;·&nbsp;
+  <div class="sub" id="sub">everything you posted &nbsp;·&nbsp; <a href="../take/">the Take</a> is everyone, <a href="../take/">the Roll</a> is members only<span id="links" hidden> &nbsp;·&nbsp;
     <a href="../my/#account">YOUR ACCOUNT &rarr;</a><span data-holder hidden> &nbsp;·&nbsp;
     <a href="../card/">YOUR CARD &rarr;</a> &nbsp;·&nbsp;
     <a href="../word/new/">WRITE A STORY &rarr;</a></span><span data-open> &nbsp;·&nbsp;
@@ -143,7 +143,7 @@
       <button class="btn ghost sm" id="out" type="button">Sign out</button></div>
     ${me.failed ? `<div class="note">Could not read your card just now. Reload in a minute.</div>` : ''}
     ${locked ? `<div class="note" id="locknote">${lockNote}</div>`
-      : `<div class="note">Post from <a href="../home.html#take">Home</a> now. The Take is for everyone. The Roll, on the <a href="../home.html#roll">Coven tab</a>, is members only.</div>`}
+      : `<div class="note">Post from <a href="../take/">Home</a> now. The Take is for everyone. The Roll, on the <a href="../take/">Coven tab</a>, is members only.</div>`}
     ${holder ? `<label>Your color</label>
     <div class="swatches" id="sw"></div>
     <div class="note" id="swnote">This colors your posts on the timeline, and these pages while you're logged in.</div>` : ''}`;

@@ -5071,12 +5071,12 @@ const SEC = {
     if (!Array.isArray(L)) return '';
     const mine = L.filter(r => r && ((V.mine && r.mine) || (r.sid && r.sid === V.sid) || (V.card && r.card_slug === V.card))).slice(0, 6);
     const all = V.mine ? `<p class="sp-fn"><a href="${esc(siteUrl('compose/'))}">All your posts →</a></p>` : '';
-    if (!mine.length) return V.mine ? `<h3 class="sp-bh">${f}'s posts</h3><div class="sp-in"><p class="sp-empty">Nothing lately. <a href="${esc(siteUrl('#roll'))}">Post a photo on the Roll</a> and it shows up here.</p>${all}</div>` : '';
+    if (!mine.length) return V.mine ? `<h3 class="sp-bh">${f}'s posts</h3><div class="sp-in"><p class="sp-empty">Nothing lately. <a href="${esc(siteUrl('take/'))}">Post a photo on the Roll</a> and it shows up here.</p>${all}</div>` : '';
     const ours = u => /^https:\/\/frqpvcpyglhmerwpvosl\.supabase\.co\/storage\/v1\/object\/public\/(posts|take)\//.test(u || ''), isVid = u => /\.(mp4|mov|webm|m4v)(\?|$)/i.test(u || '');
     return `<h3 class="sp-bh">${f}'s posts</h3><div class="sp-in"><div class="sp-grid3">${mine.map(r => r.image_url && ours(r.image_url) && !isVid(r.image_url)
-      ? `<a class="sp-g" href="${esc(siteUrl((+r.id > 0 ? '?post=' + (+r.id) : '') + '#roll'))}" title="${esc(ago(r.created_at))} ago"><img src="${esc(r.image_url)}" alt="${esc(r.image_alt || '')}" loading="lazy" decoding="async"></a>`
-      : `<a class="sp-g txt" href="${esc(siteUrl('#take'))}"><span>${esc(String(r.text || (isVid(r.image_url) ? '▶ a clip' : '')).slice(0, 120))}</span></a>`).join('')}</div>
-      <p class="sp-fn"><a href="${esc(siteUrl('#roll'))}">The Roll →</a></p>${all}</div>`;
+      ? `<a class="sp-g" href="${esc(siteUrl('take/' + (+r.id > 0 ? '?post=' + (+r.id) : '')))}" title="${esc(ago(r.created_at))} ago"><img src="${esc(r.image_url)}" alt="${esc(r.image_alt || '')}" loading="lazy" decoding="async"></a>`
+      : `<a class="sp-g txt" href="${esc(siteUrl('take/'))}"><span>${esc(String(r.text || (isVid(r.image_url) ? '▶ a clip' : '')).slice(0, 120))}</span></a>`).join('')}</div>
+      <p class="sp-fn"><a href="${esc(siteUrl('take/'))}">The Roll →</a></p>${all}</div>`;
   },
   desk(V){
     if (!(SOC.me && SOC.me.admin) || V.mine) return '';

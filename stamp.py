@@ -57,13 +57,13 @@ TRACKED = ["assets/js/desk.js", "assets/js/door.js", "assets/js/composer.js",
            "assets/js/dates.js", "assets/js/calendar.js", "assets/js/sealed.js",
            "assets/js/word.js", "assets/js/cathedral.js", "assets/js/binder.js",
            "assets/js/lounge.js", "assets/js/music.js", "assets/js/people.js", "assets/js/photos.js",
-           "assets/js/board-members.js", "supabase-config.js"]
+           "assets/js/board-members.js", "assets/js/take.js", "supabase-config.js"]
 
 # stylesheet path (relative to ROOT)  ->  how it appears in href="..."
 TRACKED_CSS = ["assets/css/cathedral.css", "assets/css/pack.css",
                "assets/css/sealed.css", "assets/css/calendar.css",
                "assets/css/binder.css", "assets/css/lounge.css", "assets/css/music.css", "assets/css/people.css", "assets/css/photos.css",
-               "assets/css/auth.css", "assets/css/board-members.css"]
+               "assets/css/auth.css", "assets/css/board-members.css", "assets/css/take.css"]
 
 # THE PIN (10/13): one exact supabase-js release, with the sha384 of that exact file (fetched once from this URL)
 PIN_VERSION = "2.117.2"
@@ -93,7 +93,9 @@ DOCS = ["home.html", "index.html", "join/index.html", "compose/index.html", "des
         # copies the homepage's stamps at build time; this keeps it current
         # between builds. Only its two script tags match, the sealed payload
         # is ciphertext and never does.
-        "wall/index.html"] + [
+        "wall/index.html",
+        # 11/12: The Take on its own page. maketake.py builds it from home.html (main() runs it first), then it is stamped like any page.
+        "take/index.html"] + [
         # every story page carries desk.js + word.js
         str(p.relative_to(ROOT)) for p in sorted(ROOT.glob("word/*/index.html"))] + [
         # every baked card back carries desk.js + cardback.js. bake.py copies
@@ -170,6 +172,12 @@ def stamp_text(text, stamps=None, css=None):
 
 
 def main() -> int:
+    # take/index.html is home.html with only the timeline on: rebuild it first so it always follows home.html
+    try:
+        import maketake
+        maketake.build()
+    except Exception as e:
+        print(f"  take/index.html NOT rebuilt ({e}); it is as it was")
     stamps, css = current()
 
     if not stamps:
@@ -215,4 +223,12 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    rc = main()
+    # every edit ends here, so this is where the front page (built from the repo by the street kit) catches up.
+    # It never fails this script (street_rebuild.py), and the page it writes already carries these same stamps.
+    try:
+        import street_rebuild
+        street_rebuild.rebuild("stamp.py")
+    except Exception as e:
+        print(f"street: NOT rebuilt ({e}). The front page is as it was.")
+    sys.exit(rc)

@@ -1,0 +1,24 @@
+/* THE TAKE on its own page (take/index.html = home.html with only the timeline on, built by maketake.py).
+   Everything here is scoped to html[data-take], so the old home never sees it. Run stamp.py after editing. */
+html[data-take] .ticker,
+html[data-take] nav.site,
+html[data-take] nav.tabbar,
+html[data-take] #hero,
+html[data-take] .tabroom,
+html[data-take] aside.sidebar,
+html[data-take] footer.site,
+html[data-take] #take-tip,
+html[data-take] #take-cta{display:none!important}
+html[data-take] main.feed > section{display:none!important}
+html[data-take][data-door="in"] main.feed > section#take{display:block!important}
+html[data-take]:not([data-door="in"]) main.feed > section#roll{display:block!important}
+html[data-take] .wrap{display:block!important;max-width:680px;margin:0 auto;padding:64px 12px 40px}
+html[data-take] main.feed{display:block;width:auto;max-width:none;margin:0}
+html[data-take] body{padding-bottom:0}
+.take-street{position:fixed;left:max(12px,env(safe-area-inset-left,0px));top:max(6px,env(safe-area-inset-top,0px));z-index:9000;
+  display:inline-flex;align-items:center;gap:6px;min-width:96px;min-height:44px;padding:0 14px;border-radius:999px;
+  background:linear-gradient(#3d3b45,#25232b);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 4px 0 #08070b,0 6px 12px rgba(0,0,0,.5);
+  color:#f1eef6;font:700 12px/1 system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;text-decoration:none}
+.take-street span{font-size:18px;line-height:1}
+.take-street:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.take-lit{outline:2px solid #ff79c6;outline-offset:4px}

@@ -1097,4 +1097,12 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    finally:
+        # the front page is built from what this script just changed: rebuild it (it never fails this script, see street_rebuild.py)
+        try:
+            import street_rebuild
+            street_rebuild.rebuild("a night changed")
+        except Exception as _e:
+            print(f"street: NOT rebuilt ({_e}). The front page is as it was.")
