@@ -2954,9 +2954,10 @@ a.key{cursor:pointer}
 .tm-caprow{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:stretch;gap:6px}
 .tm-caprow textarea{min-width:0;height:50px;padding:5px 10px;border:0;border-radius:10px;background:#fff8fb;color:#2a0d18;font:500 16px/1.25 var(--f-text);resize:none;overflow:hidden}
 .tm-caprow .key{min-height:50px;padding:0 10px;font-size:11px;white-space:nowrap}
-/* the tools: three keys and a bin, then one strip for whichever tool is open (it scrolls sideways, the screen never does) */
-.tm-tools{display:grid;grid-template-columns:1fr 1fr 1.25fr auto;gap:6px}
-.tm-tools .key{min-height:44px;min-width:0;padding:0 6px;font-size:11.5px}
+/* the tools: four keys and a bin, then one strip for whichever tool is open (it scrolls sideways, the screen never does) */
+.tm-tools{display:grid;grid-template-columns:1.05fr 1fr .78fr 1.42fr 44px;gap:6px}
+.tm-tools .key{position:relative;min-height:44px;min-width:0;padding:0 4px;font-size:11.5px;letter-spacing:.05em}
+.tm-tools .key.tm-new::after{content:"";position:absolute;right:5px;top:5px;width:9px;height:9px;border-radius:50%;background:#ff6aa8;box-shadow:0 0 0 2px #25232b}      /* a cast frame just unlocked: it is in here */
 .tm-tools .key[aria-pressed="true"]{background:linear-gradient(#f8c3d6,#e693b3);color:var(--pink-ink,#2a0d18)}
 .tm-tools .tm-bin[disabled]{opacity:.38}
 .tm-strip{display:flex;gap:6px;overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;padding:2px 2px 4px;scrollbar-width:none}
@@ -2975,6 +2976,40 @@ a.key{cursor:pointer}
   .pl{transform:none}
   .pl-inner{transition:none}
 }
+
+/* ---------- THE FRAMES (11/12): a frame is a printed PAPER under everything, and the caption on torn label tape where
+   that paper is dark or busy. The booth puts no stickers on it: those are theirs to add. tm.js sets the files
+   (--pf-*) on the print only when a frame is worn, so nothing here is asked for on a plain print. No foil, no gold,
+   nothing that moves by itself. ---------- */
+.pl-pap{position:absolute;inset:0;background-color:var(--pf-rgb,#f4f1ea);background-image:var(--pf-gr,none),var(--pf-pap,none);background-size:calc(var(--cw) / 20 * 8) auto,100% auto;background-position:0 0,50% 0;background-repeat:repeat,no-repeat;background-blend-mode:overlay,normal}
+.pl-pap[hidden],.pl-girl[hidden]{display:none}
+.pl-pap::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 .7em rgba(0,0,0,.2)}          /* wear: a darker rim */
+.pl.fr .pl-photo{box-shadow:0 0 0 .09em #0e0a10}                                                     /* the photo, sunk a hair into the frame */
+.pl.fr .pl-photo::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 .3em rgba(0,0,0,.6);pointer-events:none}
+/* a cast frame: she leans in from the bottom corner. She is the frame, not a sticker: a touch goes through her. */
+.pl-girl{position:absolute;display:block;pointer-events:none;background-repeat:no-repeat;background-size:100% 100%}
+/* the caption on tape: one torn strip to a line */
+.pl-cap b.taped{line-height:1.36}
+.pl-ln{position:relative;z-index:0;display:inline-block;padding:0 .5em;font-style:normal}
+.pl-tp{position:absolute;z-index:-1;left:0;right:0;top:.09em;bottom:.09em;text-decoration:none;filter:drop-shadow(.04em .1em .05em rgba(0,0,0,.4))}
+.pl-tp s{position:absolute;inset:0;text-decoration:none}
+/* the cast's note on a printed frame: on its own bit of white tape, so it reads on any paper */
+.pl.fr .pl-note::before{content:"";position:absolute;z-index:-1;inset:-.22em -.38em;background:#fbf7ee;clip-path:polygon(0 7%,14% 0,30% 6%,50% 1%,70% 7%,88% 0,100% 6%,98.5% 50%,100% 95%,85% 100%,66% 94%,45% 100%,25% 93%,10% 100%,0 94%,1.5% 50%)}
+/* the FRAME strip: each key is a little picture of its frame DRESSED (an example), its name, and what kind it is */
+.tm-fr{position:relative;display:flex;align-items:center;gap:8px;height:60px;padding:0 12px 0 4px;text-align:left}
+.tm-fr-pic{flex:none;display:block;width:44px;height:53px;border-radius:3px;background:var(--pf-keys,none) 0 0/500% 300% no-repeat;box-shadow:0 1px 3px rgba(0,0,0,.35)}
+.tm-fr span{display:block}
+.tm-fr b{display:block;font:700 11.5px/1.1 var(--f-text);letter-spacing:.06em;text-transform:uppercase}
+.tm-fr small{display:block;margin-top:4px;font:600 10px/1 var(--f-text);letter-spacing:.03em;color:#6a5a66}
+.tm-fr.locked{background:#3a1636;color:#f6eef4}
+.tm-fr.locked small{color:#e3c3d9}
+.tm-fr.locked .tm-fr-pic{filter:grayscale(1) brightness(.5)}
+/* the padlock on a locked one: chrome, shut */
+.tm-fr-lock{position:absolute;left:17px;top:28px;width:18px;height:14px;border-radius:3px;background:linear-gradient(#fbfcfe,#aeb6c4);box-shadow:0 1px 0 #6f7786,0 2px 5px rgba(0,0,0,.6)}
+.tm-fr-lock::before{content:"";position:absolute;left:3px;top:-9px;width:7px;height:10px;border:2.5px solid #e4e8ef;border-bottom:0;border-radius:6px 6px 0 0}
+.tm-fr-lock::after{content:"";position:absolute;left:7.5px;top:4px;width:3px;height:6px;border-radius:2px;background:#3a1636}
+.tm-fr-note{flex:none;align-self:center;width:128px;padding:0 2px 0 6px;font:600 11px/1.25 var(--f-text);white-space:normal;color:#ffd9ea}
+.tm-fr-note b{display:block;margin-bottom:2px;font:700 10.5px/1 var(--f-text);letter-spacing:.12em;text-transform:uppercase;color:#fff}
 
 </style>
 </head>
@@ -6390,11 +6425,23 @@ a.key{cursor:pointer}
    LIGHT LEAK, BLACK FRAME, DOUBLE EXPOSURE. Which one is decided when it prints, from a number this phone keeps, so the
    same frame on the same phone always comes out the same; it is stored with the print and named on its back.
 
-   What stays on this phone and goes nowhere: the prints you kept ('st-cards'), and that number ('st-card-seed').
+   THE FRAMES (11/12, his "by custom frame i mean we need to flesh it out", then "I like the frames as is. Just
+   remove the stickers and then make them be able to add their own stickers"): the FRAME key beside Font, Ink and
+   Stickers. PLAIN is the white Polaroid and where every print starts. A printed frame is its PAPER (baked by
+   tm_frames.py: grain, mottle, a faint one-ink print of his drawings, its own wear) and, on a dark or busy paper, the
+   torn label tape under the caption. The booth puts no stickers on it: people add their own, and while a frame is on
+   the Stickers tray leads with that frame's own family of drawings, then the regular 24. Each frame's key shows it
+   dressed up, as an example. The house set is everyone's; a night's own frame shows only on that night's photos; the
+   cast frames (one of the cast leans in from the bottom corner) start locked and a new print unlocks one now and then
+   (site_mode.TM_CAST_ODDS). A printed frame owns the border: the doodles and the black border step aside while it is
+   on. Nothing of a frame is asked for until FRAME is opened or a framed print is shown.
+
+   What stays on this phone and goes nowhere: the prints you kept ('st-cards'), that number ('st-card-seed'), and the
+   cast frames this phone has unlocked ('st-frames').
    Nothing here talks to the database, except one thing a logged-in Crypt member can choose: "Tag me in this frame",
    which is the site's own call (OTP.tagFrame). Errors are logged, never swallowed. ---------- */
 (() => {
-  const CFG = {"nights":[{"s":"2026-10-31-the-odd-ball","t":"THE ODD BALL","when":"OCT 31, 2026","d":"10.31.26","lab":"Justine's Brasserie"},{"s":"2026-10-03-pulse-angels-3","t":"PULSE ANGELS 3","when":"OCT 3, 2026","d":"10.03.26","lab":"21st Street Co-op"},{"s":"2026-09-25-wap","t":"WAP","when":"SEP 25, 2026","d":"09.25.26","lab":"Private Park"},{"s":"2026-09-24-harambe-4-ever","t":"HARAMBE 4 EVER","when":"SEP 24, 2026","d":"09.24.26","lab":"Paper Tiger"},{"s":"2026-09-20-chill-and-smoke","t":"CHILL & SMOKE","when":"SEP 20, 2026","d":"09.20.26","lab":"Exotic Takeout"},{"s":"2026-09-18-zen-haus","t":"THIRD FRIDAY NIGHT MARKET","when":"SEP 18, 2026","d":"09.18.26","lab":"Zen Haus"},{"s":"2026-09-18-baptism","t":"BAPTISM","when":"SEP 18, 2026","d":"09.18.26","lab":"The Deco"},{"s":"2026-09-17-bar-hop","t":"BAR HOP","when":"SEP 17, 2026","d":"09.17.26","lab":"Club 212 · Bar House"},{"s":"2026-09-16-sadboyz-club","t":"SADBOYZ CLUB","when":"SEP 16, 2026","d":"09.16.26","lab":"Wav Room"},{"s":"2026-09-13-burlesque-night","t":"BURLESQUE NIGHT","when":"SEP 13, 2026","d":"09.13.26","lab":"Rah Rah Room"},{"s":"2026-09-12-lucha-night","t":"LUCHA NIGHT","when":"SEP 12, 2026","d":"09.12.26","lab":"El Luchador Bar"},{"s":"2026-09-12-migx","t":"MIGX","when":"SEP 12, 2026","d":"09.12.26","lab":"Club 212"},{"s":"2026-09-11-brainrot","t":"BRAINROT","when":"SEP 11, 2026","d":"09.11.26","lab":"New Guild Co-op"},{"s":"2026-09-01-billy-release-party","t":"B.I.L.L.Y RELEASE PARTY","when":"SEP 1, 2026","d":"09.01.26","lab":"Slackers"},{"s":"2026-08-30-clown-church","t":"CLOWN CHURCH","when":"AUG 30, 2026","d":"08.30.26","lab":"Rah Rah Room"},{"s":"2026-08-25-the-mix","t":"RESIDENT EVIL VS SILENT HILL","when":"AUG 25, 2026","d":"08.25.26","lab":"The Mix"},{"s":"2026-08-23-the-showcase","t":"THE SHOWCASE","when":"AUG 23, 2026","d":"08.23.26","lab":"The Mix"},{"s":"2026-08-21-zen-haus","t":"THIRD FRIDAY NIGHT MARKET","when":"AUG 21, 2026","d":"08.21.26","lab":"Zen Haus"},{"s":"2026-08-16-the-mix","t":"THE MIX","when":"AUG 16, 2026","d":"08.16.26","lab":"The Mix"},{"s":"2026-08-14-blade-rave","t":"BLADE RAVE","when":"AUG 14, 2026","d":"08.14.26","lab":"Paper Tiger"}],"odds":{"double":2,"doodled":5,"note":5,"leak":5,"black":5},"caps":["caught in 4k","who let you in","main character hours","home by 10 they said","the aux was a mistake","zero thoughts all vibes","witness number one","never beating the charges","do not text them","proof you went outside","rent was due","lost the group again","told you so","no notes. ok one note","not sorry at all","back row behavior","started the dance circle","ended the dance circle","plot twist. it was you","still here at close","allegedly","i can explain","do not look at me","menace on the loose","the night won","you again","one more song they said","certified yapper","first one on the floor","last one off the floor","needs a nap and a snack","kept the receipts","we saw that","mom would be so proud","did not come to play","came to play. lost","ok superstar relax","no thoughts just flash","yes this is evidence","ate and left no crumbs","villain era starts here","camera found you first","you blinked. we kept it","this goes on the fridge","group chat is going to hear","blame the dj","sound check was a lie","say less. pose more"],"cast":{"Rin":["saw that.","nice try.","you owe me a dance.","i was here first.","say cheese louder."],"Nyx":["saw you.","you blinked.","i counted three poses.","try again next week.","not bad."],"Putty":["nice try.","do it again.","i dare you.","that was loud.","ha."],"Cinder":["noted.","bold move.","keep this one.","i am telling everyone.","we need to talk."],"Kuro":["play it back.","one more take.","off beat but ok.","turn it up.","you owe the dj."],"Bala":["front row next time.","save me a spot.","wave back next time.","i saw the whole thing.","pose harder."],"Lena":["sure you did.","called it.","keep the proof.","i believe you.","real one."]},"castNames":["Rin","Nyx","Putty","Cinder","Kuro","Bala","Lena"],"ink":{"doodles":12},"faces":[{"id":"gloria","fam":"PL Gloria","label":"Ballpoint","k":0.86,"up":false,"tape":false,"url":"street/f/pl-gloria.woff2?v=65a7bfee"},{"id":"marker","fam":"PL Marker","label":"Marker","k":0.84,"up":false,"tape":false,"url":"street/f/pl-marker.woff2?v=ffc46f2e"},{"id":"type","fam":"PL Type","label":"Typewriter","k":0.9,"up":false,"tape":false,"url":"street/f/pl-type.woff2?v=f60c1fac"},{"id":"script","fam":"PL Script","label":"Script","k":0.92,"up":false,"tape":false,"url":"street/f/pl-script.woff2?v=7304d0af"},{"id":"bebas","fam":"PL Bebas","label":"Poster","k":1.12,"up":true,"tape":false,"url":"street/f/pl-bebas.woff2?v=e70eccbb"},{"id":"tape","fam":"PL Tape","label":"Label","k":0.62,"up":true,"tape":true,"url":"street/f/pl-tape.woff2?v=2e3e59d4"},{"id":"receipt","fam":"PL Receipt","label":"Receipt","k":1.1,"up":false,"tape":false,"url":"street/f/pl-receipt.woff2?v=2051dacc"},{"id":"bangers","fam":"PL Bangers","label":"Comic","k":1.0,"up":true,"tape":false,"url":"street/f/pl-bangers.woff2?v=46096cca"},{"id":"titan","fam":"PL Titan","label":"Bubble","k":0.84,"up":false,"tape":false,"url":"street/f/pl-titan.woff2?v=0877241b"},{"id":"vp","fam":"VP Deadeye","label":"Deadeye","k":1,"up":false,"tape":false,"url":""}],"face":"gloria","stk":{"n":24,"cols":6,"rows":4}};
+  const CFG = {"nights":[{"s":"2026-10-31-the-odd-ball","t":"THE ODD BALL","when":"OCT 31, 2026","d":"10.31.26","lab":"Justine's Brasserie"},{"s":"2026-10-03-pulse-angels-3","t":"PULSE ANGELS 3","when":"OCT 3, 2026","d":"10.03.26","lab":"21st Street Co-op"},{"s":"2026-09-25-wap","t":"WAP","when":"SEP 25, 2026","d":"09.25.26","lab":"Private Park"},{"s":"2026-09-24-harambe-4-ever","t":"HARAMBE 4 EVER","when":"SEP 24, 2026","d":"09.24.26","lab":"Paper Tiger"},{"s":"2026-09-20-chill-and-smoke","t":"CHILL & SMOKE","when":"SEP 20, 2026","d":"09.20.26","lab":"Exotic Takeout"},{"s":"2026-09-18-zen-haus","t":"THIRD FRIDAY NIGHT MARKET","when":"SEP 18, 2026","d":"09.18.26","lab":"Zen Haus"},{"s":"2026-09-18-baptism","t":"BAPTISM","when":"SEP 18, 2026","d":"09.18.26","lab":"The Deco"},{"s":"2026-09-17-bar-hop","t":"BAR HOP","when":"SEP 17, 2026","d":"09.17.26","lab":"Club 212 · Bar House"},{"s":"2026-09-16-sadboyz-club","t":"SADBOYZ CLUB","when":"SEP 16, 2026","d":"09.16.26","lab":"Wav Room"},{"s":"2026-09-13-burlesque-night","t":"BURLESQUE NIGHT","when":"SEP 13, 2026","d":"09.13.26","lab":"Rah Rah Room"},{"s":"2026-09-12-lucha-night","t":"LUCHA NIGHT","when":"SEP 12, 2026","d":"09.12.26","lab":"El Luchador Bar"},{"s":"2026-09-12-migx","t":"MIGX","when":"SEP 12, 2026","d":"09.12.26","lab":"Club 212"},{"s":"2026-09-11-brainrot","t":"BRAINROT","when":"SEP 11, 2026","d":"09.11.26","lab":"New Guild Co-op"},{"s":"2026-09-01-billy-release-party","t":"B.I.L.L.Y RELEASE PARTY","when":"SEP 1, 2026","d":"09.01.26","lab":"Slackers"},{"s":"2026-08-30-clown-church","t":"CLOWN CHURCH","when":"AUG 30, 2026","d":"08.30.26","lab":"Rah Rah Room"},{"s":"2026-08-25-the-mix","t":"RESIDENT EVIL VS SILENT HILL","when":"AUG 25, 2026","d":"08.25.26","lab":"The Mix"},{"s":"2026-08-23-the-showcase","t":"THE SHOWCASE","when":"AUG 23, 2026","d":"08.23.26","lab":"The Mix"},{"s":"2026-08-21-zen-haus","t":"THIRD FRIDAY NIGHT MARKET","when":"AUG 21, 2026","d":"08.21.26","lab":"Zen Haus"},{"s":"2026-08-16-the-mix","t":"THE MIX","when":"AUG 16, 2026","d":"08.16.26","lab":"The Mix"},{"s":"2026-08-14-blade-rave","t":"BLADE RAVE","when":"AUG 14, 2026","d":"08.14.26","lab":"Paper Tiger"}],"odds":{"double":2,"doodled":5,"note":5,"leak":5,"black":5},"caps":["caught in 4k","who let you in","main character hours","home by 10 they said","the aux was a mistake","zero thoughts all vibes","witness number one","never beating the charges","do not text them","proof you went outside","rent was due","lost the group again","told you so","no notes. ok one note","not sorry at all","back row behavior","started the dance circle","ended the dance circle","plot twist. it was you","still here at close","allegedly","i can explain","do not look at me","menace on the loose","the night won","you again","one more song they said","certified yapper","first one on the floor","last one off the floor","needs a nap and a snack","kept the receipts","we saw that","mom would be so proud","did not come to play","came to play. lost","ok superstar relax","no thoughts just flash","yes this is evidence","ate and left no crumbs","villain era starts here","camera found you first","you blinked. we kept it","this goes on the fridge","group chat is going to hear","blame the dj","sound check was a lie","say less. pose more"],"cast":{"Rin":["saw that.","nice try.","you owe me a dance.","i was here first.","say cheese louder."],"Nyx":["saw you.","you blinked.","i counted three poses.","try again next week.","not bad."],"Putty":["nice try.","do it again.","i dare you.","that was loud.","ha."],"Cinder":["noted.","bold move.","keep this one.","i am telling everyone.","we need to talk."],"Kuro":["play it back.","one more take.","off beat but ok.","turn it up.","you owe the dj."],"Bala":["front row next time.","save me a spot.","wave back next time.","i saw the whole thing.","pose harder."],"Lena":["sure you did.","called it.","keep the proof.","i believe you.","real one."]},"castNames":["Rin","Nyx","Putty","Cinder","Kuro","Bala","Lena"],"ink":{"doodles":12},"faces":[{"id":"gloria","fam":"PL Gloria","label":"Ballpoint","k":0.86,"up":false,"tape":false,"url":"street/f/pl-gloria.woff2?v=65a7bfee"},{"id":"marker","fam":"PL Marker","label":"Marker","k":0.84,"up":false,"tape":false,"url":"street/f/pl-marker.woff2?v=ffc46f2e"},{"id":"type","fam":"PL Type","label":"Typewriter","k":0.9,"up":false,"tape":false,"url":"street/f/pl-type.woff2?v=f60c1fac"},{"id":"script","fam":"PL Script","label":"Script","k":0.92,"up":false,"tape":false,"url":"street/f/pl-script.woff2?v=7304d0af"},{"id":"bebas","fam":"PL Bebas","label":"Poster","k":1.12,"up":true,"tape":false,"url":"street/f/pl-bebas.woff2?v=e70eccbb"},{"id":"tape","fam":"PL Tape","label":"Label","k":0.62,"up":true,"tape":true,"url":"street/f/pl-tape.woff2?v=2e3e59d4"},{"id":"receipt","fam":"PL Receipt","label":"Receipt","k":1.1,"up":false,"tape":false,"url":"street/f/pl-receipt.woff2?v=2051dacc"},{"id":"bangers","fam":"PL Bangers","label":"Comic","k":1.0,"up":true,"tape":false,"url":"street/f/pl-bangers.woff2?v=46096cca"},{"id":"titan","fam":"PL Titan","label":"Bubble","k":0.84,"up":false,"tape":false,"url":"street/f/pl-titan.woff2?v=0877241b"},{"id":"vp","fam":"VP Deadeye","label":"Deadeye","k":1,"up":false,"tape":false,"url":""}],"face":"gloria","stk":{"n":24,"cols":6,"rows":4},"fr":{"list":[{"id":"bats","name":"BATS","line":"Cream paper, bats and roses.","kind":"house","night":"","paper":"street/s/pf-bats.webp?v=099b8855","girl":"","fig":null,"rgb":"#f0e9db","dark":false,"grain":"a","tape":"","cap":{"k":0,"b":0,"r":0,"p":0},"fam":"gothic","lead":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],"key":1},{"id":"drops","name":"BLOOD DROPS","line":"Pink paper, happy red drops.","kind":"house","night":"","paper":"street/s/pf-drops.webp?v=9503fb18","girl":"","fig":null,"rgb":"#ffc6da","dark":false,"grain":"a","tape":"","cap":{"k":0,"b":0,"r":0,"p":2},"fam":"kawaii","lead":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],"key":2},{"id":"floor","name":"DANCE FLOOR","line":"Black and white checks.","kind":"house","night":"","paper":"street/s/pf-floor.webp?v=ed368424","girl":"","fig":null,"rgb":"#ece6de","dark":false,"grain":"a","tape":"#faf6ec","cap":{"k":1,"b":1,"r":1,"p":1},"fam":"snap","lead":[5,6,7,8,9,10,11,0,1,2,3,4],"key":3},{"id":"chapel","name":"CHAPEL","line":"Dark purple, candles and bells.","kind":"house","night":"","paper":"street/s/pf-chapel.webp?v=9f75dc5a","girl":"","fig":null,"rgb":"#2e1238","dark":true,"grain":"b","tape":"#f0e2c8","cap":{"k":1,"b":1,"r":1,"p":1},"fam":"gothic","lead":[7,8,9,10,11,12,13,14,0,1,2,3,4,5,6,15],"key":4},{"id":"alley","name":"THE ALLEY","line":"Grey paper, the street out back.","kind":"house","night":"","paper":"street/s/pf-alley.webp?v=54967fa6","girl":"","fig":null,"rgb":"#4a4e5c","dark":true,"grain":"b","tape":"#ffd646","cap":{"k":1,"b":1,"r":1,"p":2},"fam":"street","lead":[0,1,2,3,4,5,6,7,8,9,10,11],"key":5},{"id":"photo","name":"PHOTO CO.","line":"Black paper, cameras and film.","kind":"house","night":"","paper":"street/s/pf-photo.webp?v=0c26c63f","girl":"","fig":null,"rgb":"#161218","dark":true,"grain":"b","tape":"#fff8fb","cap":{"k":1,"b":1,"r":1,"p":1},"fam":"snap","lead":[0,1,2,3,4,5,6,7,8,9,10,11],"key":6},{"id":"bloodbath","name":"BLOODBATH","line":"Red paper, white splatter. Only this night's photos wear it.","kind":"night","night":"bloodbath","paper":"street/s/pf-bloodbath.webp?v=ade3b8e7","girl":"","fig":null,"rgb":"#a8121f","dark":true,"grain":"b","tape":"#faf4e8","cap":{"k":1,"b":1,"r":1,"p":1},"fam":"ring","lead":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],"key":7},{"id":"rin","name":"RIN","line":"Rin leans in from the corner.","kind":"cast","night":"","paper":"street/s/pf-rin.webp?v=25493f12","girl":"street/s/pf-rin-in.webp?v=35c6f985","fig":[196,288],"rgb":"#fae2c8","dark":false,"grain":"a","tape":"","cap":{"k":0,"b":0,"r":0,"p":2},"fam":"hearts","lead":[0,1,2,3,4,5,6,7,8,9,10,11],"key":8},{"id":"nyx","name":"NYX","line":"Nyx leans in from the corner.","kind":"cast","night":"","paper":"street/s/pf-nyx.webp?v=b0ea7141","girl":"street/s/pf-nyx-in.webp?v=21f24761","fig":[196,288],"rgb":"#1c1e42","dark":true,"grain":"b","tape":"#f4ecd6","cap":{"k":1,"b":1,"r":1,"p":1},"fam":"hearts","lead":[9,4,1,0,3,2,5,6,7,8,10,11],"key":9},{"id":"putty","name":"PUTTY","line":"Putty leans in from the corner.","kind":"cast","night":"","paper":"street/s/pf-putty.webp?v=f2cf991b","girl":"street/s/pf-putty-in.webp?v=46671840","fig":[202,288],"rgb":"#faecd6","dark":false,"grain":"a","tape":"","cap":{"k":0,"b":0,"r":0,"p":2},"fam":"hearts","lead":[1,0,10,5,2,3,4,6,7,8,9,11],"key":10},{"id":"cinder","name":"CINDER","line":"Cinder leans in from the corner.","kind":"cast","night":"","paper":"street/s/pf-cinder.webp?v=4f8f8567","girl":"street/s/pf-cinder-in.webp?v=56ff31d2","fig":[192,288],"rgb":"#1e161a","dark":true,"grain":"b","tape":"#eee4de","cap":{"k":1,"b":1,"r":1,"p":1},"fam":"hearts","lead":[0,1,2,3,4,5,6,7,8,9,10,11],"key":11},{"id":"kuro","name":"KURO","line":"Kuro leans in from the corner.","kind":"cast","night":"","paper":"street/s/pf-kuro.webp?v=923b1226","girl":"street/s/pf-kuro-in.webp?v=48ebf6fa","fig":[170,288],"rgb":"#e4e4e8","dark":false,"grain":"a","tape":"","cap":{"k":0,"b":0,"r":0,"p":2},"fam":"hearts","lead":[1,0,2,3,4,5,6,7,8,9,10,11],"key":12},{"id":"bala","name":"BALA","line":"Bala leans in from the corner.","kind":"cast","night":"","paper":"street/s/pf-bala.webp?v=563cb224","girl":"street/s/pf-bala-in.webp?v=25ad2bc2","fig":[226,288],"rgb":"#ffb0ce","dark":false,"grain":"a","tape":"","cap":{"k":0,"b":0,"r":0,"p":2},"fam":"hearts","lead":[0,1,3,5,7,6,2,4,8,9,10,11],"key":13},{"id":"lena","name":"LENA","line":"Lena leans in from the corner.","kind":"cast","night":"","paper":"street/s/pf-lena.webp?v=4a4e7ef6","girl":"street/s/pf-lena-in.webp?v=a32e0756","fig":[200,288],"rgb":"#40102c","dark":true,"grain":"b","tape":"#f6e8ee","cap":{"k":1,"b":1,"r":1,"p":1},"fam":"hearts","lead":[4,0,1,2,3,5,6,7,8,9,10,11],"key":14}],"fams":{"gothic":{"url":"street/s/pf-stk-gothic.webp?v=b6d7ba6e","n":16,"cols":4,"rows":4,"dupe":[0,1,2,3,4,5,6,7,8,9]},"kawaii":{"url":"street/s/pf-stk-kawaii.webp?v=e2e4514e","n":16,"cols":4,"rows":4,"dupe":[10,11,12,13,14,15,16,17,18]},"snap":{"url":"street/s/pf-stk-snap.webp?v=886ad3be","n":12,"cols":6,"rows":2,"dupe":[2,6]},"street":{"url":"street/s/pf-stk-street.webp?v=4d556540","n":12,"cols":6,"rows":2,"dupe":[22,23]},"ring":{"url":"street/s/pf-stk-ring.webp?v=30333023","n":16,"cols":4,"rows":4,"dupe":[19,20,21]},"hearts":{"url":"street/s/pf-stk-hearts.webp?v=28ba5264","n":12,"cols":6,"rows":2,"dupe":[14,15,16,17]}},"cell":112,"gu":8,"grain":{"a":"street/s/pf-grain-a.webp?v=714f265a","b":"street/s/pf-grain-b.webp?v=64166531"},"castOdds":10,"white":"#fbf7ee","keys":{"url":"street/s/pf-keys.webp?v=12e2c05f","cols":5,"rows":3}}};
   const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const sfx = n => { if (window.__sfx) window.__sfx(n); };
@@ -6413,10 +6460,23 @@ a.key{cursor:pointer}
   /* THE EDITOR (11/12, his "they can make their own captions, add their own stickers"): a few caption faces, a few pen
      colours, his stickers. All of it is kept with the print and drawn the same in the picture. */
   const STK = 'street/s/pl-stk.webp?v=37a346ef', FACES = CFG.faces, FACE = {}; FACES.forEach(f => { FACE[f.id] = f; });
+  /* THE FRAMES: the list is site_mode.TM_FRAMES, the files are tm_frames.py's. FAMS are the sticker families a frame's
+     tray leads with. TEST is for the checks only: a night frame shown on any night, the next print made to win a cast frame. */
+  const FR = CFG.fr, FAMS = FR.fams, FRAME = {}, TEST = { night: '', cast: '' }; FR.list.forEach(f => { FRAME[f.id] = f; });
+  const mayWear = (f, c) => f.kind !== 'night' || c.s.indexOf(f.night) >= 0 || TEST.night === f.id;      /* a night's own frame: that night's photos only */
+  const frameOf = c => { const f = c && FRAME[c.fr]; return f && mayWear(f, c) ? f : null; };
+  const isBlack = c => c.sp === 'black' && !frameOf(c);                    /* a printed frame owns the border: the black one steps aside */
+  const owned = () => { const o = read('st-frames', null), ok = o && typeof o === 'object';
+    return { got: (ok && Array.isArray(o.got) ? o.got : []).filter(i => typeof i === 'string' && FRAME[i] && FRAME[i].kind === 'cast'), rolled: (ok && Array.isArray(o.rolled) ? o.rolled : []).filter(x => typeof x === 'string' && /^T[a-z0-9]{1,6}$/.test(x)).slice(-400) }; };
+  const castHit = (sd, s, k) => fnv(sd + '|' + s + '|' + k + '|cast') % 10000 < Math.round(FR.castOdds * 100);
   const INKS = [['k', '#17131c', 'Black'], ['b', '#1c2452', 'Blue'], ['r', '#b3122f', 'Red'], ['p', '#e2457a', 'Pink']], DARKINKS = [['s', '#d9dde4', 'Silver'], ['w', '#ffffff', 'White']];
-  const inksOf = c => c.sp === 'black' ? DARKINKS : INKS, inkOf = c => (inksOf(c).find(i => i[0] === c.ink) || inksOf(c)[c.sp === 'black' ? 0 : 1])[1];
-  const STMAX = 8, num = (v, lo, hi, d) => { v = +v; return isFinite(v) ? Math.max(lo, Math.min(hi, v)) : d; };
-  const cleanSt = a => (Array.isArray(a) ? a : []).filter(o => o && typeof o === 'object' && Number.isInteger(o.i) && o.i >= 0 && o.i < CFG.stk.n).slice(0, STMAX).map(o => ({ i: o.i, x: num(o.x, -1, 21, 10), y: num(o.y, -1, 40, 10), s: num(o.s, 1.6, 12, 3.8), a: num(o.a, -180, 180, 0) }));
+  const inksOf = c => isBlack(c) ? DARKINKS : INKS, inkOf = c => (inksOf(c).find(i => i[0] === c.ink) || inksOf(c)[isBlack(c) ? 0 : 1])[1];
+  const STMAX = 12, num = (v, lo, hi, d) => { v = +v; return isFinite(v) ? Math.max(lo, Math.min(hi, v)) : d; };
+  const cleanSt = a => (Array.isArray(a) ? a : []).filter(o => o && typeof o === 'object' && Number.isInteger(o.i) && o.i >= 0 && (o.f ? typeof o.f === 'string' && !!FAMS[o.f] && o.i < FAMS[o.f].n : o.i < CFG.stk.n)).slice(0, STMAX)
+    .map(o => { const q = { i: o.i, x: num(o.x, -1, 21, 10), y: num(o.y, -1, 40, 10), s: num(o.s, 1.6, 12, 3.8), a: num(o.a, -180, 180, 0) }; if (o.f) q.f = o.f; return q; });      /* f: the family its sheet is, none for the regular 24 */
+  const stkOf = o => o.f ? FAMS[o.f] : CFG.stk;
+  const stkPos = (m, i) => (i % m.cols / (m.cols - 1) * 100) + '% ' + (Math.floor(i / m.cols) / (m.rows - 1) * 100) + '%';
+  const famCss = id => "background-image:url('" + FAMS[id].url + "');background-size:" + FAMS[id].cols * 100 + '% ' + FAMS[id].rows * 100 + '%;';
   let facesP = null;
   function loadFaces() {               /* asked for when the editor opens, never on the first screen */
     if (!facesP) facesP = Promise.all(FACES.filter(f => f.url).map(f => { const ff = new FontFace(f.fam, 'url(' + f.url + ') format("woff2")'); document.fonts.add(ff); return ff.load().catch(e => { console.error('that\'s me: the caption face ' + f.label + ' would not load', e); }); }));
@@ -6430,7 +6490,8 @@ a.key{cursor:pointer}
   const okPrint = c => c && typeof c === 'object' && /^T[a-z0-9]{1,6}$/.test(c.id) && OKS.test(c.s) && OKK.test(c.k);
   const fresh = c => { if (c.sp === undefined) { c.sp = ''; c.x = {}; c.cap = c.at ? cleanCap('@' + c.at) : ''; delete c.foil; delete c.at; delete c.no; } if (!c.x || typeof c.x !== 'object') c.x = {}; c.cap = cleanCap(c.cap); if (!SPECIAL[c.sp]) c.sp = '';
     if (!FACE[c.fo]) c.fo = 'vp';                /* a print from before the editor was written in his hand: it stays that way */
-    if (!inksOf(c).some(i => i[0] === c.ink)) c.ink = c.sp === 'black' ? 's' : 'b';
+    if (typeof c.fr !== 'string' || !frameOf(c)) c.fr = '';           /* a print from before the frames, or a frame this page no longer has: PLAIN */
+    if (!inksOf(c).some(i => i[0] === c.ink)) c.ink = isBlack(c) ? 's' : 'b';
     c.st = cleanSt(c.st); return c; };
   const prints = () => (Array.isArray(read('st-cards', [])) ? read('st-cards', []) : []).filter(okPrint).map(fresh);
   function seed() {
@@ -6454,7 +6515,16 @@ a.key{cursor:pointer}
       const wide = f[2] > f[3], all = (n.fn.f || []).filter(o => o[1] !== f[1] && OKK.test(o[1])), same = all.filter(o => (o[2] > o[3]) === wide), pool = same.length ? same : all;
       if (pool.length) x.o = pool[Math.floor(R() * pool.length)][1];
     }
-    return { id: 'T' + fnv(n.s + '|' + f[1]).toString(36).slice(0, 6), s: n.s, k: f[1], i: f[0], w: f[2], h: f[3], t: n.t, when: n.when, lab: n.lab, sp, x, cap: '', fo: CFG.face, ink: sp === 'black' ? 's' : 'b', st: [], made: Date.now() };
+    return { id: 'T' + fnv(n.s + '|' + f[1]).toString(36).slice(0, 6), s: n.s, k: f[1], i: f[0], w: f[2], h: f[3], t: n.t, when: n.when, lab: n.lab, sp, x, cap: '', fo: CFG.face, ink: sp === 'black' ? 's' : 'b', st: [], fr: '', made: Date.now() };
+  }
+  /* a new print may leave a cast frame behind: decided like the specials, from this phone's number and the frame,
+     once per print. Which one: one this phone does not have yet. */
+  function castRoll(c) {
+    const o = owned(); if (o.rolled.indexOf(c.id) >= 0) return '';
+    const sd = seed(), locked = FR.list.filter(f => f.kind === 'cast' && o.got.indexOf(f.id) < 0); let won = '';
+    o.rolled.push(c.id);
+    if (locked.length && (TEST.cast || castHit(sd, c.s, c.k))) { won = (locked.find(f => f.id === TEST.cast) || locked[fnv(sd + '|' + c.s + '|' + c.k + '|who') % locked.length]).id; o.got.push(won); TEST.cast = ''; }
+    return write('st-frames', o) ? won : '';
   }
   const plain = t => String(t || '').replace(/[^A-Za-z0-9 .,!?'+:-]/g, '');
   const extOf = c => ({ t: plain(c.t), w: 'POLAROID', code: c.sp === 'note' ? 'CAST NOTE' : (SPECIAL[c.sp] || ''), src: thumb(c.s, c.k), fn: '__tmOpen' });      /* out of storage: plain text only */
@@ -6470,8 +6540,11 @@ a.key{cursor:pointer}
   const B = .95, FOOT = 4.6, PW = 20 - 2 * B;
   function layout(c) {
     const wide = c.w > c.h, ar = wide ? Math.max(1.25, Math.min(1.8, c.w / c.h)) : Math.max(.72, Math.min(.8, c.w / c.h)), ph = PW / ar, H = B + ph + FOOT, R = rng((c.x && c.x.r) || 1);
-    const L = { wide, ar, ph, H, foot: B + ph, dd: [], edge: (c.x && c.x.edge) | 0 };
-    if (c.sp === 'doodled') {          /* he drew on it: six spots round the border, a different handful of drawings each time */
+    const F = frameOf(c), L = { wide, ar, ph, H, foot: B + ph, dd: [], edge: (c.x && c.x.edge) | 0, F, cx0: 1, cx1: 19, girl: null };
+    if (F && F.fig) { L.cx0 = 4.8; L.cx1 = 18.6; const w = GIRL_H * F.fig[0] / F.fig[1]; L.girl = { x: GIRL_X, y: H + GIRL_DROP - GIRL_H, w, h: GIRL_H, a: GIRL_A }; }       /* a cast frame: she has the left end of the foot, the words move over */
+    else if (F) { L.cx0 = 2; L.cx1 = 18; }                 /* on tape the words want a little air at the ends */
+    else if (c.sp === 'doodled') { L.cx0 = 3.7; L.cx1 = 16.3; }
+    if (c.sp === 'doodled' && !F) {          /* he drew on it: six spots round the border, a different handful of drawings each time */
       const spots = [[2.1, L.foot + 3.0, 2.9], [17.9, L.foot + 3.05, 2.9], [1.7, 1.9, 2.7], [18.2, 2.2, 2.7], [1.25, B + ph * .56, 2.2], [18.8, B + ph * .42, 2.2]];
       const pool = [...Array(CFG.ink.doodles).keys()]; for (let a = pool.length - 1; a > 0; a--) { const b = Math.floor(R() * (a + 1)); [pool[a], pool[b]] = [pool[b], pool[a]]; }
       spots.forEach((s, j) => L.dd.push({ i: pool[j % pool.length], x: s[0] + (R() - .5) * .5, y: s[1] + (R() - .5) * .5, s: s[2] * (.9 + R() * .25), a: (R() - .5) * 50 }));
@@ -6479,6 +6552,27 @@ a.key{cursor:pointer}
     return L;
   }
   const inkCell = i => ({ c: i % 4, r: Math.floor(i / 4) });                       /* the pen sheet: 4 across, 5 down */
+  /* a cast frame: she leans in from the bottom left corner, her feet off the print, her hair over a corner of the photo
+     at most (her face stays on the border). How tall she is, how far off the edge, how far below it, her tilt. */
+  const GIRL_H = 7.2, GIRL_X = -1.3, GIRL_DROP = 1.7, GIRL_A = 7;
+  /* a strip of label tape, torn: its outline as fractions of its box, and a slight tilt. One per line of the caption,
+     the same every time for the same print. */
+  function tapesOf(c, n) {
+    const R = rng(fnv(c.id + '|tape')), all = [];
+    for (let k = 0; k < n; k++) { const p = [];
+      for (let i = 0; i <= 8; i++) p.push([i / 8, R() * .1]);
+      p.push([1 - .012 - R() * .02, .5]);
+      for (let i = 8; i >= 0; i--) p.push([i / 8, 1 - R() * .1]);
+      p.push([.012 + R() * .02, .5]);
+      all.push({ p, a: (R() - .5) * 4.4 }); }
+    return all;
+  }
+  const NOTE_TAPE = [[0, .07], [.14, 0], [.3, .06], [.5, .01], [.7, .07], [.88, 0], [1, .06], [.985, .5], [1, .95], [.85, 1], [.66, .94], [.45, 1], [.25, .93], [.1, 1], [0, .94], [.015, .5]];
+  /* what a caption sits on: 0 straight on the paper, 1 the frame's own tape, 2 white tape. site_mode works it out for
+     every frame and ink (whether the ink reads on that paper); the Label face carries its own strip. */
+  const capSurf = (c, f) => { const F = frameOf(c); return !F || f.tape ? 0 : (F.cap[c.ink] === undefined ? 2 : F.cap[c.ink]); };
+  const tapeCol = (F, surf) => surf === 1 && F.tape ? F.tape : FR.white;
+  const HALO = [[1, 0], [-1, 0], [0, 1], [0, -1], [.7, .7], [-.7, .7], [.7, -.7], [-.7, -.7]], HALO_R = .07;
   const headCell = who => { const k = CFG.castNames.indexOf(who); return k < 0 ? null : { c: k % 4, r: Math.ceil(CFG.ink.doodles / 4) + Math.floor(k / 4) }; };
 
   /* the paper: a few hundred soft specks, drawn once, used by the page and by the picture */
@@ -6496,14 +6590,14 @@ a.key{cursor:pointer}
     + '</div></div>'
     + '<div class="hands tm-hands" id="tm-hands" hidden role="dialog" aria-modal="true" aria-labelledby="tm-h-t">'
     + '<div class="hold"><div class="tm-stage"><div class="pl" role="button" tabindex="0" id="tm-card" aria-label="Your Polaroid. Tap it to flip it."><span class="pl-inner">'
-    + '<span class="pl-face pl-front"><span class="pl-photo"><img class="pl-im" alt="" draggable="false"><img class="pl-im2" alt="" draggable="false" hidden><i class="pl-leak"></i><i class="pl-gloss"></i><i class="pl-dev"></i></span>'
+    + '<span class="pl-face pl-front"><span class="pl-pap" hidden></span><span class="pl-photo"><img class="pl-im" alt="" draggable="false"><img class="pl-im2" alt="" draggable="false" hidden><i class="pl-leak"></i><i class="pl-gloss"></i><i class="pl-dev"></i></span><i class="pl-girl" hidden></i>'
     + '<span class="pl-cap"><b></b></span><span class="pl-note" hidden><i class="pl-head"></i><span><b></b><em></em></span></span><span class="pl-dds"></span><span class="pl-sts" id="tm-sts"></span></span>'
     + '<span class="pl-face pl-backf"><span class="pl-pen"><small>PULLED AT THE PHOTO BOOTH</small><b class="pl-b-t"></b><em class="pl-b-k"></em><i></i><span>SHOT BY 0FF THE PRINT</span><em>@vamppsych</em><span>0fftheprint.com</span><u class="pl-b-sp"></u></span></span>'
     + '</span></div></div>'
     + '<p class="hold-name"><b id="tm-h-t"></b><small id="tm-h-k"></small></p>'
     + '<div class="tm-form"><div class="tm-caprow"><textarea id="tm-cap" rows="2" autocomplete="off" autocorrect="off" spellcheck="false" maxlength="' + (CAPMAX * 2 + 1) + '" aria-label="Write on it: two short lines at most. It stays on this phone." placeholder="write on it (two short lines)"></textarea>'
     + '<button class="key tm-chromekey" type="button" id="tm-write">Write me one</button></div>'
-    + '<div class="tm-tools" role="group" aria-label="Make it yours"><button class="key" type="button" data-tool="face" aria-pressed="false">Font</button><button class="key" type="button" data-tool="ink" aria-pressed="false">Ink</button>'
+    + '<div class="tm-tools" role="group" aria-label="Make it yours"><button class="key" type="button" data-tool="frame" aria-pressed="false">Frame</button><button class="key" type="button" data-tool="face" aria-pressed="false">Font</button><button class="key" type="button" data-tool="ink" aria-pressed="false">Ink</button>'
     + '<button class="key" type="button" data-tool="stk" aria-pressed="false">Stickers</button><button class="key tm-bin" type="button" id="tm-bin" disabled aria-label="Take the picked sticker off">Bin</button></div>'
     + '<div class="tm-strip" id="tm-strip" hidden></div>'
     + '<label class="tm-tag" id="tm-tagrow" hidden><input type="checkbox" id="tm-tag"><span>Tag me in this frame</span></label>'
@@ -6518,14 +6612,14 @@ a.key{cursor:pointer}
   const say = t => { sayEl.textContent = t || ''; };
   const calm = (...els) => els.forEach(el => el && el.getAnimations().forEach(a => a.cancel()));
   const play = (el, kf, o) => el.animate(kf, o).finished.catch(() => {});
-  let FR = null, night = null, chosen = null, cur = null, kept = false, from = null, lastFocus = null, busy = false, exportP = null, exportKey = '', devA = null, wrote = 0, tool = '', sel = -1;
+  let FRS = null, won = '', night = null, chosen = null, cur = null, kept = false, from = null, lastFocus = null, busy = false, exportP = null, exportKey = '', devA = null, wrote = 0, tool = '', sel = -1;
 
   /* ---- the site's own list of frames (always asked fresh: a pulled frame leaves at once) ---- */
   function frames() {
-    if (!FR) FR = fetch('content/frames.json', { cache: 'no-cache' }).then(r => { if (!r.ok) throw new Error('frames.json answered ' + r.status); return r.json(); })
+    if (!FRS) FRS = fetch('content/frames.json', { cache: 'no-cache' }).then(r => { if (!r.ok) throw new Error('frames.json answered ' + r.status); return r.json(); })
       .then(j => { const m = {}; (j.nights || []).forEach(n => { if (OKS.test(n.s)) m[n.s] = n; }); return m; })
-      .catch(e => { FR = null; throw e; });
-    return FR;
+      .catch(e => { FRS = null; throw e; });
+    return FRS;
   }
   const rowOf = (fn, k) => (fn.f || []).find(f => f[1] === k && OKK.test(f[1]));
 
@@ -6617,23 +6711,42 @@ a.key{cursor:pointer}
   }
   function paintCap(c) {
     const box = $('.pl-cap', card), b = $('b', box), f = FACE[c.fo] || FACE.vp, lines = capLines(c);
-    b.textContent = lines.join('\n'); b.style.fontFamily = '"' + f.fam + '","VP Deadeye",sans-serif'; b.style.color = f.tape ? '#fff' : inkOf(c); b.style.textTransform = f.up ? 'uppercase' : 'none';
-    b.classList.toggle('tape', !!f.tape); b.style.backgroundColor = f.tape ? (c.sp === 'black' ? '#5a5d66' : '#17131c') : '';
-    const most = (lines.length > 1 ? 1.5 : 1.9) * f.k;
+    const F = frameOf(c), surf = capSurf(c, f);
+    if (surf) {                         /* on a dark or busy frame each line sits on its own torn strip of label tape */
+      const T = tapesOf(c, lines.length), col = tapeCol(F, surf);
+      b.innerHTML = lines.map((l, k) => '<i class="pl-ln" style="transform:rotate(' + T[k].a.toFixed(2) + 'deg)"><u class="pl-tp"><s style="background-color:' + col + ';clip-path:polygon(' + T[k].p.map(q => (q[0] * 100).toFixed(1) + '% ' + (q[1] * 100).toFixed(1) + '%').join(',') + ')"></s></u>' + esc(l) + '</i>').join('\n');
+    } else b.textContent = lines.join('\n');
+    b.style.fontFamily = '"' + f.fam + '","VP Deadeye",sans-serif'; b.style.color = f.tape ? '#fff' : inkOf(c); b.style.textTransform = f.up ? 'uppercase' : 'none';
+    b.classList.toggle('tape', !!f.tape); b.classList.toggle('taped', !!surf); b.style.backgroundColor = f.tape ? (isBlack(c) || (F && F.dark) ? '#5a5d66' : '#17131c') : '';
+    b.style.textShadow = F && !surf && !f.tape ? HALO.map(q => (q[0] * HALO_R).toFixed(3) + 'em ' + (q[1] * HALO_R).toFixed(3) + 'em 0 ' + F.rgb).join(',') : '';       /* straight on a printed paper: the print steps back behind the letters */
+    const noted = c.sp === 'note' && c.x.who && CFG.cast[c.x.who], most = Math.min((lines.length > 1 ? 1.5 : 1.9) * f.k, surf ? ((noted ? 2.9 : FOOT) - .5) / (lines.length * 1.38) : 9);       /* on tape the strips keep clear of the photo and the edge, as in the picture */
     requestAnimationFrame(() => fit(b, box, most)); loadFaces().then(() => { if (cur === c) fit(b, box, most); });
   }
+  /* what the frame decides: the paper, the girl who leans in, where the words may go, and whether the doodles and the
+     black border are on (they step aside for a printed frame and come back on PLAIN) */
+  function dress(c) {
+    const L = layout(c), F = L.F, sp = F && (c.sp === 'black' || c.sp === 'doodled') ? '' : c.sp;
+    card.className = 'pl' + (L.wide ? ' wide' : '') + (sp ? ' sp-' + sp : '') + (c.sp === 'leak' ? ' e' + L.edge : '') + (F ? ' fr' + (F.dark ? ' fr-dark' : '') : '') + (tool || c.st.length ? ' editing' : '') + (card.classList.contains('flip') ? ' flip' : '');
+    const pap = $('.pl-pap', card), girl = $('.pl-girl', card), cap = $('.pl-cap', card), q = L.girl;
+    cap.style.left = F ? L.cx0 + 'em' : ''; cap.style.right = F ? (20 - L.cx1).toFixed(2) + 'em' : '';
+    $('.pl-dds', card).innerHTML = L.dd.map(d => { const q = inkCell(d.i); return '<i style="left:' + (d.x - d.s / 2).toFixed(2) + 'em;top:' + (d.y - d.s / 2).toFixed(2) + 'em;width:' + d.s.toFixed(2) + 'em;height:' + d.s.toFixed(2) + 'em;background-position:' + (q.c / 3 * 100) + '% ' + (q.r / 4 * 100) + '%;transform:rotate(' + d.a.toFixed(1) + 'deg)"></i>'; }).join('');
+    $('.pl-b-sp', card).textContent = [SPECIAL[c.sp] || '', F ? F.name + ' FRAME' : ''].filter(Boolean).join(' + ');
+    pap.hidden = !F; girl.hidden = !q;
+    if (F) { card.style.setProperty('--pf-rgb', F.rgb); card.style.setProperty('--pf-pap', 'url("' + F.paper + '")'); card.style.setProperty('--pf-gr', 'url("' + FR.grain[F.grain] + '")'); }
+    else ['--pf-pap', '--pf-gr', '--pf-rgb'].forEach(v => card.style.removeProperty(v));
+    girl.style.cssText = q ? 'left:' + q.x.toFixed(2) + 'em;top:' + q.y.toFixed(2) + 'em;width:' + q.w.toFixed(2) + 'em;height:' + q.h.toFixed(2) + 'em;transform:rotate(' + q.a + "deg);background-image:url('" + F.girl + "')" : '';
+    return L;
+  }
   function paint(c) {
-    const L = layout(c), ph = $('.pl-photo', card), im = $('.pl-im', card), im2 = $('.pl-im2', card), note = $('.pl-note', card), dds = $('.pl-dds', card);
-    card.className = 'pl' + (L.wide ? ' wide' : '') + (c.sp ? ' sp-' + c.sp : '') + (c.sp === 'leak' ? ' e' + L.edge : '') + (tool || c.st.length ? ' editing' : '') + (card.classList.contains('flip') ? ' flip' : '');
+    const L = dress(c), ph = $('.pl-photo', card), im = $('.pl-im', card), im2 = $('.pl-im2', card), note = $('.pl-note', card);
     stage.classList.toggle('wide', L.wide);
     card.style.setProperty('--ph', L.ph.toFixed(3) + 'em');
     im.src = thumb(c.s, c.k);
     im2.hidden = !(c.sp === 'double' && c.x.o && OKK.test(c.x.o)); if (!im2.hidden) im2.src = thumb(c.s, c.x.o); else im2.removeAttribute('src');
     note.hidden = c.sp !== 'note' || !c.x.who || !CFG.cast[c.x.who];
     if (!note.hidden) { const hc = headCell(c.x.who), h = $('.pl-head', note); $('b', note).textContent = plain(c.x.line); $('em', note).textContent = c.x.who; h.style.backgroundPosition = (hc.c / 3 * 100) + '% ' + (hc.r / 4 * 100) + '%'; }
-    dds.innerHTML = L.dd.map(d => { const q = inkCell(d.i); return '<i style="left:' + (d.x - d.s / 2).toFixed(2) + 'em;top:' + (d.y - d.s / 2).toFixed(2) + 'em;width:' + d.s.toFixed(2) + 'em;height:' + d.s.toFixed(2) + 'em;background-position:' + (q.c / 3 * 100) + '% ' + (q.r / 4 * 100) + '%;transform:rotate(' + d.a.toFixed(1) + 'deg)"></i>'; }).join('');
     paintCap(c); paintSt(c);
-    $('.pl-b-t', card).textContent = c.t; $('.pl-b-k', card).textContent = c.when + (c.lab ? ' · ' + c.lab : ''); $('.pl-b-sp', card).textContent = SPECIAL[c.sp] || '';
+    $('.pl-b-t', card).textContent = c.t; $('.pl-b-k', card).textContent = c.when + (c.lab ? ' · ' + c.lab : '');
     $('#tm-h-t').textContent = SPECIAL[c.sp] || 'THAT’S ME'; $('#tm-h-k').textContent = c.t + ' · FRAME ' + c.k;
     capIn.value = c.cap;
     /* the big pictures, once they are all here (they are on the media host: fine to show, a canvas may not read them) */
@@ -6646,18 +6759,23 @@ a.key{cursor:pointer}
      size, [ and ] turn, Delete takes it off. ---- */
   function paintSt(c) {
     sts.innerHTML = c.st.map((o, n) => '<span role="button" tabindex="0" class="pl-st' + (n === sel ? ' sel' : '') + '" data-n="' + n + '" aria-label="Sticker ' + (n + 1) + ' of ' + c.st.length + '. Arrow keys move it, plus and minus size it, Delete takes it off." '
-      + 'style="left:' + (o.x - o.s / 2).toFixed(2) + 'em;top:' + (o.y - o.s / 2).toFixed(2) + 'em;width:' + o.s.toFixed(2) + 'em;height:' + o.s.toFixed(2) + 'em;transform:rotate(' + o.a.toFixed(1) + 'deg);background-position:' + (o.i % CFG.stk.cols / (CFG.stk.cols - 1) * 100) + '% ' + (Math.floor(o.i / CFG.stk.cols) / (CFG.stk.rows - 1) * 100) + '%">'
+      + 'style="left:' + (o.x - o.s / 2).toFixed(2) + 'em;top:' + (o.y - o.s / 2).toFixed(2) + 'em;width:' + o.s.toFixed(2) + 'em;height:' + o.s.toFixed(2) + 'em;transform:rotate(' + o.a.toFixed(1) + 'deg);' + (o.f ? famCss(o.f) : '') + 'background-position:' + stkPos(stkOf(o), o.i) + '">'
       + (n === sel ? '<i class="pl-grip" aria-hidden="true"></i>' : '') + '</span>').join('');
     binK.disabled = sel < 0;
   }
   const changed = () => { if (!cur) return; if (kept) keep(cur); clearTimeout(capIn.t); capIn.t = setTimeout(prepare, 500); };
   const unit = () => card.getBoundingClientRect().width / 20;
-  function addSt(i) {
+  function addSt(i, fam) {
     if (!cur) return;
-    if (cur.st.length >= STMAX) { say('Eight stickers is the most. Take one off first.'); return; }
-    const L = layout(cur), n = cur.st.length;
-    const spots = [...Array(8).keys()].map(k => [3 + (k % 4) * 4.6, L.foot + (k < 4 ? 1.5 : 3.2)]), free = spots.find(q => !cur.st.some(o => Math.hypot(o.x - q[0], o.y - q[1]) < 1.5)) || spots[n % 8];
-    cur.st.push({ i, x: free[0], y: free[1], s: 3.6, a: (n % 2 ? 8 : -8) });       /* on the border, in the first free spot of a row, clear of the photo */
+    if (cur.st.length >= STMAX) { say('Twelve stickers is the most. Take one off first.'); return; }
+    const L = layout(cur), n = cur.st.length, row = [...Array(8).keys()].map(k => [3 + (k % 4) * 4.6, L.foot + (k < 4 ? 1.5 : 3.2)]);
+    /* on a printed frame a new one lands at an end of the foot if the words leave room there, then a corner (clear of the words, the cast's note and her), then the rows */
+    const noted = cur.sp === 'note' && cur.x.who && CFG.cast[cur.x.who];                 /* the cast's note has the right end of the foot */
+    const cb = (() => { const b = $('.pl-cap b', card), q = b.getBoundingClientRect(), r = card.getBoundingClientRect(), k = r.width / 20; return b.textContent && k ? [(q.left - r.left) / k - 1.7, (q.top - r.top) / k - 1.7, (q.right - r.left) / k + 1.7, (q.bottom - r.top) / k + 1.7] : null; })();       /* the words, and a sticker's room round them */
+    const spots = L.F ? [[18.1, L.foot + 2.3], [1.9, L.foot + 2.3], [18.6, 1.4], [1.4, 1.4], [18.6, L.foot - .4], [1.4, L.foot - .4]].filter(q => !(L.girl && q[0] < 5 && q[1] > L.foot - 2) && !(noted && q[0] > 8 && q[1] > L.foot + .5) && !(cb && q[0] > cb[0] && q[0] < cb[2] && q[1] > cb[1] && q[1] < cb[3])).concat(row) : row;
+    const free = spots.find(q => !cur.st.some(o => Math.hypot(o.x - q[0], o.y - q[1]) < 1.5)) || spots[n % spots.length], o = { i, x: free[0], y: free[1], s: 3.6, a: (n % 2 ? 8 : -8) };
+    if (fam && FAMS[fam]) o.f = fam;
+    cur.st.push(o);       /* on the border, in the first free spot, clear of the photo */
     sel = n; card.classList.remove('flip'); paintSt(cur); changed(); sfx('blip'); say('Drag it where you want it.');
   }
   function dropSt() { if (!cur || sel < 0) return; cur.st.splice(sel, 1); sel = -1; paintSt(cur); changed(); sfx('paper'); }
@@ -6703,20 +6821,52 @@ a.key{cursor:pointer}
     tool = tool === t ? '' : t; $$('.tm-tools [data-tool]', hands).forEach(k => k.setAttribute('aria-pressed', String(k.dataset.tool === tool)));
     card.classList.toggle('editing', !!tool || (cur && cur.st.length > 0));
     if (!tool || !cur) { strip.hidden = true; strip.innerHTML = ''; return; }
+    strip.classList.toggle('frames', tool === 'frame');
+    if (tool === 'frame') {              /* PLAIN, the house set, this night's own frame if it has one, then the cast (locked until a print leaves one). Each key shows its frame dressed up: an example. */
+      const got = owned().got, K = FR.keys, pic = k => '<i class="tm-fr-pic" style="background-position:' + (k % K.cols / (K.cols - 1) * 100).toFixed(2) + '% ' + (Math.floor(k / K.cols) / (K.rows - 1) * 100).toFixed(2) + '%"></i>';
+      const key = (id, k, name, kind, locked, label) => '<button type="button" class="tm-opt tm-fr' + (locked ? ' locked' : '') + '" data-fr="' + id + '" aria-pressed="' + ((cur.fr || '') === id) + '" aria-label="' + esc(label) + '">' + pic(k) + (locked ? '<i class="tm-fr-lock"></i>' : '') + '<span><b>' + esc(name) + '</b><small>' + kind + '</small></span></button>';
+      const list = FR.list.filter(f => mayWear(f, cur)), cast = list.filter(f => f.kind === 'cast'), anyLocked = cast.some(f => got.indexOf(f.id) < 0);
+      strip.style.setProperty('--pf-keys', 'url("' + K.url + '")');
+      strip.innerHTML = key('', 0, 'Plain', 'white', false, 'Plain: the white Polaroid')
+        + list.filter(f => f.kind !== 'cast').map(f => key(f.id, f.key, f.name, f.kind === 'night' ? 'this night' : 'house set', false, f.name + ' frame. ' + f.line + ' Shown dressed up: add your own with Stickers.')).join('')
+        + (cast.length ? '<span class="tm-fr-note"><b>The cast</b>' + (anyLocked ? 'Keep printing. The cast leaves these.' : 'All of them are yours.') + '</span>' : '')
+        + cast.map(f => { const locked = got.indexOf(f.id) < 0; return key(f.id, f.key, f.name, locked ? 'locked' : (won === f.id ? 'new' : 'cast'), locked, locked ? f.name + ', locked. Keep printing. The cast leaves these.' : f.name + ' frame. ' + f.line + ' Shown dressed up: add your own with Stickers.'); }).join('');
+      const tk = $('.tm-tools [data-tool="frame"]', hands); if (tk) tk.classList.remove('tm-new');
+      strip.hidden = false; const on = $('.tm-fr[aria-pressed="true"]', strip); strip.scrollLeft = on ? Math.max(0, on.offsetLeft - 96) : 0;
+      say('The keys show each frame dressed up. Add your own with Stickers.');
+      return;
+    }
     if (tool === 'face') strip.innerHTML = FACES.map(f => '<button type="button" class="tm-opt tm-face' + (f.tape ? ' tape' : '') + '" data-face="' + f.id + '" aria-pressed="' + (cur.fo === f.id) + '" style="font-family:&quot;' + f.fam + '&quot;,sans-serif' + (f.up ? ';text-transform:uppercase' : '') + '">' + esc(f.label) + '</button>').join('');
     else if (tool === 'ink') strip.innerHTML = inksOf(cur).map(i => '<button type="button" class="tm-opt tm-ink" data-ink="' + i[0] + '" aria-pressed="' + (cur.ink === i[0]) + '" aria-label="' + i[2] + ' ink"><i style="background:' + i[1] + '"></i>' + i[2] + '</button>').join('');
-    else strip.innerHTML = [...Array(CFG.stk.n).keys()].map(i => '<button type="button" class="tm-opt tm-stk" data-stk="' + i + '" aria-label="Add sticker ' + (i + 1) + '" style="background-position:' + (i % CFG.stk.cols / (CFG.stk.cols - 1) * 100) + '% ' + (Math.floor(i / CFG.stk.cols) / (CFG.stk.rows - 1) * 100) + '%"></button>').join('');
+    else {                /* a framed print: that frame's own drawings first, then the regular 24 (one that is in both is shown once) */
+      const F = frameOf(cur), fam = F && FAMS[F.fam] ? F.fam : '', m = fam ? FAMS[fam] : null;
+      strip.innerHTML = (m ? F.lead.map((i, n) => '<button type="button" class="tm-opt tm-stk" data-stk="' + i + '" data-fam="' + fam + '" aria-label="Add ' + esc(F.name) + ' sticker ' + (n + 1) + '" style="' + famCss(fam) + 'background-position:' + stkPos(m, i) + '"></button>').join('') : '')
+        + [...Array(CFG.stk.n).keys()].filter(i => !m || m.dupe.indexOf(i) < 0).map(i => '<button type="button" class="tm-opt tm-stk" data-stk="' + i + '" aria-label="Add sticker ' + (i + 1) + '" style="background-position:' + stkPos(CFG.stk, i) + '"></button>').join('');
+    }
     strip.hidden = false; strip.scrollLeft = 0;
   }
   $('.tm-tools', hands).addEventListener('click', e => { const k = e.target.closest('[data-tool]'); if (k) { openTool(k.dataset.tool); sfx('blip'); } });
   strip.addEventListener('click', e => {
     const k = e.target.closest('.tm-opt'); if (!k || !cur) return;
+    if (k.dataset.fr !== undefined) { setFrame(k.dataset.fr); return; }
     if (k.dataset.face) { cur.fo = k.dataset.face; paintCap(cur); changed(); }
     else if (k.dataset.ink) { cur.ink = k.dataset.ink; paintCap(cur); changed(); }
-    else if (k.dataset.stk) { addSt(+k.dataset.stk); return; }
+    else if (k.dataset.stk) { addSt(+k.dataset.stk, k.dataset.fam || ''); return; }
     $$('.tm-opt', strip).forEach(o => o.setAttribute('aria-pressed', String(o === k))); sfx('blip');
     if (card.classList.contains('flip')) card.classList.remove('flip');
   });
+  /* FRAME: pick one (a locked one says how to get it). A picked frame is the bare paper: the stickers are theirs to add. */
+  function setFrame(id) {
+    const f = FRAME[id];
+    if (id && (!f || !mayWear(f, cur))) return;
+    sfx('blip');
+    if (f && f.kind === 'cast' && owned().got.indexOf(id) < 0) { say(f.name + ' is locked. Keep printing. The cast leaves these.'); return; }
+    cur.fr = id || '';
+    if (!inksOf(cur).some(i => i[0] === cur.ink)) cur.ink = isBlack(cur) ? 's' : 'b';
+    card.classList.remove('flip'); dress(cur); paintCap(cur); changed();
+    $$('.tm-fr', strip).forEach(o => o.setAttribute('aria-pressed', String(o.dataset.fr === cur.fr)));
+    say(f ? f.name + (/\.$/.test(f.name) ? ' ' : '. ') + f.line + ' Add your own with Stickers.' : 'Plain. The white Polaroid.');
+  }
   function setKept(k) { kept = k; keepK.textContent = k ? 'In your bag' : 'Keep it'; keepK.disabled = k; keepK.classList.toggle('pink', !k); }
 
   /* ---- in your hands ---- */
@@ -6760,7 +6910,9 @@ a.key{cursor:pointer}
     sfx('print');
     const r = cr || { left: innerWidth / 2 - 40, top: innerHeight - 60, width: 80, height: 112 };
     await showHands(c, 'sheet', r);
-    say(c.sp ? 'A special one: ' + SPECIAL[c.sp] + '. Flip it.' : 'Write on it, or tap it to flip it.');
+    const got = castRoll(c), gf = got && FRAME[got];
+    if (gf) { won = got; const tk = $('.tm-tools [data-tool="frame"]', hands); if (tk) tk.classList.add('tm-new'); sfx('thanks'); }
+    say((c.sp ? 'A special one: ' + SPECIAL[c.sp] + '. ' : '') + (gf ? 'A cast frame unlocked: ' + gf.name + '. It is under Frame, yours to keep on this phone.' : c.sp ? 'Flip it.' : 'Write on it, or tap it to flip it.'));
   });
 
   /* KEEP IT */
@@ -6808,26 +6960,36 @@ a.key{cursor:pointer}
      print is laid out so that picture is enlarged 1.3 times and no more. ---- */
   const load = src => new Promise((res, rej) => { const im = new Image(); im.decoding = 'async'; im.onload = () => res(im); im.onerror = () => rej(new Error('would not load: ' + src)); im.src = src; });
   function rr(g, x, y, w, h, r) { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); }
-  function fitText(g, text, font, size, maxW, min) { let s = size; g.font = font.replace('%', s); while (s > min && g.measureText(text).width > maxW) { s -= 1; g.font = font.replace('%', s); } return s; }
+  function fitText(g, text, font, size, maxW, min, pad) { let s = size; g.font = font.replace('%', s); while (s > min && g.measureText(text).width + (pad || 0) * s > maxW) { s -= 1; g.font = font.replace('%', s); } return s; }
   function stops(grad, list) { list.forEach(([o, c]) => grad.addColorStop(o, c)); return grad; }
   const cover = (g, im, x, y, w, h) => { const sc = Math.max(w / im.naturalWidth, h / im.naturalHeight), dw = im.naturalWidth * sc, dh = im.naturalHeight * sc; g.drawImage(im, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh); return sc; };
   const UPSCALE = 1.3;
   async function drawPrint(c) {
-    const L = layout(c), black = c.sp === 'black', pen = black ? '#d9dde4' : '#1c2452';
+    const L = layout(c), F = L.F, black = isBlack(c), pen = black ? '#d9dde4' : '#1c2452';
+    const [pap, grn, girl] = F ? await Promise.all([load(F.paper), load(FR.grain[F.grain]), F.girl ? load(F.girl) : null]) : [];           /* the frame's own files: the site's, so the canvas stays readable */
     const photo = await load(thumb(c.s, c.k));                                           /* the site's own file: the canvas stays readable */
     const u = photo.naturalWidth * UPSCALE / PW, W = Math.round(20 * u), H = Math.round(L.H * u);          /* one unit, in pixels: the photo's window is the small picture times 1.3 */
     const other = c.sp === 'double' && c.x.o && OKK.test(c.x.o) ? await load(thumb(c.s, c.x.o)).catch(e => { console.warn('that\'s me: the second frame would not load for the picture', e); return null; }) : null;
-    const ink = (c.sp === 'doodled' || c.sp === 'note') ? await load(INK) : null;
-    const face = FACE[c.fo] || FACE.vp, stk = c.st.length ? await load(STK) : null;
+    const ink = ((c.sp === 'doodled' && !F) || c.sp === 'note') ? await load(INK) : null;
+    const face = FACE[c.fo] || FACE.vp, stk = c.st.some(o => !o.f) ? await load(STK) : null, fams = {};
+    for (const id of new Set(c.st.map(o => o.f).filter(Boolean))) fams[id] = await load(FAMS[id].url);           /* each sticker from its own sheet */
     await loadFaces();                                    /* every face is here before a letter is drawn: the picture never falls back */
     await Promise.all(['400 40px "' + face.fam + '"', '400 40px "VP Deadeye"', '700 20px Inter'].map(f => document.fonts.load(f).catch(e => console.warn('that\'s me: a face would not load for the picture', e))));
     const cv = document.createElement('canvas'); cv.width = W; cv.height = H; const g = cv.getContext('2d');
     rr(g, 0, 0, W, H, .14 * u); g.clip();
-    g.fillStyle = black ? '#151317' : '#f4f1ea'; g.fillRect(0, 0, W, H);
-    g.fillStyle = g.createPattern(paperCv, 'repeat'); g.fillRect(0, 0, W, H);
-    g.fillStyle = stops(g.createLinearGradient(0, 0, W, H), black ? [[0, 'rgba(255,255,255,.05)'], [1, 'rgba(0,0,0,.2)']] : [[0, 'rgba(255,255,255,.35)'], [1, 'rgba(120,105,85,.08)']]); g.fillRect(0, 0, W, H);
+    if (F) {                            /* the printed paper, the grain laid over it, a darker rim */
+      g.fillStyle = F.rgb; g.fillRect(0, 0, W, H);
+      g.drawImage(pap, 0, 0, W, W * pap.naturalHeight / pap.naturalWidth);
+      g.save(); g.globalCompositeOperation = 'overlay'; const t = FR.gu * u; for (let y = 0; y < H; y += t) for (let x = 0; x < W; x += t) g.drawImage(grn, x, y, t, t); g.restore();
+      const e = .7 * u; [[0, 0, e, 0], [W, 0, W - e, 0], [0, 0, 0, e], [0, H, 0, H - e]].forEach(a => { g.fillStyle = stops(g.createLinearGradient(a[0], a[1], a[2], a[3]), [[0, 'rgba(0,0,0,.2)'], [1, 'rgba(0,0,0,0)']]); g.fillRect(0, 0, W, H); });
+    } else {
+      g.fillStyle = black ? '#151317' : '#f4f1ea'; g.fillRect(0, 0, W, H);
+      g.fillStyle = g.createPattern(paperCv, 'repeat'); g.fillRect(0, 0, W, H);
+      g.fillStyle = stops(g.createLinearGradient(0, 0, W, H), black ? [[0, 'rgba(255,255,255,.05)'], [1, 'rgba(0,0,0,.2)']] : [[0, 'rgba(255,255,255,.35)'], [1, 'rgba(120,105,85,.08)']]); g.fillRect(0, 0, W, H);
+    }
     /* the photo: all of it, in a window its own shape */
     const px = B * u, py = B * u, pw = PW * u, ph = L.ph * u;
+    if (F) { g.fillStyle = '#0e0a10'; g.fillRect(px - .09 * u, py - .09 * u, pw + .18 * u, ph + .18 * u); }       /* sunk a hair into the frame */
     g.save(); g.beginPath(); g.rect(px, py, pw, ph); g.clip(); g.fillStyle = '#2b2d2a'; g.fillRect(px, py, pw, ph);
     g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high';
     const scale = cover(g, photo, px, py, pw, ph);
@@ -6841,37 +7003,51 @@ a.key{cursor:pointer}
       g.restore();
     }
     g.fillStyle = stops(g.createLinearGradient(px, py, px + pw, py + ph), [[.3, 'rgba(255,255,255,0)'], [.46, 'rgba(255,255,255,.1)'], [.6, 'rgba(255,255,255,0)']]); g.fillRect(px, py, pw, ph);      /* the gloss, still */
+    if (F) { const e = .3 * u; [[px, py, px + e, py], [px + pw, py, px + pw - e, py], [px, py, px, py + e], [px, py + ph, px, py + ph - e]].forEach(a => { g.fillStyle = stops(g.createLinearGradient(a[0], a[1], a[2], a[3]), [[0, 'rgba(0,0,0,.5)'], [1, 'rgba(0,0,0,0)']]); g.fillRect(px, py, pw, ph); }); }
     g.restore();
-    g.strokeStyle = black ? 'rgba(255,255,255,.14)' : 'rgba(0,0,0,.28)'; g.lineWidth = Math.max(1, u * .05); g.strokeRect(px, py, pw, ph);
+    if (!F) { g.strokeStyle = black ? 'rgba(255,255,255,.14)' : 'rgba(0,0,0,.28)'; g.lineWidth = Math.max(1, u * .05); g.strokeRect(px, py, pw, ph); }
+    if (L.girl && girl) { const q = L.girl; g.save(); g.translate((q.x + q.w / 2) * u, (q.y + q.h / 2) * u); g.rotate(q.a * Math.PI / 180); g.drawImage(girl, -q.w * u / 2, -q.h * u / 2, q.w * u, q.h * u); g.restore(); }       /* the girl who leans in */
     /* what is written on the border */
     g.textBaseline = 'middle'; g.fillStyle = pen;
-    const noted = c.sp === 'note' && c.x.who && CFG.cast[c.x.who], capY = (L.foot + (noted ? 1.45 : FOOT / 2 + .1)) * u, room = (c.sp === 'doodled' ? 12.6 : 18) * u;
+    const noted = c.sp === 'note' && c.x.who && CFG.cast[c.x.who], capY = (L.foot + (noted ? 1.45 : FOOT / 2 + .1)) * u, room = (L.cx1 - L.cx0) * u, capX = (L.cx0 + L.cx1) / 2 * u;
     const lines = capLines(c).map(l => face.up ? l.toUpperCase() : l);
     if (lines.length) {
       g.textAlign = 'center';
+      const surf = capSurf(c, face), TP = surf ? tapesOf(c, lines.length) : null;
       const font = '400 %px "' + face.fam + '","VP Deadeye",sans-serif', most = (lines.length > 1 ? 1.5 : 1.9) * face.k * u, tall = ((noted ? 2.9 : FOOT) - .5) * u;
-      let px = most; for (const l of lines) px = Math.min(px, fitText(g, l, font, most, room - (face.tape ? .9 * u : 0), .3 * u));
-      px = Math.min(px, tall / (lines.length * 1.12)); g.font = font.replace('%', px);
-      const lh = px * 1.1, y0 = capY - (lines.length - 1) * lh / 2;
-      g.save(); g.translate(W / 2, capY); g.rotate(-1.2 * Math.PI / 180); g.translate(-W / 2, -capY);
+      let px = most; for (const l of lines) px = Math.min(px, fitText(g, l, font, most, room - (face.tape ? .9 * u : 0), .3 * u, surf ? 1 : 0));
+      px = Math.min(px, tall / (lines.length * (surf ? 1.38 : 1.12))); g.font = font.replace('%', px);
+      const lh = px * (surf ? 1.36 : 1.1), y0 = capY - (lines.length - 1) * lh / 2;
+      g.save(); g.translate(capX, capY); g.rotate(-1.2 * Math.PI / 180); g.translate(-capX, -capY);
       lines.forEach((l, k) => { const y = y0 + k * lh;
-        if (face.tape) { const tw = g.measureText(l).width + .9 * u; g.fillStyle = black ? '#5a5d66' : '#17131c'; g.fillRect(W / 2 - tw / 2, y - lh * .5, tw, lh * .98); g.fillStyle = '#fff'; } else g.fillStyle = inkOf(c);
-        g.fillText(l, W / 2, y + px * .04); });
+        if (surf) {                     /* a torn strip of label tape under each line */
+          const tw = g.measureText(l).width + px, th = px * 1.18, t = TP[k];
+          g.save(); g.translate(capX, y); g.rotate(t.a * Math.PI / 180);
+          g.save(); g.shadowColor = 'rgba(0,0,0,.4)'; g.shadowBlur = px * .1; g.shadowOffsetX = px * .04; g.shadowOffsetY = px * .1;
+          g.beginPath(); t.p.forEach((q, j) => { const X = (q[0] - .5) * tw, Y = (q[1] - .5) * th; if (j) g.lineTo(X, Y); else g.moveTo(X, Y); }); g.closePath(); g.fillStyle = tapeCol(F, surf); g.fill(); g.restore();
+          g.fillStyle = inkOf(c); g.fillText(l, 0, px * .04); g.restore(); return;
+        }
+        if (face.tape) { const tw = g.measureText(l).width + .9 * u; g.fillStyle = black || (F && F.dark) ? '#5a5d66' : '#17131c'; g.fillRect(capX - tw / 2, y - lh * .5, tw, lh * .98); g.fillStyle = '#fff'; }
+        else { if (F) { g.fillStyle = F.rgb; HALO.forEach(q => g.fillText(l, capX + q[0] * HALO_R * px, y + px * .04 + q[1] * HALO_R * px)); } g.fillStyle = inkOf(c); }
+        g.fillText(l, capX, y + px * .04); });
       g.restore(); g.fillStyle = pen;
     }
     if (noted) {
       const hc = headCell(c.x.who), hs = 1.9 * u, line = plain(c.x.line);
       g.save(); g.translate(W - B * u - .2 * u, (L.foot + FOOT - 1.2) * u); g.rotate(-3 * Math.PI / 180);          /* all of it inside the border */
-      g.textAlign = 'right'; g.font = '400 ' + (.92 * u) + 'px "VP Deadeye","Potta One",sans-serif'; g.fillText(c.x.who, 0, .35 * u);
+      g.textAlign = 'right'; g.font = '400 ' + (.92 * u) + 'px "VP Deadeye","Potta One",sans-serif';
       const nw = g.measureText(c.x.who).width;
-      g.font = '400 ' + (1.02 * u) + 'px "VP Deadeye","Potta One",sans-serif'; g.fillText(line, 0, -.75 * u);
+      g.font = '400 ' + (1.02 * u) + 'px "VP Deadeye","Potta One",sans-serif';
       const lw = Math.max(nw, g.measureText(line).width);
+      if (F) { const ax = -lw - hs - .68 * u, bx = .38 * u, ay = -1.57 * u, by = 1.07 * u; g.save(); g.fillStyle = FR.white; g.beginPath(); NOTE_TAPE.forEach((q, j) => { const X = ax + q[0] * (bx - ax), Y = ay + q[1] * (by - ay); if (j) g.lineTo(X, Y); else g.moveTo(X, Y); }); g.closePath(); g.fill(); g.restore(); }       /* on a printed frame the note sits on its own bit of tape */
+      g.fillText(line, 0, -.75 * u);
+      g.font = '400 ' + (.92 * u) + 'px "VP Deadeye","Potta One",sans-serif'; g.fillText(c.x.who, 0, .35 * u);
       if (hc && ink) g.drawImage(ink, hc.c * 128, hc.r * 128, 128, 128, -lw - hs - .3 * u, -1.35 * u, hs, hs);
       g.restore();
     }
     L.dd.forEach(d => { const q = inkCell(d.i); g.save(); g.translate(d.x * u, d.y * u); g.rotate(d.a * Math.PI / 180); g.drawImage(ink, q.c * 128, q.r * 128, 128, 128, -d.s * u / 2, -d.s * u / 2, d.s * u, d.s * u); g.restore(); });
     /* their stickers, exactly where they put them */
-    c.st.forEach(o => { g.save(); g.translate(o.x * u, o.y * u); g.rotate(o.a * Math.PI / 180); g.drawImage(stk, (o.i % CFG.stk.cols) * 160, Math.floor(o.i / CFG.stk.cols) * 160, 160, 160, -o.s * u / 2, -o.s * u / 2, o.s * u, o.s * u); g.restore(); });
+    c.st.forEach(o => { const m = stkOf(o), cell = o.f ? FR.cell : 160; g.save(); g.translate(o.x * u, o.y * u); g.rotate(o.a * Math.PI / 180); g.drawImage(o.f ? fams[o.f] : stk, (o.i % m.cols) * cell, Math.floor(o.i / m.cols) * cell, cell, cell, -o.s * u / 2, -o.s * u / 2, o.s * u, o.s * u); g.restore(); });
     cv.scale = scale;
     return cv;
   }
@@ -6882,7 +7058,7 @@ a.key{cursor:pointer}
     const face = await drawPrint(c);
     await document.fonts.load('400 44px "Potta One"').catch(e => console.warn('that\'s me: a face would not load for the picture', e));
     g.save(); g.translate(W / 2, 880); g.rotate((fnv(c.id) % 2 ? -3.2 : 2.8) * Math.PI / 180);                /* at a slight tilt, the same way every time for this print */
-    g.shadowColor = 'rgba(96,10,52,.5)'; g.shadowBlur = 70; g.shadowOffsetY = 34; g.fillStyle = c.sp === 'black' ? '#151317' : '#f4f1ea'; g.fillRect(-face.width / 2 + 4, -face.height / 2 + 4, face.width - 8, face.height - 8);
+    g.shadowColor = 'rgba(96,10,52,.5)'; g.shadowBlur = 70; g.shadowOffsetY = 34; g.fillStyle = frameOf(c) ? frameOf(c).rgb : c.sp === 'black' ? '#151317' : '#f4f1ea'; g.fillRect(-face.width / 2 + 4, -face.height / 2 + 4, face.width - 8, face.height - 8);
     g.shadowColor = 'transparent'; g.drawImage(face, -face.width / 2, -face.height / 2);
     g.restore();
     g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = '#2a0d18';
@@ -6896,7 +7072,7 @@ a.key{cursor:pointer}
   const blobOf = cv => new Promise((res, rej) => cv.toBlob(b => b ? res(b) : rej(new Error('the canvas gave no picture')), 'image/jpeg', .92));
   function prepare() {
     if (!cur) return null;
-    const c = cur, key = c.id + '|' + c.cap + '|' + c.fo + '|' + c.ink + '|' + JSON.stringify(c.st);
+    const c = cur, key = c.id + '|' + c.cap + '|' + c.fo + '|' + c.ink + '|' + JSON.stringify(c.st) + '|' + c.fr;
     if (exportP && exportKey === key) return exportP;
     exportKey = key;
     exportP = still(c).then(blobOf).then(b => new File([b], 'polaroid-' + c.s.slice(0, 10).replace(/-/g, '') + '-' + c.k + '.jpg', { type: 'image/jpeg' }));
@@ -6978,7 +7154,7 @@ a.key{cursor:pointer}
   ['pointerup', 'pointercancel'].forEach(ev => document.addEventListener(ev, () => setTimeout(() => $$('.tm-sheet .down, .tm-hands .down, .tm-findkey.down').forEach(k => k.classList.remove('down')), 40)));
 
   /* for the checks: what a print would be, and its picture, without the taps */
-  window.__tm = { nights: N, cfg: CFG, frames, makePrint, rollWith, layout, still, drawPrint, prints, loadFaces, keep, open: openSheet, light, state: () => ({ sheet: !sheet.hidden, hands: !hands.hidden, cur, kept, chosen }) };
+  window.__tm = { nights: N, cfg: CFG, frames, makePrint, rollWith, layout, frameOf, owned, castHit, castRoll, test: TEST, still, drawPrint, prints, loadFaces, keep, open: openSheet, light, state: () => ({ sheet: !sheet.hidden, hands: !hands.hidden, cur, kept, chosen }) };
 })();
 
 </script>
