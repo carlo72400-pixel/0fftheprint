@@ -3,6 +3,14 @@
   "items": [
     {
       "up": "2026-11-11",
+      "title": "RELIQUARY origins #2: Relic",
+      "line": "Relic's origin, seen through the glass of her display case. Everybody looked at her. Nobody saw her. 10 slides, read top to bottom.",
+      "link": "reliquary/relic/",
+      "thumb": "reliquary/relic/card.jpg",
+      "go": "read relic's origin"
+    },
+    {
+      "up": "2026-11-11",
       "title": "RELIQUARY origins #1: Rin",
       "line": "Rin's origin, told in her texts with CINDER (NO). Months of 3am favors before night one. 10 slides, read top to bottom.",
       "link": "reliquary/rin/",
