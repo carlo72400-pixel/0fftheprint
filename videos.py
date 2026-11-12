@@ -244,6 +244,8 @@ PAGE = """<!DOCTYPE html>
   .lb-t{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
     text-transform:uppercase;font-size:20px}
   .lb-l{font-size:13px;color:var(--muted);flex:1 1 240px;line-height:1.5}
+  /* 11/11: a cut can carry a `credit` line (the CC BY music credit on the School of Comics spots) */
+  .lb-cr{flex:1 1 100%;font-size:11px;color:var(--muted);line-height:1.5;opacity:.85}
   .lb-bar a{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;
     text-transform:uppercase;color:var(--pink);text-decoration:none;display:inline-flex;
     align-items:center;min-height:44px;padding:0 2px}
@@ -416,6 +418,7 @@ function strip(){
       + '<div class="lb-m"><div class="lb-f">' + (p ? '<img alt="" data-src="' + esc(p) + '">' : '') + '</div></div>'
       + '<div class="lb-bar"><span class="lb-t">' + esc(m.title) + '</span>'
         + '<span class="lb-l">' + esc(m.line) + '</span>'
+        + (m.credit ? '<span class="lb-cr">' + esc(m.credit) + '</span>' : '')
         + (link ? '<a href="../' + esc(link) + '">' + esc(m.from || m.title) + ' →</a>' : '')
         + (full ? '<a href="' + esc(full) + '" target="_blank" rel="noopener">full res ↓</a>' : '')
       + '</div></div>';

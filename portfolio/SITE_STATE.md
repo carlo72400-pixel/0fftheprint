@@ -33,6 +33,16 @@ He locked three calls: **both readers, two doors** · **keep the look, cut the g
 - Checked: 1280 and 375 in the Browser pane, 0 overflow offenders on all four pages, every image loads, no console errors, film preview plays, sound swap works, old `#design` lands on `archive/#design`.
 
 
+## HIRING: THE NEWEST COMMERCIAL, School of Comics (Nov 11 2026)
+
+His ask: "push my commercial to my portfolio, the pith and 0fftheprint" (the pitch = /business/). The commercial = the WILD v4 final he called ready to post on 11/11 (`Full Sail/Project & Portfolio V/07_Final_Cut/SchoolOfComics_60/30/15.mp4`, the School's copies, no class cards).
+- `<!-- SOC1111 -->` sits right above "The newest job": sub-k "The newest commercial" (`id="commercial"`), the 60 / 30 / 15 stacked in the existing `.tapes.film` (one column, 16:9, contain; no CSS change, no stamp bump; ⛔ never add `.watch` to it: `_doors.css` loads last and forces every `.tapes.watch` to 2 columns under 640px, the spots rendered 153 px wide), one client-credits paragraph that carries the music credit. Hand-kept.
+- Clips: 0tp-media-2 `video/2026-10-13-school-of-comics/soc-1013-the-{60,30,15}.mp4` (1080p59.94 H.264 CRF 21 capped at 6 Mbps, AAC 192k, faststart, metadata stripped), posters `/video/soc-1013/` (1280x720). The same files play on THE TAPE (three CUTS, `up` 2026-11-11, so the homepage card comes from there and there is no portfolio.json row) and on the pitch (card "More work", the wide tile "A commercial", reel `comics`, placed after the two tall tiles so `?for=opening` still pairs them).
+- ⛔ The music is Kevin MacLeod, CC BY 4.0: title, author, source and license go wherever the spots play (the portfolio paragraph, the pitch line under the tiles + the player bar, the Tape lightbox via the NEW `credit` field in videos.py).
+- ⛔ The 30's ticker carries the 60% line and the end cards the 4914 NW Loop 410 address, never confirmed by the School: both stay out of every caption and line, and the 30's poster is cut above the ticker. Izzy = they/them.
+- ⛔ Wording: "art-directed by me" for the finish (the 11/1 rule), the cameras are his (FX6 A-cam, a Luna Ultra B-cam).
+- Builders: Drive `03_PROJECTS/0ff-the-print/portfolio-builds/2026-11-11_soc-commercial/` (posters.py, encode.sh, site_edit.py).
+
 ## HIRING: ONE NIGHT, EVERY FORMAT, The Odd Ball (Nov 1 2026)
 
 His ask: "how can we add this to our resume slash ... portfolio website ... on the job section", about the Halloween carousel and reels he posted.

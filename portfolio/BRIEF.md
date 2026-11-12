@@ -26,7 +26,7 @@ The 10-second test, for every screen: who he is, one piece of proof for THEIR ne
 ## THE BUILD THAT CAME OUT OF IT
 
 - First screen: name you can read, one line, two doors (HIRING / BOOKING), the newest film playing.
-- HIRING: credits, the newest job (Thrift @ The Warehouse: round three of the scripted promos, the Nov 6 night market + Nov 7 $3 sale, 18 edits, 8 shown, plus the two carousels; rounds two and one folded under it; then Fill-a-Bag + its three edits), the newest night (The Odd Ball: the seamless carousel + three reels), 48 HOURS, VOLUME, the color A/B, 0FF THE PRINT, the tools, both resumes.
+- HIRING: credits, the newest commercial (School of Comics SATX: the 60, the 30 and the 15, the WILD finish, up 11/11; the same three are on THE TAPE and the pitch), the newest job (Thrift @ The Warehouse: round three of the scripted promos, the Nov 6 night market + Nov 7 $3 sale, 18 edits, 8 shown, plus the two carousels; rounds two and one folded under it; then Fill-a-Bag + its three edits), the newest night (The Odd Ball: the seamless carousel + three reels), 48 HOURS, VOLUME, the color A/B, 0FF THE PRINT, the tools, both resumes.
 - BOOKING: the wedding, how it works in three steps, three prices, Book a date.
 - NIGHTS: the best six, then every night on /portfolio/nights/ (newest first).
 - One tap deep, nothing deleted: /portfolio/archive/ (SA Current, portraits, Legion Ink, the stadium photos, design, VOLUME BTS) and /portfolio/rates/ (the full card).
