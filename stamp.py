@@ -56,13 +56,13 @@ TRACKED = ["assets/js/desk.js", "assets/js/door.js", "assets/js/composer.js",
            "assets/js/edit.js", "assets/js/board.js", "assets/js/cardback.js",
            "assets/js/dates.js", "assets/js/calendar.js", "assets/js/sealed.js",
            "assets/js/word.js", "assets/js/cathedral.js", "assets/js/binder.js",
-           "assets/js/lounge.js", "assets/js/music.js", "assets/js/people.js", "assets/js/photos.js",
+           "assets/js/people.js",
            "assets/js/board-members.js", "assets/js/take.js", "assets/js/street-skin.js", "supabase-config.js"]
 
 # stylesheet path (relative to ROOT)  ->  how it appears in href="..."
 TRACKED_CSS = ["assets/css/cathedral.css", "assets/css/pack.css",
                "assets/css/sealed.css", "assets/css/calendar.css",
-               "assets/css/binder.css", "assets/css/lounge.css", "assets/css/music.css", "assets/css/people.css", "assets/css/photos.css",
+               "assets/css/binder.css", "assets/css/people.css",
                "assets/css/auth.css", "assets/css/board-members.css", "assets/css/take.css", "assets/css/street-skin.css"]
 
 # THE PIN (10/13): one exact supabase-js release, with the sha384 of that exact file (fetched once from this URL)
@@ -77,9 +77,9 @@ FLOATING = "supabase-js@" + "2/"   # split so a repo grep for the floating tag n
 PIN_TWINS = {"newstory.py": (PIN_URL, PIN_SRI), "assets/js/sealed.js": (PIN_URL, PIN_SRI)}
 
 # every document that loads them
-# 11/12 home swap: the old home is home.html. index.html is the street (built by the street kit in Drive); it keeps the
+# 11/12: the old home is gone (home.html is a redirect to /). index.html is the street (built by the street kit in Drive); it keeps the
 # login scripts in a <template>, and those two tags are the only thing here that matches in it.
-DOCS = ["home.html", "index.html", "join/index.html", "compose/index.html", "desk/index.html",
+DOCS = ["index.html", "join/index.html", "compose/index.html", "desk/index.html",
         "board/index.html", "c/index.html", "dates/index.html", "events/index.html",
         "desk/goals/index.html",
         # Any page that loads desk.js belongs here. A page left off this list
@@ -94,7 +94,7 @@ DOCS = ["home.html", "index.html", "join/index.html", "compose/index.html", "des
         # between builds. Only its two script tags match, the sealed payload
         # is ciphertext and never does.
         "wall/index.html",
-        # 11/12: The Take on its own page. maketake.py builds it from home.html (main() runs it first), then it is stamped like any page.
+        # 11/12: The Take on its own page (take/index.html is its own source, it still loads the old home's scripts).
         "take/index.html"] + [
         # every story page carries desk.js + word.js
         str(p.relative_to(ROOT)) for p in sorted(ROOT.glob("word/*/index.html"))] + [
@@ -180,12 +180,6 @@ def stamp_text(text, stamps=None, css=None):
 
 
 def main() -> int:
-    # take/index.html is home.html with only the timeline on: rebuild it first so it always follows home.html
-    try:
-        import maketake
-        maketake.build()
-    except Exception as e:
-        print(f"  take/index.html NOT rebuilt ({e}); it is as it was")
     # the strip at the top of every inner page (back key, place name, sound key): put on any page that lacks it
     try:
         import street_skin

@@ -451,7 +451,7 @@ def main():
 
     # anything else in the repo still pointing at it (a Who Played frame in music.json, a story)
     needles = [f"events/{a.slug}/{m.get('thumb')}"] + urls_of(m)
-    hay = [os.path.join(ROOT, "home.html"), os.path.join(ROOT, "index.html")] + \
+    hay = [os.path.join(ROOT, "take", "index.html"), os.path.join(ROOT, "index.html")] + \
           [os.path.join(ROOT, "content", f) for f in sorted(os.listdir(os.path.join(ROOT, "content"))) if f.endswith(".json")]
     word = os.path.join(ROOT, "word")
     if os.path.isdir(word):

@@ -1,6 +1,6 @@
 /* THE TAKE on its own page (take/index.html, 11/12). His call: "just 1 timeline", then "merge": The Take and The Roll
  * are ONE members' timeline behind the door, called The Take. The page is the old home with everything but the
- * timeline switched off (maketake.py builds it from home.html, assets/css/take.css hides the rest). This file loads
+ * timeline switched off (take/index.html is its own source; assets/css/take.css hides the rest). This file loads
  * right after desk.js and before anything asks for the feed, and changes three things for this page only:
  *
  *   THE FEED   OTP.feed() answers with roll_feed(60, every post) (045): every post a member may see, the public ones
@@ -12,7 +12,7 @@
  *              where everyone can see them, and the line under the box says so. Putting words behind the door too is
  *              a database change (a migration, his click), not something this page can do.
  *   LINKS      the page lives one folder down with <base href="../">, so a bare #link would leave for the front
- *              page. Bare #links stay here; a link to one of the old home's tabs goes to home.html.
+ *              page. Bare #links stay here; a link to one of the old home's tabs goes to that place on the street.
  *
  * ?post=<id> (a shared post) scrolls to that post once the feed has drawn. No new SQL. ⛔ Run stamp.py after editing.
  */
@@ -49,7 +49,7 @@
     var id = a.getAttribute('href').slice(1);
     ev.preventDefault();
     if (OWN[id]) return;
-    if (/^[a-z][a-z0-9-]{0,30}$/.test(id) && d.getElementById(id) && !a.hasAttribute('data-keep')) location.href = 'home.html#' + id;
+    if (/^[a-z][a-z0-9-]{0,30}$/.test(id) && d.getElementById(id) && !a.hasAttribute('data-keep')) location.href = './#' + id;
   }, true);
 
   /* the Roll's door card, in the Take's words (people.js draws it for anybody who is not in) */
@@ -81,6 +81,7 @@
       if (el) {
         clearInterval(t);
         el.scrollIntoView({ block: 'center' });
+        setTimeout(function () { el.scrollIntoView({ block: 'center' }); }, 1500);      // again once the photos above it have their height
         el.classList.add('take-lit'); setTimeout(function () { el.classList.remove('take-lit'); }, 2400);
       } else if (++tries > 40) clearInterval(t);
     }, 300);

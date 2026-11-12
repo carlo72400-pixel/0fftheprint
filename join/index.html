@@ -97,7 +97,7 @@ a.btn{text-decoration:none}
   const H = Q.get('h') || '';
   const HASH = /^(e-[a-z0-9]{1,40}|s-[0-9a-f]{10}|cal|ig-[A-Za-z0-9_-]{5,40})$/i.test(H) ? '#' + H : '';
   const NEXT = {
-    wall: '../wall/' + HASH, home: '../home.html#take', street: '../', take: '../take/',
+    wall: '../wall/' + HASH, home: '../take/', street: '../', take: '../take/',
     my: '../my/', account: '../my/#account', card: '../card/', compose: '../compose/', write: '../word/new/', dates: '../dates/',
     desk: '../board/', goals: '../desk/goals/', board: '../board/', deskword: '../desk/word/',
   }[NEXT_KEY] || null;
