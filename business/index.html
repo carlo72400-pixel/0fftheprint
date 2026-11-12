@@ -267,14 +267,14 @@ h1,h2{margin-top:8px;font-family:var(--disp);font-weight:650;font-variation-sett
 
   <section class="card c-real" data-id="real" data-title="A real one" data-next="See a real one" aria-roledescription="slide" aria-label="2 of 7" aria-hidden="true">
     <div class="vis">
-      <video id="promo" src="media/real.mp4" poster="media/real.jpg" muted playsinline loop preload="none" aria-label="A 12-second promo for two vintage markets at Thrift @ The Warehouse"></video>
+      <video id="promo" src="media/soc-60.mp4" poster="/video/soc-1013/soc-1013-the-60.jpg" muted playsinline loop preload="none" aria-label="The 60-second School of Comics commercial, a 2000s infomercial"></video>
       <button class="key soft sound" id="sound" type="button" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path class="w" d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg><span>Sound on</span></button>
     </div>
     <div class="sheet">
-      <p class="k">A real one <span>· Thrift @ The Warehouse</span></p>
-      <h2>One weekend. 18&nbsp;videos.</h2>
-      <p class="l">A night market and a sale day for this store. All 18 delivered in 4K, plus 27 photos.</p>
-      <span class="chip"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg>An earlier promo: 2,000+ plays</span>
+      <p class="k">A real one <span>· School of Comics</span></p>
+      <h2>One shoot day. 3&nbsp;commercials.</h2>
+      <p class="l">A 60, a 30 and a 15 for a comic shop and art studio in San Antonio, finished in 4K.</p>
+      <span class="chip" hidden><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg>All 3 spots under More work</span>
     </div>
   </section>
 
@@ -338,6 +338,11 @@ h1,h2{margin-top:8px;font-family:var(--disp);font-weight:650;font-variation-sett
       <p class="k">More of my work</p>
       <h2>Tap one. It plays.</h2>
       <div class="reels">
+        <button class="tile wide" type="button" data-reel="comics" aria-label="Play the School of Comics commercial, three spots">
+          <img src="media/soc.jpg" alt="" width="640" height="360" loading="lazy" decoding="async">
+          <span class="pl" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l12.5-7.5z"/></svg></span>
+          <span class="cap"><b>A commercial</b><small>3 spots · School of Comics</small></span>
+        </button>
         <button class="tile tall stack" type="button" data-reel="thrift" aria-label="Play the new promos for Thrift @ The Warehouse">
           <img src="media/t01.jpg" alt="" width="216" height="384" loading="lazy" decoding="async">
           <img src="media/t03.jpg" alt="" width="216" height="384" loading="lazy" decoding="async">
@@ -349,11 +354,6 @@ h1,h2{margin-top:8px;font-family:var(--disp);font-weight:650;font-variation-sett
           <img src="media/launch-collage.jpg" alt="" width="360" height="640" loading="lazy" decoding="async">
           <span class="pl" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l12.5-7.5z"/></svg></span>
           <span class="cap"><b>Grand opening</b><small>2 cuts · Pixel Pulpit</small></span>
-        </button>
-        <button class="tile wide" type="button" data-reel="comics" aria-label="Play the School of Comics commercial, three spots">
-          <img src="media/soc.jpg" alt="" width="640" height="360" loading="lazy" decoding="async">
-          <span class="pl" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l12.5-7.5z"/></svg></span>
-          <span class="cap"><b>A commercial</b><small>3 spots · School of Comics</small></span>
         </button>
         <button class="tile wide" type="button" data-reel="wedding" aria-label="Play the wedding film, song only">
           <img src="media/wedding.jpg" alt="" width="640" height="360" loading="lazy" decoding="async">
@@ -439,7 +439,7 @@ h1,h2{margin-top:8px;font-family:var(--disp);font-weight:650;font-variation-sett
   var live=d.getElementById('live');
   var ME=/[?&]me(=|&|$)/.test(location.search)||matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
   if(ME) d.documentElement.classList.add('me');
-  // ?for=opening: the proof card shows a grand opening instead of the thrift promo (the DM leads are openings)
+  // ?for=opening: the proof card shows a grand opening instead of the School of Comics 60 (the DM leads are openings)
   var FOR=(location.search.match(/[?&]for=([a-z]+)/)||[])[1]||'';
   var PROOF={opening:{src:'media/launch-collage.mp4',poster:'media/launch-collage.jpg',label:'The 1-minute highlight of a grand opening for Pixel Pulpit, 57 seconds',
     who:'· Pixel Pulpit',h:'One grand opening. 2 videos.',l:'A 1-minute highlight and a 2-minute recap, delivered the next day.',first:'launch'}};
@@ -649,7 +649,8 @@ h1,h2{margin-top:8px;font-family:var(--disp);font-weight:650;font-variation-sett
     real.querySelector('.l').textContent=pf.l;
     real.querySelector('.chip').hidden=true;
     var reels=deck.querySelector('.reels'), first=deck.querySelector('[data-reel="'+pf.first+'"]');
-    if(reels&&first) reels.insertBefore(first, reels.firstElementChild);
+    // the commercial's wide tile stays on top; the proof's own tile leads the tall pair (11/11)
+    if(reels&&first) reels.insertBefore(first, reels.querySelector('.tile.tall')||reels.firstElementChild);
   }
   var start=0, want=location.hash.slice(1);
   cards.forEach(function(c,k){ if(c.getAttribute('data-id')===want) start=k });
