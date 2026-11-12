@@ -626,7 +626,7 @@ color:var(--ink);width:46px;height:46px;border-radius:50%;cursor:pointer;font-si
 font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#f7b9dd;text-decoration:none;
 border:1px solid rgba(255,121,198,.45);border-radius:999px;padding:8px 14px;background:rgba(10,10,13,.75)}
 .lb-dl:hover{color:#0a0a0d;background:#f7b9dd}
-/* MAKE IT A CARD (11/12): the photo booth on the street prints this frame as a THAT'S ME card */
+/* MAKE IT A POLAROID (11/12): the photo booth on the street prints this frame as a Polaroid */
 /* the viewer is a pop up: it sits above the street's strip, whose keys lay over its close key at the top of a page */
 .lb{z-index:9001}
 .lb-card{position:absolute;top:18px;right:76px;z-index:12;display:none;align-items:center;height:46px;padding:0 16px;
@@ -661,7 +661,7 @@ __LOOKSLINE__
   <div class="lb-looks" id="lblooks" hidden></div>
   <div class="lb-count" id="lbc"></div>
   <a class="lb-dl" id="lbdl" href="#" target="_blank" rel="noopener">full res &darr;</a>
-  <a class="lb-card" id="lbcard" href="#">make it a card</a>
+  <a class="lb-card" id="lbcard" href="#">make it a polaroid</a>
 </div>
 <script>
 const MEDIA = __MEDIA__;
@@ -704,7 +704,7 @@ function show(i){
   // so it saves rather than navigating anyway.
   const dl=document.getElementById('lbdl');
   if(v.full){dl.href=v.full;dl.style.display='';}else{dl.style.display='none';}
-  // MAKE IT A CARD: only a frame that is on the site's contact sheet gets the key
+  // MAKE IT A POLAROID: only a frame that is on the site's contact sheet gets the key
   // (the night's hit, a clip and anything pulled never do).
   const mk=document.getElementById('lbcard'), th=String(m.thumb||'');
   const nm=(th.indexOf('media/')===0 && th.slice(-6)==='_t.jpg') ? th.slice(6,-6) : '';
@@ -730,7 +730,7 @@ function onSheet(){
     if(!n) return null;
     const set={}; n.f.forEach(f=>{set[f[1]]=1;});
     return {slug:slug,set:set};
-  }).catch(e=>{console.warn('make it a card: the contact sheet would not load',e);sheetP=null;return null;});
+  }).catch(e=>{console.warn('make it a polaroid: the contact sheet would not load',e);sheetP=null;return null;});
   return sheetP;
 }
 function close(){lb.classList.remove('open');stage.innerHTML='';document.body.style.overflow='';}

@@ -368,7 +368,7 @@ window.OTPLazy = window.OTPLazy || (function () {
       .catch(function () { sbP = null; return {}; });
     return sbP;
   }
-  /* THAT'S ME cards (11/12): the photo booth on the street keeps them on this phone in 'st-cards'. One row each, the
+  /* Polaroids (11/12): the photo booth on the street prints them and keeps them on this phone in 'st-cards'. One row each, the
      frame's own small picture, back to the bag on the street. Read only. */
   function streetCards() {
     var out = {};
@@ -376,9 +376,9 @@ window.OTPLazy = window.OTPLazy || (function () {
       var j = JSON.parse(w.localStorage.getItem('st-cards') || '[]');
       (Array.isArray(j) ? j : []).forEach(function (c) {
         if (c && /^T[a-z0-9]{1,6}$/.test(c.id) && /^[a-z0-9-]{4,80}$/.test(c.s) && /^[A-Za-z0-9_.-]{1,40}$/.test(c.k))
-          out[c.id] = { t: String(c.t || 'THAT\u2019S ME'), w: 'That\u2019s me card', pic: 'events/' + c.s + '/media/' + c.k + '_t.jpg' };
+          out[c.id] = { t: String(c.t || 'THAT\u2019S ME'), w: 'Polaroid', pic: 'events/' + c.s + '/media/' + c.k + '_t.jpg' };
       });
-    } catch (e) { console.warn('the bag: the cards this phone kept would not read', e); }
+    } catch (e) { console.warn('the bag: the Polaroids this phone kept would not read', e); }
     return out;
   }
   function streetBag(body) {

@@ -2790,12 +2790,12 @@ a.key{cursor:pointer}
 .tk-film-c small{display:block;margin-top:5px;font:500 13.5px/1.35 var(--f-text);color:#c4bbd0}
 .tk-film .key.big{flex:none;width:min(100%,340px)}
 
-/* ---------- THAT'S ME cards at the PHOTO BOOTH (11/12, site build only: tm.js). A night's whole contact sheet opens in
-   the booth, you tap your frame, the booth prints it as a card with HIS DOODLES as the foil, in chrome. The card is one
-   small box: everything that moves on it is a transform, an opacity or a background-position, driven by two numbers
-   (--mx, --my: where the light is, 0 to 1). Nothing here costs a layout while it moves. ---------- */
+/* ---------- THAT'S ME at the PHOTO BOOTH: a night's whole contact sheet, and the POLAROID the booth prints of your
+   frame (11/12, site build only: tm.js). Instant film, not a trading card: white border, thick bottom edge, the photo
+   in a window its own shape so nobody is cropped out, a little paper grain, a soft shadow. No foil. The print is one
+   small box; what moves on it is a transform, an opacity or a background-position. ---------- */
 
-/* FIND YOURSELF: the chrome key under the strip in your hands, and in a strip's page from the bag */
+/* FIND YOURSELF: the chrome key with the strip in your hands, and in a strip's page from the bag */
 .key.tm-chromekey{background:linear-gradient(#fbfcfe,#c5ccd8 55%,#eef1f6);color:#17131c;box-shadow:inset 0 1px 0 #fff,0 6px 0 #6f7786,0 8px 14px rgba(0,0,0,.45)}
 .key.tm-chromekey.down{box-shadow:inset 0 1px 0 #fff,0 0 0 #6f7786,0 2px 6px rgba(0,0,0,.45);filter:brightness(1.04)}
 .tm-findkey{flex:1 0 100%!important}
@@ -2830,77 +2830,78 @@ a.key{cursor:pointer}
 .tm-keys{display:flex;align-items:center;gap:10px;padding:10px 12px calc(12px + env(safe-area-inset-bottom,0px));background:#2a0f26;border-top:1px solid #4a1c46}
 
 /* in your hands */
-.tm-hands{z-index:47;overflow-y:auto;overscroll-behavior:contain;justify-content:flex-start;gap:14px;padding-top:max(18px,env(safe-area-inset-top,0px))}
-.tm-hands .hold{padding-top:0;gap:10px;flex:none}
-.tm-hands .hold-keys{flex:none;margin-top:auto}
-.tm-stage{--cw:min(74vw,300px,calc((100vh - 310px) / 1.4));--cw:min(74vw,300px,calc((100dvh - 310px) / 1.4));perspective:900px;touch-action:none}
-@media (max-height:600px){.tm-stage{--cw:min(74vw,300px,max(150px,calc((100dvh - 250px) / 1.4)))}}
-.tm-card{position:relative;display:block;width:var(--cw);height:calc(var(--cw) * 1.4);margin:0;padding:0;border:0;background:none;color:inherit;font-size:calc(var(--cw) / 20);cursor:grab;
-  --mx:.34;--my:.3;transform:rotateX(calc((.5 - var(--my)) * 16deg)) rotateY(calc((var(--mx) - .5) * 20deg));transform-style:preserve-3d;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
-.tm-card:focus-visible{outline:3px solid #fff;outline-offset:6px}
-.tm-inner{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.3,1.2,.4,1)}
-.tm-card.flip .tm-inner{transform:rotateY(180deg)}
-.tm-face{position:absolute;inset:0;border-radius:1em;overflow:hidden;isolation:isolate;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:0 1.2em 2.2em rgba(0,0,0,.55);text-align:left}
-.tm-backf{transform:rotateY(180deg)}
-/* the chrome: a cool silver that slides, and a rainbow edge that slides the other way */
-.tm-chrome{position:absolute;inset:0;background:linear-gradient(115deg,#f7f9fc 0%,#b4bdcb 16%,#eef2f7 32%,#8791a1 50%,#f4f7fb 66%,#a4aebd 82%,#f7f9fc 100%) calc(var(--mx) * 100%) calc(var(--my) * 100%)/230% 230%}
-.tm-chrome::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,rgba(255,255,255,0) 28%,rgba(255,90,170,.55) 38%,rgba(255,220,90,.5) 45%,rgba(90,255,200,.5) 52%,rgba(90,160,255,.55) 59%,rgba(200,110,255,.5) 66%,rgba(255,255,255,0) 76%) calc(100% - var(--mx) * 100%) 0/320% 100%}
-.tm-card.bl .tm-chrome{background-image:linear-gradient(115deg,#3b3e47 0%,#101116 16%,#4c505b 32%,#07080b 50%,#565a66 66%,#15161b 82%,#3b3e47 100%)}
-.tm-card.bl .tm-chrome::after{background-image:linear-gradient(100deg,rgba(255,255,255,0) 28%,rgba(255,196,84,.6) 40%,rgba(255,240,190,.75) 50%,rgba(255,170,60,.6) 60%,rgba(255,255,255,0) 72%)}
-.tm-top{position:absolute;left:1em;right:1em;top:0;height:2.4em;display:flex;align-items:center;justify-content:center;overflow:hidden;white-space:nowrap;color:#15111a;text-shadow:0 1px 0 rgba(255,255,255,.7)}
-.tm-top b{display:block;font:400 1.5em/1 "VP Deadeye",var(--f-name);letter-spacing:.02em}
-.tm-win{position:absolute;left:1em;top:2.4em;width:18em;height:24em;overflow:hidden;border-radius:.3em;background:#0c0a10;box-shadow:0 0 0 1px rgba(10,8,14,.55)}
-.tm-win img{display:block;width:100%;height:100%;object-fit:cover}
-.tm-win.w img{object-fit:contain}
-.tm-bot{position:absolute;left:1em;right:1em;top:26.4em;height:1.6em;display:flex;align-items:center;justify-content:center;overflow:hidden;white-space:nowrap;color:#1b1722}
-.tm-bot span{display:block;font:700 .66em/1 var(--f-text);letter-spacing:.09em;text-transform:uppercase}
-/* the serial: a small plate in the corner of the photo */
-.tm-no{position:absolute;right:.5em;bottom:.5em;padding:.34em .55em;border-radius:.3em;background:rgba(12,8,16,.78);font:700 .5em/1 var(--f-text);font-style:normal;letter-spacing:.1em;font-variant-numeric:tabular-nums;color:#e9edf3}
-.tm-card.bl .tm-no{color:#f3cf7a;box-shadow:0 0 0 1px rgba(243,207,122,.7)}
-.tm-card.bl .tm-top{color:#f3cf7a;text-shadow:0 1px 0 rgba(0,0,0,.8)}
-.tm-card.bl .tm-bot{color:#d9dbe2}
-.tm-atag{position:absolute;left:.5em;bottom:.5em;max-width:calc(100% - 7.6em);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:.28em .6em .3em;border-radius:99em;background:rgba(12,8,16,.78);font:400 .78em/1.1 var(--f-name);color:#fff}
-.tm-atag:empty{display:none}
-.tm-bltag{position:absolute;right:.5em;top:.5em;padding:.3em .55em;border-radius:.3em;background:rgba(8,8,10,.82);box-shadow:0 0 0 1px #f3cf7a;font:700 .5em/1 var(--f-text);letter-spacing:.16em;color:#f3cf7a}
-.tm-card:not(.bl) .tm-bltag{display:none}
-/* his doodles: the tile is a mask, so the shine only shows inside the drawings. Light over the middle of the photo
-   (faces stay faces), strong round the edge. */
-.tm-doo,.tm-edge i{position:absolute;inset:0;-webkit-mask:url(street/s/tm-foil.webp?v=b4217332) 0 0/9em 9em repeat;mask:url(street/s/tm-foil.webp?v=b4217332) 0 0/9em 9em repeat;
-  background:linear-gradient(105deg,rgba(255,255,255,0) 22%,rgba(255,120,190,.95) 35%,rgba(255,235,140,1) 43%,#fff 50%,rgba(130,255,220,1) 57%,rgba(120,170,255,.95) 65%,rgba(255,255,255,0) 78%) calc(var(--mx) * 100%) 0/260% 100%,linear-gradient(rgba(232,238,246,.5),rgba(190,199,212,.5))}
-.tm-doo{opacity:.27;mix-blend-mode:screen}
-/* the strong part sits low and to the sides: faces are mostly in the upper middle of a photo, and stay clear */
-.tm-edge{position:absolute;inset:0;-webkit-mask:radial-gradient(ellipse 62% 62% at 50% 42%,rgba(0,0,0,0) 52%,#000 100%);mask:radial-gradient(ellipse 62% 62% at 50% 42%,rgba(0,0,0,0) 52%,#000 100%);mix-blend-mode:screen}
-.tm-edge i{opacity:.95}
-.tm-card.bl .tm-doo,.tm-card.bl .tm-edge i{background-image:linear-gradient(105deg,rgba(255,255,255,0) 22%,rgba(255,190,80,.95) 38%,rgba(255,244,205,1) 50%,rgba(255,170,60,.95) 62%,rgba(255,255,255,0) 78%),linear-gradient(rgba(214,180,96,.5),rgba(150,118,46,.5))}
-/* the bright band */
-.tm-glare{position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,0) 38%,rgba(255,255,255,.7) 50%,rgba(255,255,255,0) 62%) calc(var(--mx) * 100%) calc(var(--my) * 100%)/260% 260%;mix-blend-mode:soft-light;opacity:.6}
-/* one sweep when the card lands */
-.tm-sweep{position:absolute;top:-10%;bottom:-10%;left:0;width:46%;background:linear-gradient(100deg,rgba(255,255,255,0),rgba(255,255,255,.75) 50%,rgba(255,255,255,0));transform:translateX(-140%) skewX(-12deg);opacity:0;pointer-events:none}
-/* the back */
-.tm-pbg{position:absolute;left:1em;right:1em;top:1em;bottom:1em;border-radius:.4em;background:#120b14}
-.tm-backf .tm-plate{position:absolute;left:1em;right:1em;top:1em;bottom:1em;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.7em;padding:1.2em;text-align:center;color:#f6eef4}       /* the words sit on top of the foil */
-.tm-backf .tm-doo{opacity:.3}
-.tm-plate small{font:700 .62em/1.3 var(--f-text);letter-spacing:.16em;text-transform:uppercase;color:#ff9cc6}
-.tm-plate b{font:400 1.7em/1.02 "VP Deadeye",var(--f-name);letter-spacing:.02em}
-.tm-plate em{font:400 .9em/1.2 var(--f-name);font-style:normal;color:#fff}
-.tm-plate span{font:700 .6em/1.4 var(--f-text);letter-spacing:.12em;text-transform:uppercase;color:#cbbbc8}
-.tm-plate hr{width:40%;margin:.2em 0;border:0;border-top:1px solid rgba(255,255,255,.22)}
-.tm-card.bl .tm-plate small,.tm-card.bl .tm-plate em{color:#f3cf7a}
+.tm-hands{z-index:47;overflow-y:auto;overscroll-behavior:contain;justify-content:flex-start;gap:12px;padding-top:max(18px,env(safe-area-inset-top,0px))}
+.tm-hands .hold{padding-top:0;gap:9px;flex:none}
+.tm-hands .hold-keys{flex:none;margin-top:auto;gap:8px}
+.tm-hands .hold-keys .key.big{padding:0 8px}
+.tm-hands .hold-name b{font-size:19px}
+/* a tall print is sized so it and the keys fit one screen; a wide one takes the width */
+.tm-stage{--cw:min(72vw,290px,calc((100vh - 318px) / 1.49));--cw:min(72vw,290px,calc((100dvh - 318px) / 1.49));perspective:900px;touch-action:none}
+.tm-stage.wide{--cw:min(90vw,400px,calc((100vh - 318px) / .98));--cw:min(90vw,400px,calc((100dvh - 318px) / .98))}
+@media (max-height:600px){.tm-stage{--cw:min(72vw,290px,max(150px,calc((100dvh - 250px) / 1.49)))}}
 
-.tm-hands .hold-name b{font-size:20px}
-.tm-form{display:grid;gap:8px;width:min(100%,340px)}
-.tm-at{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:4px 10px;font:700 11.5px/1.2 var(--f-text);letter-spacing:.1em;text-transform:uppercase;color:#e9dbe6}
-.tm-at input{min-width:0;min-height:44px;padding:0 12px;border:0;border-radius:10px;background:#fff8fb;color:#2a0d18;font:500 16px/1 var(--f-text);letter-spacing:0;text-transform:none}
-.tm-at small{grid-column:1/-1;font:500 12px/1.3 var(--f-text);letter-spacing:0;text-transform:none;color:var(--ink-2,#aca6ba)}
+/* THE POLAROID. 20 units across (font-size is a twentieth of its width); --ph is the photo's height in those units. */
+.pl{position:relative;display:block;width:var(--cw);height:calc(var(--cw) / 20 * 5.55 + var(--ph));margin:0;padding:0;border:0;background:none;color:inherit;font-size:calc(var(--cw) / 20);cursor:pointer;
+  --mx:.34;--my:.3;--ph:24.13em;--pen:#1c2452;transform:rotateX(calc((.5 - var(--my)) * 9deg)) rotateY(calc((var(--mx) - .5) * 11deg));transform-style:preserve-3d;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+.pl:focus-visible{outline:3px solid #fff;outline-offset:6px}
+.pl-inner{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.3,1.2,.4,1)}
+.pl.flip .pl-inner{transform:rotateY(180deg)}
+.pl-face{position:absolute;inset:0;border-radius:.14em;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;text-align:left;
+  background:linear-gradient(135deg,rgba(255,255,255,.35),rgba(120,105,85,.08)),var(--paper,none),#f4f1ea;box-shadow:0 1.1em 2em rgba(0,0,0,.5),0 .1em .3em rgba(0,0,0,.35)}
+.pl-backf{transform:rotateY(180deg)}
+.pl-photo{position:absolute;left:.95em;top:.95em;width:18.1em;height:var(--ph);overflow:hidden;background:#2b2d2a;box-shadow:0 0 0 1px rgba(0,0,0,.28)}
+.pl-photo img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover}
+.pl-im2{mix-blend-mode:screen;opacity:.42}                                           /* DOUBLE EXPOSURE: the other frame, faint, the one you picked plainly on top of it */
+.pl-leak,.pl-gloss,.pl-dev{position:absolute;inset:0}
+.pl-leak{display:none;mix-blend-mode:screen}
+.pl.sp-leak .pl-leak{display:block}
+.pl.e0 .pl-leak{background:radial-gradient(circle at 0 70%,rgba(255,238,170,.85),rgba(255,150,50,.3) 25%,rgba(255,150,50,0) 50%),linear-gradient(to right,rgba(255,112,24,.98),rgba(255,164,58,.6) 19%,rgba(255,205,128,.18) 40%,rgba(255,205,128,0) 62%)}
+.pl.e1 .pl-leak{background:radial-gradient(circle at 100% 70%,rgba(255,238,170,.85),rgba(255,150,50,.3) 25%,rgba(255,150,50,0) 50%),linear-gradient(to left,rgba(255,112,24,.98),rgba(255,164,58,.6) 19%,rgba(255,205,128,.18) 40%,rgba(255,205,128,0) 62%)}
+.pl.e2 .pl-leak{background:radial-gradient(circle at 30% 0,rgba(255,238,170,.85),rgba(255,150,50,.3) 25%,rgba(255,150,50,0) 50%),linear-gradient(to bottom,rgba(255,112,24,.98),rgba(255,164,58,.6) 19%,rgba(255,205,128,.18) 40%,rgba(255,205,128,0) 62%)}
+.pl.e3 .pl-leak{background:radial-gradient(circle at 30% 100%,rgba(255,238,170,.85),rgba(255,150,50,.3) 25%,rgba(255,150,50,0) 50%),linear-gradient(to top,rgba(255,112,24,.98),rgba(255,164,58,.6) 19%,rgba(255,205,128,.18) 40%,rgba(255,205,128,0) 62%)}
+.pl-gloss{background:linear-gradient(115deg,rgba(255,255,255,0) 40%,rgba(255,255,255,.2) 50%,rgba(255,255,255,0) 60%) calc(var(--mx) * 100%) calc(var(--my) * 100%)/260% 260%}
+.pl-dev{background:linear-gradient(#90938a,#6f736b);opacity:0}                         /* it comes up out of grey */
+/* the border: the caption, in his hand */
+.pl-cap{position:absolute;left:1em;right:1em;top:calc(.95em + var(--ph));height:4.6em;display:flex;align-items:center;justify-content:center;overflow:hidden;white-space:nowrap;color:var(--pen)}
+.pl-cap b{display:block;font:400 1.62em/1 "VP Deadeye",var(--f-name);letter-spacing:.01em;transform:rotate(-1.2deg)}
+.pl.sp-doodled .pl-cap{left:3.7em;right:3.7em}
+.pl.sp-note .pl-cap{height:2.9em}
+/* A NOTE FROM THE CAST: bottom right corner of the border, their head beside it */
+.pl-note{position:absolute;right:1.1em;bottom:.5em;display:flex;align-items:center;gap:.3em;color:var(--pen);transform:rotate(-3deg);transform-origin:100% 100%}
+.pl-note span{display:block;text-align:right}
+.pl-note b{display:block;font:400 1.02em/1 "VP Deadeye",var(--f-name)}
+.pl-note em{display:block;margin-top:.12em;font:400 .92em/1 "VP Deadeye",var(--f-name);font-style:normal}
+.pl-head{flex:none;width:1.9em;height:1.9em;background:url(street/s/pl-ink.webp?v=c5a4dd18) 0 0/400% 500% no-repeat}
+/* DOODLED: his drawings, in pen, round the border */
+.pl-dds{position:absolute;inset:0;pointer-events:none}
+.pl-dds i{position:absolute;background:url(street/s/pl-ink.webp?v=c5a4dd18) 0 0/400% 500% no-repeat}
+/* BLACK FRAME: silver ink on black */
+.pl.sp-black{--pen:#d9dde4}
+.pl.sp-black .pl-face{background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(0,0,0,.2)),var(--paper,none),#151317}
+.pl.sp-black .pl-photo{box-shadow:0 0 0 1px rgba(255,255,255,.14)}
+/* the back: in pen on the white */
+.pl-pen{position:absolute;inset:1.6em 1.4em;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.55em;text-align:center;color:var(--pen)}
+.pl-pen small{font:700 .6em/1.3 var(--f-text);letter-spacing:.16em;opacity:.7}
+.pl-pen b{font:400 1.75em/1.02 "VP Deadeye",var(--f-name);letter-spacing:.01em;transform:rotate(-1.5deg)}
+.pl-pen em{font:400 1.05em/1.15 "VP Deadeye",var(--f-name);font-style:normal}
+.pl-pen span{font:400 .95em/1.15 "VP Deadeye",var(--f-name)}
+.pl-pen i{width:42%;border-top:.08em solid currentColor;opacity:.45;margin:.15em 0}
+.pl-pen u{margin-top:.5em;font:400 .8em/1 "VP Deadeye",var(--f-name);text-decoration:none;opacity:.75}
+.pl-pen u:empty{display:none}
+
+.tm-form{display:grid;gap:7px;width:min(100%,360px)}
+.tm-caprow{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:6px 8px}
+.tm-capl{grid-column:1/-1;font:700 11.5px/1.2 var(--f-text);letter-spacing:.1em;text-transform:uppercase;color:#e9dbe6}
+.tm-caprow input{min-width:0;min-height:48px;padding:0 12px;border:0;border-radius:10px;background:#fff8fb;color:#2a0d18;font:500 16px/1 var(--f-text)}
+.tm-caprow .key{min-height:48px;padding:0 12px;font-size:11.5px;white-space:nowrap}
+.tm-fine{margin:0;font:500 12px/1.3 var(--f-text);color:var(--ink-2,#aca6ba)}
 .tm-tag{display:flex;align-items:center;gap:10px;min-height:44px;font:500 14px/1.3 var(--f-text);color:#f6eef4}
 .tm-tag input{flex:none;width:24px;height:24px;margin:0;accent-color:#ff6aa8}
 .tm-say{min-height:18px;margin:0;font:500 13px/1.35 var(--f-text);text-align:center;color:#ffd9ea}
-.tm-hands .hold-keys{gap:8px}
-.tm-hands .hold-keys .key.big{padding:0 8px}
 
 @media (prefers-reduced-motion:reduce){
-  .tm-card{transform:none}
-  .tm-inner{transition:none}
+  .pl{transform:none}
+  .pl-inner{transition:none}
 }
 
 </style>
@@ -2997,7 +2998,7 @@ a.key{cursor:pointer}
 (() => {
   const ITEMS = {"B1": {"t": "12 CHAIRS", "k": "carousel", "pk": "zine", "w": "CAROUSEL", "what": "CAROUSEL \u00b7 16 SLIDES", "verb": "Flip it open", "cnt": 16, "img": "c-B1", "view": "swipe", "hint": "carousel", "pages": ["street/v/B1/01.webp?v=79cb67aa", "street/v/B1/02.webp?v=267f5a54", "street/v/B1/03.webp?v=4a3bafa9", "street/v/B1/04.webp?v=e3f2f2a4", "street/v/B1/05.webp?v=e895ce09", "street/v/B1/06.webp?v=dc1343a4", "street/v/B1/07.webp?v=de89894e", "street/v/B1/08.webp?v=aa40da10", "street/v/B1/09.webp?v=93f21720", "street/v/B1/10.webp?v=085b38cb", "street/v/B1/11.webp?v=e91f2452", "street/v/B1/12.webp?v=903e7208", "street/v/B1/13.webp?v=c654b1aa", "street/v/B1/14.webp?v=c6f5c178", "street/v/B1/15.webp?v=7323d976", "street/v/B1/16.webp?v=8a303df5"], "caps": ["she set out twelve chairs. seven showed up \ud83e\ude91", "plans every job. can&#x27;t touch the loot. still the boss \ud83d\udda4", "their first steal walked out with them \ud83d\udc2f", "she shoots first. that&#x27;s how half the crew got here \ud83d\udcf8", "her fake is still in their vault. nobody noticed \ud83d\udc85", "picks locks with her nails. named relic as a joke \ud83e\udd64", "the church&#x27;s security guard. our favorite inside man \ud83d\udd11", "came to fix the pipes. fixed nothing. has the polo \ud83d\ude90", "five seats left. they don&#x27;t stay empty long \ud83d\udd6f\ufe0f", "she loops their cameras live. smile, you&#x27;re on stream \ud83d\udcfa", "every gun she carries is a camera. still owes dulce \ud83d\udcb8", "watches from the roofs. can&#x27;t stop flying at the fire \ud83e\udd8b", "every witness remembers a clown. that&#x27;s the whole plan \ud83e\udd21", "zero chrome. scans clean. sweetest face in the room \ud83c\udf3b", "twelve chairs. one of them talks to the church \ud83d\udc00", "the chancery owns every miracle. we own a crowbar \ud83e\ude78"], "go": "reliquary/#12-chairs", "goT": "Full size", "goL": "12 Chairs, full size, on the lore page"}, "B2": {"t": "PATRON SAINTS", "k": "carousel", "pk": "zine", "w": "CAROUSEL", "what": "CAROUSEL \u00b7 12 SLIDES", "verb": "Flip it open", "cnt": 12, "img": "c-B2", "view": "swipe", "hint": "carousel", "pages": ["street/v/B2/01.webp?v=ee82e979", "street/v/B2/02.webp?v=51699005", "street/v/B2/03.webp?v=cf462aca", "street/v/B2/04.webp?v=d4d7d525", "street/v/B2/05.webp?v=f26f5e2e", "street/v/B2/06.webp?v=1d7cc27e", "street/v/B2/07.webp?v=671ea4e9", "street/v/B2/08.webp?v=2b2d2106", "street/v/B2/09.webp?v=ed66e669", "street/v/B2/10.webp?v=7b44cc51", "street/v/B2/11.webp?v=dbc7f0e5", "street/v/B2/12.webp?v=808609b4"], "caps": ["patron saints for your worst night out \ud83d\udd6f\ufe0f", "for the earring you lost at the function \ud83d\udc8e", "for the morning after. drink water, babe \ud83d\udca7", "for one bar of signal at the club \ud83d\udcf6", "for the bouncer who lets you skip the line \ud83d\udeaa", "imagine paying rent on a miracle. santa ossa does \ud83e\uddfe", "she was the patron saint of getting home safe \ud83d\udd4a\ufe0f", "they rented her out. rich kids never had a bad night \ud83d\udc8d", "one rental too many. her halo split into horns \ud83e\udd40", "she still hears every 3am prayer. she can&#x27;t answer one \ud83c\udf19", "so she walks you home. roof to roof \ud83d\udddd\ufe0f", "they own the saints. we own a crowbar \ud83e\ude78"], "go": "reliquary/#patron-saints", "goT": "Full size", "goL": "Patron Saints, full size, on the lore page"}, "B3": {"t": "HOW TO PLAY", "k": "carousel", "pk": "zine", "w": "CAROUSEL", "what": "CAROUSEL \u00b7 13 SLIDES", "verb": "Flip it open", "cnt": 13, "img": "c-B3", "view": "swipe", "hint": "carousel", "pages": ["street/v/B3/01.webp?v=6c05160f", "street/v/B3/02.webp?v=9889ac6b", "street/v/B3/03.webp?v=87db6956", "street/v/B3/04.webp?v=e8acfdda", "street/v/B3/05.webp?v=5f9ed15b", "street/v/B3/06.webp?v=4aa4ac8a", "street/v/B3/07.webp?v=c8cd0893", "street/v/B3/08.webp?v=26483808", "street/v/B3/09.webp?v=55ba0c36", "street/v/B3/10.webp?v=5e9973f4", "street/v/B3/11.webp?v=ab66fa87", "street/v/B3/12.webp?v=f1c9af32", "street/v/B3/13.webp?v=3ca997b2"], "caps": ["the instruction manual for robbing a church \ud83c\udfae", "side effects include a warm feeling and giving it all away \ud83d\ude07", "rob the church. give it away. go home broke \ud83d\udcb8", "pick your apostate. rin shoots first \ud83d\udcf8", "a relic does whatever its saint was patron of \u2728", "brass and stained glass, installed. it glows when it works \ud83d\udd06", "one install each. stacking is how you fall \u26a0\ufe0f", "white plate, gold fire. only smart tricks work on them \ud83d\udd25", "the scanners read chrome. june has none \ud83c\udf3b", "demons can&#x27;t step on holy ground. so cinder bought a dead one \u26ea", "watch your gold. wings mean it&#x27;s over \ud83d\udda4", "how to win: you don&#x27;t. that&#x27;s the game \ud83c\udfc6", "press start. bring a crowbar \ud83d\udd79\ufe0f"], "go": "reliquary/#how-to-play", "goT": "Full size", "goL": "How To Play, full size, on the lore page"}, "C2": {"t": "LOCK SCREENS", "k": "page", "pk": "blister", "w": "WALLPAPER", "what": "WALLPAPER \u00b7 10 PHONES", "verb": "Pop it out", "cnt": 10, "img": "c-D1", "view": "swipe", "hint": "wallpaper", "pages": ["street/v/C2/01.webp?v=3d099dfb", "street/v/C2/02.webp?v=94153bd5", "street/v/C2/03.webp?v=348ee26f", "street/v/C2/04.webp?v=a31877ca", "street/v/C2/05.webp?v=04761618", "street/v/C2/06.webp?v=4cb0b9da", "street/v/C2/07.webp?v=7d6c4272", "street/v/C2/08.webp?v=e895bc61", "street/v/C2/09.webp?v=412a4e9f", "street/v/C2/10.webp?v=928e36e0"], "caps": ["CREW", "Bala", "Cinder", "Dulce", "Kuro", "Lena", "Mars", "Nyx", "Putty", "Rin"], "go": "wallpapers/", "goT": "Save one", "goL": "Save a lock screen, full size"}, "C3": {"t": "VP DEADEYE", "k": "page", "pk": "bar", "w": "FONT", "what": "FONT \u00b7 FREE TO USE", "verb": "Unwrap it", "cnt": 1, "img": "c-D7", "view": "type", "hint": "font", "pages": ["street/v/C3/01.webp?v=f4529236"], "caps": [], "go": "font/", "goT": "Get it", "goL": "Get the font, free"}};
   const EXT = {"S0": {"t": "FRIDAY THE 13TH, PICK YOUR NIGHT", "w": "PAPER", "code": "THE CALENDAR", "src": "street/s/paper-0.webp?v=972527a6", "fn": "__nbOpen"}, "S1": {"t": "BOTH BANDS LEFT TOWN", "w": "PAPER", "code": "THE RUN", "src": "street/s/paper-1.webp?v=27a03334", "fn": "__nbOpen"}, "S2": {"t": "THE NEXT HEADLINER WAS A PRANK", "w": "PAPER", "code": "THE SHOP", "src": "street/s/paper-2.webp?v=82a391d2", "fn": "__nbOpen"}, "S3": {"t": "BLACK PUNK IS A LABEL NOW", "w": "PAPER", "code": "THE RECORD", "src": "street/s/paper-3.webp?v=cf42a4bd", "fn": "__nbOpen"}, "S4": {"t": "THE SHOP IS FREE FOR FOURTEEN DAYS", "w": "PAPER", "code": "THE SHOP", "src": "street/s/paper-4.webp?v=9b81cb70", "fn": "__nbOpen"}, "S5": {"t": "NOCTURNAL LANDS NOVEMBER 27", "w": "PAPER", "code": "THE RECORD", "src": "street/s/paper-5.webp?v=8bdd7af3", "fn": "__nbOpen"}, "S6": {"t": "SAN ANTONIO, PICK YOUR NIGHT", "w": "PAPER", "code": "THE CALENDAR", "src": "street/s/paper-6.webp?v=c22b4963", "fn": "__nbOpen"}, "S7": {"t": "SHOOT THE BAND FROM DAY ONE", "w": "PAPER", "code": "THE CRAFT", "src": "street/s/paper-7.webp?v=99a7932c", "fn": "__nbOpen"}, "S8": {"t": "HALLOWEEN GOT ITS SATURDAY", "w": "PAPER", "code": "THE COUNTDOWN", "src": "street/s/paper-8.webp?v=0ed094df", "fn": "__nbOpen"}, "S9": {"t": "HALF A REIGN IN BLOOD", "w": "PAPER", "code": "THE FESTIVAL", "src": "street/s/paper-9.webp?v=e4ae97f6", "fn": "__nbOpen"}, "S10": {"t": "THE ITEM SHOP IS THE NEW MTV", "w": "PAPER", "code": "THE SHOP", "src": "street/s/paper-10.webp?v=a85cd334", "fn": "__nbOpen"}, "S11": {"t": "NOBODY KNOWS WHAT A STREAMER IS", "w": "PAPER", "code": "THE BALLOT", "src": "street/s/paper-11.webp?v=7f679cd3", "fn": "__nbOpen"}, "S12": {"t": "HORROR'S FARM LEAGUE IS THE INTERNET", "w": "PAPER", "code": "THE FILM", "src": "street/s/paper-12.webp?v=20d96d22", "fn": "__nbOpen"}, "S13": {"t": "THIS IS A DORM", "w": "PAPER", "code": "THE ROOMS", "src": "street/s/paper-13.webp?v=e71dba3f", "fn": "__nbOpen"}, "S14": {"t": "SEVEN SEATS AT THE BACK OF THE LIST", "w": "PAPER", "code": "THE RECORD", "src": "street/s/paper-14.webp?v=f1cd397d", "fn": "__nbOpen"}, "S15": {"t": "AND THEN NOTHING HAPPENED", "w": "PAPER", "code": "THE CRAFT", "src": "street/s/paper-15.webp?v=d47b2133", "fn": "__nbOpen"}, "S16": {"t": "WHAT THE DIRECTOR WHISPERED", "w": "PAPER", "code": "THE CRAFT", "src": "street/s/paper-16.webp?v=1960f6aa", "fn": "__nbOpen"}, "S17": {"t": "IT WAS NEVER ONE TAKE", "w": "PAPER", "code": "THE CRAFT", "src": "street/s/paper-17.webp?v=44ac9c9a", "fn": "__nbOpen"}, "S18": {"t": "EVERY LIGHT NEEDS AN ALIBI", "w": "PAPER", "code": "THE CRAFT", "src": "street/s/paper-18.webp?v=589af33e", "fn": "__nbOpen"}, "S19": {"t": "THE LIGHTSABER WAS A PROJECTOR", "w": "PAPER", "code": "THE CRAFT", "src": "street/s/paper-19.webp?v=55ed2a93", "fn": "__nbOpen"}, "S20": {"t": "THE VAMPIRE PAINTER DREW 2HOLLIS", "w": "PAPER", "code": "THE RECORD", "src": "street/s/paper-20.webp?v=b8eeef94", "fn": "__nbOpen"}, "S21": {"t": "LAST LOOK BEFORE THE TAPE", "w": "PAPER", "code": "THE RUN", "src": "street/s/paper-21.webp?v=7daad7c9", "fn": "__nbOpen"}, "S22": {"t": "THE HAUNTED HOUSE HAS A WAIVER NOW", "w": "PAPER", "code": "THE COUNTDOWN", "src": "street/s/paper-22.webp?v=5a53bf9b", "fn": "__nbOpen"}, "S23": {"t": "THE WOLF KEEPS A CALENDAR", "w": "PAPER", "code": "THE FILM", "src": "street/s/paper-23.webp?v=80059fc1", "fn": "__nbOpen"}, "S24": {"t": "FOUR PRINTS OF A WET NIGHT", "w": "PAPER", "code": "THE NIGHT", "src": "street/s/paper-24.webp?v=814f8e7a", "fn": "__nbOpen"}, "S25": {"t": "FOUR BANDS AND ONE RED LIGHT", "w": "PAPER", "code": "THE NIGHT", "src": "street/s/paper-25.webp?v=b1c7e11e", "fn": "__nbOpen"}, "S26": {"t": "EMERALD, CREAM AND TAKEOUT RED", "w": "PAPER", "code": "THE NIGHT", "src": "street/s/paper-26.webp?v=d4f5e717", "fn": "__nbOpen"}, "S27": {"t": "SILVER, BLOOD AND LAPIS", "w": "PAPER", "code": "THE NIGHT", "src": "street/s/paper-27.webp?v=eceaa6d8", "fn": "__nbOpen"}, "S28": {"t": "THE TREES CAME OUT CRIMSON", "w": "PAPER", "code": "THE NIGHT", "src": "street/s/paper-28.webp?v=858900fa", "fn": "__nbOpen"}, "S29": {"t": "THE ROOM WAS DEAD SO WE LEFT", "w": "PAPER", "code": "THE NIGHT", "src": "street/s/paper-29.webp?v=02b1b461", "fn": "__nbOpen"}, "S30": {"t": "RED ON RED ON RED", "w": "PAPER", "code": "THE NIGHT", "src": "street/s/paper-30.webp?v=624f28b1", "fn": "__nbOpen"}, "S31": {"t": "BULL MADRID, THEN EVERYONE IN BLACK", "w": "PAPER", "code": "THE NIGHT", "src": "street/s/paper-31.webp?v=a96ae119", "fn": "__nbOpen"}, "S32": {"t": "EVERY ROOM A DIFFERENT COLOUR", "w": "PAPER", "code": "THE NIGHT", "src": "street/s/paper-32.webp?v=e96a7124", "fn": "__nbOpen"}, "S33": {"t": "THE NIGHT BEFORE B.I.L.L.Y", "w": "PAPER", "code": "THE NIGHT", "src": "street/s/paper-33.webp?v=69c81135", "fn": "__nbOpen"}, "S34": {"t": "THE AFTERPARTY IS THE SAN ANTONIO DATE", "w": "PAPER", "code": "THE RUN", "src": "street/s/paper-34.webp?v=75d092a9", "fn": "__nbOpen"}, "S35": {"t": "SAN ANTONIO GOES FIRST", "w": "PAPER", "code": "THE ARENA", "src": "street/s/paper-35.webp?v=acb8a539", "fn": "__nbOpen"}, "S36": {"t": "GET THERE EARLY", "w": "PAPER", "code": "THE RUN", "src": "street/s/paper-36.webp?v=8ca1bc3a", "fn": "__nbOpen"}, "S37": {"t": "THE BLOOD COUNTESS IS PLAYING AUSTIN", "w": "PAPER", "code": "THE FESTIVAL", "src": "street/s/paper-37.webp?v=1c6378af", "fn": "__nbOpen"}, "S38": {"t": "THEY WILL THINK YOU ARE A LUNATIC", "w": "PAPER", "code": "THE INTERVIEW", "src": "street/s/paper-38.webp?v=327cfb8d", "fn": "__nbOpen"}, "S39": {"t": "ONE CLOWN PER FIVE CIVILIANS", "w": "PAPER", "code": "THE NIGHT", "src": "street/s/paper-39.webp?v=5fe7047b", "fn": "__nbOpen"}, "S40": {"t": "SIXTEEN, A LAPTOP, FOUR HUNDRED MILLION", "w": "PAPER", "code": "THE DEBUT", "src": "street/s/paper-40.webp?v=cc916e83", "fn": "__nbOpen"}, "S41": {"t": "OPIUM BOUGHT THE WHOLE CONVENTION", "w": "PAPER", "code": "THE TAKEOVER", "src": "street/s/paper-41.webp?v=c657ec15", "fn": "__nbOpen"}, "S42": {"t": "NOBODY SAYS A WORD", "w": "PAPER", "code": "THE FILM", "src": "street/s/paper-42.webp?v=57312ecc", "fn": "__nbOpen"}, "S43": {"t": "THE RAGE KID GOT SOBER", "w": "PAPER", "code": "THE RECORD", "src": "street/s/paper-43.webp?v=66aa4d99", "fn": "__nbOpen"}, "S44": {"t": "GOTH WITH A BEAUTY BUDGET", "w": "PAPER", "code": "THE LOOK", "src": "street/s/paper-44.webp?v=f948cf43", "fn": "__nbOpen"}, "S45": {"t": "THE FALL RUN", "w": "PAPER", "code": "THE CALENDAR", "src": "street/s/paper-45.webp?v=24f0f710", "fn": "__nbOpen"}, "N0": {"t": "THE ODD BALL", "w": "PHOTOS", "code": "10.31.26", "src": "street/s/pb/0-1.webp?v=662c504f", "fn": "__pbOpen"}, "N1": {"t": "PULSE ANGELS 3", "w": "PHOTOS", "code": "10.03.26", "src": "street/s/pb/1-1.webp?v=641b2703", "fn": "__pbOpen"}, "N2": {"t": "WAP", "w": "PHOTOS", "code": "09.25.26", "src": "street/s/pb/2-1.webp?v=cfc22924", "fn": "__pbOpen"}, "N3": {"t": "HARAMBE 4 EVER", "w": "PHOTOS", "code": "09.24.26", "src": "street/s/pb/3-1.webp?v=07919176", "fn": "__pbOpen"}, "N4": {"t": "CHILL & SMOKE", "w": "PHOTOS", "code": "09.20.26", "src": "street/s/pb/4-1.webp?v=ca3e6f7c", "fn": "__pbOpen"}, "N5": {"t": "THIRD FRIDAY NIGHT MARKET", "w": "PHOTOS", "code": "09.18.26", "src": "street/s/pb/5-1.webp?v=21a9bebc", "fn": "__pbOpen"}, "N6": {"t": "BAPTISM", "w": "PHOTOS", "code": "09.18.26", "src": "street/s/pb/6-1.webp?v=47492a0f", "fn": "__pbOpen"}, "N7": {"t": "BAR HOP", "w": "PHOTOS", "code": "09.17.26", "src": "street/s/pb/7-1.webp?v=1e1394c0", "fn": "__pbOpen"}, "N8": {"t": "SADBOYZ CLUB", "w": "PHOTOS", "code": "09.16.26", "src": "street/s/pb/8-1.webp?v=5ffc2513", "fn": "__pbOpen"}, "N9": {"t": "BURLESQUE NIGHT", "w": "PHOTOS", "code": "09.13.26", "src": "street/s/pb/9-1.webp?v=5775ceed", "fn": "__pbOpen"}, "N10": {"t": "LUCHA NIGHT", "w": "PHOTOS", "code": "09.12.26", "src": "street/s/pb/10-1.webp?v=c792dc1b", "fn": "__pbOpen"}, "N11": {"t": "MIGX", "w": "PHOTOS", "code": "09.12.26", "src": "street/s/pb/11-1.webp?v=0dbff6bb", "fn": "__pbOpen"}, "N12": {"t": "BRAINROT", "w": "PHOTOS", "code": "09.11.26", "src": "street/s/pb/12-1.webp?v=1c8aeda4", "fn": "__pbOpen"}, "N13": {"t": "B.I.L.L.Y RELEASE PARTY", "w": "PHOTOS", "code": "09.01.26", "src": "street/s/pb/13-1.webp?v=525c583c", "fn": "__pbOpen"}, "N14": {"t": "CLOWN CHURCH", "w": "PHOTOS", "code": "08.30.26", "src": "street/s/pb/14-1.webp?v=3516f79b", "fn": "__pbOpen"}, "N15": {"t": "RESIDENT EVIL VS SILENT HILL", "w": "PHOTOS", "code": "08.25.26", "src": "street/s/pb/15-1.webp?v=8a8c1cf7", "fn": "__pbOpen"}, "N16": {"t": "THE SHOWCASE", "w": "PHOTOS", "code": "08.23.26", "src": "street/s/pb/16-1.webp?v=3b0697ea", "fn": "__pbOpen"}, "N17": {"t": "THIRD FRIDAY NIGHT MARKET", "w": "PHOTOS", "code": "08.21.26", "src": "street/s/pb/17-1.webp?v=2b9be5aa", "fn": "__pbOpen"}, "N18": {"t": "THE MIX", "w": "PHOTOS", "code": "08.16.26", "src": "street/s/pb/18-1.webp?v=5647b033", "fn": "__pbOpen"}, "N19": {"t": "BLADE RAVE", "w": "PHOTOS", "code": "08.14.26", "src": "street/s/pb/19-1.webp?v=f9d25922", "fn": "__pbOpen"}, "R0": {"t": "KAV-MAN", "w": "CARD", "code": "", "src": "street/s/pb/card-kav-man.webp?v=2484c327", "fn": "__pbOpen"}, "R1": {"t": "VIRGOSGATEWAY", "w": "CARD", "code": "", "src": "street/s/pb/card-virgosgateway.webp?v=4c28177f", "fn": "__pbOpen"}, "R2": {"t": "WRATHFOL", "w": "CARD", "code": "", "src": "street/s/pb/card-wrathfol.webp?v=fbe10064", "fn": "__pbOpen"}, "R3": {"t": "THE INK", "w": "CARD", "code": "", "src": "street/s/pb/card-theink.webp?v=e69c72ab", "fn": "__pbOpen"}, "R4": {"t": "KURLYTOP", "w": "CARD", "code": "", "src": "street/s/pb/card-kurlytop.webp?v=dd8943c6", "fn": "__pbOpen"}, "R5": {"t": "WUN MOR", "w": "CARD", "code": "", "src": "street/s/pb/card-wunmor.webp?v=4aaf6031", "fn": "__pbOpen"}, "R6": {"t": "JOSH FUEGO", "w": "CARD", "code": "", "src": "street/s/pb/card-josh-fuego.webp?v=3f7166d4", "fn": "__pbOpen"}, "R7": {"t": "VAMPPSYCH", "w": "CARD", "code": "", "src": "street/s/pb/card-vamppsych.webp?v=34a62e13", "fn": "__pbOpen"}, "JA1": {"t": "STARDUST BREAKER", "w": "RECORD", "code": "A1", "src": "street/s/jb-sleeve-a.webp?v=db7446fc", "fn": "__jbOpen"}, "JA2": {"t": "2 HI", "w": "RECORD", "code": "A2", "src": "street/s/jb-sleeve-a.webp?v=db7446fc", "fn": "__jbOpen"}, "JA3": {"t": "YOU TRIED IT", "w": "RECORD", "code": "A3", "src": "street/s/jb-sleeve-a.webp?v=db7446fc", "fn": "__jbOpen"}, "JA4": {"t": "YUP YUP YUP", "w": "RECORD", "code": "A4", "src": "street/s/jb-sleeve-a.webp?v=db7446fc", "fn": "__jbOpen"}, "JA5": {"t": "HOOD OF ATLANTA FREESTYLE*", "w": "RECORD", "code": "A5", "src": "street/s/jb-sleeve-a.webp?v=db7446fc", "fn": "__jbOpen"}, "JA6": {"t": "CHANEL & CAMEL CRUSH", "w": "RECORD", "code": "A6", "src": "street/s/jb-sleeve-a.webp?v=db7446fc", "fn": "__jbOpen"}, "JB1": {"t": "EVERYWHERE", "w": "RECORD", "code": "B1", "src": "street/s/jb-sleeve-b.webp?v=bfa62410", "fn": "__jbOpen"}, "JB2": {"t": "UNDER YOUR LASHLINE", "w": "RECORD", "code": "B2", "src": "street/s/jb-sleeve-b.webp?v=bfa62410", "fn": "__jbOpen"}, "JB3": {"t": "TALK", "w": "RECORD", "code": "B3", "src": "street/s/jb-sleeve-b.webp?v=bfa62410", "fn": "__jbOpen"}, "JB4": {"t": "SAILBOAT", "w": "RECORD", "code": "B4", "src": "street/s/jb-sleeve-b.webp?v=bfa62410", "fn": "__jbOpen"}, "JB5": {"t": "PINK (GET AWAY)", "w": "RECORD", "code": "B5", "src": "street/s/jb-sleeve-b.webp?v=bfa62410", "fn": "__jbOpen"}, "JB6": {"t": "ONLY TODAY", "w": "RECORD", "code": "B6", "src": "street/s/jb-sleeve-b.webp?v=bfa62410", "fn": "__jbOpen"}, "JB7": {"t": "FLOATING AWAY", "w": "RECORD", "code": "B7", "src": "street/s/jb-sleeve-b.webp?v=bfa62410", "fn": "__jbOpen"}, "JB8": {"t": "EYE LIED", "w": "RECORD", "code": "B8", "src": "street/s/jb-sleeve-b.webp?v=bfa62410", "fn": "__jbOpen"}, "JB9": {"t": "STARDUST BREAKER", "w": "RECORD", "code": "B9", "src": "street/s/jb-sleeve-b.webp?v=bfa62410", "fn": "__jbOpen"}, "JC1": {"t": "JUNE 27TH - FEAT. Z-RO & DJ SCREW", "w": "RECORD", "code": "C1", "src": "street/s/jb-sleeve-c.webp?v=6b2db40a", "fn": "__jbOpen"}, "JC2": {"t": "SOUTHSIDE", "w": "RECORD", "code": "C2", "src": "street/s/jb-sleeve-c.webp?v=6b2db40a", "fn": "__jbOpen"}, "JC3": {"t": "GHETTO DREAMS", "w": "RECORD", "code": "C3", "src": "street/s/jb-sleeve-c.webp?v=6b2db40a", "fn": "__jbOpen"}, "JC4": {"t": "DIAMONDS & WOOD (FEAT. SMOKE D)", "w": "RECORD", "code": "C4", "src": "street/s/jb-sleeve-c.webp?v=6b2db40a", "fn": "__jbOpen"}, "JC5": {"t": "INT'L PLAYERS ANTHEM (I CHOOSE YOU) (FEAT. OUTKAST)", "w": "RECORD", "code": "C5", "src": "street/s/jb-sleeve-c.webp?v=6b2db40a", "fn": "__jbOpen"}, "JC6": {"t": "MO CITY DON", "w": "RECORD", "code": "C6", "src": "street/s/jb-sleeve-c.webp?v=6b2db40a", "fn": "__jbOpen"}, "JC7": {"t": "CALL MY PHONE", "w": "RECORD", "code": "C7", "src": "street/s/jb-sleeve-c.webp?v=6b2db40a", "fn": "__jbOpen"}, "JC8": {"t": "CLEB FLOW", "w": "RECORD", "code": "C8", "src": "street/s/jb-sleeve-c.webp?v=6b2db40a", "fn": "__jbOpen"}, "JC9": {"t": "RIDIN'", "w": "RECORD", "code": "C9", "src": "street/s/jb-sleeve-c.webp?v=6b2db40a", "fn": "__jbOpen"}, "JC0": {"t": "BREAK EM' OFF (FEAT. LIL' KEKE)", "w": "RECORD", "code": "C0", "src": "street/s/jb-sleeve-c.webp?v=6b2db40a", "fn": "__jbOpen"}, "JD1": {"t": "SAILIN' DA SOUTH - SCREWED", "w": "RECORD", "code": "D1", "src": "street/s/jb-sleeve-d.webp?v=02bdd956", "fn": "__jbOpen"}, "JD2": {"t": "KNOCKIN PICTURES OFF THE WALL (FEAT. LIL' FLEX, LIL PAT, JASMINE & JHIAME)", "w": "RECORD", "code": "D2", "src": "street/s/jb-sleeve-d.webp?v=02bdd956", "fn": "__jbOpen"}, "JD3": {"t": "STILL TIPPIN' (FEAT. SLIM THUG AND PAUL WALL)", "w": "RECORD", "code": "D3", "src": "street/s/jb-sleeve-d.webp?v=02bdd956", "fn": "__jbOpen"}, "JD4": {"t": "LORD PRETTY FLACKO JODYE 2 (LPFJ2)", "w": "RECORD", "code": "D4", "src": "street/s/jb-sleeve-d.webp?v=02bdd956", "fn": "__jbOpen"}, "JD5": {"t": "SKY", "w": "RECORD", "code": "D5", "src": "street/s/jb-sleeve-d.webp?v=02bdd956", "fn": "__jbOpen"}, "JD6": {"t": "NOW I'M HIGH, REALLY HIGH", "w": "RECORD", "code": "D6", "src": "street/s/jb-sleeve-d.webp?v=02bdd956", "fn": "__jbOpen"}, "T1": {"t": "YOUR STUB", "w": "TICKET STUB", "code": "T1", "src": "street/r/ticket.webp?v=932310be", "fn": "__tkOpen"}, "F1": {"t": "CERTIFIED REAL", "w": "CERTIFICATE", "code": "F1", "src": "street/s/ft-eye.webp?v=f4e526b3", "fn": "__ftOpen"}, "K1": {"t": "SLATE", "w": "KIT TOOL", "code": "K1", "src": "street/r/slate.webp?v=19607189", "fn": "__rcOpen"}, "K2": {"t": "PROMPTER", "w": "KIT TOOL", "code": "K2", "src": "street/r/prompter.webp?v=51a98b3e", "fn": "__rcOpen"}, "K3": {"t": "TAKE LOG", "w": "KIT TOOL", "code": "K3", "src": "street/r/notebook.webp?v=8f1bbb22", "fn": "__rcOpen"}, "K4": {"t": "RELEASE", "w": "KIT TOOL", "code": "K4", "src": "street/r/clipboard.webp?v=f10df9e3", "fn": "__rcOpen"}, "K5": {"t": "GOLDEN HOUR", "w": "KIT TOOL", "code": "K5", "src": "street/r/sun.webp?v=41ac20ef", "fn": "__rcOpen"}, "K6": {"t": "VIEWFINDER", "w": "KIT TOOL", "code": "K6", "src": "street/r/viewfinder.webp?v=d1ff6d07", "fn": "__rcOpen"}, "K7": {"t": "EXPOSURE", "w": "KIT TOOL", "code": "K7", "src": "street/r/lightmeter.webp?v=f251ad30", "fn": "__rcOpen"}, "K8": {"t": "SLOW-MO", "w": "KIT TOOL", "code": "K8", "src": "street/r/cine-camera.webp?v=84f717b0", "fn": "__rcOpen"}, "K9": {"t": "STOPWATCH", "w": "KIT TOOL", "code": "K9", "src": "street/r/stopwatch.webp?v=383d53b0", "fn": "__rcOpen"}, "K10": {"t": "SCREENS", "w": "KIT TOOL", "code": "K10", "src": "street/r/tv.webp?v=2d667a13", "fn": "__rcOpen"}, "H1": {"t": "TODAY'S READING", "w": "HOLY CARD", "code": "H1", "src": "street/s/hv-heartsword.webp?v=e57e7aea", "fn": "__hvOpen"}}; let bagFrom = null;
-  try { (JSON.parse(localStorage.getItem('st-cards') || '[]') || []).forEach(c => { if (c && /^T[a-z0-9]{1,6}$/.test(c.id) && /^[a-z0-9-]{4,80}$/.test(c.s) && /^[A-Za-z0-9_.-]{1,40}$/.test(c.k)) EXT[c.id] = { t: String(c.t || '').replace(/[^A-Za-z0-9 .,!?'+:-]/g, ''), w: 'THAT’S ME', code: String(c.no || '').replace(/[^0-9A-Za-z-]/g, ''), src: 'events/' + c.s + '/media/' + c.k + '_t.jpg', fn: '__tmOpen' }; }); } catch (e) { console.warn('the bag: the cards this phone kept would not read', e); }
+  try { (JSON.parse(localStorage.getItem('st-cards') || '[]') || []).forEach(c => { if (c && /^T[a-z0-9]{1,6}$/.test(c.id) && /^[a-z0-9-]{4,80}$/.test(c.s) && /^[A-Za-z0-9_.-]{1,40}$/.test(c.k)) EXT[c.id] = { t: String(c.t || '').replace(/[^A-Za-z0-9 .,!?'+:-]/g, ''), w: 'POLAROID', code: ({ doodled: 'DOODLED', note: 'CAST NOTE', leak: 'LIGHT LEAK', black: 'BLACK FRAME', double: 'DOUBLE EXPOSURE' })[c.sp] || '', src: 'events/' + c.s + '/media/' + c.k + '_t.jpg', fn: '__tmOpen' }; }); } catch (e) { console.warn('the bag: the Polaroids this phone kept would not read', e); }
   window.__lb = { ext: EXT, add: c => addToBag(c), count: () => bag.length, openBag: f => { bagFrom = f || null; openBag(); } };
   const HINTS = {
     comic: 'Scroll down to read it.',
@@ -6305,58 +6306,97 @@ a.key{cursor:pointer}
   const cap = $('.ft-fcap'); if (cap && fl.length && !up) cap.textContent = 'THE FLYER WALL';
 })();
 
-/* ---------- THAT'S ME cards at the PHOTO BOOTH (11/12, site build only; the look is tm.css, the foil's tile is
-   built from his own doodles by tm_tile.py: TILE below).
+/* ---------- THAT'S ME at the PHOTO BOOTH: the booth prints you a POLAROID (11/12, site build only; the look is tm.css,
+   the words it can write are tm_lines.json, the pen drawings are built by tm_ink.py: INK below).
 
    The flow: a strip prints, FIND YOURSELF opens that night's whole contact sheet (the site's own list,
    content/frames.json: the hit and anything pulled are never in it), you tap your frame, THAT'S ME, the booth prints
-   the card into your hands. Tilt it or drag it and the foil moves, tap it and it flips. KEEP IT puts it in the bag,
-   SAVE IT makes the picture to post.
+   a Polaroid into your hands and it develops. Write on its border or let the booth write, tap it to flip it.
+   KEEP IT puts it in the bag, SAVE IT makes the picture to post.
 
-   What stays on this phone and goes nowhere: the cards you kept ('st-cards'), the @ you typed ('st-card-at'), and the
-   number that decides which foil you get ('st-card-seed'). Nothing here talks to the database, except one thing a
-   logged-in Crypt member can choose: "Tag me in this frame", which is the site's own call (OTP.tagFrame).
-   Errors are logged, never swallowed. ---------- */
+   Most prints are plain. A few are SPECIAL (the odds are site_mode.TM_ODDS): DOODLED, A NOTE FROM THE CAST,
+   LIGHT LEAK, BLACK FRAME, DOUBLE EXPOSURE. Which one is decided when it prints, from a number this phone keeps, so the
+   same frame on the same phone always comes out the same; it is stored with the print and named on its back.
+
+   What stays on this phone and goes nowhere: the prints you kept ('st-cards'), and that number ('st-card-seed').
+   Nothing here talks to the database, except one thing a logged-in Crypt member can choose: "Tag me in this frame",
+   which is the site's own call (OTP.tagFrame). Errors are logged, never swallowed. ---------- */
 (() => {
-  const CFG = {"nights":[{"s":"2026-10-31-the-odd-ball","t":"THE ODD BALL","when":"OCT 31, 2026","d":"10.31.26","lab":"Justine's Brasserie"},{"s":"2026-10-03-pulse-angels-3","t":"PULSE ANGELS 3","when":"OCT 3, 2026","d":"10.03.26","lab":"21st Street Co-op"},{"s":"2026-09-25-wap","t":"WAP","when":"SEP 25, 2026","d":"09.25.26","lab":"Private Park"},{"s":"2026-09-24-harambe-4-ever","t":"HARAMBE 4 EVER","when":"SEP 24, 2026","d":"09.24.26","lab":"Paper Tiger"},{"s":"2026-09-20-chill-and-smoke","t":"CHILL & SMOKE","when":"SEP 20, 2026","d":"09.20.26","lab":"Exotic Takeout"},{"s":"2026-09-18-zen-haus","t":"THIRD FRIDAY NIGHT MARKET","when":"SEP 18, 2026","d":"09.18.26","lab":"Zen Haus"},{"s":"2026-09-18-baptism","t":"BAPTISM","when":"SEP 18, 2026","d":"09.18.26","lab":"The Deco"},{"s":"2026-09-17-bar-hop","t":"BAR HOP","when":"SEP 17, 2026","d":"09.17.26","lab":"Club 212 · Bar House"},{"s":"2026-09-16-sadboyz-club","t":"SADBOYZ CLUB","when":"SEP 16, 2026","d":"09.16.26","lab":"Wav Room"},{"s":"2026-09-13-burlesque-night","t":"BURLESQUE NIGHT","when":"SEP 13, 2026","d":"09.13.26","lab":"Rah Rah Room"},{"s":"2026-09-12-lucha-night","t":"LUCHA NIGHT","when":"SEP 12, 2026","d":"09.12.26","lab":"El Luchador Bar"},{"s":"2026-09-12-migx","t":"MIGX","when":"SEP 12, 2026","d":"09.12.26","lab":"Club 212"},{"s":"2026-09-11-brainrot","t":"BRAINROT","when":"SEP 11, 2026","d":"09.11.26","lab":"New Guild Co-op"},{"s":"2026-09-01-billy-release-party","t":"B.I.L.L.Y RELEASE PARTY","when":"SEP 1, 2026","d":"09.01.26","lab":"Slackers"},{"s":"2026-08-30-clown-church","t":"CLOWN CHURCH","when":"AUG 30, 2026","d":"08.30.26","lab":"Rah Rah Room"},{"s":"2026-08-25-the-mix","t":"RESIDENT EVIL VS SILENT HILL","when":"AUG 25, 2026","d":"08.25.26","lab":"The Mix"},{"s":"2026-08-23-the-showcase","t":"THE SHOWCASE","when":"AUG 23, 2026","d":"08.23.26","lab":"The Mix"},{"s":"2026-08-21-zen-haus","t":"THIRD FRIDAY NIGHT MARKET","when":"AUG 21, 2026","d":"08.21.26","lab":"Zen Haus"},{"s":"2026-08-16-the-mix","t":"THE MIX","when":"AUG 16, 2026","d":"08.16.26","lab":"The Mix"},{"s":"2026-08-14-blade-rave","t":"BLADE RAVE","when":"AUG 14, 2026","d":"08.14.26","lab":"Paper Tiger"}],"odds":20};
+  const CFG = {"nights":[{"s":"2026-10-31-the-odd-ball","t":"THE ODD BALL","when":"OCT 31, 2026","d":"10.31.26","lab":"Justine's Brasserie"},{"s":"2026-10-03-pulse-angels-3","t":"PULSE ANGELS 3","when":"OCT 3, 2026","d":"10.03.26","lab":"21st Street Co-op"},{"s":"2026-09-25-wap","t":"WAP","when":"SEP 25, 2026","d":"09.25.26","lab":"Private Park"},{"s":"2026-09-24-harambe-4-ever","t":"HARAMBE 4 EVER","when":"SEP 24, 2026","d":"09.24.26","lab":"Paper Tiger"},{"s":"2026-09-20-chill-and-smoke","t":"CHILL & SMOKE","when":"SEP 20, 2026","d":"09.20.26","lab":"Exotic Takeout"},{"s":"2026-09-18-zen-haus","t":"THIRD FRIDAY NIGHT MARKET","when":"SEP 18, 2026","d":"09.18.26","lab":"Zen Haus"},{"s":"2026-09-18-baptism","t":"BAPTISM","when":"SEP 18, 2026","d":"09.18.26","lab":"The Deco"},{"s":"2026-09-17-bar-hop","t":"BAR HOP","when":"SEP 17, 2026","d":"09.17.26","lab":"Club 212 · Bar House"},{"s":"2026-09-16-sadboyz-club","t":"SADBOYZ CLUB","when":"SEP 16, 2026","d":"09.16.26","lab":"Wav Room"},{"s":"2026-09-13-burlesque-night","t":"BURLESQUE NIGHT","when":"SEP 13, 2026","d":"09.13.26","lab":"Rah Rah Room"},{"s":"2026-09-12-lucha-night","t":"LUCHA NIGHT","when":"SEP 12, 2026","d":"09.12.26","lab":"El Luchador Bar"},{"s":"2026-09-12-migx","t":"MIGX","when":"SEP 12, 2026","d":"09.12.26","lab":"Club 212"},{"s":"2026-09-11-brainrot","t":"BRAINROT","when":"SEP 11, 2026","d":"09.11.26","lab":"New Guild Co-op"},{"s":"2026-09-01-billy-release-party","t":"B.I.L.L.Y RELEASE PARTY","when":"SEP 1, 2026","d":"09.01.26","lab":"Slackers"},{"s":"2026-08-30-clown-church","t":"CLOWN CHURCH","when":"AUG 30, 2026","d":"08.30.26","lab":"Rah Rah Room"},{"s":"2026-08-25-the-mix","t":"RESIDENT EVIL VS SILENT HILL","when":"AUG 25, 2026","d":"08.25.26","lab":"The Mix"},{"s":"2026-08-23-the-showcase","t":"THE SHOWCASE","when":"AUG 23, 2026","d":"08.23.26","lab":"The Mix"},{"s":"2026-08-21-zen-haus","t":"THIRD FRIDAY NIGHT MARKET","when":"AUG 21, 2026","d":"08.21.26","lab":"Zen Haus"},{"s":"2026-08-16-the-mix","t":"THE MIX","when":"AUG 16, 2026","d":"08.16.26","lab":"The Mix"},{"s":"2026-08-14-blade-rave","t":"BLADE RAVE","when":"AUG 14, 2026","d":"08.14.26","lab":"Paper Tiger"}],"odds":{"double":2,"doodled":5,"note":5,"leak":5,"black":5},"caps":["caught in 4k","who let you in","main character hours","home by 10 they said","the aux was a mistake","zero thoughts all vibes","witness number one","never beating the charges","do not text them","proof you went outside","rent was due","lost the group again","told you so","no notes. ok one note","not sorry at all","back row behavior","started the dance circle","ended the dance circle","plot twist. it was you","still here at close","allegedly","i can explain","do not look at me","menace on the loose","the night won","you again","one more song they said","certified yapper","first one on the floor","last one off the floor","needs a nap and a snack","kept the receipts","we saw that","mom would be so proud","did not come to play","came to play. lost","ok superstar relax","no thoughts just flash","yes this is evidence","ate and left no crumbs","villain era starts here","camera found you first","you blinked. we kept it","this goes on the fridge","group chat is going to hear","blame the dj","sound check was a lie","say less. pose more"],"cast":{"Rin":["saw that.","nice try.","you owe me a dance.","i was here first.","say cheese louder."],"Nyx":["saw you.","you blinked.","i counted three poses.","try again next week.","not bad."],"Putty":["nice try.","do it again.","i dare you.","that was loud.","ha."],"Cinder":["noted.","bold move.","keep this one.","i am telling everyone.","we need to talk."],"Kuro":["play it back.","one more take.","off beat but ok.","turn it up.","you owe the dj."],"Bala":["front row next time.","save me a spot.","wave back next time.","i saw the whole thing.","pose harder."],"Lena":["sure you did.","called it.","keep the proof.","i believe you.","real one."]},"castNames":["Rin","Nyx","Putty","Cinder","Kuro","Bala","Lena"],"ink":{"doodles":12}};
   const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const sfx = n => { if (window.__sfx) window.__sfx(n); };
   const esc = t => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
   const wait = ms => new Promise(r => setTimeout(r, ms));
   const N = CFG.nights, BY = {}; N.forEach((n, i) => { BY[n.s] = i; });
-  const TILE = 'street/s/tm-foil.webp?v=b4217332', EV = 'events/';
+  const INK = 'street/s/pl-ink.webp?v=c5a4dd18', EV = 'events/';
   const thumb = (s, k) => EV + s + '/media/' + k + '_t.jpg';
   const read = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k) || 'null'); return v == null ? d : v; } catch (e) { console.warn('that\'s me: ' + k + ' would not read', e); return d; } };
   const write = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { console.warn('that\'s me: ' + k + ' would not save', e); return false; } };
   const fnv = s => { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; };
-  const OKS = /^[a-z0-9-]{4,80}$/, OKK = /^[A-Za-z0-9_.-]{1,40}$/;
-  const cleanAt = v => String(v || '').replace(/^@+/, '').replace(/[^A-Za-z0-9._]/g, '').slice(0, 30);
+  const rng = a => () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+  const OKS = /^[a-z0-9-]{4,80}$/, OKK = /^[A-Za-z0-9_.-]{1,40}$/, CAPMAX = 28;
+  const cleanCap = v => String(v || '').replace(/[^A-Za-z0-9 .,'!?&@:]/g, '').replace(/\s+/g, ' ').slice(0, CAPMAX);
+  const SPECIAL = { doodled: 'DOODLED', note: 'A NOTE FROM THE CAST', leak: 'LIGHT LEAK', black: 'BLACK FRAME', double: 'DOUBLE EXPOSURE' };
+  const ORDER = ['double', 'doodled', 'note', 'leak', 'black'];
 
-  /* ---- the cards this phone keeps ---- */
-  const okCard = c => c && typeof c === 'object' && /^T[a-z0-9]{1,6}$/.test(c.id) && OKS.test(c.s) && OKK.test(c.k);
-  const cards = () => (Array.isArray(read('st-cards', [])) ? read('st-cards', []) : []).filter(okCard);
+  /* ---- the prints this phone keeps. One made in the booth's first hour, when it printed foil cards, opens as a plain
+     Polaroid: its night and frame are the same, and the @ it carried becomes what is written on its border. ---- */
+  const okPrint = c => c && typeof c === 'object' && /^T[a-z0-9]{1,6}$/.test(c.id) && OKS.test(c.s) && OKK.test(c.k);
+  const fresh = c => { if (c.sp === undefined) { c.sp = ''; c.x = {}; c.cap = c.at ? cleanCap('@' + c.at) : ''; delete c.foil; delete c.at; delete c.no; } if (!c.x || typeof c.x !== 'object') c.x = {}; c.cap = cleanCap(c.cap); if (!SPECIAL[c.sp]) c.sp = ''; return c; };
+  const prints = () => (Array.isArray(read('st-cards', [])) ? read('st-cards', []) : []).filter(okPrint).map(fresh);
   function seed() {
     let s = read('st-card-seed', null);
     if (typeof s !== 'string' || s.length < 8) { s = Math.random().toString(36).slice(2) + Date.now().toString(36); write('st-card-seed', s); }
     return s;
   }
-  /* which foil: about 1 in 20 is a BLACK LABEL. The same frame on the same phone always comes out the same. */
-  const foilOf = (s, k) => fnv(seed() + '|' + s + '|' + k) % CFG.odds === 0 ? 'b' : 'c';
-  function makeCard(n, f) {
-    const had = cards().find(c => c.s === n.s && c.k === f[1]);
-    if (had) return had;
-    return { id: 'T' + fnv(n.s + '|' + f[1]).toString(36).slice(0, 6), s: n.s, k: f[1], i: f[0], w: f[2], h: f[3], t: n.t, when: n.when, lab: n.lab,
-      no: n.d.replace(/\D/g, '') + '-' + f[1], foil: foilOf(n.s, f[1]), at: cleanAt(read('st-card-at', '')), made: Date.now() };
+  /* which print: a number from 0 to 9999 out of this phone's own number and the frame, read against the odds in order */
+  function rollWith(sd, s, k) {
+    let v = fnv(sd + '|' + s + '|' + k) % 10000;
+    for (const sp of ORDER) { const w = Math.round((CFG.odds[sp] || 0) * 100); if (v < w) return sp; v -= w; }
+    return '';
   }
-  const extOf = c => ({ t: String(c.t || '').replace(/[^A-Za-z0-9 .,!?'+:-]/g, ''), w: 'THAT’S ME', code: String(c.no || '').replace(/[^0-9A-Za-z-]/g, ''), src: thumb(c.s, c.k), fn: '__tmOpen' });      /* out of storage: plain text only */
+  function makePrint(n, f) {
+    const had = prints().find(c => c.s === n.s && c.k === f[1]);
+    if (had) return had;
+    const sd = seed(), sp = rollWith(sd, n.s, f[1]), R = rng(fnv(sd + '|' + n.s + '|' + f[1] + '|x')), x = { r: Math.floor(R() * 1e9) };
+    if (sp === 'note') { const who = CFG.castNames[Math.floor(R() * CFG.castNames.length)], ls = CFG.cast[who]; x.who = who; x.line = ls[Math.floor(R() * ls.length)]; }
+    if (sp === 'leak') x.edge = Math.floor(R() * 4);
+    if (sp === 'double') {              /* one other frame of the same night, the same way up where there is one */
+      const wide = f[2] > f[3], all = (n.fn.f || []).filter(o => o[1] !== f[1] && OKK.test(o[1])), same = all.filter(o => (o[2] > o[3]) === wide), pool = same.length ? same : all;
+      if (pool.length) x.o = pool[Math.floor(R() * pool.length)][1];
+    }
+    return { id: 'T' + fnv(n.s + '|' + f[1]).toString(36).slice(0, 6), s: n.s, k: f[1], i: f[0], w: f[2], h: f[3], t: n.t, when: n.when, lab: n.lab, sp, x, cap: '', made: Date.now() };
+  }
+  const plain = t => String(t || '').replace(/[^A-Za-z0-9 .,!?'+:-]/g, '');
+  const extOf = c => ({ t: plain(c.t), w: 'POLAROID', code: c.sp === 'note' ? 'CAST NOTE' : (SPECIAL[c.sp] || ''), src: thumb(c.s, c.k), fn: '__tmOpen' });      /* out of storage: plain text only */
   function keep(c) {
-    const all = cards().filter(x => x.id !== c.id); all.unshift(c);
+    const all = prints().filter(x => x.id !== c.id); all.unshift(c);
     if (!write('st-cards', all.slice(0, 200))) return false;
     if (window.__lb && window.__lb.ext) { window.__lb.ext[c.id] = extOf(c); window.__lb.add(c.id); }
-    else console.error('that\'s me: the bag is not on this page, the card was saved but the bag does not show it');
+    else console.error('that\'s me: the bag is not on this page, the print was saved but the bag does not show it');
     return true;
   }
+
+  /* ---- where everything sits on a print, in its own units (20 across). The page and the picture both read this. ---- */
+  const B = .95, FOOT = 4.6, PW = 20 - 2 * B;
+  function layout(c) {
+    const wide = c.w > c.h, ar = wide ? Math.max(1.25, Math.min(1.8, c.w / c.h)) : Math.max(.72, Math.min(.8, c.w / c.h)), ph = PW / ar, H = B + ph + FOOT, R = rng((c.x && c.x.r) || 1);
+    const L = { wide, ar, ph, H, foot: B + ph, dd: [], edge: (c.x && c.x.edge) | 0 };
+    if (c.sp === 'doodled') {          /* he drew on it: six spots round the border, a different handful of drawings each time */
+      const spots = [[2.1, L.foot + 3.0, 2.9], [17.9, L.foot + 3.05, 2.9], [1.7, 1.9, 2.7], [18.2, 2.2, 2.7], [1.25, B + ph * .56, 2.2], [18.8, B + ph * .42, 2.2]];
+      const pool = [...Array(CFG.ink.doodles).keys()]; for (let a = pool.length - 1; a > 0; a--) { const b = Math.floor(R() * (a + 1)); [pool[a], pool[b]] = [pool[b], pool[a]]; }
+      spots.forEach((s, j) => L.dd.push({ i: pool[j % pool.length], x: s[0] + (R() - .5) * .5, y: s[1] + (R() - .5) * .5, s: s[2] * (.9 + R() * .25), a: (R() - .5) * 50 }));
+    }
+    return L;
+  }
+  const inkCell = i => ({ c: i % 4, r: Math.floor(i / 4) });                       /* the pen sheet: 4 across, 5 down */
+  const headCell = who => { const k = CFG.castNames.indexOf(who); return k < 0 ? null : { c: k % 4, r: Math.ceil(CFG.ink.doodles / 4) + Math.floor(k / 4) }; };
+
+  /* the paper: a few hundred soft specks, drawn once, used by the page and by the picture */
+  const paperCv = (() => { const cv = document.createElement('canvas'); cv.width = cv.height = 96; const g = cv.getContext('2d'), R = rng(1112);
+    for (let i = 0; i < 520; i++) { g.fillStyle = R() < .5 ? 'rgba(60,50,40,' + (.02 + R() * .05).toFixed(3) + ')' : 'rgba(255,255,255,' + (.05 + R() * .1).toFixed(3) + ')'; g.fillRect(Math.floor(R() * 96), Math.floor(R() * 96), 1 + (R() < .2), 1); }
+    return cv; })();
 
   /* ---- the markup: one sheet, one pair of hands ---- */
   const host = document.createElement('div');
@@ -6367,27 +6407,28 @@ a.key{cursor:pointer}
     + '<div class="tm-keys"><p class="vw-hint">Everyone on the sheet is already on the night’s page.</p><button class="key back" type="button" id="tm-sh-x" aria-label="Back to the booth"><span aria-hidden="true">&lsaquo;</span><small>Back</small></button></div>'
     + '</div></div>'
     + '<div class="hands tm-hands" id="tm-hands" hidden role="dialog" aria-modal="true" aria-labelledby="tm-h-t">'
-    + '<div class="hold"><div class="tm-stage"><button class="tm-card" type="button" id="tm-card" aria-label="Your card. Tap it to flip it, drag it to move the foil."><span class="tm-inner">'
-    + '<span class="tm-face tm-front"><i class="tm-chrome"></i><span class="tm-top"><b></b></span><span class="tm-win"><img alt="" draggable="false"><i class="tm-atag"></i><i class="tm-no"></i><i class="tm-bltag">BLACK LABEL</i></span>'
-    + '<span class="tm-bot"><span></span></span><i class="tm-doo"></i><span class="tm-edge"><i></i></span><i class="tm-glare"></i><i class="tm-sweep"></i></span>'
-    + '<span class="tm-face tm-backf"><i class="tm-chrome"></i><i class="tm-pbg"></i><i class="tm-doo"></i><span class="tm-edge"><i></i></span><i class="tm-glare"></i>'
-    + '<span class="tm-plate"><small>PULLED AT THE PHOTO BOOTH</small><b class="tm-b-t"></b><em class="tm-b-k"></em><hr><span>SHOT BY 0FF THE PRINT</span><em>@vamppsych</em><span>0fftheprint.com</span><span class="tm-b-no"></span></span></span>'
+    + '<div class="hold"><div class="tm-stage"><button class="pl" type="button" id="tm-card" aria-label="Your Polaroid. Tap it to flip it."><span class="pl-inner">'
+    + '<span class="pl-face pl-front"><span class="pl-photo"><img class="pl-im" alt="" draggable="false"><img class="pl-im2" alt="" draggable="false" hidden><i class="pl-leak"></i><i class="pl-gloss"></i><i class="pl-dev"></i></span>'
+    + '<span class="pl-cap"><b></b></span><span class="pl-note" hidden><i class="pl-head"></i><span><b></b><em></em></span></span><span class="pl-dds"></span></span>'
+    + '<span class="pl-face pl-backf"><span class="pl-pen"><small>PULLED AT THE PHOTO BOOTH</small><b class="pl-b-t"></b><em class="pl-b-k"></em><i></i><span>SHOT BY 0FF THE PRINT</span><em>@vamppsych</em><span>0fftheprint.com</span><u class="pl-b-sp"></u></span></span>'
     + '</span></button></div>'
     + '<p class="hold-name"><b id="tm-h-t"></b><small id="tm-h-k"></small></p>'
-    + '<div class="tm-form"><label class="tm-at"><span>Your @</span><input id="tm-at" type="text" inputmode="text" autocapitalize="none" autocomplete="off" autocorrect="off" spellcheck="false" maxlength="31" placeholder="optional">'
-    + '<small>It goes on the card. It stays on this phone.</small></label>'
+    + '<div class="tm-form"><div class="tm-caprow"><label class="tm-capl" for="tm-cap">Write on it</label><input id="tm-cap" type="text" autocomplete="off" autocorrect="off" spellcheck="false" maxlength="' + CAPMAX + '" placeholder="up to ' + CAPMAX + ' letters, or leave it">'
+    + '<button class="key tm-chromekey" type="button" id="tm-write">Write me one</button></div>'
+    + '<p class="tm-fine">What you write stays on this phone.</p>'
     + '<label class="tm-tag" id="tm-tagrow" hidden><input type="checkbox" id="tm-tag"><span>Tag me in this frame</span></label>'
     + '<p class="tm-say" id="tm-say" role="status"></p></div></div>'
     + '<div class="hold-keys"><button class="key pink big" type="button" id="tm-keep">Keep it</button><button class="key big tm-chromekey" type="button" id="tm-save">Save it</button>'
     + '<button class="key back" type="button" id="tm-back" aria-label="Back"><span aria-hidden="true">&lsaquo;</span><small>Back</small></button></div></div>';
   while (host.firstChild) document.body.appendChild(host.firstChild);
   const sheet = $('#tm-sheet'), shin = $('.tm-shin', sheet), grid = $('#tm-grid'), pick = $('#tm-pick'), body = $('.tm-body', sheet);
-  const hands = $('#tm-hands'), stage = $('.tm-stage', hands), card = $('#tm-card'), sayEl = $('#tm-say'), atIn = $('#tm-at'), tagRow = $('#tm-tagrow'), tagIn = $('#tm-tag');
-  const keepK = $('#tm-keep'), saveK = $('#tm-save'), backK = $('#tm-back'), meK = $('#tm-me');
+  const hands = $('#tm-hands'), stage = $('.tm-stage', hands), card = $('#tm-card'), sayEl = $('#tm-say'), capIn = $('#tm-cap'), tagRow = $('#tm-tagrow'), tagIn = $('#tm-tag');
+  const keepK = $('#tm-keep'), saveK = $('#tm-save'), backK = $('#tm-back'), meK = $('#tm-me'), dev = $('.pl-dev', card);
+  try { hands.style.setProperty('--paper', 'url(' + paperCv.toDataURL('image/png') + ')'); } catch (e) { console.warn('that\'s me: the paper would not draw, the print is plain white', e); }
   const say = t => { sayEl.textContent = t || ''; };
   const calm = (...els) => els.forEach(el => el && el.getAnimations().forEach(a => a.cancel()));
   const play = (el, kf, o) => el.animate(kf, o).finished.catch(() => {});
-  let FR = null, night = null, chosen = null, cur = null, kept = false, from = null, lastFocus = null, busy = false, exportP = null, exportKey = '';
+  let FR = null, night = null, chosen = null, cur = null, kept = false, from = null, lastFocus = null, busy = false, exportP = null, exportKey = '', devA = null, wrote = 0;
 
   /* ---- the site's own list of frames (always asked fresh: a pulled frame leaves at once) ---- */
   function frames() {
@@ -6445,63 +6486,71 @@ a.key{cursor:pointer}
   }
   $('#tm-sh-x').addEventListener('click', async () => { if (busy) return; await closeSheet(); if (lastFocus && lastFocus.isConnected) lastFocus.focus({ preventScroll: true }); });
 
-  /* ---- the foil moves: the phone's tilt where it has one and lets us, a drag or the pointer everywhere ---- */
-  let raf = 0, mx = .34, my = .3, tiltOn = false, drag = null;
+  /* ---- a faint gloss slides over the photo: a drag or the pointer everywhere, and the phone's tilt where it needs no
+     asking (an iPhone would put up a permission box for it, and a gloss is not worth a box) ---- */
+  let raf = 0, mx = .34, my = .3, drag = null;
   function light(x, y) {
     mx = Math.max(0, Math.min(1, x)); my = Math.max(0, Math.min(1, y));
     if (raf) return;
     raf = requestAnimationFrame(() => { raf = 0; card.style.setProperty('--mx', mx.toFixed(3)); card.style.setProperty('--my', my.toFixed(3)); });
   }
-  function onTilt(e) {
-    if (hands.hidden || drag || e.gamma == null || e.beta == null) return;
-    light(.5 + e.gamma / 50, .5 + (e.beta - 45) / 60);
-  }
-  function askTilt() {              /* has to be asked inside the tap on an iPhone */
-    if (RM || tiltOn || typeof DeviceOrientationEvent === 'undefined') return;
-    const on = () => { tiltOn = true; window.addEventListener('deviceorientation', onTilt, { passive: true }); };
-    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-      DeviceOrientationEvent.requestPermission().then(s => { if (s === 'granted') on(); else say('Drag the card to move the foil.'); }, e => { console.warn('that\'s me: the phone would not say if it may tilt', e); });
-    } else on();
-  }
+  if (!RM && typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission !== 'function')
+    window.addEventListener('deviceorientation', e => { if (hands.hidden || drag || e.gamma == null || e.beta == null) return; light(.5 + e.gamma / 50, .5 + (e.beta - 45) / 60); }, { passive: true });
   card.addEventListener('pointerdown', e => { drag = { x: e.clientX, y: e.clientY, moved: false }; try { card.setPointerCapture(e.pointerId); } catch (x) { /* a pointer that is already gone */ } });
   card.addEventListener('pointermove', e => {
     if (RM) return;
     if (drag && Math.abs(e.clientX - drag.x) + Math.abs(e.clientY - drag.y) > 8) drag.moved = true;
     if (drag ? drag.moved : e.pointerType === 'mouse') { const r = card.getBoundingClientRect(); light((e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height); }
   });
-  const endDrag = e => { const d = drag; drag = null; if (d && !d.moved && e.type === 'pointerup') flip(); };
+  const endDrag = e => { const d = drag; drag = null; if (d && !d.moved && e.type === 'pointerup') tapPrint(); };
   card.addEventListener('pointerup', endDrag); card.addEventListener('pointercancel', endDrag);
-  card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); } });
+  card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tapPrint(); } });
   card.addEventListener('click', e => e.preventDefault());
-  function flip() { card.classList.toggle('flip'); sfx('paper'); card.setAttribute('aria-label', card.classList.contains('flip') ? 'The back of your card. Tap it to flip it.' : 'Your card. Tap it to flip it, drag it to move the foil.'); }
+  /* a tap while it is still coming up finishes it; a tap after that flips it */
+  function tapPrint() {
+    if (devA && devA.playState === 'running') { devA.finish(); return; }
+    card.classList.toggle('flip'); sfx('paper');
+    card.setAttribute('aria-label', card.classList.contains('flip') ? 'The back of your Polaroid. Tap it to flip it.' : 'Your Polaroid. Tap it to flip it.');
+  }
+  function develop() {
+    calm(dev); devA = null;
+    if (RM) { dev.style.opacity = '0'; return; }
+    dev.style.opacity = '0';
+    devA = dev.animate([{ opacity: 1 }, { opacity: .96, offset: .18 }, { opacity: 0 }], { duration: 2200, easing: 'cubic-bezier(.5,0,.3,1)', id: 'pl-dev' });
+  }
 
-  /* ---- the card, drawn in the page ---- */
-  function fit(el, box, most) {             /* one line, as big as fits: read once, when the card is made */
+  /* ---- the print, drawn in the page ---- */
+  function fit(el, box, most) {             /* one line, as big as fits: read once, when the words change */
     el.style.fontSize = most + 'em';
-    for (let s = most; s > most * .55 && el.scrollWidth > box.clientWidth; s -= most * .04) el.style.fontSize = s.toFixed(3) + 'em';
+    for (let s = most; s > most * .5 && el.scrollWidth > box.clientWidth; s -= most * .04) el.style.fontSize = s.toFixed(3) + 'em';
   }
+  function paintCap(c) { const box = $('.pl-cap', card), b = $('b', box); b.textContent = c.cap; requestAnimationFrame(() => fit(b, box, 1.62)); }
   function paint(c) {
-    card.classList.toggle('bl', c.foil === 'b'); card.classList.remove('flip');
-    const top = $('.tm-top', card), win = $('.tm-win', card), im = $('img', win);
-    $('b', top).textContent = c.t; win.classList.toggle('w', c.w > c.h);
+    const L = layout(c), ph = $('.pl-photo', card), im = $('.pl-im', card), im2 = $('.pl-im2', card), note = $('.pl-note', card), dds = $('.pl-dds', card);
+    card.className = 'pl' + (L.wide ? ' wide' : '') + (c.sp ? ' sp-' + c.sp : '') + (c.sp === 'leak' ? ' e' + L.edge : '');
+    stage.classList.toggle('wide', L.wide);
+    card.style.setProperty('--ph', L.ph.toFixed(3) + 'em');
     im.src = thumb(c.s, c.k);
-    $('.tm-bot span', card).textContent = c.when + (c.lab ? ' · ' + c.lab : ''); $('.tm-no', card).textContent = 'NO. ' + c.no;
-    $('.tm-atag', card).textContent = c.at ? '@' + c.at : '';
-    $('.tm-b-t', card).textContent = c.t; $('.tm-b-k', card).textContent = c.when + (c.lab ? ' · ' + c.lab : ''); $('.tm-b-no', card).textContent = (c.foil === 'b' ? 'BLACK LABEL · ' : '') + 'NO. ' + c.no;
-    $('#tm-h-t').textContent = c.foil === 'b' ? 'BLACK LABEL' : 'THAT’S ME'; $('#tm-h-k').textContent = c.t + ' · FRAME ' + c.k;
-    atIn.value = c.at ? '@' + c.at : '';
-    requestAnimationFrame(() => { fit($('b', top), top, 1.5); fit($('.tm-bot span', card), $('.tm-bot', card), .66); });
-    /* the big picture, once it is all here (it is on the media host: fine to show, a canvas may not read it) */
-    const fn = night && night.s === c.s && night.fn, row = fn && rowOf(fn, c.k), big = row && (row[4] || (fn.b ? fn.b + c.k + '.jpg' : ''));
-    if (big && /^https:\/\//.test(big)) { const b = new Image(); b.decoding = 'async'; b.onload = () => { if (cur === c) im.src = big; }; b.onerror = () => console.warn('that\'s me: the big picture would not load, the small one stays'); b.src = big; }
+    im2.hidden = !(c.sp === 'double' && c.x.o && OKK.test(c.x.o)); if (!im2.hidden) im2.src = thumb(c.s, c.x.o); else im2.removeAttribute('src');
+    note.hidden = c.sp !== 'note' || !c.x.who || !CFG.cast[c.x.who];
+    if (!note.hidden) { const hc = headCell(c.x.who), h = $('.pl-head', note); $('b', note).textContent = plain(c.x.line); $('em', note).textContent = c.x.who; h.style.backgroundPosition = (hc.c / 3 * 100) + '% ' + (hc.r / 4 * 100) + '%'; }
+    dds.innerHTML = L.dd.map(d => { const q = inkCell(d.i); return '<i style="left:' + (d.x - d.s / 2).toFixed(2) + 'em;top:' + (d.y - d.s / 2).toFixed(2) + 'em;width:' + d.s.toFixed(2) + 'em;height:' + d.s.toFixed(2) + 'em;background-position:' + (q.c / 3 * 100) + '% ' + (q.r / 4 * 100) + '%;transform:rotate(' + d.a.toFixed(1) + 'deg)"></i>'; }).join('');
+    paintCap(c);
+    $('.pl-b-t', card).textContent = c.t; $('.pl-b-k', card).textContent = c.when + (c.lab ? ' · ' + c.lab : ''); $('.pl-b-sp', card).textContent = SPECIAL[c.sp] || '';
+    $('#tm-h-t').textContent = SPECIAL[c.sp] || 'THAT’S ME'; $('#tm-h-k').textContent = c.t + ' · FRAME ' + c.k;
+    capIn.value = c.cap;
+    /* the big pictures, once they are all here (they are on the media host: fine to show, a canvas may not read them) */
+    const fn = night && night.s === c.s && night.fn, big = k => { const row = fn && rowOf(fn, k), u = row && (row[4] || (fn.b ? fn.b + k + '.jpg' : '')); return u && /^https:\/\//.test(u) ? u : ''; };
+    [[im, c.k], [im2, c.sp === 'double' ? c.x.o : '']].forEach(([el, k]) => { const u = k && big(k); if (!u) return; const b = new Image(); b.decoding = 'async'; b.onload = () => { if (cur === c) el.src = u; }; b.onerror = () => console.warn('that\'s me: a big picture would not load, the small one stays'); b.src = u; });
   }
+  $('.pl-im2', card).addEventListener('error', e => { e.target.hidden = true; console.warn('that\'s me: the second frame of this double exposure would not load, the print shows the one you picked'); });
   function setKept(k) { kept = k; keepK.textContent = k ? 'In your bag' : 'Keep it'; keepK.disabled = k; keepK.classList.toggle('pink', !k); }
 
   /* ---- in your hands ---- */
   async function showHands(c, whence, rect) {
-    busy = true; cur = c; from = whence; exportP = null; exportKey = '';
-    paint(c); setKept(cards().some(x => x.id === c.id)); say(''); tagRow.hidden = true; tagIn.checked = false;
-    light(.34, .3); calm(hands, stage, $('.tm-sweep', card));
+    busy = true; cur = c; from = whence; exportP = null; exportKey = ''; wrote = 0;
+    card.classList.remove('flip'); paint(c); setKept(prints().some(x => x.id === c.id)); say(''); tagRow.hidden = true; tagIn.checked = false;
+    light(.34, .3); calm(hands, stage, dev); dev.style.opacity = rect && !RM ? '1' : '0';
     hands.hidden = false; hands.scrollTop = 0;
     if (RM || !rect) await play(hands, [{ opacity: 0 }, { opacity: 1 }], { duration: 160 });
     else {
@@ -6512,8 +6561,8 @@ a.key{cursor:pointer}
       await play(stage, [{ transform: 'translate(' + dx + 'px,' + (dy - rect.height * .6) + 'px) scale(' + s + ')', opacity: 0, offset: 0 },
         { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(' + s + ')', opacity: 1, offset: .32, easing: 'cubic-bezier(.2,.9,.25,1)' },
         { transform: 'none', opacity: 1, offset: 1 }], { duration: 900, easing: 'ease-out' });
+      develop();                     /* it comes up out of grey, about two seconds; a tap finishes it */
     }
-    if (!RM) play($('.tm-sweep', card), [{ transform: 'translateX(-140%) skewX(-12deg)', opacity: 1 }, { transform: 'translateX(340%) skewX(-12deg)', opacity: 1 }], { duration: 760, easing: 'ease-in-out' });
     (kept ? saveK : keepK).focus({ preventScroll: true });
     busy = false;
     member(c);
@@ -6522,7 +6571,7 @@ a.key{cursor:pointer}
   async function closeHands() {
     if (hands.hidden) return;
     if (!RM) await play(stage, [{ transform: 'none', opacity: 1 }, { transform: 'translateY(60px) scale(.6)', opacity: 0 }], { duration: 260, easing: 'cubic-bezier(.4,0,.8,.3)', fill: 'forwards' });
-    hands.hidden = true; calm(hands, stage, $('.tm-sweep', card)); cur = null; exportP = null;
+    hands.hidden = true; calm(hands, stage, dev); cur = null; exportP = null; devA = null;
     if (from === 'bag') { const b = document.getElementById('bagBack'); if (b && b.getClientRects().length) { b.focus({ preventScroll: true }); return; } }
     if (lastFocus && lastFocus.isConnected && lastFocus.getClientRects().length) lastFocus.focus({ preventScroll: true });
   }
@@ -6532,13 +6581,12 @@ a.key{cursor:pointer}
   meK.addEventListener('click', async () => {
     if (busy || !chosen || !night || !night.fn) return;
     const f = rowOf(night.fn, chosen); if (!f) return;
-    askTilt();
-    const c = makeCard(night, f), chute = $('.pb-chute'), cr = chute && chute.getClientRects().length ? chute.getBoundingClientRect() : null;
+    const c = makePrint(night, f), chute = $('.pb-chute'), cr = chute && chute.getClientRects().length ? chute.getBoundingClientRect() : null;
     await closeSheet();
     sfx('print');
     const r = cr || { left: innerWidth / 2 - 40, top: innerHeight - 60, width: 80, height: 112 };
     await showHands(c, 'sheet', r);
-    say(c.foil === 'b' ? 'A BLACK LABEL. About 1 in ' + CFG.odds + ' come out like this.' : 'Tilt it. Tap it to flip it.');
+    say(c.sp ? 'A special one: ' + SPECIAL[c.sp] + '. Flip it.' : 'Write on it, or tap it to flip it.');
   });
 
   /* KEEP IT */
@@ -6548,15 +6596,21 @@ a.key{cursor:pointer}
     setKept(true); sfx('thanks'); say('It is in your bag.'); saveK.focus({ preventScroll: true });
   });
 
-  /* the @: on the card, on this phone, nowhere else */
-  atIn.addEventListener('input', () => {
+  /* the border: their words, or the booth's. On the print, on this phone, nowhere else. */
+  function setCap(v) {
     if (!cur) return;
-    const v = cleanAt(atIn.value); cur.at = v; write('st-card-at', v);
-    $('.tm-atag', card).textContent = v ? '@' + v : '';
+    cur.cap = cleanCap(v); paintCap(cur);
     if (kept) keep(cur);
-    clearTimeout(atIn.t); atIn.t = setTimeout(prepare, 500);
+    clearTimeout(capIn.t); capIn.t = setTimeout(prepare, 500);
+  }
+  capIn.addEventListener('input', () => setCap(capIn.value));
+  capIn.addEventListener('blur', () => { if (cur) capIn.value = cur.cap; });
+  $('#tm-write').addEventListener('click', () => {
+    if (!cur || !CFG.caps.length) return;
+    const line = CFG.caps[(fnv(cur.id + '|' + seed()) + wrote++) % CFG.caps.length];
+    capIn.value = line; setCap(line); sfx('blip');
+    if (card.classList.contains('flip')) card.classList.remove('flip');
   });
-  atIn.addEventListener('blur', () => { atIn.value = cur && cur.at ? '@' + cur.at : ''; });
 
   /* a logged-in Crypt member may tag themselves in the frame: the site's own call, off until they tick it */
   async function member(c) {
@@ -6577,105 +6631,87 @@ a.key{cursor:pointer}
     tagIn.disabled = false;
   });
 
-  /* ---- SAVE IT: one still, 1080 x 1920, drawn on a canvas (no EXIF survives one) ---- */
+  /* ---- SAVE IT: one still, 1080 x 1920, drawn on a canvas (no EXIF survives one). The big frames are on a host a
+     canvas may not read, so the photo is drawn from the site's own small picture (520 px on its long side) and the
+     print is laid out so that picture is enlarged 1.3 times and no more. ---- */
   const load = src => new Promise((res, rej) => { const im = new Image(); im.decoding = 'async'; im.onload = () => res(im); im.onerror = () => rej(new Error('would not load: ' + src)); im.src = src; });
   function rr(g, x, y, w, h, r) { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); }
   function fitText(g, text, font, size, maxW, min) { let s = size; g.font = font.replace('%', s); while (s > min && g.measureText(text).width > maxW) { s -= 1; g.font = font.replace('%', s); } return s; }
   function stops(grad, list) { list.forEach(([o, c]) => grad.addColorStop(o, c)); return grad; }
-  async function drawCard(c, W) {
-    const H = Math.round(W * 1.4), u = W / 20, bl = c.foil === 'b';
+  const cover = (g, im, x, y, w, h) => { const sc = Math.max(w / im.naturalWidth, h / im.naturalHeight), dw = im.naturalWidth * sc, dh = im.naturalHeight * sc; g.drawImage(im, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh); return sc; };
+  const UPSCALE = 1.3;
+  async function drawPrint(c) {
+    const L = layout(c), black = c.sp === 'black', pen = black ? '#d9dde4' : '#1c2452';
+    const photo = await load(thumb(c.s, c.k));                                           /* the site's own file: the canvas stays readable */
+    const u = photo.naturalWidth * UPSCALE / PW, W = Math.round(20 * u), H = Math.round(L.H * u);          /* one unit, in pixels: the photo's window is the small picture times 1.3 */
+    const other = c.sp === 'double' && c.x.o && OKK.test(c.x.o) ? await load(thumb(c.s, c.x.o)).catch(e => { console.warn('that\'s me: the second frame would not load for the picture', e); return null; }) : null;
+    const ink = (c.sp === 'doodled' || c.sp === 'note') ? await load(INK) : null;
+    await Promise.all(['400 40px "VP Deadeye"', '700 20px Inter'].map(f => document.fonts.load(f).catch(e => console.warn('that\'s me: a face would not load for the picture', e))));
     const cv = document.createElement('canvas'); cv.width = W; cv.height = H; const g = cv.getContext('2d');
-    const [photo, tile] = await Promise.all([load(thumb(c.s, c.k)), load(TILE)]);        /* the site's own files: the canvas stays readable */
-    await Promise.all(['400 40px "VP Deadeye"', '400 24px "Potta One"', '700 20px Inter'].map(f => document.fonts.load(f).catch(e => console.warn('that\'s me: a face would not load for the picture', e))));
-    rr(g, 0, 0, W, H, u); g.clip();
-    /* the chrome, frozen at its best angle */
-    g.fillStyle = stops(g.createLinearGradient(-W * .3, 0, W * 1.1, H), bl
-      ? [[0, '#3b3e47'], [.16, '#101116'], [.32, '#4c505b'], [.5, '#07080b'], [.66, '#565a66'], [.82, '#15161b'], [1, '#3b3e47']]
-      : [[0, '#f7f9fc'], [.16, '#b4bdcb'], [.32, '#eef2f7'], [.5, '#8791a1'], [.66, '#f4f7fb'], [.82, '#a4aebd'], [1, '#f7f9fc']]);
-    g.fillRect(0, 0, W, H);
-    g.fillStyle = stops(g.createLinearGradient(-W * .2, 0, W * 1.2, H * .35), bl
-      ? [[.2, 'rgba(255,255,255,0)'], [.4, 'rgba(255,196,84,.6)'], [.5, 'rgba(255,240,190,.75)'], [.6, 'rgba(255,170,60,.6)'], [.8, 'rgba(255,255,255,0)']]
-      : [[.18, 'rgba(255,255,255,0)'], [.34, 'rgba(255,90,170,.5)'], [.44, 'rgba(255,220,90,.45)'], [.52, 'rgba(90,255,200,.45)'], [.6, 'rgba(90,160,255,.5)'], [.68, 'rgba(200,110,255,.45)'], [.84, 'rgba(255,255,255,0)']]);
-    g.fillRect(0, 0, W, H);
-    /* the photo: whole. A tall one fills the window (a 3:4 centre crop at most); a wide one sits inside it, nobody cut off */
-    const px = u, py = 2.4 * u, pw = 18 * u, ph = 24 * u;
-    g.save(); rr(g, px, py, pw, ph, .3 * u); g.clip(); g.fillStyle = '#0c0a10'; g.fillRect(px, py, pw, ph);
+    rr(g, 0, 0, W, H, .14 * u); g.clip();
+    g.fillStyle = black ? '#151317' : '#f4f1ea'; g.fillRect(0, 0, W, H);
+    g.fillStyle = g.createPattern(paperCv, 'repeat'); g.fillRect(0, 0, W, H);
+    g.fillStyle = stops(g.createLinearGradient(0, 0, W, H), black ? [[0, 'rgba(255,255,255,.05)'], [1, 'rgba(0,0,0,.2)']] : [[0, 'rgba(255,255,255,.35)'], [1, 'rgba(120,105,85,.08)']]); g.fillRect(0, 0, W, H);
+    /* the photo: all of it, in a window its own shape */
+    const px = B * u, py = B * u, pw = PW * u, ph = L.ph * u;
+    g.save(); g.beginPath(); g.rect(px, py, pw, ph); g.clip(); g.fillStyle = '#2b2d2a'; g.fillRect(px, py, pw, ph);
     g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high';
-    const wide = photo.naturalWidth > photo.naturalHeight, sc = wide ? Math.min(pw / photo.naturalWidth, ph / photo.naturalHeight) : Math.max(pw / photo.naturalWidth, ph / photo.naturalHeight);
-    const dw = photo.naturalWidth * sc, dh = photo.naturalHeight * sc;
-    g.drawImage(photo, px + (pw - dw) / 2, py + (ph - dh) / 2, dw, dh);
+    const scale = cover(g, photo, px, py, pw, ph);
+    if (other) { g.save(); g.globalCompositeOperation = 'screen'; g.globalAlpha = .42; cover(g, other, px, py, pw, ph); g.restore(); }
+    if (c.sp === 'leak') {              /* a warm burn creeping in from one edge, like expired film */
+      const e = L.edge, a = [[px, py, px + pw * .62, py], [px + pw, py, px + pw * .38, py], [px, py, px, py + ph * .62], [px, py + ph, px, py + ph * .38]][e];
+      g.save(); g.globalCompositeOperation = 'screen';
+      g.fillStyle = stops(g.createLinearGradient(a[0], a[1], a[2], a[3]), [[0, 'rgba(255,112,24,.98)'], [.3, 'rgba(255,164,58,.6)'], [.65, 'rgba(255,205,128,.18)'], [1, 'rgba(255,205,128,0)']]); g.fillRect(px, py, pw, ph);
+      const hx = e === 0 ? px : e === 1 ? px + pw : px + pw * .3, hy = e === 2 ? py : e === 3 ? py + ph : py + ph * .7;
+      g.fillStyle = stops(g.createRadialGradient(hx, hy, 0, hx, hy, pw * .5), [[0, 'rgba(255,238,170,.85)'], [.5, 'rgba(255,150,50,.3)'], [1, 'rgba(255,150,50,0)']]); g.fillRect(px, py, pw, ph);
+      g.restore();
+    }
+    g.fillStyle = stops(g.createLinearGradient(px, py, px + pw, py + ph), [[.3, 'rgba(255,255,255,0)'], [.46, 'rgba(255,255,255,.1)'], [.6, 'rgba(255,255,255,0)']]); g.fillRect(px, py, pw, ph);      /* the gloss, still */
     g.restore();
-    /* his doodles: a sheet of the shine, cut to the drawings by the tile, laid light over everything and strong round the edge */
-    const foil = document.createElement('canvas'); foil.width = W; foil.height = H; const f = foil.getContext('2d');
-    f.fillStyle = bl ? 'rgba(200,164,84,.5)' : 'rgba(224,231,241,.5)'; f.fillRect(0, 0, W, H);
-    f.fillStyle = stops(f.createLinearGradient(-W * .25, 0, W * 1.15, H * .3), bl
-      ? [[.1, 'rgba(255,255,255,0)'], [.36, 'rgba(255,190,80,.95)'], [.5, 'rgba(255,244,205,1)'], [.64, 'rgba(255,170,60,.95)'], [.9, 'rgba(255,255,255,0)']]
-      : [[.1, 'rgba(255,255,255,0)'], [.3, 'rgba(255,120,190,.95)'], [.42, 'rgba(255,235,140,1)'], [.5, '#fff'], [.58, 'rgba(130,255,220,1)'], [.7, 'rgba(120,170,255,.95)'], [.9, 'rgba(255,255,255,0)']]);
-    f.fillRect(0, 0, W, H);
-    const mask = document.createElement('canvas'); mask.width = W; mask.height = H; const mk = mask.getContext('2d');
-    const ts = 9 * u; for (let y = 0; y < H; y += ts) for (let x = 0; x < W; x += ts) mk.drawImage(tile, x, y, ts, ts);
-    f.globalCompositeOperation = 'destination-in'; f.drawImage(mask, 0, 0);
-    g.save(); g.globalCompositeOperation = 'screen'; g.globalAlpha = .27; g.drawImage(foil, 0, 0); g.restore();
-    mk.globalCompositeOperation = 'source-over'; mk.clearRect(0, 0, W, H);
-    mk.save(); mk.translate(W / 2, H * .42); mk.scale(W * .62, H * .62);              /* low and to the sides: faces stay clear */
-    mk.fillStyle = stops(mk.createRadialGradient(0, 0, 0, 0, 0, 1), [[0, 'rgba(0,0,0,0)'], [.52, 'rgba(0,0,0,0)'], [1, '#000']]); mk.fillRect(-2, -2, 4, 4); mk.restore();
-    f.drawImage(mask, 0, 0);                    /* still destination-in: what is left is the doodles round the edge */
-    g.save(); g.globalCompositeOperation = 'screen'; g.globalAlpha = .95; g.drawImage(foil, 0, 0); g.restore();
-    /* the bright band */
-    g.save(); g.globalCompositeOperation = 'soft-light'; g.globalAlpha = .6;
-    g.fillStyle = stops(g.createLinearGradient(-W * .1, H * .05, W * .9, H * .75), [[.3, 'rgba(255,255,255,0)'], [.5, 'rgba(255,255,255,.7)'], [.7, 'rgba(255,255,255,0)']]); g.fillRect(0, 0, W, H); g.restore();
-    /* the words */
-    g.textBaseline = 'middle'; g.textAlign = 'center';
-    fitText(g, c.t, '400 %px "VP Deadeye","Potta One",sans-serif', 1.5 * u, 18 * u, .7 * u);
-    g.fillStyle = bl ? 'rgba(0,0,0,.8)' : 'rgba(255,255,255,.7)'; g.fillText(c.t, W / 2, 1.2 * u + 1.5);
-    g.fillStyle = bl ? '#f3cf7a' : '#15111a'; g.fillText(c.t, W / 2, 1.2 * u);
-    const no = 'NO. ' + c.no, lab = (c.when + (c.lab ? ' · ' + c.lab : '')).toUpperCase();
-    try { g.letterSpacing = (.06 * u) + 'px'; } catch (e) { /* an older phone: the letters sit closer */ }
-    fitText(g, lab, '700 %px Inter,system-ui,sans-serif', .66 * u, 17.6 * u, .36 * u);
-    g.textAlign = 'center'; g.fillStyle = bl ? '#d9dbe2' : '#1b1722'; g.fillText(lab, W / 2, 27.2 * u, 17.8 * u);
-    /* the serial: a small plate in the corner of the photo */
-    g.font = '700 ' + (.5 * u) + 'px Inter,system-ui,sans-serif'; try { g.letterSpacing = (.05 * u) + 'px'; } catch (e) { /* same */ }
-    { const tw = g.measureText(no).width, bw = tw + 1.05 * u, bh = 1.15 * u, bx = px + pw - .5 * u - bw, by = py + ph - .5 * u - bh;
-      g.fillStyle = 'rgba(12,8,16,.78)'; rr(g, bx, by, bw, bh, .3 * u); g.fill();
-      if (bl) { g.strokeStyle = 'rgba(243,207,122,.7)'; g.lineWidth = Math.max(1, u * .05); g.stroke(); }
-      g.fillStyle = bl ? '#f3cf7a' : '#e9edf3'; g.textAlign = 'left'; g.fillText(no, bx + .52 * u, by + bh / 2 + 1); }
-    try { g.letterSpacing = '0px'; } catch (e) { /* same */ }
-    if (c.at) {
-      const t = '@' + c.at; g.font = '400 ' + (.78 * u) + 'px "Potta One",system-ui,sans-serif'; g.textAlign = 'left';
-      const tw = Math.min(g.measureText(t).width, 9.2 * u), bw = tw + 1.2 * u, bh = 1.45 * u, bx = px + .5 * u, by = py + ph - .5 * u - bh;
-      g.fillStyle = 'rgba(12,8,16,.78)'; rr(g, bx, by, bw, bh, bh / 2); g.fill();
-      g.fillStyle = '#fff'; g.fillText(t, bx + .6 * u, by + bh / 2 + 1, 9.2 * u);
+    g.strokeStyle = black ? 'rgba(255,255,255,.14)' : 'rgba(0,0,0,.28)'; g.lineWidth = Math.max(1, u * .05); g.strokeRect(px, py, pw, ph);
+    /* what is written on the border */
+    g.textBaseline = 'middle'; g.fillStyle = pen;
+    const noted = c.sp === 'note' && c.x.who && CFG.cast[c.x.who], capY = (L.foot + (noted ? 1.45 : FOOT / 2 + .1)) * u, room = (c.sp === 'doodled' ? 12.6 : 18) * u;
+    if (c.cap) { g.textAlign = 'center'; fitText(g, c.cap, '400 %px "VP Deadeye","Potta One",sans-serif', 1.62 * u, room, .8 * u); g.fillText(c.cap, W / 2, capY); }
+    if (noted) {
+      const hc = headCell(c.x.who), hs = 1.9 * u, line = plain(c.x.line);
+      g.save(); g.translate(W - B * u - .2 * u, (L.foot + FOOT - 1.2) * u); g.rotate(-3 * Math.PI / 180);          /* all of it inside the border */
+      g.textAlign = 'right'; g.font = '400 ' + (.92 * u) + 'px "VP Deadeye","Potta One",sans-serif'; g.fillText(c.x.who, 0, .35 * u);
+      const nw = g.measureText(c.x.who).width;
+      g.font = '400 ' + (1.02 * u) + 'px "VP Deadeye","Potta One",sans-serif'; g.fillText(line, 0, -.75 * u);
+      const lw = Math.max(nw, g.measureText(line).width);
+      if (hc && ink) g.drawImage(ink, hc.c * 128, hc.r * 128, 128, 128, -lw - hs - .3 * u, -1.35 * u, hs, hs);
+      g.restore();
     }
-    if (bl) {
-      g.font = '700 ' + (.5 * u) + 'px Inter,system-ui,sans-serif'; try { g.letterSpacing = (.08 * u) + 'px'; } catch (e) { /* same */ }
-      const t = 'BLACK LABEL', tw = g.measureText(t).width, bw = tw + 1.1 * u, bh = 1.1 * u, bx = px + pw - .5 * u - bw, by = py + .5 * u;
-      g.fillStyle = 'rgba(8,8,10,.82)'; rr(g, bx, by, bw, bh, .3 * u); g.fill(); g.strokeStyle = '#f3cf7a'; g.lineWidth = Math.max(1, u * .05); g.stroke();
-      g.fillStyle = '#f3cf7a'; g.textAlign = 'left'; g.fillText(t, bx + .55 * u, by + bh / 2 + 1);
-      try { g.letterSpacing = '0px'; } catch (e) { /* same */ }
-    }
+    L.dd.forEach(d => { const q = inkCell(d.i); g.save(); g.translate(d.x * u, d.y * u); g.rotate(d.a * Math.PI / 180); g.drawImage(ink, q.c * 128, q.r * 128, 128, 128, -d.s * u / 2, -d.s * u / 2, d.s * u, d.s * u); g.restore(); });
+    cv.scale = scale;
     return cv;
   }
   async function still(c) {
-    const W = 1080, H = 1920, cw = 800, ch = 1120, x = (W - cw) / 2, y = 330;
+    const W = 1080, H = 1920;
     const cv = document.createElement('canvas'); cv.width = W; cv.height = H; const g = cv.getContext('2d');
     g.fillStyle = stops(g.createLinearGradient(0, 0, 0, H), [[0, '#ff93c0'], [.55, '#f873ab'], [1, '#ee5c98']]); g.fillRect(0, 0, W, H);       /* the booth's pink */
-    const face = await drawCard(c, cw);
-    g.save(); g.shadowColor = 'rgba(96,10,52,.5)'; g.shadowBlur = 80; g.shadowOffsetY = 38; rr(g, x, y, cw, ch, cw / 20); g.fillStyle = '#2a0d18'; g.fill(); g.restore();
-    g.drawImage(face, x, y);
+    const face = await drawPrint(c);
+    await document.fonts.load('400 44px "Potta One"').catch(e => console.warn('that\'s me: a face would not load for the picture', e));
+    g.save(); g.translate(W / 2, 880); g.rotate((fnv(c.id) % 2 ? -3.2 : 2.8) * Math.PI / 180);                /* at a slight tilt, the same way every time for this print */
+    g.shadowColor = 'rgba(96,10,52,.5)'; g.shadowBlur = 70; g.shadowOffsetY = 34; g.fillStyle = c.sp === 'black' ? '#151317' : '#f4f1ea'; g.fillRect(-face.width / 2 + 4, -face.height / 2 + 4, face.width - 8, face.height - 8);
+    g.shadowColor = 'transparent'; g.drawImage(face, -face.width / 2, -face.height / 2);
+    g.restore();
     g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = '#2a0d18';
     g.font = '400 44px "Potta One",system-ui,sans-serif'; g.fillText('@vamppsych', W / 2, 1640);
-    g.font = '700 30px Inter,system-ui,sans-serif'; try { g.letterSpacing = '4px'; } catch (e) { /* an older phone */ }
+    g.font = '700 30px Inter,system-ui,sans-serif'; try { g.letterSpacing = '4px'; } catch (e) { /* an older phone: the letters sit closer */ }
     g.fillText('0FFTHEPRINT.COM', W / 2, 1708);
     try { g.letterSpacing = '0px'; } catch (e) { /* same */ }
+    cv.photoScale = face.scale; cv.print = [face.width, face.height];
     return cv;
   }
   const blobOf = cv => new Promise((res, rej) => cv.toBlob(b => b ? res(b) : rej(new Error('the canvas gave no picture')), 'image/jpeg', .92));
   function prepare() {
     if (!cur) return null;
-    const c = cur, key = c.id + '|' + c.at;
+    const c = cur, key = c.id + '|' + c.cap;
     if (exportP && exportKey === key) return exportP;
     exportKey = key;
-    exportP = still(c).then(blobOf).then(b => new File([b], 'thats-me-' + c.no + '.jpg', { type: 'image/jpeg' }));
+    exportP = still(c).then(blobOf).then(b => new File([b], 'polaroid-' + c.s.slice(0, 10).replace(/-/g, '') + '-' + c.k + '.jpg', { type: 'image/jpeg' }));
     exportP.catch(e => { console.error('that\'s me: the picture would not draw', e); if (exportKey === key) exportP = null; });
     return exportP;
   }
@@ -6704,10 +6740,10 @@ a.key{cursor:pointer}
 
   /* ---- the ways in ---- */
   /* 1. the strip in your hands: FIND YOURSELF puts the strip in the bag (the booth's own Back) and opens its night */
-  const ph = $('.pb-hands'), phName = ph && $('.hold-keys', ph);
-  if (phName) {
+  const ph = $('.pb-hands'), phKeys = ph && $('.hold-keys', ph);
+  if (phKeys) {
     const k = document.createElement('button'); k.type = 'button'; k.className = 'key big tm-chromekey tm-findkey'; k.innerHTML = 'Find yourself <span aria-hidden="true">&rsaquo;</span>';
-    phName.insertAdjacentElement('afterbegin', k);
+    phKeys.insertAdjacentElement('afterbegin', k);
     k.addEventListener('click', async () => {
       const i = +ph.dataset.tm; if (!(i >= 0) || !N[i] || busy) return;
       const b = $('.pb-hback', ph); if (b) b.click();
@@ -6723,14 +6759,14 @@ a.key{cursor:pointer}
     for (let t = 0; t < 30 && v && !v.hidden; t++) await wait(50);
     openSheet(i);
   });
-  /* 3. a card in the bag */
+  /* 3. a print in the bag */
   window.__tmOpen = (code, whence) => {
-    const c = cards().find(x => x.id === code); if (!c || busy || !hands.hidden) return;
+    const c = prints().find(x => x.id === code); if (!c || busy || !hands.hidden) return;
     night = N[BY[c.s]] || null; lastFocus = document.activeElement;
     if (night && !night.fn) frames().then(m => { if (m[c.s]) { night.fn = m[c.s]; if (cur === c) paint(c); } }, e => console.warn('that\'s me: the big picture\'s address would not load', e));
     showHands(c, whence || 'bag', null);
   };
-  /* 4. MAKE IT A CARD on a night's page: /?night=<slug>&frame=<name>#in-booth */
+  /* 4. MAKE IT A POLAROID on a night's page: /?night=<slug>&frame=<name>#in-booth */
   (async () => {
     const q = new URLSearchParams(location.search), s = q.get('night'), k = q.get('frame');
     if (!s) return;
@@ -6748,13 +6784,13 @@ a.key{cursor:pointer}
     else if (!sheet.hidden) { e.stopPropagation(); if (!busy) $('#tm-sh-x').click(); }
   }, true);
   const booth = document.getElementById('st-in-booth');
-  if (booth) booth.addEventListener('st:open', () => { if (new URLSearchParams(location.search).get('night')) return; sheet.hidden = true; hands.hidden = true; busy = false; });
+  if (booth) booth.addEventListener('st:open', () => { sheet.hidden = true; hands.hidden = true; busy = false; });
   const downOn = e => { const k = e.target.closest('.key'); if (k) k.classList.add('down'); };
   [sheet, hands].forEach(el => el.addEventListener('pointerdown', downOn, true));
   ['pointerup', 'pointercancel'].forEach(ev => document.addEventListener(ev, () => setTimeout(() => $$('.tm-sheet .down, .tm-hands .down, .tm-findkey.down').forEach(k => k.classList.remove('down')), 40)));
 
-  /* for the checks: what a card would be, and its picture, without the taps */
-  window.__tm = { nights: N, frames, makeCard, still, drawCard, cards, open: openSheet, light, state: () => ({ sheet: !sheet.hidden, hands: !hands.hidden, cur, kept, chosen, tiltOn }) };
+  /* for the checks: what a print would be, and its picture, without the taps */
+  window.__tm = { nights: N, cfg: CFG, frames, makePrint, rollWith, layout, still, drawPrint, prints, open: openSheet, light, state: () => ({ sheet: !sheet.hidden, hands: !hands.hidden, cur, kept, chosen }) };
 })();
 
 </script>
