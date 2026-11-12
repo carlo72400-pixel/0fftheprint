@@ -46,7 +46,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" integrity="sha384-Rj26LVGvoeRVR6+mwQmFfcR3QOBEwT+ZmuCWpuiqeTzJpCs0ER4ITAWGb4Hiy3Ok" crossorigin="anonymous" defer></script>
 <script src="supabase-config.js?v=f1348482" defer></script>
 <script src="assets/js/desk.js?v=ecaad17b" defer></script>
-<script src="assets/js/door.js?v=5263b497" defer></script>
+<script src="assets/js/door.js?v=a528dd3b" defer></script>
 <script src="assets/js/composer.js?v=1c95d27a" defer></script>
 <script src="assets/js/edit.js?v=46763485" defer></script>
 <script>
@@ -62,11 +62,11 @@ window.OTPLazy = window.OTPLazy || (function () {
   return { watch: watch, scan: scan };
 })();
 </script>
-<script src="assets/js/binder.js?v=5ec9844b" defer></script>
+<script src="assets/js/binder.js?v=aeefa818" defer></script>
 <script src="assets/js/cathedral.js?v=71af5a7c" defer></script>
 <script src="assets/js/lounge.js?v=059eb0eb" defer></script>
 <script src="assets/js/music.js?v=528cb700" defer></script>
-<script src="assets/js/people.js?v=d0c7a6d1" defer></script>
+<script src="assets/js/people.js?v=c248676c" defer></script>
 <script src="assets/js/photos.js?v=a529592b" defer></script>
 <script>/* tabs: pick the page before first paint, off the #hash. Old links like /#desk still land right.
    ⛔ M has to name every main.feed > section[id] (the router below the body only corrects it after the
@@ -4330,7 +4330,7 @@ window.OTPLazy = window.OTPLazy || (function () {
         <div class="hs-steps">
           <a href="#night-pick" class="st"><i>1</i><b>Find your night</b><span>the one you were at, right below</span></a>
           <a href="#find" class="st"><i>2</i><b>Pull your pack</b><span>your photos, no login needed</span></a>
-          <a href="wall/" class="st"><i>3</i><b>Get in the house</b><span>join the Crypt, all it takes is an @</span></a>
+          <a href="wall/" class="st"><i>3</i><b>Get in the house</b><span>join the Crypt, it asks for your Instagram</span></a>
         </div>
         <div class="hs-what">
           <b>In the house you get</b>
@@ -4394,7 +4394,7 @@ window.OTPLazy = window.OTPLazy || (function () {
       <div class="feed" id="take-mount"></div>
       <a class="feed-cta" id="take-cta" href="join/?next=home">
         <b>Log in to post.</b>
-        <span>Everybody in the Crypt posts to this timeline, reacts and comments. No login yet? Join the Crypt. All it takes is an Instagram.</span>
+        <span>Everybody in the Crypt posts to this timeline, reacts and comments. No login yet? Join the Crypt. Joining asks for your Instagram.</span>
       </a>
     </section>
 
@@ -6728,7 +6728,7 @@ window.OTPLazy = window.OTPLazy || (function () {
         ? `${esc(what)} is for members. One more step: put your Instagram in at <a href="wall/">the Crypt</a>. One account per Instagram.`
         : door === 'in'
           ? `${esc(what)} is for members of the Crypt.`
-          : `${esc(what)} is for members. <a href="join/?next=home">Log in</a>, or <a href="wall/">join the Crypt</a>. All it takes is an Instagram.`;
+          : `${esc(what)} is for members. <a href="join/?next=home">Log in</a>, or <a href="wall/">join the Crypt</a>. Joining asks for your Instagram.`;
       n.hidden = false;
     }
     const ago = iso => { const m = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 60000)); return m < 1 ? 'now' : m < 60 ? m + 'm' : m < 1440 ? Math.round(m / 60) + 'h' : Math.round(m / 1440) + 'd'; };

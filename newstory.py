@@ -277,7 +277,7 @@ PAGE = """<!DOCTYPE html>
 <body>
 <div class="leopard-bar"></div>
 <div class="wrap">
-  <a class="back" href="../../#desk">&larr; The Word · 0FF THE PRINT</a>
+  <a class="back" href="../../#desk">&larr; The Stand · 0FF THE PRINT</a>
   <div class="kicker">{kicker}</div>
   <h1>{title}</h1>
   <div class="dek">{dek}</div>
@@ -292,7 +292,7 @@ PAGE = """<!DOCTYPE html>
     <div id="wall-entries"></div>
     <div id="wall-compose"></div>
   </section>
-  <div class="foot">Every drop gets a number. This one is {num}. <a href="../../#desk">Back to The Word &rarr;</a></div>
+  <div class="foot">Every drop gets a number. This one is {num}. <a href="../../#desk">Back to The Stand &rarr;</a></div>
 </div>
 <script src="../../supabase-config.js"></script>
 <script src="{supabase_js}" integrity="{supabase_sri}" crossorigin="anonymous"></script>
@@ -515,6 +515,11 @@ def main():
 })();
 </script>
 </body>""", 1)
+        try:
+            import street_skin
+            page = street_skin.skin_text(page, f"word/{slug}/index.html")
+        except Exception as e:
+            print(f"  page not skinned ({e}); stamp.py puts the strip on")
         with open(os.path.join(story_dir, "index.html"), "w") as f:
             f.write(page)
         # source.md is the editor's base text: the phone editor seeds from it,

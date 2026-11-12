@@ -620,7 +620,7 @@
     /* their stories */
     if (data.stories.length) {
       var ss = d.createElement('section');
-      ss.appendChild(h2('The Word', data.stories.length + (data.stories.length === 1 ? ' story' : ' stories')));
+      ss.appendChild(h2('The Stand', data.stories.length + (data.stories.length === 1 ? ' story' : ' stories')));
       var rw = d.createElement('div');
       rw.className = 'rows';
       data.stories.forEach(function (s) {

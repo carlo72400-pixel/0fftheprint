@@ -131,7 +131,8 @@ def build():
     # to strip the stamps stamp.py had put on the page
     sys.path.insert(0, ROOT)
     from stamp import stamp_text
-    page = stamp_text(page)
+    import street_skin
+    page = stamp_text(street_skin.skin_text(page, "video/index.html"))
     io.open(os.path.join(OUT, "index.html"), "w", encoding="utf-8").write(page)
     print(f"  video/: {len(items)} pieces ({n_cut} cuts, {n_nig} night clips)")
 
@@ -141,9 +142,9 @@ PAGE = """<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>The Tape · 0FF THE PRINT</title>
+<title>Now Showing · 0FF THE PRINT</title>
 <meta name="description" content="Every piece of video the house has put out. Cuts, interviews and clips straight off the nights.">
-<meta property="og:title" content="The Tape · 0FF THE PRINT">
+<meta property="og:title" content="Now Showing · 0FF THE PRINT">
 <meta property="og:description" content="__COUNT__ pieces. Cuts, interviews and clips straight off the nights.">
 <meta property="og:image" content="SITEURL/video/preview.jpg">
 <link rel="canonical" href="SITEURL/video/">
@@ -311,7 +312,7 @@ PAGE = """<!DOCTYPE html>
 <div class="leopard-bar"></div>
 <div class="wrap">
   <a class="back" href="../">&larr; 0FF THE PRINT</a>
-  <h1>The Tape</h1>
+  <h1>Now Showing</h1>
   <div class="sub">__COUNT__ pieces &nbsp;·&nbsp; __NCUT__ cuts &nbsp;·&nbsp; __NNIGHT__ off the nights</div>
   <div class="tabs" id="tabs"></div>
   <div class="grid" id="grid"></div>
@@ -322,7 +323,7 @@ PAGE = """<!DOCTYPE html>
   </div>
 </div>
 
-<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="The Tape">
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Now Showing">
   <div class="lb-track" id="lbtrack"></div>
   <div class="lb-top" aria-live="polite"><span class="lb-c" id="lbc"></span><span class="lb-g" id="lbg"></span></div>
   <div class="lb-end" id="lbe" role="group" aria-label="More work">

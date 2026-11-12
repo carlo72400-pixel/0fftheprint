@@ -335,7 +335,7 @@
     if (pulled) {
       pulled.remove();
       document.documentElement.classList.remove('otpw-down');
-      document.title = (title || 'The Word') + ' · 0FF THE PRINT';
+      document.title = (title || 'The Stand') + ' · 0FF THE PRINT';
       const bar = document.createElement('div');
       bar.className = 'otpw-bar';
       bar.innerHTML = '<span>PULLED · only you see this</span><a href="' + esc(board) + '">Put it back</a>';

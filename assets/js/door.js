@@ -15,7 +15,7 @@
     out:  {st:'out', label:'Log in',  href:'join/?next=home', cal:'dates/', on:false,
            title:'Members and card holders log in here.',
            b:'Log in to post.',
-           s:'Everybody in the Crypt posts to this timeline, reacts and comments. No login yet? Join the Crypt. All it takes is an Instagram.',
+           s:'Everybody in the Crypt posts to this timeline, reacts and comments. No login yet? Join the Crypt. Joining asks for your Instagram.',
            foot:'Log in →'},
     // 035: who is still here? A login with no Instagram on it. Everybody who has one is let onto
     // The Wall below, so nobody is "in the queue" just to get in any more.

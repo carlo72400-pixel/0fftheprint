@@ -57,13 +57,13 @@ TRACKED = ["assets/js/desk.js", "assets/js/door.js", "assets/js/composer.js",
            "assets/js/dates.js", "assets/js/calendar.js", "assets/js/sealed.js",
            "assets/js/word.js", "assets/js/cathedral.js", "assets/js/binder.js",
            "assets/js/lounge.js", "assets/js/music.js", "assets/js/people.js", "assets/js/photos.js",
-           "assets/js/board-members.js", "assets/js/take.js", "supabase-config.js"]
+           "assets/js/board-members.js", "assets/js/take.js", "assets/js/street-skin.js", "supabase-config.js"]
 
 # stylesheet path (relative to ROOT)  ->  how it appears in href="..."
 TRACKED_CSS = ["assets/css/cathedral.css", "assets/css/pack.css",
                "assets/css/sealed.css", "assets/css/calendar.css",
                "assets/css/binder.css", "assets/css/lounge.css", "assets/css/music.css", "assets/css/people.css", "assets/css/photos.css",
-               "assets/css/auth.css", "assets/css/board-members.css", "assets/css/take.css"]
+               "assets/css/auth.css", "assets/css/board-members.css", "assets/css/take.css", "assets/css/street-skin.css"]
 
 # THE PIN (10/13): one exact supabase-js release, with the sha384 of that exact file (fetched once from this URL)
 PIN_VERSION = "2.117.2"
@@ -106,6 +106,14 @@ DOCS = ["home.html", "index.html", "join/index.html", "compose/index.html", "des
         # every night dump carries sealed.js. newevent.py writes the tag into
         # new ones; this keeps the ones already up on the current file.
         str(p.relative_to(ROOT)) for p in sorted(ROOT.glob("events/*/index.html"))]
+
+
+# 11/12: every inner page wears the street's skin (street_skin.py). Whatever it skins is stamped too.
+try:
+    import street_skin
+    DOCS = DOCS + [p for p in street_skin.pages() if p not in DOCS]
+except Exception as _e:
+    print(f"  street skin: page list not read ({_e})")
 
 
 def short_hash(path: pathlib.Path) -> str:
@@ -178,6 +186,12 @@ def main() -> int:
         maketake.build()
     except Exception as e:
         print(f"  take/index.html NOT rebuilt ({e}); it is as it was")
+    # the strip at the top of every inner page (back key, place name, sound key): put on any page that lacks it
+    try:
+        import street_skin
+        street_skin.apply_all()
+    except Exception as e:
+        print(f"  street skin NOT applied ({e}); the pages are as they were")
     stamps, css = current()
 
     if not stamps:

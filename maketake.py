@@ -42,11 +42,11 @@ def build(quiet=False):
     s, n = re.subn(r'(<script src="assets/js/desk\.js[^"]*" defer></script>\n)', r'\1<script src="assets/js/take.js" defer></script>\n', s)
     assert n == 1, f"maketake: the desk.js tag ({n})"
     s = _sub(s, "</head>", '<link rel="stylesheet" href="assets/css/take.css">\n</head>', "the end of the head")
-    s, n = re.subn(r"(<body[^>]*>\n)", r'\1<a class="take-street" href="./" aria-label="Back to the street"><span aria-hidden="true">&lsaquo;</span> Street</a>\n', s, count=1)
-    assert n == 1, "maketake: the body tag"
     s = _sub(s, '<div class="sub">out in the open &nbsp;·&nbsp; art, thoughts, whatever</div>',
              '<div class="sub">members only &nbsp;·&nbsp; posts and photos, one timeline</div>', "the timeline's line")
     s = s.replace("join/?next=home", "join/?next=take")
+    import street_skin
+    s = street_skin.skin_text(s, "take/index.html")      # the shared strip: back to the Door, THE DOOR, the sound key
     out = os.path.join(ROOT, "take", "index.html")
     os.makedirs(os.path.dirname(out), exist_ok=True)
     old = io.open(out, encoding="utf-8").read() if os.path.exists(out) else None

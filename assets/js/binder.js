@@ -179,28 +179,14 @@ window.OTPLazy = window.OTPLazy || (function () {
     if (bump) { b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump'); }
   }
 
-  /* ---------- the house bar: every page that is not the homepage gets a way back in ---------- */
+  /* ---------- the key in the corner (11/12): the old house bar (wordmark, Home, Nights, Stories, Coven) is gone. Every
+     inner page wears the street's strip now (street_skin.py), and the chip sits in its top right corner, #sk-keys,
+     beside the sound key. A page with no strip gets no chip, and says so. ---------- */
   function bar() {
-    if (d.querySelector('nav.site') || d.querySelector('.bn-bar') || !d.body) return;
-    // the wordmark's face. These pages never loaded it, and one weight is 15 KB.
-    var f = el('link'); f.rel = 'stylesheet'; f.href = 'https://fonts.googleapis.com/css2?family=Cinzel:wght@800&display=swap'; d.head.appendChild(f);
-    var n = el('nav', 'bn-bar'); n.setAttribute('aria-label', '0FF THE PRINT');
-    var home = el('a', 'bn-wm'); home.href = BASE; home.setAttribute('aria-label', '0FF THE PRINT, home');
-    var mk = el('img'); mk.alt = ''; mk.width = 240; mk.height = 228; mk.decoding = 'async'; mk.src = BASE + 'assets/cathedral/mark.webp';
-    home.appendChild(mk); home.appendChild(el('span', '', 'FF THE PRINT'));
-    n.appendChild(home);
-    var links = el('span', 'bn-links');
-    // Home carries .bn-home so a phone can drop it (binder.css): the wordmark already goes home, and four
-    // links plus the chip do not fit 390px, so Coven was cut to "COVI" with nothing saying it scrolled
-    [['Home', ''], ['Nights', 'events/'], ['Stories', '#stories'], ['Coven', '#people']].forEach(function (x) {
-      var a = el('a', x[1] ? '' : 'bn-home', x[0]); a.href = BASE + x[1];
-      try { if (new URL(a.href).pathname === location.pathname) a.setAttribute('aria-current', 'page'); } catch (e) {}
-      links.appendChild(a);
-    });
-    n.appendChild(links);
-    n.appendChild(chipEl());
-    d.body.insertBefore(n, d.body.firstChild);
-    d.documentElement.classList.add('bn-has-bar');
+    if (d.querySelector('.bn-chip') || !d.body) return;
+    var keys = d.getElementById('sk-keys');
+    if (!keys) { try { console.warn('the bag: this page has no strip to hold its key'); } catch (e) {} return; }
+    keys.appendChild(chipEl());
   }
 
   /* ---------- pack tiles: how far in you are ----------

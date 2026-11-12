@@ -122,7 +122,7 @@
       (state === 'wait' && closedDoor() ? '<p class="rl-door-l">This account is closed. <a href="my/#account">Your account &rarr;</a></p>'
         : state === 'wait' && atDoor() ? '<p class="rl-door-l">You are at the door. Every Instagram gets looked at before the Crypt opens.</p>'
         : state === 'wait' ? '<p class="rl-door-l"><a href="wall/">One more step at the Crypt</a> and you are in.</p>'
-        : '<p class="rl-door-l"><a href="join/?next=home">Log in</a> or <a href="wall/">join the Crypt</a>. All it takes is an Instagram.</p>');
+        : '<p class="rl-door-l"><a href="join/?next=home">Log in</a> with your email and password, or <a href="wall/">join the Crypt</a>. Joining asks for your Instagram.</p>');
     mount.appendChild(c);
   }
 

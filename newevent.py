@@ -959,7 +959,8 @@ def main():
     try:
         sys.path.insert(0, ROOT)
         from stamp import stamp_text
-        page = stamp_text(page)
+        import street_skin
+        page = stamp_text(street_skin.skin_text(page, f"events/{slug}/index.html"))
     except Exception as e:
         print(f"  page not stamped ({e}); run stamp.py before the commit")
     open(os.path.join(out, "index.html"), "w", encoding="utf-8").write(page)

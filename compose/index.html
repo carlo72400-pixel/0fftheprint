@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-place="door">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -60,14 +60,16 @@
   .sendrow .empty{flex-basis:100%;margin:0;padding:2px 0 0}
   .sendrow .empty:empty{display:none}
 </style>
+<link rel="stylesheet" href="../assets/css/street-skin.css?v=50d722ad">
+<script src="../assets/js/street-skin.js?v=38af1586" defer></script>
 </head>
 <body>
+<!--sk--><div class="sk-top"><a class="sk-back" href="../#in-door" aria-label="Back to The Door on the street"><span aria-hidden="true">&lsaquo;</span>Door</a><b class="sk-place">THE DOOR</b><span class="sk-keys" id="sk-keys"></span></div><!--/sk-->
 <div class="leopard-bar"></div>
 <div class="wrap">
-  <a class="back" href="../">&larr; 0FF THE PRINT</a>
   <h1>Your posts</h1>
   <!-- 045 (call 1): the Take on Home is everyone, the Roll on the Coven tab is members only, and this page lists what you put on both -->
-  <div class="sub" id="sub">everything you posted &nbsp;·&nbsp; <a href="../take/">the Take</a> is everyone, <a href="../take/">the Roll</a> is members only<span id="links" hidden> &nbsp;·&nbsp;
+  <div class="sub" id="sub">everything you posted &nbsp;·&nbsp; it all shows on <a href="../take/">the Take</a>, and a post with a photo is members only<span id="links" hidden> &nbsp;·&nbsp;
     <a href="../my/#account">YOUR ACCOUNT &rarr;</a><span data-holder hidden> &nbsp;·&nbsp;
     <a href="../card/">YOUR CARD &rarr;</a> &nbsp;·&nbsp;
     <a href="../word/new/">WRITE A STORY &rarr;</a></span><span data-open> &nbsp;·&nbsp;
@@ -143,7 +145,7 @@
       <button class="btn ghost sm" id="out" type="button">Sign out</button></div>
     ${me.failed ? `<div class="note">Could not read your card just now. Reload in a minute.</div>` : ''}
     ${locked ? `<div class="note" id="locknote">${lockNote}</div>`
-      : `<div class="note">Post from <a href="../take/">Home</a> now. The Take is for everyone. The Roll, on the <a href="../take/">Coven tab</a>, is members only.</div>`}
+      : `<div class="note">Post on <a href="../take/">the Take</a> now. A post with a photo is members only.</div>`}
     ${holder ? `<label>Your color</label>
     <div class="swatches" id="sw"></div>
     <div class="note" id="swnote">This colors your posts on the timeline, and these pages while you're logged in.</div>` : ''}`;
@@ -428,7 +430,7 @@
 
   async function renderMine() {
     const rows = await OTP.myPosts();
-    const head = `<h2>On the Take and the Roll</h2>
+    const head = `<h2>On the Take</h2>
       <div class="note" style="margin-top:2px">${locked
         ? (closed ? 'Locked while this account is closed.' : 'Locked while the desk has your account.')
         : 'Edit it, delete it, whatever. If the desk pulls a post it locks, and that is on purpose.'}</div>`;

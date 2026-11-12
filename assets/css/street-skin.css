@@ -1,0 +1,58 @@
+/* THE STREET's skin on every inner page (11/12). street_skin.py puts the strip on the page; this file is its look, and
+   the few things every page shares with the street: its two faces, its keys, its sticker edge, one colour per place.
+   Each page keeps its own layout. Run stamp.py after editing. */
+@font-face{font-family:"VP Deadeye";src:url(../../reliquary/fonts/vpdeadeye.woff2) format("woff2");font-display:swap}
+@font-face{font-family:"Potta One";src:url(../../reliquary/fonts/pottaone.woff2) format("woff2");font-display:swap}
+
+html[data-place]{--sk:#ff8fd8;--sk-ink:#150b14}
+html[data-place="booth"]{--sk:#ff6aa8}
+html[data-place="stand"]{--sk:#ffb547}
+html[data-place="bar"]{--sk:#b892ff}
+html[data-place="door"]{--sk:#5ae0d0}
+html[data-place="box"]{--sk:#ffd479}
+html[data-place="kit"]{--sk:#7fd3ff}
+html[data-place="bites"]{--sk:#ff4f8b}
+
+/* the strip: the back key top left, the place's name, the keys top right. The page starts under it. */
+.sk-top{position:relative;z-index:8999;display:flex;align-items:center;gap:10px;box-sizing:border-box;width:100%;
+  min-height:calc(56px + env(safe-area-inset-top,0px));
+  padding:max(6px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) 6px calc(max(12px,env(safe-area-inset-left,0px)) + 138px)}
+.sk-back{position:fixed;left:max(12px,env(safe-area-inset-left,0px));top:max(6px,env(safe-area-inset-top,0px));z-index:9000;
+  display:inline-flex;align-items:center;gap:6px;box-sizing:border-box;min-width:82px;min-height:44px;padding:0 14px;border-radius:999px;
+  background:linear-gradient(#3d3b45,#25232b);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 4px 0 #08070b,0 6px 12px rgba(0,0,0,.5);
+  color:#f1eef6;font:700 12px/1 system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.sk-back span{font-size:18px;line-height:1}
+.sk-back:active{transform:translateY(2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 2px 0 #08070b}
+.sk-back:focus-visible,.sk-snd:focus-visible{outline:2px solid #fff;outline-offset:2px}
+/* the place's name: a neon word in the place's colour */
+.sk-place{flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
+  font:400 15px/1 "Potta One","VP Deadeye",system-ui,sans-serif;letter-spacing:.03em;color:var(--sk);   /* small names go in Potta One (his rule) */
+  text-shadow:0 0 10px color-mix(in srgb,var(--sk) 55%,transparent),0 1px 0 #000}
+.sk-keys{flex:none;display:inline-flex;align-items:center;gap:8px}
+/* the sound key: one switch for the whole site, the street's own setting */
+.sk-snd{display:inline-flex;align-items:center;justify-content:center;gap:5px;box-sizing:border-box;min-width:44px;min-height:44px;margin:0;padding:0 10px;
+  border:0;border-radius:12px;background:linear-gradient(#3d3b45,#25232b);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 4px 0 #08070b;
+  color:#f1eef6;font:700 11px/1 system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.sk-snd svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.sk-snd[aria-pressed="false"]{color:#a79fb3}
+.sk-snd[aria-pressed="false"] .on{display:none}
+.sk-snd:active{transform:translateY(2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 2px 0 #08070b}
+
+/* the street's faces on the page's own headings (the layout stays the page's) */
+html[data-place] h1{font-family:"VP Deadeye","Potta One",system-ui,sans-serif;font-weight:400;font-style:normal;letter-spacing:.02em}
+html[data-place] ::selection{background:var(--sk);color:var(--sk-ink)}
+html[data-place] a:focus-visible,html[data-place] button:focus-visible{outline-color:var(--sk)}
+/* a sticker edge for anything that asks for it */
+.sk-sticker{filter:drop-shadow(0 0 0 #fff) drop-shadow(1.5px 0 0 #fff) drop-shadow(-1.5px 0 0 #fff) drop-shadow(0 1.5px 0 #fff) drop-shadow(0 -1.5px 0 #fff) drop-shadow(2px 3px 0 rgba(17,17,17,.4))}
+/* a chunky key for anything that asks for it */
+.sk-key{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:52px;padding:0 16px;border:0;border-radius:10px;
+  background:linear-gradient(color-mix(in srgb,var(--sk) 70%,#fff),var(--sk));color:var(--sk-ink);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 6px 0 color-mix(in srgb,var(--sk) 55%,#000),0 8px 14px rgba(0,0,0,.45);
+  font:700 13px/1.05 system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:.07em;text-transform:uppercase;text-decoration:none;cursor:pointer}
+.sk-key:active{transform:translateY(4px);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 2px 0 color-mix(in srgb,var(--sk) 55%,#000)}
+
+/* THE TAKE's page keeps the old home's markup switched off (take.css); the strip sits above it */
+html[data-take] .sk-top{position:fixed;left:0;top:0}
+@media (prefers-reduced-motion:reduce){.sk-back:active,.sk-snd:active,.sk-key:active{transform:none}}
