@@ -3,6 +3,14 @@
   "items": [
     {
       "up": "2026-11-12",
+      "title": "Rin as Teto: the pirate lock screen",
+      "line": "Rin on the rail of her own pirate ship, CRT glow and all. A free lock screen and a home screen that match.",
+      "link": "wallpapers/",
+      "thumb": "wallpapers/teto-card.jpg",
+      "go": "save her"
+    },
+    {
+      "up": "2026-11-12",
       "title": "RELIQUARY origins #10: Putty",
       "line": "Putty's origin, told on the report cards of the two places that put her out: the Clown Church, where the one rule is that you laugh, and a knight school that banned cartwheels in formation. 10 slides, read top to bottom.",
       "link": "reliquary/putty/",

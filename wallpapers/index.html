@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Pick your lock screen · VAMPPSYCH</title>
-<meta name="description" content="Ten free lock screens of the crew, night and day. Tap one and save it.">
+<meta name="description" content="Free lock screens of the crew, night and day, and Rin as Teto on her pirate ship, lock and home. Tap one and save it.">
 <link rel="canonical" href="https://0fftheprint.com/wallpapers/">
 <meta name="theme-color" content="#0e0609">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="0FF THE PRINT">
 <meta property="og:title" content="Pick your lock screen">
-<meta property="og:description" content="Ten free lock screens of the crew, night and day. Tap one and save it.">
+<meta property="og:description" content="Free lock screens of the crew, night and day, and Rin as Teto on her pirate ship, lock and home. Tap one and save it.">
 <meta property="og:url" content="https://0fftheprint.com/wallpapers/">
 <meta property="og:image" content="https://0fftheprint.com/wallpapers/preview.jpg">
 <meta property="og:image:width" content="1200">
@@ -24,7 +24,10 @@
 <!-- Built 2026-11-10 for the "PICK YOUR LOCK SCREEN" carousel ("full-res wallpapers: link in bio").
      Source art: Drive 02_BRAND/art-style/scratch-gremlin/_FINALS/04_wallpapers (night = dark holo, day = plain v5).
      Files made by scratch-gremlin/wallpapers/make_web_wallpapers.py. Self-contained: no shared CSS/JS, no stamp needed.
-     Every wallpaper is a plain link to its full-size JPG, so the page works with no script; the script adds the viewer. -->
+     Every wallpaper is a plain link to its full-size JPG, so the page works with no script; the script adds the viewer.
+     2026-11-12, his "also put it on 0fftheprint": RIN AS TETO (the pirate lock + home) in the NEW box up top. One version
+     only, so its picks carry data-one (the NIGHT / DAY switch skips them, files in night/ only) and data-dl (the save name).
+     Files made by Drive scratch-gremlin/wallpapers/teto_rin/_build/make_web_teto.py (also teto-card.jpg, its timeline card). -->
 <style>
 @font-face{font-family:"VP Deadeye";src:url(fonts/vpdeadeye.woff2) format("woff2");font-display:swap}
 @font-face{font-family:"Potta One";src:url(fonts/pottaone.woff2) format("woff2");font-display:swap}
@@ -69,8 +72,17 @@ html.ig .igb{display:block}
 .foot .go{display:flex;align-items:center;min-height:52px;border-top:1px solid var(--line);color:var(--ink);font-weight:700;text-decoration:none}
 .foot .go:last-child{border-bottom:1px solid var(--line)}
 .foot .go:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
-/* the viewer */
-.view{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;background:#0a0407;
+/* NEW 11/12: Rin as Teto, her pirate night (one version, see data-one) */
+.new{margin:22px 0 4px;padding:16px 14px 18px;border-radius:26px;background:linear-gradient(160deg,#2a1840 0%,#170d26 55%,#10070f 100%);border:2px solid #42305e}
+.new .tag{display:inline-block;padding:4px 11px;border-radius:999px;background:var(--gold);color:#1a0b10;font-weight:800;font-size:12px;letter-spacing:.14em}
+.new h2{font-family:"VP Deadeye",Impact,"Arial Black",sans-serif;font-weight:400;text-transform:uppercase;font-size:clamp(40px,11vw,66px);line-height:.92;
+  margin:10px 0 8px;color:#faf8f3;text-shadow:2px 2px 0 #000,5px 5px 0 #4b2a7a;letter-spacing:.01em}
+.new .nl{font-family:"Potta One",system-ui,sans-serif;font-size:16px;line-height:1.3;color:#d9cde6;margin:0 0 14px;max-width:30em}
+.new .grid{margin:0}
+@media (min-width:720px){.new{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:0 26px;align-items:center;padding:22px 24px}
+  .new .grid{grid-template-columns:repeat(2,minmax(0,1fr))}.new .nl{margin:0}}
+/* the viewer (z 9100, 11/12: over the street strip's back key at 9000, which sat on the close button) */
+.view{position:fixed;inset:0;z-index:9100;display:flex;flex-direction:column;background:#0a0407;
   padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
 .view[hidden]{display:none}
 .vtop{display:flex;align-items:center;gap:10px;padding:8px 12px;min-height:64px}
@@ -106,6 +118,17 @@ html.ig .igb{display:block}
     <p class="sub">tap one, save her &lt;3</p>
     <p class="igb">In Instagram? Tap ⋯ (top right), then <b>Open in browser</b>. Saving works best there.</p>
   </header>
+  <section class="new" aria-labelledby="new-h">
+    <div>
+      <span class="tag">NEW 11/12</span>
+      <h2 id="new-h">Rin as Teto</h2>
+      <p class="nl">Pirate night on her own ship, CRT glow and all. A lock screen and a home screen that match.</p>
+    </div>
+    <ul class="grid">
+      <li><a class="pick" data-k="teto" data-one data-dl="Rin-as-Teto-lock" href="night/teto.jpg"><span class="ph"><img src="t/night/teto.webp" width="400" height="867" alt="Rin as Teto lock screen: Rin on the rail of her pirate ship at night"></span><span class="lab"><span class="nm">RIN AS TETO</span><span class="ty">LOCK</span></span></a></li>
+      <li><a class="pick" data-k="tetohome" data-one data-dl="Rin-as-Teto-home" href="night/tetohome.jpg"><span class="ph"><img src="t/night/tetohome.webp" width="400" height="867" alt="Rin as Teto home screen: Rin peeking over the rail of her ship"></span><span class="lab"><span class="nm">RIN AS TETO</span><span class="ty">HOME</span></span></a></li>
+    </ul>
+  </section>
   <div class="pin" id="pin"></div>
   <div class="bar" id="bar"><div class="mode" role="group" aria-label="Night or day"><button type="button" data-mode="night" aria-pressed="true">NIGHT</button><button type="button" data-mode="day" aria-pressed="false">DAY</button></div></div>
   <ul class="grid" id="grid">
@@ -123,6 +146,7 @@ html.ig .igb{display:block}
   <footer class="foot">
     <p><b>Set it.</b> iPhone: open it in Photos, tap Share, then Use as Wallpaper. Android: open it, tap ⋮, then Set as wallpaper.</p>
     <p>Art by @vamppsych. Free for your phone. Don't sell it or post it as yours.</p>
+    <p>Rin as Teto is fan art: Kasane Teto belongs to TWINDRILL.</p>
     <a class="go" href="https://www.instagram.com/vamppsych/" rel="noopener">@vamppsych on Instagram →</a>
     <a class="go" href="../">More from 0FF THE PRINT →</a>
   </footer>
@@ -152,33 +176,40 @@ html.ig .igb{display:block}
   var KEYS = picks.map(function (a) { return a.getAttribute('data-k'); });
   var NAMES = picks.map(function (a) { return a.querySelector('.nm').textContent; });
   var TYPES = picks.map(function (a) { return a.querySelector('.ty').textContent; });
+  // data-one = a wallpaper with one version (Rin as Teto, 11/12): its files sit in night/ and the NIGHT / DAY switch skips it
+  var ONE = picks.map(function (a) { return a.hasAttribute('data-one'); });
+  var DL = picks.map(function (a) { return a.getAttribute('data-dl'); });
+  var ALT = picks.map(function (a) { return a.querySelector('img').getAttribute('alt'); });
   var mode = 'night';
   try { var m0 = localStorage.getItem('wp-mode'); if (m0 === 'day' || m0 === 'night') mode = m0; } catch (e) {}
   var view = d.getElementById('view'), vthumb = d.getElementById('vthumb'), vfull = d.getElementById('vfull'), save = d.getElementById('save');
-  var vn = d.getElementById('vn'), vt = d.getElementById('vt'), stage = d.getElementById('stage');
+  var vn = d.getElementById('vn'), vt = d.getElementById('vt'), stage = d.getElementById('stage'), vmode = view.querySelector('.mode');
   var cur = -1, opener = null, ours = false, pushed = false;
   function full(k, m) { return m + '/' + k + '.jpg'; }
   function thumb(k, m) { return 't/' + m + '/' + k + '.webp'; }
   function title(i) { return NAMES[i].charAt(0) + NAMES[i].slice(1).toLowerCase(); }
+  function mo(i) { return ONE[i] ? 'night' : mode; }
+  function tag(i) { return '#' + KEYS[i] + (mo(i) === 'day' ? '-day' : ''); }
   function setMode(m) {
     mode = m;
     try { localStorage.setItem('wp-mode', m); } catch (e) {}
     Array.prototype.forEach.call(d.querySelectorAll('.mode button'), function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-mode') === m)); });
-    picks.forEach(function (a, i) { a.href = full(KEYS[i], m); a.querySelector('img').src = thumb(KEYS[i], m); });
+    picks.forEach(function (a, i) { if (ONE[i]) return; a.href = full(KEYS[i], m); a.querySelector('img').src = thumb(KEYS[i], m); });
     if (cur >= 0) show(cur, true);
   }
   function show(i, same) {
     cur = (i + KEYS.length) % KEYS.length;
-    var k = KEYS[cur];
+    var k = KEYS[cur], m = mo(cur);
     vn.textContent = NAMES[cur]; vt.textContent = TYPES[cur]; vn.classList.toggle('long', NAMES[cur].length > 10);
-    vthumb.src = thumb(k, mode);
+    vmode.style.visibility = ONE[cur] ? 'hidden' : '';
+    vthumb.src = thumb(k, m);
     vfull.classList.remove('on'); vfull.removeAttribute('src');
-    vfull.alt = title(cur) + ' lock screen, ' + mode;
+    vfull.alt = ONE[cur] ? ALT[cur] : title(cur) + ' lock screen, ' + m;
     vfull.onload = function () { vfull.classList.add('on'); };
-    vfull.src = full(k, mode);
-    save.href = full(k, mode);
-    save.setAttribute('download', 'VAMPPSYCH-' + (k === 'crew' ? 'Crew' : title(cur)) + '-' + mode + '.jpg');
-    var h = '#' + k + (mode === 'day' ? '-day' : '');
+    vfull.src = full(k, m);
+    save.href = full(k, m);
+    save.setAttribute('download', 'VAMPPSYCH-' + (DL[cur] || ((k === 'crew' ? 'Crew' : title(cur)) + '-' + m)) + '.jpg');
+    var h = tag(cur);
     if (ours && location.hash !== h) { try { history.replaceState({ wp: 1 }, '', h); } catch (e) {} }
   }
   function open(i, fromHash) {
@@ -186,7 +217,7 @@ html.ig .igb{display:block}
     view.hidden = false; root.classList.add('locked');
     pushed = false;
     // a tap adds one history step, so the phone's back button closes the viewer; a shared link (#rin) adds none
-    if (!fromHash) { try { history.pushState({ wp: 1 }, '', '#' + KEYS[i] + (mode === 'day' ? '-day' : '')); pushed = true; } catch (e) {} }
+    if (!fromHash) { try { history.pushState({ wp: 1 }, '', tag(i)); pushed = true; } catch (e) {} }
     ours = true;
     show(i);
     view.querySelector('.x').focus();
