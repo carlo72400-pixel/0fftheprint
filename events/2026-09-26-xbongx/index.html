@@ -81,6 +81,14 @@ color:var(--ink);width:46px;height:46px;border-radius:50%;cursor:pointer;font-si
 font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#f7b9dd;text-decoration:none;
 border:1px solid rgba(255,121,198,.45);border-radius:999px;padding:8px 14px;background:rgba(10,10,13,.75)}
 .lb-dl:hover{color:#0a0a0d;background:#f7b9dd}
+/* MAKE IT A CARD (11/12): the photo booth on the street prints this frame as a THAT'S ME card */
+/* the viewer is a pop up: it sits above the street's strip, whose keys lay over its close key at the top of a page */
+.lb{z-index:9001}
+.lb-card{position:absolute;top:18px;right:76px;z-index:12;display:none;align-items:center;height:46px;padding:0 16px;
+border-radius:999px;border:1px solid rgba(255,121,198,.6);background:rgba(18,18,24,.92);color:#f7b9dd;text-decoration:none;
+font-family:var(--f-mono,monospace);font-size:11px;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
+.lb-card:hover{color:#0a0a0d;background:#f7b9dd}
+@media (max-width:640px){.lb-card{height:40px;right:66px;padding:0 13px;letter-spacing:.1em}}
 .lb-count{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);
 font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;color:var(--muted)}
 @media (max-width:640px){.grid{columns:2 150px;column-gap:8px}.tile{margin-bottom:8px}
@@ -110,6 +118,7 @@ font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;color:var(--muted)}
   <div class="lb-looks" id="lblooks" hidden></div>
   <div class="lb-count" id="lbc"></div>
   <a class="lb-dl" id="lbdl" href="#" target="_blank" rel="noopener">full res &darr;</a>
+  <a class="lb-card" id="lbcard" href="#">make it a card</a>
 </div>
 <script>
 const MEDIA = [{"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-26-xbongx/001.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-26-xbongx/001_full.jpg", "thumb": "media/001_t.jpg", "w": 2560, "h": 1923}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-26-xbongx/002.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-26-xbongx/002_full.jpg", "thumb": "media/002_t.jpg", "w": 2560, "h": 1923}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-26-xbongx/003.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-26-xbongx/003_full.jpg", "thumb": "media/003_t.jpg", "w": 2560, "h": 1923}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-26-xbongx/004.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-26-xbongx/004_full.jpg", "thumb": "media/004_t.jpg", "w": 2560, "h": 1923}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-26-xbongx/005.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-26-xbongx/005_full.jpg", "thumb": "media/005_t.jpg", "w": 2560, "h": 1923}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-26-xbongx/006.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-26-xbongx/006_full.jpg", "thumb": "media/006_t.jpg", "w": 2560, "h": 1923}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-26-xbongx/007.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-26-xbongx/007_full.jpg", "thumb": "media/007_t.jpg", "w": 2560, "h": 1923}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-26-xbongx/008.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-26-xbongx/008_full.jpg", "thumb": "media/008_t.jpg", "w": 2560, "h": 1923}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-26-xbongx/009.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-26-xbongx/009_full.jpg", "thumb": "media/009_t.jpg", "w": 2560, "h": 1923}, {"type": "photo", "src": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-26-xbongx/010.jpg", "full": "https://github.com/carlo72400-pixel/0tp-media-2/releases/download/2026-09-26-xbongx/010_full.jpg", "thumb": "media/010_t.jpg", "w": 2560, "h": 1923}];
@@ -138,6 +147,16 @@ function show(i){
   // so it saves rather than navigating anyway.
   const dl=document.getElementById('lbdl');
   if(v.full){dl.href=v.full;dl.style.display='';}else{dl.style.display='none';}
+  // MAKE IT A CARD: only a frame that is on the site's contact sheet gets the key
+  // (the night's hit, a clip and anything pulled never do).
+  const mk=document.getElementById('lbcard'), th=String(m.thumb||'');
+  const nm=(th.indexOf('media/')===0 && th.slice(-6)==='_t.jpg') ? th.slice(6,-6) : '';
+  mk.style.display='none';
+  if(m.type!=='video' && /^[A-Za-z0-9_.-]+$/.test(nm)) onSheet().then(s=>{
+    if(MEDIA[cur]!==m || !s || !s.set[nm]) return;
+    mk.href='../../?night='+encodeURIComponent(s.slug)+'&frame='+encodeURIComponent(nm)+'#in-booth';
+    mk.style.display='inline-flex';
+  });
   const multi = m.looks && m.looks.length>1;
   if(multi){
     chips.innerHTML = m.looks.map(x=>`<button type="button"${x.name===v.name?' class="on"':''} data-look="${esc(x.name)}">${esc(x.name)}</button>`).join('');
@@ -147,6 +166,16 @@ function show(i){
   lb.classList.add('open'); document.body.style.overflow='hidden';
 }
 chips.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;pref=b.dataset.look;show(cur);});
+let sheetP=null;
+function onSheet(){
+  if(!sheetP) sheetP=fetch('../../content/frames.json',{cache:'no-cache'}).then(r=>r.ok?r.json():null).then(j=>{
+    const slug=(window.OTPNight||{}).slug||'', n=j&&(j.nights||[]).find(x=>x.s===slug);
+    if(!n) return null;
+    const set={}; n.f.forEach(f=>{set[f[1]]=1;});
+    return {slug:slug,set:set};
+  }).catch(e=>{console.warn('make it a card: the contact sheet would not load',e);sheetP=null;return null;});
+  return sheetP;
+}
 function close(){lb.classList.remove('open');stage.innerHTML='';document.body.style.overflow='';}
 grid.addEventListener('click',e=>{const t=e.target.closest('.tile');if(!t)return;e.preventDefault();show(+t.dataset.i);});
 document.getElementById('lbx').onclick=close;
@@ -162,7 +191,7 @@ document.addEventListener('keydown',e=>{
    looks. If it never loads, the grid above is the page and always was. */
 window.OTPNight = Object.assign({media:MEDIA, show:show}, {"slug": "2026-09-26-xbongx", "title": "XBONGX", "venue": "21st Street Co-op", "dateShort": "09.26.26", "looks": ["PULSE ANGELS"], "mini": true});
 </script>
-<script src="../../assets/js/binder.js?v=f912bb4a" defer></script>
+<script src="../../assets/js/binder.js?v=56851789" defer></script>
 <script src="../../assets/js/sealed.js?v=c130f7b5" defer></script>
 </body>
 </html>

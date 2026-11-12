@@ -2790,6 +2790,119 @@ a.key{cursor:pointer}
 .tk-film-c small{display:block;margin-top:5px;font:500 13.5px/1.35 var(--f-text);color:#c4bbd0}
 .tk-film .key.big{flex:none;width:min(100%,340px)}
 
+/* ---------- THAT'S ME cards at the PHOTO BOOTH (11/12, site build only: tm.js). A night's whole contact sheet opens in
+   the booth, you tap your frame, the booth prints it as a card with HIS DOODLES as the foil, in chrome. The card is one
+   small box: everything that moves on it is a transform, an opacity or a background-position, driven by two numbers
+   (--mx, --my: where the light is, 0 to 1). Nothing here costs a layout while it moves. ---------- */
+
+/* FIND YOURSELF: the chrome key under the strip in your hands, and in a strip's page from the bag */
+.key.tm-chromekey{background:linear-gradient(#fbfcfe,#c5ccd8 55%,#eef1f6);color:#17131c;box-shadow:inset 0 1px 0 #fff,0 6px 0 #6f7786,0 8px 14px rgba(0,0,0,.45)}
+.key.tm-chromekey.down{box-shadow:inset 0 1px 0 #fff,0 0 0 #6f7786,0 2px 6px rgba(0,0,0,.45);filter:brightness(1.04)}
+.tm-findkey{flex:1 0 100%!important}
+.pb-hands:not([data-tm]) .tm-findkey{display:none}
+.pb-hands[data-tm] .hold-keys{flex-wrap:wrap}
+@media (max-height:760px){.pb-hands[data-tm] .hold{padding-top:3vh;gap:10px}.pb-hands[data-tm] .pb-held .pb-big{width:min(34vw,148px,15vh)}}
+.pb-nightgo .tm-find{margin-top:10px}
+
+/* the contact sheet */
+.tm-sheet{position:fixed;inset:0;z-index:46;display:flex;justify-content:center;background:rgba(14,4,12,.8)}
+.tm-shin{position:relative;width:min(100%,640px);height:100%;display:flex;flex-direction:column;background:#1a0a18;color:#f6eef4;padding-top:env(safe-area-inset-top,0px)}
+.tm-bar{display:flex;flex-direction:column;gap:4px;padding:12px 14px;background:#2a0f26;border-bottom:1px solid #4a1c46}
+.tm-bar b{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:400 18px/1.1 var(--f-name)}
+.tm-bar small{font:700 11.5px/1.2 var(--f-text);letter-spacing:.12em;text-transform:uppercase;color:#ff9cc6}
+.tm-body{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:10px 0 16px}
+.tm-line{margin:0 14px 10px;font-size:14px;line-height:1.4;color:#cbbbc8}
+.tm-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-flow:dense;gap:3px}
+@media (min-width:560px){.tm-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.tm-f{position:relative;display:block;margin:0;padding:0;border:0;background:#0c060b;aspect-ratio:3/4;overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;content-visibility:auto;contain-intrinsic-size:auto 160px}
+.tm-f.w{grid-column:span 2;aspect-ratio:3/2}
+.tm-f img{display:block;width:100%;height:100%;object-fit:cover}
+.tm-f i{position:absolute;left:4px;bottom:4px;padding:2px 5px;border-radius:4px;background:rgba(12,6,11,.72);font:700 10px/1.2 var(--f-text);font-style:normal;letter-spacing:.06em;color:#f6eef4}
+.tm-f.on{outline:3px solid #fff;outline-offset:-3px}
+.tm-f.on::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 0 6px var(--now,#ff6aa8)}
+.tm-f.dead{display:none}
+.tm-f:focus-visible{outline:3px solid #fff;outline-offset:-3px}
+.tm-pick{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#3a1636;border-top:1px solid #6a2a62}
+.tm-pick img{flex:none;width:48px;height:64px;object-fit:cover;border-radius:5px;background:#0c060b}
+.tm-pick p{flex:1;min-width:0;margin:0;font-size:13px;line-height:1.3;color:#e9dbe6}
+.tm-pick p b{display:block;font:400 16px/1.1 var(--f-name);color:#fff}
+.tm-pick .key{flex:none;min-width:132px}
+.tm-keys{display:flex;align-items:center;gap:10px;padding:10px 12px calc(12px + env(safe-area-inset-bottom,0px));background:#2a0f26;border-top:1px solid #4a1c46}
+
+/* in your hands */
+.tm-hands{z-index:47;overflow-y:auto;overscroll-behavior:contain;justify-content:flex-start;gap:14px;padding-top:max(18px,env(safe-area-inset-top,0px))}
+.tm-hands .hold{padding-top:0;gap:10px;flex:none}
+.tm-hands .hold-keys{flex:none;margin-top:auto}
+.tm-stage{--cw:min(74vw,300px,calc((100vh - 310px) / 1.4));--cw:min(74vw,300px,calc((100dvh - 310px) / 1.4));perspective:900px;touch-action:none}
+@media (max-height:600px){.tm-stage{--cw:min(74vw,300px,max(150px,calc((100dvh - 250px) / 1.4)))}}
+.tm-card{position:relative;display:block;width:var(--cw);height:calc(var(--cw) * 1.4);margin:0;padding:0;border:0;background:none;color:inherit;font-size:calc(var(--cw) / 20);cursor:grab;
+  --mx:.34;--my:.3;transform:rotateX(calc((.5 - var(--my)) * 16deg)) rotateY(calc((var(--mx) - .5) * 20deg));transform-style:preserve-3d;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+.tm-card:focus-visible{outline:3px solid #fff;outline-offset:6px}
+.tm-inner{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.3,1.2,.4,1)}
+.tm-card.flip .tm-inner{transform:rotateY(180deg)}
+.tm-face{position:absolute;inset:0;border-radius:1em;overflow:hidden;isolation:isolate;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:0 1.2em 2.2em rgba(0,0,0,.55);text-align:left}
+.tm-backf{transform:rotateY(180deg)}
+/* the chrome: a cool silver that slides, and a rainbow edge that slides the other way */
+.tm-chrome{position:absolute;inset:0;background:linear-gradient(115deg,#f7f9fc 0%,#b4bdcb 16%,#eef2f7 32%,#8791a1 50%,#f4f7fb 66%,#a4aebd 82%,#f7f9fc 100%) calc(var(--mx) * 100%) calc(var(--my) * 100%)/230% 230%}
+.tm-chrome::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,rgba(255,255,255,0) 28%,rgba(255,90,170,.55) 38%,rgba(255,220,90,.5) 45%,rgba(90,255,200,.5) 52%,rgba(90,160,255,.55) 59%,rgba(200,110,255,.5) 66%,rgba(255,255,255,0) 76%) calc(100% - var(--mx) * 100%) 0/320% 100%}
+.tm-card.bl .tm-chrome{background-image:linear-gradient(115deg,#3b3e47 0%,#101116 16%,#4c505b 32%,#07080b 50%,#565a66 66%,#15161b 82%,#3b3e47 100%)}
+.tm-card.bl .tm-chrome::after{background-image:linear-gradient(100deg,rgba(255,255,255,0) 28%,rgba(255,196,84,.6) 40%,rgba(255,240,190,.75) 50%,rgba(255,170,60,.6) 60%,rgba(255,255,255,0) 72%)}
+.tm-top{position:absolute;left:1em;right:1em;top:0;height:2.4em;display:flex;align-items:center;justify-content:center;overflow:hidden;white-space:nowrap;color:#15111a;text-shadow:0 1px 0 rgba(255,255,255,.7)}
+.tm-top b{display:block;font:400 1.5em/1 "VP Deadeye",var(--f-name);letter-spacing:.02em}
+.tm-win{position:absolute;left:1em;top:2.4em;width:18em;height:24em;overflow:hidden;border-radius:.3em;background:#0c0a10;box-shadow:0 0 0 1px rgba(10,8,14,.55)}
+.tm-win img{display:block;width:100%;height:100%;object-fit:cover}
+.tm-win.w img{object-fit:contain}
+.tm-bot{position:absolute;left:1em;right:1em;top:26.4em;height:1.6em;display:flex;align-items:center;justify-content:center;overflow:hidden;white-space:nowrap;color:#1b1722}
+.tm-bot span{display:block;font:700 .66em/1 var(--f-text);letter-spacing:.09em;text-transform:uppercase}
+/* the serial: a small plate in the corner of the photo */
+.tm-no{position:absolute;right:.5em;bottom:.5em;padding:.34em .55em;border-radius:.3em;background:rgba(12,8,16,.78);font:700 .5em/1 var(--f-text);font-style:normal;letter-spacing:.1em;font-variant-numeric:tabular-nums;color:#e9edf3}
+.tm-card.bl .tm-no{color:#f3cf7a;box-shadow:0 0 0 1px rgba(243,207,122,.7)}
+.tm-card.bl .tm-top{color:#f3cf7a;text-shadow:0 1px 0 rgba(0,0,0,.8)}
+.tm-card.bl .tm-bot{color:#d9dbe2}
+.tm-atag{position:absolute;left:.5em;bottom:.5em;max-width:calc(100% - 7.6em);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:.28em .6em .3em;border-radius:99em;background:rgba(12,8,16,.78);font:400 .78em/1.1 var(--f-name);color:#fff}
+.tm-atag:empty{display:none}
+.tm-bltag{position:absolute;right:.5em;top:.5em;padding:.3em .55em;border-radius:.3em;background:rgba(8,8,10,.82);box-shadow:0 0 0 1px #f3cf7a;font:700 .5em/1 var(--f-text);letter-spacing:.16em;color:#f3cf7a}
+.tm-card:not(.bl) .tm-bltag{display:none}
+/* his doodles: the tile is a mask, so the shine only shows inside the drawings. Light over the middle of the photo
+   (faces stay faces), strong round the edge. */
+.tm-doo,.tm-edge i{position:absolute;inset:0;-webkit-mask:url(street/s/tm-foil.webp?v=b4217332) 0 0/9em 9em repeat;mask:url(street/s/tm-foil.webp?v=b4217332) 0 0/9em 9em repeat;
+  background:linear-gradient(105deg,rgba(255,255,255,0) 22%,rgba(255,120,190,.95) 35%,rgba(255,235,140,1) 43%,#fff 50%,rgba(130,255,220,1) 57%,rgba(120,170,255,.95) 65%,rgba(255,255,255,0) 78%) calc(var(--mx) * 100%) 0/260% 100%,linear-gradient(rgba(232,238,246,.5),rgba(190,199,212,.5))}
+.tm-doo{opacity:.27;mix-blend-mode:screen}
+/* the strong part sits low and to the sides: faces are mostly in the upper middle of a photo, and stay clear */
+.tm-edge{position:absolute;inset:0;-webkit-mask:radial-gradient(ellipse 62% 62% at 50% 42%,rgba(0,0,0,0) 52%,#000 100%);mask:radial-gradient(ellipse 62% 62% at 50% 42%,rgba(0,0,0,0) 52%,#000 100%);mix-blend-mode:screen}
+.tm-edge i{opacity:.95}
+.tm-card.bl .tm-doo,.tm-card.bl .tm-edge i{background-image:linear-gradient(105deg,rgba(255,255,255,0) 22%,rgba(255,190,80,.95) 38%,rgba(255,244,205,1) 50%,rgba(255,170,60,.95) 62%,rgba(255,255,255,0) 78%),linear-gradient(rgba(214,180,96,.5),rgba(150,118,46,.5))}
+/* the bright band */
+.tm-glare{position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,0) 38%,rgba(255,255,255,.7) 50%,rgba(255,255,255,0) 62%) calc(var(--mx) * 100%) calc(var(--my) * 100%)/260% 260%;mix-blend-mode:soft-light;opacity:.6}
+/* one sweep when the card lands */
+.tm-sweep{position:absolute;top:-10%;bottom:-10%;left:0;width:46%;background:linear-gradient(100deg,rgba(255,255,255,0),rgba(255,255,255,.75) 50%,rgba(255,255,255,0));transform:translateX(-140%) skewX(-12deg);opacity:0;pointer-events:none}
+/* the back */
+.tm-pbg{position:absolute;left:1em;right:1em;top:1em;bottom:1em;border-radius:.4em;background:#120b14}
+.tm-backf .tm-plate{position:absolute;left:1em;right:1em;top:1em;bottom:1em;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.7em;padding:1.2em;text-align:center;color:#f6eef4}       /* the words sit on top of the foil */
+.tm-backf .tm-doo{opacity:.3}
+.tm-plate small{font:700 .62em/1.3 var(--f-text);letter-spacing:.16em;text-transform:uppercase;color:#ff9cc6}
+.tm-plate b{font:400 1.7em/1.02 "VP Deadeye",var(--f-name);letter-spacing:.02em}
+.tm-plate em{font:400 .9em/1.2 var(--f-name);font-style:normal;color:#fff}
+.tm-plate span{font:700 .6em/1.4 var(--f-text);letter-spacing:.12em;text-transform:uppercase;color:#cbbbc8}
+.tm-plate hr{width:40%;margin:.2em 0;border:0;border-top:1px solid rgba(255,255,255,.22)}
+.tm-card.bl .tm-plate small,.tm-card.bl .tm-plate em{color:#f3cf7a}
+
+.tm-hands .hold-name b{font-size:20px}
+.tm-form{display:grid;gap:8px;width:min(100%,340px)}
+.tm-at{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:4px 10px;font:700 11.5px/1.2 var(--f-text);letter-spacing:.1em;text-transform:uppercase;color:#e9dbe6}
+.tm-at input{min-width:0;min-height:44px;padding:0 12px;border:0;border-radius:10px;background:#fff8fb;color:#2a0d18;font:500 16px/1 var(--f-text);letter-spacing:0;text-transform:none}
+.tm-at small{grid-column:1/-1;font:500 12px/1.3 var(--f-text);letter-spacing:0;text-transform:none;color:var(--ink-2,#aca6ba)}
+.tm-tag{display:flex;align-items:center;gap:10px;min-height:44px;font:500 14px/1.3 var(--f-text);color:#f6eef4}
+.tm-tag input{flex:none;width:24px;height:24px;margin:0;accent-color:#ff6aa8}
+.tm-say{min-height:18px;margin:0;font:500 13px/1.35 var(--f-text);text-align:center;color:#ffd9ea}
+.tm-hands .hold-keys{gap:8px}
+.tm-hands .hold-keys .key.big{padding:0 8px}
+
+@media (prefers-reduced-motion:reduce){
+  .tm-card{transform:none}
+  .tm-inner{transition:none}
+}
+
 </style>
 </head>
 <body>
@@ -2884,7 +2997,8 @@ a.key{cursor:pointer}
 (() => {
   const ITEMS = {"B1": {"t": "12 CHAIRS", "k": "carousel", "pk": "zine", "w": "CAROUSEL", "what": "CAROUSEL \u00b7 16 SLIDES", "verb": "Flip it open", "cnt": 16, "img": "c-B1", "view": "swipe", "hint": "carousel", "pages": ["street/v/B1/01.webp?v=79cb67aa", "street/v/B1/02.webp?v=267f5a54", "street/v/B1/03.webp?v=4a3bafa9", "street/v/B1/04.webp?v=e3f2f2a4", "street/v/B1/05.webp?v=e895ce09", "street/v/B1/06.webp?v=dc1343a4", "street/v/B1/07.webp?v=de89894e", "street/v/B1/08.webp?v=aa40da10", "street/v/B1/09.webp?v=93f21720", "street/v/B1/10.webp?v=085b38cb", "street/v/B1/11.webp?v=e91f2452", "street/v/B1/12.webp?v=903e7208", "street/v/B1/13.webp?v=c654b1aa", "street/v/B1/14.webp?v=c6f5c178", "street/v/B1/15.webp?v=7323d976", "street/v/B1/16.webp?v=8a303df5"], "caps": ["she set out twelve chairs. seven showed up \ud83e\ude91", "plans every job. can&#x27;t touch the loot. still the boss \ud83d\udda4", "their first steal walked out with them \ud83d\udc2f", "she shoots first. that&#x27;s how half the crew got here \ud83d\udcf8", "her fake is still in their vault. nobody noticed \ud83d\udc85", "picks locks with her nails. named relic as a joke \ud83e\udd64", "the church&#x27;s security guard. our favorite inside man \ud83d\udd11", "came to fix the pipes. fixed nothing. has the polo \ud83d\ude90", "five seats left. they don&#x27;t stay empty long \ud83d\udd6f\ufe0f", "she loops their cameras live. smile, you&#x27;re on stream \ud83d\udcfa", "every gun she carries is a camera. still owes dulce \ud83d\udcb8", "watches from the roofs. can&#x27;t stop flying at the fire \ud83e\udd8b", "every witness remembers a clown. that&#x27;s the whole plan \ud83e\udd21", "zero chrome. scans clean. sweetest face in the room \ud83c\udf3b", "twelve chairs. one of them talks to the church \ud83d\udc00", "the chancery owns every miracle. we own a crowbar \ud83e\ude78"], "go": "reliquary/#12-chairs", "goT": "Full size", "goL": "12 Chairs, full size, on the lore page"}, "B2": {"t": "PATRON SAINTS", "k": "carousel", "pk": "zine", "w": "CAROUSEL", "what": "CAROUSEL \u00b7 12 SLIDES", "verb": "Flip it open", "cnt": 12, "img": "c-B2", "view": "swipe", "hint": "carousel", "pages": ["street/v/B2/01.webp?v=ee82e979", "street/v/B2/02.webp?v=51699005", "street/v/B2/03.webp?v=cf462aca", "street/v/B2/04.webp?v=d4d7d525", "street/v/B2/05.webp?v=f26f5e2e", "street/v/B2/06.webp?v=1d7cc27e", "street/v/B2/07.webp?v=671ea4e9", "street/v/B2/08.webp?v=2b2d2106", "street/v/B2/09.webp?v=ed66e669", "street/v/B2/10.webp?v=7b44cc51", "street/v/B2/11.webp?v=dbc7f0e5", "street/v/B2/12.webp?v=808609b4"], "caps": ["patron saints for your worst night out \ud83d\udd6f\ufe0f", "for the earring you lost at the function \ud83d\udc8e", "for the morning after. drink water, babe \ud83d\udca7", "for one bar of signal at the club \ud83d\udcf6", "for the bouncer who lets you skip the line \ud83d\udeaa", "imagine paying rent on a miracle. santa ossa does \ud83e\uddfe", "she was the patron saint of getting home safe \ud83d\udd4a\ufe0f", "they rented her out. rich kids never had a bad night \ud83d\udc8d", "one rental too many. her halo split into horns \ud83e\udd40", "she still hears every 3am prayer. she can&#x27;t answer one \ud83c\udf19", "so she walks you home. roof to roof \ud83d\udddd\ufe0f", "they own the saints. we own a crowbar \ud83e\ude78"], "go": "reliquary/#patron-saints", "goT": "Full size", "goL": "Patron Saints, full size, on the lore page"}, "B3": {"t": "HOW TO PLAY", "k": "carousel", "pk": "zine", "w": "CAROUSEL", "what": "CAROUSEL \u00b7 13 SLIDES", "verb": "Flip it open", "cnt": 13, "img": "c-B3", "view": "swipe", "hint": "carousel", "pages": ["street/v/B3/01.webp?v=6c05160f", "street/v/B3/02.webp?v=9889ac6b", "street/v/B3/03.webp?v=87db6956", "street/v/B3/04.webp?v=e8acfdda", "street/v/B3/05.webp?v=5f9ed15b", "street/v/B3/06.webp?v=4aa4ac8a", "street/v/B3/07.webp?v=c8cd0893", "street/v/B3/08.webp?v=26483808", "street/v/B3/09.webp?v=55ba0c36", "street/v/B3/10.webp?v=5e9973f4", "street/v/B3/11.webp?v=ab66fa87", "street/v/B3/12.webp?v=f1c9af32", "street/v/B3/13.webp?v=3ca997b2"], "caps": ["the instruction manual for robbing a church \ud83c\udfae", "side effects include a warm feeling and giving it all away \ud83d\ude07", "rob the church. give it away. go home broke \ud83d\udcb8", "pick your apostate. rin shoots first \ud83d\udcf8", "a relic does whatever its saint was patron of \u2728", "brass and stained glass, installed. it glows when it works \ud83d\udd06", "one install each. stacking is how you fall \u26a0\ufe0f", "white plate, gold fire. only smart tricks work on them \ud83d\udd25", "the scanners read chrome. june has none \ud83c\udf3b", "demons can&#x27;t step on holy ground. so cinder bought a dead one \u26ea", "watch your gold. wings mean it&#x27;s over \ud83d\udda4", "how to win: you don&#x27;t. that&#x27;s the game \ud83c\udfc6", "press start. bring a crowbar \ud83d\udd79\ufe0f"], "go": "reliquary/#how-to-play", "goT": "Full size", "goL": "How To Play, full size, on the lore page"}, "C2": {"t": "LOCK SCREENS", "k": "page", "pk": "blister", "w": "WALLPAPER", "what": "WALLPAPER \u00b7 10 PHONES", "verb": "Pop it out", "cnt": 10, "img": "c-D1", "view": "swipe", "hint": "wallpaper", "pages": ["street/v/C2/01.webp?v=3d099dfb", "street/v/C2/02.webp?v=94153bd5", "street/v/C2/03.webp?v=348ee26f", "street/v/C2/04.webp?v=a31877ca", "street/v/C2/05.webp?v=04761618", "street/v/C2/06.webp?v=4cb0b9da", "street/v/C2/07.webp?v=7d6c4272", "street/v/C2/08.webp?v=e895bc61", "street/v/C2/09.webp?v=412a4e9f", "street/v/C2/10.webp?v=928e36e0"], "caps": ["CREW", "Bala", "Cinder", "Dulce", "Kuro", "Lena", "Mars", "Nyx", "Putty", "Rin"], "go": "wallpapers/", "goT": "Save one", "goL": "Save a lock screen, full size"}, "C3": {"t": "VP DEADEYE", "k": "page", "pk": "bar", "w": "FONT", "what": "FONT \u00b7 FREE TO USE", "verb": "Unwrap it", "cnt": 1, "img": "c-D7", "view": "type", "hint": "font", "pages": ["street/v/C3/01.webp?v=f4529236"], "caps": [], "go": "font/", "goT": "Get it", "goL": "Get the font, free"}};
   const EXT = {"S0": {"t": "FRIDAY THE 13TH, PICK YOUR NIGHT", "w": "PAPER", "code": "THE CALENDAR", "src": "street/s/paper-0.webp?v=972527a6", "fn": "__nbOpen"}, "S1": {"t": "BOTH BANDS LEFT TOWN", "w": "PAPER", "code": "THE RUN", "src": "street/s/paper-1.webp?v=27a03334", "fn": "__nbOpen"}, "S2": {"t": "THE NEXT HEADLINER WAS A PRANK", "w": "PAPER", "code": "THE SHOP", "src": "street/s/paper-2.webp?v=82a391d2", "fn": "__nbOpen"}, "S3": {"t": "BLACK PUNK IS A LABEL NOW", "w": "PAPER", "code": "THE RECORD", "src": "street/s/paper-3.webp?v=cf42a4bd", "fn": "__nbOpen"}, "S4": {"t": "THE SHOP IS FREE FOR FOURTEEN DAYS", "w": "PAPER", "code": "THE SHOP", "src": "street/s/paper-4.webp?v=9b81cb70", "fn": "__nbOpen"}, "S5": {"t": "NOCTURNAL LANDS NOVEMBER 27", "w": "PAPER", "code": "THE RECORD", "src": "street/s/paper-5.webp?v=8bdd7af3", "fn": "__nbOpen"}, "S6": {"t": "SAN ANTONIO, PICK YOUR NIGHT", "w": "PAPER", "code": "THE CALENDAR", "src": "street/s/paper-6.webp?v=c22b4963", "fn": "__nbOpen"}, "S7": {"t": "SHOOT THE BAND FROM DAY ONE", "w": "PAPER", "code": "THE CRAFT", "src": "street/s/paper-7.webp?v=99a7932c", "fn": "__nbOpen"}, "S8": {"t": "HALLOWEEN GOT ITS SATURDAY", "w": "PAPER", "code": "THE COUNTDOWN", "src": "street/s/paper-8.webp?v=0ed094df", "fn": "__nbOpen"}, "S9": {"t": "HALF A REIGN IN BLOOD", "w": "PAPER", "code": "THE FESTIVAL", "src": "street/s/paper-9.webp?v=e4ae97f6", "fn": "__nbOpen"}, "S10": {"t": "THE ITEM SHOP IS THE NEW MTV", "w": "PAPER", "code": "THE SHOP", "src": "street/s/paper-10.webp?v=a85cd334", "fn": "__nbOpen"}, "S11": {"t": "NOBODY KNOWS WHAT A STREAMER IS", "w": "PAPER", "code": "THE BALLOT", "src": "street/s/paper-11.webp?v=7f679cd3", "fn": "__nbOpen"}, "S12": {"t": "HORROR'S FARM LEAGUE IS THE INTERNET", "w": "PAPER", "code": "THE FILM", "src": "street/s/paper-12.webp?v=20d96d22", "fn": "__nbOpen"}, "S13": {"t": "THIS IS A DORM", "w": "PAPER", "code": "THE ROOMS", "src": "street/s/paper-13.webp?v=e71dba3f", "fn": "__nbOpen"}, "S14": {"t": "SEVEN SEATS AT THE BACK OF THE LIST", "w": "PAPER", "code": "THE RECORD", "src": "street/s/paper-14.webp?v=f1cd397d", "fn": "__nbOpen"}, "S15": {"t": "AND THEN NOTHING HAPPENED", "w": "PAPER", "code": "THE CRAFT", "src": "street/s/paper-15.webp?v=d47b2133", "fn": "__nbOpen"}, "S16": {"t": "WHAT THE DIRECTOR WHISPERED", "w": "PAPER", "code": "THE CRAFT", "src": "street/s/paper-16.webp?v=1960f6aa", "fn": "__nbOpen"}, "S17": {"t": "IT WAS NEVER ONE TAKE", "w": "PAPER", "code": "THE CRAFT", "src": "street/s/paper-17.webp?v=44ac9c9a", "fn": "__nbOpen"}, "S18": {"t": "EVERY LIGHT NEEDS AN ALIBI", "w": "PAPER", "code": "THE CRAFT", "src": "street/s/paper-18.webp?v=589af33e", "fn": "__nbOpen"}, "S19": {"t": "THE LIGHTSABER WAS A PROJECTOR", "w": "PAPER", "code": "THE CRAFT", "src": "street/s/paper-19.webp?v=55ed2a93", "fn": "__nbOpen"}, "S20": {"t": "THE VAMPIRE PAINTER DREW 2HOLLIS", "w": "PAPER", "code": "THE RECORD", "src": "street/s/paper-20.webp?v=b8eeef94", "fn": "__nbOpen"}, "S21": {"t": "LAST LOOK BEFORE THE TAPE", "w": "PAPER", "code": "THE RUN", "src": "street/s/paper-21.webp?v=7daad7c9", "fn": "__nbOpen"}, "S22": {"t": "THE HAUNTED HOUSE HAS A WAIVER NOW", "w": "PAPER", "code": "THE COUNTDOWN", "src": "street/s/paper-22.webp?v=5a53bf9b", "fn": "__nbOpen"}, "S23": {"t": "THE WOLF KEEPS A CALENDAR", "w": "PAPER", "code": "THE FILM", "src": "street/s/paper-23.webp?v=80059fc1", "fn": "__nbOpen"}, "S24": {"t": "FOUR PRINTS OF A WET NIGHT", "w": "PAPER", "code": "THE NIGHT", "src": "street/s/paper-24.webp?v=814f8e7a", "fn": "__nbOpen"}, "S25": {"t": "FOUR BANDS AND ONE RED LIGHT", "w": "PAPER", "code": "THE NIGHT", "src": "street/s/paper-25.webp?v=b1c7e11e", "fn": "__nbOpen"}, "S26": {"t": "EMERALD, CREAM AND TAKEOUT RED", "w": "PAPER", "code": "THE NIGHT", "src": "street/s/paper-26.webp?v=d4f5e717", "fn": "__nbOpen"}, "S27": {"t": "SILVER, BLOOD AND LAPIS", "w": "PAPER", "code": "THE NIGHT", "src": "street/s/paper-27.webp?v=eceaa6d8", "fn": "__nbOpen"}, "S28": {"t": "THE TREES CAME OUT CRIMSON", "w": "PAPER", "code": "THE NIGHT", "src": "street/s/paper-28.webp?v=858900fa", "fn": "__nbOpen"}, "S29": {"t": "THE ROOM WAS DEAD SO WE LEFT", "w": "PAPER", "code": "THE NIGHT", "src": "street/s/paper-29.webp?v=02b1b461", "fn": "__nbOpen"}, "S30": {"t": "RED ON RED ON RED", "w": "PAPER", "code": "THE NIGHT", "src": "street/s/paper-30.webp?v=624f28b1", "fn": "__nbOpen"}, "S31": {"t": "BULL MADRID, THEN EVERYONE IN BLACK", "w": "PAPER", "code": "THE NIGHT", "src": "street/s/paper-31.webp?v=a96ae119", "fn": "__nbOpen"}, "S32": {"t": "EVERY ROOM A DIFFERENT COLOUR", "w": "PAPER", "code": "THE NIGHT", "src": "street/s/paper-32.webp?v=e96a7124", "fn": "__nbOpen"}, "S33": {"t": "THE NIGHT BEFORE B.I.L.L.Y", "w": "PAPER", "code": "THE NIGHT", "src": "street/s/paper-33.webp?v=69c81135", "fn": "__nbOpen"}, "S34": {"t": "THE AFTERPARTY IS THE SAN ANTONIO DATE", "w": "PAPER", "code": "THE RUN", "src": "street/s/paper-34.webp?v=75d092a9", "fn": "__nbOpen"}, "S35": {"t": "SAN ANTONIO GOES FIRST", "w": "PAPER", "code": "THE ARENA", "src": "street/s/paper-35.webp?v=acb8a539", "fn": "__nbOpen"}, "S36": {"t": "GET THERE EARLY", "w": "PAPER", "code": "THE RUN", "src": "street/s/paper-36.webp?v=8ca1bc3a", "fn": "__nbOpen"}, "S37": {"t": "THE BLOOD COUNTESS IS PLAYING AUSTIN", "w": "PAPER", "code": "THE FESTIVAL", "src": "street/s/paper-37.webp?v=1c6378af", "fn": "__nbOpen"}, "S38": {"t": "THEY WILL THINK YOU ARE A LUNATIC", "w": "PAPER", "code": "THE INTERVIEW", "src": "street/s/paper-38.webp?v=327cfb8d", "fn": "__nbOpen"}, "S39": {"t": "ONE CLOWN PER FIVE CIVILIANS", "w": "PAPER", "code": "THE NIGHT", "src": "street/s/paper-39.webp?v=5fe7047b", "fn": "__nbOpen"}, "S40": {"t": "SIXTEEN, A LAPTOP, FOUR HUNDRED MILLION", "w": "PAPER", "code": "THE DEBUT", "src": "street/s/paper-40.webp?v=cc916e83", "fn": "__nbOpen"}, "S41": {"t": "OPIUM BOUGHT THE WHOLE CONVENTION", "w": "PAPER", "code": "THE TAKEOVER", "src": "street/s/paper-41.webp?v=c657ec15", "fn": "__nbOpen"}, "S42": {"t": "NOBODY SAYS A WORD", "w": "PAPER", "code": "THE FILM", "src": "street/s/paper-42.webp?v=57312ecc", "fn": "__nbOpen"}, "S43": {"t": "THE RAGE KID GOT SOBER", "w": "PAPER", "code": "THE RECORD", "src": "street/s/paper-43.webp?v=66aa4d99", "fn": "__nbOpen"}, "S44": {"t": "GOTH WITH A BEAUTY BUDGET", "w": "PAPER", "code": "THE LOOK", "src": "street/s/paper-44.webp?v=f948cf43", "fn": "__nbOpen"}, "S45": {"t": "THE FALL RUN", "w": "PAPER", "code": "THE CALENDAR", "src": "street/s/paper-45.webp?v=24f0f710", "fn": "__nbOpen"}, "N0": {"t": "THE ODD BALL", "w": "PHOTOS", "code": "10.31.26", "src": "street/s/pb/0-1.webp?v=662c504f", "fn": "__pbOpen"}, "N1": {"t": "PULSE ANGELS 3", "w": "PHOTOS", "code": "10.03.26", "src": "street/s/pb/1-1.webp?v=641b2703", "fn": "__pbOpen"}, "N2": {"t": "WAP", "w": "PHOTOS", "code": "09.25.26", "src": "street/s/pb/2-1.webp?v=cfc22924", "fn": "__pbOpen"}, "N3": {"t": "HARAMBE 4 EVER", "w": "PHOTOS", "code": "09.24.26", "src": "street/s/pb/3-1.webp?v=07919176", "fn": "__pbOpen"}, "N4": {"t": "CHILL & SMOKE", "w": "PHOTOS", "code": "09.20.26", "src": "street/s/pb/4-1.webp?v=ca3e6f7c", "fn": "__pbOpen"}, "N5": {"t": "THIRD FRIDAY NIGHT MARKET", "w": "PHOTOS", "code": "09.18.26", "src": "street/s/pb/5-1.webp?v=21a9bebc", "fn": "__pbOpen"}, "N6": {"t": "BAPTISM", "w": "PHOTOS", "code": "09.18.26", "src": "street/s/pb/6-1.webp?v=47492a0f", "fn": "__pbOpen"}, "N7": {"t": "BAR HOP", "w": "PHOTOS", "code": "09.17.26", "src": "street/s/pb/7-1.webp?v=1e1394c0", "fn": "__pbOpen"}, "N8": {"t": "SADBOYZ CLUB", "w": "PHOTOS", "code": "09.16.26", "src": "street/s/pb/8-1.webp?v=5ffc2513", "fn": "__pbOpen"}, "N9": {"t": "BURLESQUE NIGHT", "w": "PHOTOS", "code": "09.13.26", "src": "street/s/pb/9-1.webp?v=5775ceed", "fn": "__pbOpen"}, "N10": {"t": "LUCHA NIGHT", "w": "PHOTOS", "code": "09.12.26", "src": "street/s/pb/10-1.webp?v=c792dc1b", "fn": "__pbOpen"}, "N11": {"t": "MIGX", "w": "PHOTOS", "code": "09.12.26", "src": "street/s/pb/11-1.webp?v=0dbff6bb", "fn": "__pbOpen"}, "N12": {"t": "BRAINROT", "w": "PHOTOS", "code": "09.11.26", "src": "street/s/pb/12-1.webp?v=1c8aeda4", "fn": "__pbOpen"}, "N13": {"t": "B.I.L.L.Y RELEASE PARTY", "w": "PHOTOS", "code": "09.01.26", "src": "street/s/pb/13-1.webp?v=525c583c", "fn": "__pbOpen"}, "N14": {"t": "CLOWN CHURCH", "w": "PHOTOS", "code": "08.30.26", "src": "street/s/pb/14-1.webp?v=3516f79b", "fn": "__pbOpen"}, "N15": {"t": "RESIDENT EVIL VS SILENT HILL", "w": "PHOTOS", "code": "08.25.26", "src": "street/s/pb/15-1.webp?v=8a8c1cf7", "fn": "__pbOpen"}, "N16": {"t": "THE SHOWCASE", "w": "PHOTOS", "code": "08.23.26", "src": "street/s/pb/16-1.webp?v=3b0697ea", "fn": "__pbOpen"}, "N17": {"t": "THIRD FRIDAY NIGHT MARKET", "w": "PHOTOS", "code": "08.21.26", "src": "street/s/pb/17-1.webp?v=2b9be5aa", "fn": "__pbOpen"}, "N18": {"t": "THE MIX", "w": "PHOTOS", "code": "08.16.26", "src": "street/s/pb/18-1.webp?v=5647b033", "fn": "__pbOpen"}, "N19": {"t": "BLADE RAVE", "w": "PHOTOS", "code": "08.14.26", "src": "street/s/pb/19-1.webp?v=f9d25922", "fn": "__pbOpen"}, "R0": {"t": "KAV-MAN", "w": "CARD", "code": "", "src": "street/s/pb/card-kav-man.webp?v=2484c327", "fn": "__pbOpen"}, "R1": {"t": "VIRGOSGATEWAY", "w": "CARD", "code": "", "src": "street/s/pb/card-virgosgateway.webp?v=4c28177f", "fn": "__pbOpen"}, "R2": {"t": "WRATHFOL", "w": "CARD", "code": "", "src": "street/s/pb/card-wrathfol.webp?v=fbe10064", "fn": "__pbOpen"}, "R3": {"t": "THE INK", "w": "CARD", "code": "", "src": "street/s/pb/card-theink.webp?v=e69c72ab", "fn": "__pbOpen"}, "R4": {"t": "KURLYTOP", "w": "CARD", "code": "", "src": "street/s/pb/card-kurlytop.webp?v=dd8943c6", "fn": "__pbOpen"}, "R5": {"t": "WUN MOR", "w": "CARD", "code": "", "src": "street/s/pb/card-wunmor.webp?v=4aaf6031", "fn": "__pbOpen"}, "R6": {"t": "JOSH FUEGO", "w": "CARD", "code": "", "src": "street/s/pb/card-josh-fuego.webp?v=3f7166d4", "fn": "__pbOpen"}, "R7": {"t": "VAMPPSYCH", "w": "CARD", "code": "", "src": "street/s/pb/card-vamppsych.webp?v=34a62e13", "fn": "__pbOpen"}, "JA1": {"t": "STARDUST BREAKER", "w": "RECORD", "code": "A1", "src": "street/s/jb-sleeve-a.webp?v=db7446fc", "fn": "__jbOpen"}, "JA2": {"t": "2 HI", "w": "RECORD", "code": "A2", "src": "street/s/jb-sleeve-a.webp?v=db7446fc", "fn": "__jbOpen"}, "JA3": {"t": "YOU TRIED IT", "w": "RECORD", "code": "A3", "src": "street/s/jb-sleeve-a.webp?v=db7446fc", "fn": "__jbOpen"}, "JA4": {"t": "YUP YUP YUP", "w": "RECORD", "code": "A4", "src": "street/s/jb-sleeve-a.webp?v=db7446fc", "fn": "__jbOpen"}, "JA5": {"t": "HOOD OF ATLANTA FREESTYLE*", "w": "RECORD", "code": "A5", "src": "street/s/jb-sleeve-a.webp?v=db7446fc", "fn": "__jbOpen"}, "JA6": {"t": "CHANEL & CAMEL CRUSH", "w": "RECORD", "code": "A6", "src": "street/s/jb-sleeve-a.webp?v=db7446fc", "fn": "__jbOpen"}, "JB1": {"t": "EVERYWHERE", "w": "RECORD", "code": "B1", "src": "street/s/jb-sleeve-b.webp?v=bfa62410", "fn": "__jbOpen"}, "JB2": {"t": "UNDER YOUR LASHLINE", "w": "RECORD", "code": "B2", "src": "street/s/jb-sleeve-b.webp?v=bfa62410", "fn": "__jbOpen"}, "JB3": {"t": "TALK", "w": "RECORD", "code": "B3", "src": "street/s/jb-sleeve-b.webp?v=bfa62410", "fn": "__jbOpen"}, "JB4": {"t": "SAILBOAT", "w": "RECORD", "code": "B4", "src": "street/s/jb-sleeve-b.webp?v=bfa62410", "fn": "__jbOpen"}, "JB5": {"t": "PINK (GET AWAY)", "w": "RECORD", "code": "B5", "src": "street/s/jb-sleeve-b.webp?v=bfa62410", "fn": "__jbOpen"}, "JB6": {"t": "ONLY TODAY", "w": "RECORD", "code": "B6", "src": "street/s/jb-sleeve-b.webp?v=bfa62410", "fn": "__jbOpen"}, "JB7": {"t": "FLOATING AWAY", "w": "RECORD", "code": "B7", "src": "street/s/jb-sleeve-b.webp?v=bfa62410", "fn": "__jbOpen"}, "JB8": {"t": "EYE LIED", "w": "RECORD", "code": "B8", "src": "street/s/jb-sleeve-b.webp?v=bfa62410", "fn": "__jbOpen"}, "JB9": {"t": "STARDUST BREAKER", "w": "RECORD", "code": "B9", "src": "street/s/jb-sleeve-b.webp?v=bfa62410", "fn": "__jbOpen"}, "JC1": {"t": "JUNE 27TH - FEAT. Z-RO & DJ SCREW", "w": "RECORD", "code": "C1", "src": "street/s/jb-sleeve-c.webp?v=6b2db40a", "fn": "__jbOpen"}, "JC2": {"t": "SOUTHSIDE", "w": "RECORD", "code": "C2", "src": "street/s/jb-sleeve-c.webp?v=6b2db40a", "fn": "__jbOpen"}, "JC3": {"t": "GHETTO DREAMS", "w": "RECORD", "code": "C3", "src": "street/s/jb-sleeve-c.webp?v=6b2db40a", "fn": "__jbOpen"}, "JC4": {"t": "DIAMONDS & WOOD (FEAT. SMOKE D)", "w": "RECORD", "code": "C4", "src": "street/s/jb-sleeve-c.webp?v=6b2db40a", "fn": "__jbOpen"}, "JC5": {"t": "INT'L PLAYERS ANTHEM (I CHOOSE YOU) (FEAT. OUTKAST)", "w": "RECORD", "code": "C5", "src": "street/s/jb-sleeve-c.webp?v=6b2db40a", "fn": "__jbOpen"}, "JC6": {"t": "MO CITY DON", "w": "RECORD", "code": "C6", "src": "street/s/jb-sleeve-c.webp?v=6b2db40a", "fn": "__jbOpen"}, "JC7": {"t": "CALL MY PHONE", "w": "RECORD", "code": "C7", "src": "street/s/jb-sleeve-c.webp?v=6b2db40a", "fn": "__jbOpen"}, "JC8": {"t": "CLEB FLOW", "w": "RECORD", "code": "C8", "src": "street/s/jb-sleeve-c.webp?v=6b2db40a", "fn": "__jbOpen"}, "JC9": {"t": "RIDIN'", "w": "RECORD", "code": "C9", "src": "street/s/jb-sleeve-c.webp?v=6b2db40a", "fn": "__jbOpen"}, "JC0": {"t": "BREAK EM' OFF (FEAT. LIL' KEKE)", "w": "RECORD", "code": "C0", "src": "street/s/jb-sleeve-c.webp?v=6b2db40a", "fn": "__jbOpen"}, "JD1": {"t": "SAILIN' DA SOUTH - SCREWED", "w": "RECORD", "code": "D1", "src": "street/s/jb-sleeve-d.webp?v=02bdd956", "fn": "__jbOpen"}, "JD2": {"t": "KNOCKIN PICTURES OFF THE WALL (FEAT. LIL' FLEX, LIL PAT, JASMINE & JHIAME)", "w": "RECORD", "code": "D2", "src": "street/s/jb-sleeve-d.webp?v=02bdd956", "fn": "__jbOpen"}, "JD3": {"t": "STILL TIPPIN' (FEAT. SLIM THUG AND PAUL WALL)", "w": "RECORD", "code": "D3", "src": "street/s/jb-sleeve-d.webp?v=02bdd956", "fn": "__jbOpen"}, "JD4": {"t": "LORD PRETTY FLACKO JODYE 2 (LPFJ2)", "w": "RECORD", "code": "D4", "src": "street/s/jb-sleeve-d.webp?v=02bdd956", "fn": "__jbOpen"}, "JD5": {"t": "SKY", "w": "RECORD", "code": "D5", "src": "street/s/jb-sleeve-d.webp?v=02bdd956", "fn": "__jbOpen"}, "JD6": {"t": "NOW I'M HIGH, REALLY HIGH", "w": "RECORD", "code": "D6", "src": "street/s/jb-sleeve-d.webp?v=02bdd956", "fn": "__jbOpen"}, "T1": {"t": "YOUR STUB", "w": "TICKET STUB", "code": "T1", "src": "street/r/ticket.webp?v=932310be", "fn": "__tkOpen"}, "F1": {"t": "CERTIFIED REAL", "w": "CERTIFICATE", "code": "F1", "src": "street/s/ft-eye.webp?v=f4e526b3", "fn": "__ftOpen"}, "K1": {"t": "SLATE", "w": "KIT TOOL", "code": "K1", "src": "street/r/slate.webp?v=19607189", "fn": "__rcOpen"}, "K2": {"t": "PROMPTER", "w": "KIT TOOL", "code": "K2", "src": "street/r/prompter.webp?v=51a98b3e", "fn": "__rcOpen"}, "K3": {"t": "TAKE LOG", "w": "KIT TOOL", "code": "K3", "src": "street/r/notebook.webp?v=8f1bbb22", "fn": "__rcOpen"}, "K4": {"t": "RELEASE", "w": "KIT TOOL", "code": "K4", "src": "street/r/clipboard.webp?v=f10df9e3", "fn": "__rcOpen"}, "K5": {"t": "GOLDEN HOUR", "w": "KIT TOOL", "code": "K5", "src": "street/r/sun.webp?v=41ac20ef", "fn": "__rcOpen"}, "K6": {"t": "VIEWFINDER", "w": "KIT TOOL", "code": "K6", "src": "street/r/viewfinder.webp?v=d1ff6d07", "fn": "__rcOpen"}, "K7": {"t": "EXPOSURE", "w": "KIT TOOL", "code": "K7", "src": "street/r/lightmeter.webp?v=f251ad30", "fn": "__rcOpen"}, "K8": {"t": "SLOW-MO", "w": "KIT TOOL", "code": "K8", "src": "street/r/cine-camera.webp?v=84f717b0", "fn": "__rcOpen"}, "K9": {"t": "STOPWATCH", "w": "KIT TOOL", "code": "K9", "src": "street/r/stopwatch.webp?v=383d53b0", "fn": "__rcOpen"}, "K10": {"t": "SCREENS", "w": "KIT TOOL", "code": "K10", "src": "street/r/tv.webp?v=2d667a13", "fn": "__rcOpen"}, "H1": {"t": "TODAY'S READING", "w": "HOLY CARD", "code": "H1", "src": "street/s/hv-heartsword.webp?v=e57e7aea", "fn": "__hvOpen"}}; let bagFrom = null;
-  window.__lb = { add: c => addToBag(c), count: () => bag.length, openBag: f => { bagFrom = f || null; openBag(); } };
+  try { (JSON.parse(localStorage.getItem('st-cards') || '[]') || []).forEach(c => { if (c && /^T[a-z0-9]{1,6}$/.test(c.id) && /^[a-z0-9-]{4,80}$/.test(c.s) && /^[A-Za-z0-9_.-]{1,40}$/.test(c.k)) EXT[c.id] = { t: String(c.t || '').replace(/[^A-Za-z0-9 .,!?'+:-]/g, ''), w: 'THAT’S ME', code: String(c.no || '').replace(/[^0-9A-Za-z-]/g, ''), src: 'events/' + c.s + '/media/' + c.k + '_t.jpg', fn: '__tmOpen' }; }); } catch (e) { console.warn('the bag: the cards this phone kept would not read', e); }
+  window.__lb = { ext: EXT, add: c => addToBag(c), count: () => bag.length, openBag: f => { bagFrom = f || null; openBag(); } };
   const HINTS = {
     comic: 'Scroll down to read it.',
     carousel: 'Swipe for the next slide.',
@@ -3269,7 +3383,7 @@ a.key{cursor:pointer}
   let mapSeen = true;
   const fxPause = () => mapv.classList.toggle('fx-paused', !!window.__stIn || !mapSeen);
   const lock = on => { window.__stIn = on; root.style.overflow = on ? 'hidden' : ''; OUTSIDE.forEach(el => { if (el) el.inert = on; }); fxPause(); };
-  const machineBusy = () => ['#hands', '#viewer', '#bag', '#keypad', '#nb-read', '.nb-hands', '.nb-tip', '.nb-issues', '.nb-box.open', '#pb-view', '.pb-hands', '.pb-every', '.pb-bay.open', '#jb-view', '.jb-hands', '.jb-pad', '.jb-req', '#tk-view', '.tk-hands', '#ft-view', '.ft-hands', '.cv-hands', '#rc-view', '.rc-hands', '#hv-view', '.hv-hands', '#hv-read', '#tk-sent', '#tk-film'].some(s => { const e = $(s); return e && !e.hidden; });
+  const machineBusy = () => ['#hands', '#viewer', '#bag', '#keypad', '#nb-read', '.nb-hands', '.nb-tip', '.nb-issues', '.nb-box.open', '#pb-view', '.pb-hands', '.pb-every', '.pb-bay.open', '#tm-sheet', '#tm-hands', '#jb-view', '.jb-hands', '.jb-pad', '.jb-req', '#tk-view', '.tk-hands', '#ft-view', '.ft-hands', '.cv-hands', '#rc-view', '.rc-hands', '#hv-view', '.hv-hands', '#hv-read', '#tk-sent', '#tk-film'].some(s => { const e = $(s); return e && !e.hidden; });
   const view = () => 'map';
   const sfx = n => { if (window.__sfx) window.__sfx(n); };
   const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
@@ -3853,14 +3967,14 @@ a.key{cursor:pointer}
       }
       goK.focus({ preventScroll: true });
     }
-    function hideHands() { hands.hidden = true; calm(hands, held, ...$$('.hold-name, .hold-keys', hands)); held.innerHTML = ''; hold = null; }
+    function hideHands() { hands.hidden = true; delete hands.dataset.tm; calm(hands, held, ...$$('.hold-name, .hold-keys', hands)); held.innerHTML = ''; hold = null; }
     async function takeStrip() {
       if (busy || shot < 0) return;
       busy = true; const i = shot; sfx('lift');
       const r = out.getBoundingClientRect();
       shot = -1; out.classList.remove('ready'); chute.classList.remove('full'); out.inert = true; out.tabIndex = -1;
       if (window.__lb) window.__lb.add('N' + i);
-      hold = { kind: 'strip', i }; held.innerHTML = stripHTML(N[i], 'pb-big');
+      hold = { kind: 'strip', i }; held.innerHTML = stripHTML(N[i], 'pb-big'); hands.dataset.tm = i;
       $('#pb-hold-t').textContent = N[i].t; $('#pb-hold-k').textContent = N[i].day + ' · ' + N[i].when;
       goT.textContent = 'Open the night'; backK.setAttribute('aria-label', 'Keep it in your bag');
       say('Your photos are in your hands. Open the night, or keep them.');
@@ -3929,7 +4043,7 @@ a.key{cursor:pointer}
     async function openNight(i, whence) {
       const n = N[i]; vFrom = whence;
       $('#pb-vt').textContent = n.t;
-      vhead.innerHTML = '<small>' + esc(n.day + ' · ' + n.when + ' · ' + n.v) + '</small><p>A few frames from the night. The whole night, and its pack, are on its own page.</p><p class="pb-nightgo"><a class="key pink big" href="events/' + n.slug + '/">Open the night <span aria-hidden="true">&rsaquo;</span></a></p>'
+      vhead.innerHTML = '<small>' + esc(n.day + ' · ' + n.when + ' · ' + n.v) + '</small><p>A few frames from the night. The whole night, and its pack, are on its own page.</p><p class="pb-nightgo"><a class="key pink big" href="events/' + n.slug + '/">Open the night <span aria-hidden="true">&rsaquo;</span></a><button class="key big tm-chromekey tm-find" type="button" data-i="' + i + '">Find yourself <span aria-hidden="true">&rsaquo;</span></button></p>'
         + (n.looks.length ? '<div class="looks">' + n.looks.map(l => '<span>' + esc(l) + '</span>').join('') + '</div>' : '');
       track.innerHTML = n.frames.map((f, k) => '<figure' + deal(k) + '><img src="' + f.src + '" alt="' + esc(n.t) + ', frame ' + f.no + '" width="' + f.w + '" height="' + f.h + '"><figcaption>FRAME ' + f.no + '</figcaption></figure>').join('');
       $('.pb-vhint', view).textContent = whence === 'bag' ? 'Swipe the frames.' : 'Swipe the frames. Your strip is in your bag.';
@@ -6189,6 +6303,458 @@ a.key{cursor:pointer}
   const fl = $$('.ft-fly[data-d]'); let up = 0;
   fl.forEach(f => { const gone = f.dataset.d < today; f.hidden = gone; if (!gone) up++; });
   const cap = $('.ft-fcap'); if (cap && fl.length && !up) cap.textContent = 'THE FLYER WALL';
+})();
+
+/* ---------- THAT'S ME cards at the PHOTO BOOTH (11/12, site build only; the look is tm.css, the foil's tile is
+   built from his own doodles by tm_tile.py: TILE below).
+
+   The flow: a strip prints, FIND YOURSELF opens that night's whole contact sheet (the site's own list,
+   content/frames.json: the hit and anything pulled are never in it), you tap your frame, THAT'S ME, the booth prints
+   the card into your hands. Tilt it or drag it and the foil moves, tap it and it flips. KEEP IT puts it in the bag,
+   SAVE IT makes the picture to post.
+
+   What stays on this phone and goes nowhere: the cards you kept ('st-cards'), the @ you typed ('st-card-at'), and the
+   number that decides which foil you get ('st-card-seed'). Nothing here talks to the database, except one thing a
+   logged-in Crypt member can choose: "Tag me in this frame", which is the site's own call (OTP.tagFrame).
+   Errors are logged, never swallowed. ---------- */
+(() => {
+  const CFG = {"nights":[{"s":"2026-10-31-the-odd-ball","t":"THE ODD BALL","when":"OCT 31, 2026","d":"10.31.26","lab":"Justine's Brasserie"},{"s":"2026-10-03-pulse-angels-3","t":"PULSE ANGELS 3","when":"OCT 3, 2026","d":"10.03.26","lab":"21st Street Co-op"},{"s":"2026-09-25-wap","t":"WAP","when":"SEP 25, 2026","d":"09.25.26","lab":"Private Park"},{"s":"2026-09-24-harambe-4-ever","t":"HARAMBE 4 EVER","when":"SEP 24, 2026","d":"09.24.26","lab":"Paper Tiger"},{"s":"2026-09-20-chill-and-smoke","t":"CHILL & SMOKE","when":"SEP 20, 2026","d":"09.20.26","lab":"Exotic Takeout"},{"s":"2026-09-18-zen-haus","t":"THIRD FRIDAY NIGHT MARKET","when":"SEP 18, 2026","d":"09.18.26","lab":"Zen Haus"},{"s":"2026-09-18-baptism","t":"BAPTISM","when":"SEP 18, 2026","d":"09.18.26","lab":"The Deco"},{"s":"2026-09-17-bar-hop","t":"BAR HOP","when":"SEP 17, 2026","d":"09.17.26","lab":"Club 212 · Bar House"},{"s":"2026-09-16-sadboyz-club","t":"SADBOYZ CLUB","when":"SEP 16, 2026","d":"09.16.26","lab":"Wav Room"},{"s":"2026-09-13-burlesque-night","t":"BURLESQUE NIGHT","when":"SEP 13, 2026","d":"09.13.26","lab":"Rah Rah Room"},{"s":"2026-09-12-lucha-night","t":"LUCHA NIGHT","when":"SEP 12, 2026","d":"09.12.26","lab":"El Luchador Bar"},{"s":"2026-09-12-migx","t":"MIGX","when":"SEP 12, 2026","d":"09.12.26","lab":"Club 212"},{"s":"2026-09-11-brainrot","t":"BRAINROT","when":"SEP 11, 2026","d":"09.11.26","lab":"New Guild Co-op"},{"s":"2026-09-01-billy-release-party","t":"B.I.L.L.Y RELEASE PARTY","when":"SEP 1, 2026","d":"09.01.26","lab":"Slackers"},{"s":"2026-08-30-clown-church","t":"CLOWN CHURCH","when":"AUG 30, 2026","d":"08.30.26","lab":"Rah Rah Room"},{"s":"2026-08-25-the-mix","t":"RESIDENT EVIL VS SILENT HILL","when":"AUG 25, 2026","d":"08.25.26","lab":"The Mix"},{"s":"2026-08-23-the-showcase","t":"THE SHOWCASE","when":"AUG 23, 2026","d":"08.23.26","lab":"The Mix"},{"s":"2026-08-21-zen-haus","t":"THIRD FRIDAY NIGHT MARKET","when":"AUG 21, 2026","d":"08.21.26","lab":"Zen Haus"},{"s":"2026-08-16-the-mix","t":"THE MIX","when":"AUG 16, 2026","d":"08.16.26","lab":"The Mix"},{"s":"2026-08-14-blade-rave","t":"BLADE RAVE","when":"AUG 14, 2026","d":"08.14.26","lab":"Paper Tiger"}],"odds":20};
+  const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const sfx = n => { if (window.__sfx) window.__sfx(n); };
+  const esc = t => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  const N = CFG.nights, BY = {}; N.forEach((n, i) => { BY[n.s] = i; });
+  const TILE = 'street/s/tm-foil.webp?v=b4217332', EV = 'events/';
+  const thumb = (s, k) => EV + s + '/media/' + k + '_t.jpg';
+  const read = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k) || 'null'); return v == null ? d : v; } catch (e) { console.warn('that\'s me: ' + k + ' would not read', e); return d; } };
+  const write = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { console.warn('that\'s me: ' + k + ' would not save', e); return false; } };
+  const fnv = s => { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; };
+  const OKS = /^[a-z0-9-]{4,80}$/, OKK = /^[A-Za-z0-9_.-]{1,40}$/;
+  const cleanAt = v => String(v || '').replace(/^@+/, '').replace(/[^A-Za-z0-9._]/g, '').slice(0, 30);
+
+  /* ---- the cards this phone keeps ---- */
+  const okCard = c => c && typeof c === 'object' && /^T[a-z0-9]{1,6}$/.test(c.id) && OKS.test(c.s) && OKK.test(c.k);
+  const cards = () => (Array.isArray(read('st-cards', [])) ? read('st-cards', []) : []).filter(okCard);
+  function seed() {
+    let s = read('st-card-seed', null);
+    if (typeof s !== 'string' || s.length < 8) { s = Math.random().toString(36).slice(2) + Date.now().toString(36); write('st-card-seed', s); }
+    return s;
+  }
+  /* which foil: about 1 in 20 is a BLACK LABEL. The same frame on the same phone always comes out the same. */
+  const foilOf = (s, k) => fnv(seed() + '|' + s + '|' + k) % CFG.odds === 0 ? 'b' : 'c';
+  function makeCard(n, f) {
+    const had = cards().find(c => c.s === n.s && c.k === f[1]);
+    if (had) return had;
+    return { id: 'T' + fnv(n.s + '|' + f[1]).toString(36).slice(0, 6), s: n.s, k: f[1], i: f[0], w: f[2], h: f[3], t: n.t, when: n.when, lab: n.lab,
+      no: n.d.replace(/\D/g, '') + '-' + f[1], foil: foilOf(n.s, f[1]), at: cleanAt(read('st-card-at', '')), made: Date.now() };
+  }
+  const extOf = c => ({ t: String(c.t || '').replace(/[^A-Za-z0-9 .,!?'+:-]/g, ''), w: 'THAT’S ME', code: String(c.no || '').replace(/[^0-9A-Za-z-]/g, ''), src: thumb(c.s, c.k), fn: '__tmOpen' });      /* out of storage: plain text only */
+  function keep(c) {
+    const all = cards().filter(x => x.id !== c.id); all.unshift(c);
+    if (!write('st-cards', all.slice(0, 200))) return false;
+    if (window.__lb && window.__lb.ext) { window.__lb.ext[c.id] = extOf(c); window.__lb.add(c.id); }
+    else console.error('that\'s me: the bag is not on this page, the card was saved but the bag does not show it');
+    return true;
+  }
+
+  /* ---- the markup: one sheet, one pair of hands ---- */
+  const host = document.createElement('div');
+  host.innerHTML = '<div class="tm-sheet" id="tm-sheet" hidden role="dialog" aria-modal="true" aria-labelledby="tm-sh-t"><div class="tm-shin">'
+    + '<div class="tm-bar"><b id="tm-sh-t"></b><small id="tm-sh-k"></small></div>'
+    + '<div class="tm-body"><p class="tm-line" id="tm-line">Find yourself. Tap your frame.</p><div class="tm-grid" id="tm-grid"></div></div>'
+    + '<div class="tm-pick" id="tm-pick" hidden><img alt="" width="48" height="64"><p><b id="tm-pick-t"></b>That you?</p><button class="key pink big" type="button" id="tm-me">That’s me</button></div>'
+    + '<div class="tm-keys"><p class="vw-hint">Everyone on the sheet is already on the night’s page.</p><button class="key back" type="button" id="tm-sh-x" aria-label="Back to the booth"><span aria-hidden="true">&lsaquo;</span><small>Back</small></button></div>'
+    + '</div></div>'
+    + '<div class="hands tm-hands" id="tm-hands" hidden role="dialog" aria-modal="true" aria-labelledby="tm-h-t">'
+    + '<div class="hold"><div class="tm-stage"><button class="tm-card" type="button" id="tm-card" aria-label="Your card. Tap it to flip it, drag it to move the foil."><span class="tm-inner">'
+    + '<span class="tm-face tm-front"><i class="tm-chrome"></i><span class="tm-top"><b></b></span><span class="tm-win"><img alt="" draggable="false"><i class="tm-atag"></i><i class="tm-no"></i><i class="tm-bltag">BLACK LABEL</i></span>'
+    + '<span class="tm-bot"><span></span></span><i class="tm-doo"></i><span class="tm-edge"><i></i></span><i class="tm-glare"></i><i class="tm-sweep"></i></span>'
+    + '<span class="tm-face tm-backf"><i class="tm-chrome"></i><i class="tm-pbg"></i><i class="tm-doo"></i><span class="tm-edge"><i></i></span><i class="tm-glare"></i>'
+    + '<span class="tm-plate"><small>PULLED AT THE PHOTO BOOTH</small><b class="tm-b-t"></b><em class="tm-b-k"></em><hr><span>SHOT BY 0FF THE PRINT</span><em>@vamppsych</em><span>0fftheprint.com</span><span class="tm-b-no"></span></span></span>'
+    + '</span></button></div>'
+    + '<p class="hold-name"><b id="tm-h-t"></b><small id="tm-h-k"></small></p>'
+    + '<div class="tm-form"><label class="tm-at"><span>Your @</span><input id="tm-at" type="text" inputmode="text" autocapitalize="none" autocomplete="off" autocorrect="off" spellcheck="false" maxlength="31" placeholder="optional">'
+    + '<small>It goes on the card. It stays on this phone.</small></label>'
+    + '<label class="tm-tag" id="tm-tagrow" hidden><input type="checkbox" id="tm-tag"><span>Tag me in this frame</span></label>'
+    + '<p class="tm-say" id="tm-say" role="status"></p></div></div>'
+    + '<div class="hold-keys"><button class="key pink big" type="button" id="tm-keep">Keep it</button><button class="key big tm-chromekey" type="button" id="tm-save">Save it</button>'
+    + '<button class="key back" type="button" id="tm-back" aria-label="Back"><span aria-hidden="true">&lsaquo;</span><small>Back</small></button></div></div>';
+  while (host.firstChild) document.body.appendChild(host.firstChild);
+  const sheet = $('#tm-sheet'), shin = $('.tm-shin', sheet), grid = $('#tm-grid'), pick = $('#tm-pick'), body = $('.tm-body', sheet);
+  const hands = $('#tm-hands'), stage = $('.tm-stage', hands), card = $('#tm-card'), sayEl = $('#tm-say'), atIn = $('#tm-at'), tagRow = $('#tm-tagrow'), tagIn = $('#tm-tag');
+  const keepK = $('#tm-keep'), saveK = $('#tm-save'), backK = $('#tm-back'), meK = $('#tm-me');
+  const say = t => { sayEl.textContent = t || ''; };
+  const calm = (...els) => els.forEach(el => el && el.getAnimations().forEach(a => a.cancel()));
+  const play = (el, kf, o) => el.animate(kf, o).finished.catch(() => {});
+  let FR = null, night = null, chosen = null, cur = null, kept = false, from = null, lastFocus = null, busy = false, exportP = null, exportKey = '';
+
+  /* ---- the site's own list of frames (always asked fresh: a pulled frame leaves at once) ---- */
+  function frames() {
+    if (!FR) FR = fetch('content/frames.json', { cache: 'no-cache' }).then(r => { if (!r.ok) throw new Error('frames.json answered ' + r.status); return r.json(); })
+      .then(j => { const m = {}; (j.nights || []).forEach(n => { if (OKS.test(n.s)) m[n.s] = n; }); return m; })
+      .catch(e => { FR = null; throw e; });
+    return FR;
+  }
+  const rowOf = (fn, k) => (fn.f || []).find(f => f[1] === k && OKK.test(f[1]));
+
+  /* ---- the contact sheet ---- */
+  async function openSheet(i, want) {
+    if (busy || !N[i]) return;
+    busy = true; night = N[i]; chosen = null; lastFocus = document.activeElement;
+    $('#tm-sh-t').textContent = night.t; $('#tm-sh-k').textContent = night.when + (night.lab ? ' · ' + night.lab : '');
+    $('#tm-line').textContent = 'Getting the night’s frames.'; grid.innerHTML = ''; pick.hidden = true;
+    calm(sheet, shin); sheet.hidden = false; sfx('paper');
+    if (RM) await play(sheet, [{ opacity: 0 }, { opacity: 1 }], { duration: 150 });
+    else await play(shin, [{ transform: 'translateY(100%)' }, { transform: 'none' }], { duration: 420, easing: 'cubic-bezier(.32,.72,0,1)' });
+    $('#tm-sh-x').focus({ preventScroll: true });
+    let fn = null;
+    try { fn = (await frames())[night.s]; } catch (e) { console.error('that\'s me: the night\'s frames would not load', e); }
+    if (!fn || !fn.f || !fn.f.length) { $('#tm-line').textContent = 'This night’s frames would not load. Try again in a minute.'; busy = false; return; }
+    night.fn = fn;
+    $('#tm-line').textContent = fn.f.length + ' frames. Find yourself and tap it.';
+    grid.innerHTML = fn.f.filter(f => OKK.test(f[1])).map(f => '<button type="button" class="tm-f' + (f[2] > f[3] ? ' w' : '') + '" data-k="' + esc(f[1]) + '" aria-label="Frame ' + esc(f[1]) + '">'
+      + '<img src="' + esc(thumb(night.s, f[1])) + '" alt="" loading="lazy" decoding="async" width="' + (f[2] > f[3] ? 520 : 391) + '" height="' + (f[2] > f[3] ? 391 : 520) + '"><i>' + esc(f[1]) + '</i></button>').join('');
+    body.scrollTop = 0;
+    busy = false;
+    if (want) {
+      const b = $$('.tm-f', grid).find(x => x.dataset.k === want);
+      if (b) { b.scrollIntoView({ block: 'center' }); choose(b); }
+      else $('#tm-line').textContent = 'That frame is not on the sheet. Pick another one.';
+    }
+  }
+  /* a frame whose picture will not load can never be picked: it leaves the sheet */
+  grid.addEventListener('error', e => {
+    const b = e.target.closest && e.target.closest('.tm-f'); if (!b) return;
+    b.classList.add('dead'); b.disabled = true;
+    if (chosen === b.dataset.k) { chosen = null; pick.hidden = true; }
+    console.warn('that\'s me: frame ' + b.dataset.k + ' would not load, it is off the sheet');
+  }, true);
+  function choose(b) {
+    if (b.disabled || !rowOf(night.fn, b.dataset.k)) return;
+    $$('.tm-f.on', grid).forEach(x => x.classList.remove('on'));
+    b.classList.add('on'); chosen = b.dataset.k; sfx('blip');
+    $('img', pick).src = $('img', b).currentSrc || $('img', b).src; $('#tm-pick-t').textContent = 'Frame ' + chosen;
+    pick.hidden = false;
+  }
+  grid.addEventListener('click', e => { const b = e.target.closest('.tm-f'); if (b && !busy) choose(b); });
+  async function closeSheet(quiet) {
+    if (sheet.hidden) return;
+    if (!RM && !quiet) await play(shin, [{ transform: 'none' }, { transform: 'translateY(100%)' }], { duration: 280, easing: 'cubic-bezier(.3,0,.8,.15)', fill: 'forwards' });
+    sheet.hidden = true; calm(sheet, shin); grid.innerHTML = ''; pick.hidden = true; chosen = null;
+  }
+  $('#tm-sh-x').addEventListener('click', async () => { if (busy) return; await closeSheet(); if (lastFocus && lastFocus.isConnected) lastFocus.focus({ preventScroll: true }); });
+
+  /* ---- the foil moves: the phone's tilt where it has one and lets us, a drag or the pointer everywhere ---- */
+  let raf = 0, mx = .34, my = .3, tiltOn = false, drag = null;
+  function light(x, y) {
+    mx = Math.max(0, Math.min(1, x)); my = Math.max(0, Math.min(1, y));
+    if (raf) return;
+    raf = requestAnimationFrame(() => { raf = 0; card.style.setProperty('--mx', mx.toFixed(3)); card.style.setProperty('--my', my.toFixed(3)); });
+  }
+  function onTilt(e) {
+    if (hands.hidden || drag || e.gamma == null || e.beta == null) return;
+    light(.5 + e.gamma / 50, .5 + (e.beta - 45) / 60);
+  }
+  function askTilt() {              /* has to be asked inside the tap on an iPhone */
+    if (RM || tiltOn || typeof DeviceOrientationEvent === 'undefined') return;
+    const on = () => { tiltOn = true; window.addEventListener('deviceorientation', onTilt, { passive: true }); };
+    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+      DeviceOrientationEvent.requestPermission().then(s => { if (s === 'granted') on(); else say('Drag the card to move the foil.'); }, e => { console.warn('that\'s me: the phone would not say if it may tilt', e); });
+    } else on();
+  }
+  card.addEventListener('pointerdown', e => { drag = { x: e.clientX, y: e.clientY, moved: false }; try { card.setPointerCapture(e.pointerId); } catch (x) { /* a pointer that is already gone */ } });
+  card.addEventListener('pointermove', e => {
+    if (RM) return;
+    if (drag && Math.abs(e.clientX - drag.x) + Math.abs(e.clientY - drag.y) > 8) drag.moved = true;
+    if (drag ? drag.moved : e.pointerType === 'mouse') { const r = card.getBoundingClientRect(); light((e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height); }
+  });
+  const endDrag = e => { const d = drag; drag = null; if (d && !d.moved && e.type === 'pointerup') flip(); };
+  card.addEventListener('pointerup', endDrag); card.addEventListener('pointercancel', endDrag);
+  card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); } });
+  card.addEventListener('click', e => e.preventDefault());
+  function flip() { card.classList.toggle('flip'); sfx('paper'); card.setAttribute('aria-label', card.classList.contains('flip') ? 'The back of your card. Tap it to flip it.' : 'Your card. Tap it to flip it, drag it to move the foil.'); }
+
+  /* ---- the card, drawn in the page ---- */
+  function fit(el, box, most) {             /* one line, as big as fits: read once, when the card is made */
+    el.style.fontSize = most + 'em';
+    for (let s = most; s > most * .55 && el.scrollWidth > box.clientWidth; s -= most * .04) el.style.fontSize = s.toFixed(3) + 'em';
+  }
+  function paint(c) {
+    card.classList.toggle('bl', c.foil === 'b'); card.classList.remove('flip');
+    const top = $('.tm-top', card), win = $('.tm-win', card), im = $('img', win);
+    $('b', top).textContent = c.t; win.classList.toggle('w', c.w > c.h);
+    im.src = thumb(c.s, c.k);
+    $('.tm-bot span', card).textContent = c.when + (c.lab ? ' · ' + c.lab : ''); $('.tm-no', card).textContent = 'NO. ' + c.no;
+    $('.tm-atag', card).textContent = c.at ? '@' + c.at : '';
+    $('.tm-b-t', card).textContent = c.t; $('.tm-b-k', card).textContent = c.when + (c.lab ? ' · ' + c.lab : ''); $('.tm-b-no', card).textContent = (c.foil === 'b' ? 'BLACK LABEL · ' : '') + 'NO. ' + c.no;
+    $('#tm-h-t').textContent = c.foil === 'b' ? 'BLACK LABEL' : 'THAT’S ME'; $('#tm-h-k').textContent = c.t + ' · FRAME ' + c.k;
+    atIn.value = c.at ? '@' + c.at : '';
+    requestAnimationFrame(() => { fit($('b', top), top, 1.5); fit($('.tm-bot span', card), $('.tm-bot', card), .66); });
+    /* the big picture, once it is all here (it is on the media host: fine to show, a canvas may not read it) */
+    const fn = night && night.s === c.s && night.fn, row = fn && rowOf(fn, c.k), big = row && (row[4] || (fn.b ? fn.b + c.k + '.jpg' : ''));
+    if (big && /^https:\/\//.test(big)) { const b = new Image(); b.decoding = 'async'; b.onload = () => { if (cur === c) im.src = big; }; b.onerror = () => console.warn('that\'s me: the big picture would not load, the small one stays'); b.src = big; }
+  }
+  function setKept(k) { kept = k; keepK.textContent = k ? 'In your bag' : 'Keep it'; keepK.disabled = k; keepK.classList.toggle('pink', !k); }
+
+  /* ---- in your hands ---- */
+  async function showHands(c, whence, rect) {
+    busy = true; cur = c; from = whence; exportP = null; exportKey = '';
+    paint(c); setKept(cards().some(x => x.id === c.id)); say(''); tagRow.hidden = true; tagIn.checked = false;
+    light(.34, .3); calm(hands, stage, $('.tm-sweep', card));
+    hands.hidden = false; hands.scrollTop = 0;
+    if (RM || !rect) await play(hands, [{ opacity: 0 }, { opacity: 1 }], { duration: 160 });
+    else {
+      const h = stage.getBoundingClientRect(), s = Math.max(.14, Math.min(1, rect.width / Math.max(1, h.width)));
+      const dx = (rect.left + rect.width / 2) - (h.left + h.width / 2), dy = (rect.top + rect.height / 2) - (h.top + h.height / 2);
+      play(hands, [{ backgroundColor: 'rgba(20,6,16,0)' }, { backgroundColor: 'rgba(20,6,16,.82)' }], { duration: 320 });
+      /* out of the slot, then up into your hands */
+      await play(stage, [{ transform: 'translate(' + dx + 'px,' + (dy - rect.height * .6) + 'px) scale(' + s + ')', opacity: 0, offset: 0 },
+        { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(' + s + ')', opacity: 1, offset: .32, easing: 'cubic-bezier(.2,.9,.25,1)' },
+        { transform: 'none', opacity: 1, offset: 1 }], { duration: 900, easing: 'ease-out' });
+    }
+    if (!RM) play($('.tm-sweep', card), [{ transform: 'translateX(-140%) skewX(-12deg)', opacity: 1 }, { transform: 'translateX(340%) skewX(-12deg)', opacity: 1 }], { duration: 760, easing: 'ease-in-out' });
+    (kept ? saveK : keepK).focus({ preventScroll: true });
+    busy = false;
+    member(c);
+    prepare();                       /* the picture to post is made now, so the share sheet opens inside the SAVE IT tap */
+  }
+  async function closeHands() {
+    if (hands.hidden) return;
+    if (!RM) await play(stage, [{ transform: 'none', opacity: 1 }, { transform: 'translateY(60px) scale(.6)', opacity: 0 }], { duration: 260, easing: 'cubic-bezier(.4,0,.8,.3)', fill: 'forwards' });
+    hands.hidden = true; calm(hands, stage, $('.tm-sweep', card)); cur = null; exportP = null;
+    if (from === 'bag') { const b = document.getElementById('bagBack'); if (b && b.getClientRects().length) { b.focus({ preventScroll: true }); return; } }
+    if (lastFocus && lastFocus.isConnected && lastFocus.getClientRects().length) lastFocus.focus({ preventScroll: true });
+  }
+  backK.addEventListener('click', () => { if (!busy) closeHands(); });
+
+  /* THAT'S ME: the booth prints it */
+  meK.addEventListener('click', async () => {
+    if (busy || !chosen || !night || !night.fn) return;
+    const f = rowOf(night.fn, chosen); if (!f) return;
+    askTilt();
+    const c = makeCard(night, f), chute = $('.pb-chute'), cr = chute && chute.getClientRects().length ? chute.getBoundingClientRect() : null;
+    await closeSheet();
+    sfx('print');
+    const r = cr || { left: innerWidth / 2 - 40, top: innerHeight - 60, width: 80, height: 112 };
+    await showHands(c, 'sheet', r);
+    say(c.foil === 'b' ? 'A BLACK LABEL. About 1 in ' + CFG.odds + ' come out like this.' : 'Tilt it. Tap it to flip it.');
+  });
+
+  /* KEEP IT */
+  keepK.addEventListener('click', () => {
+    if (busy || !cur || kept) return;
+    if (!keep(cur)) { say('This phone would not keep it. Its storage is full or off.'); return; }
+    setKept(true); sfx('thanks'); say('It is in your bag.'); saveK.focus({ preventScroll: true });
+  });
+
+  /* the @: on the card, on this phone, nowhere else */
+  atIn.addEventListener('input', () => {
+    if (!cur) return;
+    const v = cleanAt(atIn.value); cur.at = v; write('st-card-at', v);
+    $('.tm-atag', card).textContent = v ? '@' + v : '';
+    if (kept) keep(cur);
+    clearTimeout(atIn.t); atIn.t = setTimeout(prepare, 500);
+  });
+  atIn.addEventListener('blur', () => { atIn.value = cur && cur.at ? '@' + cur.at : ''; });
+
+  /* a logged-in Crypt member may tag themselves in the frame: the site's own call, off until they tick it */
+  async function member(c) {
+    const O = window.OTP;
+    if (!O || !O.configured || typeof O.tagFrame !== 'function' || !O.FRAME_NAME_OK || !O.FRAME_NAME_OK.test(String(c.k).toLowerCase())) return;
+    try {
+      if (!(await O.me())) return;
+      const r = await O.sb().rpc('is_wall_member');
+      if (r.error) throw r.error;
+      if (r.data === true && cur === c) tagRow.hidden = false;
+    } catch (e) { console.warn('that\'s me: could not tell if this is a member, so no tag choice', e); }
+  }
+  tagIn.addEventListener('change', async () => {
+    if (!cur) return;
+    const c = cur, on = tagIn.checked; tagIn.disabled = true;
+    try { await window.OTP.tagFrame(c.s, String(c.k).toLowerCase(), on, Number.isInteger(c.i) ? c.i : null); say(on ? 'Tagged. It is with the frames you are in.' : 'Tag taken off.'); }
+    catch (e) { console.error('that\'s me: the tag did not go through', e); tagIn.checked = !on; say((e && e.message) || 'The tag did not go through.'); }
+    tagIn.disabled = false;
+  });
+
+  /* ---- SAVE IT: one still, 1080 x 1920, drawn on a canvas (no EXIF survives one) ---- */
+  const load = src => new Promise((res, rej) => { const im = new Image(); im.decoding = 'async'; im.onload = () => res(im); im.onerror = () => rej(new Error('would not load: ' + src)); im.src = src; });
+  function rr(g, x, y, w, h, r) { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); }
+  function fitText(g, text, font, size, maxW, min) { let s = size; g.font = font.replace('%', s); while (s > min && g.measureText(text).width > maxW) { s -= 1; g.font = font.replace('%', s); } return s; }
+  function stops(grad, list) { list.forEach(([o, c]) => grad.addColorStop(o, c)); return grad; }
+  async function drawCard(c, W) {
+    const H = Math.round(W * 1.4), u = W / 20, bl = c.foil === 'b';
+    const cv = document.createElement('canvas'); cv.width = W; cv.height = H; const g = cv.getContext('2d');
+    const [photo, tile] = await Promise.all([load(thumb(c.s, c.k)), load(TILE)]);        /* the site's own files: the canvas stays readable */
+    await Promise.all(['400 40px "VP Deadeye"', '400 24px "Potta One"', '700 20px Inter'].map(f => document.fonts.load(f).catch(e => console.warn('that\'s me: a face would not load for the picture', e))));
+    rr(g, 0, 0, W, H, u); g.clip();
+    /* the chrome, frozen at its best angle */
+    g.fillStyle = stops(g.createLinearGradient(-W * .3, 0, W * 1.1, H), bl
+      ? [[0, '#3b3e47'], [.16, '#101116'], [.32, '#4c505b'], [.5, '#07080b'], [.66, '#565a66'], [.82, '#15161b'], [1, '#3b3e47']]
+      : [[0, '#f7f9fc'], [.16, '#b4bdcb'], [.32, '#eef2f7'], [.5, '#8791a1'], [.66, '#f4f7fb'], [.82, '#a4aebd'], [1, '#f7f9fc']]);
+    g.fillRect(0, 0, W, H);
+    g.fillStyle = stops(g.createLinearGradient(-W * .2, 0, W * 1.2, H * .35), bl
+      ? [[.2, 'rgba(255,255,255,0)'], [.4, 'rgba(255,196,84,.6)'], [.5, 'rgba(255,240,190,.75)'], [.6, 'rgba(255,170,60,.6)'], [.8, 'rgba(255,255,255,0)']]
+      : [[.18, 'rgba(255,255,255,0)'], [.34, 'rgba(255,90,170,.5)'], [.44, 'rgba(255,220,90,.45)'], [.52, 'rgba(90,255,200,.45)'], [.6, 'rgba(90,160,255,.5)'], [.68, 'rgba(200,110,255,.45)'], [.84, 'rgba(255,255,255,0)']]);
+    g.fillRect(0, 0, W, H);
+    /* the photo: whole. A tall one fills the window (a 3:4 centre crop at most); a wide one sits inside it, nobody cut off */
+    const px = u, py = 2.4 * u, pw = 18 * u, ph = 24 * u;
+    g.save(); rr(g, px, py, pw, ph, .3 * u); g.clip(); g.fillStyle = '#0c0a10'; g.fillRect(px, py, pw, ph);
+    g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high';
+    const wide = photo.naturalWidth > photo.naturalHeight, sc = wide ? Math.min(pw / photo.naturalWidth, ph / photo.naturalHeight) : Math.max(pw / photo.naturalWidth, ph / photo.naturalHeight);
+    const dw = photo.naturalWidth * sc, dh = photo.naturalHeight * sc;
+    g.drawImage(photo, px + (pw - dw) / 2, py + (ph - dh) / 2, dw, dh);
+    g.restore();
+    /* his doodles: a sheet of the shine, cut to the drawings by the tile, laid light over everything and strong round the edge */
+    const foil = document.createElement('canvas'); foil.width = W; foil.height = H; const f = foil.getContext('2d');
+    f.fillStyle = bl ? 'rgba(200,164,84,.5)' : 'rgba(224,231,241,.5)'; f.fillRect(0, 0, W, H);
+    f.fillStyle = stops(f.createLinearGradient(-W * .25, 0, W * 1.15, H * .3), bl
+      ? [[.1, 'rgba(255,255,255,0)'], [.36, 'rgba(255,190,80,.95)'], [.5, 'rgba(255,244,205,1)'], [.64, 'rgba(255,170,60,.95)'], [.9, 'rgba(255,255,255,0)']]
+      : [[.1, 'rgba(255,255,255,0)'], [.3, 'rgba(255,120,190,.95)'], [.42, 'rgba(255,235,140,1)'], [.5, '#fff'], [.58, 'rgba(130,255,220,1)'], [.7, 'rgba(120,170,255,.95)'], [.9, 'rgba(255,255,255,0)']]);
+    f.fillRect(0, 0, W, H);
+    const mask = document.createElement('canvas'); mask.width = W; mask.height = H; const mk = mask.getContext('2d');
+    const ts = 9 * u; for (let y = 0; y < H; y += ts) for (let x = 0; x < W; x += ts) mk.drawImage(tile, x, y, ts, ts);
+    f.globalCompositeOperation = 'destination-in'; f.drawImage(mask, 0, 0);
+    g.save(); g.globalCompositeOperation = 'screen'; g.globalAlpha = .27; g.drawImage(foil, 0, 0); g.restore();
+    mk.globalCompositeOperation = 'source-over'; mk.clearRect(0, 0, W, H);
+    mk.save(); mk.translate(W / 2, H * .42); mk.scale(W * .62, H * .62);              /* low and to the sides: faces stay clear */
+    mk.fillStyle = stops(mk.createRadialGradient(0, 0, 0, 0, 0, 1), [[0, 'rgba(0,0,0,0)'], [.52, 'rgba(0,0,0,0)'], [1, '#000']]); mk.fillRect(-2, -2, 4, 4); mk.restore();
+    f.drawImage(mask, 0, 0);                    /* still destination-in: what is left is the doodles round the edge */
+    g.save(); g.globalCompositeOperation = 'screen'; g.globalAlpha = .95; g.drawImage(foil, 0, 0); g.restore();
+    /* the bright band */
+    g.save(); g.globalCompositeOperation = 'soft-light'; g.globalAlpha = .6;
+    g.fillStyle = stops(g.createLinearGradient(-W * .1, H * .05, W * .9, H * .75), [[.3, 'rgba(255,255,255,0)'], [.5, 'rgba(255,255,255,.7)'], [.7, 'rgba(255,255,255,0)']]); g.fillRect(0, 0, W, H); g.restore();
+    /* the words */
+    g.textBaseline = 'middle'; g.textAlign = 'center';
+    fitText(g, c.t, '400 %px "VP Deadeye","Potta One",sans-serif', 1.5 * u, 18 * u, .7 * u);
+    g.fillStyle = bl ? 'rgba(0,0,0,.8)' : 'rgba(255,255,255,.7)'; g.fillText(c.t, W / 2, 1.2 * u + 1.5);
+    g.fillStyle = bl ? '#f3cf7a' : '#15111a'; g.fillText(c.t, W / 2, 1.2 * u);
+    const no = 'NO. ' + c.no, lab = (c.when + (c.lab ? ' · ' + c.lab : '')).toUpperCase();
+    try { g.letterSpacing = (.06 * u) + 'px'; } catch (e) { /* an older phone: the letters sit closer */ }
+    fitText(g, lab, '700 %px Inter,system-ui,sans-serif', .66 * u, 17.6 * u, .36 * u);
+    g.textAlign = 'center'; g.fillStyle = bl ? '#d9dbe2' : '#1b1722'; g.fillText(lab, W / 2, 27.2 * u, 17.8 * u);
+    /* the serial: a small plate in the corner of the photo */
+    g.font = '700 ' + (.5 * u) + 'px Inter,system-ui,sans-serif'; try { g.letterSpacing = (.05 * u) + 'px'; } catch (e) { /* same */ }
+    { const tw = g.measureText(no).width, bw = tw + 1.05 * u, bh = 1.15 * u, bx = px + pw - .5 * u - bw, by = py + ph - .5 * u - bh;
+      g.fillStyle = 'rgba(12,8,16,.78)'; rr(g, bx, by, bw, bh, .3 * u); g.fill();
+      if (bl) { g.strokeStyle = 'rgba(243,207,122,.7)'; g.lineWidth = Math.max(1, u * .05); g.stroke(); }
+      g.fillStyle = bl ? '#f3cf7a' : '#e9edf3'; g.textAlign = 'left'; g.fillText(no, bx + .52 * u, by + bh / 2 + 1); }
+    try { g.letterSpacing = '0px'; } catch (e) { /* same */ }
+    if (c.at) {
+      const t = '@' + c.at; g.font = '400 ' + (.78 * u) + 'px "Potta One",system-ui,sans-serif'; g.textAlign = 'left';
+      const tw = Math.min(g.measureText(t).width, 9.2 * u), bw = tw + 1.2 * u, bh = 1.45 * u, bx = px + .5 * u, by = py + ph - .5 * u - bh;
+      g.fillStyle = 'rgba(12,8,16,.78)'; rr(g, bx, by, bw, bh, bh / 2); g.fill();
+      g.fillStyle = '#fff'; g.fillText(t, bx + .6 * u, by + bh / 2 + 1, 9.2 * u);
+    }
+    if (bl) {
+      g.font = '700 ' + (.5 * u) + 'px Inter,system-ui,sans-serif'; try { g.letterSpacing = (.08 * u) + 'px'; } catch (e) { /* same */ }
+      const t = 'BLACK LABEL', tw = g.measureText(t).width, bw = tw + 1.1 * u, bh = 1.1 * u, bx = px + pw - .5 * u - bw, by = py + .5 * u;
+      g.fillStyle = 'rgba(8,8,10,.82)'; rr(g, bx, by, bw, bh, .3 * u); g.fill(); g.strokeStyle = '#f3cf7a'; g.lineWidth = Math.max(1, u * .05); g.stroke();
+      g.fillStyle = '#f3cf7a'; g.textAlign = 'left'; g.fillText(t, bx + .55 * u, by + bh / 2 + 1);
+      try { g.letterSpacing = '0px'; } catch (e) { /* same */ }
+    }
+    return cv;
+  }
+  async function still(c) {
+    const W = 1080, H = 1920, cw = 800, ch = 1120, x = (W - cw) / 2, y = 330;
+    const cv = document.createElement('canvas'); cv.width = W; cv.height = H; const g = cv.getContext('2d');
+    g.fillStyle = stops(g.createLinearGradient(0, 0, 0, H), [[0, '#ff93c0'], [.55, '#f873ab'], [1, '#ee5c98']]); g.fillRect(0, 0, W, H);       /* the booth's pink */
+    const face = await drawCard(c, cw);
+    g.save(); g.shadowColor = 'rgba(96,10,52,.5)'; g.shadowBlur = 80; g.shadowOffsetY = 38; rr(g, x, y, cw, ch, cw / 20); g.fillStyle = '#2a0d18'; g.fill(); g.restore();
+    g.drawImage(face, x, y);
+    g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = '#2a0d18';
+    g.font = '400 44px "Potta One",system-ui,sans-serif'; g.fillText('@vamppsych', W / 2, 1640);
+    g.font = '700 30px Inter,system-ui,sans-serif'; try { g.letterSpacing = '4px'; } catch (e) { /* an older phone */ }
+    g.fillText('0FFTHEPRINT.COM', W / 2, 1708);
+    try { g.letterSpacing = '0px'; } catch (e) { /* same */ }
+    return cv;
+  }
+  const blobOf = cv => new Promise((res, rej) => cv.toBlob(b => b ? res(b) : rej(new Error('the canvas gave no picture')), 'image/jpeg', .92));
+  function prepare() {
+    if (!cur) return null;
+    const c = cur, key = c.id + '|' + c.at;
+    if (exportP && exportKey === key) return exportP;
+    exportKey = key;
+    exportP = still(c).then(blobOf).then(b => new File([b], 'thats-me-' + c.no + '.jpg', { type: 'image/jpeg' }));
+    exportP.catch(e => { console.error('that\'s me: the picture would not draw', e); if (exportKey === key) exportP = null; });
+    return exportP;
+  }
+  function download(file) {
+    const a = document.createElement('a'), url = URL.createObjectURL(file);
+    a.href = url; a.download = file.name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 30000);
+  }
+  saveK.addEventListener('click', async () => {
+    if (busy || !cur) return;
+    busy = true; say('Making your picture.');
+    try {
+      const file = await prepare();
+      busy = false;                       /* the share sheet is the phone's own: it may stay up as long as it likes */
+      const phone = window.matchMedia('(pointer: coarse)').matches;
+      if (phone && navigator.canShare && navigator.canShare({ files: [file] })) {
+        try { await navigator.share({ files: [file], title: 'THAT’S ME' }); say('Shared.'); }
+        catch (e) {
+          if (e && e.name === 'AbortError') say('');
+          else { console.warn('that\'s me: the share sheet would not open, saving the picture instead', e); download(file); say('Saved to this phone.'); }
+        }
+      } else { download(file); say('Saved. It is in your downloads.'); }
+      sfx('thanks');
+    } catch (e) { console.error('that\'s me: save it failed', e); say('The picture would not make. Try once more.'); }
+    busy = false;
+  });
+
+  /* ---- the ways in ---- */
+  /* 1. the strip in your hands: FIND YOURSELF puts the strip in the bag (the booth's own Back) and opens its night */
+  const ph = $('.pb-hands'), phName = ph && $('.hold-keys', ph);
+  if (phName) {
+    const k = document.createElement('button'); k.type = 'button'; k.className = 'key big tm-chromekey tm-findkey'; k.innerHTML = 'Find yourself <span aria-hidden="true">&rsaquo;</span>';
+    phName.insertAdjacentElement('afterbegin', k);
+    k.addEventListener('click', async () => {
+      const i = +ph.dataset.tm; if (!(i >= 0) || !N[i] || busy) return;
+      const b = $('.pb-hback', ph); if (b) b.click();
+      for (let t = 0; t < 30 && !ph.hidden; t++) await wait(50);
+      openSheet(i);
+    });
+  } else console.error('that\'s me: the booth\'s hands are not on the page, FIND YOURSELF has nowhere to sit');
+  /* 2. a strip opened from the bag */
+  document.addEventListener('click', async e => {
+    const k = e.target.closest && e.target.closest('.tm-find[data-i]'); if (!k) return;
+    const i = +k.dataset.i, v = document.getElementById('pb-view'), x = v && $('[data-act="back"]', v);
+    if (x) x.click();
+    for (let t = 0; t < 30 && v && !v.hidden; t++) await wait(50);
+    openSheet(i);
+  });
+  /* 3. a card in the bag */
+  window.__tmOpen = (code, whence) => {
+    const c = cards().find(x => x.id === code); if (!c || busy || !hands.hidden) return;
+    night = N[BY[c.s]] || null; lastFocus = document.activeElement;
+    if (night && !night.fn) frames().then(m => { if (m[c.s]) { night.fn = m[c.s]; if (cur === c) paint(c); } }, e => console.warn('that\'s me: the big picture\'s address would not load', e));
+    showHands(c, whence || 'bag', null);
+  };
+  /* 4. MAKE IT A CARD on a night's page: /?night=<slug>&frame=<name>#in-booth */
+  (async () => {
+    const q = new URLSearchParams(location.search), s = q.get('night'), k = q.get('frame');
+    if (!s) return;
+    try { history.replaceState(null, '', location.pathname + '#in-booth'); } catch (e) { console.warn('that\'s me: the address would not tidy', e); }
+    if (!OKS.test(s) || BY[s] === undefined || (k && !OKK.test(k))) { console.warn('that\'s me: the link names a night or a frame this page does not have'); return; }
+    const ov = document.getElementById('st-in-booth');
+    for (let t = 0; t < 60 && ov && ov.hidden; t++) { if (t === 8 && window.__stGo) window.__stGo('booth'); await wait(100); }
+    openSheet(BY[s], k || null);
+  })();
+
+  /* Escape closes the top one; a fresh visit to the booth starts with both shut */
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    if (!hands.hidden) { e.stopPropagation(); if (!busy) closeHands(); }
+    else if (!sheet.hidden) { e.stopPropagation(); if (!busy) $('#tm-sh-x').click(); }
+  }, true);
+  const booth = document.getElementById('st-in-booth');
+  if (booth) booth.addEventListener('st:open', () => { if (new URLSearchParams(location.search).get('night')) return; sheet.hidden = true; hands.hidden = true; busy = false; });
+  const downOn = e => { const k = e.target.closest('.key'); if (k) k.classList.add('down'); };
+  [sheet, hands].forEach(el => el.addEventListener('pointerdown', downOn, true));
+  ['pointerup', 'pointercancel'].forEach(ev => document.addEventListener(ev, () => setTimeout(() => $$('.tm-sheet .down, .tm-hands .down, .tm-findkey.down').forEach(k => k.classList.remove('down')), 40)));
+
+  /* for the checks: what a card would be, and its picture, without the taps */
+  window.__tm = { nights: N, frames, makeCard, still, drawCard, cards, open: openSheet, light, state: () => ({ sheet: !sheet.hidden, hands: !hands.hidden, cur, kept, chosen, tiltOn }) };
 })();
 
 </script>
