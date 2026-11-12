@@ -3856,7 +3856,7 @@ function missHTML(code, hadPast){
 function codeHTML(R, A){
   const L = R.hits, past = R.past, nights = new Set(L.map(it => it.d)).size;
   order = L.map(it => it.id);
-  let h = `<div class="dayhead srch-h"><h2>That post</h2><span>${L.length ? `On the Crypt · ${nights} night${nights === 1 ? '' : 's'}` : past.length ? 'Already happened' : 'Not on yet'}</span></div>`;
+  let h = `<div class="dayhead srch-h"><h2>That post</h2><span>${L.length ? `On the Coven · ${nights} night${nights === 1 ? '' : 's'}` : past.length ? 'Already happened' : 'Not on yet'}</span></div>`;
   const groups = {}; L.forEach(it => (groups[it.d] = groups[it.d] || []).push(it));
   Object.keys(groups).forEach(k => { h += `<section class="grp srch-g"><h3>${esc(dayLabel(k))}${dayNum(k) - dayNum(night) >= 2 ? ` <small>${esc(inDays(k))}</small>` : ''} <i>${groups[k].length}</i></h3>${groups[k].map(it => rowCard(it, A)).join('')}</section>`; });
   if (past.length) h += `<section class="grp srch-g done"><h3>Already happened <i>${past.length}</i></h3>${past.slice(-6).map(it => rowCard(it, A)).join('')}</section>`;
@@ -4064,7 +4064,7 @@ function openGone(g){
   shId = null; PICK = null;
   const d = g.d ? dayOf(g.d) : null, past = !!g.d && g.d < night, on = !!g.d && DAYKEYS.includes(g.d) && !past;
   const near = past ? [] : nearShows(g);
-  const head = g.why === 'moved' ? 'This flyer moved' : g.why === 'none' ? 'That flyer is not on the Crypt' : near.length ? 'This flyer changed' : 'This flyer came down';
+  const head = g.why === 'moved' ? 'This flyer moved' : g.why === 'none' ? 'That flyer is not on the Coven' : near.length ? 'This flyer changed' : 'This flyer came down';
   const line = past ? 'That night already happened.'
     : near.length ? `This link is off the Crypt, but a flyer with a close name is on ${g.d === night ? 'tonight' : 'that night'}. It may be the same show:`
     : g.why === 'moved' ? 'It is still on, under a new link. Look on its night, or search for it by name.'
@@ -4115,7 +4115,7 @@ function mineForm(id, dk){
   const a0 = r ? r.a : (F.area !== 'all' ? F.area : HOME);
   $('#mf-scroll').innerHTML = `<form class="mf" id="mf-form" novalidate data-nodrag>
     <h2 id="mf-t">${r ? 'Change it' : 'Add your own'}</h2>
-    <p class="mf-sub">Somewhere you are going that is not in the Crypt. It stays on this phone and lands in My night with the rest of your plans.</p>
+    <p class="mf-sub">Somewhere you are going that is not in the Coven. It stays on this phone and lands in My night with the rest of your plans.</p>
     ${HOST === 'private' && r && r.link ? `<a class="btn mf-open" href="${esc(r.link)}" target="_blank" rel="noopener">${esc(r.lk || 'Open the link')}</a>` : ''}
     <label class="mf-f"><span>What</span><input id="mf-n" maxlength="120" value="${esc(r ? r.n : '')}" placeholder="A birthday, a show, a pop up" autocomplete="off"></label>
     <div class="mf-row"><label class="mf-f"><span>Day</span><input id="mf-d" type="date" min="${r && r.d < night ? r.d : night}" value="${d0}"></label>
@@ -4551,7 +4551,7 @@ async function socialStart(){
         const lbl = k => { const d = dayOf(k); if (d) return d.long; return new Date(dayNum(k) * 864e5).toLocaleDateString('en-US', {timeZone: 'UTC', weekday: 'short', month: 'short', day: 'numeric'}); };
         const days = [...new Set(L.map(r => r.day))].sort().map(lbl);
         toast(L.length === 1 ? `A night you saved (${days[0]}) changed or came off the Crypt. Check that night's flyers.`
-          : `${L.length} nights you saved changed or came off the Crypt (${days.slice(0, 3).join(', ')}${days.length > 3 ? ', more' : ''}). Check those nights.`, 6500);
+          : `${L.length} nights you saved changed or came off the Coven (${days.slice(0, 3).join(', ')}${days.length > 3 ? ', more' : ''}). Check those nights.`, 6500);
       });
       if (changed) {
         save(GKEY, going); renderDock();
@@ -4973,7 +4973,7 @@ const SEC = {
       ${V.kind !== 'desk' && !(SOC.me && SOC.me.admin) ? (rpOpen('space', V.sid) ? rpHTML('space', V.sid) : SOC.reported['space:' + V.sid] ? '<p class="sp-fine">Reported. The desk has it.</p>' : `<button type="button" class="sp-rep" data-report="space" data-target="${esc(V.sid)}">⚑ Report this page</button>`) : ''}</div>`;
   },
   net(V){
-    if (V.mine && !V.open) return `<p><b>Your page is hidden.</b> Turn on Show me in the Crypt (Edit, then Me) so members can see it.</p>`;
+    if (V.mine && !V.open) return `<p><b>Your page is hidden.</b> Turn on Show me in the Coven (Edit, then Me) so members can see it.</p>`;
     if (V.mine && V.fresh) return `<p><b>This is your page.</b> Everyone starts in the house colors. Tap Edit my page and make it yours.</p>`;
     if (V.mine) return `<p><b>This is your page.</b> Members see it when they tap your name.</p>`;
     if (!V.open) return `<p><b>Hidden from members.</b> Only the desk can see this one.</p>`;
@@ -5236,7 +5236,7 @@ async function openSpace(sid, opt){
   if (SPACE.sid !== (sid || null) || openSheet !== s) return;          // tapped someone else meanwhile
   if (r.error || !r.data) {
     if (SPACE.data) return;                                            // keep the cached copy on a bad connection
-    $('#sp-scroll').innerHTML = `<div class="sp-page"><div class="sp-col"><section class="sp-box sp-hdr"><h2 class="sp-name" id="sp-t">This page is closed</h2><p>They turned off Show me in the Crypt, or they are not a member anymore.</p></section></div></div>`;
+    $('#sp-scroll').innerHTML = `<div class="sp-page"><div class="sp-col"><section class="sp-box sp-hdr"><h2 class="sp-name" id="sp-t">This page is closed</h2><p>They turned off Show me in the Coven, or they are not a member anymore.</p></section></div></div>`;
     return;
   }
   SPACE.data = r.data; SPACE.cache[r.data.sid] = r.data;
@@ -5358,7 +5358,7 @@ function renderEditor(){
       <p class="spe-h">Wallpaper <em>your own picture behind it all</em></p>
       <div class="spe-row">${upBtn('wallpaper', dr.wallpaper, 'Upload wallpaper', 'Change wallpaper')}${dr.wallpaper ? '<button type="button" class="btn" data-sprm="wallpaper">Remove</button>' : ''}</div>
       <div>${dr.wallpaper ? `<label class="sw"><span>Tile it</span><input type="checkbox" data-spsw="tile"${dr.tile ? ' checked' : ''}></label>` : ''}
-      <label class="sw"><span>Wear my colors in the Crypt</span><input type="checkbox" data-spsw="wear"${dr.wear ? ' checked' : ''}></label></div>`;
+      <label class="sw"><span>Wear my colors in the Coven</span><input type="checkbox" data-spsw="wear"${dr.wear ? ' checked' : ''}></label></div>`;
   } else if (tab === 'me') {
     // W2 (his call 2): a card holder has ONE photo and ONE song, the card's; the headline and About me stay the Crypt's own
     const H = dr.holder;
@@ -5374,7 +5374,7 @@ function renderEditor(){
       <label class="spe-f"><span>About me <small data-cnt="about">${dr.about.length}/600</small></span><textarea data-spf="about" maxlength="600" rows="4" placeholder="What you shoot, what you play, where you hang">${esc(dr.about)}</textarea></label>
       ${H ? '<p class="spe-fine">Only members see your headline and About me. Your public card has its own tagline and bio, on Your account.</p>' : ''}
       <label class="spe-f"><span>Who I'd like to meet <small data-cnt="meet">${dr.meet.length}/300</small></span><textarea data-spf="meet" maxlength="300" rows="3" placeholder="DJs, people with a car, anyone going to the co-op">${esc(dr.meet)}</textarea></label>
-      <label class="sw"><span>Show me in the Crypt<small>members see your space and your name on going lists</small></span><input type="checkbox" id="sp-show"${SOC.me && SOC.me.show_name ? ' checked' : ''}></label>`;
+      <label class="sw"><span>Show me in the Coven<small>members see your space and your name on going lists</small></span><input type="checkbox" id="sp-show"${SOC.me && SOC.me.show_name ? ' checked' : ''}></label>`;
   } else if (tab === 'details') {
     body = `<label class="spe-f"><span>Pronouns <small data-cnt="pronouns">${dr.pronouns.length}/20</small></span><input data-spf="pronouns" maxlength="20" value="${esc(dr.pronouns)}" placeholder="they/them" autocomplete="off"></label>
       <p class="spe-h">City</p>
@@ -5722,7 +5722,7 @@ function cardAskHTML(){
     <input id="ask-note" maxlength="280" placeholder="Anything the desk should know? (optional)" autocomplete="off" aria-label="Note for the desk">
     <button type="submit" class="primary">Ask for a card</button>
     <p class="lock-msg" id="ask-msg" role="alert"></p>
-    <p class="ask-fine">If the desk gives you a card, your Crypt pic and song go on your public card.</p></form>`;
+    <p class="ask-fine">If the desk gives you a card, your Coven pic and song go on your public card.</p></form>`;
 }
 /* the People tab (10/11, his ask: "first thing people should be able to see when they click people is their page"):
    your own page, inline and in your colors, then Who's here, then the desk for him */
@@ -5741,7 +5741,7 @@ function renderPeople(){
       <button type="button" data-jump="#fr-people"><img src="../assets/cathedral/w/going.webp" alt="" width="22" height="22" decoding="async">Friends${askN ? `<b>${askN}</b>` : ''}</button>
       <button type="button" data-jump="#ppl-q"><img src="../assets/cathedral/w/all.webp" alt="" width="22" height="22" decoding="async">Who's here<small>${hereN}</small></button>
     </nav>`;
-    if (!me.open) h += `<p class="ppl-note">Hidden right now: only you see this page. Turn on <b>Show me in the Crypt</b> (Edit, then Me) and members can open it from your name.</p>`;
+    if (!me.open) h += `<p class="ppl-note">Hidden right now: only you see this page. Turn on <b>Show me in the Coven</b> (Edit, then Me) and members can open it from your name.</p>`;
     h += pplSpaceHTML();
   } else if (SOC.on) {
     h += `<div class="dayhead ppl-h"><h2>Your page</h2><span>opening…</span></div>
@@ -5750,7 +5750,7 @@ function renderPeople(){
   if (me) h += dmPeopleHTML();
   if (me) h += frPeopleHTML();
   h += cardAskHTML();
-  h += `<div class="dayhead"><h2>Who's here</h2><span id="ppl-n">${L.length + (me ? 1 : 0)} in the Crypt</span></div>
+  h += `<div class="dayhead"><h2>Who's here</h2><span id="ppl-n">${L.length + (me ? 1 : 0)} in the Coven</span></div>
     <input type="search" class="ppl-q" id="ppl-q" placeholder="Find someone" value="${esc(PEOPLE_Q)}" autocomplete="off" aria-label="Find someone">
     <div class="ppl-grid" id="ppl-grid">${pplGridHTML()}</div>`;
   if (SOC.me && SOC.me.admin) h += `<section class="admin" id="admin"><p class="c-empty">Opening the desk…</p></section>`;
@@ -6649,16 +6649,16 @@ function renderMine(){
   if (!up.length) {
     const starts = ITEMS.filter(it => it.d === night && it.p && !it.pp && !going[it.id] && status(it, A).k !== 'done').sort(byStart(A)).slice(0, 4);
     h += `<section class="plan first empty-plan"><img class="mn-ico" src="../assets/cathedral/w/mine.webp" alt="" width="192" height="192" decoding="async"><div class="pl-h"><h3>Your night, empty</h3></div>
-      <p class="pl-then">Tap <b>+</b> on any flyer and it lands here in time order, with when to leave and a reminder if you want one. Not in the Crypt? Add your own.</p>
+      <p class="pl-then">Tap <b>+</b> on any flyer and it lands here in time order, with when to leave and a reminder if you want one. Not in the Coven? Add your own.</p>
       <div class="pl-acts"><button type="button" class="primary" data-pickme>Pick one for me</button><button type="button" class="btn" data-page="tonight">See tonight</button><button type="button" class="btn" data-addmine="">+ Add your own</button></div></section>`;
     if (starts.length) { h += `<div class="lbl"><span><b>Start with one of these</b> · tonight</span><em>tap +</em></div><div class="rail">${starts.map(it => betCard(it, A)).join('')}</div>`; order = starts.map(it => it.id); }
   } else {
-    h += weekStrip() + up.map((k, i) => nightCard(k, A, i === 0) + nightPlan(k, A, i === 0)).join('') + `<button type="button" class="more addmine" data-addmine="">Going somewhere that is not in the Crypt? <b>Add your own</b></button>`;
+    h += weekStrip() + up.map((k, i) => nightCard(k, A, i === 0) + nightPlan(k, A, i === 0)).join('') + `<button type="button" class="more addmine" data-addmine="">Going somewhere that is not in the Coven? <b>Add your own</b></button>`;
     const live = upIds.filter(id => status(BY[id], A).k !== 'done');
     if (live.length > 1 && up.length > 1 && HOST === 'site') h += `<button type="button" class="btn cal-all" data-icsall>${ICON.cal}Add all ${live.length} to my calendar</button>`;
   }
   if (past.length) h += showPast ? past.map(k => nightPlan(k, A, false)).join('') : `<button type="button" class="more" id="showpast">Show ${past.length} ${past.length === 1 ? 'night' : 'nights'} that already happened</button>`;
-  if (SOC.on) h += `<div class="mn-set">${SPACE.mine ? '<button type="button" class="btn mn-sp" data-page="people">My page →</button>' : ''}<a class="btn mn-sp" href="${esc(siteUrl('my/#account'))}">Your account →</a><label class="sw"><span>${SPACE.mine ? 'Show me in the Crypt<small>your space and your name on going lists</small>' : 'Show me in the Crypt<small>your page and your name on going lists</small>'}</span><input type="checkbox" id="m-show" ${SOC.me && SOC.me.show_name ? 'checked' : ''}></label></div>`;
+  if (SOC.on) h += `<div class="mn-set">${SPACE.mine ? '<button type="button" class="btn mn-sp" data-page="people">My page →</button>' : ''}<a class="btn mn-sp" href="${esc(siteUrl('my/#account'))}">Your account →</a><label class="sw"><span>${SPACE.mine ? 'Show me in the Coven<small>your space and your name on going lists</small>' : 'Show me in the Coven<small>your page and your name on going lists</small>'}</span><input type="checkbox" id="m-show" ${SOC.me && SOC.me.show_name ? 'checked' : ''}></label></div>`;
   h += `</div>`;
   $('#day').innerHTML = h; settleImages($('#day'));
   hintMaybe();
@@ -6692,7 +6692,7 @@ function hintMaybe(){
   if (!hintCounted) { if (seen >= 3) return; save('wall-hint-n', seen + 1); hintCounted = true; }
   const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
   const hint = document.createElement('div'); hint.className = 'hint'; hint.id = 'hint';
-  hint.innerHTML = `<div><b>Keep your plan one tap away</b><span>${ios ? 'Tap Share, then Add to Home Screen.' : 'Add the Crypt to your home screen.'} It opens with no signal.</span></div>
+  hint.innerHTML = `<div><b>Keep your plan one tap away</b><span>${ios ? 'Tap Share, then Add to Home Screen.' : 'Add the Coven to your home screen.'} It opens with no signal.</span></div>
     <button type="button" class="primary" id="install" hidden>Install</button><button type="button" class="hx" id="hint-x" aria-label="Dismiss">✕</button>`;
   const box = $('.mn-body'); if (box) box.appendChild(hint);
   if (window.__wallPrompt) $('#install').hidden = false;
