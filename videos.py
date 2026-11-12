@@ -108,9 +108,9 @@ def build():
     #    on the shared reverse.
     items.sort(key=lambda x: (x.get("date", ""), x.get("kind") != "NIGHT"), reverse=True)
 
-    missing = [i["slug"] for i in items
-               if i.get("poster") and not i["poster"].startswith("http")
-               and not os.path.exists(os.path.join(OUT, i["poster"]))]
+    missing = [i["slug"] for i in items for k in ("poster", "thumb")
+               if i.get(k) and not i[k].startswith("http")
+               and not os.path.exists(os.path.join(OUT, i[k]))]
     if missing:
         print(f"  ⚠️  {len(missing)} poster(s) not on disk: {', '.join(missing[:6])}")
     thin = [i["slug"] for i in items if not i.get("w") or not i.get("h")]
@@ -365,13 +365,15 @@ function draw(kind){
     if (note) note.textContent = ''; return; }
   if (note) note.textContent = view.length + ' in this rail \u00b7 scroll \u2192';
   grid.innerHTML = view.map((m,i) => {
-    const p = safeUrl(m.poster);
+    // `thumb` (optional, 11/11): a 9:16 tile image for a cut whose player poster is 16:9 (the School of Comics
+    // comic covers). The tile shows the thumb whole; the lightbox keeps `poster` + w/h so the player stays 16:9.
+    const p = safeUrl(m.thumb || m.poster);
     // landscape posters are letterboxed into the 9:16 tile, not cropped
-    const wide = (m.w || 0) > (m.h || 0);
+    const wide = !m.thumb && (m.w || 0) > (m.h || 0);
     return '<button class="card" data-i="'+i+'" type="button">'
       + '<span class="shot' + (wide ? ' wide' : '') + '">'
         + (p ? (wide ? '<img class="bed" src="'+esc(p)+'" alt="" aria-hidden="true" loading="lazy">' : '')
-             + '<img class="main" src="'+esc(p)+'" alt="" loading="'+((window.__vN=(window.__vN||0)+1)<=6?'eager':'lazy')+'" width="'+(m.w||520)+'" height="'+(m.h||924)+'">' : '')
+             + '<img class="main" src="'+esc(p)+'" alt="" loading="'+((window.__vN=(window.__vN||0)+1)<=6?'eager':'lazy')+'" width="'+(m.thumb?720:(m.w||520))+'" height="'+(m.thumb?1280:(m.h||924))+'">' : '')
         + '<span class="kd">'+esc(m.kind)+'</span>'
         + (m.dur ? '<span class="dur">'+esc(m.dur)+'</span>' : '')
         + '<span class="ply">&#9654;</span>'
@@ -568,7 +570,7 @@ function endPick(i){
 function endShow(){
   if (!lb.classList.contains('on') || at < 0 || !view[at]) return;
   lbeg.innerHTML = endPick(at).map(k => {
-    const m = view[k], p = safeUrl(m.poster);
+    const m = view[k], p = safeUrl(m.thumb || m.poster);
     return '<button type="button" data-k="' + k + '">'
       + '<img alt="" src="' + esc(p) + '">'
       + '<b>' + esc(m.title) + '</b><small>' + esc(m.from) + '</small></button>';

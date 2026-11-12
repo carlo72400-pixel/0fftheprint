@@ -392,7 +392,7 @@
       tx.appendChild(el('span', '', g.list.length === 1 ? g.list[0].title + ' went up on The Tape.' : g.list.length + ' cuts went up on The Tape.'));
       var strip = el('span', 'hx-strip');
       g.list.slice(0, TAPE_SHOW).forEach(function (v) {
-        var p = String(v.poster || ''); p = p.indexOf('../') === 0 ? p.slice(3) : 'video/' + p;
+        var p = String(v.thumb || v.poster || ''); p = p.indexOf('../') === 0 ? p.slice(3) : 'video/' + p;   // thumb = a 9:16 tile image (11/11)
         if (!POSTER.test(p)) return;
         var im = el('img'); im.alt = ''; im.loading = 'lazy'; im.decoding = 'async'; im.width = 520; im.height = 924;
         im.addEventListener('error', function () { im.remove(); }, { once: true }); im.src = p; strip.appendChild(im);
