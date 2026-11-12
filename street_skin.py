@@ -62,6 +62,10 @@ KEY_CSS = (".sk-back{position:fixed;left:max(12px,env(safe-area-inset-left,0px))
            "color:#f1eef6;font:700 12px/1 system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;text-decoration:none}"
            ".sk-back span{font-size:18px;line-height:1}.sk-back:focus-visible{outline:2px solid #fff;outline-offset:2px}"
            ".sk-pad{height:calc(52px + env(safe-area-inset-top,0px))}"
+           # inside a tool the Kit's own key (top left of its bar, back to the Kit's front) is the one back key: the street's
+           # key steps aside, and the round key the Kit had in the bottom right corner since October is gone (his 11/12 call)
+           'body[data-tool]:not([data-tool="home"]) .sk-back,body[data-tool]:not([data-tool="home"]) .sk-pad{display:none}'
+           "#back-fab{display:none!important}"
            # the Kit's own title, in the Kit's colour (11/12, header only)
            ".bar .wm b{color:#7fd3ff;text-shadow:0 0 12px rgba(127,211,255,.65),0 0 2px rgba(127,211,255,.9)}")
 
