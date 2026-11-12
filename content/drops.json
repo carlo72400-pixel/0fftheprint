@@ -2,6 +2,14 @@
   "_about": "Stand-alone drop pages for the homepage timeline (cathedral.js drops(), 11/10). One row each: up = the day it went up, link = the drop's own folder, thumb = a 16:9 card inside it, go = the call to action.",
   "items": [
     {
+      "up": "2026-11-12",
+      "title": "RELIQUARY special: The After Party",
+      "line": "Part 2 of the BLOODBATH special, on a home video: the DJ kills the lights for the drop, the champ belt disappears, and a crew of thieves gets robbed at their own party. A special, not canon. 10 screens, read top to bottom.",
+      "link": "reliquary/afterparty/",
+      "thumb": "reliquary/afterparty/card.jpg",
+      "go": "play the tape"
+    },
+    {
       "up": "2026-11-11",
       "title": "RELIQUARY special: BLOODBATH 4",
       "line": "The fight card for BLOODBATH 4, Friday the 13th: Kuro vs MINO, Bala vs CY, and the Apostates vs HYDRA for the champ belt. A special, not canon. 10 pages, read top to bottom.",
