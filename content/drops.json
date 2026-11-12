@@ -2,54 +2,6 @@
   "_about": "Stand-alone drop pages for the homepage timeline (cathedral.js drops(), 11/10). One row each: up = the day it went up, link = the drop's own folder, thumb = a 16:9 card inside it, go = the call to action.",
   "items": [
     {
-      "up": "2026-11-12",
-      "title": "RELIQUARY special: The After Party",
-      "line": "Part 2 of the BLOODBATH special, on a home video: the DJ kills the lights for the drop, the champ belt disappears, and a crew of thieves gets robbed at their own party. A special, not canon. 10 screens, read top to bottom.",
-      "link": "reliquary/afterparty/",
-      "thumb": "reliquary/afterparty/card.jpg",
-      "go": "play the tape"
-    },
-    {
-      "up": "2026-11-11",
-      "title": "RELIQUARY special: BLOODBATH 4",
-      "line": "The fight card for BLOODBATH 4, Friday the 13th: Kuro vs MINO, Bala vs CY, and the Apostates vs HYDRA for the champ belt. A special, not canon. 10 pages, read top to bottom.",
-      "link": "reliquary/bloodbath/",
-      "thumb": "reliquary/bloodbath/card.jpg",
-      "go": "read the fight card"
-    },
-    {
-      "up": "2026-11-11",
-      "title": "RELIQUARY origins #3: Lena",
-      "line": "Lena's origin, told on the certificates she writes for every fake she sells. Every fake got one. The real one didn't. 10 slides, read top to bottom.",
-      "link": "reliquary/lena/",
-      "thumb": "reliquary/lena/card.jpg",
-      "go": "read lena's origin"
-    },
-    {
-      "up": "2026-11-11",
-      "title": "RELIQUARY origins #2: Relic",
-      "line": "Relic's origin, seen through the glass of her display case. Everybody looked at her. Nobody saw her. 10 slides, read top to bottom.",
-      "link": "reliquary/relic/",
-      "thumb": "reliquary/relic/card.jpg",
-      "go": "read relic's origin"
-    },
-    {
-      "up": "2026-11-11",
-      "title": "RELIQUARY origins #1: Rin",
-      "line": "Rin's origin, told in her texts with CINDER (NO). Months of 3am favors before night one. 10 slides, read top to bottom.",
-      "link": "reliquary/rin/",
-      "thumb": "reliquary/rin/card.jpg",
-      "go": "read rin's origin"
-    },
-    {
-      "up": "2026-11-11",
-      "title": "RELIQUARY ep. 1",
-      "line": "The manhwa starts here. 3:07 AM in Santa Ossa, printed on one long church receipt. 20 slides, read top to bottom.",
-      "link": "reliquary/ep1/",
-      "thumb": "reliquary/ep1/card.jpg",
-      "go": "read episode 1"
-    },
-    {
       "up": "2026-11-10",
       "title": "RELIQUARY: the lore",
       "line": "The church owns every miracle in Santa Ossa. Twelve misfits rob it for a living. Three carousels, 41 slides, a caption on every one.",

@@ -41,7 +41,7 @@ a{color:inherit}
   text-shadow:1px 1px 0 #96081a,2px 2px 0 #96081a,3px 3px 0 #96081a,4px 4px 0 #96081a,5px 5px 0 #5a0610,6px 6px 0 #5a0610,7px 7px 0 #5a0610,0 12px 26px rgba(0,0,0,.6)}
 .hero .sub{margin:14px auto 0;max-width:640px;font:400 clamp(19px,4.6vw,24px)/1.35 "Potta One",sans-serif;color:var(--ink)}
 .hero .punch{margin:10px 0 0;font:400 clamp(28px,7vw,44px)/1 "VP Deadeye",Impact,sans-serif;color:var(--red)}
-.hero .how{margin:16px auto 0;max-width:560px;color:var(--mute);font-size:16px}
+.how{margin:12px auto 0;max-width:560px;color:var(--mute);font-size:16px}
 .tabs{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:22px 0 6px}
 .tab{display:inline-flex;align-items:center;min-height:48px;padding:0 18px;background:var(--lane);color:var(--laneink);text-decoration:none;
   font:400 22px/1 "VP Deadeye",Impact,sans-serif;letter-spacing:.02em;border:3px solid #000;box-shadow:4px 4px 0 #000}
@@ -81,6 +81,37 @@ footer{padding:40px 16px calc(36px + env(safe-area-inset-bottom));text-align:cen
 footer b{color:var(--ink)}
 .toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translateX(-50%);padding:12px 16px;background:#000;color:#fff;border:2px solid var(--gold);font-weight:800;opacity:0;transition:opacity .2s;pointer-events:none}
 .toast.on{opacity:1}
+.jump{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:22px 0 4px}
+.jump a{display:inline-flex;align-items:center;min-height:48px;padding:0 14px;background:var(--lane);color:var(--laneink);text-decoration:none;
+  font:400 16px/1 "Potta One",sans-serif;border:3px solid #000;box-shadow:4px 4px 0 #000}
+.jump a:active{transform:translate(2px,2px);box-shadow:2px 2px 0 #000}
+.band{margin:0;text-align:center;font:400 clamp(28px,7vw,40px)/1.05 "Potta One",sans-serif;color:var(--gold);text-transform:uppercase;letter-spacing:.03em;
+  text-shadow:3px 3px 0 #96081a,5px 5px 0 #000;text-wrap:balance}
+.shelf{padding-top:40px;scroll-margin-top:8px}
+.shelf-intro{margin:10px auto 0;max-width:560px;text-align:center;color:var(--mute);font-size:16px}
+.group{margin:30px auto 0;max-width:980px}
+.group h3{margin:0 0 16px;display:flex;align-items:center;gap:12px;font:800 13px/1.2 system-ui,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+.group h3::after{content:"";flex:1;height:2px;background:var(--line)}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 16px}
+@media (min-width:700px){.cards{grid-template-columns:repeat(4,minmax(0,1fr));gap:28px 22px}}
+.card{position:relative;display:flex;flex-direction:column;gap:4px;min-width:0;color:var(--ink);text-decoration:none}
+.card .cov{display:block;width:100%;height:auto;aspect-ratio:3/4;margin-bottom:10px;border:3px solid #000;background:#1c0d10;
+  box-shadow:5px 5px 0 var(--acc),9px 9px 0 #000;transition:transform .12s,box-shadow .12s}
+.card:hover .cov,.card:focus-visible .cov{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--acc),11px 11px 0 #000}
+.card:focus-visible{outline:3px solid var(--gold);outline-offset:6px}
+.card .k{font:800 12px/1.3 system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.card .t{font:400 clamp(17px,4.4vw,21px)/1.15 "Potta One",sans-serif;color:var(--ink)}
+.card .m{font-size:13px;color:var(--mute)}
+.card .start{display:inline-block;margin:0 4px 4px 0;padding:3px 6px;background:var(--gold);color:#000;font:800 11px/1.1 system-ui,sans-serif;
+  letter-spacing:.12em;border:2px solid #000;box-shadow:2px 2px 0 #000}
+.lorehead{text-align:center;padding-top:56px;scroll-margin-top:8px}
+.private{max-width:760px;margin:0 auto;padding:14px 16px 16px;border-bottom:3px solid #000;background:#0b0507;box-shadow:0 4px 0 var(--red)}
+.private p{margin:0 0 8px;font-size:15px;color:var(--ink)}
+.private .pv-k{font:800 12px/1.2 system-ui,sans-serif;letter-spacing:.16em;color:var(--red)}
+.sched{margin:6px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;font-size:15px}
+.sched li{display:grid;grid-template-columns:86px minmax(0,1fr);gap:10px;align-items:baseline}
+.sched b{color:var(--gold);font:800 14px/1.2 system-ui,sans-serif;letter-spacing:.06em}
+.sched i{font:800 11px/1 system-ui,sans-serif;font-style:normal;letter-spacing:.12em;text-transform:uppercase;color:#000;background:var(--gold);padding:3px 6px;margin-left:6px}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
 </head>
@@ -90,9 +121,13 @@ footer b{color:var(--ink)}
   <h1>RELIQUARY</h1>
   <p class="sub">The church owns every miracle in Santa Ossa. Twelve misfits rob it for a living.</p>
   <p class="punch">We own a crowbar.</p>
+  
+</header>
+<section class="wrap lorehead" id="lore">
+  <h2 class="band">Swipe the lore</h2>
   <p class="how">Three carousels, 41 slides. Swipe through each one. A heist comedy by @vamppsych.</p>
   <nav class="tabs" aria-label="The carousels"><a class="tab" href="#12-chairs" style="--lane:#16346a;--laneink:#d2e4ff">12 CHAIRS</a><a class="tab" href="#patron-saints" style="--lane:#96162a;--laneink:#ffd23f">PATRON SAINTS</a><a class="tab" href="#how-to-play" style="--lane:#ffd23f;--laneink:#111012">HOW TO PLAY</a></nav>
-</header>
+</section>
 <main>
 <section class="deck" id="12-chairs" style="--lane:#16346a;--laneink:#d2e4ff">
   <header class="deckhead">
@@ -183,7 +218,7 @@ footer b{color:var(--ink)}
 </main>
 <section class="more">
   <h3>More of the crew</h3>
-  <div class="links"><a href="ep1/">Read the manhwa, episode 1</a><a href="rin/">Read Rin&#x27;s origin, origins #1</a><a href="relic/">Read Relic&#x27;s origin, origins #2</a><a href="lena/">Read Lena&#x27;s origin, origins #3</a><a href="bloodbath/">Read the BLOODBATH special</a><a href="afterparty/">Read part 2, the after party</a><a href="../wallpapers/">Lock screens of the crew</a><a href="../font/">My handwriting font</a><a href="https://www.instagram.com/vamppsych/" rel="noopener">@vamppsych on Instagram</a></div>
+  <div class="links"><a href="../wallpapers/">Lock screens of the crew</a><a href="../font/">My handwriting font</a><a href="https://www.instagram.com/vamppsych/" rel="noopener">@vamppsych on Instagram</a></div>
 </section>
 <footer><b>RELIQUARY</b> is a heist comedy by VAMPPSYCH. Every saint in Santa Ossa is made up.</footer>
 <div class="toast" role="status" aria-live="polite"></div>
