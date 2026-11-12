@@ -171,11 +171,11 @@ window.OTPLazy = window.OTPLazy || (function () {
   }
   function paintChip(b, bump) {
     var t = totals();
-    b.querySelector('.bn-n').textContent = t.frames ? String(t.frames) : 'Binder';
+    b.querySelector('.bn-n').textContent = t.frames ? String(t.frames) : 'Bag';
     b.querySelector('.bn-h').textContent = t.hits ? String(t.hits) : '';
     b.classList.toggle('has', t.frames > 0);
     b.classList.toggle('hit', t.hits > 0);
-    b.setAttribute('aria-label', t.frames ? 'Your binder: ' + t.frames + ' frames, ' + t.hits + (t.hits === 1 ? ' hit' : ' hits') : 'Your binder');
+    b.setAttribute('aria-label', t.frames ? 'Your bag: ' + t.frames + ' frames, ' + t.hits + (t.hits === 1 ? ' hit' : ' hits') : 'Your bag');
     if (bump) { b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump'); }
   }
 
@@ -348,15 +348,53 @@ window.OTPLazy = window.OTPLazy || (function () {
         op.addEventListener('click', closeSheet);
         body.appendChild(op);
       }
-      body.appendChild(el('p', 'bn-fine', 'Your binder lives on this phone. Nothing to log in to. Clear your browser and it starts over.'));
+      body.appendChild(el('p', 'bn-fine', 'Your bag lives on this phone. Nothing to log in to. Clear your browser and it starts over.'));
+      streetBag(body);
     });
   }
+  /* ---------- what the street's own BAG holds (11/12: one bag, one name). The street keeps its things under
+     'vend-demo-bag' (a list of codes); street/bag.json, written by the street's build, says what each code is.
+     Read only: nothing here writes the street's list. ---------- */
+  var sbP = null;
+  function streetCodes() {
+    try {
+      var j = JSON.parse(w.localStorage.getItem('vend-demo-bag') || '[]');
+      return Array.isArray(j) ? j.filter(function (c) { return typeof c === 'string' && /^[A-Z][A-Za-z0-9]{0,6}$/.test(c); }) : [];
+    } catch (e) { return []; }
+  }
+  function streetNames() {
+    if (!sbP) sbP = fetch(BASE + 'street/bag.json', { cache: 'no-cache' })
+      .then(function (r) { return r.ok ? r.json() : {}; })
+      .catch(function () { sbP = null; return {}; });
+    return sbP;
+  }
+  function streetBag(body) {
+    var codes = streetCodes(); if (!codes.length) return;
+    var fine = body.querySelector('.bn-fine');
+    var h = el('h3', '', 'From the street'); h.appendChild(el('small', '', codes.length + (codes.length === 1 ? ' thing' : ' things')));
+    var row = el('div', 'bn-street');
+    body.insertBefore(h, fine); body.insertBefore(row, fine);
+    streetNames().then(function (names) {
+      codes.forEach(function (c) {
+        var it = names && names[c]; if (!it) return;
+        var a = el('a', 'bn-sitem'); a.href = BASE + '#bag';
+        if (typeof it.src === 'string' && /^street\/[A-Za-z0-9_.\/-]+\.webp(\?v=[A-Za-z0-9]+)?$/.test(it.src)) {
+          var im = el('img'); im.alt = ''; im.loading = 'lazy'; im.decoding = 'async'; im.width = 54; im.height = 72; im.src = BASE + it.src;
+          a.appendChild(im);
+        }
+        var tx = el('span', 'bn-tx'); tx.appendChild(el('b', '', String(it.t || c))); tx.appendChild(el('span', '', String(it.w || '')));
+        a.appendChild(tx); row.appendChild(a);
+      });
+      if (!row.firstChild) { h.remove(); row.remove(); }
+    });
+  }
+
   function buildSheet() {
     sheet = el('div', 'bn-sheet'); sheet.hidden = true;
-    sheet.setAttribute('role', 'dialog'); sheet.setAttribute('aria-modal', 'true'); sheet.setAttribute('aria-label', 'Your binder');
+    sheet.setAttribute('role', 'dialog'); sheet.setAttribute('aria-modal', 'true'); sheet.setAttribute('aria-label', 'Your bag');
     var cardEl = el('div', 'bn-card');
     var head = el('div', 'bn-head');
-    head.appendChild(el('h2', '', 'Your binder'));
+    head.appendChild(el('h2', '', 'Your bag'));
     var x = el('button', 'bn-x', '×'); x.type = 'button'; x.setAttribute('aria-label', 'Close'); x.addEventListener('click', closeSheet);
     head.appendChild(x);
     cardEl.appendChild(head);

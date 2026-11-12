@@ -163,3 +163,12 @@ html.bn-open-sheet,html.bn-open-sheet body{overflow:hidden}
 .lb-who .bn-why-m{margin:6px 0 0;color:#ff8a8a}
 
 @media (prefers-reduced-motion:reduce){ .bn-card,.bn-chip.bump{animation:none} .bn-go,.bn-chip{transition:none} }
+
+/* ---- 11/12: one bag. The chip sits in the street strip's corner (#sk-keys), and the sheet lists what the street's own bag holds. ---- */
+#sk-keys .bn-chip{min-height:44px;margin:0}
+.bn-street{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin:0 0 14px}
+.bn-sitem{display:flex;align-items:center;gap:9px;min-height:60px;padding:6px 8px;border-radius:10px;text-decoration:none;color:inherit;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+.bn-sitem img{flex:none;width:40px;height:54px;object-fit:contain}
+.bn-sitem .bn-tx{display:flex;flex-direction:column;gap:3px;min-width:0}
+.bn-sitem .bn-tx b{font-size:12.5px;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bn-sitem .bn-tx span{font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:.7}

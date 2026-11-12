@@ -226,7 +226,7 @@
     if (!mineEl || !st || !st.opened) return;
     mineEl.textContent = '';
     var a = d.createElement('button'); a.type = 'button'; a.className = 'sl-bind';
-    a.textContent = 'In your binder: ' + st.have + ' of ' + n;
+    a.textContent = 'In your bag: ' + st.have + ' of ' + n;
     a.onclick = function () { try { B.open(); } catch (e) {} };
     var t = d.createElement('span');
     t.className = st.hit ? 'got' : '';
@@ -283,7 +283,7 @@
     var big = seal.querySelector('.sl-say .big'), sub = seal.querySelector('.sl-say .sub');
     if (st.have >= n) {
       if (big) big.textContent = 'You have the whole ' + WHOLE;
-      if (sub) sub.textContent = 'All ' + n + ' frames are in your binder. Tear it anyway, or open the night below.';
+      if (sub) sub.textContent = 'All ' + n + ' frames are in your bag. Tear it anyway, or open the night below.';
     } else {
       if (big) big.textContent = 'Rip another';
       if (sub) sub.textContent = (n - st.have) + ' frames you have not pulled yet. They come out first.';

@@ -49,8 +49,8 @@
       grid.innerHTML = '';
       NIGHTS.forEach(function (n) { grid.appendChild(tile(n)); });
       var t = null; try { t = w.OTPBinder && w.OTPBinder.totals ? w.OTPBinder.totals() : null; } catch (e) {}
-      line.innerHTML = t && t.frames ? 'Your binder: <b>' + t.frames + '</b> frames · <b>' + t.hits + '</b> ' + (t.hits === 1 ? 'hit' : 'hits') + ' · <b>' + t.opened + '</b> of ' + NIGHTS.length + ' packs opened' + (t.done ? ' · <b>' + t.done + '</b> complete' : '') + ' <button type="button" class="ph-link" data-binder>Open the binder</button>'
-        : 'Your binder is empty. Tear a pack open and what you pull is yours to keep, on this phone.';
+      line.innerHTML = t && t.frames ? 'Your bag: <b>' + t.frames + '</b> frames · <b>' + t.hits + '</b> ' + (t.hits === 1 ? 'hit' : 'hits') + ' · <b>' + t.opened + '</b> of ' + NIGHTS.length + ' packs opened' + (t.done ? ' · <b>' + t.done + '</b> complete' : '') + ' <button type="button" class="ph-link" data-binder>Open the binder</button>'
+        : 'Your bag is empty. Tear a pack open and what you pull is yours to keep, on this phone.';
     }
     line.addEventListener('click', function (ev) { if (ev.target.closest('[data-binder]')) { try { w.OTPBinder && w.OTPBinder.open && w.OTPBinder.open(); } catch (e) {} } });
     paint();
