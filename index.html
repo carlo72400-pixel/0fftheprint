@@ -43,8 +43,8 @@
      it served 2.117.3 while the site was tested on 2.117.2. A new version is a new hash, on every page at once. -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" integrity="sha384-Rj26LVGvoeRVR6+mwQmFfcR3QOBEwT+ZmuCWpuiqeTzJpCs0ER4ITAWGb4Hiy3Ok" crossorigin="anonymous" defer></script>
 <script src="supabase-config.js?v=f1348482" defer></script>
-<script src="assets/js/desk.js?v=92efb57d" defer></script>
-<script src="assets/js/door.js?v=fd99bb53" defer></script>
+<script src="assets/js/desk.js?v=ecaad17b" defer></script>
+<script src="assets/js/door.js?v=5263b497" defer></script>
 <script src="assets/js/composer.js?v=1c95d27a" defer></script>
 <script src="assets/js/edit.js?v=46763485" defer></script>
 <script>
@@ -6793,7 +6793,7 @@ window.OTPLazy = window.OTPLazy || (function () {
       setTimeout(() => { if (t.isConnected && t.dataset.sure === '1') { t.dataset.sure = ''; t.textContent = was; t.classList.remove('sure'); } }, 4000);
       return false;
     };
-    // THE REPORT CHOOSER (calls 8, 9; the shared pattern the Crypt, packs and pages copy): 'Tell the desk why', one
+    // THE REPORT CHOOSER (calls 8, 9; the shared pattern the Crypt and pages copy): 'Tell the desk why', one
     // chip per reason OTP.reportChoices(kind) gives, 'Never mind'. 'Something else' opens a short note (140, optional)
     // and Send. The database answers 'sent' or 'already'; who sent it is only ever the desk's to see.
     const openChooser = (li, kind, target, done) => {

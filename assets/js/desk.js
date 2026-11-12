@@ -34,15 +34,15 @@
   };
   // 033: a casual member's photo lives in the small `take` bucket, a card
   // holder's media in `posts`. Same key shape in both, so say which bucket.
-  // 037 / 030: pack photos (`packs`) and Crypt page pictures (`spaces`) have the
-  // same <uid>/<file> keys and their own delete policies (own folder, or the
-  // desk), so deleteImage can take those back too. Nothing here widens who may
+  // 030: Crypt page pictures (`spaces`) have the same <uid>/<file> keys and
+  // their own delete policies (own folder, or the desk), so deleteImage can
+  // take those back too. Nothing here widens who may
   // delete: storage refuses a key that is not the caller's.
   // 044: card art (`cards`) too. Its own folder for a member, any folder for the
   // desk ("admin deletes any card art").
-  const FILE_BUCKETS = ["posts", "take", "packs", "spaces", "cards"];
+  const FILE_BUCKETS = ["posts", "take", "spaces", "cards"];
   const objectRef = url => {
-    const m = /\/storage\/v1\/object\/public\/(posts|take|packs|spaces|cards)\/([^?#]+)/.exec(String(url || ""));
+    const m = /\/storage\/v1\/object\/public\/(posts|take|spaces|cards)\/([^?#]+)/.exec(String(url || ""));
     return m ? { bucket: m[1], name: m[2] } : null;
   };
 
@@ -469,7 +469,8 @@
     // bring back marks taken off. Keeping them apart per person is the Crypt's job.
     // Wave 2 adds two that belong to the login, not the phone: wall-fix (the
     // desk's Crypt flyer fixes, read through the members-only table) and otp-kept
-    // (the cards a member kept, cached with their uid for pages without desk.js).
+    // (the cards a member kept; the packs came out 11/12 and nothing writes it
+    // any more, this only clears what an older visit left on the phone).
     async signOut() {
       const c = sb(); if (!c) return;
       forgetMe();
@@ -618,54 +619,6 @@
           : "That photo did not upload. Try again, and if it keeps happening tell the desk.");
       }
       return c.storage.from("take").getPublicUrl(name).data.publicUrl;
-    },
-
-    // 037 (10/11): a photo for a member's own pack. Same shrink as a take photo, the `packs`
-    // bucket, the member's own folder, forty a day (the policy counts). Returns the storage KEY
-    // (what pack_save wants), not the public url: packs.js builds the url when it draws.
-    async uploadPackPhoto(file) {
-      const c = sb(); if (!c) throw new Error("Backend not configured yet.");
-      const { data: { user } } = await c.auth.getUser();
-      if (!user) throw new Error("Log in first.");
-      if (!/^image\//.test(file.type || "") || /\.(gif)$/i.test(file.name || "")) throw new Error("Photos only in a pack: JPG, PNG or WebP.");
-      let src;
-      try { src = await createImageBitmap(file, { imageOrientation: "from-image" }); }
-      catch (e) {
-        src = await new Promise((ok, no) => {
-          const im = new Image();
-          im.onload = () => ok(im);
-          im.onerror = () => no(new Error("That photo would not open. Try a JPG or a PNG."));
-          im.src = URL.createObjectURL(file);
-        });
-      }
-      const w0 = src.width || src.naturalWidth, h0 = src.height || src.naturalHeight;
-      if (!w0 || !h0) throw new Error("That photo would not open. Try a JPG or a PNG.");
-      const k = Math.min(1, 2000 / Math.max(w0, h0));
-      const cv = document.createElement("canvas");
-      cv.width = Math.max(1, Math.round(w0 * k)); cv.height = Math.max(1, Math.round(h0 * k));
-      const g = cv.getContext("2d");
-      g.fillStyle = "#000"; g.fillRect(0, 0, cv.width, cv.height);
-      g.drawImage(src, 0, 0, cv.width, cv.height);
-      const blob = await new Promise((ok, no) => cv.toBlob(
-        b => b ? ok(b) : no(new Error("That photo would not open. Try a JPG or a PNG.")), "image/jpeg", 0.88));
-      const name = `${user.id}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`;
-      const { error } = await c.storage.from("packs").upload(name, blob, {
-        cacheControl: "31536000", upsert: false, contentType: "image/jpeg",
-      });
-      if (error) {
-        let n = null;
-        if (/row-level security|policy|unauthorized/i.test(error.message || "")) {
-          try { const r = await c.rpc("uploads_today", { p_bucket: "packs" }); if (!r.error) n = r.data; } catch (e) {}
-        }
-        throw new Error(n != null && n >= 40
-          ? "That is forty pack photos today. Try again tomorrow."
-          : "That photo did not upload. Try again, and if it keeps happening tell the desk.");
-      }
-      return { key: name, url: c.storage.from("packs").getPublicUrl(name).data.publicUrl, w: cv.width, h: cv.height };
-    },
-    packPhotoUrl(key) {
-      const c = sb(); if (!c || !key) return "";
-      return c.storage.from("packs").getPublicUrl(key).data.publicUrl;
     },
 
     // May this session post to the timeline? Card holders, the desk, and anyone on
@@ -2346,7 +2299,7 @@
     // THE one badge: what is waiting on the desk, by queue, plus the total.
     // Never throws (a badge that throws takes the nav down with it).
     async deskWaiting() {
-      const KEYS = ["asks", "sources", "reports", "packs", "rooms", "picks", "comments", "stories", "house", "photos_up", "total"];
+      const KEYS = ["asks", "sources", "reports", "rooms", "picks", "comments", "stories", "house", "photos_up", "total"];
       const z = {}; KEYS.forEach(k => { z[k] = 0; });
       z.door = 0;
       const c = sb(); if (!c) return z;
@@ -2357,30 +2310,33 @@
       try { r = await c.rpc("desk_waiting"); } catch (e) { return z; }
       if (!r.error) {
         const row = Array.isArray(r.data) ? r.data[0] : r.data;
-        if (row && typeof row === "object") KEYS.forEach(k => { z[k] = Number(row[k]) || 0; });
+        if (row && typeof row === "object") {
+          KEYS.forEach(k => { z[k] = Number(row[k]) || 0; });
+          // the packs came out 11/12: a database that still counts them (052 not run yet) must not hold the badge up
+          z.total = Math.max(0, z.total - (Number(row.packs) || 0));
+        }
         z.door = await door;
         z.total += z.door;
         return z;
       }
       if (r.error.code !== "PGRST202") return z;
       // A database without 045 has no desk_waiting. Add up what it can answer:
-      // card asks and sources (032), packs (037), rooms (038), reported chats
+      // card asks and sources (032), rooms (038), reported chats
       // (040). Each one that fails counts 0.
       const one = async fn => { try { return await fn(); } catch (e) { return 0; } };
-      const [counts, packs, rooms, dms] = await Promise.all([
+      const [counts, rooms, dms] = await Promise.all([
         one(async () => { const q = await c.rpc("wall_desk_counts"); return (!q.error && Array.isArray(q.data) && q.data[0]) || 0; }),
-        one(async () => { const q = await c.rpc("desk_packs"); return q.error ? 0 : (q.data || []).filter(p => !p.published).length; }),
         one(async () => { const q = await c.rpc("rooms_list"); return q.error ? 0 : (q.data || []).filter(x => !x.published && !x.mine).length; }),
         one(async () => { const q = await c.rpc("dm_desk_count"); return q.error ? 0 : (Number(q.data) || 0); }),
       ]);
       z.asks = Number(counts && counts.asks) || 0;
       z.sources = Number(counts && counts.sources) || 0;
-      z.packs = packs; z.rooms = rooms; z.reports = dms;
-      z.total = z.asks + z.sources + z.packs + z.rooms + z.reports;
+      z.rooms = rooms; z.reports = dms;
+      z.total = z.asks + z.sources + z.rooms + z.reports;
       return z;
     },
 
-    // Packs and rooms waiting (oldest first) and pending sources, or null.
+    // Rooms waiting (oldest first) and pending sources, or null.
     async deskQueue() { return await call("desk_queue"); },
 
     // THE one card rule. Yes makes them a card holder and hands back the card
@@ -2469,7 +2425,7 @@
     },
 
     // Waiting vs said no: mark one row as seen (story | pick | story_comment |
-    // pack | room), or every waiting row of a kind (refusals from before 045).
+    // room), or every waiting row of a kind (refusals from before 045).
     async deskMarkRead(kind, id) {
       const n = Number(await call("desk_mark_read", { p_kind: kind, p_id: id == null ? null : id })) || 0;
       if (id != null && !n) throw new Error("That one is already gone.");
@@ -2480,11 +2436,10 @@
     },
 
     async sourceDecide(id, status) { return await call("wall_source_decide", { p_id: id, p_status: status }); },
-    async packDecide(id, on) { return await call("pack_publish", { p_id: id, p_on: !!on }); },
     async roomDecide(id, on) { return await call("room_publish", { p_id: id, p_on: !!on }); },
 
     // Hide (or show again) and delete anything a member made, from one table
-    // (DESK_KINDS, under this object): post, take_comment, flyer_comment, pack,
+    // (DESK_KINDS, under this object): post, take_comment, flyer_comment,
     // room, space_post, frame_tag, story, story_comment, pick, video, date,
     // dm_message, space. extra carries {user, slug, media} for a frame tag and
     // {user} for a page. Something already gone says so.
@@ -2518,7 +2473,7 @@
     async refused() { return (await OTP.deskMembers()).filter(p => p.said_no).map(deskRow); },
 
     // ---- REPORTS, BLOCKS, EDITS (044 / 045) ----
-    // Calls 8 and 9: a report button on comments, packs, pages, rooms and frame
+    // Calls 8 and 9: a report button on comments, pages, rooms and frame
     // tags, one list on the board, Block that means block, and fixing your own
     // comment (no time window; the 'edited' tag tells readers).
     REPORT_WHY: {
@@ -2533,7 +2488,7 @@
     reportChoices(kind) {
       const W = OTP.REPORT_WHY, pick = keys => keys.map(k => [k, W[k]]);
       if (kind === "frame_tag") return [["not_them", "That is not them"], ["other", "Something else"]];
-      if (kind === "space" || kind === "post" || kind === "pack" || kind === "room")
+      if (kind === "space" || kind === "post" || kind === "room")
         return pick(["mean", "spam", "private", "not_them", "other"]);
       return pick(["mean", "spam", "private", "other"]);
     },
@@ -2882,18 +2837,6 @@
       const rows = Array.isArray(t.data) ? t.data : [];
       return photos ? rows.filter(x => x && x.image_url) : rows;
     },
-
-    // ---- PACKS (045) ----
-    // Call 16: the cards a member kept (hearts), from packs still up. [] for a
-    // stranger or on any error. Never throws.
-    async myFaves() {
-      const c = sb(); if (!c) return [];
-      try {
-        if (!(await hasSession(c))) return [];
-        const { data, error } = await c.rpc("my_faves");
-        return (!error && Array.isArray(data)) ? data : [];
-      } catch (e) { return []; }
-    },
   };
 
   // THE MEMBERS MANAGER: the one dispatch table deskHide / deskDelete read. A
@@ -2914,7 +2857,6 @@
     post: viaAct("post"),
     take_comment: viaAct("take_comment"),
     flyer_comment: viaAct("flyer_comment"),
-    pack: viaAct("pack"),
     room: viaAct("room"),
     space_post: { del: id => actOrGone("space_post", id, "remove"), only: "A page comment comes down or stays." },
     frame_tag: {

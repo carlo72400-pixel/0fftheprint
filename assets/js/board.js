@@ -2306,9 +2306,7 @@
         ["Write or fix any member's tagline and bio", 'here', M()],
         ["Open any card holder's page", 'here', M()],
         ['How someone gets a card', 'cold', 'joins the Crypt and picks their card under Kin'],
-        ['Packs and rooms waiting', 'here', function () {
-          openQueue(DB.waiting && !(+DB.waiting.packs) && +DB.waiting.rooms ? 'rooms' : 'packs');
-        }],
+        ['Rooms waiting', 'here', Q('rooms')],
         ['Flyer sources', 'here', Q('sources')],
         ['Reports', 'here', Q('reports')],
         ['Take a photo down', 'here', J('nights')],
@@ -2431,7 +2429,6 @@
         // 049 + 050: new @s to look at come first (waiting at the door, or let in and not looked at yet)
         ['door', 'new @ to check', 'new @s to check', function () { setView('members', { filter: 'check' }); }],
         ['asks', 'wants a card', 'want a card', function () { setView('members', { filter: 'asks' }); }],
-        ['packs', 'pack waiting', 'packs waiting', queue('packs')],
         ['rooms', 'room waiting', 'rooms waiting', queue('rooms')],
         ['sources', 'flyer source', 'flyer sources', queue('sources')],
         ['reports', 'report', 'reports', queue('reports')],

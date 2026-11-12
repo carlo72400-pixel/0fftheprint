@@ -47,7 +47,7 @@
     admin:{st:'in', label:'Desk',    href:'board/', cal:'wall/#cal', on:true,
            title:'Everything waiting on you.',
            b:'Open the desk.',
-           s:'Card asks, packs, rooms, reports, the whole back room.',
+           s:'Card asks, rooms, reports, the whole back room.',
            foot:'Open the desk →'},
     // A closed account (closed by them: wall_join says 'closed'; by the desk: 'shut'). Your account opens it again
     // or logs out. Never says who closed it.

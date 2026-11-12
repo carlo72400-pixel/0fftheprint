@@ -7,8 +7,8 @@
  * DMs stay private unless somebody in the chat reported it.
  *
  * board.js owns the page and the sheet. This file owns the MEMBERS tab: the one
- * list of everyone with a login, the person sheet, and the four queue sheets
- * (packs, rooms, flyer sources, reports). It loads after board.js and reads
+ * list of everyone with a login, the person sheet, and the three queue sheets
+ * (rooms, flyer sources, reports). It loads after board.js and reads
  * window.BOARD at the moment it needs it, never at load.
  *
  *   window.BOARD_MEMBERS = { render(mountEl, opts), openPerson(key), openQueue(kind) }
@@ -49,7 +49,6 @@
   var UUID_OK = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
   var IG_OK = /^[a-z0-9._]{1,30}$/;
   var PLAYLIST_OK = /^[A-Za-z0-9]{22}$/;
-  var PACK_OK = /^[a-z0-9-]{1,90}$/;
   // 002's reserved_slugs: nobody but the desk is handed one, so the prefill skips them
   var RESERVED = ['vamppsych', 'the-desk', 'desk', 'otp', 'admin', '0ff-the-print', 'off-the-print', 'theprint'];
   // 044's house_seats, mirrored with their roster names. ⛔ The roster-seat guard reads THIS first, so it never waits on
@@ -122,7 +121,7 @@
   }
 
   /* ============================ pictures =============================
-     ⛔ A face, a post photo or a pack cover is drawn only from our storage
+     ⛔ A face or a post photo is drawn only from our storage
      (BOARD.safeImg, and only its absolute answers). A frame from a night is a
      file in this repo, so it goes through safeImg as a repo path. */
 
@@ -133,10 +132,6 @@
   function repoPic(src) {
     var b = B(), s = b && b.safeImg ? b.safeImg(src) : '';
     return /^https?:\/\//i.test(s) || /^\.\.\/[a-z0-9_]/i.test(s) ? s : '';
-  }
-  function packUrl(key) {
-    if (!key) return '';
-    try { return pic(w.OTP && OTP.packPhotoUrl ? OTP.packPhotoUrl(key) : ''); } catch (e) { return ''; }
   }
   function faceHtml(src, name, big) {
     var f = pic(src);
@@ -227,7 +222,7 @@
     return t.join('');
   }
   function stuffCount(p) {
-    return ['n_posts', 'n_comments', 'n_page', 'n_packs', 'n_rooms', 'n_stories', 'n_story_comments', 'n_picks',
+    return ['n_posts', 'n_comments', 'n_page', 'n_rooms', 'n_stories', 'n_story_comments', 'n_picks',
             'n_videos', 'n_dates', 'n_tags', 'n_sources']
       .reduce(function (n, k) { return n + (+p[k] || 0); }, 0);
   }
@@ -287,7 +282,6 @@
     if (seen) bits.push('seen ' + agoShort(seen));
     if (+p.n_posts > 0) bits.push(plural(+p.n_posts, 'post', 'posts'));
     if (+p.n_comments > 0) bits.push(plural(+p.n_comments, 'comment', 'comments'));
-    if (+p.n_packs > 0) bits.push(plural(+p.n_packs, 'pack', 'packs'));
     return bits.join(DOT);
   }
   function keyOf(p) {
@@ -1022,7 +1016,7 @@
             return unbanSaid(s);
           } };
         }, { sure: 'Tap again: off the Crypt and the site.', cls: 'btn bad sm' })) +
-        note('Their card page, posts, comments, page, packs and rooms go dark. Nothing is deleted. Unban puts every bit of it back.') +
+        note('Their card page, posts, comments, page and rooms go dark. Nothing is deleted. Unban puts every bit of it back.') +
         row(mk(reg, 'Close the account', async function () {
           var n = String(val(p, 'note') || '').trim();
           await OTP.deskClose(r.id, n || null);
@@ -1170,14 +1164,14 @@
   var TABS = [
     ['posts', 'Posts', ['posts']], ['comments', 'Comments', ['take_comments', 'flyer_comments']],
     ['page_comments', 'Page comments', ['page_comments']], ['on_their_page', 'On their page', ['on_their_page']],
-    ['packs', 'Packs', ['packs']], ['rooms', 'Rooms', ['rooms']], ['stories', 'Stories', ['stories']],
+    ['rooms', 'Rooms', ['rooms']], ['stories', 'Stories', ['stories']],
     ['story_comments', 'Story comments', ['story_comments']], ['picks', 'Picks', ['picks']], ['videos', 'Videos', ['videos']],
     ['dates', 'Dates', ['dates']], ['tags', 'Frames', ['tags']], ['sources', 'Sources', ['sources']]
   ];
   // each list's kind in deskHide / deskDelete, and whether it hides (or only comes down)
   var LISTK = {
     posts: ['post', true], take_comments: ['take_comment', true], flyer_comments: ['flyer_comment', true],
-    page_comments: ['space_post', false], on_their_page: ['space_post', false], packs: ['pack', true], rooms: ['room', true],
+    page_comments: ['space_post', false], on_their_page: ['space_post', false], rooms: ['room', true],
     stories: ['story', true], story_comments: ['story_comment', true], picks: ['pick', true], videos: ['video', true],
     dates: ['date', true], tags: ['frame_tag', false], sources: [null, false]
   };
@@ -1210,12 +1204,6 @@
       case 'flyer_comments': title = r.b; sub.push('on a Crypt flyer'); state = r.hidden ? 'hidden' : 'live'; if (r.edited_at) sub.push('edited'); break;
       case 'page_comments': title = r.b; sub.push('on ' + (r.on_name || 'a member') + "'s page"); break;
       case 'on_their_page': title = r.b; sub.push('by ' + (r.by_name || 'a member')); break;
-      case 'packs':
-        title = r.title || 'A pack'; img = packUrl(r.cover || (Array.isArray(r.images) ? r.images[0] : ''));
-        sub.push(plural((r.images || []).length, 'card', 'cards'));
-        state = r.published ? 'live' : r.waiting ? 'waiting' : 'hidden';
-        if (PACK_OK.test(String(r.slug || ''))) link = '<a class="btn ghost sm" href="../packs/?p=' + encodeURIComponent(r.slug) + '" target="_blank" rel="noopener">Open it</a>';
-        break;
       case 'rooms':
         title = r.name || 'A room'; if (r.label) sub.push(r.label);
         state = r.published ? 'live' : r.waiting ? 'waiting' : 'hidden';
@@ -1260,7 +1248,6 @@
     var id = r.id, uid = p.id, btns = [];
     var put = function (on) {
       return function () {
-        if (k === 'packs') return OTP.packDecide(id, on);
         if (k === 'rooms') return OTP.roomDecide(id, on);
         if (on) return OTP.deskHide(dk, id, false);
         return OTP.deskMarkRead(k === 'picks' ? 'pick' : 'story_comment', id);
@@ -1272,7 +1259,7 @@
         btns.push(mk(reg, 'No', async function () { await OTP.sourceDecide(id, 'denied'); return 'Said no.'; }));
       }
     } else {
-      if (state === 'waiting' && (k === 'packs' || k === 'rooms' || k === 'picks' || k === 'story_comments')) {
+      if (state === 'waiting' && (k === 'rooms' || k === 'picks' || k === 'story_comments')) {
         btns.push(mk(reg, 'Put it up', async function () { await put(true)(); return 'Up.'; }, { cls: 'btn sm' }));
         btns.push(mk(reg, 'No', async function () { await put(false)(); return 'Said no. It stays down.'; }));
       } else if (hides && (state === 'live' || state === 'out')) {
@@ -1342,7 +1329,7 @@
     space_post: 'A comment on a Crypt page', space: 'Their Crypt page', post: 'A post', pack: 'A pack',
     room: 'A room', frame_tag: 'A frame tag'
   };
-  var HIDE_KINDS = ['take_comment', 'flyer_comment', 'post', 'pack', 'room'];
+  var HIDE_KINDS = ['take_comment', 'flyer_comment', 'post', 'room'];
   var OUTCOME = { kept: 'kept', hidden: 'hidden', removed: 'removed', banned: 'banned', gone: 'already gone' };
   function whyWord(k) { return (w.OTP && OTP.REPORT_WHY && OTP.REPORT_WHY[k]) || (k ? 'Something else' : 'No reason given'); }
 
@@ -1354,9 +1341,8 @@
       out = (s.text ? quote(s.text) : '') + (im ? '<img class="mg-pic" src="' + esc(im) + '" alt="" loading="lazy">' : '') +
         (s.members_only ? '<div class="mtags">' + pill('THE ROLL', 'git') + '</div>' : '');
     } else if (k === 'pack') {
-      var cv = packUrl(s.cover);
-      out = '<div class="mp-line"><b>' + esc(s.title || 'A pack') + '</b></div>' + (s.line ? quote(s.line) : '') +
-        (cv ? '<img class="mg-pic" src="' + esc(cv) + '" alt="" loading="lazy">' : '');
+      // an old report on a member pack (the packs came out 11/12): its words, no cover
+      out = '<div class="mp-line"><b>' + esc(s.title || 'A pack') + '</b></div>' + (s.line ? quote(s.line) : '');
     } else if (k === 'room') {
       out = '<div class="mp-line"><b>' + esc(s.name || 'A room') + '</b>' + (s.label ? esc(DOT + s.label) : '') + '</div>' +
         (s.line ? quote(s.line) : '');
@@ -1584,12 +1570,11 @@
   }
 
   /* ============================ QUEUE SHEETS ============================
-     What is waiting on him, one sheet per queue: packs, rooms, flyer sources,
+     What is waiting on him, one sheet per queue: rooms, flyer sources,
      reports. Each action re-reads the queue and the badge. */
 
   var Q = null;
   var QT = {
-    packs: ['PACKS WAITING', 'members made these. nothing is up until you say'],
     rooms: ['ROOMS WAITING', 'a playlist and a name, waiting on you'],
     sources: ['FLYER SOURCES', 'accounts and links members sent for the Tuesday sweep'],
     reports: ['REPORTS', 'one entry per reported thing, open first']
@@ -1598,7 +1583,7 @@
   function openQueue(kind) {
     var b = B();
     if (!b || !b.sheet) return;
-    var k = QT[kind] ? kind : 'packs';
+    var k = QT[kind] ? kind : 'rooms';
     if (Q && Q.h && Q.h.el.isConnected) Q.h.shut();
     var h = b.sheet({ title: QT[k][0], why: QT[k][1], tall: true, body: '<div class="mq" aria-live="polite"></div>' });
     h.box.classList.add('mp-sheet');
@@ -1633,17 +1618,6 @@
 
   function byLine(by, extra) {
     return [by && by.name ? 'by ' + by.name : '', by && by.ig ? '@' + by.ig : ''].concat(extra || []).filter(Boolean).join(DOT);
-  }
-  function packRow(q, reg, x) {
-    var cv = packUrl(x.cover);
-    var open = PACK_OK.test(String(x.slug || '')) ? '<a class="btn ghost sm" href="../packs/?p=' + encodeURIComponent(x.slug) + '" target="_blank" rel="noopener">Open it</a>' : '';
-    return '<div class="mi">' + (cv ? '<span class="mi-pic"><img src="' + esc(cv) + '" alt="" loading="lazy"></span>' : '') +
-      '<div class="mi-b"><div class="mi-t">' + esc(x.title || 'A pack') + '</div>' + (x.line ? quote(x.line) : '') +
-      '<div class="mi-s"><span>' + esc(byLine(x.by, [plural(+x.cards || 0, 'card', 'cards'), day(x.at)])) + '</span></div>' +
-      '<div class="row mi-do">' + open +
-        mk(reg, 'Put it up', async function () { await OTP.packDecide(x.id, true); return 'Up. It is in the packs now.'; }, { cls: 'btn sm' }) +
-        mk(reg, 'No', async function () { await OTP.packDecide(x.id, false); return 'Said no. It stays down.'; }) +
-      '</div></div></div>';
   }
   function roomRow(q, reg, x) {
     var listen = PLAYLIST_OK.test(String(x.playlist || ''))
@@ -1684,11 +1658,11 @@
     else if (!rows.length) html += '<div class="empty">' + (k === 'reports' ? (q.closed ? 'No closed reports.' : 'No open reports.') : 'Nothing waiting.') + '</div>';
     else if (k === 'reports') html += rows.map(function (g) { return groupHtml(g, reg, q); }).join('');
     else html += '<div class="mp-items">' + rows.map(function (x) {
-      return k === 'packs' ? packRow(q, reg, x) : k === 'rooms' ? roomRow(q, reg, x) : sourceRow(q, reg, x);
+      return k === 'rooms' ? roomRow(q, reg, x) : sourceRow(q, reg, x);
     }).join('') + '</div>';
-    if ((k === 'packs' || k === 'rooms') && rows && rows.length) {
+    if (k === 'rooms' && rows && rows.length) {
       html += row(mk(reg, 'Mark all as seen', async function () {
-        var n = await OTP.deskMarkAllSeen(k === 'packs' ? 'pack' : 'room');
+        var n = await OTP.deskMarkAllSeen('room');
         return n ? n + ' marked seen. They stay down.' : 'Nothing left to mark.';
       }, { sure: 'Tap again: mark them all seen' })) +
         note('Every one still down is marked seen and leaves the badge. Nothing goes up.');

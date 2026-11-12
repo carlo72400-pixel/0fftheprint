@@ -22,7 +22,7 @@
 <link rel="preconnect" href="https://carlo72400-pixel.github.io" crossorigin>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" integrity="sha384-Rj26LVGvoeRVR6+mwQmFfcR3QOBEwT+ZmuCWpuiqeTzJpCs0ER4ITAWGb4Hiy3Ok" crossorigin="anonymous" defer></script>
 <script src="../supabase-config.js?v=f1348482" defer></script>
-<script src="../assets/js/desk.js?v=92efb57d" defer></script>
+<script src="../assets/js/desk.js?v=ecaad17b" defer></script>
 </head>
 <body>
 <title>CRYPT · 0FF THE PRINT</title>
@@ -792,7 +792,7 @@ button.cd:active{transform:scale(.94)}
    His asks: "first thing people should be able to see when they click people is their page" and "flesh out their page or
    the pages as well". The tab draws the member's own page inline, in their colors, with the same boxes as the sheet
    (ids are pp- instead of sp-); the editor still lives in the sheet. New boxes: Details, Interests, Pics (migration 039),
-   In our frames (037), Packs (037), Rooms (038), on the Take (033); numbers and a card holder's links in the header. */
+   In our frames (037), Rooms (038), on the Take (033); numbers and a card holder's links in the header. */
 .ppl-h{margin-top:4px}
 .ppl-note{margin:10px 0 0;padding:10px 12px;border:1px dashed var(--line);border-radius:3px;background:var(--panel);color:var(--muted);font-size:14px;line-height:1.45}
 .ppl-note b{color:var(--ink)}
@@ -819,11 +819,6 @@ button.cd:active{transform:scale(.94)}
 .sp-g img{width:100%;height:100%;object-fit:cover;display:block}
 .sp-g.txt{display:grid;place-items:center;padding:8px;font:500 12px/1.3 var(--sp-bf);text-align:center;color:var(--sp-ink);background:color-mix(in srgb,var(--sp-hot) 10%,var(--sp-box))}
 .sp-g.txt span{display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
-.sp-pk{display:grid;grid-template-columns:64px minmax(0,1fr);gap:10px;align-items:center;padding:8px 0;border-bottom:1px dashed var(--sp-line);color:inherit;text-decoration:none!important}
-.sp-pk:last-child{border-bottom:0}
-.sp-pk img,.sp-pk i{width:64px;height:84px;object-fit:cover;border:1px solid var(--sp-line);display:block;background:var(--sp-head)}
-.sp-pk b{display:block;color:var(--sp-hot);font-weight:700;overflow-wrap:anywhere}
-.sp-pk small{display:block;opacity:.78;font-size:12.5px}
 .sp-rm{display:grid;gap:6px;padding:8px 0;border-bottom:1px dashed var(--sp-line)}
 .sp-rm:last-child{border-bottom:0}
 .sp-rm b{color:var(--sp-hot)}
@@ -843,12 +838,11 @@ button.cd:active{transform:scale(.94)}
 .spe-pic.add input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
 .spe-pic.add span{display:grid;justify-items:center;gap:2px;font:400 28px/1 var(--f-body)}
 .spe-pic.add small{font:700 11px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase}
-.sp[data-skin="house"] .sp-g,.sp[data-skin="house"] .sp-pk img,.sp[data-skin="house"] .sp-pk i,.sp[data-skin="house"] .sp-chips i,.sp[data-skin="house"] .sp-lk,.sp[data-skin="house"] .sp-rm iframe{border-radius:0}
+.sp[data-skin="house"] .sp-g,.sp[data-skin="house"] .sp-chips i,.sp[data-skin="house"] .sp-lk,.sp[data-skin="house"] .sp-rm iframe{border-radius:0}
 .sp[data-skin="house"] .sp-details .sp-bh::before{background-image:url("../assets/cathedral/r/eye.webp")}
 .sp[data-skin="house"] .sp-interests .sp-bh::before{background-image:url("../assets/cathedral/r/heart.webp")}
 .sp[data-skin="house"] .sp-pics .sp-bh::before{background-image:url("../assets/cathedral/a/photos.webp")}
 .sp[data-skin="house"] .sp-frames .sp-bh::before{background-image:url("../assets/cathedral/w/screen.webp")}
-.sp[data-skin="house"] .sp-packs .sp-bh::before{background-image:url("../assets/cathedral/a/pack.webp")}
 .sp[data-skin="house"] .sp-rooms .sp-bh::before{background-image:url("../assets/cathedral/w/rooms.webp")}
 .sp[data-skin="house"] .sp-take .sp-bh::before{background-image:url("../assets/cathedral/r/fire.webp")}
 @media (prefers-reduced-motion:reduce){.sp-light{transition:none}}
@@ -4802,7 +4796,7 @@ const LINK_BASE = {instagram:['Instagram','https://instagram.com/'], tiktok:['Ti
 const linkHref = (B, h) => typeof B[1] === 'function' ? B[1](h) : B[1] + h;
 const siteUrl = p => (HOST === 'site' ? '../' : 'https://0fftheprint.com/') + p;
 const nightName = slug => { const m = String(slug || '').match(/^(\d{4})-(\d{2})-(\d{2})-(.+)$/); return m ? `${m[4].replace(/-/g, ' ').toUpperCase()} · ${m[2]}.${m[3]}.${m[1].slice(2)}` : String(slug || ''); };
-const XTRA = {frames: {}, packs: null, rooms: null, take: null, t: 0, busy: {}, thumbs: {}, all: {}};   // what the other tables know about a member, fetched once
+const XTRA = {frames: {}, rooms: null, take: null, t: 0, busy: {}, thumbs: {}, all: {}};   // what the other tables know about a member, fetched once
 /* a tagged frame's thumbnail comes from that night's own data.json (media[frame].thumb): the file names skip numbers where a photo
    came out and the clips are v01_t.jpg..., so building 0NN_t.jpg from the frame number drew the wrong photo or a broken tile */
 const MEDIA_RX = /^[a-z0-9][a-z0-9_-]{0,40}$/;        // a frame's own name (043 FRAME_NAME_OK), e.g. 017 for media/017_t.jpg
@@ -5063,14 +5057,6 @@ const SEC = {
       `<a class="sp-g" href="${esc(x.href)}" title="${esc(nightName(x.slug))}"><img src="${esc(x.th)}" alt="" loading="lazy" decoding="async"></a>`).join('')}</div>
       ${L.length > 9 ? `<p class="sp-fn"><button type="button" class="spe-link" data-spframes="${esc(V.sid)}">${all ? 'Show fewer' : `Show all ${L.length}`}</button></p>` : ''}</div>`;
   },
-  packs(V){
-    const L = XTRA.packs, f = esc(firstName(V.name));
-    if (!Array.isArray(L)) return '';
-    const mine = L.filter(p => p && ((V.mine && p.mine) || (p.sid && p.sid === V.sid) || (V.card && p.card_slug === V.card)) && (p.published || V.mine));   // V.mine && p.mine: a hidden member's own rows carry no sid
-    if (!mine.length) return V.mine ? `<h3 class="sp-bh">${f}'s Packs</h3><div class="sp-in"><p class="sp-empty">Got photos of your own? Turn them into a pack: <a href="${esc(siteUrl('packs/#new'))}">make one</a>.</p></div>` : '';
-    const url = k => { try { return (window.OTP && OTP.packPhotoUrl) ? OTP.packPhotoUrl(k) : ''; } catch(e){ return ''; } };
-    return `<h3 class="sp-bh">${f}'s Packs <em>${mine.length}</em></h3><div class="sp-in">${mine.slice(0, 6).map(p => `<a class="sp-pk" href="${esc(siteUrl('packs/?p=' + encodeURIComponent(p.slug || '')))}">${p.cover && url(p.cover) ? `<img src="${esc(url(p.cover))}" alt="" loading="lazy" decoding="async">` : '<i></i>'}<span><b>${esc(p.title)}</b><small>${+p.cards || 0} ${p.cards === 1 ? 'card' : 'cards'}${p.has_hit ? ' · one hit' : ''}${p.faves ? ` · ${p.faves} ♥` : ''}${!p.published ? ' · on the desk' : ''}</small></span></a>`).join('')}</div>`;
-  },
   rooms(V){
     const L = XTRA.rooms, f = esc(firstName(V.name));
     if (!Array.isArray(L)) return '';
@@ -5097,7 +5083,7 @@ const SEC = {
     return `<h3 class="sp-bh">The desk <em>only you see this</em></h3><div class="sp-in sp-acts"><a class="sp-act" href="${esc(siteUrl('board/#members/' + V.sid))}">Manage on the board</a><button type="button" class="sp-act" data-spreset="${esc(V.sid)}">Reset this space</button></div>`;
   }
 };
-const LEFT = ['hdr', 'song', 'contact', 'details', 'interests'], RIGHT = ['net', 'blurbs', 'pics', 'frames', 'nights', 'friends', 'top8', 'packs', 'rooms', 'take', 'posts', 'desk'];
+const LEFT = ['hdr', 'song', 'contact', 'details', 'interests'], RIGHT = ['net', 'blurbs', 'pics', 'frames', 'nights', 'friends', 'top8', 'rooms', 'take', 'posts', 'desk'];
 const secHTML = (k, V) => { const h = SEC[k](V); return `<section class="sp-box sp-${k}" id="sp-${k}"${h ? '' : ' hidden'}>${h}</section>`; };
 function paintSec(k){ const V = viewNow(), el = $('#sp-' + k); if (!V || !el) return; const h = SEC[k](V); el.innerHTML = h; el.hidden = !h; settleImages(el); }
 const themeMap = T => ({'--sp-bg':T.bg, '--sp-box':T.box, '--sp-ink':T.ink, '--sp-hot':T.hot, '--sp-head':T.head, '--sp-hink':T.hink,
@@ -5138,8 +5124,8 @@ function paintInlineAll(){
   const nu = pplSpaceHTML(); if (!nu) return;
   box.outerHTML = nu; pplTheme(); settleImages($('#ppl-sp'));
 }
-/* what the other tables know about a member: frames they are in (037), their packs (037), rooms (038), posts (033).
-   Fetched once per page (frames) or once per ten minutes (the three lists), then the boxes are painted where they show. */
+/* what the other tables know about a member: frames they are in (037), their rooms (038), posts (033).
+   Fetched once per page (frames) or once per ten minutes (the two lists), then the boxes are painted where they show. */
 async function spExtra(V){
   if (!V || !SOC.on) return;
   const c = db(); if (!c) return;
@@ -5156,15 +5142,15 @@ async function spExtra(V){
     XTRA.frames[sid] = L;
     delete XTRA.busy['f' + sid]; done('frames');
   }
-  if ((XTRA.packs === null || Date.now() - XTRA.t > 10 * 60000) && !XTRA.busy.lists) {
+  if ((XTRA.rooms === null || Date.now() - XTRA.t > 10 * 60000) && !XTRA.busy.lists) {
     XTRA.busy.lists = 1;
     try {
       // W2 (his call 1): their posts are the Roll's too (members only), so the box reads roll_feed; desk.js falls back to the public Take
       const roll = (window.OTP && typeof OTP.rollFeed === 'function') ? OTP.rollFeed(60, {photos: false}).then(d => ({data: d}), () => c.rpc('take_feed', {p_limit: 60})) : c.rpc('take_feed', {p_limit: 60});
-      const [pk, rm, tk] = await Promise.all([safe(c.rpc('packs_list')), safe(c.rpc('rooms_list')), safe(roll)]);
-      XTRA.packs = pk; XTRA.rooms = rm; XTRA.take = tk; XTRA.t = Date.now();
-    } catch(e){ XTRA.packs = XTRA.packs || []; XTRA.rooms = XTRA.rooms || []; XTRA.take = XTRA.take || []; }
-    delete XTRA.busy.lists; ['packs', 'rooms', 'take'].forEach(done);
+      const [rm, tk] = await Promise.all([safe(c.rpc('rooms_list')), safe(roll)]);
+      XTRA.rooms = rm; XTRA.take = tk; XTRA.t = Date.now();
+    } catch(e){ XTRA.rooms = XTRA.rooms || []; XTRA.take = XTRA.take || []; }
+    delete XTRA.busy.lists; ['rooms', 'take'].forEach(done);
   }
 }
 function lightbox(u){
@@ -6137,7 +6123,7 @@ function heldLoad(){
 function paintDeskMore(){
   const el = $('#adm-more'), w = DESK.wait; if (!el || !w) return;
   const n = Math.max(0, (+w.total || 0) - (+w.asks || 0) - (+w.sources || 0));
-  el.hidden = !n; el.innerHTML = n ? `Plus <b>${n}</b> more on the board: packs, rooms, picks, comments, stories, reports.` : '';
+  el.hidden = !n; el.innerHTML = n ? `Plus <b>${n}</b> more on the board: rooms, picks, comments, stories, reports.` : '';
 }
 async function renderAdmin(){
   if (!SOC.me || !SOC.me.admin || !$('#admin')) return;
