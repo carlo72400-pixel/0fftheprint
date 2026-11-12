@@ -2,6 +2,14 @@
   "_about": "Stand-alone drop pages for the homepage timeline (cathedral.js drops(), 11/10). One row each: up = the day it went up, link = the drop's own folder, thumb = a 16:9 card inside it, go = the call to action.",
   "items": [
     {
+      "up": "2026-11-12",
+      "title": "RELIQUARY origins #10: Putty",
+      "line": "Putty's origin, told on the report cards of the two places that put her out: the Clown Church, where the one rule is that you laugh, and a knight school that banned cartwheels in formation. 10 slides, read top to bottom.",
+      "link": "reliquary/putty/",
+      "thumb": "reliquary/putty/card.jpg",
+      "go": "read putty's origin"
+    },
+    {
       "up": "2026-11-10",
       "title": "RELIQUARY: the lore",
       "line": "The church owns every miracle in Santa Ossa. Twelve misfits rob it for a living. Three carousels, 41 slides, a caption on every one.",
