@@ -102,15 +102,19 @@ html[data-place="booth"] .lb-looks{bottom:calc(44px + env(safe-area-inset-bottom
 @media (max-width:640px){
   html[data-place="booth"] .lb-count{left:auto;right:18px;transform:none;max-width:calc(100% - 158px);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:clamp(0px,calc((100vw - 320px) * .04),.2em)}
 }
-/* UP TO 640 px WIDE the look chips sit 10 px higher (54 px from the foot, not 44). The chips' lowest row and the top of
-   the FULL RES key shared 9 px of height, so wherever that row reached left of the key's end a chip lay over the key:
-   measured on four nights with two to five looks, it did at 320, 360, 375, 390, 393, 402, 414 and 430 px wide (24 of
-   72 cases). 10 px is the smallest lift that keeps every chip off the key and the count in every case (9 px still
-   touched in 12). Its price: a tall (9:16) photo already reaches under the chips, and they cover 10 px more of its
-   foot; at 375 px with a home bar, five looks now reach 7 px over a wide photo's foot. (The other way, FULL RES and
-   the count 10 px lower, would cover no more of a photo.) From 641 px wide nothing changed.
-   This rule was 15 px and under 375 px only, earlier on 11/14. */
-@media (max-width:640px){html[data-place="booth"] .lb-looks{bottom:calc(54px + env(safe-area-inset-bottom,0px))}}
+/* UP TO 640 px WIDE FULL RES and the count sit 10 px lower (8 px from the foot plus the inset, not 18), and the look
+   chips stay where they were before today's lifts (44 px plus the inset). The chips' lowest row and the top of the
+   FULL RES key shared 9 px of height, so wherever that row reached left of the key's end a chip lay over the key:
+   measured on four nights with two to five looks, it did at 320 to 430 px wide (24 of 72 cases), 402 among them.
+   Moving the key and the count down, not the chips up, leaves the photo exactly as uncovered as it was: a tall photo
+   already reaches under the chips, and lifting them covered more of it (the photo is what people came for). The key
+   is 35 px tall: its press reaches from the foot (or the top of the home bar) up to the chips' foot, 44 px. From
+   641 px wide nothing changed. (Earlier on 11/14 the chips were lifted instead, 15 px under 375 px and then 10 px up
+   to 640 px: both are gone.) */
+@media (max-width:640px){
+  html[data-place="booth"] .lb-dl,html[data-place="booth"] .lb-count{bottom:calc(8px + env(safe-area-inset-bottom,0px))}
+  html[data-place="booth"] .lb-dl::after{content:"";position:absolute;left:-1px;right:-1px;top:-2px;bottom:-9px}
+}
 /* the sound key's word (On, Off) was 9.2 px: nothing a person reads is under 11 */
 .sk-snd small{font-size:11px}
 
