@@ -2697,6 +2697,13 @@ a.key{cursor:pointer}
   .st-bites .stage{margin-left:calc(-1 * max(16px,env(safe-area-inset-left,0px)));margin-right:calc(-1 * max(16px,env(safe-area-inset-right,0px)))}
   .st-bites .machine{max-width:calc(min(100%,62vh) - 20px)}      /* its 10 px of side padding sit outside its width */
   .st-bites .after{max-width:min(100%,62vh)}
+  /* MY COLLECTION the same (11/14, with F_kit2.py): its sheet, every view that opens from it (the LOVE BITES viewer, a
+     sleeve, a stub, the certificate, a tool, the holy card and its reading, a booth night, a paper) and FIND YOURSELF
+     run the width of the screen like on a phone, never wider than 62% of the screen's height and never narrower than
+     the column each had before. At his 614 px the collection now covers the street, so the street rests under it. */
+  .bag>.vw-sheet,.viewer>.vw-sheet,.jb-view>.jb-vsheet,.tk-view>.tk-vsheet,.ft-view>.ft-vsheet,.rc-view>.rc-vsheet,.hv-view>.hv-vsheet{width:min(100%,max(560px,62vh))}
+  .pb-view>.pb-vsheet,.hv-read>.hv-rsheet{width:min(100%,max(600px,62vh))}
+  .nb-read>.nb-rsheet,.fy-sheet>.fy-in{width:min(100%,max(640px,62vh))}
 }
 /* SIGNS YOU CAN READ ON A PHONE (round 8, 11/12; the boxes and sizes are site_mode.signs). Every place's name is on a
    solid plate: dark on light or light on dark, 7:1 or better, no soft colour on a sign of nearly the same colour. A glow
@@ -6903,9 +6910,9 @@ a.bx-cut.tall{flex-basis:36%;max-width:190px;min-width:122px}
   }
   function look() {
     clearTimeout(again);
-    const ov = document.querySelector('.st-in:not([hidden])');
+    const ov = document.querySelector('.st-in:not([hidden])') || document.querySelector('#bag:not([hidden])');      /* a place, or MY COLLECTION opened from the street itself */
     if (!ov) { off(); return; }
-    const sh = ov.querySelector('.st-in-sheet'); if (!sh) { off(); return; }
+    const sh = ov.querySelector('.st-in-sheet') || ov.querySelector('#bagSheet'); if (!sh) { off(); return; }
     if (!still(ov) || !still(sh)) { off(); again = setTimeout(look, 120); return; }        /* still sliding in: look again in a moment */
     if (!full(sh)) { off(); return; }
     if (sheet && sheet !== sh) sheet.classList.remove('st-behind');
