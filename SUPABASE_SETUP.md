@@ -82,12 +82,10 @@ stolen desk login can never move the house's login somewhere else.
 | Who | Where | What happens |
 |---|---|---|
 | Anybody new | the Crypt (`/wall/`) | Signs up with email, password and their Instagram, one account each. They can post the same day. |
-| A member who wants a card | the Crypt, under Kin | Asks for one (and picks their roster seat if they already have one) |
-| You | `/board/` | See who is asking, make them a card holder or say no |
+| You | `/board/` | Decide who can post songs, video, stories and dates (the publish switch, `profiles.approved`) |
 | Everybody | `/join/` | Logs in, or asks for a password reset. **Log in and reset only**: there is no sign-up here any more, and an old sign-up link says so. |
-| Everybody | `/my/` (Your account) | Changes their name (card holders ask you), email and password, logs out everywhere, closes the account (and opens it again) |
-| Members and card holders | Home (`/#take`) and `/compose/` | Post (the Take is for everyone, the Roll on the Coven tab is members only), and see their own posts |
-| Card holders | `/card/` | Build the card |
+| Everybody | `/my/` (Your account) | Changes their name (people who can post ask you), email and password, logs out everywhere, closes the account (and opens it again) |
+| Members | The Take (`/take/`) and `/compose/` | Post (the Take is for everyone, the Roll on the Coven tab is members only), and see their own posts |
 | You | `/board/` | Pull any post, ban or close somebody, fix their info |
 
 Nobody can post until they are in. That is enforced in the database itself,

@@ -53,7 +53,7 @@ ROOT = pathlib.Path(__file__).resolve().parent
 
 # script path (relative to ROOT)  ->  how it appears in src="..."
 TRACKED = ["assets/js/desk.js", "assets/js/door.js", "assets/js/composer.js",
-           "assets/js/edit.js", "assets/js/board.js", "assets/js/cardback.js",
+           "assets/js/edit.js", "assets/js/board.js",
            "assets/js/dates.js", "assets/js/calendar.js", "assets/js/sealed.js",
            "assets/js/word.js", "assets/js/cathedral.js", "assets/js/binder.js",
            "assets/js/people.js",
@@ -80,12 +80,12 @@ PIN_TWINS = {"newstory.py": (PIN_URL, PIN_SRI), "assets/js/sealed.js": (PIN_URL,
 # 11/12: the old home is gone (home.html is a redirect to /). index.html is the street (built by the street kit in Drive); it keeps the
 # login scripts in a <template>, and those two tags are the only thing here that matches in it.
 DOCS = ["index.html", "join/index.html", "compose/index.html", "desk/index.html",
-        "board/index.html", "c/index.html", "dates/index.html", "events/index.html",
+        "board/index.html", "dates/index.html", "events/index.html",
         "desk/goals/index.html",
         # Any page that loads desk.js belongs here. A page left off this list
         # silently serves whatever desk.js the browser cached, which is exactly
         # the bug this script exists to prevent.
-        "card/index.html", "desk/word/index.html", "reset/index.html",
+        "desk/word/index.html", "reset/index.html",
         "word/new/index.html", "word/live/index.html", "my/index.html",
         # 10/4: these carry binder.js (the house bar and the binder chip)
         "word/index.html", "video/index.html", "work/index.html",
@@ -100,11 +100,7 @@ DOCS = ["index.html", "join/index.html", "compose/index.html", "desk/index.html"
         "take/index.html"] + [
         # every story page carries desk.js + word.js
         str(p.relative_to(ROOT)) for p in sorted(ROOT.glob("word/*/index.html"))] + [
-        # every baked card back carries desk.js + cardback.js. bake.py copies
-        # these out of c/index.html, so a re-bake picks the new stamp up on its
-        # own, but stamping WITHOUT re-baking would leave six pages serving a
-        # cached script that no longer has the methods they call.
-        str(p.relative_to(ROOT)) for p in sorted(ROOT.glob("c/*/index.html"))] + [
+        # 11/13: the artist pages are gone (c/ and card/ are small redirects that load no script), so none is stamped.
         # every night dump carries sealed.js. newevent.py writes the tag into
         # new ones; this keeps the ones already up on the current file.
         str(p.relative_to(ROOT)) for p in sorted(ROOT.glob("events/*/index.html"))]

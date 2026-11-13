@@ -31,7 +31,7 @@ PY = "/usr/bin/python3"          # the Mac's own Python: it has Pillow, which th
 # what the street is built from, inside the repo
 INPUTS = ["content/desk.json", "content/frames.json", "content/music.json", "content/rotation.json", "content/roster.json",
           "content/video.json", "events/events.json", "stamp.py", "supabase-config.js", "assets/js/desk.js"]
-GLOBS = ["word/*/index.html", "events/*/data.json", "c/*/index.html"]
+GLOBS = ["word/*/index.html", "events/*/data.json"]
 
 
 def kit_dir():

@@ -47,11 +47,10 @@ PLACES = {
 # which pages, and the place each belongs to (first match wins)
 RULES = [
     (r"^events/(?:[^/]+/)?index\.html$", "booth"),
-    (r"^c/(?:[^/]+/)?index\.html$", "booth"),
     (r"^word/(?:[^/]+/)?index\.html$", "stand"),
     (r"^(?:video|ink)/index\.html$", "box"),
     (r"^take/index\.html$", "coven"),
-    (r"^(?:dates|join|reset|my|compose|card)/index\.html$", "door"),
+    (r"^(?:dates|join|reset|my|compose)/index\.html$", "door"),
     (r"^(?:reliquary|font|wallpapers)/index\.html$", "bites"),
     (r"^(?:work|press)/index\.html$", "street"),
     (r"^404\.html$", "street"),
@@ -59,9 +58,9 @@ RULES = [
     (r"^kit/vlog/index\.html$", "kit"),
 ]
 INLINE = ("kit/index.html",)                          # an offline app: the key's rules ride in the page, no shared files
-GLOBS = ["events/index.html", "events/*/index.html", "c/index.html", "c/*/index.html", "word/index.html", "word/*/index.html",
+GLOBS = ["events/index.html", "events/*/index.html", "word/index.html", "word/*/index.html",
          "video/index.html", "ink/index.html", "dates/index.html", "join/index.html", "reset/index.html", "my/index.html",
-         "compose/index.html", "card/index.html", "take/index.html", "reliquary/index.html", "font/index.html",
+         "compose/index.html", "take/index.html", "reliquary/index.html", "font/index.html",
          "wallpapers/index.html", "work/index.html", "press/index.html", "404.html", "kit/index.html", "ad/index.html",
          "kit/vlog/index.html"]
 
