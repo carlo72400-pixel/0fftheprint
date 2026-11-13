@@ -792,7 +792,7 @@ button.cd:active{transform:scale(.94)}
    His asks: "first thing people should be able to see when they click people is their page" and "flesh out their page or
    the pages as well". The tab draws the member's own page inline, in their colors, with the same boxes as the sheet
    (ids are pp- instead of sp-); the editor still lives in the sheet. New boxes: Details, Interests, Pics (migration 039),
-   In our frames (037), Rooms (038), on the Take (033); numbers and a card holder's links in the header. */
+   In our frames (037), Rooms (038), on the Take (033); numbers and a posting member's links in the header. */
 .ppl-h{margin-top:4px}
 .ppl-note{margin:10px 0 0;padding:10px 12px;border:1px dashed var(--line);border-radius:3px;background:var(--panel);color:var(--muted);font-size:14px;line-height:1.45}
 .ppl-note b{color:var(--ink)}
@@ -897,7 +897,7 @@ button.cd:active{transform:scale(.94)}
 .adm-dm p{margin:6px 0 0;font-size:13.5px}
 
 /* ================= KIN (10/11, his ask: "a friends list / page and rename it from people to something else") =================
-   You ask, they accept. A Friends block on the Kin tab (asks waiting, faces, All), a Friends box on every page, Add friend in the
+   You ask, they accept. A Friends block on the Kin tab (asks waiting, faces, All), a Friends box on every page, Add to kindred in the
    contact box, and a sheet (#frsheet) that is the whole list with a search box and Remove. */
 .fr-ask{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 12px;border:1px solid rgba(255,121,198,.55);border-radius:3px;background:var(--panel)}
 .fr-acts{display:flex;gap:6px}
@@ -4795,7 +4795,7 @@ const LIMITS = Object.assign({about: 600, meet: 300, headline: 80, mood: 24}, DE
 const SPF_PAINT = {about: 'blurbs', meet: 'blurbs', gear: 'details', music: 'interests', movies: 'interests', haunts: 'interests'};
 const cap = v => String(v || '').charAt(0).toUpperCase() + String(v || '').slice(1);
 const hasRest = V => !!(V && V.details);            // the database has migration 039; before it, the new boxes stay dark
-// a card holder's link-in-bio row (021): the base is hardcoded here and the handle is a bare word, the same rule as the card back
+// a posting member's link-in-bio row (021): the base is hardcoded here and the handle is a bare word, the same rule as the card back
 // (Bandcamp's handle is the store's subdomain: bandcamp.com/<h> is a fan collection or a 404, <h>.bandcamp.com is the artist)
 const LINK_BASE = {instagram:['Instagram','https://instagram.com/'], tiktok:['TikTok','https://www.tiktok.com/@'], youtube:['YouTube','https://www.youtube.com/@'],
   x:['X','https://x.com/'], twitch:['Twitch','https://twitch.tv/'], threads:['Threads','https://www.threads.net/@'], spotify:['Spotify','https://open.spotify.com/artist/'],
@@ -4880,10 +4880,10 @@ function draftFrom(d){
     rest: hasRest(d), pronouns: String(dd.pronouns || '').slice(0, 20), city: dd.city || '', here_for: (dd.here_for || []).slice(0, 5), scene: (dd.scene || []).slice(0, 5),
     sign: dd.sign || '', gear: String(dd.gear || '').slice(0, 80), music: String(dd.music || '').slice(0, 300), movies: String(dd.movies || '').slice(0, 200),
     haunts: String(dd.haunts || '').slice(0, 160), pics: (d.pics || []).slice(0, 6),
-    holder: !!d.kind && d.kind !== 'member'});      // a card holder's pic and song are the card's too (044): sent only when touched
+    holder: !!d.kind && d.kind !== 'member'});      // a posting member's pic and song are the card's too (044): sent only when touched
 }
 const DETAIL_KEYS = ['pronouns', 'city', 'here_for', 'scene', 'sign', 'gear', 'music', 'movies', 'haunts', 'pics'];
-/* v: 2 (044) is the new Crypt: only a save that says so writes a card holder's pic and song through to their card. A card holder's
+/* v: 2 (044) is the new Crypt: only a save that says so writes a posting member's pic and song through to their card. A posting member's
    save leaves pic and song out unless they changed them here, so a Top 8 tap or a skin change never touches the card. */
 const spPayload = dr => {
   const o = Object.assign({}, dr, {top8: dr.top8.map(f => f.s), song: dr.song || null, pic: dr.pic || null, wallpaper: dr.wallpaper || null, mood_e: dr.mood_e || null});
@@ -4907,7 +4907,7 @@ function viewNow(){
   return Object.assign({}, V, {look: lookOf(dr), pic: dr.pic, headline: dr.headline, mood_e: dr.mood_e, mood: dr.mood,
     about: dr.about, meet: dr.meet, song: dr.song, top8: dr.top8, wear: dr.wear}, dr.rest ? {details: detailsOf(dr), pics: dr.pics} : {});
 }
-const thumb = u => /\/public\/cards\/.+-full\.jpg$/i.test(u || '') ? u.replace(/-full\.jpg$/i, '-card.jpg') : u;   // a card holder's face at avatar size: the card-size file, not the full art
+const thumb = u => /\/public\/cards\/.+-full\.jpg$/i.test(u || '') ? u.replace(/-full\.jpg$/i, '-card.jpg') : u;   // a posting member's face at avatar size: the card-size file, not the full art
 const avatar = (p, n, cls) => p ? `<img class="${cls}" src="${esc(cls === 'sp-pic' ? p : thumb(p))}" alt="" decoding="async" loading="lazy">` : `<span class="${cls} sp-ini" aria-hidden="true">${esc(initials(n))}</span>`;
 
 /* a comment on a page (W2, his calls 8 and 9): yours comes down; on YOUR page somebody else's comes down, blocks them or goes to the
@@ -5297,7 +5297,7 @@ function spStatus(t, bad){ const e = $('#spe-st'); if (!e) return; e.textContent
 function spDirty(){ SPACE.dirty = true; spStatus('Saving…'); clearTimeout(SPACE.saveT); SPACE.saveT = setTimeout(spSave, 900); }
 function spFlush(){ if (SPACE.dirty) { clearTimeout(SPACE.saveT); spSave(); } }
 /* the old files come off only once the save that went through no longer points at them. A save redone from the page after one failed
-   (the old pic again), or one that went out while a newer upload waited, leaves them queued for a later save. A card holder's save with
+   (the old pic again), or one that went out while a newer upload waited, leaves them queued for a later save. A posting member's save with
    no pic in it leaves their card photo as the server has it, so an old pic (cards, or spaces pic-) waits for a save that carries one;
    the same for album pictures when the save has no pics. */
 function spSweep(P){
@@ -5343,7 +5343,7 @@ function spEditOpen(){
   if (!SPACE.myUid) { try { db().auth.getSession().then(s => { const u = s && s.data && s.data.session && s.data.session.user; if (u && u.id) SPACE.myUid = u.id; }, () => {}); } catch(e){} }
   const was = SPACE.lastDraft;
   SPACE.edit = true; SPACE.draft = SPACE.lastDraft = draftFrom(V); SPACE.peek = false;
-  // a card holder's new pic or song whose save has not gone through yet (the page shows it since Done): the next save still carries it
+  // a posting member's new pic or song whose save has not gone through yet (the page shows it since Done): the next save still carries it
   if (was && (SPACE.failed || SPACE.dirty)) ['picTouched', 'songTouched'].forEach(k => { if (was[k]) SPACE.draft[k] = true; });
   if (!SPACE.tab) SPACE.tab = 'look';
   const ed = $('#sp-edit'); ed.hidden = false;
@@ -5362,7 +5362,7 @@ function spEditClose(){
 }
 const swatch = (k, S) => { const F = SPFONTS[S.font]; return `<button type="button" class="spe-skin" data-spskin="${k}" aria-pressed="${SPACE.draft.skin === k}" style="--a:${S.bg};--b:${S.box};--c:${S.hot};--d:${S.head}"><i aria-hidden="true"></i><span style="font-family:${esc(F[1])};font-weight:${F[2]};font-style:${F[3]}">${esc(S.n)}</span></button>`; };
 const upBtn = (k, has, l1, l2) => `<label class="btn spe-up"><input type="file" accept="image/*" data-spup="${k}" aria-label="${esc(has ? l2 : l1)}">${esc(has ? l2 : l1)}</label>`;
-// the Song tab's line: a card holder's song is the card's too (044)
+// the Song tab's line: a posting member's song is the card's too (044)
 const songSay = (dr, k) => k === 'set' ? (dr && dr.holder ? '✓ Got it. It plays on your page.' : '✓ Got it. It is on your page.')
   : (dr && dr.holder ? 'One song, on your page. In Spotify: tap ⋯ on a song, then Share, then Copy Song Link. Paste it here.'
     : 'In Spotify: tap ⋯ on a song, then Share, then Copy Song Link. Paste it here.');
@@ -5392,7 +5392,7 @@ function renderEditor(){
       <div>${dr.wallpaper ? `<label class="sw"><span>Tile it</span><input type="checkbox" data-spsw="tile"${dr.tile ? ' checked' : ''}></label>` : ''}
       <label class="sw"><span>Wear my colors in the Coven</span><input type="checkbox" data-spsw="wear"${dr.wear ? ' checked' : ''}></label></div>`;
   } else if (tab === 'me') {
-    // W2 (his call 2): a card holder has ONE photo and ONE song, the card's; the headline and About me stay the Crypt's own
+    // W2 (his call 2): a posting member has ONE photo and ONE song, the card's; the headline and About me stay the Crypt's own
     const H = dr.holder;
     body = `<p class="spe-fine">Your name lives on <a href="${esc(siteUrl('my/#account'))}">Your account</a>. Your Instagram changes through the desk.</p>
       <p class="spe-h">Pic${H ? ' <em>your face across the site</em>' : ''}</p>
@@ -5482,7 +5482,7 @@ async function shrinkImage(file, max, square){
   g.drawImage(src, sx, sy, sw, sh, 0, 0, cv.width, cv.height);
   return await new Promise((ok, no) => cv.toBlob(b => b ? ok(b) : no(new Error('encode')), 'image/jpeg', .86));
 }
-/* a card holder's old card photo (cards/<uid>/...-full.jpg and its -card twin, uploadCardArt's pair) comes off after the save that
+/* a posting member's old card photo (cards/<uid>/...-full.jpg and its -card twin, uploadCardArt's pair) comes off after the save that
    replaced it goes through. Only their own folder: anything else is never queued. */
 function cardTrash(u){
   const m = /\/public\/cards\/([0-9a-f-]{36}\/[A-Za-z0-9._-]+)-full\.jpg(?:\?[^/]*)?$/i.exec(String(u || ''));
@@ -5499,7 +5499,7 @@ async function spUpload(kind, file){
     if (!uid) throw new Error('signed out');
     SPACE.myUid = uid;
     if (kind === 'pic' && SPACE.draft.holder && window.OTP && typeof OTP.uploadCardArt === 'function') {
-      // a card holder's pic IS the card photo (044): card art, both sizes, in their cards folder
+      // a posting member's pic IS the card photo (044): card art, both sizes, in their cards folder
       const url = await OTP.uploadCardArt(file);
       const old = SPACE.draft.pic;
       if (old && old.indexOf('/public/spaces/' + uid + '/') > 0) SPACE.trash.push(old.split('/public/spaces/')[1]);
@@ -5653,7 +5653,7 @@ function spaceClick(t, ds){
     // the reset deletes the row; its pictures sit in that member's own folder of the public spaces bucket (039 lets a page hold only its
     // own files), so they come off too, or a picture pulled for being out of line would still load from its old link
     const V0 = SPACE.cache[ds.spreset] || (SPACE.data && SPACE.data.sid === ds.spreset ? SPACE.data : null);
-    // a card holder's pic is their card photo too (044): the reset never takes it
+    // a posting member's pic is their card photo too (044): the reset never takes it
     const files = V0 ? [...new Set([V0.kind !== 'member' ? null : V0.pic, V0.look && V0.look.wallpaper].concat(Array.isArray(V0.pics) ? V0.pics : []).map(u => String(u || ''))
       .filter(u => u.indexOf('/public/spaces/') > 0).map(u => u.split('/public/spaces/')[1]).filter(k => /^[0-9a-f-]{36}\/[A-Za-z0-9._-]+$/.test(k)))] : [];
     (async () => { const r = await db().rpc('wall_space_reset', {p_sid: ds.spreset}); if (r.error) { toast('Could not reset it.'); return; }
@@ -5742,24 +5742,7 @@ function askCardsPaint(){
   if (keep && L.some(x => x.slug === keep)) sel.value = keep;
   const f = $('#ask-form'); if (f) f.querySelectorAll('[data-askpick]').forEach(x => { x.hidden = !L.length; });
 }
-function cardAskHTML(){
-  const m = SOC.me;
-  if (!m || m.admin || m.holder !== false) return '';          // card holders, the desk, and a DB before migration-032
-  if (m.card_denied || m.card_ask === 'denied') return `<div class="ask"><p><b>Card:</b> not right now. You're still in the Crypt.</p></div>`;
-  if (m.card_ask === 'asked') return `<div class="ask"><p><b>You asked for a card.</b> The desk will take a look.</p><button type="button" class="btn" data-unask>Take it back</button></div>`;
-  const L = askCards();
-  if (!L) Promise.all([seatsLoad(), heldLoad()]).then(askCardsPaint, () => {});
-  const opts = (L || []).map(x => `<option value="${esc(x.slug)}">${esc(x.name)}</option>`).join('');
-  const hide = L && L.length ? '' : ' hidden';
-  return `<form class="ask" id="ask-form"><p><b>Want a card?</b> Card holders get their own card on 0FF THE PRINT and can post video, stories, songs and dates.</p>
-    <label for="ask-card" data-askpick${hide}>Your card</label>
-    <select id="ask-card" data-askpick${hide}><option value="">No card yet, I'm new</option>${opts}</select>
-    <p data-askpick${hide}>On the roster already? Pick your card so the desk hands you the right one.</p>
-    <input id="ask-note" maxlength="280" placeholder="Anything the desk should know? (optional)" autocomplete="off" aria-label="Note for the desk">
-    <button type="submit" class="primary">Ask for a card</button>
-    <p class="lock-msg" id="ask-msg" role="alert"></p>
-    <p class="ask-fine">If the desk gives you a card, your Coven pic and song go on your public card.</p></form>`;
-}
+function cardAskHTML(){ return ''; }      /*cvn: the card ask box is gone (11/13): nothing draws it*/
 /* the People tab (10/11, his ask: "first thing people should be able to see when they click people is their page"):
    your own page, inline and in your colors, then Who's here, then the desk for him */
 function renderPeople(){
@@ -5785,7 +5768,7 @@ function renderPeople(){
   }
   if (me) h += dmPeopleHTML();
   if (me) h += frPeopleHTML();
-  /*cvn: the Want a card? box is not offered any more (11/13). cardAskHTML() and the calls behind it stay as they are.*/
+  /*cvn: the card ask box is not offered any more (11/13)*/
   h += `<div class="dayhead"><h2>Who's here</h2><span id="ppl-n">${L.length + (me ? 1 : 0)} in the Coven</span></div>
     <input type="search" class="ppl-q" id="ppl-q" placeholder="Find someone" value="${esc(PEOPLE_Q)}" autocomplete="off" aria-label="Find someone">
     <div class="ppl-grid" id="ppl-grid">${pplGridHTML()}</div>`;
@@ -6963,7 +6946,7 @@ document.addEventListener('click', e => {
   if (ds.vote) { vote(shId, ds.vote); return; }
   if (ds.cdel) { (async () => { const r = await db().from('wall_comments').delete().eq('id', +ds.cdel); if (r.error) { toast('Could not delete that.'); return; } const t = SOC.tally[shId]; if (t && t.comments) t.comments--; paintChips(shId); paintSocialBox(shId, true); })(); return; }
   if (ds.chide) { (async () => { const r = await db().from('wall_comments').update({hidden: ds.h === '1'}).eq('id', +ds.chide); if (r.error) { toast('Could not change that.'); return; } paintSocialBox(shId, true); refreshTally(); })(); return; }
-  // THE one card rule (044): Make card holder. An ask that names a card needs a second tap that says which (a roster seat by its name);
+  // THE one card rule (044): Make posting member. An ask that names a card needs a second tap that says which (a roster seat by its name);
   // one with no card named is one tap, and the database picks it (their card, then one off their name).
   if (ds.cardyes) {
     const want = ds.want || '';
@@ -6976,7 +6959,7 @@ document.addEventListener('click', e => {
     return;
   }
   if (ds.cardno) { if (t.dataset.sure !== '1') { t.dataset.sure = '1'; t.textContent = 'Tap again to say no'; return; } (async () => { const r = await db().rpc('wall_card_decide', {p_user: ds.cardno, p_yes: false}); if (r.error) { toast('That did not go through.'); return; } toast('Told no. They stay in the Coven.'); renderAdmin(); })(); return; }
-  // a card holder banned here keeps their card and their posts on the timeline (033 take_author_ok): Revoke on /desk/ is what takes those down
+  // a posting member banned here keeps their card and their posts on the timeline (033 take_author_ok): Revoke on /desk/ is what takes those down
   // THE one ban (044 desk_ban): off the Crypt and the whole site at once, and Unban puts it all back. Before 044, the old wall_ban.
   if (ds.ban) { if (t.dataset.sure !== '1') { t.dataset.sure = '1'; t.textContent = 'Tap again: off the Coven and the site'; return; } (async () => {
     let r = await db().rpc('desk_ban', {p_user: ds.ban, p_on: true});
@@ -7029,7 +7012,7 @@ $('#scrim').addEventListener('click', () => hideSheet());
 applyFixes(HOST === 'site' && hasLogin() && load('wall-fix', null) ? load('wall-fix', []) : (D.fixes || []));
 renderClock(); renderSub(); renderNights(); renderPage(false); mvLand();
 /* ONE CALENDAR (10/4, "combine those two calendars"): the house's own dates used to be a second calendar on the
-   homepage (the Run, the database's public `calendar` view: shows the desk and card holders typed in). They are read
+   homepage (the Run, the database's public `calendar` view: shows the desk and posting members typed in). They are read
    into this one when the wall opens. A date the sweep already has a flyer for only marks that flyer; a date it does not
    have becomes its own card, on a night of its own when it falls past the swept month. The last answer is kept on the
    phone, so the wall still has them with no signal. Ids are f + 9 hex like every other event, so going marks work. */
@@ -7558,9 +7541,9 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) tick
 /*/cvn*/
 }
 
-/* ---------- the door: card holders only on the public page ----------
+/* ---------- the door: posting members only on the public page ----------
    The site is static, so the week's data ships sealed (AES-GCM) and the key lives in Supabase
-   public.wall_keys behind RLS: approved card holders and the desk read it, nobody else does.
+   public.wall_keys behind RLS: approved posting members and the desk read it, nobody else does.
    A member's key is cached on their phone so the wall opens instantly; a background check
    drops it the moment their login stops being an approved one. */
 const KKEY = 'wall-k';
@@ -7683,7 +7666,7 @@ function wireLock(kind){
         else if (got === 'need') lock('ig');
         else if (got === 'closed' || got === 'shut' || got === 'door') lock(got);
         else if (got === 'open') {
-          // the name guard hands a card holder's (or the house's) name back as something else: say what they are called now
+          // the name guard hands a posting member's (or the house's) name back as something else: say what they are called now
           let now = null; try { const a = OTP.account ? await OTP.account() : null; now = a && a.name; } catch(e){}
           if (made && now && now.trim() !== name) lockToast(`That name is taken, so you're ${now} for now. Change it on Your account.`, 6000);
         }
