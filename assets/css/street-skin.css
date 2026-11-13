@@ -102,12 +102,15 @@ html[data-place="booth"] .lb-looks{bottom:calc(44px + env(safe-area-inset-bottom
 @media (max-width:640px){
   html[data-place="booth"] .lb-count{left:auto;right:18px;transform:none;max-width:calc(100% - 158px);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:clamp(0px,calc((100vw - 320px) * .04),.2em)}
 }
-/* UNDER 375 px WIDE the look chips sit 15 px higher (59 px from the foot, not 44). The chips' lowest row and the top
-   of the FULL RES key share 9 px of height, and on a narrow screen the lowest chip reached over the key's right end
-   (320 px: on every night with looks; 360 px: on nights with three or five). At 59 px no chip can reach the key.
-   375 px and up is exactly as it was (there a chip still crosses the key's corner on some nights at some widths:
-   the same one rule up to 640 px would end it, his call). */
-@media (max-width:374px){html[data-place="booth"] .lb-looks{bottom:calc(59px + env(safe-area-inset-bottom,0px))}}
+/* UP TO 640 px WIDE the look chips sit 10 px higher (54 px from the foot, not 44). The chips' lowest row and the top of
+   the FULL RES key shared 9 px of height, so wherever that row reached left of the key's end a chip lay over the key:
+   measured on four nights with two to five looks, it did at 320, 360, 375, 390, 393, 402, 414 and 430 px wide (24 of
+   72 cases). 10 px is the smallest lift that keeps every chip off the key and the count in every case (9 px still
+   touched in 12). Its price: a tall (9:16) photo already reaches under the chips, and they cover 10 px more of its
+   foot; at 375 px with a home bar, five looks now reach 7 px over a wide photo's foot. (The other way, FULL RES and
+   the count 10 px lower, would cover no more of a photo.) From 641 px wide nothing changed.
+   This rule was 15 px and under 375 px only, earlier on 11/14. */
+@media (max-width:640px){html[data-place="booth"] .lb-looks{bottom:calc(54px + env(safe-area-inset-bottom,0px))}}
 /* the sound key's word (On, Off) was 9.2 px: nothing a person reads is under 11 */
 .sk-snd small{font-size:11px}
 
