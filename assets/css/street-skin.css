@@ -57,11 +57,11 @@ html[data-place] a:focus-visible,html[data-place] button:focus-visible{outline-c
 html[data-take] .sk-top{position:fixed;left:0;top:0}
 /* A phone, on a page that also carries the bag: the place's name has to fit between the back key and two keys, and at a
    real 375 px it was cut to "PHOT..." (11/12). There the name starts right after its own back key (--sk-bk is that
-   key's width, measured: Door 83, Stand 90, Booth 92, Street 96, Love Bites 123, Box Office 126), the sound key drops
+   key's width, measured: Coven 91, Stand 90, Booth 92, Street 96, Love Bites 123, Box Office 126), the sound key drops
    its word (its icon loses its waves and greys when sound is off, its label still says which), the gaps close up and the name goes a size
    down. Change a back key's word in street_skin.py and its width here goes with it. */
 html[data-place]{--sk-bk:126px}
-html[data-place="door"]{--sk-bk:83px}
+html[data-place="door"]{--sk-bk:91px}
 html[data-place="stand"]{--sk-bk:90px}
 html[data-place="booth"]{--sk-bk:92px}
 html[data-place="street"]{--sk-bk:96px}

@@ -33,7 +33,7 @@ PLACES = {
     "booth":  ("#in-booth", "Booth", "PHOTO BOOTH", "#ff6aa8"),
     "stand":  ("#in-stand", "Stand", "THE STAND", "#ffb547"),
     "bar":    ("#in-bar", "Bar", "THE BAR", "#b892ff"),
-    "door":   ("#in-door", "Door", "THE DOOR", "#5ae0d0"),
+    "door":   ("#in-door", "Coven", "THE COVEN", "#5ae0d0"),      # 11/13: no place is called THE DOOR. The club building is THE COVEN (its address on the street is still #in-door)
     "box":    ("#in-box", "Box Office", "BOX OFFICE", "#ffd479"),
     "kit":    ("#in-kit", "Kit", "THE KIT", "#7fd3ff"),
     "bites":  ("#in-bites", "Love Bites", "LOVE BITES", "#ff4f8b"),
