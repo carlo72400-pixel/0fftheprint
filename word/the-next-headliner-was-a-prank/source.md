@@ -4,7 +4,7 @@ You know Miku. This is the other one. The one that started as a lie.
 
 ## Here's what's coming
 
-Beebom had it on November 5. Kasane Teto headlines Fortnite Festival Season 16, and it starts Thursday, November 12. She gets her own Music Pass. Her shop items show up on November 14. Beebom says she'll also be in Battle Royale as a character you can walk up to.
+Beebom had it on November 5. Kasane Teto headlines Fortnite Festival Season 16, and it starts Thursday, November 12. She gets her own Music Pass. Beebom says she'll also be in Battle Royale as a character you can walk up to.
 
 She takes the stage from Lil Tecca, who had Season 15. So a rapper is handing the mic to a voice library.
 
@@ -32,7 +32,9 @@ We think that's the real story. Nobody signed her. Nobody owns her the way a lab
 
 ## So mark your own calendar
 
-Thursday, November 12, the season starts. Saturday, November 14, the shop. No drive time on this one. It's on your phone.
+Thursday, November 12, the season starts, and her pass with it. No drive time on this one. It's on your phone.
+
+Updated Thursday, November 12. We first had her shop items landing November 14. Two sites say Epic moved her out of that shop slot on November 4 and into her pass, so that date's out. [Part two has the pass](https://0fftheprint.com/word/her-own-pass-one-song/).
 
 The Fortnite Festival main stage. Monday, November 9, 2026.
 
