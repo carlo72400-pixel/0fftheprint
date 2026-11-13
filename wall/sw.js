@@ -1,5 +1,5 @@
 /* THE WALL, offline worker (0fftheprint.com/wall/sw.js). Written by flyer-sweep/wall_build.py; never hand-edit.
-   Build 20261110170405.
+   Build 20261113130342.
    - The page itself: the SAVED copy, at once, as long as it is still the page the site has (10/13, "flyers open fast from a
      link": a link used to wait up to six seconds on the network). 11/13: one small ask goes first (a HEAD for the page, a
      second and a half at most) and says whether the site's page changed since this copy was saved. The same: the saved copy.
@@ -12,10 +12,10 @@
    - Scripts, styles and fonts: served from the phone, refreshed in the background.
    - Flyers: kept after the first view (and the next few nights are warmed while the phone is idle), capped.
    - Supabase (logins, the key): never cached, always live. */
-const BUILD = '20261110170405';
+const BUILD = '20261113130342';
 const SHELL = 'wall-shell-' + BUILD;
 const IMGS = 'wall-img-v1';
-const PRECACHE = ["./", "manifest.webmanifest", "icon-192.png", "apple-touch-icon.png", "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js", "../supabase-config.js?v=f1348482", "../assets/js/desk.js?v=92efb57d"];
+const PRECACHE = ["./", "manifest.webmanifest", "icon-192.png", "apple-touch-icon.png", "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js", "../supabase-config.js?v=f1348482", "../assets/js/desk.js?v=e5ad04a5"];
 const IMG_CAP = 450;
 
 self.addEventListener('install', e => {
