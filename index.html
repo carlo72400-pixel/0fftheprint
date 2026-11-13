@@ -2955,6 +2955,33 @@ a.key{cursor:pointer}
 .ft-fly.ft-flip .b{-webkit-transform:rotateY(0deg);visibility:visible}
 @media (prefers-reduced-motion:reduce){.jb-sl .face,.ft-flipc .face,.tk-flipc .face,.ft-fly .f,.ft-fly .b{transition:none!important}}
 
+/* ---- THE STATUS BAR (11/14, his iPhone: "fix the iphone layout", the title sat under the clock). Opened from the home
+   screen icon the page is drawn UNDER the phone's status bar (viewport-fit=cover with black-translucent), and the phone
+   says how tall that bar is: env(safe-area-inset-top), 59 px on an island phone, 62 on the newest, 44 to 48 with a
+   notch, 20 on an old one, and 0 in Safari and on every phone and browser that keeps the page below its own bar. The
+   frame grows by exactly that much at its top and the WHOLE plate starts below it, so the title, the tape, the nine tap
+   shapes, the glow, the signs, the cast and Rin's walk stay registered to the picture: the plate's own box does not
+   change by a pixel. The band behind the bar is the top colour of whichever sky is up (.sk-night and the rest:
+   site_mode.finish() stops the build if the two drift apart), under the same glass, scan lines and rounded corners as
+   the rest of the screen, so it reads as more sky and never as a bar. By day and at dawn the sky is pale and the
+   phone's clock is always white, so there the band deepens to violet toward the top of the screen (the zenith) and the
+   clock stays readable. With no inset every length here is 0 and nothing is drawn. Phones and upright tablets only:
+   from 900 px the wide layout sizes the frame itself (desk.css). ---- */
+@media (max-width:899px){
+  .mp-frame{box-sizing:content-box;padding-top:env(safe-area-inset-top,0px)}
+  .mp-plate{top:env(safe-area-inset-top,0px)}
+  .mp-plate::before,.mp-plate::after{content:"";position:absolute;left:0;right:0;bottom:100%;height:env(safe-area-inset-top,0px);pointer-events:none}
+  .mp-plate::before{background:#1e0318;transition:background-color 2.4s ease}
+  .mapv[data-sky="dusk"] .mp-plate::before{background:#3a1050}
+  .mapv[data-sky="dawn"] .mp-plate::before{background:#dcb3dc}
+  .mapv[data-sky="day"] .mp-plate::before{background:#d9c2f4}
+  .mp-plate::after{background:linear-gradient(rgba(52,20,92,.92),rgba(52,20,92,.5) 55%,rgba(52,20,92,0));opacity:0;transition:opacity 2.4s ease}
+  .mapv[data-sky="dawn"] .mp-plate::after,.mapv[data-sky="day"] .mp-plate::after{opacity:1}
+  .mp-dim{top:calc(-1 * env(safe-area-inset-top,0px))}
+  .mp-card{bottom:calc((100% - env(safe-area-inset-top,0px)) * .02)}
+}
+@media (max-width:899px) and (prefers-reduced-motion:reduce){.mp-plate::before,.mp-plate::after{transition:none}}
+
 /* ---------- FIND YOURSELF at the PHOTO BOOTH: a night's whole contact sheet (11/13, site build only: fy.js).
    A tap on a photo opens it on the night's own page. ---------- */
 
