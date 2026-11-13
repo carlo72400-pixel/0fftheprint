@@ -7482,9 +7482,23 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) tick
   /* start. A shared link (#e-, #s-, #ig-, #me, #cal) goes where it points; a reload inside a card stays in it; anything else
      opens on the Reading. The table shows at once, the cards are dealt when their pictures have loaded. */
   let kept = null; try { kept = sessionStorage.getItem('cvn-view'); } catch(e){}
-  const deep = /^#(e-|s-|ig-|me$|cal$)/i.test(ENTRY_HASH) || kept === 'card';
+  /* an address for "open on this card": wall/#c-stars (11/13, the Take page's hand uses it). The five page cards open as the
+     page, with no table first, and the phone's own back key goes back where the link came from; WHISPERS and YOUR PALM are
+     sheets and open over the table, the way their cards do. THE TAKE is its own page and has no address here. The address
+     is tidied once it has been read, so a reload stays wherever you went next. */
+  const cardAt = h => { const m = /^#c-([a-z]{3,12})$/i.exec(h || ''), id = m && m[1].toLowerCase(); return id && BYID[id] && !BYID[id].href ? id : null; };
+  const wantCard = cardAt(ENTRY_HASH);
+  function openAt(id, fresh){
+    try { history.replaceState(history.state, '', location.pathname + location.search); } catch(e){}
+    if (!PAGE_OF[id] || !fresh) { go(id, 1); return; }          // a sheet, or a link tapped while this page was already open
+    const land = () => { lastId = id; cardUp(false); quiet = true; try { setPage(PAGE_OF[id]); } finally { quiet = false; } window.scrollTo(0, 0); paint(); };
+    if (LOGIN[id]) member(land); else land();
+  }
+  window.addEventListener('hashchange', e => { let h = location.hash; try { h = new URL(e.newURL).hash; } catch(err){} const id = cardAt(h); if (id) openAt(id, false); });
+  const deep = /^#(e-|s-|ig-|me$|cal$)/i.test(ENTRY_HASH) || kept === 'card' || !!(wantCard && PAGE_OF[wantCard]);
   if (!deep) { coming = true; tableUp(false); }
   else { try { hist = !!(history.state && history.state.cvn === 'card'); } catch(e){} }
+  if (wantCard) openAt(wantCard, true);
   const imgs = Array.from(document.querySelectorAll('#cvn img[data-src], #cvn-hand img[data-src]'));
   Promise.all(imgs.map(im => new Promise((ok, no) => {
     im.addEventListener('load', ok, {once: true}); im.addEventListener('error', () => no(new Error('did not load: ' + im.dataset.src)), {once: true});
