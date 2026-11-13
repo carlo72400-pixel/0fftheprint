@@ -12,7 +12,7 @@ window.OTPLazy = window.OTPLazy || (function () {
 /* 0FF THE PRINT — THE BINDER (10/4).
  *
  * What you pull, you keep. Every frame a pack deals, the one hit hiding in each
- * night and every roster card out of the house pack lands in a binder that lives
+ * night lands in a binder that lives
  * on the visitor's own phone. No login and no database: it is localStorage.
  *
  * WHY IT EXISTS. The packs were the best toy on the site and nothing stuck. You
@@ -23,7 +23,7 @@ window.OTPLazy = window.OTPLazy || (function () {
  *
  * WHERE IT SHOWS.
  *   - the chip in the nav (home), or in the house bar this file puts on every other page that loads it
- *   - the sheet the chip opens: where you stand, every night, the roster
+ *   - the sheet the chip opens: where you stand, every night
  *   - under every pack tile (the /events/ shelf; Home's Drops rail came out in Wave 2): how far in you are, NEW on a fresh one
  *   - on a night's own page: sealed.js deals what you have NOT pulled first and says where you stand
  *   - under a night: the packs on either side of it, so a night is never a dead end
@@ -52,7 +52,8 @@ window.OTPLazy = window.OTPLazy || (function () {
 
   /* ---------- the store ----------
      { v, n: { <slug>: { f: [frame index...], c: frames in the night, h: the hit's thumb once pulled } },
-       r: { <roster key>: times pulled }, rips } */
+       r: { <roster key>: times pulled }, rips }
+     11/13: the artist cards are gone. r stays in the shape (a phone that pulled some keeps its file as it is); nothing reads or shows it. */
   function blank() { return { v: VER, n: {}, r: {}, rips: 0 }; }
   function load() {
     try {
@@ -91,25 +92,19 @@ window.OTPLazy = window.OTPLazy || (function () {
     return true;
   }
   function rip() { S.rips = (S.rips | 0) + 1; save(); }
-  /* a roster card out of the house pack */
-  function card(name) {
-    var k = tight(name); if (!k) return false;
-    var isNew = !S.r[k];
-    S.r[k] = Math.min(9999, (S.r[k] | 0) + 1);
-    save(); tell('card');
-    return isNew;
-  }
+  /* 11/13: the artist cards are gone. card() stays as a name (an old page may still call it) and keeps nothing. */
+  function card() { return false; }
   function totals() {
     var frames = 0, hits = 0, opened = 0, done = 0;
     Object.keys(S.n).forEach(function (k) {
       var st = night(k); if (!st.opened) return;
       opened++; frames += st.have; if (st.hit) hits++; if (st.done) done++;
     });
-    return { frames: frames, hits: hits, opened: opened, done: done, cards: Object.keys(S.r).length, rips: S.rips | 0 };
+    return { frames: frames, hits: hits, opened: opened, done: done, cards: 0, rips: S.rips | 0 };
   }
 
-  /* ---------- what the site has: the nights and the roster, asked for once ---------- */
-  var evP = null, roP = null;
+  /* ---------- what the site has: the nights, asked for once ---------- */
+  var evP = null;
   function events() {
     if (!evP) evP = fetch(BASE + 'events/events.json', { cache: 'no-cache' })
       .then(function (r) { return r.ok ? r.json() : null; })
@@ -119,38 +114,6 @@ window.OTPLazy = window.OTPLazy || (function () {
       }).catch(function () { evP = null; return []; });
     return evP;
   }
-  // a roster card's key in the binder: binder_key for a card holder with no house seat ('c-<slug>', what the house
-  // pack hands card() for one), else the name, as it always was
-  function rkey(c) { return tight((c && (c.binder_key || c.name)) || ''); }
-  function houseRoster() {
-    if (!roP) roP = fetch(BASE + 'content/roster.json', { cache: 'no-cache' })
-      .then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (j) { return ((j && j.items) || []).filter(function (c) { return c && tight(c.name); }); })
-      .catch(function () { roP = null; return []; });
-    return roP;
-  }
-  /* The roster the house pack deals from. With desk.js on the page that is OTP.people() (Wave 2, call 2): the house
-     seats, a card holder with no seat added, and a banned, closed or demoted holder's seat dark. A page without
-     desk.js (a night, /events/) counts roster.json, the floor. */
-  function roster() {
-    var O = w.OTP;
-    if (!(O && typeof O.people === 'function')) return houseRoster();
-    return Promise.resolve().then(function () { return O.people(); })
-      .then(function (l) { l = (Array.isArray(l) ? l : []).filter(function (c) { return c && rkey(c); }); return l.length ? l : houseRoster(); },
-            function () { return houseRoster(); });
-  }
-  // a card holder's photo on the binder's roster: their card or page photo in the house's storage, nothing else
-  var CARD_IMG = /\/storage\/v1\/object\/public\/(cards|spaces)\/[A-Za-z0-9][A-Za-z0-9._\/-]{0,200}$/;
-  function cardImg(u) {
-    u = String(u || '');
-    if (!u || u.length > 600 || u.indexOf('..') >= 0 || !CARD_IMG.test(u.split('#')[0])) return '';
-    try {
-      var x = new URL(u);
-      if ((x.protocol === 'https:' && /\.supabase\.co$/.test(x.hostname)) || x.origin === location.origin) return x.href;
-    } catch (e) {}
-    return '';
-  }
-
   // a night's slug opens with its date. Fresh = shot in the last two weeks.
   function fresh(slug) {
     var m = /^(\d{4})-(\d{2})-(\d{2})-/.exec(slug); if (!m) return false;
@@ -279,18 +242,15 @@ window.OTPLazy = window.OTPLazy || (function () {
     if (!sheet) return;
     var body = sheet.querySelector('.bn-body'); if (!body) return;
     var my = ++drawN;
-    Promise.all([events(), roster()]).then(function (got) {
+    events().then(function (list) {
       if (my !== drawN) return;                // a newer draw is on its way
-      var list = got[0], cards = got[1], t = totals();
+      var t = totals();
       var frames = list.reduce(function (a, e) { return a + (e.count | 0); }, 0);
-      // pulled out of THIS roster: a seat that went dark since is not counted against it
-      var pulledN = cards.filter(function (c) { return !!S.r[rkey(c)]; }).length;
       body.textContent = '';
 
       var stats = el('div', 'bn-stats');
       stats.appendChild(stat(t.frames, frames || null, 'frames pulled'));
       stats.appendChild(stat(t.hits, list.length || null, 'hits found'));
-      stats.appendChild(stat(pulledN, cards.length || null, 'roster cards'));
       body.appendChild(stats);
 
       // the next thing to do: the newest night this phone has not finished
@@ -328,29 +288,6 @@ window.OTPLazy = window.OTPLazy || (function () {
       });
       body.appendChild(ol);
 
-      if (cards.length) {
-        var hr = el('h3', '', 'The roster'); hr.appendChild(el('small', '', pulledN + ' of ' + cards.length + ' pulled'));
-        body.appendChild(hr);
-        var row = el('div', 'bn-roster');
-        cards.forEach(function (c) {
-          var k = rkey(c), got1 = !!S.r[k];
-          var s = el('span', 'bn-face' + (got1 ? ' got' : ''));
-          // a house seat wears its avatar; a card holder with no seat, their card photo (a stored photo only)
-          var src = c._db ? cardImg(c.photo) : BASE + 'assets/cathedral/av/' + tight(c.name) + '.jpg';
-          if (src) {
-            var im = el('img'); im.alt = ''; im.loading = 'lazy'; im.decoding = 'async'; im.width = 54; im.height = 54;
-            im.addEventListener('error', function () { im.remove(); }, { once: true });
-            im.src = src;
-            s.appendChild(im);
-          } else s.appendChild(el('i', 'bn-glyph', String(c.pending_glyph || '?').slice(0, 3)));
-          s.appendChild(el('span', '', got1 ? String(c.display_name || c.name) : '?'));
-          row.appendChild(s);
-        });
-        body.appendChild(row);
-        var op = el('a', 'bn-link', 'Open the house pack →'); op.href = BASE + '#open';
-        op.addEventListener('click', closeSheet);
-        body.appendChild(op);
-      }
       body.appendChild(el('p', 'bn-fine', 'My Collection lives on this phone. Nothing to log in to. Clear your browser and it starts over.'));
       streetBag(body);
     });
@@ -450,7 +387,7 @@ window.OTPLazy = window.OTPLazy || (function () {
 
   /* ---------- keep every surface in step ---------- */
   subs.push(function (what) {
-    chips.forEach(function (b) { paintChip(b, what === 'add' || what === 'card'); });
+    chips.forEach(function (b) { paintChip(b, what === 'add'); });
     paintPacks(d);
     if (sheet && !sheet.hidden) drawSheet();
   });
