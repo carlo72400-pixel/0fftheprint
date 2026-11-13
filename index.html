@@ -3026,6 +3026,19 @@ html.st-cap::before{opacity:1;pointer-events:auto}      /* while it is up it als
 .mapv.st-rest,.mapv.st-rest *{visibility:hidden!important}
 .st-in-sheet.st-behind{background:transparent!important}
 .st-in-sheet.st-behind>:not(.hands),.st-in-sheet.st-behind>:not(.hands) *{visibility:hidden!important}
+/* ---- THE STREET HOLDS STILL ON A PHONE (11/14, his "Yes, freeze it"). A phone's browser has a small budget of graphics memory, and
+   every part of the street that moves on its own needs a layer of its own the size of the whole picture: the drifting rows, the
+   grain, the rolling band, the beams, the breathing glows. Held still they fold into far fewer layers (62 to 38 at 614 and 412 px,
+   218 to 98 MB at full size at 614), and the street, a picked place and the dive into it draw inside the budget his Samsung has. Under 900 px only, and only without Reduce
+   Motion (Reduce Motion keeps what it does today). Rin, the cast, the neon signs and the other small things keep moving. ---- */
+@media (max-width:899px) and (prefers-reduced-motion:no-preference){
+  .mapv .dl,.mapv .mp-st,.mapv .mp-signs.mp-stx,.mapv .mp-hint{translate:none!important}
+  .mapv .dl-ground{transform:none!important}
+  .mapv .crt-scan,.mapv .crt-noise{animation:none!important}
+  .mapv .crt-roll,.mapv .mp-beam{display:none!important}
+  .mapv[data-tap="glow"] .tp-g,.mapv[data-tap="spot"] .tp-s{animation:none!important;opacity:.87}
+  .mapv .fx-cloud,.mapv .mp-spark{animation:none!important}
+}
 
 /* ---------- FIND YOURSELF at the PHOTO BOOTH: a night's whole contact sheet (11/13, site build only: fy.js).
    A tap on a photo opens it on the night's own page. ---------- */
@@ -6924,6 +6937,16 @@ a.bx-cut.tall{flex-basis:36%;max-width:190px;min-width:122px}
   }
   new MutationObserver(look).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['hidden'] });
   window.addEventListener('resize', () => { off(); look(); });
+})();
+/* ---- THE STREET HOLDS STILL ON A PHONE (site.css has the why): on the screens where the rows no longer drift, the drift's loop
+   stops restyling the whole street every frame. It goes back to work if the screen grows to 900 px or Reduce Motion changes. ---- */
+(() => {
+  const plate = document.getElementById('mp-plate'); if (!plate || !window.matchMedia) return;
+  const still = window.matchMedia('(max-width: 899px) and (prefers-reduced-motion: no-preference)');
+  const set = plate.style.setProperty.bind(plate.style);
+  plate.style.setProperty = (k, v, p) => { if (k === '--cam' && still.matches) return; return set(k, v, p); };
+  const calm = () => { if (still.matches) plate.style.removeProperty('--cam'); };
+  calm(); if (still.addEventListener) still.addEventListener('change', calm);
 })();
 
 /* ---------- FIND YOURSELF at the PHOTO BOOTH (11/13, site build only; the look is fy.css).
