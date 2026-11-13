@@ -3025,6 +3025,17 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .rc-lnk:active{background:rgba(255,255,255,.12)}
 @media (prefers-reduced-motion:reduce){.rm-snd:active{transform:none}}
 
+/* THE CAP BEHIND THE STATUS BAR (11/14, the iPhone pass). Opened from the home screen icon the status bar is see
+   through, so a scrolled page ran under the clock: the cream news strip made it unreadable, and words sat in the bar's
+   zone. Once the page has moved (site.js puts st-cap on <html> past 2 px) a cap the height of the status bar is drawn
+   behind it in the page's own night colour. At the very top there is none: the sky stays behind the clock, as it was.
+   Where a phone reports no inset the cap has no height, so nothing is drawn at all. A place, a sheet or a viewer is a
+   screen of its own that already clears the bar: they all lie over the cap (it sits at 35, they start at 36). It
+   comes and goes in an eighth of a second, at once under Reduce Motion. */
+html::before{content:"";position:fixed;left:0;right:0;top:0;z-index:35;height:env(safe-area-inset-top,0px);background:var(--st-sky2);opacity:0;pointer-events:none;transition:opacity .12s linear}
+html.st-cap::before{opacity:1;pointer-events:auto}      /* while it is up it also takes a press: nothing under the clock can be pressed by accident */
+@media (prefers-reduced-motion:reduce){html::before{transition:none}}
+
 /* ---------- FIND YOURSELF at the PHOTO BOOTH: a night's whole contact sheet (11/13, site build only: fy.js).
    A tap on a photo opens it on the night's own page. ---------- */
 
@@ -6621,6 +6632,10 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   /* an iPhone paints :active on a key that is not a link only when the page listens for touches. This listener does
      nothing else: the map card's arrows, the Instagram sticker, the cuts and the receipt get their press look. */
   document.addEventListener('touchstart', () => {}, { passive: true });
+  /* THE CAP BEHIND THE STATUS BAR (site.css): on once the page has moved, off at the very top (a pull past the top is
+     a negative number: off). Where the phone reports no inset the cap has no height, so the class changes nothing. */
+  const capIt = () => document.documentElement.classList.toggle('st-cap', window.scrollY > 2);
+  window.addEventListener('scroll', capIt, { passive: true }); capIt();
 
   /* ---- the machines' pictures wait for their machine. The build parks each one's address in data-src (a hidden machine's
      pictures would otherwise all be fetched on the first screen); the first time a machine, or any other hidden panel,

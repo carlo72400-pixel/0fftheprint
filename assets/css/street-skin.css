@@ -90,3 +90,16 @@ html[data-place] .lb-x{top:calc(18px + env(safe-area-inset-top,0px))}
 html[data-place] .lb-dl,html[data-place] .lb-count{bottom:calc(18px + env(safe-area-inset-bottom,0px))}
 /* the sound key's word (On, Off) was 9.2 px: nothing a person reads is under 11 */
 .sk-snd small{font-size:11px}
+
+/* THE CAP BEHIND THE STATUS BAR (11/14, the iPhone pass). Opened from the home screen icon the status bar is see
+   through, so a scrolled page ran under the clock. Once the page has moved (street-skin.js puts sk-capped on <html>
+   past 2 px) a cap the height of the status bar is drawn behind it, in the page's own night colour (the script reads
+   it; a light page such as the font's gets the house's dark, because the phone's clock is always white). At the very
+   top there is none. Where a phone reports no inset it has no height: nothing is drawn. It lies over the strip as the
+   strip scrolls away and under the back key (same level, the key comes later), under a photo viewer and the
+   wallpaper viewer (9001, 9100), and it steps aside while MY COLLECTION is up. Not on the Take: its cloth is fixed
+   and already covers the bar. An eighth of a second in and out, at once under Reduce Motion. */
+html[data-place]:not([data-take])::before{content:"";position:fixed;left:0;right:0;top:0;z-index:9000;height:env(safe-area-inset-top,0px);background:var(--sk-cap,#0a0a0d);opacity:0;pointer-events:none;transition:opacity .12s linear}
+html[data-place].sk-capped:not([data-take])::before{opacity:1;pointer-events:auto}      /* while it is up it also takes a press: nothing under the clock can be pressed by accident */
+html[data-place].bn-open-sheet:not([data-take])::before{opacity:0;pointer-events:none}
+@media (prefers-reduced-motion:reduce){html[data-place]::before{transition:none}}

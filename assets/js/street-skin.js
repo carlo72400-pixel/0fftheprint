@@ -71,6 +71,23 @@
   /* an iPhone paints :active on a key that is not a link only when the page listens for touches (11/14). This listener
      does nothing else: the strip's sound key, the back key and every .sk-key get their press look. */
   d.addEventListener('touchstart', function () {}, { passive: true });
+  /* THE CAP BEHIND THE STATUS BAR (street-skin.css): on once the page has moved, off at the very top. Its colour is
+     the page's own (the body's, or the root's when the body has none); a light page keeps the stylesheet's dark. */
+  var capped = false, capHue = false;
+  function capColour() {
+    try {
+      var rx = /^rgba?\((\d+), (\d+), (\d+)(?:, ([\d.]+))?\)$/, c = rx.exec(w.getComputedStyle(d.body).backgroundColor);
+      if (!c || c[4] === '0') c = rx.exec(w.getComputedStyle(d.documentElement).backgroundColor);
+      if (!c || c[4] === '0') return '';
+      return (+c[1] * 299 + +c[2] * 587 + +c[3] * 114) / 1000 < 90 ? 'rgb(' + c[1] + ', ' + c[2] + ', ' + c[3] + ')' : '';
+    } catch (e) { console.warn('street skin: the cap could not read the page colour', e); return ''; }
+  }
+  function cap() {
+    var on = (w.pageYOffset || 0) > 2; if (on === capped) return; capped = on;
+    if (on && !capHue) { capHue = true; var c = capColour(); if (c) d.documentElement.style.setProperty('--sk-cap', c); }
+    d.documentElement.classList.toggle('sk-capped', on);
+  }
+  w.addEventListener('scroll', cap, { passive: true }); cap();
   /* the click: on the press itself, for keys and links, never for typing or the sound key (it has its own) */
   d.addEventListener('pointerdown', function (ev) {
     var t = ev.target && ev.target.closest ? ev.target.closest('a[href], button, summary, [role="button"], input[type="submit"], input[type="button"], label[for]') : null;
