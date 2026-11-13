@@ -408,7 +408,7 @@
       return wideCard('drop', x.link, 'new drop', dt, x.thumb, x.title, String(x.line || '').slice(0, 160), (x.go ? String(x.go).slice(0, 30) : 'see it') + ' →');
     }
     function cryptCard(dt) {
-      return wideCard('crypt', 'wall/', 'new flyers', dt, 'wall/preview.jpg', 'This week in the Crypt', 'The week\u2019s flyers are up. See who\u2019s going.', 'open the Crypt \u2192');
+      return wideCard('crypt', 'wall/', 'new flyers', dt, 'wall/preview.jpg', 'This week in the Coven', 'The week\u2019s flyers are up. See who\u2019s going.', 'open the Coven \u2192');
     }
     var built = null, placing = false, seenPosts = 0;
     function place(ns, st, tp, mi, fo, cr, dr) {

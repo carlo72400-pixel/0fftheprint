@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="cath" data-take data-place="door">
+<html lang="en" class="cath" data-take data-place="coven">
 <head>
 <meta charset="UTF-8">
 <base href="../">
@@ -49,7 +49,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" integrity="sha384-Rj26LVGvoeRVR6+mwQmFfcR3QOBEwT+ZmuCWpuiqeTzJpCs0ER4ITAWGb4Hiy3Ok" crossorigin="anonymous" defer></script>
 <script src="supabase-config.js?v=f1348482" defer></script>
 <script src="assets/js/desk.js?v=ecaad17b" defer></script>
-<script src="assets/js/take.js?v=9c7e7813" defer></script>
+<script src="assets/js/take.js?v=f8bb0d07" defer></script>
 <script src="assets/js/door.js?v=a528dd3b" defer></script>
 <script src="assets/js/composer.js?v=1c95d27a" defer></script>
 <script src="assets/js/edit.js?v=46763485" defer></script>
@@ -67,7 +67,7 @@ window.OTPLazy = window.OTPLazy || (function () {
 })();
 </script>
 <script src="assets/js/binder.js?v=4772851d" defer></script>
-<script src="assets/js/cathedral.js?v=71af5a7c" defer></script>
+<script src="assets/js/cathedral.js?v=73c0b32a" defer></script>
 <script src="assets/js/people.js?v=c248676c" defer></script>
 <script>/* tabs: pick the page before first paint, off the #hash. Old links like /#desk still land right.
    ⛔ M has to name every main.feed > section[id] (the router below the body only corrects it after the
@@ -3995,12 +3995,12 @@ window.OTPLazy = window.OTPLazy || (function () {
 <link rel="stylesheet" href="assets/css/binder.css?v=96736cd3">
 <link rel="stylesheet" href="assets/css/cathedral.css?v=3329ef2e">
 <link rel="stylesheet" href="assets/css/people.css?v=85ce71bf">
-<link rel="stylesheet" href="assets/css/take.css?v=bf892074">
+<link rel="stylesheet" href="assets/css/take.css?v=2a5c7914">
 <link rel="stylesheet" href="assets/css/street-skin.css?v=2c90de82">
 <script src="assets/js/street-skin.js?v=38af1586" defer></script>
 </head>
 <body>
-<!--sk--><div class="sk-top"><a class="sk-back" href="./#in-door" aria-label="Back to The Door on the street"><span aria-hidden="true">&lsaquo;</span>Door</a><b class="sk-place">THE DOOR</b><span class="sk-keys" id="sk-keys"></span></div><!--/sk-->
+<!--sk--><div class="sk-top"><a class="sk-back" href="./wall/" aria-label="Back to the table. The Reading."><span aria-hidden="true">&lsaquo;</span>Table</a><b class="sk-place">THE COVEN</b><span class="sk-keys" id="sk-keys"></span></div><!--/sk-->
 
 <!-- ========== CARD DETAIL MODAL ========== -->
 <div id="card-modal" class="modal" role="dialog" aria-label="Card detail">
@@ -4501,15 +4501,14 @@ window.OTPLazy = window.OTPLazy || (function () {
     <section id="rooms" data-tab="music"></section>
     <section id="putuson" data-tab="music"></section>
 
-    <!-- ===== THE ROLL (10/11): the People tab is the members' photo feed. people.js draws it into
-         #roll-mount: the door card for a stranger, the roll for a member (post, this week, the photos
-         and the house's nights, clips, frames you're in). Private by his call; Open A Pack under it is public.
-         Since 045 (call 1) a Roll post is members only in the database too: it never reaches the Take,
-         take_feed or a stranger. The Take above is the open one. ===== -->
+    <!-- ===== What anybody who is NOT in sees on this page (11/13). people.js draws the old home's members-only
+         card into #roll-mount and assets/js/take.js puts it in the Take's words: THE TAKE is for members of the
+         Coven, with Log in (join/?next=take) and Join (wall/) as two keys. A member never sees this section
+         (assets/css/take.css shows #take instead). ===== -->
     <section id="roll" data-tab="people">
       <div class="section-head">
-        <h2>The Roll <span class="accent">members only</span></h2>
-        <div class="sub">behind the door &nbsp;·&nbsp; post a photo &nbsp;·&nbsp; tap a name</div>
+        <h2>The Take <span class="accent">members only</span></h2>
+        <div class="sub">for members of the Coven &nbsp;·&nbsp; posts and photos, one timeline</div>
       </div>
       <div id="roll-mount"></div>
     </section>
@@ -6727,10 +6726,10 @@ window.OTPLazy = window.OTPLazy || (function () {
       // (A signed-in 'in' that is not a member is a Crypt ban: no way in to offer, so no link.)
       const door = document.documentElement.getAttribute('data-door');
       n.innerHTML = door === 'wait'
-        ? `${esc(what)} is for members. One more step: put your Instagram in at <a href="wall/">the Crypt</a>. One account per Instagram.`
+        ? `${esc(what)} is for members. One more step: put your Instagram in at <a href="wall/">the Coven</a>. One account per Instagram.`
         : door === 'in'
-          ? `${esc(what)} is for members of the Crypt.`
-          : `${esc(what)} is for members. <a href="join/?next=take">Log in</a>, or <a href="wall/">join the Crypt</a>. Joining asks for your Instagram.`;
+          ? `${esc(what)} is for members of the Coven.`
+          : `${esc(what)} is for members. <a href="join/?next=take">Log in</a>, or <a href="wall/">join the Coven</a>. Joining asks for your Instagram.`;
       n.hidden = false;
     }
     const ago = iso => { const m = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 60000)); return m < 1 ? 'now' : m < 60 ? m + 'm' : m < 1440 ? Math.round(m / 60) + 'h' : Math.round(m / 1440) + 'd'; };

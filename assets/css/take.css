@@ -1,5 +1,7 @@
-/* THE TAKE on its own page (take/index.html = home.html with only the timeline on, built by maketake.py).
-   Everything here is scoped to html[data-take], so the old home never sees it. Run stamp.py after editing. */
+/* THE TAKE on its own page (take/index.html, its own source since 11/12: the old home's markup with only the timeline on).
+   Everything here is scoped to html[data-take]. Run stamp.py after editing.
+   11/13: the page is the eighth card of the Coven. This file is the PLAIN page (what shows if the card's own sheet,
+   assets/css/take-card.css, or one of its drawings does not load); the card's look is that sheet. */
 html[data-take] .ticker,
 html[data-take] nav.site,
 html[data-take] nav.tabbar,
@@ -14,7 +16,16 @@ html[data-take][data-door="in"] main.feed > section#take{display:block!important
 html[data-take]:not([data-door="in"]) main.feed > section#roll{display:block!important}
 html[data-take] .wrap{display:block!important;max-width:680px;margin:0 auto;padding:8px 12px 40px}
 html[data-take] main.feed{display:block;width:auto;max-width:none;margin:0}
-html[data-take] body{padding-top:calc(58px + env(safe-area-inset-top,0px))!important;padding-bottom:0}      /* room for the Street key: it sat on the heading */
+html[data-take] body{padding-top:calc(58px + env(safe-area-inset-top,0px))!important;padding-bottom:0}      /* room for the back key: it sat on the heading */
+/* the strip's colour is THE TAKE's pink (street_skin.py names the place "coven"; the shared sheet has no line for it) */
+html[data-take][data-place]{--sk:#ec6ea4;--sk-bk:88px}
+/* the card anybody who is not in gets (take.js writes it): the name, Members only, one plain line, the keys, a fine line */
+.rl-door .tk-name{font:700 11px/1 system-ui,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#ec6ea4}
+.rl-door .tk-keys{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:8px}
+.rl-door .tk-key{display:inline-flex;align-items:center;justify-content:center;min-width:120px;min-height:48px;padding:0 18px;border:2px solid #ec6ea4;border-radius:12px;
+  color:#ffd0e4;font:700 13px/1 system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;text-decoration:none}
+.rl-door .tk-key.go{background:#ec6ea4;color:#150b14}
+.rl-door .tk-fine{font-size:12.5px;color:#a79fb3}
 .take-street{position:fixed;left:max(12px,env(safe-area-inset-left,0px));top:max(6px,env(safe-area-inset-top,0px));z-index:9000;
   display:inline-flex;align-items:center;gap:6px;min-width:96px;min-height:44px;padding:0 14px;border-radius:999px;
   background:linear-gradient(#3d3b45,#25232b);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 4px 0 #08070b,0 6px 12px rgba(0,0,0,.5);

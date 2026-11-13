@@ -5,6 +5,8 @@ Every public inner page carries the same strip at the top: one back key, top lef
 street the page belongs to and names it; the place's name beside it; and, top right, the sound key (and the BAG key on
 pages that keep a bag). The look is assets/css/street-skin.css, the sound and the keys are assets/js/street-skin.js.
 <html data-place="..."> picks the place's colour.
+One page is not a place on the street: THE TAKE (take/) is the eighth card of the Coven (11/13). Its key says Table and goes
+to the table (wall/), and its strip is the cloth the card's own files dress (assets/css/take-card.css, assets/js/take-card.js).
 
     skin_text(html, rel)   one page's text, skinned. Safe to run again: it replaces its own strip, it never stacks.
     apply_all()            every inner page in PAGES below, written only when it changed. stamp.py runs this first,
@@ -38,6 +40,9 @@ PLACES = {
     "kit":    ("#in-kit", "Kit", "THE KIT", "#7fd3ff"),
     "bites":  ("#in-bites", "Love Bites", "LOVE BITES", "#ff4f8b"),
     "street": ("", "Street", "0FF THE PRINT", "#ff8fd8"),
+    # 11/13: THE TAKE is the eighth card of the Coven. Its back key is Table and goes to the table (wall/), not to a place on
+    # the street; the fifth item is the key's spoken name. Its colour is THE TAKE's pink (assets/css/take.css sets it).
+    "coven":  ("wall/", "Table", "THE COVEN", "#ec6ea4", "Back to the table. The Reading."),
 }
 # which pages, and the place each belongs to (first match wins)
 RULES = [
@@ -45,7 +50,8 @@ RULES = [
     (r"^c/(?:[^/]+/)?index\.html$", "booth"),
     (r"^word/(?:[^/]+/)?index\.html$", "stand"),
     (r"^(?:video|ink)/index\.html$", "box"),
-    (r"^(?:dates|join|reset|my|compose|card|take)/index\.html$", "door"),
+    (r"^take/index\.html$", "coven"),
+    (r"^(?:dates|join|reset|my|compose|card)/index\.html$", "door"),
     (r"^(?:reliquary|font|wallpapers)/index\.html$", "bites"),
     (r"^(?:work|press)/index\.html$", "street"),
     (r"^404\.html$", "street"),
@@ -171,14 +177,15 @@ def pages():
 def strip(rel, text):
     """the strip's markup for one page"""
     place = place_of(rel)
-    to, word, name, _ = PLACES[place]
+    to, word, name = PLACES[place][:3]
+    label = PLACES[place][4] if len(PLACES[place]) > 4 else f"Back to {name.title()} on the street"
     if rel == "404.html":
         up = "/"                                            # a missing page can be asked for at any depth
     elif '<base href="../">' in text:
         up = "./"                                           # the take page reads every address from the root
     else:
         up = "../" * rel.count("/") or "./"
-    back = f'<a class="sk-back" href="{up}{to}" aria-label="Back to {name.title()} on the street"><span aria-hidden="true">&lsaquo;</span>{word}</a>'
+    back = f'<a class="sk-back" href="{up}{to}" aria-label="{label}"><span aria-hidden="true">&lsaquo;</span>{word}</a>'
     if rel in INLINE:
         return up, f'<!--sk-->{back}<div class="sk-pad" aria-hidden="true"></div><!--/sk-->'
     if rel in OFFLINE:
