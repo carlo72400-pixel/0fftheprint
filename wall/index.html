@@ -7136,7 +7136,7 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) tick
   const CARD_OF = {tonight: 'signs', all: 'signs', month: 'stars', film: 'visions', mine: 'path', people: 'kindred'};
   const TURN = ['signs', 'stars', 'visions', 'path', 'kindred'];          // the cards that are pages: a swipe on the plate or the hand turns through these
   const LOGIN = {kindred: 1, whispers: 1, palm: 1};
-  const SKINNED = ['visions', 'signs', 'stars'];                              // the cards whose page inside wears the skin (coven_skin.css); the rest follow
+  const SKINNED = ['visions', 'signs', 'stars', 'path'];                              // the cards whose page inside wears the skin (coven_skin.css); the rest follow
   let view = 'card', hist = false, coming = false, quiet = false, lastId = 'signs', dealt = false, swiped = 0, anim = 0;
   const pill0 = pill ? {html: pill.innerHTML, href: pill.getAttribute('href'), label: pill.getAttribute('aria-label')} : null;
 
