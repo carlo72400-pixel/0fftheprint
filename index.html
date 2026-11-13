@@ -2838,7 +2838,12 @@ a.key{cursor:pointer}
 /* THE BAR: Lounge Radio's player, under the jukebox */
 .jb-radio{display:flex;flex-direction:column;gap:8px;width:min(100%,400px);margin:12px auto 0}
 .jb-radio iframe{display:block;width:100%;height:152px;border:0;border-radius:12px;background:#1a1220}
-.jb-radio .jb-next{align-self:flex-end;min-height:44px;flex-direction:row;gap:6px}
+.jb-radio[hidden]{display:none}
+.jb-radio .jb-pl{min-height:152px;border-radius:12px;background:#1a1220;overflow:hidden}
+.jb-radio .jb-pl iframe{display:block}
+.jb-rline{margin:0;min-height:20px;font:600 13.5px/1.4 var(--f-text);color:#f3e6ff}
+.jb-rline:empty{min-height:0}
+.jb-radio .jb-open{align-self:flex-start;min-height:44px;flex-direction:row;gap:6px;text-decoration:none}
 /* LENA'S CABINET: everything coming up */
 .ft-all{display:flex;justify-content:center;margin:12px 0 2px}
 .ft-all a{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:999px;border:1.5px solid #c9a44a;background:#1a0f24;color:#ffe9a8;font:700 12.5px/1 var(--f-text);letter-spacing:.06em;text-decoration:none}
@@ -4742,8 +4747,7 @@ a.key{cursor:pointer}
     /* play a record: it drops on the platter, the arm swings in, it spins; its sleeve pops out */
     function stopRadio(quiet) {
       if (!radioT) return;
-      radioT = 0; radioK.setAttribute('aria-pressed', 'false');
-      { const rb = document.getElementById('jb-radio'); if (rb) { rb.hidden = true; rb.innerHTML = ''; } }
+      radioT = 0; radioK.setAttribute('aria-pressed', 'false'); if (window.__jbRadio) window.__jbRadio.hush();
       if (!quiet) { box.classList.remove('playing'); idle(); }
     }
     async function select(code) {
@@ -4751,6 +4755,7 @@ a.key{cursor:pointer}
       if (!r) { show('NO SUCH RECORD', 'TRY A1 TO D' + (P[3].items.length)); sfx('blip'); return; }
       if (busy) return;
       busy = true; stopRadio(true);
+      { const u = uriOf(r.url); if (u) tune(u); }
       if (r.page !== page) setPage(r.page);
       $$('.jb-strip.on', box).forEach(s => s.classList.remove('on'));
       const strip = $('.jb-strip[data-code="' + code + '"]', box); if (strip) strip.classList.add('on');
@@ -4836,26 +4841,80 @@ a.key{cursor:pointer}
     const feat = $('.jb-fplay', box);
     feat.addEventListener('click', () => select(feat.dataset.code));
 
-    /* RADIO: Lounge Radio, in place. The same list the home page's radio plays (music.json night.tracks), one song at
-       a time in Spotify's own player, loaded only on the tap. Play is the player's own key (a phone only lets a page
-       start sound from a tap on the player itself). NEXT SONG loads the next one; RADIO again switches it off. */
-    const radioBox = document.getElementById('jb-radio');
-    function radioTick() {
-      const t = BAR.radio[radioI++ % BAR.radio.length];
-      show('LOUNGE RADIO · ' + BAR.room, t.t.toUpperCase() + ' · ' + t.a.toUpperCase());
-      radioBox.innerHTML = '<iframe src="https://open.spotify.com/embed/track/' + encodeURIComponent(t.id) + '?utm_source=generator&theme=0" allow="autoplay; clipboard-write; encrypted-media" loading="lazy" title="Lounge Radio: ' + esc(t.t) + ' by ' + esc(t.a) + '"></iframe>'
-        + '<button class="key lil jb-next" type="button">Next song <span aria-hidden="true">&rsaquo;</span></button>';
-      radioBox.hidden = false;
+    /* RADIO (round 17, his 11/13: "find a way to make the radio work"). It never played: the key dropped a paused
+       Spotify embed under the jukebox and waited for a second tap on Spotify's own key, nothing knew when a song
+       ended, and a title strip said NOW PLAYING and played nothing. Now there is ONE Spotify player for the whole
+       jukebox, made with Spotify's own player controller (the way the old home's radio worked) when THE BAR is opened,
+       never before, holding the house playlist. RADIO calls play() inside its own tap, so one tap starts sound, and
+       Spotify's player moves through the playlist by itself. A title strip puts its own record in the same player
+       and plays it, so NOW PLAYING is true. The player stays in view. If no word comes back from it about a second
+       and a half after a tap (Safari may not hand our tap to Spotify's frame), the line under it says to press play
+       on the player. The one Sound switch stops it, and leaving THE BAR pauses it. No account, no key, no other
+       service. Somebody not logged in to Spotify hears a short preview of each song, and the words say so. */
+    const radioBox = document.getElementById('jb-radio'), LIST = 'spotify:playlist:74nGTHB3twhhqG1aeDEMpK';
+    const SPR = { api: null, making: null, ctrl: null, uri: LIST, playing: false, heard: 0, t: 0 };
+    const soundOn = () => { try { return localStorage.getItem('st-snd') !== 'off'; } catch (e) { return true; } };
+    const rline = t => { const l = document.getElementById('jb-rline'); if (l) l.textContent = t || ''; };
+    const PLAIN = 'Not logged in to Spotify? You hear a short preview of each song.';
+    function spotifyApi() {
+      if (!SPR.api) SPR.api = new Promise(res => {
+        let done = false; const fin = v => { if (!done) { done = true; res(v); } }, was = window.onSpotifyIframeApiReady;
+        window.onSpotifyIframeApiReady = API => { fin(API); if (typeof was === 'function') was(API); };
+        const sc = document.createElement('script'); sc.src = 'https://open.spotify.com/embed/iframe-api/v1'; sc.async = true;
+        sc.onerror = () => { console.warn('the radio: Spotify\'s player script would not load'); fin(null); };
+        document.head.appendChild(sc); setTimeout(() => fin(null), 9000);
+      });
+      return SPR.api;
     }
-    radioBox.addEventListener('click', e => { if (e.target.closest('.jb-next')) { sfx('needle'); radioTick(); } });
+    function makePlayer() {
+      if (!SPR.making) SPR.making = spotifyApi().then(API => new Promise(res => {
+        radioBox.innerHTML = '<div class="jb-pl"><div id="jb-pl-in"></div></div><p class="jb-rline" id="jb-rline" role="status"></p>'
+          + '<a class="key lil jb-open" href="https://open.spotify.com/playlist/74nGTHB3twhhqG1aeDEMpK" target="_blank" rel="noopener">Open the playlist in Spotify <span aria-hidden="true">&rsaquo;</span></a>';
+        radioBox.hidden = false;
+        if (!API) {            /* no controller: Spotify's plain player, which only its own key can start */
+          document.getElementById('jb-pl-in').outerHTML = '<iframe src="https://open.spotify.com/embed/playlist/74nGTHB3twhhqG1aeDEMpK?utm_source=generator&theme=0" allow="autoplay; clipboard-write; encrypted-media" title="Lounge Radio: the house playlist"></iframe>';
+          rline('Press play on the player.'); res(null); return;
+        }
+        let made = false;
+        API.createController(document.getElementById('jb-pl-in'), { uri: LIST, width: '100%', height: 152 }, c => {
+          made = true; SPR.ctrl = c;
+          c.addListener('playback_update', e => {
+            const d = (e && e.data) || {}; SPR.heard = Date.now(); SPR.playing = d.isPaused === false;
+            if (SPR.playing) { rline(PLAIN); if (!soundOn() || ov.hidden) { try { c.pause(); } catch (x) {} } }
+          });
+          rline('Tap RADIO, or a title strip.'); res(c);
+        });
+        setTimeout(() => { if (!made) { console.warn('the radio: Spotify\'s player did not come up'); res(null); } }, 9000);
+      }));
+      return SPR.making;
+    }
+    /* play a Spotify address in the one player, inside the tap that asked for it */
+    function tune(uri) {
+      if (!soundOn()) { rline('Sound is off. Turn Sound on, then tap again.'); return false; }
+      const t0 = Date.now(); radioBox.hidden = false;
+      if (SPR.ctrl) {
+        try { if (SPR.uri !== uri) { SPR.ctrl.loadUri(uri); SPR.uri = uri; } SPR.ctrl.play(); } catch (e) { console.warn('the radio: the player would not take it', e); }
+        rline('');
+      } else makePlayer();
+      clearTimeout(SPR.t);
+      SPR.t = setTimeout(() => { if (!(SPR.playing && SPR.heard >= t0)) rline('Press play on the player.'); }, 1500);
+      return true;
+    }
+    function hush() { clearTimeout(SPR.t); if (SPR.ctrl) { try { SPR.ctrl.pause(); } catch (e) {} } SPR.playing = false; }
+    const uriOf = url => { const m = /open\.spotify\.com\/(track|album|playlist|artist|episode)\/([A-Za-z0-9]{22})/.exec(url || ''); return m ? 'spotify:' + m[1] + ':' + m[2] : ''; };
+    window.__jbRadio = { state: () => ({ made: !!SPR.ctrl, uri: SPR.uri, playing: SPR.playing, heard: SPR.heard, on: !!radioT }), hush };
+    ov.addEventListener('st:open', makePlayer); if (!ov.hidden) makePlayer();
+    new MutationObserver(() => { if (ov.hidden) { hush(); if (radioT) stopRadio(); } }).observe(ov, { attributes: true, attributeFilter: ['hidden'] });
+    document.addEventListener('st:sound', e => { if (!e.detail) { hush(); rline('Sound is off. Turn Sound on, then tap RADIO.'); } else if (!ov.hidden) rline('Tap RADIO, or a title strip.'); });
     radioK.addEventListener('click', () => {
       if (busy) return;
-      if (radioT) { stopRadio(); sfx('blip'); say(HINT); return; }
+      if (radioT) { stopRadio(); sfx('blip'); say(HINT); rline('Tap RADIO, or a title strip.'); return; }
       hideSleeve(); $$('.jb-strip.on', box).forEach(s => s.classList.remove('on')); feat.classList.remove('on');
-      radioK.setAttribute('aria-pressed', 'true'); sfx('radio');
-      lbl.textContent = 'LR'; $('.jb-lbl', box).style.background = '#ffc6dc';
-      box.classList.add('playing'); radioI = Math.floor(Math.random() * BAR.radio.length); radioT = -1; radioTick();
-      say('Lounge Radio is on. Press play on the player. Tap RADIO again to stop it.');
+      if (!tune(LIST)) { sfx('blip'); say('Sound is off. Turn Sound on to hear the radio.'); return; }
+      radioK.setAttribute('aria-pressed', 'true'); sfx('radio'); radioT = -1;
+      lbl.textContent = 'LR'; $('.jb-lbl', box).style.background = '#ffc6dc'; box.classList.add('playing');
+      show('LOUNGE RADIO · ' + BAR.room, 'THE HOUSE PLAYLIST');
+      say('Lounge Radio is on: the house playlist, in Spotify’s player. Tap RADIO again to stop it.');
       radioBox.scrollIntoView({ block: 'nearest', behavior: RM ? 'auto' : 'smooth' });
     });
 
