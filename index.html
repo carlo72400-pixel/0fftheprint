@@ -3012,6 +3012,13 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 html::before{content:"";position:fixed;left:0;right:0;top:0;z-index:35;height:env(safe-area-inset-top,0px);background:var(--st-sky2);opacity:0;pointer-events:none;transition:opacity .12s linear}
 html.st-cap::before{opacity:1;pointer-events:auto}      /* while it is up it also takes a press: nothing under the clock can be pressed by accident */
 @media (prefers-reduced-motion:reduce){html::before{transition:none}}
+/* ---- WHAT IS COVERED RESTS (11/14, his Samsung: "it shows the card blank when u flip it"; site.js has the why). While a place
+   covers the whole screen the street under it is not drawn (.st-rest), and while a place's own hands view covers the whole
+   screen with its solid backdrop the place under it is not drawn either (.st-behind). Both come back the moment their cover
+   starts to move. Nothing changes on the screen: whatever rests is under something solid. ---- */
+.mapv.st-rest,.mapv.st-rest *{visibility:hidden!important}
+.st-in-sheet.st-behind{background:transparent!important}
+.st-in-sheet.st-behind>:not(.hands),.st-in-sheet.st-behind>:not(.hands) *{visibility:hidden!important}
 
 /* ---------- FIND YOURSELF at the PHOTO BOOTH: a night's whole contact sheet (11/13, site build only: fy.js).
    A tap on a photo opens it on the night's own page. ---------- */
@@ -6871,6 +6878,45 @@ a.bx-cut.tall{flex-basis:36%;max-width:190px;min-width:122px}
   const fl = $$('.ft-fly[data-d]'); let up = 0;
   fl.forEach(f => { const gone = f.dataset.d < today; f.hidden = gone; if (!gone) up++; });
   const cap = $('.ft-fcap'); if (cap && fl.length && !up) cap.textContent = 'THE FLYER WALL';
+})();
+/* ---- WHAT IS COVERED RESTS (11/14, his Samsung, Samsung Internet, a screen recording: the street's picture went blank when he
+   picked THE HOUSE, the card in his hands was not drawn at all, before the flip and after it). A phone's browser draws a page
+   inside a small budget of graphics memory. The street is a stack of picture-size layers (the rows, the glow, the signs, the
+   CRT glass) and it stayed drawn behind every open place, and the place stayed drawn behind its own hands view: together they
+   did not fit, so the newest things on the screen (the card, its back) were left blank. Reproduced in Chrome with its graphics
+   memory cut to 64 MB at 412x891: card blank, back blank; with this block the card and both its faces draw, both ways.
+   So: once a place has slid up and covers the whole screen, the street is switched off (.st-rest, site.css); once a place's
+   hands view is up, solid and covering the whole screen, the rest of that place is switched off too (.st-behind). The moment
+   the cover starts to move (a place sliding down, the hands view fading out, Reduce Motion's fade), everything comes back on
+   first. A wide screen, where a place is a column with the street beside it, never switches anything off. ---- */
+(() => {
+  const mapv = document.getElementById('mapv'); if (!mapv) return;
+  const full = el => { const r = el.getBoundingClientRect(); return r.left <= .5 && r.top <= .5 && r.right >= innerWidth - .5 && r.bottom >= innerHeight - .5; };
+  const solid = el => { const m = /rgba?\(([^)]+)\)/.exec(getComputedStyle(el).backgroundColor); const p = m ? m[1].split(',').map(Number) : []; return p.length === 3 || (p.length === 4 && p[3] >= 1); };
+  const still = el => !el.getAnimations().length;
+  let cover = null, sheet = null, hands = null, raf = 0, again = 0;
+  function off() { mapv.classList.remove('st-rest'); if (sheet) sheet.classList.remove('st-behind'); cover = sheet = hands = null; cancelAnimationFrame(raf); raf = 0; }
+  function watch() {        /* while something rests: every frame, is its cover still standing still? */
+    raf = requestAnimationFrame(() => { raf = 0; if (!cover) return;
+      if (cover.hidden || !still(cover) || !still(sheet) || (hands && (hands.hidden || !still(hands)))) { off(); look(); return; }
+      watch(); });
+  }
+  function look() {
+    clearTimeout(again);
+    const ov = document.querySelector('.st-in:not([hidden])');
+    if (!ov) { off(); return; }
+    const sh = ov.querySelector('.st-in-sheet'); if (!sh) { off(); return; }
+    if (!still(ov) || !still(sh)) { off(); again = setTimeout(look, 120); return; }        /* still sliding in: look again in a moment */
+    if (!full(sh)) { off(); return; }
+    if (sheet && sheet !== sh) sheet.classList.remove('st-behind');
+    cover = ov; sheet = sh; mapv.classList.add('st-rest');
+    const h = sh.querySelector(':scope > .hands:not([hidden])');
+    if (h && still(h) && solid(h) && full(h)) { hands = h; sh.classList.add('st-behind'); }
+    else { hands = null; sh.classList.remove('st-behind'); if (h && !still(h)) again = setTimeout(look, 120); }
+    if (!raf) watch();
+  }
+  new MutationObserver(look).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['hidden'] });
+  window.addEventListener('resize', () => { off(); look(); });
 })();
 
 /* ---------- FIND YOURSELF at the PHOTO BOOTH (11/13, site build only; the look is fy.css).
