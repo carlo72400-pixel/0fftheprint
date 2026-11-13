@@ -3923,6 +3923,11 @@ window.OTPLazy = window.OTPLazy || (function () {
     color:var(--pink-glow);font-family:var(--f-mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;}
   .take-more:hover{border-color:var(--pink-deep);}
   .take-more:disabled{opacity:.6;cursor:default;}
+  /* (11/14) the timeline while the members' feed is on its way: #take-mount is EMPTY until it is in. The card look
+     (take-card.css) has its own stamp for that; this is the plain page's line. .take-wait is the line when it did not load. */
+  html[data-take]:not(.tkc) #take-mount:empty::before{content:"Loading the timeline.";display:block;padding:28px 12px;text-align:center;
+    color:var(--muted);font-family:var(--f-mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;}
+  #take-mount .take-wait{margin:0;padding:22px 12px 0;text-align:center;color:#f6eede;font:600 14px/1.4 Inter,system-ui,sans-serif;}
   .react-btn[hidden]{display:none !important;}   /* the comment button waits for the backend */
   .react-btn[disabled]{opacity:.6;cursor:default;}
   .post-del{margin-left:6px;border:0;background:none;padding:0;color:var(--muted);font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;text-decoration:underline;text-underline-offset:3px;}
@@ -4397,7 +4402,7 @@ window.OTPLazy = window.OTPLazy || (function () {
         <span class="tl-alt">Off the record stays off the record. Opens your mail to the desk, or <a href="https://instagram.com/vamppsych" target="_blank" rel="noopener">DM The Lens</a>. Members post right here: <a href="join/?next=take">log in</a> or <a href="wall/">join the Crypt</a>.</span>
       </div>
       <div id="composer"></div>
-      <div class="feed" id="take-mount"></div>
+      <div class="feed" id="take-mount" aria-busy="true"></div>
       <a class="feed-cta" id="take-cta" href="join/?next=take">
         <b>Log in to post.</b>
         <span>Everybody in the Crypt posts to this timeline, reacts and comments. No login yet? Join the Crypt. Joining asks for your Instagram.</span>
@@ -4811,7 +4816,7 @@ window.OTPLazy = window.OTPLazy || (function () {
   ).join('');
 
   // ============ Fetch all content ============
-  let site, creators, take, rotation, desk, roster, work;  // `take` gets live posts merged in below
+  let site, creators, take, rotation, desk, roster, work;  // `take` is the committed posts; the members' feed goes on top at the draw (showTake)
   let music = {};   // 10/11: content/music.json, the Music tab's committed data (assets/js/music.js draws it)
   let tape = [];
   let slate = {};
@@ -4822,6 +4827,53 @@ window.OTPLazy = window.OTPLazy || (function () {
   // holder with no seat), as card slugs. applyList() already drops a hidden seat; this also keeps its posting member
   // from coming back in as a database-only card when the cards are merged in (OTP.peopleMerge, The Take below).
   let rosterHide = [];
+  // ---- THE TAKE'S FEED (11/14): ONE members' timeline, asked for by the page itself ----
+  // ⛔ This page used to call OTP.feed() and trust take.js to have swapped the members' feed in first. Both files are
+  // `defer`, this script is not: when take.js arrived a moment after desk.js the page got desk.js's own feed, the PUBLIC
+  // one (take_feed), drew it for a member and never looked again. A slow answer did the same another way: past 1.8 s
+  // the page settled on the committed posts alone. So the page asks for the members' feed here, in its own words:
+  // first who is signed in (OTP.me), then roll_feed(60, every post), the two calls it always made. It never asks for
+  // the public feed and never draws a post before the members' feed is in. Until then #take-mount stays EMPTY, which
+  // both looks read as "Loading the timeline."; a feed that does not answer gets one plain line and a Try again key.
+  //   rows   the members' feed (every post this login may see; none for a login that is not in)
+  //   null   nobody is signed in on this phone: nothing is asked for, nothing is drawn (the members only card shows)
+  //   throws the feed did not answer (asked twice when the connection dropped)
+  const takeRow = r => ({ id: r.id, author: r.card_slug || '', author_name: r.display_name, text: r.text, image: r.image_url || '',
+    image_alt: r.image_alt || '', pinned: !!r.pinned, date: r.created_at, edited: r.edited_at || null, accent: r.accent || null,
+    live: true, kind: r.kind || 'card', sid: r.sid || '', avatar: r.pic || '', mine: !!r.mine, members_only: !!r.members_only });
+  const takeRows = async () => {
+    if (!(window.OTP && OTP.configured && OTP.me && OTP.rollFeed)) throw new Error('the backend script is not here');
+    const me = await OTP.me();
+    if (!me) return null;
+    let rows;
+    try { rows = await OTP.rollFeed(60, { photos: false }); }
+    catch (e) {
+      if (e && e.code) throw e;                       // the database said no in its own words: asking again changes nothing
+      await new Promise(r => setTimeout(r, 600));     // a dropped connection: once more
+      rows = await OTP.rollFeed(60, { photos: false });
+    }
+    return (Array.isArray(rows) ? rows : []).map(takeRow);
+  };
+  // One ask at a time; the newest ask is the one that gets drawn. takeDraw is set further down, once a post can be drawn;
+  // an answer that lands before that waits in takeGot.
+  const TAKE_WAIT_MS = 8000;      // under the card look's own nine seconds, after which an empty timeline reads as "nothing yet"
+  let takeState = 'wait', takeGot = null, takeDraw = null, takeN = 0;
+  const takeSettle = got => { takeGot = got; takeState = got.fail ? 'failed' : got.rows ? 'members' : 'nobody'; if (takeDraw) takeDraw(got); };
+  const takeAsk = () => {
+    const n = ++takeN; takeState = 'wait'; takeGot = null;
+    // the first ask leaves the timeline empty (the waiting look); a later one (Try again, a late "in") says so in a line
+    if (n > 1) { const m = document.getElementById('take-mount'); if (m) { m.innerHTML = '<p class="take-wait" role="status">Loading the timeline.</p>'; m.setAttribute('aria-busy', 'true'); } }
+    // the first wait is counted from the page's own start, so the line below is up before the card look's nine seconds
+    const late = setTimeout(() => { if (n === takeN && takeState === 'wait') takeSettle({ fail: true }); },
+      n > 1 ? TAKE_WAIT_MS : Math.max(2500, TAKE_WAIT_MS - performance.now()));
+    takeRows().then(rows => ({ rows }), e => { console.warn('the take: the members feed did not answer,', e && e.message); return { fail: true }; })
+      .then(got => { if (n !== takeN) return; clearTimeout(late); if (got.fail && takeState === 'failed') return; takeSettle(got); });
+  };
+  // Who is looking can be known late (the page's own answer, <html data-door>, is painted by door.js and cathedral.js).
+  // If it turns to "in" after this page was told nobody is signed in, ask again: a member never stays on an empty page.
+  try { new MutationObserver(() => { if (takeState === 'nobody' && document.documentElement.getAttribute('data-door') === 'in') takeAsk(); })
+    .observe(document.documentElement, { attributes: true, attributeFilter: ['data-door'] }); } catch (e) {}
+
   try {
     // FAULT-ISOLATED ON PURPOSE. This used to be seven bare fetches under one catch,
     // so a single malformed JSON file blanked the entire homepage. Now one bad file
@@ -4898,6 +4950,8 @@ window.OTPLazy = window.OTPLazy || (function () {
         }
         return !!(window.OTP && OTP.configured);
       })();
+      // THE TAKE'S FEED is asked for now, beside the overlay, and drawn further down when the page can draw a post.
+      takeAsk();
       // ⛔ BOUNDED, like the feed below. Every section on this page is drawn after
       // this block, so a request that never answered left the whole front page on
       // 'loading…' over files that had already downloaded. Past the cap the page
@@ -5749,29 +5803,9 @@ window.OTPLazy = window.OTPLazy || (function () {
       } catch (e) { console.warn('seed overrides skipped:', e.message); }
     }
 
-    let liveFull = false;
-    // Live posts from approved posting members sit on top of the JSON seeds.
-    // If the backend is not configured, this is a no-op and the seeds show alone.
-    if (window.OTP && OTP.configured) {
-      try {
-        // ⛔ This was a BARE await in the middle of the single render pass, and
-        // OTP.feed() carries no timeout of its own. Everything below it (Music,
-        // Catalog, THE WORK, the roster, the card wiring) renders after it, so a
-        // hung or paused Supabase did not cost a moment, it meant those sections
-        // NEVER rendered. The git-backed JSON is the render floor and it must not
-        // be gated on a network call. Losing the race just means seeds-only.
-        const live = await Promise.race([
-          OTP.feed(FEED_CAP),
-          new Promise(r => setTimeout(() => r([]), LIVE_TIMEOUT_MS)),
-        ]);
-        liveFull = live.length >= FEED_CAP;      // a full page back: there may be older ones
-        if (live.length) {
-          const seeds = take.filter(p => !p.pinned);
-          const pinned = [...live, ...take].filter(p => p.pinned);
-          take = [...pinned.slice(0, 1), ...live.filter(p => !p.pinned), ...seeds];
-        }
-      } catch (e) { console.warn('live feed skipped:', e.message); }
-    }
+    // (11/14) The live posts were asked for HERE, with OTP.feed(), raced against 1.8 s. That is gone: on this page the
+    // feed is the members' one, asked for up top (takeAsk) and drawn below (takeDraw) when it is in. `take` stays the
+    // committed posts, the floor the members' feed sits on.
 
     // Member card edits (the /card/ builder) overlay the seeded roster exactly
     // the way live posts overlay take.json: the committed JSON is the render
@@ -5801,13 +5835,6 @@ window.OTPLazy = window.OTPLazy || (function () {
       } catch (e) { console.warn('card overlay skipped:', e.message); }
       fillCardPeople();
     }
-
-    // The pin is hoisted to the front BEFORE the slice, so it can never fall off
-    // the bottom of the window no matter how take.json gets reordered.
-    const pinnedPost = take.find(p => p.pinned);
-    const visible = (pinnedPost
-      ? [pinnedPost, ...take.filter(p => p !== pinnedPost)]
-      : take).slice(0, FEED_CAP);
 
     // The key is matched against a frozen list. An unknown or missing value
     // falls through to no class at all, which renders as house pink.
@@ -5887,32 +5914,67 @@ window.OTPLazy = window.OTPLazy || (function () {
         </div>
       </article>`;
     };
-    tMount.innerHTML = visible.map(postHTML).join('');
-    paintBg(tMount);   // avatars, same one path as every other background
-    wireReactions(tMount);
+    // (11/14) THE DRAW. Nothing is drawn until the members' feed is in (takeAsk, up top), so a member never sees the
+    // committed posts alone or the public feed, not even for a frame. The members' posts go on top of the committed
+    // ones, the way the live posts always did.
+    const seeds = take;
+    const showTake = live => {
+      let all = seeds;
+      if (live.length) {
+        const pinned = [...live, ...seeds].filter(p => p.pinned);
+        all = [...pinned.slice(0, 1), ...live.filter(p => !p.pinned), ...seeds.filter(p => !p.pinned)];
+      }
+      // The pin is hoisted to the front BEFORE the slice, so it can never fall off
+      // the bottom of the window no matter how take.json gets reordered.
+      const pinnedPost = all.find(p => p.pinned);
+      const visible = (pinnedPost
+        ? [pinnedPost, ...all.filter(p => p !== pinnedPost)]
+        : all).slice(0, FEED_CAP);
+      tMount.innerHTML = visible.map(postHTML).join('');
+      paintBg(tMount);   // avatars, same one path as every other background
+      wireReactions(tMount);
 
-    // Everybody posts now, so eight slots turn over fast. One button brings the older
-    // ones back (up to 60), which is also how a member reaches their own post to delete it.
-    if (liveFull && window.OTP && OTP.feed) {
-      const more = document.createElement('button');
-      more.type = 'button'; more.className = 'take-more'; more.textContent = 'Show older posts';
-      tMount.insertAdjacentElement('afterend', more);
-      more.addEventListener('click', async () => {
-        more.disabled = true; more.textContent = 'Loading…';
-        let rows = null;
-        try { rows = await OTP.feed(60); } catch (e) {}
-        if (!rows) { more.disabled = false; more.textContent = 'Could not load. Tap to try again.'; return; }
-        const have = new Set([...tMount.querySelectorAll('.post-t[data-pid]')].map(a => a.dataset.pid));
-        const older = rows.filter(r => r.id != null && !have.has(String(r.id)));
-        const at = tMount.querySelectorAll('.post-t').length;
-        if (older.length) {
-          tMount.insertAdjacentHTML('beforeend', older.map((r, i) => postHTML(r, at + i)).join(''));
-          paintBg(tMount);
-          wireReactions(tMount);          // only wires the bars it has not seen
-        }
-        more.remove();
-      });
-    }
+      // Everybody posts now, so eight slots turn over fast. One button brings the older
+      // ones back (up to 60), which is also how a member reaches their own post to delete it.
+      if (live.length >= FEED_CAP) {            // a full page back: there may be older ones
+        const more = document.createElement('button');
+        more.type = 'button'; more.className = 'take-more'; more.textContent = 'Show older posts';
+        tMount.insertAdjacentElement('afterend', more);
+        more.addEventListener('click', async () => {
+          more.disabled = true; more.textContent = 'Loading…';
+          let rows = null;
+          try { rows = await takeRows(); } catch (e) {}
+          if (!rows) { more.disabled = false; more.textContent = 'Could not load. Tap to try again.'; return; }
+          const have = new Set([...tMount.querySelectorAll('.post-t[data-pid]')].map(a => a.dataset.pid));
+          const older = rows.filter(r => r.id != null && !have.has(String(r.id)));
+          const at = tMount.querySelectorAll('.post-t').length;
+          if (older.length) {
+            tMount.insertAdjacentHTML('beforeend', older.map((r, i) => postHTML(r, at + i)).join(''));
+            paintBg(tMount);
+            wireReactions(tMount);          // only wires the bars it has not seen
+          }
+          more.remove();
+        });
+      }
+    };
+    takeDraw = got => {
+      const old = tMount.parentNode && tMount.parentNode.querySelector('.take-more:not(.take-again)'); if (old) old.remove();
+      if (got.fail) {
+        // one plain line and one key. Try again asks the same two calls again; with no backend script only a fresh page helps.
+        tMount.innerHTML = '<p class="take-wait" role="status">The timeline did not load.</p><button type="button" class="take-more take-again">Try again</button>';
+        tMount.querySelector('.take-again').addEventListener('click', () => {
+          if (!(window.OTP && OTP.configured && OTP.rollFeed)) { location.reload(); return; }
+          takeAsk();
+        });
+        tMount.removeAttribute('aria-busy');
+        return;
+      }
+      if (!got.rows) { tMount.innerHTML = ''; return; }      // nobody signed in: the timeline stays empty and unseen
+      tMount.removeAttribute('aria-busy');
+      showTake(got.rows);
+    };
+    if (takeGot) takeDraw(takeGot);          // the answer was in before a post could be drawn
+    else if (takeN === 0) takeAsk();         // never asked (the content files did not load): ask now; no backend script is a plain "did not load"
   }
 
   // ============ Music Rotation (hover-volume) ============

@@ -1,11 +1,15 @@
 /* THE TAKE on its own page (take/index.html, 11/12). His call: "just 1 timeline", then "merge": The Take and The Roll
  * are ONE members' timeline, called The Take. The page is the old home with everything but the
  * timeline switched off (take/index.html is its own source; assets/css/take.css hides the rest). This file loads
- * right after desk.js and before anything asks for the feed, and changes four things for this page only:
+ * after desk.js and changes four things for this page only:
  *
  *   THE FEED   OTP.feed() answers with roll_feed(60, every post) (045): every post a member may see, the public ones
  *              and the members-only ones, newest first, in the shape the timeline's own renderer already draws.
  *              Nobody signed in gets nothing here (the members-only card shows instead).
+ *              ⛔ 11/14: the PAGE no longer calls it. This file is `defer` and the page's own script is not, so the
+ *              page could ask for the feed after desk.js ran and BEFORE this swap, and a member got the public feed.
+ *              The page asks for the members' feed itself now (take/index.html, takeRows). The swap stays for
+ *              anything else that calls OTP.feed() here and for a copy of the page saved before 11/14.
  *   A POST     a post with a photo is sent members only, the way the Roll's own box posts (membersOnly, and the photo
  *              goes up as a Roll photo). Since migration 053 the database decides anyway: every new post by a member
  *              is members only, words alone included, whatever this page sends, and the line under the box says
