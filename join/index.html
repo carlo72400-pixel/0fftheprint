@@ -102,7 +102,7 @@ a.btn{text-decoration:none}
   // already signed in? send them where they belong
   const me = await OTP.me();
   if (me) {
-    // The Wall decides who gets in (card holders, the desk, and anybody whose login carries an Instagram: 035).
+    // The Wall decides who gets in (people the desk lets post, the desk, and anybody whose login carries an Instagram: 035).
     // The Crypt has its own Instagram step, so it always gets them back, and so does Your account, which has a
     // page for every login (a closed one, one that is almost in). Anywhere else waits until we know they are in:
     // a login with no Instagram sent back to the page that said "Log in" just bounced off it.

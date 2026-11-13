@@ -67,7 +67,7 @@
   if (!me) {
     line(`<span class="cav plain"></span>
       <div class="cgrow"><a class="clink" href="join/?next=home">Log in to post.</a>
-        <div class="cnote">Everybody in the Crypt posts here. No login yet? <a href="wall/">Join the Crypt</a>. All it takes is an Instagram.</div></div>`);
+        <div class="cnote">Everybody in the Coven posts here. No login yet? <a href="wall/">Join the Coven</a>. All it takes is an Instagram.</div></div>`);
     return;
   }
 
@@ -99,7 +99,7 @@
   if (atDoor) {
     line(`<span class="cav plain"></span>
       <div class="cgrow"><b class="clink">You are at the door.</b>
-        <div class="cnote">Every Instagram gets looked at before the Crypt opens. Once you are in, you post here.</div></div>`);
+        <div class="cnote">Every Instagram gets looked at before the Coven opens. Once you are in, you post here.</div></div>`);
     return;
   }
 
@@ -107,7 +107,7 @@
   if (!canPost) {
     line(`<span class="cav plain"></span>
       <div class="cgrow"><b class="clink">One more step.</b>
-        <div class="cnote">Put your Instagram in at <a href="wall/">the Crypt</a> and you can post now. One account per Instagram.</div></div>`);
+        <div class="cnote">Put your Instagram in at <a href="wall/">the Coven</a> and you can post now. One account per Instagram.</div></div>`);
     return;
   }
   // A casual member: words and photos. GIFs and video stay with the card.

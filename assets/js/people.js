@@ -20,7 +20,7 @@
  *   CLIPS        the video posts (card holders can post video), one row.
  *   A NAME       tap one, their page opens as a sheet: avatar, name, seat, posts, a grid of their photos, the
  *                frames they marked, and their links: a card holder's card (/c/) and, for anybody on the Wall,
- *                their page in the Crypt. Faces and names come off OTP.people() (044's one list: roster.json
+ *                their page in the Coven. Faces and names come off OTP.people() (044's one list: roster.json
  *                with the cards and the dark seats folded in), keyed by card slug.
  *   FRAMES YOU'RE IN  the frames you marked "I'm in this one" (my_frames, by name since 043), 30, then Show all.
  *                Every frame (30 at random) came off by his call 4: it repeated Home's Contact Sheet.
@@ -121,9 +121,9 @@
     c.innerHTML = '<img src="assets/cathedral/a/join.webp" alt="" width="96" height="96" decoding="async">' +
       '<b>Members only.</b><p>The Roll is where the people in the house post their photos. It stays behind the door.</p>' +
       (state === 'wait' && closedDoor() ? '<p class="rl-door-l">This account is closed. <a href="my/#account">Your account &rarr;</a></p>'
-        : state === 'wait' && atDoor() ? '<p class="rl-door-l">You are at the door. Every Instagram gets looked at before the Crypt opens.</p>'
-        : state === 'wait' ? '<p class="rl-door-l"><a href="wall/">One more step at the Crypt</a> and you are in.</p>'
-        : '<p class="rl-door-l"><a href="join/?next=home">Log in</a> with your email and password, or <a href="wall/">join the Crypt</a>. Joining asks for your Instagram.</p>');
+        : state === 'wait' && atDoor() ? '<p class="rl-door-l">You are at the door. Every Instagram gets looked at before the Coven opens.</p>'
+        : state === 'wait' ? '<p class="rl-door-l"><a href="wall/">One more step at the Coven</a> and you are in.</p>'
+        : '<p class="rl-door-l"><a href="join/?next=home">Log in</a> with your email and password, or <a href="wall/">join the Coven</a>. Joining asks for your Instagram.</p>');
     mount.appendChild(c);
   }
 
@@ -136,7 +136,7 @@
     box.className = 'rl-post';
     if (!canPost) {
       box.innerHTML = atDoor() ? '<p class="rl-note">You are at the door. Once you are in, you post here.</p>'
-        : '<p class="rl-note">Put your Instagram in at <a href="wall/">the Crypt</a> and you can post here.</p>';
+        : '<p class="rl-note">Put your Instagram in at <a href="wall/">the Coven</a> and you can post here.</p>';
       return;
     }
     box.innerHTML = '<div class="rl-post-top"></div>' +
@@ -343,10 +343,10 @@
     var top = el('div', 'rl-pan-top'); top.appendChild(avatar(p, 'big'));
     var photos = rows.filter(function (r) { return r.key === p.key && safe(r.image_url) && !isVideo(r.image_url); });
     var nPosts = rows.filter(function (r) { return r.key === p.key; }).length;
-    // anybody who shows on the Wall has a page in the Crypt: a card holder too (roll_feed sends their sid), not only
-    // somebody whose link is their Crypt page. A card holder's card is the other link.
+    // anybody who shows on the Wall has a page in the Coven: a card holder too (roll_feed sends their sid), not only
+    // somebody whose link is their Coven page. A card holder's card is the other link.
     var sid = /^[a-z0-9]+$/.test(p.sid || '') ? p.sid : ((/^wall\/#s-([a-z0-9]+)$/.exec(p.link || '') || [])[1] || '');
-    var go = sid ? '<a href="wall/#s-' + esc(sid) + '">Their page in the Crypt &rarr;</a>' : '';
+    var go = sid ? '<a href="wall/#s-' + esc(sid) + '">Their page in the Coven &rarr;</a>' : '';
     top.appendChild(el('div', 'rl-pan-who', '<b>' + esc(p.name) + '</b><span>' + esc(p.seat) + '</span><em>' + nPosts + (nPosts === 1 ? ' post here' : ' posts here') + '</em>' + go));
     var x = el('button', 'rl-pan-x', '&times;'); x.type = 'button'; x.setAttribute('aria-label', 'Close'); top.appendChild(x);
     pan.appendChild(top);

@@ -112,7 +112,7 @@
         // Wave 2, call 6: a new one is "Put a date up", the same words as the
         // button on /dates/, and the note says where it lands.
         '<h3>' + (row ? 'Edit the date' : 'Put a date up') + '</h3>' +
-        '<div class="note">Anything you have coming up. It goes on the Run and in the Crypt straight away.</div>' +
+        '<div class="note">Anything you have coming up. It goes on the Run and in the Coven straight away.</div>' +
         '<label for="cf-title">What is it</label>' +
         '<input id="cf-title" type="text" maxlength="90" value="' + esc(r.title || '') + '" ' +
           'placeholder="the show, the drop, the release">' +

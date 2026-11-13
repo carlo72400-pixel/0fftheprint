@@ -145,7 +145,7 @@
     el.classList.add('flash');
   }
 
-  /* ONE LINE PER VIEWER. The stranger keeps the HTML's line (the Crypt pitch)
+  /* ONE LINE PER VIEWER. The stranger keeps the HTML's line (the Coven pitch)
      and gets the log in here; everyone signed in gets the first sentence there
      and their own line here.
      Every link is a fixed page, nothing out of the database reaches these. */
@@ -166,13 +166,13 @@
       panel.appendChild(wholine('Can you post here? <a href="../join/?next=dates">Log in</a> and put your own dates up.'));
     } else if (who === 'pending') {
       // a login that already carries an @ (it knocked on /join/) walks straight
-      // into the Crypt; only one with none has anything to type there
+      // into the Coven; only one with none has anything to type there
       panel.appendChild(wholine('One more step and you see every flyer: ' + (hasIg
-        ? '<a href="../wall/">walk into the Crypt</a>.'
-        : '<a href="../wall/">put your Instagram in at the Crypt</a>.')));
+        ? '<a href="../wall/">walk into the Coven</a>.'
+        : '<a href="../wall/">put your Instagram in at the Coven</a>.')));
     } else if (who === 'casual') {
       panel.appendChild(wholine('Every flyer and every show, on one calendar: ' +
-        '<a href="../wall/#cal">open the Crypt</a>. People the desk lets post put their own dates up here.'));
+        '<a href="../wall/#cal">open the Coven</a>. People the desk lets post put their own dates up here.'));
     } else if (who === 'card') {
       var bar = d.createElement('div');
       bar.className = 'addbar';
@@ -181,7 +181,7 @@
       add.onclick = function () { C.sheet(null, load, { admin: false }); };
       bar.appendChild(add);
       panel.appendChild(bar);
-      panel.appendChild(wholine('It goes on the Run and in the Crypt straight away. ' +
+      panel.appendChild(wholine('It goes on the Run and in the Coven straight away. ' +
         'Want the house there? Tick ask the house.'));
     } else if (who === 'desk') {
       panel.appendChild(wholine('You run this list from the board. ' +
@@ -296,9 +296,9 @@
 
   /* Who is looking. me() settles the desk and a card holder (my_profile already
      reports a banned or closed holder as not approved). Anyone else signed in
-     asks my_account whether they are in the Crypt yet: 'pending' is a login
+     asks my_account whether they are in the Coven yet: 'pending' is a login
      that has not walked in (with or without an Instagram on it). An account
-     that will not answer gets the casual line, whose Crypt link is right for
+     that will not answer gets the casual line, whose Coven link is right for
      both. */
   function whoOf(acct) {
     hasIg = !!(acct && acct.ig);

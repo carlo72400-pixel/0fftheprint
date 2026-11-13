@@ -117,14 +117,14 @@ a.btn{text-decoration:none}
 <div class="wrap">
   <h1>Your account</h1>
   <div class="sub" id="sub">your name &nbsp;·&nbsp; your login &nbsp;·&nbsp; what you put up &nbsp;·&nbsp;
-    <a href="../wall/" style="color:var(--pink-glow);text-decoration:none;font-weight:600">THE CRYPT &rarr;</a></div>
+    <a href="../wall/" style="color:var(--pink-glow);text-decoration:none;font-weight:600">THE COVEN &rarr;</a></div>
 
   <div id="gate" class="gate" style="display:none"></div>
 
   <!-- A CLOSED ACCOUNT gets this and nothing else. -->
   <div class="card shut" id="closed" style="display:none"></div>
 
-  <!-- MEMBERS (and a login that is almost in): their page lives in the Crypt. -->
+  <!-- MEMBERS (and a login that is almost in): their page lives in the Coven. -->
   <div class="card" id="crypt" style="display:none"></div>
 
   <div id="app" class="grid" style="display:none">
@@ -137,19 +137,19 @@ a.btn{text-decoration:none}
       <div class="quick" id="quick">
         <a href="../take/">Post</a>
         <a href="../compose/">Your posts</a>
-        <a href="../wall/#me">Your page in the Crypt</a>
+        <a href="../wall/#me">Your page in the Coven</a>
         <a href="../word/new/">Write a story</a>
         <a href="../compose/#rot">Song on rotation</a>
       </div>
       <div class="hint" style="margin-top:12px">This photo is your face everywhere: your posts
-        and your page in the Crypt.</div>
+        and your page in the Coven.</div>
     </div>
 
     <!-- YOUR WORDS (11/13: the artist pages are gone). One line and a short paragraph. Their page in the
-         Crypt shows them as its headline and About until they write that page themselves (wall_space). -->
+         Coven shows them as its headline and About until they write that page themselves (wall_space). -->
     <div class="card" id="wordscard" style="display:none">
       <div class="sec">Your words</div>
-      <div class="hint">One line and a short paragraph. They show on your page in the Crypt
+      <div class="hint">One line and a short paragraph. They show on your page in the Coven
         until you write that page yourself.</div>
       <label for="w-tag">Tagline</label>
       <input type="text" id="w-tag" maxlength="80" placeholder="one line. who you are in the room.">
@@ -164,10 +164,10 @@ a.btn{text-decoration:none}
     <!-- THEIR LINKS.
          ⛔ Platform + handle, never a URL: the page rebuilds the host, so a
          member cannot point their own page anywhere but their own profile.
-         Wave 2: this is the ONE place links change. Their page in the Crypt reads these. -->
+         Wave 2: this is the ONE place links change. Their page in the Coven reads these. -->
     <div class="card" id="linkscard" style="display:none;scroll-margin-top:16px">
       <div class="sec">Your links</div>
-      <div class="hint">Up to five. They show on your page in the Crypt. This is the one place to
+      <div class="hint">Up to five. They show on your page in the Coven. This is the one place to
         change them. Give the handle only, not the whole address.</div>
       <div id="lk-rows"></div>
       <div class="row" style="margin-top:12px">
@@ -324,7 +324,7 @@ a.btn{text-decoration:none}
 <script src="../supabase-config.js?v=f1348482"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" integrity="sha384-Rj26LVGvoeRVR6+mwQmFfcR3QOBEwT+ZmuCWpuiqeTzJpCs0ER4ITAWGb4Hiy3Ok" crossorigin="anonymous"></script>
 <script src="../assets/js/desk.js?v=31a2cc50" defer></script>
-<script src="../assets/js/calendar.js?v=2cd5da5c" defer></script>
+<script src="../assets/js/calendar.js?v=c662692c" defer></script>
 <script defer>
 document.addEventListener('DOMContentLoaded', async () => {
   const $ = id => document.getElementById(id);
@@ -333,7 +333,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const say = (el, t, kind) => { if (!el) return; el.className = 'msg' + (kind ? ' ' + kind : ''); el.textContent = t || ''; };
   const gate = html => { $('gate').style.display = ''; $('gate').innerHTML = html; };
 
-  // ?next= and the Crypt's links land on #account or #linkscard, which are
+  // ?next= and the Coven's links land on #account or #linkscard, which are
   // drawn after the page loads, so the browser's own jump finds nothing. Snap
   // to the one asked for each time something above it is drawn, until they
   // touch the page or six seconds pass (the card preview waits on the
@@ -419,8 +419,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     $('account').style.display = '';
     const whoLine = () => { $('a-who').innerHTML = email ? 'Signed in as <b>' + esc(email) + '</b>' : 'Signed in'; };
     whoLine();
-    const CHIP = { desk: 'THE DESK', card: 'YOU CAN POST', member: 'IN THE CRYPT', pending: 'ALMOST IN', door: 'AT THE DOOR' };
-    // a banned login is not in the Crypt, so it gets no chip rather than a wrong one
+    const CHIP = { desk: 'THE DESK', card: 'YOU CAN POST', member: 'IN THE COVEN', pending: 'ALMOST IN', door: 'AT THE DOOR' };
+    // a banned login is not in the Coven, so it gets no chip rather than a wrong one
     if (CHIP[kind] && !(acct && acct.banned)) {
       const chip = $('a-role');
       chip.textContent = CHIP[kind]; chip.className = 'chip ' + kind; chip.hidden = false;
@@ -465,7 +465,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     $('a-ig').innerHTML = ig
       ? '<div class="av">@' + esc(ig) + '</div><div class="hint">' +
         (isDesk ? 'Change it on the board, under Members.' : 'Ask the desk to change it.') + '</div>'
-      : '<div class="hint">No Instagram on this login yet. <a href="../wall/">Put it in at the Crypt</a>.</div>';
+      : '<div class="hint">No Instagram on this login yet. <a href="../wall/">Put it in at the Coven</a>.</div>';
 
     // -- email
     if (isDesk) {
@@ -556,28 +556,28 @@ document.addEventListener('DOMContentLoaded', async () => {
   drawAccount();
   jump();
 
-  // ---- MEMBERS: their page is in the Crypt ---------------------------------
+  // ---- MEMBERS: their page is in the Coven ---------------------------------
   if (!P.approved) {
     const box = $('crypt');
     box.style.display = '';
     if (acct && acct.banned) {
-      box.innerHTML = '<div class="sec">The Crypt</div><p class="hint">The Crypt is closed to this account.</p>';
+      box.innerHTML = '<div class="sec">The Coven</div><p class="hint">The Coven is closed to this account.</p>';
     } else if (kind === 'pending') {
       box.innerHTML = '<div class="sec">One more step.</div>' +
-        "<p class=\"hint\">Put your Instagram in at the Crypt and you're in.</p>" +
-        '<a class="btn" href="../wall/">Go to the Crypt</a>';
+        "<p class=\"hint\">Put your Instagram in at the Coven and you're in.</p>" +
+        '<a class="btn" href="../wall/">Go to the Coven</a>';
     } else if (kind === 'door') {
       // 049: the desk looks at every new @ first (turned away reads the same: a no is never announced)
       box.innerHTML = '<div class="sec">You are at the door.</div>' +
-        '<p class="hint">Every Instagram gets looked at before the Crypt opens. Your page, your Kin and your messages ' +
+        '<p class="hint">Every Instagram gets looked at before the Coven opens. Your page, your Kin and your messages ' +
         'are there once you are in.</p>';
     } else {
       // 11/13: no cards. A member reads nothing here about posting more, except one who already asked the desk
       // (the ask is still waiting in the database; the desk answers it on the board).
       const line = (acct && acct.card_ask === 'asked')
         ? 'You asked the desk to let you post songs, video, stories and dates. The desk answers by hand.' : '';
-      box.innerHTML = '<div class="sec">Your page in the Crypt</div>' +
-        '<p class="hint">Your page, your Kin and your messages live in the Crypt.</p>' +
+      box.innerHTML = '<div class="sec">Your page in the Coven</div>' +
+        '<p class="hint">Your page, your Kin and your messages live in the Coven.</p>' +
         '<a class="btn" href="../wall/#me">Open your page</a>' +
         (line ? '<p class="hint" style="margin-top:12px">' + esc(line) + '</p>' : '') +
         '<div class="quick"><a href="../compose/">Your posts</a>' +
@@ -666,7 +666,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           }
           msg.className = 'msg ok';
           msg.textContent = saved.length
-            ? `Saved. ${saved.length} link${saved.length > 1 ? 's' : ''} on your page in the Crypt.`
+            ? `Saved. ${saved.length} link${saved.length > 1 ? 's' : ''} on your page in the Coven.`
             : 'Saved. No links on your page.';
         } catch (e) { msg.className = 'msg bad'; msg.textContent = e.message || String(e); }
         b.disabled = false;

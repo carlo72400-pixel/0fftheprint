@@ -4,32 +4,32 @@
    S.out below saying the same thing: the static one is the first frame and what a
    link preview reads.
    Wave 2: it also says where What's coming goes (`cal`, every a[data-cal]: the Run
-   on dates/ for a stranger, the Crypt's calendar for a member, call 6), shows who
+   on dates/ for a stranger, the Coven's calendar for a member, call 6), shows who
    is signed in with Your account and Log out (call 7), and knows a closed account. */
 (async () => {
   const S = {
     // 033: everybody on The Wall posts to the timeline now, not only card holders.
     // 035: the door is an Instagram (one account each, no member code). `st` names the state for
     // the stylesheet (cathedral.js copies it onto <html>), so a label can change without breaking it.
-    // `cal` is where What's coming opens: the Run on dates/ until they are in the Crypt, its calendar after.
+    // `cal` is where What's coming opens: the Run on dates/ until they are in the Coven, its calendar after.
     out:  {st:'out', label:'Log in',  href:'join/?next=home', cal:'dates/', on:false,
            title:'Members log in here.',
            b:'Log in to post.',
-           s:'Everybody in the Crypt posts to this timeline, reacts and comments. No login yet? Join the Crypt. Joining asks for your Instagram.',
+           s:'Everybody in the Coven posts to this timeline, reacts and comments. No login yet? Join the Coven. Joining asks for your Instagram.',
            foot:'Log in →'},
     // 035: who is still here? A login with no Instagram on it. Everybody who has one is let onto
     // The Wall below, so nobody is "in the queue" just to get in any more.
     wait: {st:'wait', label:'Almost in', href:'wall/', cal:'dates/', on:false,
            title:'One more step: your Instagram.',
            b:'One more step.',
-           s:'Put your Instagram in at the Crypt and you can post, react and comment. One account per Instagram.',
+           s:'Put your Instagram in at the Coven and you can post, react and comment. One account per Instagram.',
            foot:'One more step →'},
     // 049: the door looks first. A new @ waits until the desk has looked at it (a no is never announced, so
     // somebody turned away reads the same). `st` stays 'wait' for the stylesheet; `at` tells the Roll apart.
     door: {st:'wait', at:'door', label:'At the door', href:'wall/', cal:'dates/', on:false,
            title:'Your Instagram is waiting to be looked at.',
            b:'You are at the door.',
-           s:'Every Instagram gets looked at before the Crypt opens. Once you are in, you post, react and comment here.',
+           s:'Every Instagram gets looked at before the Coven opens. Once you are in, you post, react and comment here.',
            foot:'At the door →'},
     // Wave 2 naming: /my/ is 'Your account' for every role (W1's 'Your desk' label is gone)
     in:   {st:'in', label:'Your account', href:'my/#account', cal:'wall/#cal', on:true,
@@ -39,9 +39,9 @@
            foot:'Your account →'},
     wall: {st:'in', label:'Member', href:'wall/', cal:'wall/#cal', on:true,
            title:'Every flyer this week, one night at a time.',
-           b:'Open the Crypt.',
+           b:'Open the Coven.',
            s:'Every flyer in SA, San Marcos and Austin, one night at a time. See who is going and vote the vibe. You can post up top, too.',
-           foot:'Open the Crypt →'},
+           foot:'Open the Coven →'},
     // Wave 2: the board is the one control room (/desk/ only sends you there). The badge is everything waiting
     // on him, the same number the board's own strip adds up (desk_waiting).
     admin:{st:'in', label:'Desk',    href:'board/', cal:'wall/#cal', on:true,
@@ -141,10 +141,10 @@
       try { s.n = ((await OTP.deskWaiting()) || {}).total || 0; } catch(e){}
     } else if (me && me.profile && me.profile.approved) {
       s = S.in;
-      // 032 kept a Crypt-banned card holder here. Since 044 a ban or a close is a gate: my_profile reports
+      // 032 kept a Coven-banned card holder here. Since 044 a ban or a close is a gate: my_profile reports
       // approved false for them, so they read as not approved and land on the quiet 'Almost in' like any banned
-      // login. This stays for an approved login the Crypt still refuses: the key stays 'Your account', and the
-      // CRYPT link, which would only open on a door that refuses them, goes. Only a plain false hides it: a
+      // login. This stays for an approved login the Coven still refuses: the key stays 'Your account', and the
+      // COVEN link, which would only open on a door that refuses them, goes. Only a plain false hides it: a
       // failed ask leaves it where it was.
       try {
         const r = await OTP.sb().rpc('is_wall_member');
