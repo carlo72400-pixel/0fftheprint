@@ -48,31 +48,6 @@
       "artist": "Frost Children",
       "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d0000b273557318ccf401251fe5efa334",
       "link": "https://open.spotify.com/track/10Fq3Aq8hu8hELDkpYWJVf"
-    },
-    {
-      "platform": "spotify",
-      "title": "Stardust Breaker",
-      "artist": "KAV-MAN",
-      "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d0000b273824a32b56f258d90d1aeaa01",
-      "link": "https://open.spotify.com/track/0KJIm3Ukd82n0d7VOCQWWI?t=123",
-      "start": 123,
-      "preview": "https://p.scdn.co/mp3-preview/0672e369bb582b64c8fffe218daa286b2a099379"
-    },
-    {
-      "platform": "spotify",
-      "title": "2 HI",
-      "artist": "VIRGOSGATEWAY",
-      "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d0000b2737a49561a1eb3f079d7e4f4f7",
-      "link": "https://open.spotify.com/track/0sKUd3PxqITdWs8NqzpCBV",
-      "preview": "https://p.scdn.co/mp3-preview/4559e4f26c088f1ca47dfb05f646c0580b37c052"
-    },
-    {
-      "platform": "spotify",
-      "title": "YOU TRIED IT",
-      "artist": "VIRGOSGATEWAY",
-      "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d0000b2737278fa6c7ec6e3598a7338b6",
-      "link": "https://open.spotify.com/track/1PkGP1pjnPXpi081HVv7zr",
-      "preview": "https://p.scdn.co/mp3-preview/7b717897dbce2610548fc8bef9cbecb685b82585"
     }
   ]
 }
