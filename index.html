@@ -2840,6 +2840,62 @@ a.key{cursor:pointer}
 .tk-film-c b{display:block;font:400 20px/1.1 var(--f-name)}
 .tk-film-c small{display:block;margin-top:5px;font:500 13.5px/1.35 var(--f-text);color:#c4bbd0}
 .tk-film .key.big{flex:none;width:min(100%,340px)}
+/* THE HOUSE CARD (round 17, 11/13: "when you flip the card, you can still see the text from the front ... inverted", "I
+   want the card to fill the screen").
+   THE FLIP. Safari only hides the back of a face that is itself turned in 3D, and it mixes the front's foil (a blend
+   mode) into the turning card's own picture when the front is not its own layer: that picture is then shown mirrored
+   with the card. So: the front has its own (zero) turn, each face sits half a pixel proud of the card so the two are
+   never in the same plane, each face keeps its blend modes to itself, and the -webkit- forms are on the turner and on
+   both faces. And so that nothing rests on the browser at all, the face you are not looking at is switched off
+   (visibility) the moment the card is edge on: .11s into the .6s turn, where its curve passes 90 degrees. Nothing
+   between the turner and its faces clips, filters or fades.
+   IT FILLS THE SCREEN. Up to 480 px wide the card in your hands, and the one from your collection, run edge to edge and
+   from the top of the screen to the keys; the keys have their own bar under it, always there. A reading too long for
+   the card (after a little shrinking, hv.js fit) scrolls inside the card. Wider screens get a bigger card too. */
+.hv-flipc{-webkit-transform-style:preserve-3d}
+.hv-flipc .face{-webkit-transform-style:flat;transform-style:flat;transition:visibility 0s .11s}
+.hv-flipc .face.front{-webkit-transform:rotateY(0deg) translateZ(.5px);transform:rotateY(0deg) translateZ(.5px)}
+.hv-flipc .face.back{-webkit-transform:rotateY(180deg) translateZ(.5px);transform:rotateY(180deg) translateZ(.5px);visibility:hidden}
+.hv-flipc.hv-flipd .face.front{visibility:hidden}
+.hv-flipc.hv-flipd .face.back{visibility:visible}
+.hv-flipc .hv-cf,.hv-flipc .hv-cb{isolation:isolate}
+.hv-flipc .hv-cb.hv-long{justify-content:flex-start;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y}
+.hv-flipc .hv-cb.hv-long>.hv-bhead{margin-top:auto}
+.hv-flipc .hv-cb.hv-long>.hv-bfoot{margin-bottom:auto}
+.hv-flipc .hv-cb.hv-long>.hv-cn.bl,.hv-flipc .hv-cb.hv-long>.hv-cn.br{display:none}
+@media (prefers-reduced-motion:reduce){.hv-flipc .face{transition:none!important}}
+.hv-vkeys .hv-vread{flex-direction:row;gap:6px}
+.hv-hands .hold-keys,.hv-vkeys,.hv-vbody>p{position:relative;z-index:2}                /* the card swings toward you as it turns: the keys stay on top of it */
+@media (min-width:481px){
+  .hv-hands,.hv-view{--hv-w:max(240px,min(420px,calc((100vh - 230px)*.6)))}
+  .hv-held,.hv-vbody .hv-flipc{width:var(--hv-w)}
+  .hv-held,.hv-vbody{--cf:calc(var(--hv-w)/19.45)}
+}
+@media (max-width:480px){
+  .hv-hands,.hv-view{--hv-h:calc(100vh - 92px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
+  .hv-view{--hv-h:calc(100vh - 138px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
+  @supports (height:100dvh){
+    .hv-hands{--hv-h:calc(100dvh - 92px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
+    .hv-view{--hv-h:calc(100dvh - 138px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
+  }
+  .hv-hands{padding:0;justify-content:flex-start;background:#14081a}
+  .hv-hands .hold{flex:1;min-height:0;width:100%;gap:0;padding-top:env(safe-area-inset-top,0px)}
+  .hv-hands .hold-name{position:absolute;width:1px;height:1px;margin:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .hv-held{display:flex;flex-direction:column;flex:1;min-height:0;width:100%}
+  .hv-held,.hv-vbody{--cf:min(5.14vw,calc(var(--hv-h)/27))}
+  .hv-held .hv-flipc,.hv-vbody .hv-flipc{flex:1;min-height:0;width:100%;aspect-ratio:auto}
+  .hv-held .hv-card,.hv-vbody .hv-card{height:100%;aspect-ratio:auto;border-radius:0}
+  .hv-held .hv-cf,.hv-held .hv-cb,.hv-vbody .hv-cf,.hv-vbody .hv-cb{border-radius:.35em}
+  .hv-held .hv-winf,.hv-vbody .hv-winf{width:min(84%,calc((var(--hv-h) - 12.6em)*.8))}
+  .hv-held .hv-cf,.hv-vbody .hv-cf{gap:max(0px,calc((var(--hv-h) - 31.5em)/9))}
+  .hv-hands .hold-keys{flex:none;width:100%;margin:0;padding:10px 12px calc(16px + env(safe-area-inset-bottom,0px));gap:10px;background:#2e1438;border-top:1px solid #4a2560}
+  .hv-hands .hold-keys .hv-go{flex:1}
+  .hv-vbar{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);padding:0;border:0}
+  .hv-vbody{padding:0;gap:0;justify-content:flex-start;overflow:visible}
+  .hv-vbody>.hv-flipc+p{flex:none;max-width:none;width:100%;min-height:46px;display:flex;align-items:center;justify-content:center;padding:5px 14px;font-size:12.5px;line-height:1.35;background:#1a0b22}
+  .hv-vkeys{padding:10px 12px calc(16px + env(safe-area-inset-bottom,0px))}
+  .hv-vkeys .hv-vread{max-width:none}
+}
 
 /* ---------- THAT'S ME at the PHOTO BOOTH: a night's whole contact sheet, and the POLAROID the booth prints of your
    frame (11/12, site build only: tm.js). Instant film, not a trading card: white border, thick bottom edge, the photo
@@ -5902,7 +5958,9 @@ a.key{cursor:pointer}
       });
       $$('.hv-cb', root).forEach(cb => {
         let k = 1; cb.style.setProperty('--bs', '1');
-        for (let n = 0; n < 9 && cb.scrollHeight > cb.clientHeight + 1; n++) { k -= .04; cb.style.setProperty('--bs', k.toFixed(2)); }
+        cb.classList.remove('hv-long'); const most = matchMedia('(max-width:480px)').matches ? 4 : 9;
+        for (let n = 0; n < most && cb.scrollHeight > cb.clientHeight + 1; n++) { k -= .04; cb.style.setProperty('--bs', k.toFixed(2)); }
+        cb.classList.toggle('hv-long', cb.scrollHeight > cb.clientHeight + 1);
       });
     }
 
