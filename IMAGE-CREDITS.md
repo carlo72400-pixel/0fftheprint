@@ -1,15 +1,22 @@
 # Image credits — THE WORD
 
 Every story cover, where it came from, and what the licence actually lets us do.
-Sourced and licence-verified 2026-08-27, extended 2026-09-02, 2026-09-14, 2026-10-04, 2026-10-07, 2026-10-21, 2026-10-27, 2026-10-29, 2026-11-04 and 2026-11-09. The credit line also appears on each
+Sourced and licence-verified 2026-08-27, extended 2026-09-02, 2026-09-14, 2026-10-04, 2026-10-07, 2026-10-21, 2026-10-27, 2026-10-29, 2026-11-04, 2026-11-09 and 2026-11-12. The credit line also appears on each
 story page itself, under the cover, which is where attribution legally belongs.
 
 ⛔ **Do not swap a cover without updating this file and the page's credit line.**
 CC BY and CC BY-SA both require the credit AND a note that the image was changed.
 All of these are cropped, so all of them say "Cropped."
+Since 2026-11-12 some covers are also restyled in Photoshop (a print treatment over the photo, plus the house stamp
+and folio), and those say "Cropped and restyled."
 
 | № | Story | Image | Source | Licence |
 |---|---|---|---|---|
+| 0TP-058 | Thirty-Three Years, One Memo | Jensen Huang at SC18, Dallas, Nov 12, 2018, restyled as a newsprint halftone with a pink EFFECTIVE IMMEDIATELY stamp (tile: wider, same treatment) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:JensenHuangSC18.jpg) · Raysonho @ Open Grid Scheduler / Scalable Grid Engine | [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| 0TP-057 | Her Own Pass, One Song | Kasane Teto in the BIRDBRAIN music video, 2025, restyled as a comment stream with a seek bar, nothing over her face (tile: same, re-flowed). Her design belongs to TWINDRILL | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Kasane_Teto_in_BIRDBRAIN.png) · Jamie Paige | [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/) |
+| 0TP-056 | San Antonio Plays At 11 | Ocean Drive by night, Miami Beach, July 25, 2016, restyled as a two-plate riso print with the type knocked out (tile: the hotels on the right) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Ocean_Drive_by_night_2.jpg) · Gzzz | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
+| 0TP-055 | One Night In May | Chino Moreno of Deftones at Rock im Park, June 5, 2022, restyled as a two-ink screenprint gig poster (tile: a paper band on top for the bill) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Deftones_-_Rock_im_Park_2022_-_IMG_2974_-_7.jpg) · Mr. Rossi (press accreditation archived with VRT) | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
+| 0TP-054 | The Album Has A Narrator | Ballet slippers, Jan 29, 2017, restyled with a spin blur around the shoes, a plum gradient map and an obi strip (Commons has no photo of 2hollis we can trust) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Ballet_Slippers_%28Unsplash%29.jpg) · Gaelle Marcel | [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
 | 0TP-053 | Friday The 13th, Pick Your Night | A black cat at night, April 30, 2015 (tile: the cat, centred) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Black_Cat_in_Darkness.JPG) · Luke Rogers | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
 | 0TP-052 | Both Bands Left Town | The backline at WAP, Private Park, San Marcos, Sep 25, 2026 (gallery frame 024, no people) | **Ours.** Shot by the house | House |
 | 0TP-051 | The Next Headliner Was A Prank | Vocaloid cosplayers at Fancy Frontier 19, Taiwan, Feb 4, 2012, Kasane Teto in red at the top right (tile: the right half of the group) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:FF19_DSC2309_85.jpg) · kxz Chen (Flickr, licence machine-reviewed) | [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/) |
@@ -81,7 +88,7 @@ in the 9/2 pass: a Ken Carson live shot tagged "License review needed" (an unrev
 frame), and an Elizabeth Bathory painting claiming CC BY-SA as "own work", which does not hold up
 for a historical portrait. Neither shipped.
 
-**SHARE-ALIKE.** 0TP-049, 0TP-047, 0TP-044, 0TP-043, 0TP-038, 0TP-037, 0TP-035, 0TP-033, 0TP-032, 0TP-029, 0TP-018, 0TP-008 and 0TP-006 are CC BY-SA. Our cropped versions of those
+**SHARE-ALIKE.** 0TP-056, 0TP-055, 0TP-053, 0TP-051, 0TP-049, 0TP-047, 0TP-044, 0TP-043, 0TP-038, 0TP-037, 0TP-035, 0TP-033, 0TP-032, 0TP-029, 0TP-018, 0TP-008 and 0TP-006 are CC BY-SA. Our cropped versions of those
 images carry the same licence, meaning somebody else may reuse those covers
 under BY-SA. It stops at those images. It does not touch the writing, the rest
 of the site, or anything else in this repo.

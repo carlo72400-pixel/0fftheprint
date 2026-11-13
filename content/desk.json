@@ -1,6 +1,76 @@
 {
   "items": [
     {
+      "title": "Thirty-Three Years, One Memo",
+      "kicker": "THE SCANDAL",
+      "dek": "Jensen Huang told his staff he cheated. US officials say the woman was recruited by China's spy agency. China calls it a smear. By Thursday he was out.",
+      "date": "11.12.26",
+      "lanes": [
+        "story"
+      ],
+      "dept": "story",
+      "platform": "SITE",
+      "thumb": "word/thirty-three-years-one-memo/thumb.jpg",
+      "link": "word/thirty-three-years-one-memo/",
+      "num": "0TP-058"
+    },
+    {
+      "title": "Her Own Pass, One Song",
+      "kicker": "THE SHOP",
+      "dek": "Kasane Teto's Fortnite pass went live Thursday, and she's on 1 of its 4 songs. Her biggest hits aren't in the game at all. Then on Sunday, there's a leek.",
+      "date": "11.12.26",
+      "lanes": [
+        "story"
+      ],
+      "dept": "story",
+      "platform": "SITE",
+      "thumb": "word/her-own-pass-one-song/thumb.jpg",
+      "link": "word/her-own-pass-one-song/",
+      "num": "0TP-057"
+    },
+    {
+      "title": "San Antonio Plays At 11",
+      "kicker": "THE COUNTDOWN",
+      "dek": "GTA 6 unlocks at midnight Eastern on November 19, so San Antonio should get it at 11 the night before. Here's the clock, plus two rumors nobody's confirmed.",
+      "date": "11.12.26",
+      "lanes": [
+        "story"
+      ],
+      "dept": "story",
+      "platform": "SITE",
+      "thumb": "word/san-antonio-plays-at-11/thumb.jpg",
+      "link": "word/san-antonio-plays-at-11/",
+      "num": "0TP-056"
+    },
+    {
+      "title": "One Night In May",
+      "kicker": "THE RUN",
+      "dek": "Deftones play Frost Bank Center on Thursday, May 6, with Knocked Loose and julie. The presale is Tuesday. Meshuggah and Metallica already took that month.",
+      "date": "11.12.26",
+      "lanes": [
+        "story"
+      ],
+      "dept": "story",
+      "platform": "SITE",
+      "thumb": "word/one-night-in-may/thumb.jpg",
+      "link": "word/one-night-in-may/",
+      "num": "0TP-055"
+    },
+    {
+      "title": "The Album Has A Narrator",
+      "kicker": "THE RECORD",
+      "dek": "2hollis put out Pirouette on Wednesday, 16 songs told through something called One. No Carti, no Ken. Texas gets two nights, Dallas and Austin, in February.",
+      "date": "11.12.26",
+      "lanes": [
+        "story"
+      ],
+      "dept": "story",
+      "platform": "SITE",
+      "thumb": "word/the-album-has-a-narrator/thumb.jpg",
+      "link": "word/the-album-has-a-narrator/",
+      "num": "0TP-054"
+    },
+    {
       "title": "Friday The 13th, Pick Your Night",
       "kicker": "THE CALENDAR",
       "dek": "Friday the 13th has a backyard party with buckets of fake blood, a horror con with a real Jason and a new horror movie. Saturday's stacked too.",
