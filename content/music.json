@@ -1,6 +1,6 @@
 {
  "v": 1,
- "built": "2026-10-11",
+ "built": "2026-11-12",
  "notes": {
   "2JLzVBFFRsqgmu20e3p2Rm": "Off EMOTIONS, out April 3. The album samples Purple Swag twice, and Purple Swag samples Houston.",
   "2rSNj3zySzJ09yWUQar6Iz": "Single, out Aug 7 on Opium. It nods back to How U Feel?, the opener on If Looks Could Kill. He plays Austin Oct 13.",
@@ -10,14 +10,44 @@
   "6m96Qz0SKJHFgluQAsKhFu": "Off THE HØMECØMING*, out April 14. diamond* started the Atlanta crew ØWAY with Tezzus.",
   "0KJIm3Ukd82n0d7VOCQWWI": "Off Fat Boi Fall, 2024. KAV-MAN holds a card here, and his card plays this from 2:03.",
   "0sKUd3PxqITdWs8NqzpCBV": "Single, out June 29 on GateWayRecords. It plays when you open VIRGOSGATEWAY’s card.",
-  "1PkGP1pjnPXpi081HVv7zr": "Single, out March 28 on GateWayRecords."
+  "1PkGP1pjnPXpi081HVv7zr": "Single, out March 28 on GateWayRecords.",
+  "3gaH1lcvaoTibA4dZ1CyzK": "Out June 8. The crew’s name as a hook, and crowds scream it back. The Ø in vamp wØrld comes from here.",
+  "0AlTIOiF5u0sHdsEvBU2av": "Out Jan 31. Nine’s anthem, the one the crowd chants. It opens vamp wØrld.",
+  "0NwBVCDFDAXvhhlqeUEVIf": "Off Virginia Creeper, out Oct 30. It went on vamp wØrld the day it dropped.",
+  "1s5P9UA3dokSsHaEH8rYn1": "Toronto’s twentythree, out Oct 23 with a video. It’s on the ??? playlist.",
+  "2WyUJEFZ6vQzTwSdKzqLrx": "Basspunk, out Oct 21. It’s on two of our playlists: ??? and hello brainrot.",
+  "5KJwFcJc0m1u4F8mVkwT5Y": "Out Oct 9. It sits in the right now block on hello brainrot.",
+  "10Fq3Aq8hu8hELDkpYWJVf": "Out July 10. Frost Children are all over hello brainrot: three songs in the right now block."
  },
  "rooms": [
+  {
+   "id": "1SFQOgzAUPk2c8gkIyAbla",
+   "name": "vamp wØrld 🩸",
+   "label": "The anthems room",
+   "line": "What our world plays right now: ØWAY, rage, opium, the UK and the club.",
+   "art": "https://image-cdn-fa.spotifycdn.com/image/ab67706c0000bebb51b84ef7d840ab5e45b674a2",
+   "spot": true
+  },
+  {
+   "id": "2hxZbnqcR16fGB9ou4U98K",
+   "name": "???",
+   "label": "The night out",
+   "line": "Pregame to after hours. Atlanta bounce, UK underground, peak rage.",
+   "art": "https://image-cdn-fa.spotifycdn.com/image/ab67706c0000bebb7fba1af00ba0b5e7390ad1b3"
+  },
+  {
+   "id": "392DTpfHKat2W8darHiVPo",
+   "name": "hello brainrot 🎀",
+   "label": "The girls’ party club",
+   "line": "Y2K, Tokyo right now, gyaru, kandi rave and the weird girls.",
+   "art": "https://image-cdn-fa.spotifycdn.com/image/ab67706c0000bebb8764bac3a9b3fe8fb94cd524"
+  },
   {
    "id": "74nGTHB3twhhqG1aeDEMpK",
    "name": "VAMPLYFE",
    "label": "The house sound",
-   "line": "117 songs. The house in one room."
+   "line": "The house in one room.",
+   "art": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000bebb8f0280c34bd2c2ae9dba8184"
   }
  ],
  "battle": {

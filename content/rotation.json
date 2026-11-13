@@ -2,6 +2,55 @@
   "items": [
     {
       "platform": "spotify",
+      "title": "ØWAY",
+      "artist": "Tezzus",
+      "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d0000b27349ed75e3363b6236a544a1bf",
+      "link": "https://open.spotify.com/track/3gaH1lcvaoTibA4dZ1CyzK"
+    },
+    {
+      "platform": "spotify",
+      "title": "24Hrs",
+      "artist": "Nine Vicious",
+      "art": "https://image-cdn-ak.spotifycdn.com/image/ab67616d0000b273b4a10dd705b4f85453de048b",
+      "link": "https://open.spotify.com/track/0AlTIOiF5u0sHdsEvBU2av"
+    },
+    {
+      "platform": "spotify",
+      "title": "LL50",
+      "artist": "Nettspend",
+      "art": "https://image-cdn-ak.spotifycdn.com/image/ab67616d0000b273798e8eab149ee6f280de9401",
+      "link": "https://open.spotify.com/track/0NwBVCDFDAXvhhlqeUEVIf"
+    },
+    {
+      "platform": "spotify",
+      "title": "Turn Up",
+      "artist": "twentythree",
+      "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d0000b2730890184c6173540cce734ea7",
+      "link": "https://open.spotify.com/track/1s5P9UA3dokSsHaEH8rYn1"
+    },
+    {
+      "platform": "spotify",
+      "title": "White Flag",
+      "artist": "Bassvictim",
+      "art": "https://image-cdn-ak.spotifycdn.com/image/ab67616d0000b2732707fcaeb0e5295c3b51eb74",
+      "link": "https://open.spotify.com/track/2WyUJEFZ6vQzTwSdKzqLrx"
+    },
+    {
+      "platform": "spotify",
+      "title": "i think he's got a girl",
+      "artist": "Slayyyter",
+      "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d0000b273f5507b07b32e229575f1d539",
+      "link": "https://open.spotify.com/track/5KJwFcJc0m1u4F8mVkwT5Y"
+    },
+    {
+      "platform": "spotify",
+      "title": "Light Leak",
+      "artist": "Frost Children",
+      "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d0000b273557318ccf401251fe5efa334",
+      "link": "https://open.spotify.com/track/10Fq3Aq8hu8hELDkpYWJVf"
+    },
+    {
+      "platform": "spotify",
       "title": "Stardust Breaker",
       "artist": "KAV-MAN",
       "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d0000b273824a32b56f258d90d1aeaa01",
@@ -24,27 +73,6 @@
       "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d0000b2737278fa6c7ec6e3598a7338b6",
       "link": "https://open.spotify.com/track/1PkGP1pjnPXpi081HVv7zr",
       "preview": "https://p.scdn.co/mp3-preview/7b717897dbce2610548fc8bef9cbecb685b82585"
-    },
-    {
-      "platform": "spotify",
-      "title": "yup yup yup",
-      "artist": "SEBii, kimj, R!R!Riot",
-      "art": "https://i.scdn.co/image/ab67616d0000b273ff8ba9e0229d0d5e1f8363a4",
-      "link": "https://open.spotify.com/track/4dPUnCKITMG4pKIezK47NK"
-    },
-    {
-      "platform": "spotify",
-      "title": "Hood Of Atlanta Freestyle*",
-      "artist": "Young Stoner Life, Tezzus, diamond*",
-      "art": "https://i.scdn.co/image/ab67616d0000b273d37db4145fbf94df277d218c",
-      "link": "https://open.spotify.com/track/3iQzTFuQHfCEb5m50ASIyx"
-    },
-    {
-      "platform": "spotify",
-      "title": "CHANEL & CAMEL CRUSH",
-      "artist": "diamond*",
-      "art": "https://i.scdn.co/image/ab67616d0000b273445536e3a3abe1192e95ee67",
-      "link": "https://open.spotify.com/track/6m96Qz0SKJHFgluQAsKhFu"
     }
   ]
 }

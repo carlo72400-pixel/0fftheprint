@@ -688,6 +688,15 @@ NOTES_BY_ID = {
     '0KJIm3Ukd82n0d7VOCQWWI': 'Off Fat Boi Fall, 2024. KAV-MAN holds a card here, and his card plays this from 2:03.',
     '0sKUd3PxqITdWs8NqzpCBV': 'Single, out June 29 on GateWayRecords. It plays when you open VIRGOSGATEWAY\u2019s card.',
     '1PkGP1pjnPXpi081HVv7zr': 'Single, out March 28 on GateWayRecords.',
+    # 11/12: the new rotation, picked off the house's three new playlists (vamp wØrld, ???, hello brainrot). Dates are
+    # Spotify's own (the track's release date); the playlist facts are where each one sits in those playlists.
+    '3gaH1lcvaoTibA4dZ1CyzK': 'Out June 8. The crew’s name as a hook, and crowds scream it back. The Ø in vamp wØrld comes from here.',
+    '0AlTIOiF5u0sHdsEvBU2av': 'Out Jan 31. Nine’s anthem, the one the crowd chants. It opens vamp wØrld.',
+    '0NwBVCDFDAXvhhlqeUEVIf': 'Off Virginia Creeper, out Oct 30. It went on vamp wØrld the day it dropped.',
+    '1s5P9UA3dokSsHaEH8rYn1': 'Toronto’s twentythree, out Oct 23 with a video. It’s on the ??? playlist.',
+    '2WyUJEFZ6vQzTwSdKzqLrx': 'Basspunk, out Oct 21. It’s on two of our playlists: ??? and hello brainrot.',
+    '5KJwFcJc0m1u4F8mVkwT5Y': 'Out Oct 9. It sits in the right now block on hello brainrot.',
+    '10Fq3Aq8hu8hELDkpYWJVf': 'Out July 10. Frost Children are all over hello brainrot: three songs in the right now block.',
 }
 
 TEXAS_FACTS = {

@@ -15,12 +15,35 @@
  "winners": [],
  "rooms": [
   {
+   "id": "1SFQOgzAUPk2c8gkIyAbla",
+   "name": "vamp wØrld 🩸",
+   "label": "The anthems room",
+   "line": "What our world plays right now: ØWAY, rage, opium, the UK and the club.",
+   "art": "https://image-cdn-fa.spotifycdn.com/image/ab67706c0000bebb51b84ef7d840ab5e45b674a2",
+   "spot": true
+  },
+  {
+   "id": "2hxZbnqcR16fGB9ou4U98K",
+   "name": "???",
+   "label": "The night out",
+   "line": "Pregame to after hours. Atlanta bounce, UK underground, peak rage.",
+   "art": "https://image-cdn-fa.spotifycdn.com/image/ab67706c0000bebb7fba1af00ba0b5e7390ad1b3"
+  },
+  {
+   "id": "392DTpfHKat2W8darHiVPo",
+   "name": "hello brainrot 🎀",
+   "label": "The girls’ party club",
+   "line": "Y2K, Tokyo right now, gyaru, kandi rave and the weird girls.",
+   "art": "https://image-cdn-fa.spotifycdn.com/image/ab67706c0000bebb8764bac3a9b3fe8fb94cd524"
+  },
+  {
    "id": "74nGTHB3twhhqG1aeDEMpK",
    "name": "VAMPLYFE",
    "label": "The house sound",
-   "line": "117 songs. The house in one room."
+   "line": "The house in one room.",
+   "art": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000bebb8f0280c34bd2c2ae9dba8184"
   }
  ],
  "cover": null,
- "built_sha": "66bc271e816fb2008387101c947632df7447ae457c9564842fbe582e15bba11a"
+ "built_sha": "fe6ef49e17eddbb97a3df576a58c1614c3865235ffe284b0d8f473e438d26796"
 }
