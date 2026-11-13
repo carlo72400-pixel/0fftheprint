@@ -109,6 +109,7 @@ window.OTPLazy = window.OTPLazy || (function () {
     line-height:1.55;
     -webkit-font-smoothing:antialiased;
     min-height:100vh;
+    min-height:100dvh;      /* 11/14: vh is the screen with Safari's bars put away; dvh is the screen as it is */
     position:relative;
   }
   /* Subtle gyaru deco — ambient texture across the top of the page, no header */
@@ -3770,7 +3771,7 @@ window.OTPLazy = window.OTPLazy || (function () {
   .cgrow{flex:1;min-width:0;}
   .cbox textarea{
     width:100%;background:transparent;border:0;color:var(--ink);resize:none;
-    font-family:var(--f-body);font-size:15.5px;line-height:1.5;padding:9px 2px;
+    font-family:var(--f-body);font-size:16px;line-height:1.5;padding:9px 2px;
     min-height:52px;outline:none;
   }
   .cbox textarea::placeholder{color:var(--muted);}
