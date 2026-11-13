@@ -86,9 +86,22 @@ html[data-place]{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 /* The night pages' photo viewer (newevent.py writes its rules into every night page; these win over them and are the
    same 18 px where a phone reports no inset). Opened from the home screen icon a page is drawn under the status bar
    and the home bar: the Close key sat under the clock, FULL RES and the count under the home bar. */
-html[data-place] .lb-x{top:calc(18px + env(safe-area-inset-top,0px))}
-html[data-place] .lb-dl,html[data-place] .lb-count{bottom:calc(18px + env(safe-area-inset-bottom,0px))}
-html[data-place] .lb-looks{bottom:calc(44px + env(safe-area-inset-bottom,0px))}      /* the look chips sit over the count: they go up with it, or the count runs into them */
+html[data-place="booth"] .lb-x{top:calc(18px + env(safe-area-inset-top,0px))}
+html[data-place="booth"] .lb-dl,html[data-place="booth"] .lb-count{bottom:calc(18px + env(safe-area-inset-bottom,0px))}
+html[data-place="booth"] .lb-looks{bottom:calc(44px + env(safe-area-inset-bottom,0px))}      /* the look chips sit over the count: they go up with it, or the count runs into them */
+/* ⛔ NIGHT PAGES ONLY (the photo booth's pages). The video page, the work page and the ink page have viewers of their
+   own, with the same class names and their own measures: written for every skinned page, the three rules above moved
+   the video page's close key 14 px and the work page's 2 px (11/14, put right the same day).
+   THE COUNT CLEARS THE KEY: the count ("1 / 255 . SUSPIRIA") sat centred on the foot and FULL RES at its left, so on
+   every phone from 320 to 430 px wide the count's first figures were under the key. Up to 640 px the count sits at
+   the right, beside the key (the key is 114 px wide and 18 px in: 158 px are kept for it and a gap), on ONE line: a
+   second line would run into the look chips above it. So that the longest count of today (24 letters) fits a 320 px
+   screen, its letters close up below 375 px (the spacing goes from nothing at 320 to its own .2em at 375 and up); a
+   count longer than that on a narrow screen ends in three dots instead of running into anything. From 641 px the
+   count is centred as it was. */
+@media (max-width:640px){
+  html[data-place="booth"] .lb-count{left:auto;right:18px;transform:none;max-width:calc(100% - 158px);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:clamp(0px,calc((100vw - 320px) * .04),.2em)}
+}
 /* the sound key's word (On, Off) was 9.2 px: nothing a person reads is under 11 */
 .sk-snd small{font-size:11px}
 
