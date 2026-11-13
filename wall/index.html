@@ -2550,7 +2550,7 @@ function openFilm(id){
       ${f.wp && f.wp.link ? `<a class="btn" href="${esc(f.wp.link)}" target="_blank" rel="noopener">Where to stream</a>` : ''}
       <a class="btn" href="${/^\d+$/.test(f.id) ? 'https://letterboxd.com/tmdb/' + f.id + '/' : 'https://letterboxd.com/search/' + encodeURIComponent(f.t) + '/'}" target="_blank" rel="noopener">Letterboxd</a>
     </div>
-    <p class="tmdb">${String(f.id).startsWith('al-') ? 'Poster, synopsis and showtimes: Alamo Drafthouse. Credits: Wikipedia.' : 'Credits and poster: TMDB' + (f.wp && (f.wp.flat || []).length ? ', streaming by JustWatch' : '') + '.'}${Object.keys(f.al || {}).length ? '' : ' Showtimes open a search for ' + esc(city) + ' (change it under Leaving from on My night).'}</p></div>`;
+    <p class="tmdb">${String(f.id).startsWith('al-') ? 'Poster, synopsis and showtimes: Alamo Drafthouse. Credits: Wikipedia.' : 'Credits and poster: TMDB' + (f.wp && (f.wp.flat || []).length ? ', streaming by JustWatch' : '') + '.'}${Object.keys(f.al || {}).length ? '' : ' Showtimes open a search for ' + esc(city) + ' (change it under Leaving from on Your path).'}</p></div>`;
   const sc = $('#fm-scroll'); sc.scrollTop = 0;
   showSheet($('#fmsheet'));
 }
@@ -3846,7 +3846,7 @@ function missHTML(code, hadPast){
   const g = goneRows().find(x => x.pc.includes(code)), near = g && !hadPast ? nearShows(g) : [];
   const can = HOST === 'site' && SOC.on, sent = MISS.sent[code];
   const line = hadPast ? 'Its night already happened. Nothing coming up uses that post.'
-    : g ? `It was on${g.n ? ' as ' + g.n : ''} and came down.${near.length ? ` A flyer with a close name is still on ${g.d === night ? 'tonight' : 'that night'}, so it may be the same show:` : ''}` : 'That post is not on the Crypt.';
+    : g ? `It was on${g.n ? ' as ' + g.n : ''} and came down.${near.length ? ` A flyer with a close name is still on ${g.d === night ? 'tonight' : 'that night'}, so it may be the same show:` : ''}` : 'That post is not on the Coven.';
   const act = can ? (sent ? `<p class="miss-ok" role="status">${esc(sent)}</p>`
       : `<button type="button" class="primary miss-go" data-sendig="${esc(code)}">Send it</button><p class="miss-f">It goes to the desk. Once the desk says yes, the next sweep reads it and puts it up.</p>`)
     : HOST === 'private' ? `<a class="btn miss-go" href="${esc((D.meta.public_url || 'https://0fftheprint.com/wall/') + '#ig-' + code)}" target="_blank" rel="noopener">Send it from the site</a>` : '';
@@ -4066,10 +4066,10 @@ function openGone(g){
   const near = past ? [] : nearShows(g);
   const head = g.why === 'moved' ? 'This flyer moved' : g.why === 'none' ? 'That flyer is not on the Coven' : near.length ? 'This flyer changed' : 'This flyer came down';
   const line = past ? 'That night already happened.'
-    : near.length ? `This link is off the Crypt, but a flyer with a close name is on ${g.d === night ? 'tonight' : 'that night'}. It may be the same show:`
+    : near.length ? `This link is off the Coven, but a flyer with a close name is on ${g.d === night ? 'tonight' : 'that night'}. It may be the same show:`
     : g.why === 'moved' ? 'It is still on, under a new link. Look on its night, or search for it by name.'
     : g.why === 'none' ? 'The link is old, or the flyer came down. Search for it by name, room or @.'
-    : "It is off the Crypt now. Check the promoter's post before you go.";
+    : "It is off the Coven now. Check the promoter's post before you go.";
   $('#sh-scroll').innerHTML = `<div class="sh-body gone"><h2 class="sh-t" id="sh-t">${esc(head)}</h2>
     ${g.n ? `<p class="gone-n"><b>${esc(g.n)}</b>${g.d ? ` · ${esc(d ? d.long : g.d)}` : ''}</p>` : ''}
     <p class="sh-note">${esc(line)}</p>${nearHTML(near)}
@@ -4160,7 +4160,7 @@ function mineSubmit(){
   MINE = MINE.filter(x => x.id !== id).concat([rec]); save(MKEY, MINE);
   minePut(rec);
   hideSheet($('#mnsheet')); buzz();
-  toast(old ? 'Saved.' : `Added to ${dayLabel(dd)}. It's in My night.`);
+  toast(old ? 'Saved.' : `Added to ${dayLabel(dd)}. It's on Your path.`);
   renderNights(); renderPage(false);
 }
 function mineDelete(btn){
@@ -4550,7 +4550,7 @@ async function socialStart(){
         save('wall-lost-seen', [...seen].concat(L.map(r => r.event_id)).slice(-200));
         const lbl = k => { const d = dayOf(k); if (d) return d.long; return new Date(dayNum(k) * 864e5).toLocaleDateString('en-US', {timeZone: 'UTC', weekday: 'short', month: 'short', day: 'numeric'}); };
         const days = [...new Set(L.map(r => r.day))].sort().map(lbl);
-        toast(L.length === 1 ? `A night you saved (${days[0]}) changed or came off the Crypt. Check that night's flyers.`
+        toast(L.length === 1 ? `A night you saved (${days[0]}) changed or came off the Coven. Check that night's flyers.`
           : `${L.length} nights you saved changed or came off the Coven (${days.slice(0, 3).join(', ')}${days.length > 3 ? ', more' : ''}). Check those nights.`, 6500);
       });
       if (changed) {
@@ -4706,7 +4706,7 @@ document.addEventListener('submit', async e => {
     if (en != null && s != null && en <= s) en += 1440;
     let vf = ($('#df-vf').value || '').trim(), kept = '';
     const dn = ($('#df-dn').value || '').trim();
-    if (vf && vf !== (it.vf || '') && vf !== (b.vf || '') && HOST === 'site' && (it.pv || privPlace(Object.assign({}, it, {vf, pv: 0, kr: 0, pb: 0})))) { const pvf = privVf(vf); if (pvf !== vf) { vf = pvf; kept = ' The street stays off the Crypt.'; } }
+    if (vf && vf !== (it.vf || '') && vf !== (b.vf || '') && HOST === 'site' && (it.pv || privPlace(Object.assign({}, it, {vf, pv: 0, kr: 0, pb: 0})))) { const pvf = privVf(vf); if (pvf !== vf) { vf = pvf; kept = ' The street stays off the Coven.'; } }
     const t0 = JSON.stringify([P.s, P.e]);
     if (s === (b.s ?? null) && en === (b.e ?? null)) { delete P.s; delete P.t; delete P.e; }
     else if (s == null) { P.s = null; P.t = ''; delete P.e; }
@@ -5078,12 +5078,12 @@ const SEC = {
     if (!Array.isArray(L)) return '';
     const mine = L.filter(r => r && ((V.mine && r.mine) || (r.sid && r.sid === V.sid) || (V.card && r.card_slug === V.card))).slice(0, 6);
     const all = V.mine ? `<p class="sp-fn"><a href="${esc(siteUrl('compose/'))}">All your posts →</a></p>` : '';
-    if (!mine.length) return V.mine ? `<h3 class="sp-bh">${f}'s posts</h3><div class="sp-in"><p class="sp-empty">Nothing lately. <a href="${esc(siteUrl('take/'))}">Post a photo on the Roll</a> and it shows up here.</p>${all}</div>` : '';
+    if (!mine.length) return V.mine ? `<h3 class="sp-bh">${f}'s posts</h3><div class="sp-in"><p class="sp-empty">Nothing lately. <a href="${esc(siteUrl('take/'))}">Post a photo on the Take</a> and it shows up here.</p>${all}</div>` : '';
     const ours = u => /^https:\/\/frqpvcpyglhmerwpvosl\.supabase\.co\/storage\/v1\/object\/public\/(posts|take)\//.test(u || ''), isVid = u => /\.(mp4|mov|webm|m4v)(\?|$)/i.test(u || '');
     return `<h3 class="sp-bh">${f}'s posts</h3><div class="sp-in"><div class="sp-grid3">${mine.map(r => r.image_url && ours(r.image_url) && !isVid(r.image_url)
       ? `<a class="sp-g" href="${esc(siteUrl('take/' + (+r.id > 0 ? '?post=' + (+r.id) : '')))}" title="${esc(ago(r.created_at))} ago"><img src="${esc(r.image_url)}" alt="${esc(r.image_alt || '')}" loading="lazy" decoding="async"></a>`
       : `<a class="sp-g txt" href="${esc(siteUrl('take/'))}"><span>${esc(String(r.text || (isVid(r.image_url) ? '▶ a clip' : '')).slice(0, 120))}</span></a>`).join('')}</div>
-      <p class="sp-fn"><a href="${esc(siteUrl('take/'))}">The Roll →</a></p>${all}</div>`;
+      <p class="sp-fn"><a href="${esc(siteUrl('take/'))}">The Take →</a></p>${all}</div>`;
   },
   desk(V){
     if (!(SOC.me && SOC.me.admin) || V.mine) return '';
@@ -5675,7 +5675,7 @@ async function hereStart(){
   if (r.error || !Array.isArray(r.data)) { try { r = await db().rpc('wall_space_people'); } catch(e){ r = {error: e}; } }   // before migration-031: same faces, no rings
   if (r.error || !Array.isArray(r.data)) return;
   HERE.list = r.data;
-  if (PAGE === 'people') { const g = $('#ppl-grid'), n = $('#ppl-n'); if (g) g.innerHTML = pplGridHTML(); if (n) n.textContent = `${HERE.list.length + (SPACE.mine ? 1 : 0)} in the Crypt`; }
+  if (PAGE === 'people') { const g = $('#ppl-grid'), n = $('#ppl-n'); if (g) g.innerHTML = pplGridHTML(); if (n) n.textContent = `${HERE.list.length + (SPACE.mine ? 1 : 0)} in the Coven`; }
 }
 function ringOf(p){
   if (!p.skin) return '';
@@ -6287,7 +6287,7 @@ function vevent(it){
   const dm = it.s != null ? homeDm(it) : null;
   const leaveBy = dm != null ? 'Leave by ' + hm(it.s - dm - 15) : '';
   L.push('SUMMARY:' + icsEsc(it.n), 'LOCATION:' + icsEsc([it.vf, it.c].filter(Boolean).join(', ')),
-    'DESCRIPTION:' + icsEsc([it.t && 'When: ' + it.t, leaveBy && leaveBy + ' (' + driveTxt(dm) + ' from ' + homeName() + ', plus 15 to park)', it.cost && 'Cost: ' + it.cost, it.g && 'Ages: ' + it.g, it.l && 'Who: ' + it.l, it.no, post && post[2], !it.mine && ('CRYPT: ' + D.meta.public_url + '#e-' + it.id)].filter(Boolean).join('\n')));
+    'DESCRIPTION:' + icsEsc([it.t && 'When: ' + it.t, leaveBy && leaveBy + ' (' + driveTxt(dm) + ' from ' + homeName() + ', plus 15 to park)', it.cost && 'Cost: ' + it.cost, it.g && 'Ages: ' + it.g, it.l && 'Who: ' + it.l, it.no, post && post[2], !it.mine && ('THE COVEN: ' + D.meta.public_url + '#e-' + it.id)].filter(Boolean).join('\n')));
   if (post) L.push('URL:' + post[2]);
   // ten minutes before it is time to walk out, never less than an hour before the start; noon for a night with no time on the flyer
   L.push('BEGIN:VALARM', 'ACTION:DISPLAY', 'DESCRIPTION:' + icsEsc(leaveBy ? leaveBy + ': ' + it.n : it.n), it.s != null ? `TRIGGER:-PT${Math.max(60, (dm || 0) + 25)}M` : 'TRIGGER;RELATED=START:PT12H', 'END:VALARM');
@@ -6777,7 +6777,7 @@ function toggleGo(id, btn){
   renderSide();
   const far = on && BY[id] && BY[id].d > goFar();
   if (far) toast('Saved for ' + dayLabel(BY[id].d) + ' on this phone. Going counts open 120 days out.', 3600);
-  else if (on) toast(BY[id] && BY[id].d > night ? 'Saved for ' + dayLabel(BY[id].d) : 'Added to My night');
+  else if (on) toast(BY[id] && BY[id].d > night ? 'Saved for ' + dayLabel(BY[id].d) : 'Added to Your path');
   if (SOC.on && BY[id] && !far) {
     const c = db(), t = SOC.tally[id] = SOC.tally[id] || blankTally(id);
     t.going = Math.max(0, (t.going || 0) + (on ? 1 : -1)); paintChips(id);
@@ -6863,7 +6863,7 @@ document.addEventListener('click', e => {
     const k = ds.wk;
     if (myStops(k).length) { const sec = document.querySelector(`#day .plan[data-night="${k}"]`); if (sec) sec.scrollIntoView({block:'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'}); }
     else if (DAYKEYS.includes(k)) { cur = k; planIx = 0; showDone = false; SCROLL.tonight = 0; setPage('tonight'); renderNights(); }
-    else toast('Nothing in the Crypt for that night yet.');
+    else toast('Nothing in the Coven for that night yet.');
     return;
   }
   if (t.id === 'showpast') { showPast = true; renderMine(); return; }
@@ -6921,7 +6921,7 @@ document.addEventListener('click', e => {
   }
   if (ds.dfdown) {
     if (t.dataset.sure !== '1') { t.dataset.sure = '1'; t.textContent = 'Tap again: it comes off for everyone'; return; }
-    const fx = FIX.of[ds.dfdown]; deskFix(ds.dfdown, 'hidden', fx ? fx.patch : {}, 'Taken down. Put it back from The desk on Kin.');
+    const fx = FIX.of[ds.dfdown]; deskFix(ds.dfdown, 'hidden', fx ? fx.patch : {}, 'Taken down. Put it back from The desk on Kindred.');
     return;
   }
   if (ds.dfundo) { deskUnfix(ds.dfundo); return; }
@@ -6941,14 +6941,14 @@ document.addEventListener('click', e => {
       toast(`${ds.n || 'They'} can post video, stories, songs and dates now.`, 5200); buzz(); renderAdmin(); hereStart(); })();
     return;
   }
-  if (ds.cardno) { if (t.dataset.sure !== '1') { t.dataset.sure = '1'; t.textContent = 'Tap again to say no'; return; } (async () => { const r = await db().rpc('wall_card_decide', {p_user: ds.cardno, p_yes: false}); if (r.error) { toast('That did not go through.'); return; } toast('Told no. They stay in the Crypt.'); renderAdmin(); })(); return; }
+  if (ds.cardno) { if (t.dataset.sure !== '1') { t.dataset.sure = '1'; t.textContent = 'Tap again to say no'; return; } (async () => { const r = await db().rpc('wall_card_decide', {p_user: ds.cardno, p_yes: false}); if (r.error) { toast('That did not go through.'); return; } toast('Told no. They stay in the Coven.'); renderAdmin(); })(); return; }
   // a card holder banned here keeps their card and their posts on the timeline (033 take_author_ok): Revoke on /desk/ is what takes those down
   // THE one ban (044 desk_ban): off the Crypt and the whole site at once, and Unban puts it all back. Before 044, the old wall_ban.
-  if (ds.ban) { if (t.dataset.sure !== '1') { t.dataset.sure = '1'; t.textContent = 'Tap again: off the Crypt and the site'; return; } (async () => {
+  if (ds.ban) { if (t.dataset.sure !== '1') { t.dataset.sure = '1'; t.textContent = 'Tap again: off the Coven and the site'; return; } (async () => {
     let r = await db().rpc('desk_ban', {p_user: ds.ban, p_on: true});
     if (r.error && r.error.code === 'PGRST202') r = await db().rpc('wall_ban', {p_user: ds.ban, p_ban: true});
     if (r.error) { toast(/desk/i.test(r.error.message || '') && /banned/i.test(r.error.message || '') ? 'The desk can\'t be banned.' : 'That did not go through.'); return; }
-    toast('Banned. Off the Crypt and the site. Unban puts it all back.', 3600); buzz(); renderAdmin(); hereStart(); })(); return; }
+    toast('Banned. Off the Coven and the site. Unban puts it all back.', 3600); buzz(); renderAdmin(); hereStart(); })(); return; }
   if (ds.unban) { (async () => {
     let r = await db().rpc('desk_ban', {p_user: ds.unban, p_on: false});
     if (r.error && r.error.code === 'PGRST202') r = await db().rpc('wall_ban', {p_user: ds.unban, p_ban: false});
@@ -7602,7 +7602,7 @@ function lock(kind, msg){
       <button type="button" class="btn lock-alt" id="wall-out">Log out</button>`;
   } else if (kind === 'door') {
     // 049: at the door until the desk has looked at their Instagram. Turned away reads exactly this (a no is never announced).
-    body = `<h2>You're at the door</h2><p>Every Instagram gets looked at before the Crypt opens. Yours is in line. Check back soon.</p>
+    body = `<h2>Waiting for a look</h2><p>Every Instagram gets looked at before the Crypt opens. Yours is in line. Check back soon.</p>
       <button type="button" class="primary lock-go" id="wall-check">Check again</button>
       <p class="lock-msg" id="door-msg" role="alert"></p>
       <button type="button" class="btn lock-alt" id="wall-out">Log out</button>`;
@@ -7700,7 +7700,7 @@ function wireLock(kind){
 async function joinAndOpen(ig, show, say){
   const c = OTP.sb();
   let r; try { r = await c.rpc('wall_join', {p_ig: ig || null}); } catch (e) { r = {error: e}; }
-  if (r.error) { say(/can.t join/i.test(r.error.message || '') ? "This account can't join the Crypt." : 'The door did not answer. Try again in a second.'); return 'err'; }
+  if (r.error) { say(/can.t join/i.test(r.error.message || '') ? "This account can't join the Crypt." : 'That did not answer. Try again in a second.'); return 'err'; }
   // 049: at the door. Their "Show me in the Crypt" pick is kept now (the database takes it while they wait).
   if (r.data === 'wait') {
     if (show === false) { try { await c.rpc('wall_set_show', {p_show: false}); } catch(e){} }
