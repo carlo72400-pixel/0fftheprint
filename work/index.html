@@ -64,10 +64,10 @@ text-decoration:none;border-bottom:1px solid rgba(255,121,198,.45);padding-botto
 .lb-night[hidden]{display:none}
 .lb-x,.lb-n,.lb-p{position:absolute;background:rgba(18,18,24,.9);border:1px solid var(--line);
 color:var(--ink);width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer;line-height:1}
-.lb-x{top:16px;right:16px}
+.lb-x{top:calc(16px + env(safe-area-inset-top,0px));right:16px}      /* 11/14: opened from the home screen icon the page is drawn under the status bar: the key keeps its height clear */
 .lb-p{left:12px;top:50%;transform:translateY(-50%)}
 .lb-n{right:12px;top:50%;transform:translateY(-50%)}
-@media(max-width:640px){.lb-p,.lb-n{bottom:14px;top:auto;transform:none}.lb-p{left:14px}.lb-n{right:14px}}
+@media(max-width:640px){.lb-p,.lb-n{bottom:calc(14px + env(safe-area-inset-bottom,0px));top:auto;transform:none}.lb-p{left:14px}.lb-n{right:14px}}      /* 11/14: and the home bar's */
 /* 10/22 UX sweep: the venue filters are 44 px targets */
 .filters>*{min-height:44px;display:inline-flex;align-items:center}
 /* 10/22 scrim: the tile label sits on the photo, so it gets a dark fade under it */
@@ -75,7 +75,7 @@ color:var(--ink);width:44px;height:44px;border-radius:50%;font-size:20px;cursor:
 </style>
 <link rel="stylesheet" href="../assets/css/binder.css?v=04973e99">
 <script src="../assets/js/binder.js?v=301b2a56" defer></script>
-<link rel="stylesheet" href="../assets/css/street-skin.css?v=feef2872">
+<link rel="stylesheet" href="../assets/css/street-skin.css?v=94036c6a">
 <script src="../assets/js/street-skin.js?v=c80117df" defer></script>
 </head>
 <body>
