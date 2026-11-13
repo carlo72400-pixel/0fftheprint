@@ -299,7 +299,7 @@
       IN.hidden = !inside; OUT.hidden = inside;
       if (inside) fill(st);
       // the plain line under the house line speaks to whoever is at the door
-      var hp = d.getElementById('hero-plain'); if (hp && inside && !hp.dataset.member) { hp.dataset.member = '1'; hp.textContent = 'Welcome back. Tonight\u2019s flyers, your people and your packs are one tap down.'; }
+      var hp = d.getElementById('hero-plain'); if (hp && inside && !hp.dataset.member) { hp.dataset.member = '1'; hp.textContent = 'Welcome back. Tonight\u2019s flyers and your people are one tap down.'; }
     }
     show();
     try { new MutationObserver(show).observe(root, { attributes: true, attributeFilter: ['data-door'] }); } catch (e) {}
@@ -326,16 +326,17 @@
     function nightCard(e, dt) {
       var a = el('a', 'hx night' + (e.mini ? ' mini' : '')); a.href = 'events/' + e.slug + '/';
       a.appendChild(avatar());
-      var main = el('span', 'hx-main'); main.appendChild(label(e.mini ? 'new mini pack' : 'new night', dt));
+      var main = el('span', 'hx-main'); main.appendChild(label(e.mini ? 'new photos' : 'new night', dt));      // 11/14: the packs are gone, a night's page is its photos
       var row = el('span', 'hx-row');
       var pk = el('span', 'hx-pk'); var im = el('img'); im.alt = ''; im.loading = 'lazy'; im.decoding = 'async'; im.width = 520; im.height = 878;
       im.addEventListener('error', function () { im.src = 'assets/cathedral/pack-house.webp'; }, { once: true });
       im.src = 'events/' + e.slug + '/pack.webp'; pk.appendChild(im); row.appendChild(pk);
       var tx = el('span', 'hx-tx');
       tx.appendChild(el('b', '', (e.title || '') + (e.venue ? ' @ ' + e.venue : '')));
-      var line = el('span', '', e.mini ? (e.count | 0) + ' frames, one rip deals them all.' : (e.count | 0) + ' frames went up. Were you there?'), go = el('em', '', 'tear the pack →');
-      var B = binder(), st = null; try { st = B ? B.night(e.slug) : null; } catch (err) {}
-      if (st && st.opened) { line.textContent = st.done ? 'All ' + (e.count | 0) + ' frames are in your binder.' : st.have + ' of ' + (e.count | 0) + ' in your binder.'; go.textContent = st.done ? 'see the night →' : 'rip another →'; }
+      // 11/14: this said "tear the pack", "one rip deals them all" and, for a phone that had opened one, how many were
+      // "in your binder". The packs and the Polaroids are gone: a night's page is the photos from the night.
+      var n = e.count | 0;
+      var line = el('span', '', (n ? n + (n === 1 ? ' photo' : ' photos') : 'Photos') + ' from the night. Find yourself.'), go = el('em', '', 'open the night →');
       tx.appendChild(line); tx.appendChild(go); row.appendChild(tx);
       main.appendChild(row); a.appendChild(main);
       return a;
@@ -435,13 +436,6 @@
                    d: function (it) { return dropCard(it.x, it.dt); } };
       built = items.slice(0, HOUSE_CAP).map(function (it) { return { t: it.t, node: CARD[it.kind](it) }; });
       slot();
-      // a member's binder moves: the night cards say so
-      try { if (binder()) binder().on(function () { Array.prototype.forEach.call(mount.querySelectorAll('.hx.night'), function (a) {
-        var m = /events\/([a-z0-9-]+)\/$/.exec(a.getAttribute('href') || ''), B = binder(); if (!m || !B) return;
-        var s2 = B.night(m[1]), line = a.querySelector('.hx-tx > span'), go = a.querySelector('em'); if (!s2.opened || !line || !go) return;
-        line.textContent = s2.done ? 'All ' + s2.total + ' frames are in your binder.' : s2.have + ' of ' + s2.total + ' in your binder.';
-        go.textContent = s2.done ? 'see the night →' : 'rip another →';
-      }); }); } catch (err) {}
     }
     function slot() {
       if (!built) return;
