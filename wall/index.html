@@ -7224,7 +7224,7 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) tick
     if (pill.dataset.cvn !== word) {
       pill.dataset.cvn = word;
       pill.innerHTML = '<span aria-hidden="true">&lsaquo;</span>' + word;
-      pill.setAttribute('href', away ? pill0.href : './');
+      pill.setAttribute('href', away ? '../' : './');      // the street itself: a member's tap on the building there comes straight back in
       pill.setAttribute('aria-label', away ? 'Back to the street' : 'Back to the table. The Reading.');
     }
   }
