@@ -57,13 +57,13 @@ TRACKED = ["assets/js/desk.js", "assets/js/door.js", "assets/js/composer.js",
            "assets/js/dates.js", "assets/js/calendar.js", "assets/js/sealed.js",
            "assets/js/word.js", "assets/js/cathedral.js", "assets/js/binder.js",
            "assets/js/people.js",
-           "assets/js/board-members.js", "assets/js/take.js", "assets/js/street-skin.js", "supabase-config.js"]
+           "assets/js/board-members.js", "assets/js/take.js", "assets/js/take-card.js", "assets/js/street-skin.js", "supabase-config.js"]
 
 # stylesheet path (relative to ROOT)  ->  how it appears in href="..."
 TRACKED_CSS = ["assets/css/cathedral.css", "assets/css/pack.css",
                "assets/css/sealed.css", "assets/css/calendar.css",
                "assets/css/binder.css", "assets/css/people.css",
-               "assets/css/auth.css", "assets/css/board-members.css", "assets/css/take.css", "assets/css/street-skin.css"]
+               "assets/css/auth.css", "assets/css/board-members.css", "assets/css/take.css", "assets/css/take-card.css", "assets/css/street-skin.css"]
 
 # THE PIN (10/13): one exact supabase-js release, with the sha384 of that exact file (fetched once from this URL)
 PIN_VERSION = "2.117.2"
@@ -95,6 +95,8 @@ DOCS = ["index.html", "join/index.html", "compose/index.html", "desk/index.html"
         # is ciphertext and never does.
         "wall/index.html",
         # 11/12: The Take on its own page (take/index.html is its own source, it still loads the old home's scripts).
+        # 11/13: it is the eighth card of the Coven. Its card skin is take-card.css and take-card.js, BUILT by the street
+        # kit (machine-tools/take_card_build.py) and stamped here like any other file.
         "take/index.html"] + [
         # every story page carries desk.js + word.js
         str(p.relative_to(ROOT)) for p in sorted(ROOT.glob("word/*/index.html"))] + [
