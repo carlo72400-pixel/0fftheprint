@@ -431,9 +431,10 @@
   }
 
   /* ---------- the roll itself ---------- */
-  var RENDERED = null, DESK = false, POSTS = {}, PEOPLE = {};
+  var RENDERED = null, DESK = false, POSTS = {}, PEOPLE = {}, RUN = 0;
   async function roll() {
     if (RENDERED === 'in') return; RENDERED = 'in';
+    var run = ++RUN;
     mount.innerHTML = '<p class="rl-note">Loading the roll…</p>';
     var post = el('div'), feed = el('div', 'rl-feed'), clips = el('div'), fr = el('div');
     var results = await Promise.all([
@@ -454,6 +455,10 @@
     var people = PEOPLE; rows.forEach(function (r) { var p = who(r); people[r.id] = p; POSTS[r.id] = r; r.key = p.key; });
     var approved = !!(me && me.profile && me.profile.approved), canPost = approved;
     if (me && !canPost && w.OTP && OTP.canTake) { try { canPost = await OTP.canTake(); } catch (e) {} }
+    // 11/14: who is looking can change while this waits. A phone that remembers a member opens as "in" on the first
+    // frame; when the session answer says nobody is signed in, paint() has already drawn the members only card, and
+    // this used to come back late and draw the roll over it (no photos, no way to log in). The card stays.
+    if (run !== RUN || RENDERED !== 'in') return;
     mount.innerHTML = '';
     if (me) { composer(me, canPost, !approved, post); mount.appendChild(post); }
     // photos and nights together, newest first
