@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#0a0a0d">
 <meta name="description" content="Every flyer for San Antonio, San Marcos and Austin this week, one night at a time.">
 <meta property="og:site_name" content="0FF THE PRINT">
-<meta property="og:title" content="CRYPT · 0FF THE PRINT">
+<meta property="og:title" content="THE COVEN · 0FF THE PRINT">
 <meta property="og:description" content="Every flyer in SA, San Marcos and Austin, Nov 10 to 30. One night at a time.">
 <meta property="og:image" content="https://0fftheprint.com/wall/preview.jpg">
 <meta property="og:url" content="https://0fftheprint.com/wall/">
@@ -17,7 +17,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="CRYPT">
+<meta name="apple-mobile-web-app-title" content="THE COVEN">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="preconnect" href="https://carlo72400-pixel.github.io" crossorigin>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" integrity="sha384-Rj26LVGvoeRVR6+mwQmFfcR3QOBEwT+ZmuCWpuiqeTzJpCs0ER4ITAWGb4Hiy3Ok" crossorigin="anonymous" defer></script>
@@ -25,7 +25,7 @@
 <script src="../assets/js/desk.js?v=31a2cc50" defer></script>
 </head>
 <body>
-<title>CRYPT · 0FF THE PRINT</title>
+<title>THE COVEN · 0FF THE PRINT</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- the fonts never hold up the first paint (10/13): the page draws in the system fonts and swaps when these land -->
@@ -1799,7 +1799,7 @@ label small{font-size:11px !important}
   <header class="mast">
     <div class="mast-l">
       <a class="kick" href="/">&#8592; 0FF THE PRINT</a>
-      <h1 class="word">CRYPT</h1>
+      <h1 class="word">THE COVEN</h1>
       <p class="sub" id="sub">Every flyer, one night at a time</p>
     </div>
     <div class="mast-r"><button type="button" class="srch-btn" id="srchbtn" aria-label="Search every night"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><span>Search</span></button><button type="button" class="me-btn dm-btn" id="dmbtn" hidden aria-label="Messages"><span class="me-pic" aria-hidden="true">💬</span>Messages<b class="me-bd" id="dmbadge" hidden>0</b></button><button type="button" class="me-btn" id="mebtn" hidden aria-label="My page"><span class="me-pic" id="mepic" aria-hidden="true"></span>My page</button><div class="clock" id="clock" aria-live="polite"></div></div>
@@ -1809,7 +1809,7 @@ label small{font-size:11px !important}
   <main class="day" id="day"></main>
   <aside class="side" id="side" aria-label="Your plan and what is coming"></aside>
 
-  <footer class="foot"><p><b>CRYPT</b> is every flyer we could find for San Antonio, San Marcos and Austin this week, sorted by night, plus the main events at the big rooms for the next three months. Updated every Tuesday by <a href="/">0FF THE PRINT</a>.</p><p>Flyers belong to the promoters and artists who made them, so tap through to their post. Want yours on here, or off it? DM <a href="https://www.instagram.com/vamppsych/" target="_blank" rel="noopener">@vamppsych</a>.</p><p class="fine">Times are Central · built Tue 11/10 5:04pm · check the promoter's post before you drive</p></footer>
+  <footer class="foot"><p><b>THE COVEN</b> is every flyer we could find for San Antonio, San Marcos and Austin this week, sorted by night, plus the main events at the big rooms for the next three months. Updated every Tuesday by <a href="/">0FF THE PRINT</a>.</p><p>Flyers belong to the promoters and artists who made them, so tap through to their post. Want yours on here, or off it? DM <a href="https://www.instagram.com/vamppsych/" target="_blank" rel="noopener">@vamppsych</a>.</p><p class="fine">Times are Central · built Tue 11/10 5:04pm · check the promoter's post before you drive</p></footer>
 
   <nav class="tabbar" id="tabbar" aria-label="Pages"></nav>
   <div class="toast" id="toast" role="status"></div>
@@ -5082,7 +5082,7 @@ const SEC = {
     const L = XTRA.rooms, f = esc(firstName(V.name));
     if (!Array.isArray(L)) return '';
     const mine = L.filter(r => r && ((V.mine && r.mine) || (r.sid && r.sid === V.sid) || (V.card && r.card_slug === V.card)) && (r.published || V.mine) && /^[A-Za-z0-9]{22}$/.test(r.playlist || ''));
-    if (!mine.length) return V.mine ? `<h3 class="sp-bh">${f}'s Rooms</h3><div class="sp-in"><p class="sp-empty">A room is a playlist with your name on it: <a href="${esc(siteUrl('#rooms'))}">make one on the Music tab</a>.</p></div>` : '';
+    if (!mine.length) return '';      /*cvn: no rooms, no box (11/14): the line here sent you to a room maker that is gone*/
     return `<h3 class="sp-bh">${f}'s Rooms <em>${mine.length}</em></h3><div class="sp-in">${mine.slice(0, 5).map(r => `<div class="sp-rm"><b>${esc(r.name)}</b>${r.label || !r.published ? `<small>${esc(r.label || '')}${!r.published ? (r.label ? ' · ' : '') + 'on the desk' : ''}</small>` : ''}
       ${SPACE.room === r.playlist ? `<iframe src="https://open.spotify.com/embed/playlist/${esc(r.playlist)}?utm_source=generator&theme=0" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" title="${esc(r.name)}"></iframe>`
         : `<div class="sp-rm-acts"><button type="button" class="sp-act" data-sproom="${esc(r.playlist)}">▶ Play it</button><a class="sp-act" href="https://open.spotify.com/playlist/${esc(r.playlist)}" target="_blank" rel="noopener">In Spotify</a></div>`}</div>`).join('')}</div>`;
@@ -6163,7 +6163,7 @@ async function renderAdmin(){
   const waitSrc = (DESK.sources || []).filter(x => x.status === 'pending');
   const doneSrc = (DESK.sources || []).filter(x => x.status !== 'pending');
   const want = p => /^[a-z0-9][a-z0-9-]{0,59}$/.test(p.card_want || '') ? p.card_want : '';
-  const askRow = p => `<div class="adm-ask"><div><b>${esc(p.name)}</b> ${p.ig ? `<a href="https://www.instagram.com/${esc(p.ig)}/" target="_blank" rel="noopener">@${esc(p.ig)}</a>` : ''}<small>wants to post more · asked ${esc(agoTxt(p.card_ask_at))}</small>${p.card_note ? `<p>"${esc(p.card_note)}"</p>` : ''}${want(p) ? `<span class="adm-want">Wants: ${esc(want(p))}</span>` : ''}</div>
+  const askRow = p => `<div class="adm-ask"><div><b>${esc(p.name)}</b> ${p.ig ? `<a href="https://www.instagram.com/${esc(p.ig)}/" target="_blank" rel="noopener">@${esc(p.ig)}</a>` : ''}<small>asked to post video, stories, songs and dates · ${esc(agoTxt(p.card_ask_at))}</small>${p.card_note ? `<p>"${esc(p.card_note)}"</p>` : ''}${want(p) ? `<span class="adm-want">Wants: ${esc(want(p))}</span>` : ''}</div>
     <div class="adm-acts"><button type="button" class="primary" data-cardyes="${esc(p.user_id)}" data-n="${esc(p.name)}"${want(p) ? ` data-want="${esc(want(p))}"` : ''}>Let them post</button><button type="button" class="btn" data-cardno="${esc(p.user_id)}">No</button><a class="btn" href="${esc(siteUrl('board/#members/' + p.sid))}">Manage</a></div></div>`;
   const srcRow = x => { const u = srcLink(x); return `<div class="adm-ask"><div><b>${u ? `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(srcName(x))}</a>` : esc(srcName(x))}</b><small>flyer source · from ${esc(x.by_name)} · ${esc(ago(x.created_at))} ago</small>${x.note ? `<p>"${esc(x.note)}"</p>` : ''}</div>
     <div class="adm-acts"><button type="button" class="primary" data-srcyes="${x.id}">Add to the sweep</button><button type="button" class="btn" data-srcno="${x.id}">No</button></div></div>`; };
@@ -7589,24 +7589,24 @@ function lock(kind, msg){
           <input id="wall-email" name="email" type="email" autocomplete="email" autocapitalize="none" required>
           <label for="wall-pw">Password <small>(8+ characters)</small></label>
           <input id="wall-pw" name="pw" type="password" autocomplete="new-password" minlength="8" required>
-          <label class="sw lock-sw"><span>Show me in the Crypt<small>your page and your name on going lists</small></span><input type="checkbox" id="wall-show" checked></label>
-          <button type="submit" class="primary lock-go" id="join-go">Join the Crypt</button>
+          <label class="sw lock-sw"><span>Show me in the Coven<small>your page and your name on going lists</small></span><input type="checkbox" id="wall-show" checked></label>
+          <button type="submit" class="primary lock-go" id="join-go">Join the Coven</button>
         </div>
         <p class="lock-msg" id="join-msg" role="alert"></p>
       </form>
       <a class="btn lock-alt" href="${esc2(loginHref())}">Already in? Log in</a>${fine}`;
   } else if (kind === 'ig') {
-    body = `<h2>One more step</h2><p>${esc2(msg || "You're logged in. Put your Instagram in and the Crypt opens.")}</p>
+    body = `<h2>One more step</h2><p>${esc2(msg || "You're logged in. Put your Instagram in and the Coven opens.")}</p>
       <form class="lock-form" id="ig-form" novalidate>
         <label for="wall-ig2">Your Instagram</label>
         <input id="wall-ig2" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="@handle" maxlength="80" required>
-        <button type="submit" class="primary lock-go" id="ig-go">Open the Crypt</button>
+        <button type="submit" class="primary lock-go" id="ig-go">Open the Coven</button>
         <p class="lock-msg" id="ig-msg" role="alert"></p>
       </form>
       <button type="button" class="btn lock-alt" id="wall-out">Log out</button>${fine}`;
   } else if (kind === 'ban') {
     // a banned account: wall_join refuses it before anything else (035), so the Instagram box would only promise a door that stays shut
-    body = `<h2>The Crypt is closed</h2><p>This account can't join the Crypt.</p>
+    body = `<h2>The Coven is closed</h2><p>This account can't join the Coven.</p>
       <button type="button" class="btn lock-alt" id="wall-out">Log out</button>`;
   } else if (kind === 'closed') {
     // they closed it themselves (044 account_close): a hide, nothing deleted, so opening it again puts everything back
@@ -7620,15 +7620,15 @@ function lock(kind, msg){
       <button type="button" class="btn lock-alt" id="wall-out">Log out</button>`;
   } else if (kind === 'door') {
     // 049: at the door until the desk has looked at their Instagram. Turned away reads exactly this (a no is never announced).
-    body = `<h2>Waiting for a look</h2><p>Every Instagram gets looked at before the Crypt opens. Yours is in line. Check back soon.</p>
+    body = `<h2>Waiting for a look</h2><p>Every Instagram gets looked at before the Coven opens. Yours is in line. Check back soon.</p>
       <button type="button" class="primary lock-go" id="wall-check">Check again</button>
       <p class="lock-msg" id="door-msg" role="alert"></p>
       <button type="button" class="btn lock-alt" id="wall-out">Log out</button>`;
   } else {
     const copy = {
-      err:  ["Couldn't open it right now", 'The door did not answer. Check your signal and try again.', 'Try again'],
-      old:  ['Update your phone', 'The Crypt needs a newer browser to open. Update iOS or Chrome, then try again.', 'Try again'],
-      busy: ['Opening the Crypt', 'Checking your login.', '']
+      err:  ["Couldn't open it right now", 'That did not answer. Check your signal and try again.', 'Try again'],
+      old:  ['Update your phone', 'The Coven needs a newer browser to open. Update iOS or Chrome, then try again.', 'Try again'],
+      busy: ['Opening the Coven', 'Checking your login.', '']
     }[kind];
     body = `<h2>${copy[0]}</h2><p>${copy[1]}</p>${copy[2] ? `<button type="button" class="primary lock-go" onclick="location.reload()">${copy[2]}</button>` : ''}`;
   }
@@ -7672,7 +7672,7 @@ function wireLock(kind){
         }
       } catch (err) {
         say(/invalid login|credentials/i.test(err.message || '') ? 'That email already has an account. Use its password, or log in below.' : (err.message || 'That did not go through. Try again.'));
-      } finally { go.disabled = false; go.textContent = 'Join the Crypt'; }
+      } finally { go.disabled = false; go.textContent = 'Join the Coven'; }
     });
   }
   if (kind === 'ig') {
@@ -7718,7 +7718,7 @@ function wireLock(kind){
 async function joinAndOpen(ig, show, say){
   const c = OTP.sb();
   let r; try { r = await c.rpc('wall_join', {p_ig: ig || null}); } catch (e) { r = {error: e}; }
-  if (r.error) { say(/can.t join/i.test(r.error.message || '') ? "This account can't join the Crypt." : 'That did not answer. Try again in a second.'); return 'err'; }
+  if (r.error) { say(/can.t join/i.test(r.error.message || '') ? "This account can't join the Coven." : 'That did not answer. Try again in a second.'); return 'err'; }
   // 049: at the door. Their "Show me in the Crypt" pick is kept now (the database takes it while they wait).
   if (r.data === 'wait') {
     if (show === false) { try { await c.rpc('wall_set_show', {p_show: false}); } catch(e){} }
@@ -7728,7 +7728,7 @@ async function joinAndOpen(ig, show, say){
   try { localStorage.removeItem('wall-code-pending'); } catch(e){}       // left behind by the page from before 10/4
   if (show === false) { try { await c.rpc('wall_set_show', {p_show: false}); } catch(e){} }
   const ok = await unlock();
-  if (ok !== 'open' && ok !== 'reload') say(ok === 'old' ? 'Update your browser, then try again.' : 'You are in, but the Crypt did not open. Pull to refresh.');
+  if (ok !== 'open' && ok !== 'reload') say(ok === 'old' ? 'Update your browser, then try again.' : 'You are in, but the Coven did not open. Pull to refresh.');
   return ok === 'open' ? 'open' : 'err';
 }
 function bytes(hex){ return new Uint8Array(hex.match(/../g).map(h => parseInt(h, 16))); }
