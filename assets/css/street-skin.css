@@ -88,6 +88,7 @@ html[data-place]{-webkit-text-size-adjust:100%;text-size-adjust:100%}
    and the home bar: the Close key sat under the clock, FULL RES and the count under the home bar. */
 html[data-place] .lb-x{top:calc(18px + env(safe-area-inset-top,0px))}
 html[data-place] .lb-dl,html[data-place] .lb-count{bottom:calc(18px + env(safe-area-inset-bottom,0px))}
+html[data-place] .lb-looks{bottom:calc(44px + env(safe-area-inset-bottom,0px))}      /* the look chips sit over the count: they go up with it, or the count runs into them */
 /* the sound key's word (On, Off) was 9.2 px: nothing a person reads is under 11 */
 .sk-snd small{font-size:11px}
 
