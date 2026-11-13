@@ -2924,6 +2924,30 @@ a.key{cursor:pointer}
 .lb-rc:focus-visible{outline:3px solid #ffb3d1;outline-offset:2px}
 .lb-rc:active b,.lb-rc:hover b{text-decoration:underline}
 
+/* ---- THE OTHER FLIP CARDS (11/14; his note on the House card: "when you flip the card, you can still see the text from
+   the front ... inverted"). The jukebox sleeve (in your hands and from My Collection), Lena's certificate, the box office
+   ticket and the flyers on Lena's wall get the House card's turn (.hv-flipc, above). Safari only hides the back of a face
+   that is itself turned in 3D, so every front has its own (zero) turn; the two faces of a card sit half a pixel proud of
+   it, never in one plane; both forms of backface-visibility are on the faces themselves (jb.css, ft.css, tk.css); and so
+   that nothing rests on the browser at all, the face you are not looking at is switched off (visibility) the moment the
+   card is edge on: .11s into the .6s turn, .09s into a flyer's .5s, where the curve passes 90 degrees. Every turn looks
+   and lasts as it did. The faces are the turner's own children: nothing between them clips, filters or fades. Under
+   Reduce Motion the turn is instant and so is the switch. The sleeve's front keeps its cover (jb_art.css). The photo
+   booth's strip has one face and does not turn: there is nothing of this kind on it. ---- */
+.jb-sl,.ft-flipc,.tk-flipc{-webkit-transform-style:preserve-3d}
+.jb-sl .face,.ft-flipc .face,.tk-flipc .face{-webkit-transform-style:flat;transform-style:flat;transition:visibility 0s .11s}
+.jb-sl .face.front,.ft-flipc .face.front,.tk-flipc .face.front{-webkit-transform:rotateY(0deg) translateZ(.5px);transform:rotateY(0deg) translateZ(.5px)}
+.jb-sl .face.back,.ft-flipc .face.back,.tk-flipc .face.back{-webkit-transform:rotateY(180deg) translateZ(.5px);transform:rotateY(180deg) translateZ(.5px);visibility:hidden}
+.jb-sl.flipped .face.front,.ft-flipc.ft-flipd .face.front,.tk-flipc.tk-flipd .face.front{visibility:hidden}
+.jb-sl.flipped .face.back,.ft-flipc.ft-flipd .face.back,.tk-flipc.tk-flipd .face.back{visibility:visible}
+/* a flyer on the wall: its two faces turn by themselves (no turner), so each is already its own layer */
+.ft-fly .f,.ft-fly .b{transition:transform .5s cubic-bezier(.3,.7,.2,1),visibility 0s .09s}
+.ft-fly .f{-webkit-transform:rotateY(0deg);transform:rotateY(0deg)}
+.ft-fly .b{-webkit-transform:rotateY(180deg);visibility:hidden}
+.ft-fly.ft-flip .f{-webkit-transform:rotateY(-180deg);transform:rotateY(-180deg);visibility:hidden}
+.ft-fly.ft-flip .b{-webkit-transform:rotateY(0deg);visibility:visible}
+@media (prefers-reduced-motion:reduce){.jb-sl .face,.ft-flipc .face,.tk-flipc .face,.ft-fly .f,.ft-fly .b{transition:none!important}}
+
 /* ---------- FIND YOURSELF at the PHOTO BOOTH: a night's whole contact sheet (11/13, site build only: fy.js).
    A tap on a photo opens it on the night's own page. ---------- */
 
