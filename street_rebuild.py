@@ -30,7 +30,8 @@ PY = "/usr/bin/python3"          # the Mac's own Python: it has Pillow, which th
 
 # what the street is built from, inside the repo
 INPUTS = ["content/desk.json", "content/frames.json", "content/music.json", "content/rotation.json", "content/roster.json",
-          "content/video.json", "events/events.json", "stamp.py", "supabase-config.js", "assets/js/desk.js"]
+          "content/video.json", "events/events.json", "stamp.py", "supabase-config.js", "assets/js/desk.js",
+          "reliquary/index.html", "content/drops.json"]      # the manhwa shelf and the day each drop went up: LOVE BITES' comic row is the issues that are out
 GLOBS = ["word/*/index.html", "events/*/data.json"]
 
 
