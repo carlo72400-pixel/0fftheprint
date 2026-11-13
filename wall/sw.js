@@ -1,9 +1,13 @@
 /* THE WALL, offline worker (0fftheprint.com/wall/sw.js). Written by flyer-sweep/wall_build.py; never hand-edit.
    Build 20261110170405.
-   - The page itself: the SAVED copy first, at once, and a fresh one downloads behind it for next time (10/13, "flyers open fast
-     from a link": a link used to wait up to six seconds on the network). The page checks wall/build.txt itself: when a newer
-     build has the flyer it was sent to, it asks again with ?b=<build>, and that one request goes to the network first. A saved
-     copy older than three days also goes network first (four seconds, then the saved copy). No saved copy: the network.
+   - The page itself: the SAVED copy, at once, as long as it is still the page the site has (10/13, "flyers open fast from a
+     link": a link used to wait up to six seconds on the network). 11/13: one small ask goes first (a HEAD for the page, a
+     second and a half at most) and says whether the site's page changed since this copy was saved. The same: the saved copy.
+     Changed: the new page from the network, then and there (four seconds, then the saved copy), so a link that needs
+     something only the new page has lands right on the first tap. No answer (no signal, a slow one): the saved copy, and a
+     fresh one downloads behind it for next time. The page still checks wall/build.txt itself: when a newer build has the
+     flyer it was sent to, it asks again with ?b=<build>, and that one request goes to the network first. A saved copy older
+     than three days also goes network first. No saved copy: the network.
      The data inside it stays sealed; a member's phone already holds the key, so it opens offline too.
    - Scripts, styles and fonts: served from the phone, refreshed in the background.
    - Flyers: kept after the first view (and the next few nights are warmed while the phone is idle), capped.
@@ -33,26 +37,48 @@ async function trim(){
   for (let i = 0; i < keys.length - IMG_CAP; i++) await c.delete(keys[i]);   // oldest first
 }
 
-/* Only a real page goes in the page slot (anything else under /wall/ used to be able to land there). Saved first (10/13): the
-   saved page answers at once and the fresh one downloads into the slot behind it, stamped with when it was saved. The page swaps
-   itself when it needs to (build.txt, above). ?b= or a stale slot: the network first, the saved copy if it is slow or gone. */
+/* Only a real page goes in the page slot (anything else under /wall/ used to be able to land there). The saved page answers at
+   once (10/13) when it is still the site's page (11/13): the copy carries the ETag and Last-Modified it came with, and one HEAD
+   for the page (never out of the phone's own cache) is held against them. The same: the saved copy, its saved-at stamp
+   renewed, nothing downloaded. Changed: the network first, the saved copy if that is slow or gone. No word inside ASK (no signal,
+   a slow one, a host that sends neither mark): the saved copy, and the fresh one downloads into the slot behind it as before.
+   ?b= or a stale slot: the network first. Every fetch of the page asks the site (cache: 'no-cache'), so a copy the phone's own
+   cache kept for its ten minutes is never mistaken for the new page. */
 const hold = (e, p) => { try { e.waitUntil(Promise.resolve(p).catch(() => {})); } catch (err) {} };
-const STALE = 3 * 864e5, SLOW = 4000;
+const STALE = 3 * 864e5, SLOW = 4000, ASK = 1500;
+const PAGE = new URL('./', self.registration.scope).href;
 async function keep(c, r){
   // the saved-at stamp rides on the saved copy's headers; the body is the page exactly as it came
   const h = new Headers(r.headers); h.delete('content-length'); h.delete('content-encoding'); h.set('x-wall-saved', String(Date.now()));
   await c.put('./', new Response(await r.blob(), {status: r.status, statusText: r.statusText, headers: h}));
 }
+const tag = r => (r.headers.get('etag') || '').replace(/^W\//, '').replace(/"/g, '').replace(/-gzip$/, '');
+/* is the saved copy still the site's page? true or false, or null when nobody can say inside ASK */
+function sameAsSite(saved){
+  const was = tag(saved), wasAt = saved.headers.get('last-modified') || '';
+  if ((!was && !wasAt) || self.navigator.onLine === false) return Promise.resolve(null);
+  const ask = fetch(PAGE, {method: 'HEAD', cache: 'no-store'}).then(r => {
+    if (!r.ok) return null;
+    const now = tag(r), nowAt = r.headers.get('last-modified') || '';
+    return was && now ? was === now : wasAt && nowAt ? wasAt === nowAt : null;
+  }).catch(() => null);
+  return Promise.race([ask, new Promise(ok => setTimeout(ok, ASK, null))]);
+}
 async function pageFirst(e){
   const c = await caches.open(SHELL);
-  const fresh = () => fetch(e.request).then(r => {
+  // the page, asked of the site itself; a plain fetch of the same address answers a visit as long as nothing redirected it
+  const fresh = () => fetch(e.request.url, {cache: 'no-cache'}).then(r => (r.redirected || r.type !== 'basic') ? fetch(e.request) : r).then(r => {
     if (r.ok && /text\/html/i.test(r.headers.get('content-type') || '')) hold(e, keep(c, r.clone()));
     return r;
   });
   const saved = await c.match('./');
   const asked = new URL(e.request.url).searchParams.has('b');            // the page asked for a newer build on purpose
   const age = saved ? Date.now() - (+saved.headers.get('x-wall-saved') || 0) : Infinity;
-  if (saved && !asked && age < STALE) { hold(e, fresh().catch(() => null)); return saved; }
+  if (saved && !asked && age < STALE) {
+    const same = await sameAsSite(saved);
+    if (same === true) { hold(e, keep(c, saved.clone())); return saved; }                 // still the page: at once, the stamp renewed
+    if (same === null) { hold(e, fresh().catch(() => null)); return saved; }              // nobody could say: at once, a fresh one behind it
+  }                                                                                       // the site's page changed: the network first, below
   const net = fresh();
   if (!saved) { try { return await net; } catch (err) { return Response.error(); } }
   try {
