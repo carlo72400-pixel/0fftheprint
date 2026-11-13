@@ -4198,8 +4198,8 @@ window.OTPLazy = window.OTPLazy || (function () {
          outside name on the list, so Cam is the one link that leaves.
          Wave 2 (call 13): the card list keeps it. Once OTP.people() answers, a
          c/<slug>/ row whose card is gone (out, banned, closed, taken back) drops,
-         and a card holder with no row here joins before the open seat. Nobody
-         is added by hand any more: make them a card holder on the board. The
+         and a posting member with no row here joins before the open seat. Nobody
+         is added by hand any more: make them a posting member on the board. The
          rows below are the floor for a page whose database did not answer. -->
     <section class="card friends" id="spotlight">
       <h3>Creator Spotlight</h3>
@@ -4381,7 +4381,7 @@ window.OTPLazy = window.OTPLazy || (function () {
       <div class="fr-foot" id="fr-foot"></div>
     </section>
 
-    <!-- ===== THE TAKE — the timeline. Card holders post here. ===== -->
+    <!-- ===== THE TAKE — the timeline. Posting members post here. ===== -->
     <section id="take" data-tab="home">
       <div class="section-head">
         <h2>The Take <span class="accent">the timeline</span></h2>
@@ -4456,7 +4456,7 @@ window.OTPLazy = window.OTPLazy || (function () {
            Culture, Interviews), never a fixed list. Hardcoded ones drifted once:
            Hair and Fashion matched zero items and filtered the grid to empty.
            #desk-grid holds one .shelf per series, each with its own rail. -->
-      <!-- composer.js fills this: a card holder gets a Write a story button
+      <!-- composer.js fills this: a posting member gets a Write a story button
            here, so starting one is a tap from the page they are already on
            instead of a trip through the desk. -->
       <div id="word-cta"></div>
@@ -4716,7 +4716,7 @@ window.OTPLazy = window.OTPLazy || (function () {
   function syncWall(){
     if (!navWall) return;
     if (tile) tile.hidden = navWall.hidden;
-    // logged out, or not on The Wall yet: the way in. Not for a card holder door.js hid CRYPT from (a Crypt
+    // logged out, or not on The Wall yet: the way in. Not for a posting member door.js hid CRYPT from (a Crypt
     // ban, 032): that door refuses them, so 'Join the Crypt' would be the same dead end under another name.
     if (join) join.hidden = !navWall.hidden || !!(navKey && navKey.getAttribute('data-st') === 'in');
   }
@@ -4737,7 +4737,7 @@ window.OTPLazy = window.OTPLazy || (function () {
     if (!v) return '';
     // '#anchor' has to be allowed explicitly. It cannot execute anything, and
     // leaving it out silently killed every in-page link that came through here
-    // (the #roster catalog tile, a card holder's avatar with no external link).
+    // (the #roster catalog tile, a posting member's avatar with no external link).
     if (/^#[\w-]*$/.test(v)) return v;
     // ⛔ Protocol-relative ('//evil.example/x') borrows the page's scheme and hides
     // the host. It passed the old '(https?:)?//' branch AND the bare '[\w./-]+'
@@ -4819,7 +4819,7 @@ window.OTPLazy = window.OTPLazy || (function () {
   let slateHeld = null; // 10/10: an UNPINNED slate.next, kept so the pencil can re-pin it with its own words
   let events = [];
   // Wave 2 (call 2): the roster seats the desk hid on the board ('roster' rows by name, 'c:<slug>' rows for a card
-  // holder with no seat), as card slugs. applyList() already drops a hidden seat; this also keeps its card holder
+  // holder with no seat), as card slugs. applyList() already drops a hidden seat; this also keeps its posting member
   // from coming back in as a database-only card when the cards are merged in (OTP.peopleMerge, The Take below).
   let rosterHide = [];
   try {
@@ -4974,7 +4974,7 @@ window.OTPLazy = window.OTPLazy || (function () {
         rotation = applyList(rotation, bySection.rotation, it => parseSpotifyId(it.link) || '',
           p => { const id = parseSpotifyId(p.link); return !!id && !seedIds.has(id); });
         // The seats the desk hid, as card slugs, read BEFORE applyList drops them (a hidden seat is gone after).
-        // A seat row is keyed by its name; a 'c:<slug>' row hides a card holder who has no seat.
+        // A seat row is keyed by its name; a 'c:<slug>' row hides a posting member who has no seat.
         (bySection.roster || []).forEach(r => {
           if (!r || !r.hidden) return;
           const k = String(r.item_key || ''), m = /^c:([a-z0-9][a-z0-9-]{0,60})$/.exec(k);
@@ -5542,7 +5542,7 @@ window.OTPLazy = window.OTPLazy || (function () {
 
   // CREATOR SPOTLIGHT (call 13): the card list keeps it. Once OTP.people() answers WITH the database in it, a
   // hand-typed c/<slug>/ row whose card is gone (out, banned, closed, taken back, or hidden from the roster on the
-  // board) drops, and a card holder with no row joins before the open seat (never the house's own card). No answer,
+  // board) drops, and a posting member with no row joins before the open seat (never the house's own card). No answer,
   // an empty one, or one with no card from the database in it (the cards read lost its race) keeps the markup as is.
   // A new row carries its card photo in data-photo, and cathedral.js paints the faces again on 'otp:spotlight'.
   (async () => {
@@ -5677,7 +5677,7 @@ window.OTPLazy = window.OTPLazy || (function () {
     // art, the handle and the seat. cardTight is the same people, keyed the way
     // pageFor() already matches them.
     const cardTight = {};
-    // Built again after the card overlay below: a card holder's own photo and link land on the roster
+    // Built again after the card overlay below: a posting member's own photo and link land on the roster
     // objects there, and a copy taken only here kept the house art on their posts while /my/ told
     // them 'Your card photo is your face across the site'.
     const fillCardPeople = () => {
@@ -5750,7 +5750,7 @@ window.OTPLazy = window.OTPLazy || (function () {
     }
 
     let liveFull = false;
-    // Live posts from approved card holders sit on top of the JSON seeds.
+    // Live posts from approved posting members sit on top of the JSON seeds.
     // If the backend is not configured, this is a no-op and the seeds show alone.
     if (window.OTP && OTP.configured) {
       try {
@@ -5779,7 +5779,7 @@ window.OTPLazy = window.OTPLazy || (function () {
     // reason, and losing it just means the desk-authored cards show.
     // Wave 2 (call 2, one profile): OTP.peopleMerge does the whole merge, the same
     // one every page uses. A card row patches its seat (card_slug, then the name);
-    // a card holder with no seat joins as a card of their own (_db); a seat whose
+    // a posting member with no seat joins as a card of their own (_db); a seat whose
     // holder is banned, closed or demoted goes dark (dark_seats), and a seat the
     // desk hid on the board stays out (rosterHide). It runs before the faces
     // below, the Music tab's handoff and the pack pool, so all three see one list.
@@ -5835,7 +5835,7 @@ window.OTPLazy = window.OTPLazy || (function () {
         ? `<span class="av${/\/public\/cards\//.test(avUrl) ? ' av-card' : ''}" data-bg="${esc(avUrl)}"></span>`
         : `<span class="av av-fallback">${esc(Array.from(String(who.name || '0').trim())[0] || '0')}</span>`;
       const isExt = /^https?:\/\//.test(who.link || '');
-      // A card holder whose card has no outside link carries '#roster', and that grid left on 10/7: the avatar
+      // A posting member whose card has no outside link carries '#roster', and that grid left on 10/7: the avatar
       // opened the Coven tab, not the person. Their own page instead, the same one their name opens.
       const avHref = ownPage || safeUrl(who.link) || '#';
       const bodyTxt = String(p.text || p.body || '').trim();
@@ -6081,7 +6081,7 @@ window.OTPLazy = window.OTPLazy || (function () {
   const rMount = document.getElementById('rotation-mount');
   if (rMount && rotation) {
     // 10/11: member picks (migration 009) used to sit ABOVE the seeds in this grid. They have their
-    // own row now, Card Holders' Picks (music.js), so On Rotation is the desk's hand again. A pick
+    // own row now, the members' picks (music.js), so On Rotation is the desk's hand again. A pick
     // the desk already promoted into rotation.json is dropped from the picks so it never shows twice.
     const liveTracks = (await rotationLiveP) || [];
     const seeded = new Set(rotation.map(e => parseSpotifyId(e.link)).filter(Boolean));
@@ -6956,7 +6956,7 @@ window.OTPLazy = window.OTPLazy || (function () {
       }
     });
 
-    // a casual member takes their own post down (card holders have edit mode for this)
+    // a casual member takes their own post down (posting members have edit mode for this)
     mount.querySelectorAll('.post-del[data-del]:not([data-wired])').forEach(b => { b.dataset.wired = '1'; b.addEventListener('click', async () => {
       if (b.dataset.sure !== '1') { b.dataset.sure = '1'; b.textContent = 'Tap again to delete'; return; }
       b.disabled = true;
@@ -7293,7 +7293,7 @@ window.OTPLazy = window.OTPLazy || (function () {
   // `?? 0` would make those cards unpullable. Below gold-rare on purpose.
   const BESPOKE_WEIGHT = 3;
   function weightedPull(){
-    // Pool: every roster card + every non-open-seat curator. A card of their own (a card holder with no
+    // Pool: every roster card + every non-open-seat curator. A card of their own (a posting member with no
     // roster seat, Wave 2) joins only once it has a photo: the house seats have art, a blank card in a pack does not.
     const pool = [];
     (roster || []).forEach(v => { if (v._db && !safeUrl(v.photo)) return; pool.push({type:'roster', card:v}); });
