@@ -69,9 +69,9 @@
 
 /* ---------------- the add / edit sheet ---------------- */
 .sh-back{position:fixed;inset:0;background:rgba(6,5,9,.8);z-index:400;display:flex;
-  align-items:flex-end;justify-content:center;backdrop-filter:blur(3px)}
+  align-items:flex-end;justify-content:center;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}      /* 11/14: an iPhone before iOS 18 only knows the -webkit- spelling */
 .sh{background:var(--panel,#121218);border:1px solid var(--line);border-bottom:0;
-  border-radius:20px 20px 0 0;width:100%;max-width:560px;max-height:92vh;overflow-y:auto;
+  border-radius:20px 20px 0 0;width:100%;max-width:560px;max-height:92vh;max-height:92dvh;overflow-y:auto;
   padding:20px 20px calc(24px + env(safe-area-inset-bottom));
   font-family:var(--f-body,'Inter',system-ui,sans-serif);color:var(--ink)}
 @media(min-width:640px){.sh-back{align-items:center;padding:24px}

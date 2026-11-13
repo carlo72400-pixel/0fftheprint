@@ -92,6 +92,8 @@ html.bn-open-sheet,html.bn-open-sheet body{overflow:hidden}
 .bn-head h2{font:700 12px/1.2 Verdana,Geneva,Tahoma,sans-serif;letter-spacing:.03em;margin:0}
 .bn-x{width:32px;height:32px;border:1px solid #3a0f27;background:rgba(58,15,39,.12);color:#3a0f27;font-size:20px;line-height:1;cursor:pointer;border-radius:0}
 .bn-x:hover{background:#3a0f27;color:var(--pink-glow,#ff79c6)}
+.bn-x{position:relative}
+.bn-x::after{content:'';position:absolute;inset:-7px}      /* 11/14: the key looks as it did (32 px) and takes a 44 px press (its inside is 30 px, plus 7 each way) */
 .bn-body{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:14px 14px 18px}
 .bn-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .bn-stat{padding:10px 8px 9px;border:1px solid rgba(244,238,242,.18);background:rgba(244,238,242,.04);text-align:center;min-width:0}
@@ -127,7 +129,7 @@ html.bn-open-sheet,html.bn-open-sheet body{overflow:hidden}
 @media (max-width:560px){
   /* a sheet off the bottom edge, under the thumb */
   .bn-sheet{place-items:end center;padding:0}
-  .bn-card{width:100%;max-height:88vh;border-left:0;border-right:0;border-bottom:0}
+  .bn-card{width:100%;max-height:88vh;max-height:88dvh;border-left:0;border-right:0;border-bottom:0}      /* 11/14: vh is the screen with Safari's bars put away; with them showing on a small iPhone the sheet's head and its close key were pushed off the top. dvh is the screen that is showing; the vh line stays for browsers without it */
   .bn-body{padding-bottom:calc(22px + env(safe-area-inset-bottom,0px))}
 }
 /* ---------------- a night's lightbox: the tag line's controls (sealed.js, Wave 2) ----------------

@@ -80,3 +80,13 @@ html[data-place="street"]{--sk-bk:96px}
   .sk-top:has(.bn-chip) .sk-place{font-size:11px;letter-spacing:-.02em}
 }
 @media (prefers-reduced-motion:reduce){.sk-back:active,.sk-snd:active,.sk-key:active{transform:none}}
+
+/* THE iPHONE PASS (11/14). Turned on its side, Safari grows a page's text unless it is told not to. */
+html[data-place]{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+/* The night pages' photo viewer (newevent.py writes its rules into every night page; these win over them and are the
+   same 18 px where a phone reports no inset). Opened from the home screen icon a page is drawn under the status bar
+   and the home bar: the Close key sat under the clock, FULL RES and the count under the home bar. */
+html[data-place] .lb-x{top:calc(18px + env(safe-area-inset-top,0px))}
+html[data-place] .lb-dl,html[data-place] .lb-count{bottom:calc(18px + env(safe-area-inset-bottom,0px))}
+/* the sound key's word (On, Off) was 9.2 px: nothing a person reads is under 11 */
+.sk-snd small{font-size:11px}

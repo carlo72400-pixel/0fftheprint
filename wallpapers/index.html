@@ -47,7 +47,7 @@ h1{font-family:"VP Deadeye",Impact,"Arial Black",sans-serif;font-weight:400;text
 .sub{font-family:"Potta One",system-ui,sans-serif;color:var(--gold);font-size:17px;margin:0}
 .igb{display:none;margin:14px 0 0;padding:11px 14px;border-radius:14px;background:var(--gold);color:#1a0b10;font-weight:700;font-size:15px;line-height:1.35}
 html.ig .igb{display:block}
-.bar{position:sticky;top:0;z-index:5;margin:14px -16px 0;padding:10px 16px;transition:background-color .15s}
+.bar{position:sticky;top:calc(max(6px,env(safe-area-inset-top,0px)) + 50px);z-index:5;margin:14px -16px 0;padding:10px 16px;transition:background-color .15s}      /* 11/14: it sticks under the back key's row. At the very top of the screen NIGHT sat under the back key (and, from the home screen icon, under the status bar) */
 .bar.stuck{background:linear-gradient(var(--bg) 72%,rgba(14,6,9,0))}
 .pin{height:1px;margin-bottom:-1px}
 .mode{display:inline-flex;gap:4px;padding:4px;border-radius:999px;background:var(--chip);border:2px solid var(--line)}
@@ -106,8 +106,8 @@ html.ig .igb{display:block}
 .hint{margin:11px auto 0;max-width:440px;font-size:14px;line-height:1.4;color:#d4c6cc}
 @media (prefers-reduced-motion:reduce){.ph,.vfull{transition:none}.pick:hover .ph{transform:none}}
 </style>
-<link rel="stylesheet" href="../assets/css/street-skin.css?v=b1e2b3ee">
-<script src="../assets/js/street-skin.js?v=38af1586" defer></script>
+<link rel="stylesheet" href="../assets/css/street-skin.css?v=3f23afc1">
+<script src="../assets/js/street-skin.js?v=273da3fa" defer></script>
 </head>
 <body>
 <!--sk--><div class="sk-top"><a class="sk-back" href="../#in-bites" aria-label="Back to Love Bites on the street"><span aria-hidden="true">&lsaquo;</span>Love Bites</a><b class="sk-place">LOVE BITES</b><span class="sk-keys" id="sk-keys"></span></div><!--/sk-->
@@ -254,7 +254,7 @@ html.ig .igb{display:block}
   }, { passive: true });
   window.addEventListener('popstate', function () { if (!view.hidden && !/^#[a-z]+(-day|-night)?$/.test(location.hash || '')) close(true); else if (view.hidden) fromHash(); });
   // the Night/Day bar only gets its backdrop once it is stuck to the top (at rest it sat as a dark band on the red glow)
-  try { var bar = d.getElementById('bar'); new IntersectionObserver(function (es) { bar.classList.toggle('stuck', !es[0].isIntersecting); }).observe(d.getElementById('pin')); } catch (e) {}
+  try { var bar = d.getElementById('bar'); new IntersectionObserver(function (es) { bar.classList.toggle('stuck', !es[0].isIntersecting); }, { rootMargin: '-' + (parseFloat(getComputedStyle(bar).top) || 0) + 'px 0px 0px 0px' }).observe(d.getElementById('pin'));      /* 11/14: stuck starts where the bar now sticks, under the back key's row */ } catch (e) {}
   if (mode !== 'night') setMode(mode);
   fromHash();
 })();

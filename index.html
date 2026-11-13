@@ -2698,6 +2698,21 @@ a.key{cursor:pointer}
   .st-in-sheet.st-m > :not([class$="-stage"]):not([role="dialog"]):not([role="alertdialog"]):not(.nb-sr):not(.hv-defs){margin-left:16px;margin-right:16px;max-width:calc(100% - 32px)}
   .rc-awn{width:100%;margin-left:0;margin-right:0}
 }
+/* A SCREEN 481 TO 899 px WIDE, HELD UPRIGHT, IS A PHONE TOO (11/14: his Samsung reports a screen 614 px wide, its browser
+   draws the page at about two thirds). There each machine sat in a 400 px column with bare gutters either side. It now
+   runs the width of the screen like on any phone, but never wider than 62% of the screen's height, so an upright
+   tablet gets a machine it can still see most of; the words and keys under it keep the machine's width. LOVE BITES
+   (its own 440 px cap) the same. On its side, and from 900 px, nothing changes. 480 px and under is the block above,
+   untouched. */
+@media (min-width:481px) and (max-width:899px) and (orientation:portrait){
+  .st-in-sheet.st-m{padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+  .st-in-sheet.st-m > [class$="-stage"]{max-width:min(100%,62vh);margin-left:auto;margin-right:auto}
+  .st-in-sheet.st-m > :not([class$="-stage"]):not([role="dialog"]):not([role="alertdialog"]):not(.nb-sr):not(.hv-defs){margin-left:auto;margin-right:auto;max-width:min(calc(100% - 32px),calc(62vh - 32px))}
+  .rc-awn{width:100%;margin-left:0;margin-right:0}
+  .st-bites .stage{margin-left:calc(-1 * max(16px,env(safe-area-inset-left,0px)));margin-right:calc(-1 * max(16px,env(safe-area-inset-right,0px)))}
+  .st-bites .machine{max-width:calc(min(100%,62vh) - 20px)}      /* its 10 px of side padding sit outside its width */
+  .st-bites .after{max-width:min(100%,62vh)}
+}
 /* SIGNS YOU CAN READ ON A PHONE (round 8, 11/12; the boxes and sizes are site_mode.signs). Every place's name is on a
    solid plate: dark on light or light on dark, 7:1 or better, no soft colour on a sign of nearly the same colour. A glow
    only where the sign is meant to be lit, and only when the lamps are on; by day the plate alone carries it. */
@@ -2831,12 +2846,12 @@ a.key{cursor:pointer}
 @media (prefers-reduced-motion:reduce){.hv-flipc .face{transition:none!important}}
 .hv-vkeys .hv-vread{flex-direction:row;gap:6px}
 .hv-hands .hold-keys,.hv-vkeys,.hv-vbody>p{position:relative;z-index:2}                /* the card swings toward you as it turns: the keys stay on top of it */
-@media (min-width:481px){
+@media (min-width:481px) and (orientation:landscape),(min-width:900px){      /* 11/14: an upright screen up to 899 px is a phone (the block below) */
   .hv-hands,.hv-view{--hv-w:max(240px,min(420px,calc((100vh - 230px)*.6)))}
   .hv-held,.hv-vbody .hv-flipc{width:var(--hv-w)}
   .hv-held,.hv-vbody{--cf:calc(var(--hv-w)/19.45)}
 }
-@media (max-width:480px){
+@media (max-width:480px),(max-width:899px) and (orientation:portrait){
   .hv-hands,.hv-view{--hv-h:calc(100vh - 92px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
   .hv-view{--hv-h:calc(100vh - 138px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
   @supports (height:100dvh){
@@ -2981,6 +2996,23 @@ a.key{cursor:pointer}
   .mp-card{bottom:calc((100% - env(safe-area-inset-top,0px)) * .02)}
 }
 @media (max-width:899px) and (prefers-reduced-motion:reduce){.mp-plate::before,.mp-plate::after{transition:none}}
+
+/* ---- THE iPHONE PASS (11/14, his "do an iphone pass aswell"). What an iPhone does that this page had not answered.
+   Each of these is nothing at all on a screen with no inset, except the sheets' height (the next rule but one), which
+   was wrong on every phone. ---- */
+/* turned on its side, Safari grows the text unless it is told not to */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+/* A SHEET IS AS TALL AS THE SCREEN, ITS OWN ROOM INCLUDED. LOVE BITES' sheet, MY COLLECTION, what you open from it and
+   FIND YOURSELF were given the screen's height AND their top and bottom room on top of it (the other machines' sheets
+   count the room inside: their machine's own rule says so). So they ran off the foot of the screen by that much and
+   could not scroll there: under LOVE BITES the hint, the sound switch and MY COLLECTION sat 100 px below a 393x852
+   screen (159 px with an island's inset), and in MY COLLECTION and FIND YOURSELF the Back key hung off the foot, under
+   the home bar. Now the room is counted inside and LOVE BITES scrolls to its last row. */
+.st-in-sheet,.vw-sheet,.fy-in{box-sizing:border-box}
+/* the end of the page: the three links clear the home bar */
+@media (max-width:899px){.mp-legend{padding-bottom:env(safe-area-inset-bottom,0px)}}
+/* three turning pieces had only the new spelling (an iPhone before iOS 15.4 wants this one) */
+.held[data-pk=zine]>.pkg img,.cv-fl span,.nb-half.bot{-webkit-backface-visibility:hidden}
 
 /* ---------- FIND YOURSELF at the PHOTO BOOTH: a night's whole contact sheet (11/13, site build only: fy.js).
    A tap on a photo opens it on the night's own page. ---------- */
@@ -6269,7 +6301,7 @@ a.key{cursor:pointer}
       });
       $$('.hv-cb', root).forEach(cb => {
         let k = 1; cb.style.setProperty('--bs', '1');
-        cb.classList.remove('hv-long'); const most = matchMedia('(max-width:480px)').matches ? 4 : 9;
+        cb.classList.remove('hv-long'); const most = matchMedia('(max-width:480px),(max-width:899px) and (orientation:portrait)').matches ? 4 : 9;
         for (let n = 0; n < most && cb.scrollHeight > cb.clientHeight + 1; n++) { k -= .04; cb.style.setProperty('--bs', k.toFixed(2)); }
         cb.classList.toggle('hv-long', cb.scrollHeight > cb.clientHeight + 1);
       });
@@ -6575,6 +6607,9 @@ a.key{cursor:pointer}
   const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const sfx = n => { if (window.__sfx) window.__sfx(n); };
+  /* an iPhone paints :active on a key that is not a link only when the page listens for touches. This listener does
+     nothing else: the map card's arrows, the Instagram sticker, the cuts and the receipt get their press look. */
+  document.addEventListener('touchstart', () => {}, { passive: true });
 
   /* ---- the machines' pictures wait for their machine. The build parks each one's address in data-src (a hidden machine's
      pictures would otherwise all be fetched on the first screen); the first time a machine, or any other hidden panel,
@@ -6715,7 +6750,7 @@ a.key{cursor:pointer}
      be cut by the screen: each time a machine opens on a narrow screen, anything small that pokes past either edge is
      slid back inside (the CSS translate property, so its own tilt is untouched). A part its own machine crops on
      purpose (Putty leaning in at the door) is left alone. Wider screens: nothing moves. ---- */
-  const NARROW = window.matchMedia('(max-width: 480px)');
+  const NARROW = window.matchMedia('(max-width: 480px), (max-width: 899px) and (orientation: portrait)');      /* 11/14: the same screens site.css runs a machine edge to edge on */
   function cropped(el, stop) {
     for (let e = el.parentElement; e && e !== stop; e = e.parentElement) { const o = getComputedStyle(e).overflowX; if (o !== 'visible') return true; }
     return false;

@@ -68,6 +68,9 @@
     keys.insertBefore(btn, keys.firstChild);
     paint();
   }
+  /* an iPhone paints :active on a key that is not a link only when the page listens for touches (11/14). This listener
+     does nothing else: the strip's sound key, the back key and every .sk-key get their press look. */
+  d.addEventListener('touchstart', function () {}, { passive: true });
   /* the click: on the press itself, for keys and links, never for typing or the sound key (it has its own) */
   d.addEventListener('pointerdown', function (ev) {
     var t = ev.target && ev.target.closest ? ev.target.closest('a[href], button, summary, [role="button"], input[type="submit"], input[type="button"], label[for]') : null;
