@@ -626,14 +626,8 @@ color:var(--ink);width:46px;height:46px;border-radius:50%;cursor:pointer;font-si
 font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#f7b9dd;text-decoration:none;
 border:1px solid rgba(255,121,198,.45);border-radius:999px;padding:8px 14px;background:rgba(10,10,13,.75)}
 .lb-dl:hover{color:#0a0a0d;background:#f7b9dd}
-/* MAKE IT A POLAROID (11/12): the photo booth on the street prints this frame as a Polaroid */
 /* the viewer is a pop up: it sits above the street's strip, whose keys lay over its close key at the top of a page */
 .lb{z-index:9001}
-.lb-card{position:absolute;top:18px;right:76px;z-index:12;display:none;align-items:center;height:46px;padding:0 16px;
-border-radius:999px;border:1px solid rgba(255,121,198,.6);background:rgba(18,18,24,.92);color:#f7b9dd;text-decoration:none;
-font-family:var(--f-mono,monospace);font-size:11px;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
-.lb-card:hover{color:#0a0a0d;background:#f7b9dd}
-@media (max-width:640px){.lb-card{height:40px;right:66px;padding:0 13px;letter-spacing:.1em}}
 .lb-count{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);
 font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;color:var(--muted)}
 @media (max-width:640px){.grid{columns:2 150px;column-gap:8px}.tile{margin-bottom:8px}
@@ -661,7 +655,6 @@ __LOOKSLINE__
   <div class="lb-looks" id="lblooks" hidden></div>
   <div class="lb-count" id="lbc"></div>
   <a class="lb-dl" id="lbdl" href="#" target="_blank" rel="noopener">full res &darr;</a>
-  <a class="lb-card" id="lbcard" href="#">make it a polaroid</a>
 </div>
 <script>
 const MEDIA = __MEDIA__;
@@ -704,16 +697,6 @@ function show(i){
   // so it saves rather than navigating anyway.
   const dl=document.getElementById('lbdl');
   if(v.full){dl.href=v.full;dl.style.display='';}else{dl.style.display='none';}
-  // MAKE IT A POLAROID: only a frame that is on the site's contact sheet gets the key
-  // (the night's hit, a clip and anything pulled never do).
-  const mk=document.getElementById('lbcard'), th=String(m.thumb||'');
-  const nm=(th.indexOf('media/')===0 && th.slice(-6)==='_t.jpg') ? th.slice(6,-6) : '';
-  mk.style.display='none';
-  if(m.type!=='video' && /^[A-Za-z0-9_.-]+$/.test(nm)) onSheet().then(s=>{
-    if(MEDIA[cur]!==m || !s || !s.set[nm]) return;
-    mk.href='../../?night='+encodeURIComponent(s.slug)+'&frame='+encodeURIComponent(nm)+'#in-booth';
-    mk.style.display='inline-flex';
-  });
   const multi = m.looks && m.looks.length>1;
   if(multi){
     chips.innerHTML = m.looks.map(x=>`<button type="button"${x.name===v.name?' class="on"':''} data-look="${esc(x.name)}">${esc(x.name)}</button>`).join('');
@@ -723,16 +706,6 @@ function show(i){
   lb.classList.add('open'); document.body.style.overflow='hidden';
 }
 chips.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;pref=b.dataset.look;show(cur);});
-let sheetP=null;
-function onSheet(){
-  if(!sheetP) sheetP=fetch('../../content/frames.json',{cache:'no-cache'}).then(r=>r.ok?r.json():null).then(j=>{
-    const slug=(window.OTPNight||{}).slug||'', n=j&&(j.nights||[]).find(x=>x.s===slug);
-    if(!n) return null;
-    const set={}; n.f.forEach(f=>{set[f[1]]=1;});
-    return {slug:slug,set:set};
-  }).catch(e=>{console.warn('make it a polaroid: the contact sheet would not load',e);sheetP=null;return null;});
-  return sheetP;
-}
 function close(){lb.classList.remove('open');stage.innerHTML='';document.body.style.overflow='';}
 grid.addEventListener('click',e=>{const t=e.target.closest('.tile');if(!t)return;e.preventDefault();show(+t.dataset.i);});
 document.getElementById('lbx').onclick=close;
@@ -743,6 +716,14 @@ document.addEventListener('keydown',e=>{
   if(!lb.classList.contains('open'))return;
   if(e.key==='Escape')close(); if(e.key==='ArrowRight')show(cur+1); if(e.key==='ArrowLeft')show(cur-1);
 });
+/* ONE PHOTO BY ITS ADDRESS (11/13): events/<night>/#f-<name> opens that photo. The photo booth on the street sends
+   people here from FIND YOURSELF. A name this night does not have just shows the night. */
+function openAt(){
+  const h=/^#f-([A-Za-z0-9_.-]{1,40})$/.exec(location.hash); if(!h) return;
+  const i=MEDIA.findIndex(x=>x.type!=='video' && x.thumb==='media/'+h[1]+'_t.jpg');
+  if(i>=0) show(i);
+}
+openAt(); addEventListener('hashchange',openAt);
 /* LAST NIGHT, SEALED reads the night through this and nothing else. It is a
    separate deferred file, so this inline script has already run by the time it
    looks. If it never loads, the grid above is the page and always was. */

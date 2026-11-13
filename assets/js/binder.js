@@ -308,34 +308,16 @@ window.OTPLazy = window.OTPLazy || (function () {
       .catch(function () { sbP = null; return {}; });
     return sbP;
   }
-  /* Polaroids (11/12): the photo booth on the street prints them and keeps them on this phone in 'st-cards'. One row each, the
-     frame's own small picture, back to the bag on the street. Read only. */
-  function streetCards() {
-    var out = {};
-    try {
-      var j = JSON.parse(w.localStorage.getItem('st-cards') || '[]');
-      (Array.isArray(j) ? j : []).forEach(function (c) {
-        if (c && /^T[a-z0-9]{1,6}$/.test(c.id) && /^[a-z0-9-]{4,80}$/.test(c.s) && /^[A-Za-z0-9_.-]{1,40}$/.test(c.k))
-          out[c.id] = { t: String(c.t || 'THAT\u2019S ME'), w: 'Polaroid', pic: 'events/' + c.s + '/media/' + c.k + '_t.jpg' };
-      });
-    } catch (e) { console.warn('the bag: the Polaroids this phone kept would not read', e); }
-    return out;
-  }
   function streetBag(body) {
     var codes = streetCodes(); if (!codes.length) return;
     var fine = body.querySelector('.bn-fine');
     var h = el('h3', '', 'From the street'); h.appendChild(el('small', '', codes.length + (codes.length === 1 ? ' thing' : ' things')));
     var row = el('div', 'bn-street');
     body.insertBefore(h, fine); body.insertBefore(row, fine);
-    var mine = streetCards();
     streetNames().then(function (names) {
       codes.forEach(function (c) {
-        var it = (names && names[c]) || mine[c]; if (!it) return;
+        var it = names && names[c]; if (!it) return;      // a code the street no longer knows (a Polaroid kept before 11/13) is simply not listed
         var a = el('a', 'bn-sitem'); a.href = BASE + '#bag';
-        if (it.pic) {
-          var ph = el('img'); ph.alt = ''; ph.loading = 'lazy'; ph.decoding = 'async'; ph.width = 54; ph.height = 72; ph.style.objectFit = 'cover'; ph.src = BASE + it.pic;
-          a.appendChild(ph);
-        }
         if (typeof it.src === 'string' && /^street\/[A-Za-z0-9_.\/-]+\.webp(\?v=[A-Za-z0-9]+)?$/.test(it.src)) {
           var im = el('img'); im.alt = ''; im.loading = 'lazy'; im.decoding = 'async'; im.width = 54; im.height = 72; im.src = BASE + it.src;
           a.appendChild(im);
