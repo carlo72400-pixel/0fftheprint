@@ -239,6 +239,16 @@
   // which is the same person, not a new one. MIXED means two different people.
   const MIXED = {};
   let meP = null, meUid, meSaw;
+  // 11/14: a "nobody" that came from a request that never got an answer, on a phone that holds a saved login. me()
+  // asks once more before it says so, and OTP.meDoubt tells a caller the null it got is not a real "signed out".
+  let meDoubt = false;
+  const savedLogin = () => {
+    try { for (let i = 0; i < w.localStorage.length; i++) { if (/^sb-.+-auth-token$/.test(w.localStorage.key(i) || "")) return true; } }
+    catch (e) {}
+    return false;
+  };
+  // No answer at all (the connection dropped, a gateway timed out), as against the login server saying no.
+  const dropped = e => !!e && (e.name === "AuthRetryableFetchError" || !e.status);
   // THE RUN: upcoming() shares one calendar read per page (keyed by limit). It
   // goes wherever the me() answer goes, because the desk reads pulled dates a
   // stranger cannot, so a sign in or out must not hand back the other's list.
@@ -385,6 +395,10 @@
     sb,
     FEED_CAP,
 
+    // true when the last me() answered null because the login server did not answer twice running while this
+    // phone holds a saved login: not a real "signed out". door.js keeps what the phone last knew and saves nothing.
+    get meDoubt() { return meDoubt; },
+
     // { user, profile } for the session, or null when nobody is signed in.
     // `failed: true` rides along when my_profile would not answer twice running:
     // the login is real but the profile is unknown, which is not the same thing
@@ -394,8 +408,18 @@
         const p = meP = (async () => {
           // No client yet (the library has not loaded) is not an answer to keep.
           const c = sb(); if (!c) return { r: null, keep: false };
-          const { data, error } = await c.auth.getUser();
-          const user = data && data.user;
+          let { data, error } = await c.auth.getUser();
+          let user = data && data.user;
+          // 11/14: one dropped request must not turn a member into a stranger. No user, no answer from the login
+          // server, and this phone holds a saved login: ask once more. A phone with no saved login never waits.
+          let doubt = false;
+          if (!user && dropped(error) && savedLogin()) {
+            await new Promise(ok => setTimeout(ok, 600));
+            ({ data, error } = await c.auth.getUser());
+            user = data && data.user;
+            doubt = !user && dropped(error);      // twice no answer: who it is stays unknown
+          }
+          meDoubt = doubt;      // set when the answer is in, so it stands until the next answer
           // No user AND an error is a network hiccup as often as a signed-out
           // visitor, so that null is handed back but not kept.
           if (!user) return { r: null, keep: !error };

@@ -126,6 +126,14 @@
   try {
     const me = await OTP.me();
     name = (me && me.profile && me.profile.display_name) || '';
+    // 11/14: "nobody" because the login server did not answer (desk.js asked twice) on a phone that holds a saved
+    // login is not a signed out visitor. A member was shown Log in and that state was saved over the right one. The
+    // state this phone last knew stays (already painted above); with none, the stranger's state shows and is not kept.
+    if (!me && OTP.meDoubt) {
+      let had = null; try { had = JSON.parse(localStorage.getItem('otp_door') || 'null'); } catch(e){}
+      if (had && had.st && had.st !== 'out') return;
+      keep = false;
+    }
     // my_profile would not answer (desk.js asked twice): the login is real, WHO it is is not known. Painting
     // on would turn a card holder or the desk into a plain member for this load and save that over the right
     // answer, so the state this phone last knew stays (already painted above). With none, paint the best guess

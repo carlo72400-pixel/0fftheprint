@@ -4844,6 +4844,9 @@ window.OTPLazy = window.OTPLazy || (function () {
   const takeRows = async () => {
     if (!(window.OTP && OTP.configured && OTP.me && OTP.rollFeed)) throw new Error('the backend script is not here');
     const me = await OTP.me();
+    // "nobody" because the login server did not answer twice on a phone that holds a saved login (OTP.meDoubt) is not
+    // a stranger: the page keeps what it last knew, so the timeline says it did not load and offers Try again.
+    if (!me && OTP.meDoubt) throw new Error('who is signed in did not answer');
     if (!me) return null;
     let rows;
     try { rows = await OTP.rollFeed(60, { photos: false }); }
