@@ -55,6 +55,7 @@
   .vmsg{font-family:var(--f-mono);font-size:11px;color:var(--pink-glow);margin-top:8px;min-height:0}
   .vmsg:empty{display:none}
   #vd-msg a,.vmsg a{color:var(--pink-glow)}
+  #vd-msg a{display:inline-block;padding:14px 0;margin:-14px 0}
   /* the send button is full width, so its answer goes on the line under it */
   .sendrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:10px}
   .sendrow .empty{flex-basis:100%;margin:0;padding:2px 0 0}
@@ -285,8 +286,9 @@
   // 10/11), so that is where this page sends them: c/<slug>/#reel.
   // Degrades to nothing until migration 014 runs; .catch keeps the page whole.
   const vidBox = $('vids');
-  // 11/13: the artist pages are gone, and with them the one public place a person's own videos showed. No See it link.
-  const seeIt = '';
+  // 11/13: the artist pages are gone. 11/14: a member's own videos show on their page in the Coven (YOUR PALM), so the
+  // line after a save says so and links there: wall/#c-palm opens that page for whoever is logged in.
+  const seeIt = ' <a href="../wall/#c-palm">See it on your page</a>';
   // A cover has to match how the rail draws that provider: 9/16 for tiktok and
   // instagram, 16/9 for youtube. Forcing everything to landscape would crop a
   // vertical cover to a ribbon. Downscaled BEFORE upload, the egress lesson.
@@ -302,7 +304,7 @@
     vidBox.innerHTML = `
       <h2 style="margin-top:26px">Put a video up</h2>
       <div class="card">
-        <div class="empty" style="margin-bottom:10px">Paste a YouTube, TikTok or Instagram link. It is saved under your name right away.</div>
+        <div class="empty" style="margin-bottom:10px">Paste a YouTube, TikTok or Instagram link. It goes on your page in the Coven right away, with your videos.</div>
         <input type="text" id="vd-url" placeholder="https://www.tiktok.com/@you/video/..." autocomplete="off"
           style="width:100%;background:#0d0d12;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:12px;font-size:16px;min-height:44px">
         <input type="text" id="vd-title" placeholder="what is it" autocomplete="off" maxlength="80"
@@ -375,7 +377,7 @@
         msg.textContent = 'Sending…';
         await OTP.submitVideo({ url: $('vd-url').value, title: $('vd-title').value, coverUrl });
         await renderVideos();
-        $('vd-msg').innerHTML = 'Up. It is saved under your name.' + seeIt;
+        $('vd-msg').innerHTML = 'Up. It is on your page in the Coven.' + seeIt;
         return;
       } catch (e) { msg.textContent = e.message; }
       btn.disabled = false;
