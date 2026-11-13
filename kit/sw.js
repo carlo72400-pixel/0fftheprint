@@ -6,7 +6,7 @@
    ever cached over a page.
    11/12: the vlog kit carries the street's strip; its one face (Potta One) is in the list.
    11/5: the stopwatch door uses the hourglass (k/other.webp) instead of the coming-soon calendar, so the precache list changed. Ask art was already in this list. */
-const BUILD = 'kit-20261112a';
+const BUILD = 'kit-20261112b';
 const FILES = ['./', './index.html', './qr-shot.png', '../business/media/icon-192.png', '../assets/cathedral/shot/putty_sign.webp', '../assets/cathedral/shot/ask_p_s.webp', '../assets/cathedral/shot/ask_p.webp?v=3', '../assets/cathedral/shot/ask_l.webp?v=4', '../assets/cathedral/shot/ask_wall_p.webp?v=3', '../assets/cathedral/shot/ask_wall_l.webp?v=3', '../assets/cathedral/shot/qp_heart.webp', '../assets/cathedral/shot/qp_star.webp', '../assets/cathedral/shot/qp_cam.webp', '../assets/cathedral/shot/qp_print.webp', '../assets/cathedral/shot/qp_film.webp', '../assets/cathedral/shot/qp_bat.webp', '../assets/cathedral/shot/t_flash.webp', '../assets/cathedral/shot/qr_wall.webp', '../assets/fonts/saira-condensed-700.woff2', '../assets/fonts/saira-condensed-900.woff2', '../assets/fonts/inter-400.woff2', '../assets/fonts/jetbrains-mono-400.woff2', '../assets/fonts/gloria-hallelujah-400.woff2', './manifest.webmanifest', './icon-192.png', './icon-512.png',
   '../assets/cathedral/mark.webp', '../assets/cathedral/w/stage.webp', '../assets/cathedral/w/screen.webp', '../assets/cathedral/w/film.webp',
   '../assets/cathedral/w/all.webp', '../assets/cathedral/w/going.webp', '../assets/cathedral/w/tonight.webp', '../assets/cathedral/w/pin.webp',

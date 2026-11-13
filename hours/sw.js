@@ -3,7 +3,7 @@
    other pages' offline copies on this domain (the Kit, the SNW planner, the Crypt, the AD) live through an update.
    Pages and core go network first so a new build lands, then fall back to the cache. The Google fonts are cached the
    first time they load. The punches themselves are in the phone's storage, never in a cache. */
-const BUILD = 'hours-20261105a';
+const BUILD = 'hours-20261112a';
 const FILES = ['./', './index.html', './core.js?v=2', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(BUILD).then(c => c.addAll(FILES)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k.startsWith('hours-') && k !== BUILD).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
