@@ -105,6 +105,7 @@ FULL_CSS = (
     "border:0;border-radius:12px;background:linear-gradient(#3d3b45,#25232b);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 4px 0 #08070b;"
     'color:#f1eef6;font:700 11px/1 system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}'
     ".sk-snd svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}"
+    ".sk-snd small{font-size:11px}"      # 11/14: the word (On, Off) was 9.2 px; nothing a person reads is under 11 (street-skin.css says the same)
     '.sk-snd[aria-pressed="false"]{color:#a79fb3}.sk-snd[aria-pressed="false"] .on{display:none}'
     ".sk-snd:active{transform:translateY(2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 2px 0 #08070b}"
     "@media (prefers-reduced-motion:reduce){.sk-back:active,.sk-snd:active{transform:none}}"

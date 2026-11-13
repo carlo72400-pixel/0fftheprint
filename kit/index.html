@@ -164,7 +164,7 @@ input[type=range]{width:100%;accent-color:var(--glow);height:44px}
 .take .id{font:900 italic 20px/1 var(--f-display);color:var(--glow);white-space:nowrap}
 .take .id small{display:block;font:600 11px/1.3 var(--f-mono);letter-spacing:.1em;color:var(--muted)}
 .take .tx{min-width:0;display:grid;gap:3px}
-.take .tx input{width:100%;border:0;border-bottom:1px dashed var(--line);background:none;padding:4px 0;font:500 14px/1.3 var(--f-body);color:var(--ink)}
+.take .tx input{width:100%;border:0;border-bottom:1px dashed var(--line);background:none;padding:4px 0;font:500 16px/1.3 var(--f-body);color:var(--ink)}
 .take .tx small{font:500 11px/1.3 var(--f-mono);color:var(--muted)}
 .take .circ{width:46px;height:46px;border-radius:50%;border:2px solid var(--line);background:none;color:var(--muted);font:900 16px/1 var(--f-display)}
 .take .circ[aria-pressed="true"]{border-color:var(--ok);color:var(--ok);box-shadow:0 0 0 3px rgba(126,231,135,.2)}
@@ -242,7 +242,7 @@ body{background:radial-gradient(140% 60% at var(--lx) -10%,rgba(255,255,255,.10)
 .lbl{color:#a9a5b2;text-shadow:0 1px 0 rgba(0,0,0,.8)}
 .in{border:0;border-radius:4px;background:linear-gradient(180deg,#0a150e,var(--lcd));color:#dffbe4;box-shadow:inset 0 0 0 1px #000,inset 0 2px 8px rgba(0,0,0,.8),0 1px 0 rgba(255,255,255,.1);text-shadow:0 0 6px rgba(158,240,176,.35);caret-color:var(--lcdink)}
 .in::placeholder{color:rgba(158,240,176,.45)}
-textarea.in{font-family:var(--f-mono);font-size:15px}
+textarea.in{font-family:var(--f-mono);font-size:16px}      /* 11/14: 16 px, an iPhone zooms the whole page on any field under it */
 select.in{background:linear-gradient(180deg,#0a150e,var(--lcd)) padding-box,url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' fill='none' stroke='%239ef0b0' stroke-width='2'/%3E%3C/svg%3E") right 13px center/14px 9px no-repeat;background-color:var(--lcd)}
 .btn{border:0;border-radius:5px;background:linear-gradient(180deg,#3f3b48,#27242e);color:#f1ecf5;box-shadow:0 1px 0 rgba(255,255,255,.16),0 4px 0 #0b0a0e,0 7px 10px rgba(0,0,0,.6);transition:transform .06s,box-shadow .06s;margin-bottom:4px}
 .btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(255,255,255,.16),0 1px 0 #0b0a0e}
@@ -605,7 +605,7 @@ body[data-tool]:not([data-tool="home"]) .app{padding-bottom:calc(var(--sab) + 11
       <div class="row"><label><span class="lbl">Their email <small style="text-transform:none;letter-spacing:0">(optional)</small></span><input class="in" id="rl-email" type="email" autocomplete="off" placeholder="so they get a copy"></label><label><span class="lbl">Shoot</span><input class="in" id="rl-proj" placeholder="Night, room, date"></label></div>
       <div class="seg" id="rl-kind"><button type="button" data-kind="editorial" aria-pressed="true">Editorial</button><button type="button" data-kind="commercial" aria-pressed="false">Commercial</button><button type="button" data-kind="model" aria-pressed="false">Portrait</button></div>
       <span class="lbl">The words <small style="text-transform:none;letter-spacing:0">(edit them, they stick per type)</small></span>
-      <textarea class="in" id="rl-legal" rows="7" style="min-height:150px;font-size:13.5px;line-height:1.45"></textarea>
+      <textarea class="in" id="rl-legal" rows="7" style="min-height:150px;font-size:16px;line-height:1.45"></textarea>
       <button type="button" class="btn ghost" id="rl-reset" style="min-height:40px;font-size:12.5px">Put the house words back</button>
       <span class="lbl">Sign here</span>
       <div class="sig" id="rl-sigbox"><canvas id="rl-sig"></canvas><div class="line"></div><div class="hint">sign with your finger</div></div>

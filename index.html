@@ -3014,6 +3014,17 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 /* three turning pieces had only the new spelling (an iPhone before iOS 15.4 wants this one) */
 .held[data-pk=zine]>.pkg img,.cv-fl span,.nb-half.bot{-webkit-backface-visibility:hidden}
 
+/* PRESS LOOKS UNDER A FINGER (11/14, the iPhone pass; checks/iphone_press_check.js holds a finger on every kind of key).
+   63 kinds of key on this page go down by a class put on at pointerdown, which works on every phone. These had a look
+   under a mouse only, or none at all: a row of the list and the news strip take their own picked look while a finger
+   is on them, a machine's sound switch goes down a step, the kit's two links light. (An iPhone paints :active here
+   because site.js listens for touches.) Nothing changes until something is pressed. */
+.mp-row:active{outline:none;box-shadow:inset 0 0 0 2px var(--neon)}
+.mp-row.mp-newsbar:active{box-shadow:inset 0 3px 0 #c8102e,inset 0 -3px 0 #c8102e}
+.rm-snd:active{transform:translate(1px,2px);box-shadow:2px 2px 0 rgba(17,17,17,.35)}
+.rc-lnk:active{background:rgba(255,255,255,.12)}
+@media (prefers-reduced-motion:reduce){.rm-snd:active{transform:none}}
+
 /* ---------- FIND YOURSELF at the PHOTO BOOTH: a night's whole contact sheet (11/13, site build only: fy.js).
    A tap on a photo opens it on the night's own page. ---------- */
 
