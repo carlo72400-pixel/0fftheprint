@@ -171,11 +171,14 @@ window.OTPLazy = window.OTPLazy || (function () {
   }
   function paintChip(b, bump) {
     var t = totals();
-    b.querySelector('.bn-n').textContent = t.frames ? String(t.frames) : 'Bag';
+    /* 11/13: the bag is MY COLLECTION (his call). Empty, the chip says so: MY COLLECTION where there is room, COLLECTION
+       under the picture in a phone's strip (binder.css). What the phone stores, and where, has not changed. */
+    var nEl = b.querySelector('.bn-n'); nEl.textContent = t.frames ? String(t.frames) : '';
+    if (!t.frames) { nEl.appendChild(el('i', 'bn-my', 'My ')); nEl.appendChild(d.createTextNode('Collection')); }
     b.querySelector('.bn-h').textContent = t.hits ? String(t.hits) : '';
     b.classList.toggle('has', t.frames > 0);
     b.classList.toggle('hit', t.hits > 0);
-    b.setAttribute('aria-label', t.frames ? 'Your bag: ' + t.frames + ' frames, ' + t.hits + (t.hits === 1 ? ' hit' : ' hits') : 'Your bag');
+    b.setAttribute('aria-label', t.frames ? 'My Collection: ' + t.frames + ' frames, ' + t.hits + (t.hits === 1 ? ' hit' : ' hits') : 'My Collection');
     if (bump) { b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump'); }
   }
 
@@ -348,7 +351,7 @@ window.OTPLazy = window.OTPLazy || (function () {
         op.addEventListener('click', closeSheet);
         body.appendChild(op);
       }
-      body.appendChild(el('p', 'bn-fine', 'Your bag lives on this phone. Nothing to log in to. Clear your browser and it starts over.'));
+      body.appendChild(el('p', 'bn-fine', 'My Collection lives on this phone. Nothing to log in to. Clear your browser and it starts over.'));
       streetBag(body);
     });
   }
@@ -409,10 +412,10 @@ window.OTPLazy = window.OTPLazy || (function () {
 
   function buildSheet() {
     sheet = el('div', 'bn-sheet'); sheet.hidden = true;
-    sheet.setAttribute('role', 'dialog'); sheet.setAttribute('aria-modal', 'true'); sheet.setAttribute('aria-label', 'Your bag');
+    sheet.setAttribute('role', 'dialog'); sheet.setAttribute('aria-modal', 'true'); sheet.setAttribute('aria-label', 'My Collection');
     var cardEl = el('div', 'bn-card');
     var head = el('div', 'bn-head');
-    head.appendChild(el('h2', '', 'Your bag'));
+    head.appendChild(el('h2', '', 'My Collection'));
     var x = el('button', 'bn-x', '×'); x.type = 'button'; x.setAttribute('aria-label', 'Close'); x.addEventListener('click', closeSheet);
     head.appendChild(x);
     cardEl.appendChild(head);
