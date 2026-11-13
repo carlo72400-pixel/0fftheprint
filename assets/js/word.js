@@ -203,14 +203,8 @@
     const mine = canPost ? ((await race(OTP.myEntries(slug))) || []) : [];
     const mineUp = new Set(mine.filter(x => x.published).map(x => String(x.id)));
 
-    // The name goes to their card page. c/?s= answers before bake.py has made
-    // c/<slug>/. Inline style: the baked pages' CSS has no rule for it.
-    const who = e => {
-      const n = esc(e.display_name || e.card_slug || 'card holder');
-      return e.card_slug
-        ? `<a href="../../c/?s=${encodeURIComponent(e.card_slug)}" style="color:inherit;text-decoration:none">${n}</a>`
-        : n;
-    };
+    // 11/13: the artist pages are gone and a stranger cannot open a member's page, so the name is plain text.
+    const who = e => esc(e.display_name || e.card_slug || 'a member');
     list.innerHTML = entries.map((e, i) => `
       <div class="wall-entry" data-i="${i}">
         <div class="we-by">${who(e)}</div>
@@ -218,7 +212,7 @@
         ${mineUp.has(String(e.id)) ? `<div class="we-row"><span class="we-msg"></span>
           <button type="button" class="we-down">Take mine down</button></div>` : ''}
       </div>`).join('') ||
-      '<div class="we-none">Nothing on the wall yet. First card holder in gets the top slot.</div>';
+      '<div class="we-none">Nothing on the wall yet. The first line in gets the top slot.</div>';
     list.querySelectorAll('.we-down').forEach(btn => {
       const row = btn.closest('.wall-entry');
       const e = entries[Number(row.dataset.i)];

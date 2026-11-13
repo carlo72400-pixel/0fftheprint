@@ -23,6 +23,7 @@
 .grid{display:grid;grid-template-columns:1fr;gap:18px}
 @media (min-width:860px){.grid{grid-template-columns:300px 1fr;align-items:start}}
 #prev{max-width:260px;margin:0 auto}
+#prev .facepic{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;object-position:50% 26%;border-radius:10px;border:1px solid var(--line)}
 .quick{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:12px}
 .quick a{display:flex;align-items:center;justify-content:center;min-height:48px;
   border:1px solid var(--line);border-radius:9px;color:var(--ink);text-decoration:none;
@@ -128,33 +129,28 @@ a.btn{text-decoration:none}
 
   <div id="app" class="grid" style="display:none">
     <div class="card">
-      <div class="sec">Your card</div>
-      <div id="prev"><div class="hint">loading the card…</div></div>
+      <div class="sec">Your photo</div>
+      <div id="prev"><div class="hint">loading your photo…</div></div>
       <div class="drop" id="pic">Tap to change your photo</div>
       <input type="file" id="picfile" accept="image/*" hidden>
       <div class="msg" id="picmsg"></div>
       <div class="quick" id="quick">
-        <a href="../card/">Your card</a>
         <a href="../take/">Post</a>
         <a href="../compose/">Your posts</a>
         <a href="../wall/#me">Your page in the Crypt</a>
         <a href="../word/new/">Write a story</a>
         <a href="../compose/#rot">Song on rotation</a>
-        <a id="backlink" href="#" style="display:none">Your card page</a>
       </div>
-      <div class="hint" style="margin-top:12px">This photo is your face everywhere: your card, your posts
-        and your page in the Crypt. Frames and songs live in the builder.</div>
+      <div class="hint" style="margin-top:12px">This photo is your face everywhere: your posts
+        and your page in the Crypt.</div>
     </div>
 
-    <!-- THE BACK OF THE CARD. Two fields, and they are the only two on the
-         whole page a member types. Everything else on /c/<slug>/ fills itself
-         in from what they post, write and get on rotation, which is the entire
-         reason it is easy to use: nobody has to sit down and build a profile. -->
+    <!-- YOUR WORDS (11/13: the artist pages are gone). One line and a short paragraph. Their page in the
+         Crypt shows them as its headline and About until they write that page themselves (wall_space). -->
     <div class="card" id="wordscard" style="display:none">
-      <div class="sec">The back of your card</div>
-      <div class="hint">One line and a short paragraph. That is all you type. Your posts, your
-        songs, your stories and your clips show up on your page on their own. These two are
-        public, on your card. What you write in the Crypt stays in the Crypt.</div>
+      <div class="sec">Your words</div>
+      <div class="hint">One line and a short paragraph. They show on your page in the Crypt
+        until you write that page yourself.</div>
       <label for="w-tag">Tagline</label>
       <input type="text" id="w-tag" maxlength="80" placeholder="one line. who you are in the room.">
       <div class="hint" id="w-tagc" style="text-align:right"></div>
@@ -165,15 +161,14 @@ a.btn{text-decoration:none}
       <button class="btn sm" id="w-save" type="button" style="width:auto">Save your words</button>
     </div>
 
-    <!-- THEIR LINKS. This is what makes /c/<slug>/ worth putting in a bio.
+    <!-- THEIR LINKS.
          ⛔ Platform + handle, never a URL: the page rebuilds the host, so a
          member cannot point their own page anywhere but their own profile.
-         Wave 2: this is the ONE place links change. The card builder's single
-         link is gone, and their page in the Crypt reads these. -->
+         Wave 2: this is the ONE place links change. Their page in the Crypt reads these. -->
     <div class="card" id="linkscard" style="display:none;scroll-margin-top:16px">
       <div class="sec">Your links</div>
-      <div class="hint">Up to five. They sit at the top of your card page and on your page in the
-        Crypt. This is the one place to change them. Give the handle only, not the whole address.</div>
+      <div class="hint">Up to five. They show on your page in the Crypt. This is the one place to
+        change them. Give the handle only, not the whole address.</div>
       <div id="lk-rows"></div>
       <div class="row" style="margin-top:12px">
         <button class="btn ghost sm" id="lk-add" type="button" style="width:auto">Add a link</button>
@@ -189,7 +184,7 @@ a.btn{text-decoration:none}
            is a reason to return rather than a chore to finish. -->
       <div class="card exch" id="exchcard">
         <div class="sec">The Exchange</div>
-        <div class="hint">A seat is not a badge. It is a trade, and this is our half of it.
+        <div class="hint">Posting here is a trade, and this is our half of it.
           Put your dates up. If we can make it we shoot the night, and the frames come back
           with your name on them: on your page, in the drops, and yours to post anywhere
           you want.</div>
@@ -256,7 +251,7 @@ a.btn{text-decoration:none}
     <div class="aset" id="a-name-ro" hidden>
       <div class="ak">Your name</div>
       <div class="av" id="a-name-v"></div>
-      <div class="hint">Ask the desk to change a card holder's name. Your card page follows it.</div>
+      <div class="hint">The desk changes your name for you. Ask the desk.</div>
     </div>
 
     <div class="aset">
@@ -310,10 +305,10 @@ a.btn{text-decoration:none}
       <summary>Close your account</summary>
       <p class="hint">Closing hides you everywhere: your page, posts, comments, rooms, frame tags
         and your name on going lists. Your messages stay with the people you sent them to, under Closed
-        account. Nothing is deleted, so you can open it again by logging back in. A card ask still
-        waiting goes, and so do your own events and watchlist on this phone.</p>
-      <p class="hint" id="a-close-card" hidden>Your card page goes dark too. Stories already in the catalog
-        stay up until the desk takes them down.</p>
+        account. Nothing is deleted, so you can open it again by logging back in. Your own events
+        and watchlist on this phone go too.</p>
+      <p class="hint" id="a-close-card" hidden>Stories already in the catalog stay up until the desk
+        takes them down.</p>
       <label for="a-c-pw">Your password</label>
       <input type="password" id="a-c-pw" autocomplete="current-password">
       <label class="tick"><input type="checkbox" id="a-c-sure"> <span>Close it. I can open it again by logging in.</span></label>
@@ -424,14 +419,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     $('account').style.display = '';
     const whoLine = () => { $('a-who').innerHTML = email ? 'Signed in as <b>' + esc(email) + '</b>' : 'Signed in'; };
     whoLine();
-    const CHIP = { desk: 'THE DESK', card: 'CARD HOLDER', member: 'IN THE CRYPT', pending: 'ALMOST IN', door: 'AT THE DOOR' };
+    const CHIP = { desk: 'THE DESK', card: 'YOU CAN POST', member: 'IN THE CRYPT', pending: 'ALMOST IN', door: 'AT THE DOOR' };
     // a banned login is not in the Crypt, so it gets no chip rather than a wrong one
     if (CHIP[kind] && !(acct && acct.banned)) {
       const chip = $('a-role');
       chip.textContent = CHIP[kind]; chip.className = 'chip ' + kind; chip.hidden = false;
     }
 
-    // -- name: members and the desk change it here, card holders through the desk
+    // -- name: members and the desk change it here; somebody the desk lets post asks the desk
     const name = (acct && acct.name) || P.display_name || '';
     if (kind === 'card') {
       $('a-name-ro').hidden = false;
@@ -577,21 +572,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         '<p class="hint">Every Instagram gets looked at before the Crypt opens. Your page, your Kin and your messages ' +
         'are there once you are in.</p>';
     } else {
-      // doorLine is written for a card holder page ("This part is for card
-      // holders"). This is their own page, so a member who never asked gets the
-      // offer instead. Waiting and a quiet no still read as doorLine says.
-      const OFFER = 'Want a card? Ask in the Crypt, under Kin.';
-      let line;
-      if (acct && acct.card_want && acct.card_ask === 'asked') line = 'You asked for a card: ' + acct.card_want;
-      else if (acct && !acct.card_ask && !P.denied) line = OFFER;
-      else {
-        line = await OTP.doorLine(P);
-        if (/^This part is for card holders/.test(line)) line = OFFER;
-      }
+      // 11/13: no cards. A member reads nothing here about posting more, except one who already asked the desk
+      // (the ask is still waiting in the database; the desk answers it on the board).
+      const line = (acct && acct.card_ask === 'asked')
+        ? 'You asked the desk to let you post songs, video, stories and dates. The desk answers by hand.' : '';
       box.innerHTML = '<div class="sec">Your page in the Crypt</div>' +
         '<p class="hint">Your page, your Kin and your messages live in the Crypt.</p>' +
         '<a class="btn" href="../wall/#me">Open your page</a>' +
-        '<p class="hint" style="margin-top:12px">' + esc(line) + '</p>' +
+        (line ? '<p class="hint" style="margin-top:12px">' + esc(line) + '</p>' : '') +
         '<div class="quick"><a href="../compose/">Your posts</a>' +
         '<a href="../#rooms">Rooms</a></div>';
     }
@@ -599,13 +587,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     return;
   }
 
-  // ---- CARD HOLDERS (and the desk): the card holder app --------------------
+  // ---- PEOPLE THE DESK LETS POST (and the desk) ---------------------------
   $('app').style.display = '';
   if (isDesk) $('quick').insertAdjacentHTML('afterbegin', '<a href="../board/">The board</a>');
   const mySlug = P.card_slug || (acct && acct.card_slug) || '';
   jump();
 
-  // ---- the back of the card: the only two fields a member types -----------
+  // ---- your words: the only two fields a member types ---------------------
   // A member without a card_slug has no page to point at yet (the desk hands
   // the slug out), so the block only appears once there is somewhere for it to
   // go. Reading through myWords() and not the public `cards` view on purpose:
@@ -618,8 +606,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     try { w = await OTP.myWords(); } catch (e) { /* the block just stays hidden */ }
     if (!w || !w.card_slug) return;
     wc.style.display = '';
-    const link = $('backlink');
-    if (link) { link.href = '../c/' + encodeURIComponent(w.card_slug) + '/'; link.style.display = ''; }
     const tag = $('w-tag'), bio = $('w-bio'), msg = $('w-msg');
     tag.value = w.tagline || '';
     bio.value = w.bio || '';
@@ -643,10 +629,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       row.querySelector('.lk-x').onclick = () => row.remove();
       lkRows.appendChild(row);
     };
-    // The card builder's one old link (007's link_platform / link_handle) still
-    // shows on the card page, and /card/ has no box for it any
-    // more. So it joins the list here, where it can be kept or removed, and a
-    // save clears the old pair (the list carries it from then on).
+    // The one old link (007's link_platform / link_handle) joins the list here, where it can be
+    // kept or removed, and a save clears the old pair (the list carries it from then on).
     const oldP = P.link_platform || '', oldH = P.link_handle || '';
     let oldLink = !!(oldP || oldH);
     (async () => {
@@ -675,14 +659,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             try { await OTP.saveCard({ link_platform: null, link_handle: null }); oldLink = false; }
             catch (e) {
               msg.className = 'msg bad';
-              msg.textContent = 'Saved, but your old card link is still up. Tap Save links again.';
+              msg.textContent = 'Saved, but your old link is still up. Tap Save links again.';
               b.disabled = false;
               return;
             }
           }
           msg.className = 'msg ok';
           msg.textContent = saved.length
-            ? `Saved. ${saved.length} link${saved.length > 1 ? 's' : ''} on your card page and your page in the Crypt.`
+            ? `Saved. ${saved.length} link${saved.length > 1 ? 's' : ''} on your page in the Crypt.`
             : 'Saved. No links on your page.';
         } catch (e) { msg.className = 'msg bad'; msg.textContent = e.message || String(e); }
         b.disabled = false;
@@ -702,74 +686,34 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
   })();
 
-  // ---- the card preview: real renderer CSS, adopted from the homepage so it
-  // cannot drift (same trick as the builder) --------------------------------
-  // ⛔ ONLY the card's own rules. The homepage's sheet also styles .wrap (a
-  //    two-column grid on a computer), .btn, .card and .drop, and adopting the
-  //    whole thing put this page in two columns and restyled every button on it.
-  const CARD_RULE = /poke|pend-/;
-  function cardRulesOnly(box) {
-    const list = box.cssRules;
-    for (let i = list.length - 1; i >= 0; i--) {
-      const r = list[i];
-      if (typeof r.selectorText === 'string' && r.style) {
-        const all = r.selectorText.split(',');
-        const keep = all.filter(s => CARD_RULE.test(s));
-        if (!keep.length) box.deleteRule(i);
-        else if (keep.length < all.length) r.selectorText = keep.join(',');
-      } else if (r.cssRules && !(window.CSSKeyframesRule && r instanceof CSSKeyframesRule)) {
-        cardRulesOnly(r);                       // @media, @supports
-        if (!r.cssRules.length) box.deleteRule(i);
-      }
-      // @keyframes, @font-face and the rest stay as they are
-    }
-  }
+  // ---- your photo (11/13: no card any more). The house's own picture for a seat on the roster stands in until
+  // they set one, the same picture the timeline and the post box fall back to (content/roster.json).
   let seed = null;
   (async () => {
     try {
-      const html = await fetch('../index.html', { cache: 'no-cache' }).then(r => r.text());
-      const css = (html.match(/<style>[\s\S]*?<\/style>/gi) || [])
-        .map(b => b.replace(/<\/?style>/gi, '')).join('\n');
-      const el = document.createElement('style'); el.textContent = css;
-      document.head.appendChild(el);
-      try { cardRulesOnly(el.sheet); } catch (e) { /* the preview keeps them all rather than none */ }
-      const [r, c] = await Promise.all([
-        fetch('../content/roster.json', { cache: 'no-cache' }).then(x => x.json()),
-        fetch('../content/creators.json', { cache: 'no-cache' }).then(x => x.json()),
-      ]);
-      const slugify = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-      // ⛔ TWO KEYS, like the homepage: The Ink holds `theink`, WUN MOR holds `wunmor`.
+      const r = await fetch('../content/roster.json', { cache: 'no-cache' }).then(x => x.json());
+      // ⛔ TWO KEYS: The Ink holds `theink`, WUN MOR holds `wunmor`.
       const tight = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-      const items = [...(c.items || []), ...(r.items || [])];
-      // Wave 2: roster.json carries each seat's card_slug, so that wins; the
-      // name keys stay for files that do not carry one (creators.json).
+      const items = (r && r.items) || [];
       seed = (mySlug && items.find(x => x.card_slug === mySlug)) ||
-        items.find(x => slugify(x.name) === mySlug || (mySlug && tight(x.name) === tight(mySlug))) || null;
+        items.find(x => mySlug && tight(x.name) === tight(mySlug)) || null;
     } catch (e) { seed = null; }
     paintCard();
     jump();
   })();
 
   function paintCard() {
-    const frame = P.card_frame || (seed && seed.rarity) || 'common';
     // the house art's path is from the site root, and this page is one folder down
     const photo = P.card_photo || (seed && seed.photo ? '../' + String(seed.photo).replace(/^\.?\//, '') : null);
-    const name = (seed && seed.name) || P.display_name;
-    const art = photo
-      ? `<div class="poke-art" style="background-image:url('${esc(photo)}');background-size:cover;background-position:50% 26%"></div>`
-      : `<div class="poke-art poke-art-pending"><span class="pend-seat">${esc((seed && seed.pending_glyph) || '0FF')}</span><span class="pend-stamp">PHOTO PENDING</span></div>`;
-    $('prev').innerHTML = `
-      <div class="poke ${esc(frame)} poke-roster" data-type="${esc((seed && seed.type) || '')}">
-        <div class="poke-inner">
-          <div class="poke-head"><div class="poke-name">${esc(name)}</div>
-            ${seed && seed.hp ? `<div class="poke-hp">HP <b>${esc(seed.hp)}</b></div>` : ''}</div>
-          <div class="poke-type">${esc((seed && seed.type_label) || 'CARD HOLDER')}</div>
-          ${art}
-          <div class="poke-moves"></div>
-          <div class="poke-foot"><span class="poke-flavor">${esc((seed && seed.flavor) || '')}</span>
-            <span><span class="poke-rare">${esc(frame.replace('-', ' '))}</span></span></div>
-        </div>
-      </div>`;
+    const box = $('prev');
+    box.textContent = '';
+    if (photo) {
+      const im = new Image(); im.alt = 'Your photo'; im.className = 'facepic'; im.src = photo;
+      box.appendChild(im);
+    } else {
+      const h = document.createElement('div'); h.className = 'hint'; h.textContent = 'No photo yet.';
+      box.appendChild(h);
+    }
   }
 
   // ---- one-tap photo: upload the pair, save it to the profile -------------
@@ -809,7 +753,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   ]);
   const roomLabel = r => (r.name || 'A room') + (r.label ? ' · ' + r.label : '');
   const storyHref = x => '../word/live/?s=' + encodeURIComponent(x.slug);
-  const reel = mySlug ? '../c/' + encodeURIComponent(mySlug) + '/#reel' : '../#videos';
+  // 11/13: the artist pages are gone, and with them the one public place a person's own videos showed: no link on a video row
   const vidLabel = x => x.title + ' · ' + x.provider;
 
   const waiting = [
@@ -823,7 +767,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       : { kind: 'STORY', label: x.title, href: storyHref(x), fix: '../word/new/?id=' + encodeURIComponent(x.id), down: () => OTP.withdrawStory(x.id) }),
     ...tracks.filter(x => x.published).map(x => ({ kind: 'ON ROTATION', label: x.title + ' · ' + x.artist, href: '../#music', down: () => OTP.withdrawTrack(x.id) })),
     ...entries.filter(x => x.published).map(x => ({ kind: 'ENTRY', label: 'on ' + x.story_slug, href: '../word/' + encodeURIComponent(x.story_slug) + '/', down: () => OTP.withdrawEntry(x.id) })),
-    ...vids.filter(x => x.published).map(x => ({ kind: x.featured ? 'ON YOUR PAGE · FEATURED' : 'ON YOUR PAGE', label: vidLabel(x), href: reel, cls: x.featured ? 'gold' : '',
+    ...vids.filter(x => x.published).map(x => ({ kind: x.featured ? 'VIDEO · FEATURED' : 'VIDEO', label: vidLabel(x), cls: x.featured ? 'gold' : '',
       fix: '../compose/#vids', down: () => OTP.deleteVideo(x.id) })),
     ...rooms.filter(x => x.published).map(x => ({ kind: 'ROOM', label: roomLabel(x), href: '../#rooms' })),
   ];

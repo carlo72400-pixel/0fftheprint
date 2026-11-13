@@ -87,13 +87,14 @@
     var rec = kind !== 'member' ? seatOf(r.card_slug) : null;
     // one profile: the name they go by (the database's), the seat's name only when the row has none
     var name = r.display_name || (rec && rec.name) || (kind === 'desk' ? 'THE DESK' : 'Member');
-    var link = kind === 'member' ? (r.sid ? 'wall/#s-' + r.sid : '') : (r.card_slug ? 'c/' + encodeURIComponent(r.card_slug) + '/' : '');
+    // 11/13: one page for one kind of person. Every name goes to that person's own page (the feed sends a sid for everybody).
+    var link = r.sid ? 'wall/#s-' + r.sid : '';
     // a card holder: their card photo off the one list (the roster's art when they set none), then whatever the feed carries
     var photo = kind === 'member' ? safe(r.pic) : (av(rec && rec.photo) || av(r.pic));
     return { key: (kind === 'member' ? 'm:' + (r.sid || tight(r.display_name)) : 'c:' + (r.card_slug || tight(name))),
       name: name, photo: photo, link: link, kind: kind, sid: r.sid || '',
-      // the card's own seat line (THE LENS), the same one Home prints
-      seat: (kind !== 'member' && rec && rec.seat) || (kind === 'desk' ? 'The desk' : kind === 'card' ? 'Card holder' : 'Member'),
+      // 11/13: nobody is a card holder. The line under a name is The desk or Member.
+      seat: kind === 'desk' ? 'The desk' : 'Member',
       accent: ACC[r.accent] || ACC[rec && rec.accent] || '' };
   }
   function avatar(p, cls) {
@@ -242,7 +243,7 @@
   function nightCard(n) {
     var c = el('article', 'rl-card house'); c.dataset.key = 'house';
     var head = el('div', 'rl-head');
-    var a = el('a', 'rl-who'); a.href = 'c/vamppsych/'; a.dataset.who = 'house';
+    var a = el('a', 'rl-who'); a.href = './'; a.dataset.who = 'house';
     a.appendChild(avatar(HOUSE));
     var dt = ymd(n.date);
     a.appendChild(el('span', 'rl-nm', '<b>' + esc(HOUSE.name) + '</b><span>shot this night · ' + (dt ? MON3[dt.getMonth()] + ' ' + dt.getDate() : '') + '</span>'));
@@ -257,7 +258,7 @@
     c.appendChild(main);
     return c;
   }
-  var HOUSE = { key: 'house', name: 'THE HOUSE', photo: '', link: 'c/vamppsych/', seat: 'The desk', accent: ACC.pink };
+  var HOUSE = { key: 'house', name: 'THE HOUSE', photo: '', link: './', seat: 'The desk', accent: ACC.pink };
 
   /* ---------- Edit: your own words, in place (updatePost; the database stamps it edited) ---------- */
   function editPost(btn) {
@@ -345,8 +346,7 @@
     // anybody who shows on the Wall has a page in the Crypt: a card holder too (roll_feed sends their sid), not only
     // somebody whose link is their Crypt page. A card holder's card is the other link.
     var sid = /^[a-z0-9]+$/.test(p.sid || '') ? p.sid : ((/^wall\/#s-([a-z0-9]+)$/.exec(p.link || '') || [])[1] || '');
-    var go = (p.kind !== 'member' && p.link ? '<a href="' + esc(p.link) + '">Their card &rarr;</a>' : '') +
-      (sid ? '<a href="wall/#s-' + esc(sid) + '">Their page in the Crypt &rarr;</a>' : '');
+    var go = sid ? '<a href="wall/#s-' + esc(sid) + '">Their page in the Crypt &rarr;</a>' : '';
     top.appendChild(el('div', 'rl-pan-who', '<b>' + esc(p.name) + '</b><span>' + esc(p.seat) + '</span><em>' + nPosts + (nPosts === 1 ? ' post here' : ' posts here') + '</em>' + go));
     var x = el('button', 'rl-pan-x', '&times;'); x.type = 'button'; x.setAttribute('aria-label', 'Close'); top.appendChild(x);
     pan.appendChild(top);

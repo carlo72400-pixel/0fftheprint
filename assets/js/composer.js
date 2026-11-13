@@ -195,7 +195,7 @@
 
   function setFile(f) {
     const isVid = /^video\//.test(f.type || '') || /\.(mp4|mov|webm|m4v)$/i.test(f.name || '');
-    if (casual && isVid) { msg('Photos only here. Video is a card holder thing.', 'err'); return; }
+    if (casual && isVid) { msg('Photos only here. Video is for people the desk lets post it.', 'err'); return; }
     if (!isVid && !/^image\//.test(f.type || '') && !/\.(jpe?g|png|gif|webp|heic|heif|avif)$/i.test(f.name || '')) {
       msg(casual ? 'Photos only.' : 'Photos, GIFs and video clips only.', 'err'); return;
     }

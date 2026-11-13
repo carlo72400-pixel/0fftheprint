@@ -83,7 +83,7 @@
     <div class="tools" id="desktools" hidden></div>
     <div class="cover" id="cover"><img id="coverimg" alt=""></div>
     <article id="art"></article>
-    <div class="foot"><span id="footsaid">A card holder wrote this one. When it earns its number it moves
+    <div class="foot"><span id="footsaid">A member wrote this one. When it earns its number it moves
       into the catalog for good.</span> <a href="../../#desk">Back to The Stand &rarr;</a></div>
   </div>
   <div class="empty" id="empty">loading the story…</div>
@@ -136,12 +136,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     $('byline').innerHTML = '<b>0FF THE PRINT</b>' + date + edited + down;
     $('footsaid').textContent = 'A house story, up from the phone. It gets its number on the next bake.';
   } else {
-    // The name goes to the writer's card page (c/?s= answers before bake.py
-    // has made c/<slug>/). A pending row read off the table has no card_slug.
+    // 11/13: the artist pages are gone and a stranger cannot open a member's page, so the name is plain text.
     var byline = name => {
-      const who = esc(name || row.card_slug || 'card holder');
-      $('byline').innerHTML = '<b>' + (row.card_slug
-          ? '<a href="../../c/?s=' + encodeURIComponent(row.card_slug) + '">' + who + '</a>' : who) + '</b>' +
+      const who = esc(name || row.card_slug || 'a member');
+      $('byline').innerHTML = '<b>' + who + '</b>' +
         ' &nbsp;·&nbsp; FROM THE FLOOR' + date + edited + down;
     };
     byline(row.display_name);

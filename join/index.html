@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Log in · 0FF THE PRINT</title>
 <meta name="robots" content="noindex, nofollow">
-<meta name="description" content="Log in. Members and card holders. New here? Join the Crypt. Joining asks for your Instagram, one account each.">
+<meta name="description" content="Log in. Members only. New here? Join the Coven. Joining asks for your Instagram, one account each.">
 <meta property="og:title" content="Log in · 0FF THE PRINT">
-<meta property="og:description" content="Log in. Members and card holders. New here? Join the Crypt. Joining asks for your Instagram, one account each.">
+<meta property="og:description" content="Log in. Members only. New here? Join the Coven. Joining asks for your Instagram, one account each.">
 <meta property="og:image" content="https://0fftheprint.com/assets/preview.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Log in · 0FF THE PRINT">
-<meta name="twitter:description" content="Log in. Members and card holders. New here? Join the Crypt. Joining asks for your Instagram, one account each.">
+<meta name="twitter:description" content="Log in. Members only. New here? Join the Coven. Joining asks for your Instagram, one account each.">
 <meta name="twitter:image" content="https://0fftheprint.com/assets/preview.jpg">
 <meta name="theme-color" content="#0a0a0d">
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
@@ -29,10 +29,10 @@ a.btn{text-decoration:none}
 <div class="leopard-bar"></div>
 <div class="wrap">
   <h1 id="ttl">Welcome back</h1>
-  <div class="sub">log in &nbsp;·&nbsp; members and card holders</div>
+  <div class="sub">log in &nbsp;·&nbsp; members</div>
   <!-- An old "Sign up" link (?mode=up, ?signup) still lands here. Wave 2: the
        Crypt's form is the one sign-up, so this page says where it went. -->
-  <p class="door-note" id="upnote" hidden>Signing up happens in the Crypt now.</p>
+  <p class="door-note" id="upnote" hidden>Signing up happens in the Coven now.</p>
 
   <div class="setup" id="setup" style="display:none">
     <b>Backend not switched on yet</b>
@@ -56,14 +56,11 @@ a.btn{text-decoration:none}
     </form>
 
     <div class="msg" id="msg"></div>
-    <div class="note" id="note">
-      Want a card? Join the Crypt, then ask under Kin. The desk approves cards by hand.
-    </div>
   </div>
 
   <div class="card" id="newhere">
-    <div class="note" style="margin-top:0">New here? Join the Crypt. Joining asks for your Instagram, one account each.</div>
-    <a class="btn ghost" href="../wall/">Join the Crypt</a>
+    <div class="note" style="margin-top:0">New here? Join the Coven. Joining asks for your Instagram, one account each.</div>
+    <a class="btn ghost" href="../wall/">Join the Coven</a>
   </div>
 </div>
 
@@ -98,7 +95,7 @@ a.btn{text-decoration:none}
   const HASH = /^(e-[a-z0-9]{1,40}|s-[0-9a-f]{10}|cal|ig-[A-Za-z0-9_-]{5,40})$/i.test(H) ? '#' + H : '';
   const NEXT = {
     wall: '../wall/' + HASH, home: '../take/', street: '../', take: '../take/',
-    my: '../my/', account: '../my/#account', card: '../card/', compose: '../compose/', write: '../word/new/', dates: '../dates/',
+    my: '../my/', account: '../my/#account', card: '../my/', compose: '../compose/', write: '../word/new/', dates: '../dates/',
     desk: '../board/', goals: '../desk/goals/', board: '../board/', deskword: '../desk/word/',
   }[NEXT_KEY] || null;
 
@@ -134,17 +131,17 @@ a.btn{text-decoration:none}
     } else if (word === 'wait') {
       // 049: the door looks first. Somebody turned away reads this too (a no is never announced).
       $('panel').innerHTML = `<b style="font-family:var(--f-display);font-style:italic;font-size:26px;text-transform:uppercase">You are at the door.</b>
-        <div class="note">Signed in as ${esc(me.user.email)}. Every Instagram gets looked at before the Crypt opens.
-        <a href="../wall/" style="color:var(--pink-glow)">The Crypt</a> opens for you once you are in.</div>
+        <div class="note">Signed in as ${esc(me.user.email)}. Every Instagram gets looked at before the Coven opens.
+        <a href="../wall/" style="color:var(--pink-glow)">The Coven</a> opens for you once you are in.</div>
         <button class="btn ghost" id="out" type="button">Sign out</button>`;
     } else if (word === 'banned') {
-      $('panel').innerHTML = `<b style="font-family:var(--f-display);font-style:italic;font-size:26px;text-transform:uppercase">The Crypt is closed to this account.</b>
+      $('panel').innerHTML = `<b style="font-family:var(--f-display);font-style:italic;font-size:26px;text-transform:uppercase">The Coven is closed to this account.</b>
         <div class="note">Signed in as ${esc(me.user.email)}. <a href="../my/#account">Your account</a> has the rest.</div>
         <button class="btn ghost" id="out" type="button">Sign out</button>`;
     } else {
       $('panel').innerHTML = `<b style="font-family:var(--f-display);font-style:italic;font-size:26px;text-transform:uppercase">One more step.</b>
         <div class="note">Signed in as ${esc(me.user.email)}. This login has no Instagram on it yet, and that is the way in.
-        <a href="../wall/" style="color:var(--pink-glow)">Put yours in at the Crypt</a> and you can post today. One account per Instagram.</div>
+        <a href="../wall/" style="color:var(--pink-glow)">Put yours in at the Coven</a> and you can post today. One account per Instagram.</div>
         <button class="btn ghost" id="out" type="button">Sign out</button>`;
     }
     $('out').onclick = async () => { await OTP.signOut(); location.reload(); };

@@ -71,7 +71,6 @@
   <!-- 045 (call 1): the Take on Home is everyone, the Roll on the Coven tab is members only, and this page lists what you put on both -->
   <div class="sub" id="sub">everything you posted &nbsp;·&nbsp; it all shows on <a href="../take/">the Take</a>, and a new post is members only<span id="links" hidden> &nbsp;·&nbsp;
     <a href="../my/#account">YOUR ACCOUNT &rarr;</a><span data-holder hidden> &nbsp;·&nbsp;
-    <a href="../card/">YOUR CARD &rarr;</a> &nbsp;·&nbsp;
     <a href="../word/new/">WRITE A STORY &rarr;</a></span><span data-open> &nbsp;·&nbsp;
     <a href="../wall/">THE CRYPT &rarr;</a></span></span></div>
 
@@ -143,7 +142,7 @@
   panel.innerHTML = `
     <div class="who">signed in as <b>${esc(prof.display_name || me.user.email)}</b>
       <button class="btn ghost sm" id="out" type="button">Sign out</button></div>
-    ${me.failed ? `<div class="note">Could not read your card just now. Reload in a minute.</div>` : ''}
+    ${me.failed ? `<div class="note">Could not read your account just now. Reload in a minute.</div>` : ''}
     ${locked ? `<div class="note" id="locknote">${lockNote}</div>`
       : `<div class="note">Post on <a href="../take/">the Take</a> now. A new post is members only.</div>`}
     ${holder ? `<label>Your color</label>
@@ -214,7 +213,7 @@
                 ? `<button class="btn ghost sm" data-rtdown="${t.id}" type="button">Take it down</button>`
                 : `<button class="btn ghost sm" data-rtw="${t.id}" type="button">Withdraw</button>`}
             </div>
-            ${t.published ? `<div class="fine">Takes it off Card Holders' Picks. Sending it again goes back through the desk.</div>` : ''}
+            ${t.published ? `<div class="fine">Takes it off the rotation. Sending it again goes back through the desk.</div>` : ''}
             <div id="rts-${t.id}" style="display:none;margin-top:8px">
               <input type="text" id="rts-u-${t.id}" placeholder="new Spotify track link" autocomplete="off"
                 style="width:100%;background:#0d0d12;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:11px;font-size:16px;min-height:44px">
@@ -286,7 +285,8 @@
   // 10/11), so that is where this page sends them: c/<slug>/#reel.
   // Degrades to nothing until migration 014 runs; .catch keeps the page whole.
   const vidBox = $('vids');
-  const seeIt = slug ? ` <a href="../c/${encodeURIComponent(slug)}/#reel">See it</a>` : '';
+  // 11/13: the artist pages are gone, and with them the one public place a person's own videos showed. No See it link.
+  const seeIt = '';
   // A cover has to match how the rail draws that provider: 9/16 for tiktok and
   // instagram, 16/9 for youtube. Forcing everything to landscape would crop a
   // vertical cover to a ribbon. Downscaled BEFORE upload, the egress lesson.
@@ -302,7 +302,7 @@
     vidBox.innerHTML = `
       <h2 style="margin-top:26px">Put a video up</h2>
       <div class="card">
-        <div class="empty" style="margin-bottom:10px">Paste a YouTube, TikTok or Instagram link. It goes up on your page right away.</div>
+        <div class="empty" style="margin-bottom:10px">Paste a YouTube, TikTok or Instagram link. It is saved under your name right away.</div>
         <input type="text" id="vd-url" placeholder="https://www.tiktok.com/@you/video/..." autocomplete="off"
           style="width:100%;background:#0d0d12;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:12px;font-size:16px;min-height:44px">
         <input type="text" id="vd-title" placeholder="what is it" autocomplete="off" maxlength="80"
@@ -317,7 +317,7 @@
           <span class="empty" id="vd-msg"></span>
         </div>
         ${minev.length ? `<div style="margin-top:14px">` + minev.map(v => {
-          const lab = !v.published ? ['PULLED BY THE DESK', 'pulled'] : v.featured ? ['FEATURED', 'on'] : ['ON YOUR PAGE', 'on'];
+          const lab = !v.published ? ['PULLED BY THE DESK', 'pulled'] : v.featured ? ['FEATURED', 'on'] : ['UP', 'on'];
           return `
           <div class="vrow" data-vrow="${v.id}">
             <div class="vtop">
@@ -375,7 +375,7 @@
         msg.textContent = 'Sending…';
         await OTP.submitVideo({ url: $('vd-url').value, title: $('vd-title').value, coverUrl });
         await renderVideos();
-        $('vd-msg').innerHTML = 'Up. It is on your page now.' + seeIt;
+        $('vd-msg').innerHTML = 'Up. It is saved under your name.' + seeIt;
         return;
       } catch (e) { msg.textContent = e.message; }
       btn.disabled = false;

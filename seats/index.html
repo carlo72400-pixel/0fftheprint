@@ -72,9 +72,8 @@ h2{font-family:var(--f-display);font-weight:900;font-style:italic;font-size:27px
   like a normal person. Members can react and comment, nobody else. No follower counts, and
   nothing deciding who sees it.</p>
 
-  <p>The card is the seat. Anybody with an Instagram can get in and post words and photos.
-  The card is the part I hand out myself. It puts you on the roster with your own card and
-  your own page, and it is what lets you post video, write stories, and put your songs and
+  <p>Anybody with an Instagram can get in and post words and photos. A seat is the part I
+  hand out myself. It is what lets you post video, write stories, and put your songs and
   your dates up. I approve those by hand at a desk, which is exactly as slow as it sounds.</p>
 
   <p>What it costs is nothing. What it asks is that you post sometimes.</p>
@@ -108,7 +107,7 @@ h2{font-family:var(--f-display);font-weight:900;font-style:italic;font-size:27px
   const el = document.getElementById('seats');
   try {
     const r = await fetch('../content/roster.json', { cache: 'no-cache' }).then(r => r.json());
-    // Open seats were pulled OFF the public roster 8/25 (empty cards read as
+    // Open seats were pulled OFF the public roster 8/25 (empty seats read as
     // filler). They live under _archived_unfilled_seats now, and this page is
     // the one place they still show, which is exactly its job.
     const pool = (r.items || []).concat(r._archived_unfilled_seats || []);

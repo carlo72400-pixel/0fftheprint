@@ -578,7 +578,7 @@
       const { data: { user } } = await c.auth.getUser();
       if (!user) throw new Error("Log in first.");
       if (/^video\//.test(file.type || "") || /\.(mp4|mov|webm|m4v)$/i.test(file.name || "")) {
-        throw new Error("Photos only here. Video is a card holder thing.");
+        throw new Error("Photos only here. Video is for people the desk lets post it.");
       }
       let src;
       // from-image: Safari 15 ignored EXIF here without it and a portrait phone
@@ -2024,7 +2024,7 @@
     // refused person read a promise that was never going to land, on every one
     // of them.
     doorNote(profile) {
-      if (!profile) return { state: "out", line: "Members and card holders log in here." };
+      if (!profile) return { state: "out", line: "Members log in here." };
       if (profile.is_admin)  return { state: "admin", line: "Approvals and pulls." };
       if (profile.approved)  return { state: "in", line: "You are in." };
       // ⛔ REFUSED READS EXACTLY LIKE WAITING, HIS CALL. The no is a DESK tool:
@@ -2047,7 +2047,7 @@
       try {
         const c = sb(); const r = c ? await c.rpc("wall_me") : null;
         const m = r && !r.error && r.data && r.data[0];
-        if (m && m.member && !m.card_ask) return "This part is for card holders. You can ask for a card in the Crypt, under Kin.";
+        if (m && m.member && !m.card_ask) return "This part is for people the desk lets post here. The desk hands that out by hand.";
       } catch (e) {}
       return d.line;
     },
@@ -2158,8 +2158,8 @@
         closed: "This account is closed.",
         empty: "Put a name in.",
         long: "40 characters at most.",
-        taken: "That name belongs to a card holder or the house. Pick another.",
-        card: "Ask the desk to change a card holder's name. Your card page follows it.",
+        taken: "That name is taken. Pick another.",
+        card: "The desk changes your name for you. Ask the desk.",
         slow: "Three name changes a day. Try again tomorrow.",
       },
     },
@@ -2667,13 +2667,14 @@
         extra.push({
           name, display_name: name, card_slug: rw.card_slug,
           photo: rw.card_photo || "", rarity: rw.card_frame || "common",
-          type: "take", type_label: "CARD HOLDER", hp: 100, moves: [],
+          type: "take", type_label: "MEMBER", hp: 100, moves: [],
           flavor: rw.tagline || "", lore: rw.bio || "", tagline: rw.tagline || "", bio: rw.bio || "",
           theme_song: rw.theme_song || "", theme_start: rw.theme_start || 0,
           featured: Array.isArray(rw.featured) ? rw.featured.slice(0, 3) : [],
-          link: l ? l.link : "c/" + s + "/", platform: l ? l.platform : "Card",
+          // 11/13: the artist pages are gone. link and page stay in the row (the board reads them), empty when the person set no link.
+          link: l ? l.link : "", platform: l ? l.platform : "",
           pending_glyph: tight(name).slice(0, 3).toUpperCase() || "0FF", pending_stamp: "PHOTO PENDING",
-          page: "c/" + s + "/", binder_key: "c-" + s, _db: true, hasDb: true,
+          page: "", binder_key: "c-" + s, _db: true, hasDb: true,
         });
       });
       extra.sort((a, b) => a.display_name.localeCompare(b.display_name, undefined, { sensitivity: "base" }));

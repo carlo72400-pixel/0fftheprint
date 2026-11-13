@@ -576,7 +576,7 @@ for st in stories:
     #    story id (STORY_META, written by newstory.py --story-id at promotion). That holds
     #    through a desk retitle and a phone edit. Anything else is a SKIP.
     if card is not None:
-        who = _html.escape(no_dash(st.get("display_name") or "a card holder"))
+        who = _html.escape(no_dash(st.get("display_name") or "a member"))
         page = open(page_path).read() if os.path.exists(page_path) else ""
         sid = str(st.get("id") or "")
         by_id = bool(STORY_ID_OK.fullmatch(sid)) and STORY_META.format(sid) in page
@@ -619,7 +619,7 @@ for st in stories:
             [sys.executable, NEWSTORY, draft,
              "--title", st["title"], "--dek", st["dek"], "--cover", cover,
              "--kicker", kicker]
-            + ([] if house else ["--author", st.get("display_name") or "a card holder"])
+            + ([] if house else ["--author", st.get("display_name") or "a member"])
             + (["--shelf", shelf] if shelf else [])
             + (["--story-id", str(st["id"])] if STORY_ID_OK.fullmatch(str(st.get("id") or "")) else [])
             + (["--slug", slug] if TAKES_SLUG else []),

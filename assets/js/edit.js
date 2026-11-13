@@ -360,7 +360,7 @@
           if (!el.closest('#mx-picks') || el.classList.contains('won')) return;
           pencil(el, 'Your pick', function () {
             var pn = panel('MUSIC · ' + (row.title || ''), [
-              { type: 'note', label: "Takes your pick off Card Holders' Picks. You can send it again later; it goes back through the desk." }
+              { type: 'note', label: "Takes your pick off the rotation. You can send it again later; it goes back through the desk." }
             ], async function () {
               await OTP.withdrawTrack(row.id);
             }, '<button type="button" class="edm-go">Swap or fix it</button>', { save: 'Take it down', done: 'Down. Reloading…' });

@@ -61,7 +61,7 @@
   <h1 id="head">Write a story</h1>
   <div class="sub">the serious surface &nbsp;·&nbsp; yours &nbsp;·&nbsp; live when you send it</div>
 
-  <div class="card" id="panel"><div class="empty">checking your card…</div></div>
+  <div class="card" id="panel"><div class="empty">checking your login…</div></div>
 </div>
 
 <script src="../../supabase-config.js?v=f1348482"></script>
@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const desk = !!(me.profile && me.profile.is_admin);
   if (!me.profile || !(me.profile.approved || desk)) {
     panel.innerHTML = '<div class="empty">' + esc(me.failed
-      ? 'Could not check your card. Try again in a minute.'
+      ? 'Could not check your login. Try again in a minute.'
       : await OTP.doorLine(me.profile)) + '</div>';
     return;
   }
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const houseHtml = desk && !editing && !pulled ? `
       <div class="house">
         <label class="tick"><input type="checkbox" id="house"${houseAsked ? ' checked' : ''}> File it as a house story</label>
-        <div class="hint" style="margin-top:0">It runs under 0FF THE PRINT with a house kicker, not under your card.</div>
+        <div class="hint" style="margin-top:0">It runs under 0FF THE PRINT with a house kicker, not under your name.</div>
         <div id="housebits"${houseAsked ? '' : ' hidden'}>
           <label for="kick">Kicker</label>
           <select id="kick">${KICKERS.map(k => `<option>${k}</option>`).join('')}<option value="">Other</option></select>

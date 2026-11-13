@@ -47,7 +47,8 @@
     if (r.venue) meta.push('<span>' + esc(r.venue) + '</span>');
     if (r.city) meta.push('<span>' + esc(r.city) + '</span>');
     var wn = whoseNight(r);
-    if (wn.slug) meta.push('<a class="by" href="../c/' + encodeURIComponent(wn.slug) + '/">' + esc(wn.name) + '</a>');
+    // 11/13: the artist pages are gone, so whose night it is reads as plain text
+    if (wn.slug) meta.push('<span class="by">' + esc(wn.name) + '</span>');
     // only the desk ever holds a pulled row (calendarAll); the view has none
     if (r.published === false) meta.push('<span class="pill off">pulled</span>');
     // THE EXCHANGE. Public on purpose: a night the house is coming to should
@@ -162,7 +163,7 @@
     if (who === 'out') {
       // the HTML's line is the way in for a new face; a card holder who is only
       // signed out logs in here, and next=dates brings them back to this page
-      panel.appendChild(wholine('Got a card? <a href="../join/?next=dates">Log in</a> and put your own dates up.'));
+      panel.appendChild(wholine('Can you post here? <a href="../join/?next=dates">Log in</a> and put your own dates up.'));
     } else if (who === 'pending') {
       // a login that already carries an @ (it knocked on /join/) walks straight
       // into the Crypt; only one with none has anything to type there
@@ -171,7 +172,7 @@
         : '<a href="../wall/">put your Instagram in at the Crypt</a>.')));
     } else if (who === 'casual') {
       panel.appendChild(wholine('Every flyer and every show, on one calendar: ' +
-        '<a href="../wall/#cal">open the Crypt</a>. Card holders put their own dates up here.'));
+        '<a href="../wall/#cal">open the Crypt</a>. People the desk lets post put their own dates up here.'));
     } else if (who === 'card') {
       var bar = d.createElement('div');
       bar.className = 'addbar';

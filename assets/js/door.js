@@ -13,7 +13,7 @@
     // the stylesheet (cathedral.js copies it onto <html>), so a label can change without breaking it.
     // `cal` is where What's coming opens: the Run on dates/ until they are in the Crypt, its calendar after.
     out:  {st:'out', label:'Log in',  href:'join/?next=home', cal:'dates/', on:false,
-           title:'Members and card holders log in here.',
+           title:'Members log in here.',
            b:'Log in to post.',
            s:'Everybody in the Crypt posts to this timeline, reacts and comments. No login yet? Join the Crypt. Joining asks for your Instagram.',
            foot:'Log in →'},
@@ -35,7 +35,7 @@
     in:   {st:'in', label:'Your account', href:'my/#account', cal:'wall/#cal', on:true,
            title:'Your account.',
            b:'Your account.',
-           s:'Your card, your posts, your songs, what the desk still owes you an answer on. Posting is one tap from there.',
+           s:'Your photo, your posts, your songs, what the desk still owes you an answer on. Posting is one tap from there.',
            foot:'Your account →'},
     wall: {st:'in', label:'Member', href:'wall/', cal:'wall/#cal', on:true,
            title:'Every flyer this week, one night at a time.',
@@ -47,7 +47,7 @@
     admin:{st:'in', label:'Desk',    href:'board/', cal:'wall/#cal', on:true,
            title:'Everything waiting on you.',
            b:'Open the desk.',
-           s:'Card asks, rooms, reports, the whole back room.',
+           s:'Asks, rooms, reports, the whole back room.',
            foot:'Open the desk →'},
     // A closed account (closed by them: wall_join says 'closed'; by the desk: 'shut'). Your account opens it again
     // or logs out. Never says who closed it.
