@@ -4378,7 +4378,7 @@ const asBuilt = it => FIX.orig[it.id] ? Object.assign({}, it, FIX.orig[it.id]) :
 const UUID_RX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 /* the Run's own facts on a flyer it matches or makes (rec.rw, from the build or mergeRun): whose night, who put it up, the house */
 const SLUG_RX = /^[a-z0-9][a-z0-9-]{0,58}[a-z0-9]$/;
-const runWho = (slug, name) => SLUG_RX.test(slug || '') ? `<a href="${esc(siteUrl('c/' + slug + '/'))}">${esc(name || slug)}</a>` : esc(name || slug || '');
+const runWho = (slug, name) => esc(name || slug || '');      /*cvn: a name on the Run is plain text, the artist pages are gone*/
 function runPill(it){
   const h = it.rw && it.rw.house_status;
   return h === 'shot' ? '<span class="ch house">The house shot it</span>' : (h === 'going' || h === 'on_list') ? '<span class="ch house">The house is going</span>' : '';
@@ -4923,7 +4923,7 @@ function postActs(V, p){
 /* the page, one box at a time (so typing in the editor only repaints the box it changes) */
 const SEC = {
   hdr(V){
-    const kind = {desk:'The Desk', card:'Card holder', member:'Member'}[V.kind] || 'Member';
+    const kind = {desk:'The Desk', card:'Member', member:'Member'}[V.kind]      /*cvn: one kind of person*/ || 'Member';
     const since = V.since ? new Date(V.since).toLocaleDateString('en-US', {month:'short', year:'numeric', timeZone:TZ}) : '';
     const mood = (V.mood_e || V.mood) ? `<p class="sp-mood"><b>Mood:</b> ${esc(V.mood_e || '')} ${esc(V.mood || '')}</p>` : '';
     const head = V.headline ? `<p class="sp-quote${V.look.marquee ? ' sp-marq' : ''}"><span>"${esc(V.headline)}"</span></p>` : '';
@@ -4956,7 +4956,7 @@ const SEC = {
       ${INL ? `<button type="button" class="sp-act big" data-spnudge>✎ Edit my page</button>` : ''}
       <button type="button" class="sp-act" data-spcopy="${esc(V.sid)}">🔗 Copy my link</button>
       <button type="button" class="sp-act" ${INL ? 'data-sppreview' : 'data-spmine'}>👀 See it as them</button>
-      ${V.card ? `<a class="sp-act" href="${esc(siteUrl('c/?s=' + encodeURIComponent(V.card)))}">🪪 My card</a>` : ''}
+      ${''/*cvn: the My card key went with the artist pages*/}
       ${V.kind === 'card' ? `<a class="sp-act" href="${esc(siteUrl('dates/'))}">Put a date up</a>` : ''}
       <a class="sp-act" href="${esc(siteUrl('my/#account'))}">Your account</a>
       ${SOC.me && SOC.me.admin ? `<a class="sp-act" href="${esc(siteUrl('board/'))}">The desk</a>` : ''}
@@ -4968,7 +4968,7 @@ const SEC = {
       ${'friend' in V ? frBtn(V) : ''}
       <button type="button" class="sp-act" data-sptop="${esc(V.sid)}" aria-pressed="${inTop}">${inTop ? '★ In your Top 8' : '☆ Add to Top 8'}</button>
       <button type="button" class="sp-act" data-spcopy="${esc(V.sid)}">🔗 Copy their link</button>
-      ${V.card ? `<a class="sp-act" href="../c/?s=${encodeURIComponent(V.card)}">🪪 Their card</a>` : ''}
+      ${''/*cvn: the Their card key went with the artist pages*/}
       ${V.ig ? `<p class="sp-igm"><a href="https://ig.me/m/${esc(V.ig)}" target="_blank" rel="noopener">Or message @${esc(V.ig)} on Instagram</a></p>` : ''}
       ${V.kind !== 'desk' && !(SOC.me && SOC.me.admin) ? (rpOpen('space', V.sid) ? rpHTML('space', V.sid) : SOC.reported['space:' + V.sid] ? '<p class="sp-fine">Reported. The desk has it.</p>' : `<button type="button" class="sp-rep" data-report="space" data-target="${esc(V.sid)}">⚑ Report this page</button>`) : ''}</div>`;
   },
@@ -5331,8 +5331,8 @@ function spEditClose(){
 const swatch = (k, S) => { const F = SPFONTS[S.font]; return `<button type="button" class="spe-skin" data-spskin="${k}" aria-pressed="${SPACE.draft.skin === k}" style="--a:${S.bg};--b:${S.box};--c:${S.hot};--d:${S.head}"><i aria-hidden="true"></i><span style="font-family:${esc(F[1])};font-weight:${F[2]};font-style:${F[3]}">${esc(S.n)}</span></button>`; };
 const upBtn = (k, has, l1, l2) => `<label class="btn spe-up"><input type="file" accept="image/*" data-spup="${k}" aria-label="${esc(has ? l2 : l1)}">${esc(has ? l2 : l1)}</label>`;
 // the Song tab's line: a card holder's song is the card's too (044)
-const songSay = (dr, k) => k === 'set' ? (dr && dr.holder ? '✓ Got it. It plays here and on your card.' : '✓ Got it. It is on your page.')
-  : (dr && dr.holder ? 'One song. It plays here and when somebody opens your card. In Spotify: tap ⋯ on a song, then Share, then Copy Song Link. Paste it here.'
+const songSay = (dr, k) => k === 'set' ? (dr && dr.holder ? '✓ Got it. It plays on your page.' : '✓ Got it. It is on your page.')
+  : (dr && dr.holder ? 'One song, on your page. In Spotify: tap ⋯ on a song, then Share, then Copy Song Link. Paste it here.'
     : 'In Spotify: tap ⋯ on a song, then Share, then Copy Song Link. Paste it here.');
 function renderEditor(){
   const ed = $('#sp-edit'), dr = SPACE.draft; if (!dr) return;
@@ -5363,16 +5363,16 @@ function renderEditor(){
     // W2 (his call 2): a card holder has ONE photo and ONE song, the card's; the headline and About me stay the Crypt's own
     const H = dr.holder;
     body = `<p class="spe-fine">Your name lives on <a href="${esc(siteUrl('my/#account'))}">Your account</a>. Your Instagram changes through the desk.</p>
-      <p class="spe-h">Pic${H ? ' <em>your card photo too</em>' : ''}</p>
+      <p class="spe-h">Pic${H ? ' <em>your face across the site</em>' : ''}</p>
       <div class="spe-row">${avatar(dr.pic, SPACE.data.name, 'spe-av big')}${upBtn('pic', dr.pic, 'Upload a pic', 'Change pic')}${dr.pic ? '<button type="button" class="btn" data-sprm="pic">Remove</button>' : ''}</div>
-      ${H ? `<p class="spe-fine">One photo for everything. It shows on your public card page, next to your posts and here.</p>
-      <p class="spe-fine">Your links come from your card. <a href="${esc(siteUrl('my/#linkscard'))}">Change them on Your account.</a></p>` : ''}
+      ${H ? `<p class="spe-fine">One photo for everything. It shows next to your posts and here.</p>
+      <p class="spe-fine">Your links are on Your account. <a href="${esc(siteUrl('my/#linkscard'))}">Change them there.</a></p>` : ''}
       <label class="spe-f"><span>Headline <small>under your name</small></span><input data-spf="headline" maxlength="80" value="${esc(dr.headline)}" placeholder="dead inside but the fit is crazy" autocomplete="off"></label>
       <p class="spe-h">Mood</p>
       <div class="spe-moods">${MOODS.map(e => `<button type="button" data-spmood="${e}" aria-pressed="${dr.mood_e === e}" aria-label="Mood ${e}">${e}</button>`).join('')}</div>
       <label class="spe-f"><span>Feeling</span><input data-spf="mood" maxlength="24" value="${esc(dr.mood)}" placeholder="haunted" autocomplete="off"></label>
       <label class="spe-f"><span>About me <small data-cnt="about">${dr.about.length}/600</small></span><textarea data-spf="about" maxlength="600" rows="4" placeholder="What you shoot, what you play, where you hang">${esc(dr.about)}</textarea></label>
-      ${H ? '<p class="spe-fine">Only members see your headline and About me. Your public card has its own tagline and bio, on Your account.</p>' : ''}
+      ${H ? '<p class="spe-fine">Only members see your headline and About me.</p>' : ''}
       <label class="spe-f"><span>Who I'd like to meet <small data-cnt="meet">${dr.meet.length}/300</small></span><textarea data-spf="meet" maxlength="300" rows="3" placeholder="DJs, people with a car, anyone going to the co-op">${esc(dr.meet)}</textarea></label>
       <label class="sw"><span>Show me in the Coven<small>members see your space and your name on going lists</small></span><input type="checkbox" id="sp-show"${SOC.me && SOC.me.show_name ? ' checked' : ''}></label>`;
   } else if (tab === 'details') {
@@ -5396,7 +5396,7 @@ function renderEditor(){
         ${dr.pics.length < 6 ? `<label class="spe-pic add"><input type="file" accept="image/*" data-spup="pics" aria-label="Add a picture"><span>＋<small>Add</small></span></label>` : ''}</div>
       <p class="spe-fine">Your own pictures, six at most, shrunk on your phone first. Members see them on your page; the first one leads.</p>`;
   } else if (tab === 'song') {
-    body = `<p class="spe-h">Profile song <em>${dr.holder ? 'your card song too' : 'plays when someone taps it'}</em></p>
+    body = `<p class="spe-h">Profile song <em>${dr.holder ? 'on your page' : 'plays when someone taps it'}</em></p>
       <label class="spe-f"><span>Spotify song link</span><input data-spsong inputmode="url" autocomplete="off" placeholder="https://open.spotify.com/track/..." value="${dr.song ? 'https://open.spotify.com/track/' + esc(dr.song) : ''}"></label>
       <p class="spe-fine" id="spe-songst">${songSay(dr, dr.song ? 'set' : 'empty')}</p>
       ${dr.song ? '<div class="spe-row"><button type="button" class="btn" data-sprm="song">Remove song</button></div>' : ''}`;
@@ -5749,7 +5749,7 @@ function renderPeople(){
   }
   if (me) h += dmPeopleHTML();
   if (me) h += frPeopleHTML();
-  h += cardAskHTML();
+  /*cvn: the Want a card? box is not offered any more (11/13). cardAskHTML() and the calls behind it stay as they are.*/
   h += `<div class="dayhead"><h2>Who's here</h2><span id="ppl-n">${L.length + (me ? 1 : 0)} in the Coven</span></div>
     <input type="search" class="ppl-q" id="ppl-q" placeholder="Find someone" value="${esc(PEOPLE_Q)}" autocomplete="off" aria-label="Find someone">
     <div class="ppl-grid" id="ppl-grid">${pplGridHTML()}</div>`;
@@ -5805,7 +5805,7 @@ function dmThreadHTML(){
   if (!T) return `<div class="dm-body"><div class="dm-top">${back}<b id="dm-t">Opening…</b><span></span></div></div>`;
   if (T.gone) return `<div class="dm-body"><div class="dm-top">${back}<b id="dm-t">Not here</b><span></span></div><p class="c-empty dm-empty">That conversation is gone, or they are not a member anymore.</p></div>`;
   const W = T.with || {};
-  const kind = W.kind === 'desk' ? 'The Desk' : W.kind === 'card' ? 'Card holder' : 'Member';
+  const kind = W.kind === 'desk' ? 'The Desk' : W.kind === 'card' ? 'Member' : 'Member';      /*cvn: one kind of person*/
   const top = `<div class="dm-top">${back}<button type="button" class="dm-who" data-space="${esc(W.sid)}">${avatar(W.pic, W.name, 'dm-av')}<span><b id="dm-t">${esc(W.name)}</b><small>${kind}${T.reported ? ' · reported' : ''}</small></span></button><button type="button" class="dm-dots" data-dmmenu aria-label="More" aria-expanded="${DM.menu}">⋯</button></div>
     ${DM.menu ? `<div class="dm-menu">${T.thread ? `<button type="button" data-dmreport="${T.thread}"${T.reported ? ' disabled' : ''}>${T.reported ? 'Reported to the desk' : 'Report to the desk'}</button><button type="button" data-dmhide="${T.thread}">Hide this conversation</button>` : ''}<button type="button" class="${T.blocked ? '' : 'bad'}" data-dmblock="${esc(W.sid)}" data-on="${T.blocked ? '0' : '1'}">${T.blocked ? 'Unblock' : 'Block'}</button></div>` : ''}`;
   const comp = T.closed ? `<p class="dm-closed">${T.blocked ? 'You blocked them. Unblock to write.' : 'They are not taking messages.'}</p>`
@@ -5999,7 +5999,7 @@ function frPeoplePaint(){ const box = $('#fr-people'); if (!box) return; box.inn
 function frRowsHTML(){
   const mine = FR.sheetFor === '', L = FR.sheetList, q = FR.q.trim().toLowerCase();
   if (L === null) return '<p class="c-empty">Loading…</p>';
-  const rows = L.filter(p => !q || String(p.name || '').toLowerCase().includes(q)).map(p => `<div class="fr-row">${avatar(p.pic, p.name, 'dm-av')}<span class="dm-t"><button type="button" class="c-name" data-space="${esc(p.sid)}">${esc(p.name)}</button><small>${p.kind === 'desk' ? 'The Desk' : p.kind === 'card' ? 'Card holder' : 'Member'}${p.since ? ` · since ${esc(new Date(p.since).toLocaleDateString('en-US', {month: 'short', day: 'numeric', timeZone: TZ}))}` : ''}${p.open === false ? ' · hidden' : ''}</small></span>${mine ? `<button type="button" class="fr-rm" data-frrm="${esc(p.sid)}">Remove</button>` : '<span></span>'}</div>`).join('');
+  const rows = L.filter(p => !q || String(p.name || '').toLowerCase().includes(q)).map(p => `<div class="fr-row">${avatar(p.pic, p.name, 'dm-av')}<span class="dm-t"><button type="button" class="c-name" data-space="${esc(p.sid)}">${esc(p.name)}</button><small>${p.kind === 'desk' ? 'The Desk' : p.kind === 'card' ? 'Member' : 'Member'}${p.since ? ` · since ${esc(new Date(p.since).toLocaleDateString('en-US', {month: 'short', day: 'numeric', timeZone: TZ}))}` : ''}${p.open === false ? ' · hidden' : ''}</small></span>${mine ? `<button type="button" class="fr-rm" data-frrm="${esc(p.sid)}">Remove</button>` : '<span></span>'}</div>`).join('');
   return rows || `<p class="c-empty">${q ? 'Nobody by that name.' : mine ? 'No friends yet. Open somebody\'s page and tap Add friend.' : 'Nobody to show.'}</p>`;
 }
 function frSheetPaint(){
@@ -6144,8 +6144,8 @@ async function renderAdmin(){
   const waitSrc = (DESK.sources || []).filter(x => x.status === 'pending');
   const doneSrc = (DESK.sources || []).filter(x => x.status !== 'pending');
   const want = p => /^[a-z0-9][a-z0-9-]{0,59}$/.test(p.card_want || '') ? p.card_want : '';
-  const askRow = p => `<div class="adm-ask"><div><b>${esc(p.name)}</b> ${p.ig ? `<a href="https://www.instagram.com/${esc(p.ig)}/" target="_blank" rel="noopener">@${esc(p.ig)}</a>` : ''}<small>wants a card · asked ${esc(agoTxt(p.card_ask_at))}</small>${p.card_note ? `<p>"${esc(p.card_note)}"</p>` : ''}${want(p) ? `<span class="adm-want">Wants: ${esc(want(p))}</span>` : ''}</div>
-    <div class="adm-acts"><button type="button" class="primary" data-cardyes="${esc(p.user_id)}" data-n="${esc(p.name)}"${want(p) ? ` data-want="${esc(want(p))}"` : ''}>Make card holder</button><button type="button" class="btn" data-cardno="${esc(p.user_id)}">No</button><a class="btn" href="${esc(siteUrl('board/#members/' + p.sid))}">Manage</a></div></div>`;
+  const askRow = p => `<div class="adm-ask"><div><b>${esc(p.name)}</b> ${p.ig ? `<a href="https://www.instagram.com/${esc(p.ig)}/" target="_blank" rel="noopener">@${esc(p.ig)}</a>` : ''}<small>wants to post more · asked ${esc(agoTxt(p.card_ask_at))}</small>${p.card_note ? `<p>"${esc(p.card_note)}"</p>` : ''}${want(p) ? `<span class="adm-want">Wants: ${esc(want(p))}</span>` : ''}</div>
+    <div class="adm-acts"><button type="button" class="primary" data-cardyes="${esc(p.user_id)}" data-n="${esc(p.name)}"${want(p) ? ` data-want="${esc(want(p))}"` : ''}>Let them post</button><button type="button" class="btn" data-cardno="${esc(p.user_id)}">No</button><a class="btn" href="${esc(siteUrl('board/#members/' + p.sid))}">Manage</a></div></div>`;
   const srcRow = x => { const u = srcLink(x); return `<div class="adm-ask"><div><b>${u ? `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(srcName(x))}</a>` : esc(srcName(x))}</b><small>flyer source · from ${esc(x.by_name)} · ${esc(ago(x.created_at))} ago</small>${x.note ? `<p>"${esc(x.note)}"</p>` : ''}</div>
     <div class="adm-acts"><button type="button" class="primary" data-srcyes="${x.id}">Add to the sweep</button><button type="button" class="btn" data-srcno="${x.id}">No</button></div></div>`; };
   // a reported chat: Ban either of them (not the desk), Remove one message; both of them then see "removed by the desk"
@@ -6164,7 +6164,7 @@ async function renderAdmin(){
   box.innerHTML = `<p class="soc-h">The desk <em>only you see this</em></p>
     <p class="adm-n">The desk lives on the board now. Everyone, every control.</p>
     <a class="adm-board" href="${esc(siteUrl('board/#members'))}">Open the board</a>
-    ${A ? `<p class="adm-n">${A.casual} casual ${A.casual === 1 ? 'member' : 'members'} · ${A.card_holders} card holders</p>` : ''}
+    ${A ? `<p class="adm-n">${A.casual} casual ${A.casual === 1 ? 'member' : 'members'} · ${A.card_holders} who can post</p>` : ''}
     <div class="adm-sec"><p class="adm-h">Waiting on you <b>${asks.length + waitSrc.length}</b></p>
       ${asks.map(askRow).join('')}${waitSrc.map(srcRow).join('')}${asks.length + waitSrc.length ? '' : '<p class="c-empty">Nothing waiting.</p>'}
       <p class="adm-n" id="adm-more" hidden></p></div>
@@ -6935,8 +6935,8 @@ document.addEventListener('click', e => {
     t.disabled = true;
     (async () => { const args = {p_user: ds.cardyes, p_yes: true}; if (want) args.p_slug = want;
       const r = await db().rpc('wall_card_decide', args); t.disabled = false;
-      if (r.error) { toast(/holds that card|already holds/i.test(r.error.message || '') ? 'Somebody already holds that card.' : 'That did not go through.'); return; }
-      toast(`${ds.n || 'They'} ${ds.n ? 'is' : 'are'} a card holder now.${r.data ? ' Card: /c/?s=' + r.data + '.' : ''} Their Crypt pic and song are on it.`, 5200); buzz(); renderAdmin(); hereStart(); })();
+      if (r.error) { toast(/holds that card|already holds/i.test(r.error.message || '') ? 'Somebody already holds that seat.' : 'That did not go through.'); return; }
+      toast(`${ds.n || 'They'} can post video, stories, songs and dates now.`, 5200); buzz(); renderAdmin(); hereStart(); })();
     return;
   }
   if (ds.cardno) { if (t.dataset.sure !== '1') { t.dataset.sure = '1'; t.textContent = 'Tap again to say no'; return; } (async () => { const r = await db().rpc('wall_card_decide', {p_user: ds.cardno, p_yes: false}); if (r.error) { toast('That did not go through.'); return; } toast('Told no. They stay in the Crypt.'); renderAdmin(); })(); return; }
@@ -7573,8 +7573,7 @@ function lock(kind, msg){
         </div>
         <p class="lock-msg" id="join-msg" role="alert"></p>
       </form>
-      <p class="lock-fine">Want a card? Join, then ask under Kin.</p>
-      <a class="btn lock-alt" href="${esc2(loginHref())}">Already in or have a card? Log in</a>${fine}`;
+      <a class="btn lock-alt" href="${esc2(loginHref())}">Already in? Log in</a>${fine}`;
   } else if (kind === 'ig') {
     body = `<h2>One more step</h2><p>${esc2(msg || "You're logged in. Put your Instagram in and the Crypt opens.")}</p>
       <form class="lock-form" id="ig-form" novalidate>
@@ -7648,7 +7647,7 @@ function wireLock(kind){
         else if (got === 'open') {
           // the name guard hands a card holder's (or the house's) name back as something else: say what they are called now
           let now = null; try { const a = OTP.account ? await OTP.account() : null; now = a && a.name; } catch(e){}
-          if (made && now && now.trim() !== name) lockToast(`That name belongs to a card holder, so you're ${now} for now. Change it on Your account.`, 6000);
+          if (made && now && now.trim() !== name) lockToast(`That name is taken, so you're ${now} for now. Change it on Your account.`, 6000);
         }
       } catch (err) {
         say(/invalid login|credentials/i.test(err.message || '') ? 'That email already has an account. Use its password, or log in below.' : (err.message || 'That did not go through. Try again.'));

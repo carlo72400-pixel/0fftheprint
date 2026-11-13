@@ -4073,7 +4073,7 @@ window.OTPLazy = window.OTPLazy || (function () {
 <!-- ========== NAV ========== -->
 <nav class="site">
   <a href="#home" class="wm" aria-label="0FF THE PRINT, home"><img src="assets/cathedral/mark.webp" alt="" width="240" height="228"><span>FF THE PRINT</span></a>
-  <a href="join/?next=take" id="nav-key" class="key" title="Members and card holders log in here.">Log in</a>
+  <a href="join/?next=take" id="nav-key" class="key" title="Members log in here.">Log in</a>
   <a href="#home" class="tablink" data-tab-link="home" title="The front door: find your night, the timeline.">Home</a>
   <a href="wall/" id="nav-wall" title="Every flyer in SA, San Marcos and Austin this week." hidden>CRYPT</a>
   <a href="kit/" class="navkit" title="Filmmaker tools from the house. Free, works offline.">KIT</a>
@@ -4213,7 +4213,7 @@ window.OTPLazy = window.OTPLazy || (function () {
           </div>
           <div class="creator-platform">IG</div>
         </a>
-        <a class="creator" href="c/kav-man/">
+        <a class="creator">
           <div class="creator-pic" style="background:linear-gradient(135deg, #f7d046, #8a5a00);">K</div>
           <div class="creator-meta">
             <div class="creator-name">KAV-MAN</div>
@@ -4221,7 +4221,7 @@ window.OTPLazy = window.OTPLazy || (function () {
           </div>
           <div class="creator-platform">0TP</div>
         </a>
-        <a class="creator" href="c/virgosgateway/">
+        <a class="creator">
           <div class="creator-pic" style="background:linear-gradient(135deg, #9a5cff, #1c4d2e);">V</div>
           <div class="creator-meta">
             <div class="creator-name">VIRGOSGATEWAY</div>
@@ -4229,7 +4229,7 @@ window.OTPLazy = window.OTPLazy || (function () {
           </div>
           <div class="creator-platform">0TP</div>
         </a>
-        <a class="creator" href="c/wrathfol/">
+        <a class="creator">
           <div class="creator-pic" style="background:linear-gradient(135deg, #f7d046, #6d1a1a);">W</div>
           <div class="creator-meta">
             <div class="creator-name">WRATHFOL</div>
@@ -4237,7 +4237,7 @@ window.OTPLazy = window.OTPLazy || (function () {
           </div>
           <div class="creator-platform">0TP</div>
         </a>
-        <a class="creator" href="c/theink/">
+        <a class="creator">
           <div class="creator-pic" style="background:linear-gradient(135deg, #8f8a97, #3a0d0d);">S</div>
           <div class="creator-meta">
             <div class="creator-name">SMILEY</div>
@@ -4245,7 +4245,7 @@ window.OTPLazy = window.OTPLazy || (function () {
           </div>
           <div class="creator-platform">0TP</div>
         </a>
-        <a class="creator" href="c/wunmor/">
+        <a class="creator">
           <div class="creator-pic" style="background:linear-gradient(135deg, #c9c2d4, #2a2233);">M</div>
           <div class="creator-meta">
             <div class="creator-name">WUN MOR</div>
@@ -4253,7 +4253,7 @@ window.OTPLazy = window.OTPLazy || (function () {
           </div>
           <div class="creator-platform">0TP</div>
         </a>
-        <a class="creator" href="c/kurlytop/">
+        <a class="creator">
           <div class="creator-pic" style="background:linear-gradient(135deg, #7b3fbf, #14121a);">K</div>
           <div class="creator-meta">
             <div class="creator-name">KURLYTOP</div>
@@ -4330,7 +4330,7 @@ window.OTPLazy = window.OTPLazy || (function () {
           <a class="hk" href="wall/#me" id="hk-dm"><img src="assets/cathedral/i-people.webp" alt="" width="44" height="44" decoding="async"><b>Messages</b><span id="hk-dm-s">members talk</span><i class="n" id="hk-dm-n" hidden></i></a>
           <a class="hk" href="wall/#me" id="hk-kin"><img src="assets/cathedral/a/join.webp" alt="" width="44" height="44" decoding="async"><b>Kin</b><span id="hk-kin-s">your people</span><i class="n" id="hk-kin-n" hidden></i></a>
           <a class="hk" href="#find" id="hk-packs"><img src="assets/cathedral/a/pack.webp" alt="" width="44" height="44" decoding="async"><b>Your packs</b><span id="hk-packs-s">nothing pulled yet</span></a>
-          <a class="hk" href="my/" id="hk-card"><img src="assets/cathedral/a/photos.webp" alt="" width="44" height="44" decoding="async"><b>Your card</b><span>your page</span></a>
+          <a class="hk" href="my/" id="hk-card"><img src="assets/cathedral/a/photos.webp" alt="" width="44" height="44" decoding="async"><b>Your account</b><span>your page</span></a>
         </div>
       </div>
       <div class="house out" id="house-out" hidden>
@@ -4344,7 +4344,6 @@ window.OTPLazy = window.OTPLazy || (function () {
           <ul>
             <li>Tonight&rsquo;s flyers in SA, San Marcos and Austin, and who&rsquo;s going</li>
             <li>Messages with members and your Kin</li>
-            <li>Your card page, your packs kept on your account</li>
           </ul>
           <div class="hs-keys"><a class="hs-key primary" href="wall/">Join the Crypt</a><a class="hs-key" href="join/?next=take">Log in</a></div>
         </div>
@@ -5570,7 +5569,7 @@ window.OTPLazy = window.OTPLazy || (function () {
       if (have.has(sl) || sl === house) return;
       const name = String(x.display_name || x.name || sl).trim() || sl;
       const a = document.createElement('a');
-      a.className = 'creator'; a.href = 'c/' + sl + '/';
+      a.className = 'creator';      // 11/13: no artist page to open
       const pic = document.createElement('div');
       pic.className = 'creator-pic';
       pic.style.background = 'linear-gradient(135deg, var(--pink-glow), var(--dye-blue))';
@@ -5579,7 +5578,7 @@ window.OTPLazy = window.OTPLazy || (function () {
       if (ph) pic.dataset.photo = ph;
       const meta = document.createElement('div'); meta.className = 'creator-meta';
       const nm = document.createElement('div'); nm.className = 'creator-name'; nm.textContent = name;
-      const tg = document.createElement('div'); tg.className = 'creator-tag'; tg.textContent = String(x.tagline || '').trim().slice(0, 60) || 'card holder';
+      const tg = document.createElement('div'); tg.className = 'creator-tag'; tg.textContent = String(x.tagline || '').trim().slice(0, 60) || 'member';
       meta.appendChild(nm); meta.appendChild(tg);
       const pl = document.createElement('div'); pl.className = 'creator-platform'; pl.textContent = '0TP';
       a.appendChild(pic); a.appendChild(meta); a.appendChild(pl);
@@ -5662,13 +5661,13 @@ window.OTPLazy = window.OTPLazy || (function () {
   if (tMount && take) {
     // Authors resolve out of the roster + curator cards, so a member's avatar
     // and handle stay in sync with whatever their card is currently running.
-    // The page for a person, if that person holds a card. Anything else (a
-    // release, a seat nobody sits in) has no page and gets no link.
+    // 11/13: there are no artist pages. This answered with a person's card page (c/<slug>/); it answers with nothing now, and
+    // a name on the timeline goes to that person's own page in the Coven when the feed sends one (see postHTML).
     const tightKey = v => String(v || '').toLowerCase().replace(/[^a-z0-9]/g, '');
     const pageFor = name => {
       const m = window.__OTP_SLUGS || {};
       const slug = m[tightKey(name)];
-      return slug ? 'c/' + encodeURIComponent(slug) + '/' : '';
+      return '';
     };
     window.__OTP_PAGE_FOR = pageFor;
 
@@ -5823,9 +5822,11 @@ window.OTPLazy = window.OTPLazy || (function () {
       const who = (!isMember && (cardPeople[slugify(p.author || '')] || cardTight[tightKey(p.author || '')])) || {
         name: p.author_name || p.author || 'THE DESK',
         photo: p.avatar || '', link: p.sid ? 'wall/#s-' + p.sid : '#', handle: p.handle || '',
-        // a card holder with no roster entry (made in the Crypt or on /desk/) keeps the tag
-        seat: isMember ? 'Member' : (p.kind === 'card' ? 'Card holder' : '')
+        seat: ''
       };
+      // 11/13: one kind of person. The line under a name is The desk or Member (the house's own seeded posts are the desk's).
+      const seatLine = (p.kind === 'desk' || (!p.kind && /^(vamppsych|the-?desk|desk)$/.test(slugify(p.author || '')))) ? 'The desk' : 'Member';
+      const ownPage = p.sid ? 'wall/#s-' + p.sid : '';      // the person's own page, when the feed says whose post it is
       // NOT an inline style attribute: the HTML parser decodes entities before the
       // CSS parser sees them, so an escaped quote still breaks out of url(). Painted
       // through the CSSOM below instead, where a bad value is rejected, not executed.
@@ -5836,7 +5837,7 @@ window.OTPLazy = window.OTPLazy || (function () {
       const isExt = /^https?:\/\//.test(who.link || '');
       // A card holder whose card has no outside link carries '#roster', and that grid left on 10/7: the avatar
       // opened the Coven tab, not the person. Their own page instead, the same one their name opens.
-      const avHref = (!isMember && /^#/.test(who.link || '') && pageFor(p.author || who.name)) || safeUrl(who.link) || '#';
+      const avHref = ownPage || safeUrl(who.link) || '#';
       const bodyTxt = String(p.text || p.body || '').trim();
       const body = bodyTxt ? md(bodyTxt) : '';   // 038: a photo alone is a whole post
       const imgUrl = safeUrl(p.image);
@@ -5863,11 +5864,11 @@ window.OTPLazy = window.OTPLazy || (function () {
         <a class="post-av" href="${esc(avHref)}" ${isExt ? 'target="_blank" rel="noopener"' : ''} aria-label="${esc(who.name || 'Profile')}">${av}</a>
         <div class="post-main">
           <div class="post-who">
-            ${(() => { const pg = isMember ? (p.sid ? 'wall/#s-' + p.sid : '') : pageFor(p.author || who.name);
+            ${(() => { const pg = ownPage;
               return pg ? `<a class="who-page" href="${esc(pg)}"><b>${esc(who.name)}</b></a>`
                         : `<b>${esc(who.name)}</b>`; })()}
             ${who.handle ? `<span class="hnd">${esc(who.handle)}</span>` : ''}
-            ${who.seat ? `<span class="seat">${esc(who.seat)}</span>` : ''}
+            <span class="seat">${esc(seatLine)}</span>
             <span class="dot">·</span><span class="when">${esc(timeAgo(p.date || p.ts))}</span>
             ${p.edited ? '<span class="dot">·</span><span class="when">edited</span>' : ''}
             ${pin}${p.mine && isMember && p.id != null ? `<button type="button" class="post-del" data-del="${esc(String(p.id))}">Delete</button>` : ''}
@@ -6238,7 +6239,7 @@ window.OTPLazy = window.OTPLazy || (function () {
       { key: 'dates',      label: 'Dates',          sub: 'where to be and when',              kickers: ['THE RUN', 'THE COUNTDOWN', 'THE CALENDAR', 'THE FESTIVAL', 'THE ARENA'] },
       { key: 'culture',    label: 'Culture',        sub: 'records, films, looks' },
       { key: 'interviews', label: 'Interviews',     sub: 'sat down with the house',           kickers: ['THE INTERVIEW', 'THE INK'] },
-      { key: 'floor',      label: 'From The Floor', sub: 'written by card holders',           kickers: ['FROM THE FLOOR'] },
+      { key: 'floor',      label: 'From The Floor', sub: 'written by members',                kickers: ['FROM THE FLOOR'] },
     ];
     const shelfOf = it => {
       const own = String(it.shelf || '').toLowerCase();
@@ -6267,7 +6268,7 @@ window.OTPLazy = window.OTPLazy || (function () {
       dates:      { i: 'coming', k: 'Next up', t: 'The whole calendar',    l: 'Every date we know about, in one place.', go: 'Open it', href: calHref },
       culture:    { i: 'photos', k: 'Next up', t: 'Spotted something?',    l: 'The next story starts with a tip. Off the record stays off the record.', go: 'Tell the desk', href: '#take' },
       interviews: { i: 'join',   k: 'Next up', t: 'Sit down with us',      l: 'Got a story worth an hour? Pitch the desk.', go: 'Pitch us', href: '#pitch' },
-      floor:      { i: 'story',  k: 'Next up', t: 'Write one',             l: 'Card holders can post a story straight to the floor.', go: 'Write a story', href: 'word/new/' },
+      floor:      { i: 'story',  k: 'Next up', t: 'Write one',             l: 'Some members can post a story straight to the floor.', go: 'Write a story', href: 'word/new/' },
     };
     const declared = (site && site.word_next && typeof site.word_next === 'object') ? site.word_next : {};
     const todayNoon = (() => { const n = new Date(); return new Date(n.getFullYear(), n.getMonth(), n.getDate(), 12).getTime(); })();
@@ -6776,7 +6777,7 @@ window.OTPLazy = window.OTPLazy || (function () {
         ${rows.length ? `<ol class="tk-list">${rows.map(x => `<li class="${x.hidden ? 'hid' : ''}" data-cid="${esc(String(x.id))}">
           ${x.pic && /^https:\/\//.test(x.pic) ? `<img class="tk-av" src="${esc(sized(x.pic, 'av'))}" alt="" loading="lazy" decoding="async">` : `<span class="tk-av" aria-hidden="true">${esc(ini(x.name))}</span>`}
           <div><div class="tk-top">${x.sid ? `<a href="wall/#s-${esc(x.sid)}"><b>${esc(x.name)}</b></a>` : `<b>${esc(x.name)}</b>`}
-            ${x.kind === 'desk' ? '<span class="tk-k">the desk</span>' : x.kind === 'card' ? '<span class="tk-k">card holder</span>' : ''}
+            ${x.kind === 'desk' ? '<span class="tk-k">the desk</span>' : ''}
             <time>${esc(ago(x.created_at))}</time>${x.edited_at ? '<span class="tk-k">edited</span>' : ''}${x.hidden ? '<span class="tk-k">hidden</span>' : ''}</div>
             <p>${esc(x.body)}</p>
             ${acts(x)}
