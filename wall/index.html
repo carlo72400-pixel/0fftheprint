@@ -4930,7 +4930,7 @@ const SEC = {
     const lw = Math.max(...String(V.name).split(/\s+/).map(w => Array.from(w).length));   // one long handle shrinks instead of breaking mid-word
     const pro = hasRest(V) && V.details.pronouns ? V.details.pronouns : '';
     // the numbers a page can wear: nights marked, frames they are in, Top 8s they sit in, comments on flyers (039 counts; before it, what the page knows)
-    const nums = hasRest(V) ? [['friend' in V ? +V.friends_n || 0 : 0, 'friend', 'friends', ''], [+V.nights_n || 0, 'night', 'nights', ''], [+V.frames_n || 0, 'frame', 'frames', ''], [+V.fans || 0, 'Top 8', 'Top 8s', 'in '], [+V.comments_n || 0, 'comment', 'comments', '']]
+    const nums = hasRest(V) ? [['friend' in V ? +V.friends_n || 0 : 0, 'kindred', 'kindred', ''], [+V.nights_n || 0, 'night', 'nights', ''], [+V.frames_n || 0, 'frame', 'frames', ''], [+V.fans || 0, 'Top 8', 'Top 8s', 'in '], [+V.comments_n || 0, 'comment', 'comments', '']]
                             : [[(V.going || []).length, 'night', 'nights', ''], [+V.fans || 0, 'Top 8', 'Top 8s', 'in ']];
     const stats = nums.filter(x => x[0] > 0).map(x => `<span>${x[3]}<b>${x[0]}</b> ${x[0] === 1 ? x[1] : x[2]}</span>`).join('');
     const links = (Array.isArray(V.links) ? V.links : []).map(l => { const B = l && LINK_BASE[l.p];
@@ -4998,8 +4998,8 @@ const SEC = {
     if (!('friend' in V)) return '';
     const f = esc(firstName(V.name)), L = Array.isArray(V.friends) ? V.friends : [], n = +V.friends_n || 0, a = V.mine ? (+V.asks_n || 0) : 0;
     const asks = a ? `<p class="sp-fn"><button type="button" class="spe-link" data-frall="">${a} ${a === 1 ? 'ask waits' : 'asks wait'} for you →</button></p>` : '';
-    if (!n) return V.mine ? `<h3 class="sp-bh">${f}'s Friends</h3><div class="sp-in">${asks}<p class="sp-empty">No friends yet. Open somebody's page and tap Add friend.</p></div>` : '';
-    return `<h3 class="sp-bh">${f}'s Friends <em>${n}</em></h3><div class="sp-in">${asks}<div class="sp-8">${L.map(x => `<button type="button" class="sp-f" data-space="${esc(x.s)}">${avatar(x.p, x.n, 'sp-fp')}<span>${esc(x.n)}</span></button>`).join('')}</div>
+    if (!n) return V.mine ? `<h3 class="sp-bh">${f}'s Kindred</h3><div class="sp-in">${asks}<p class="sp-empty">No kindred yet. Open somebody's page and tap Add to kindred.</p></div>` : '';
+    return `<h3 class="sp-bh">${f}'s Kindred <em>${n}</em></h3><div class="sp-in">${asks}<div class="sp-8">${L.map(x => `<button type="button" class="sp-f" data-space="${esc(x.s)}">${avatar(x.p, x.n, 'sp-fp')}<span>${esc(x.n)}</span></button>`).join('')}</div>
       <p class="sp-fn"><button type="button" class="spe-link" data-frall="${V.mine ? '' : esc(V.sid)}">${V.mine ? 'All my kindred' : `All ${n}`} →</button></p></div>`;
   },
   top8(V){
@@ -5013,7 +5013,7 @@ const SEC = {
     const f = esc(firstName(V.name)), P = V.posts || [];
     const ta = $(INL ? '#pp-body' : '#sp-body'), tf = ta && ta.closest('form');
     const draft = tf && tf.dataset.sid === V.sid ? ta.value : '';     // a comment half typed on one page never rides along to the next person's
-    return `<h3 class="sp-bh">${f}'s Friends Comments</h3><div class="sp-in">
+    return `<h3 class="sp-bh">${f}'s Kindred Comments</h3><div class="sp-in">
       <p class="sp-fn">Displaying <b>${P.length}</b> of <b>${V.posts_n || 0}</b> comments</p>
       <form class="c-form sp-cf" id="sp-form" data-sid="${esc(V.sid)}"><textarea id="sp-body" maxlength="280" rows="2" placeholder="${V.mine ? 'Write on your own wall' : `Leave ${f} a comment`}">${esc(draft)}</textarea><button type="submit" class="primary">Post</button></form>
       <ol class="sp-posts">${P.map(p => `<li><button type="button" class="sp-pa" ${p.s ? `data-space="${esc(p.s)}"` : 'disabled'}>${avatar(p.p, p.n, 'sp-fp')}<b>${esc(p.n)}</b></button>
@@ -5971,10 +5971,10 @@ async function refreshMine(){
 function frBtn(V){
   const st = V.friend || 'none', s = esc(V.sid);
   if (st === 'self') return '';
-  if (st === 'friends') return `<button type="button" class="sp-act" data-fr="${s}" data-st="friends" aria-pressed="true">✓ Friends</button>`;
+  if (st === 'friends') return `<button type="button" class="sp-act" data-fr="${s}" data-st="friends" aria-pressed="true">✓ Kindred</button>`;
   if (st === 'asked') return `<button type="button" class="sp-act" data-fr="${s}" data-st="asked">Requested</button>`;
-  if (st === 'pending') return `<button type="button" class="sp-act big" data-fr="${s}" data-st="pending">✓ Accept friend request</button>`;
-  return `<button type="button" class="sp-act" data-fr="${s}" data-st="none">＋ Add friend</button>`;
+  if (st === 'pending') return `<button type="button" class="sp-act big" data-fr="${s}" data-st="pending">✓ Accept as kindred</button>`;
+  return `<button type="button" class="sp-act" data-fr="${s}" data-st="none">＋ Add to kindred</button>`;
 }
 const frFace = p => `<button type="button" class="hf" data-space="${esc(p.sid)}" aria-label="${esc(p.name)}'s page"><span class="hf-p">${p.pic ? `<img src="${esc(thumb(p.pic))}" alt="" loading="lazy" decoding="async">` : `<span class="hf-i">${esc(initials(p.name))}</span>`}</span><span class="hf-n">${esc(firstName(p.name))}</span></button>`;
 const frAskRow = p => `<div class="fr-ask">${avatar(p.pic, p.name, 'dm-av')}<span class="dm-t"><button type="button" class="c-name" data-space="${esc(p.sid)}">${esc(p.name)}</button><small>wants to be kindred · ${esc(ago(p.created_at))} ago</small></span><span class="fr-acts"><button type="button" class="primary" data-frans="${esc(p.sid)}" data-yes="1">Accept</button><button type="button" data-frans="${esc(p.sid)}" data-yes="0">Ignore</button></span></div>`;
@@ -5987,7 +5987,7 @@ function frPeopleInner(){
   const L = FR.list, A = FR.asks || [];
   if (L === null) return '<p class="c-empty">Loading…</p>';
   return (A.length ? `<div class="fr-list">${A.map(frAskRow).join('')}</div>` : '')
-    + (L.length ? `<div class="ppl-grid fr-grid" id="fr-grid">${L.slice(0, 12).map(frFace).join('')}</div>` : (A.length ? '' : '<p class="c-empty">No friends yet. Open somebody\'s page and tap Add friend.</p>'))
+    + (L.length ? `<div class="ppl-grid fr-grid" id="fr-grid">${L.slice(0, 12).map(frFace).join('')}</div>` : (A.length ? '' : '<p class="c-empty">No kindred yet. Open somebody\'s page and tap Add to kindred.</p>'))
     + (L.length ? `<button type="button" class="more" data-frall="">${L.length > 12 ? `All ${L.length} kindred` : 'My kindred'} →</button>` : '')
     + frBlockedHTML();
 }
@@ -6000,7 +6000,7 @@ function frRowsHTML(){
   const mine = FR.sheetFor === '', L = FR.sheetList, q = FR.q.trim().toLowerCase();
   if (L === null) return '<p class="c-empty">Loading…</p>';
   const rows = L.filter(p => !q || String(p.name || '').toLowerCase().includes(q)).map(p => `<div class="fr-row">${avatar(p.pic, p.name, 'dm-av')}<span class="dm-t"><button type="button" class="c-name" data-space="${esc(p.sid)}">${esc(p.name)}</button><small>${p.kind === 'desk' ? 'The Desk' : p.kind === 'card' ? 'Member' : 'Member'}${p.since ? ` · since ${esc(new Date(p.since).toLocaleDateString('en-US', {month: 'short', day: 'numeric', timeZone: TZ}))}` : ''}${p.open === false ? ' · hidden' : ''}</small></span>${mine ? `<button type="button" class="fr-rm" data-frrm="${esc(p.sid)}">Remove</button>` : '<span></span>'}</div>`).join('');
-  return rows || `<p class="c-empty">${q ? 'Nobody by that name.' : mine ? 'No friends yet. Open somebody\'s page and tap Add friend.' : 'Nobody to show.'}</p>`;
+  return rows || `<p class="c-empty">${q ? 'Nobody by that name.' : mine ? 'No kindred yet. Open somebody\'s page and tap Add to kindred.' : 'Nobody to show.'}</p>`;
 }
 function frSheetPaint(){
   const sc = $('#fr-scroll'); if (!sc) return;
@@ -6028,8 +6028,8 @@ function frSet(sid, st){ [SPACE.data, SPACE.cache[sid]].forEach(V => { if (V && 
 function frClick(t, ds){
   if (ds.fr) {
     const st = ds.st, sid = ds.fr;
-    if (!SOC.on) { toast('Friends open for members'); return true; }
-    if ((st === 'friends' || st === 'asked') && t.dataset.sure !== '1') { t.dataset.sure = '1'; t.textContent = st === 'friends' ? 'Tap again to unfriend' : 'Tap again to take it back'; return true; }
+    if (!SOC.on) { toast('Kindred is for members'); return true; }
+    if ((st === 'friends' || st === 'asked') && t.dataset.sure !== '1') { t.dataset.sure = '1'; t.textContent = st === 'friends' ? 'Tap again to remove from kindred' : 'Tap again to take it back'; return true; }
     (async () => {
       const fn = st === 'none' ? 'friend_ask' : st === 'pending' ? 'friend_answer' : 'friend_remove';
       let r; try { r = await db().rpc(fn, st === 'pending' ? {p_sid: sid, p_yes: true} : {p_sid: sid}); } catch(e){ r = {error: e}; }
@@ -6038,7 +6038,7 @@ function frClick(t, ds){
       frSet(sid, nu);
       [SPACE.data, SPACE.cache[sid]].forEach(V => { if (V && V.sid === sid) { if (nu === 'friends' && st !== 'friends') V.friends_n = (+V.friends_n || 0) + 1; if (st === 'friends' && nu === 'none') V.friends_n = Math.max(0, (+V.friends_n || 0) - 1); } });
       if (SPACE.data && SPACE.data.sid === sid) { paintSec('contact'); paintSec('hdr'); }
-      buzz(); toast(nu === 'friends' ? 'Friends.' : nu === 'asked' ? 'Asked. They will see it on Kin.' : 'Done.');
+      buzz(); toast(nu === 'friends' ? 'Kindred.' : nu === 'asked' ? 'Asked. They will see it on Kindred.' : 'Done.');
       await frLoad(); refreshMine();
     })();
     return true;
@@ -6049,14 +6049,14 @@ function frClick(t, ds){
       let r; try { r = await db().rpc('friend_answer', {p_sid: sid, p_yes: yes}); } catch(e){ r = {error: e}; }
       if (!r || r.error) { toast('That did not save.'); return; }
       FR.asks = (FR.asks || []).filter(p => p.sid !== sid); frSet(sid, r.data || 'none');
-      buzz(); toast(yes ? 'Friends.' : 'Ignored.');
+      buzz(); toast(yes ? 'Kindred.' : 'Ignored.');
       await frLoad(); refreshMine();
       if (openSheet === $('#frsheet') && FR.sheetFor === '') { FR.sheetList = FR.list; frSheetPaint(); }
       if (SPACE.data && SPACE.data.sid === sid) paintSec('contact');
     })();
     return true;
   }
-  if (ds.frall != null) { if (!SOC.on) { toast('Friends open for members'); return true; } buzz(); frOpen(ds.frall); return true; }
+  if (ds.frall != null) { if (!SOC.on) { toast('Kindred is for members'); return true; } buzz(); frOpen(ds.frall); return true; }
   if (ds.blockedsee != null) { FR.showBlocked = !FR.showBlocked; frPeoplePaint(); return true; }
   if (ds.unblock) {
     if (t.dataset.sure !== '1') { t.dataset.sure = '1'; t.textContent = 'Tap again to unblock'; return true; }
