@@ -685,8 +685,8 @@ NOTES_BY_ID = {
     '4dPUnCKITMG4pKIezK47NK': 'Off the three-song tour ep, out Sep 19. kimj has made beats for 2hollis and glaive.',
     '3iQzTFuQHfCEb5m50ASIyx': 'Out Aug 26 on YSL. Young Thug signed Tezzus and diamond* last October, after bada bing, bada b\u00d8\u00d8m took off.',
     '6m96Qz0SKJHFgluQAsKhFu': 'Off THE H\u00d8MEC\u00d8MING*, out April 14. diamond* started the Atlanta crew \u00d8WAY with Tezzus.',
-    '0KJIm3Ukd82n0d7VOCQWWI': 'Off Fat Boi Fall, 2024. KAV-MAN holds a card here, and his card plays this from 2:03.',
-    '0sKUd3PxqITdWs8NqzpCBV': 'Single, out June 29 on GateWayRecords. It plays when you open VIRGOSGATEWAY\u2019s card.',
+    '0KJIm3Ukd82n0d7VOCQWWI': 'Off Fat Boi Fall, 2024. KAV-MAN is on the house\u2019s roster.',
+    '0sKUd3PxqITdWs8NqzpCBV': 'Single, out June 29 on GateWayRecords. VIRGOSGATEWAY is on the house\u2019s roster.',
     '1PkGP1pjnPXpi081HVv7zr': 'Single, out March 28 on GateWayRecords.',
     # 11/12: the new rotation, picked off the house's three new playlists (vamp wØrld, ???, hello brainrot). Dates are
     # Spotify's own (the track's release date); the playlist facts are where each one sits in those playlists.
