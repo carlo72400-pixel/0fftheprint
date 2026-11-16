@@ -420,7 +420,7 @@ h1,h2{margin-top:8px;font-family:var(--disp);font-weight:650;font-variation-sett
         </button>
       </div>
       <p style="margin:12px 2px 0;font:400 12px/1.45 Inter,system-ui,sans-serif;color:#d9c6d2">School of Comics music: "Carnivale Intrigue", "Merry Go Slower", "Monster Promenade", "Pixelland" and "Super Circus" by Kevin MacLeod (incompetech.com), licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener" style="color:#f6dfe9">CC BY 4.0</a>.</p>
-      <h3 class="ph">Photo packs <small>Tap one to open it</small></h3>
+      <h3 class="ph">Parties and shows <small>Same job as your event. Tap one to open it.</small></h3>
       <div class="packs">
         <a href="/events/2026-10-17-fill-a-bag/" target="_blank" rel="noopener"><img src="/events/2026-10-17-fill-a-bag/pack.webp" alt="Fill-a-Bag, a sale day at Thrift @ The Warehouse" width="520" height="878" loading="lazy" decoding="async"></a>
         <a href="/events/2026-10-03-pulse-angels-3/" target="_blank" rel="noopener"><img src="/events/2026-10-03-pulse-angels-3/pack.webp" alt="Pulse Angels 3" width="520" height="878" loading="lazy" decoding="async"></a>
@@ -513,12 +513,12 @@ h1,h2{margin-top:8px;font-family:var(--disp);font-weight:650;font-variation-sett
     events:{h:'Got an event coming up?', l:'I shoot the promo before it, film the day, and hand you the recap the next day. <b>You post it.</b>',
       steps:[['A week or two before','The promo shoot'],['The day of','I film it'],['The next day','The recap']],
       planh:'Your event, start to finish.', planl:'For most events I would book 4 hours: 2 for the promo, 2 at the event. <b>$500, about 8 to 12 videos.</b>',
-      see:['thrift','See event promos I made'], plans:'Event this week? DM me today.',
+      see:['thrift','See event promos I made'], plans:'I shoot parties and shows every weekend. Your event is the same job. Event this week? DM me today.',
       presets:[[4,'Promo + the event',1],[2,'Promo only',0],[6,'2 promos + the event',0]], subj:'Videos for my event', mail:'The event and its date: ', proof:'opening'},
     opening:{h:'Opening soon?', l:'I shoot the countdown promo, film opening day, and hand you the recap the next day. <b>You post it.</b>',
       steps:[['A week before','The countdown promo'],['Opening day','I film it'],['The next day','The recap']],
       planh:'Your opening, start to finish.', planl:'For an opening I would book 4 hours: 2 for the promo, 2 on the day. <b>$500, about 8 to 12 videos.</b>',
-      see:['launch','See a grand opening I shot'], plans:'Opening this week? DM me today.',
+      see:['launch','See a grand opening I shot'], plans:'I shoot parties and shows every weekend. Your opening is the same job. Opening this week? DM me today.',
       presets:[[4,'Promo + opening day',1],[2,'Opening day only',0],[6,'2 promos + the day',0]], subj:'Videos for my opening', mail:'The opening date: ', proof:'opening'},
     trades:{h:'Show people the work.', l:'Your crew on the job, the before and after, and an ad for your page. <b>You post it.</b>',
       steps:[['On the job','Your crew at work'],['When it is done','The before and after'],['The ad','A 30-second spot, plus clips']],
@@ -757,6 +757,8 @@ h1,h2{margin-top:8px;font-family:var(--disp);font-weight:650;font-variation-sett
   cards.forEach(function(c,k){ if(c.getAttribute('data-id')===want) start=k });
   cards.forEach(function(c,k){ if(k!==start){ c.classList.remove('on'); c.setAttribute('aria-hidden','true'); c.inert=true } });
   show(start, 1);
+  var rk=(want.match(/^reel-([a-z]+)$/)||[])[1];
+  if(rk && REELS[rk]) openReel(rk, null);
 })();
 </script>
 </body>
