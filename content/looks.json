@@ -2,6 +2,116 @@
  "v": 1,
  "nights": [
   {
+   "slug": "2026-11-13-bloodbath-4",
+   "title": "BLOODBATH 4",
+   "venue": "Private Park",
+   "date": "2026-11-13",
+   "date_short": "11.13.26",
+   "looks": [
+    "CORN SYRUP",
+    "BRUISE",
+    "DEVELOPED IN BLOOD",
+    "RELIGHT",
+    "SHUTTER DRAG",
+    "NATURAL"
+   ],
+   "count": 160,
+   "frames": [
+    {
+     "i": 0,
+     "thumb": "media/001_t.jpg",
+     "w": 1440,
+     "h": 2560,
+     "prints": [
+      {
+       "name": "CORN SYRUP",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-3/releases/download/2026-11-13-bloodbath-4/001.jpg"
+      },
+      {
+       "name": "BRUISE",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-3/releases/download/2026-11-13-bloodbath-4/001_bruise.jpg"
+      },
+      {
+       "name": "DEVELOPED IN BLOOD",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-3/releases/download/2026-11-13-bloodbath-4/001_developed-in-blood.jpg"
+      },
+      {
+       "name": "RELIGHT",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-3/releases/download/2026-11-13-bloodbath-4/001_relight.jpg"
+      },
+      {
+       "name": "SHUTTER DRAG",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-3/releases/download/2026-11-13-bloodbath-4/001_shutter-drag.jpg"
+      },
+      {
+       "name": "NATURAL",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-3/releases/download/2026-11-13-bloodbath-4/001_natural.jpg"
+      }
+     ]
+    },
+    {
+     "i": 80,
+     "thumb": "media/081_t.jpg",
+     "w": 2560,
+     "h": 1923,
+     "prints": [
+      {
+       "name": "CORN SYRUP",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-3/releases/download/2026-11-13-bloodbath-4-2/081.jpg"
+      },
+      {
+       "name": "BRUISE",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-3/releases/download/2026-11-13-bloodbath-4-2/081_bruise.jpg"
+      },
+      {
+       "name": "DEVELOPED IN BLOOD",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-3/releases/download/2026-11-13-bloodbath-4-2/081_developed-in-blood.jpg"
+      },
+      {
+       "name": "RELIGHT",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-3/releases/download/2026-11-13-bloodbath-4-2/081_relight.jpg"
+      },
+      {
+       "name": "SHUTTER DRAG",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-3/releases/download/2026-11-13-bloodbath-4-2/081_shutter-drag.jpg"
+      },
+      {
+       "name": "NATURAL",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-3/releases/download/2026-11-13-bloodbath-4-2/081_natural.jpg"
+      }
+     ]
+    },
+    {
+     "i": 159,
+     "thumb": "media/160_t.jpg",
+     "w": 2560,
+     "h": 1923,
+     "prints": [
+      {
+       "name": "CORN SYRUP",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-3/releases/download/2026-11-13-bloodbath-4-2/160.jpg"
+      },
+      {
+       "name": "BRUISE",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-3/releases/download/2026-11-13-bloodbath-4-2/160_bruise.jpg"
+      },
+      {
+       "name": "DEVELOPED IN BLOOD",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-3/releases/download/2026-11-13-bloodbath-4-2/160_developed-in-blood.jpg"
+      },
+      {
+       "name": "SHUTTER DRAG",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-3/releases/download/2026-11-13-bloodbath-4-2/160_shutter-drag.jpg"
+      },
+      {
+       "name": "NATURAL",
+       "src": "https://github.com/carlo72400-pixel/0tp-media-3/releases/download/2026-11-13-bloodbath-4-2/160_natural.jpg"
+      }
+     ]
+    }
+   ]
+  },
+  {
    "slug": "2026-10-31-the-odd-ball",
    "title": "THE ODD BALL",
    "venue": "Justine's Brasserie",

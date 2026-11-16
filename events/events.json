@@ -1,6 +1,16 @@
 {
  "items": [
   {
+   "slug": "2026-11-13-bloodbath-4",
+   "title": "BLOODBATH 4",
+   "venue": "Private Park",
+   "date": "2026-11-13",
+   "date_short": "11.13.26",
+   "count": 160,
+   "cover": "2026-11-13-bloodbath-4/media/106_t.jpg",
+   "up": "2026-11-15"
+  },
+  {
    "slug": "2026-10-31-the-odd-ball",
    "title": "THE ODD BALL",
    "venue": "Justine's Brasserie",

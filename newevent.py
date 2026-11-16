@@ -603,7 +603,7 @@ color:var(--muted);margin-top:8px;line-height:1.9}
 .looks b{color:var(--pink);font-weight:500}
 .looks span{color:var(--ink)}
 .lb-looks{position:absolute;left:50%;bottom:44px;transform:translateX(-50%);display:flex;gap:6px;
-flex-wrap:wrap;justify-content:center;max-width:92vw;z-index:11}
+flex-wrap:wrap;justify-content:center;width:max-content;max-width:92vw;z-index:11}
 .lb-looks button{font-family:var(--f-mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
 color:var(--pink);background:rgba(10,10,13,.8);border:1px solid rgba(255,121,198,.45);border-radius:999px;
 padding:7px 11px;cursor:pointer}

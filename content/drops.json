@@ -2,6 +2,14 @@
   "_about": "Stand-alone drop pages for the homepage timeline (cathedral.js drops(), 11/10). One row each: up = the day it went up, link = the drop's own folder, thumb = a 16:9 card inside it, go = the call to action.",
   "items": [
     {
+      "up": "2026-11-15",
+      "title": "BLOODBATH 4: the posts",
+      "line": "The night's carousels and stories: Follow The Blood as one strip, The Bursts slide by slide, and both stories.",
+      "link": "events/2026-11-13-bloodbath-4/posts/",
+      "thumb": "events/2026-11-13-bloodbath-4/posts/card.jpg",
+      "go": "swipe the posts"
+    },
+    {
       "up": "2026-11-13",
       "title": "RELIQUARY special: BLOODBATH 4",
       "line": "The fight card for BLOODBATH 4, Friday the 13th: Kuro vs MINO, Bala vs CY, and the Apostates vs HYDRA for the champ belt. A special, not canon. 10 pages, read top to bottom.",
