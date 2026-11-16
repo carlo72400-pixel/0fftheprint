@@ -733,11 +733,11 @@ h1,h2{margin-top:8px;font-family:var(--disp);font-weight:650;font-variation-sett
   pv.addEventListener('ended', function(){ if(reel && ri<reel.clips.length-1) load(ri+1) });
   window.addEventListener('popstate', function(){ closeReel(true) });
 
-  // pause when the phone locks; on his phone, start over after a minute away
+  // pause when the phone locks; on his phone, start over after a minute away (a real lock only: a page that opened in the background keeps its reel)
   var hidAt=0;
   d.addEventListener('visibilitychange', function(){
     if(d.hidden){ hidAt=Date.now(); vids(cards[at]).forEach(function(v){v.pause()}); pv.pause(); mute(true); return }
-    if(ME && Date.now()-hidAt>60000){ closeReel(false); if(at!==0){ show(0,-1); return } }
+    if(ME && hidAt && Date.now()-hidAt>60000){ closeReel(false); if(at!==0){ show(0,-1); return } }
     if(player.hidden) vids(cards[at]).forEach(play);
   });
 
