@@ -240,6 +240,41 @@ h1,h2{margin-top:8px;font-family:var(--disp);font-weight:650;font-variation-sett
 .me .only-them{display:none}
 .me .qr{display:grid}
 
+/* 3: how it works, three stops on the night */
+.c-plan{--acc:var(--mint);--acc-ink:#23634a}
+.c-plan .vis{background:radial-gradient(circle at 26% 16%,#4a3346,var(--night) 68%)}
+.steps{position:absolute;left:16px;right:16px;top:calc(52px + env(safe-area-inset-top));bottom:12px;list-style:none;display:flex;flex-direction:column;justify-content:center;gap:12px}
+.steps li{position:relative;display:grid;grid-template-columns:50px 1fr;gap:14px;align-items:center;padding:12px 14px;border-radius:18px;background:rgba(255,255,255,.07);box-shadow:0 0 0 1px rgba(255,255,255,.11)}
+.steps li + li::before{content:'';position:absolute;left:38px;top:-13px;width:2px;height:14px;background:rgba(255,255,255,.32)}
+.steps .n{width:50px;height:50px;border-radius:15px;display:grid;place-items:center;background:var(--pink);color:var(--night);font-family:var(--disp);font-weight:700;font-feature-settings:'lnum';font-size:27px;line-height:1}
+.steps li:nth-child(2) .n{background:var(--mint)}
+.steps li:nth-child(3) .n{background:var(--butter)}
+.steps small{display:block;font:700 12px/1.25 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:#f6dfe9}
+.steps b{display:block;margin-top:4px;font-family:var(--disp);font-weight:650;font-variation-settings:'SOFT' 100,'opsz' 72;font-size:23px;line-height:1.08;color:#fff}
+.see{width:100%;margin-top:12px}
+.see svg{width:18px;height:18px}
+
+/* 6: the common bookings, one tap sets the hours */
+.presets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:18px}
+.presets .key{position:relative;flex-direction:column;gap:3px;min-height:72px;padding:10px 6px 8px;border-radius:14px;font-size:13.5px;line-height:1.15;text-align:center}
+.presets .key b{font-family:var(--disp);font-weight:700;font-feature-settings:'lnum';font-size:21px;line-height:1;color:var(--night)}
+.presets .key small{font:700 10.5px/1.2 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--dim)}
+.presets .key[data-rec]::before{content:'Recommended';position:absolute;top:-10px;left:50%;transform:translateX(-50%);padding:4px 8px;border-radius:999px;background:var(--deep);color:#fff;font:700 9.5px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.presets .key[aria-pressed=true]{border-color:var(--deep);box-shadow:0 5px 0 var(--deep)}
+.presets .key[aria-pressed=true].down{box-shadow:0 1px 0 var(--deep)}
+.presets .key[aria-pressed=true] b{color:var(--deep)}
+
+/* his phone only: which pitch this is */
+.modes{display:none;flex-wrap:wrap;gap:6px;margin-top:12px}
+.me .modes{display:flex}
+.modes a{min-height:44px;display:inline-flex;align-items:center;padding:0 13px;border-radius:999px;border:2px solid var(--line2);font:700 12px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;text-decoration:none;color:var(--ink);-webkit-tap-highlight-color:transparent}
+.modes a[aria-current=page]{background:var(--night);border-color:var(--night);color:#fff}
+
+/* a tall sheet stops under the bars and the home link, then scrolls (the price card on small phones) */
+.sheet{max-height:calc(100% - 64px - env(safe-area-inset-top))}
+@media (max-height:700px){.steps{gap:8px}.steps li{padding:9px 12px}.steps .n{width:44px;height:44px;font-size:24px}.steps b{font-size:20px}
+  .presets{margin-top:14px;gap:6px}.presets .key{min-height:58px;padding:9px 4px 6px;font-size:12.5px}.presets .key b{font-size:19px}
+  .c-price .price strong{font-size:50px}.c-price .vs{margin-top:8px;padding:9px 11px 7px}.c-price .calc{margin-top:8px;padding:8px 11px}}
 @media (max-height:700px){h1,h2{font-size:clamp(27px,7.6vw,34px)}.rows{gap:8px}.rows .ic{width:38px;height:38px}.price strong{font-size:56px}.l{font-size:16px}}
 @media (prefers-reduced-motion:reduce){
   .js .card,.js .card.on{transition:opacity .12s linear}
@@ -250,22 +285,23 @@ h1,h2{margin-top:8px;font-family:var(--disp);font-weight:650;font-variation-sett
 </style>
 </head>
 <body>
-<main class="deck" id="deck" aria-roledescription="carousel" aria-label="Videos for your business, 7 cards">
-  <div class="bars" aria-hidden="true"><i class="now"></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<main class="deck" id="deck" aria-roledescription="carousel" aria-label="Videos for your business, 8 cards">
+  <div class="bars" aria-hidden="true"><i class="now"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
   <a class="home" href="/">&#8249; 0FF THE PRINT</a>
   <p class="sr" id="live" aria-live="polite"></p>
 
-  <section class="card c-hello on" data-id="hello" data-title="What I do" aria-roledescription="slide" aria-label="1 of 7">
+  <section class="card c-hello on" data-id="hello" data-title="What I do" aria-roledescription="slide" aria-label="1 of 8">
     <div class="media" aria-hidden="true"><video src="media/hello.mp4" poster="media/hello.jpg" muted playsinline loop autoplay preload="auto"></video></div>
     <div class="vis"></div>
     <div class="sheet">
       <p class="k">Gianni Ortiz <span>· San Antonio + Austin</span></p>
-      <h1>Videos for your business.</h1>
-      <p class="l">I write it, film it, direct it and edit it. <b>You post it.</b></p>
+      <h1 id="hh">Videos for your business.</h1>
+      <p class="l" id="hl">I write it, film it, direct it and edit it. <b>You post it.</b></p>
+      <nav class="modes" aria-label="Which pitch"><a href="?me&amp;for=events">Events</a><a href="?me&amp;for=opening">Opening</a><a href="?me&amp;for=trades">Trades</a><a href="?me&amp;for=any">Any business</a></nav>
     </div>
   </section>
 
-  <section class="card c-real" data-id="real" data-title="A real one" data-next="See a real one" aria-roledescription="slide" aria-label="2 of 7" aria-hidden="true">
+  <section class="card c-real" data-id="real" data-title="A real one" data-next="See a real one" aria-roledescription="slide" aria-label="2 of 8" aria-hidden="true">
     <div class="vis">
       <video id="promo" src="media/soc-60.mp4" poster="/video/soc-1013/soc-1013-the-60.jpg" muted playsinline loop preload="none" aria-label="The 60-second School of Comics commercial, a 2000s infomercial"></video>
       <button class="key soft sound" id="sound" type="button" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path class="w" d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg><span>Sound on</span></button>
@@ -278,7 +314,24 @@ h1,h2{margin-top:8px;font-family:var(--disp);font-weight:650;font-variation-sett
     </div>
   </section>
 
-  <section class="card c-get" data-id="get" data-title="What you get" data-next="What you get" aria-roledescription="slide" aria-label="3 of 7" aria-hidden="true">
+  <section class="card c-plan" data-id="plan" data-title="How it works" data-next="How it works" aria-roledescription="slide" aria-label="3 of 8" aria-hidden="true">
+    <div class="vis">
+      <ol class="steps" id="steps">
+        <li><span class="n" aria-hidden="true">1</span><div><small>First</small><b>We plan it by DM</b></div></li>
+        <li><span class="n" aria-hidden="true">2</span><div><small>Then</small><b>I shoot, 2 hours</b></div></li>
+        <li><span class="n" aria-hidden="true">3</span><div><small>The next day</small><b>Your files</b></div></li>
+      </ol>
+    </div>
+    <div class="sheet">
+      <p class="k">How it works</p>
+      <h2 id="planh">One shoot, start to finish.</h2>
+      <p class="l" id="planl">2 hours at your place, about 4 to 6 videos, edited and ready to post.</p>
+      <button class="key soft see" id="see" type="button" data-reel="comics"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg><span>See a commercial I made</span></button>
+      <p class="l small" id="plans" hidden></p>
+    </div>
+  </section>
+
+  <section class="card c-get" data-id="get" data-title="What you get" data-next="What you get" aria-roledescription="slide" aria-label="4 of 8" aria-hidden="true">
     <div class="media" aria-hidden="true"><video src="media/found-it.mp4" poster="media/found-it.jpg" muted playsinline loop preload="none"></video></div>
     <div class="vis"></div>
     <div class="sheet">
@@ -293,7 +346,7 @@ h1,h2{margin-top:8px;font-family:var(--disp);font-weight:650;font-variation-sett
     </div>
   </section>
 
-  <section class="card c-color" data-id="color" data-title="The color" data-next="The color" aria-roledescription="slide" aria-label="4 of 7" aria-hidden="true">
+  <section class="card c-color" data-id="color" data-title="The color" data-next="The color" aria-roledescription="slide" aria-label="5 of 8" aria-hidden="true">
     <div class="vis">
       <div class="wipe" id="wipe" role="img" aria-label="The same frame off the camera, flat and grey, and graded, true to life">
         <img src="media/grade-before.jpg" alt="" width="720" height="1280" loading="lazy" decoding="async">
@@ -310,7 +363,7 @@ h1,h2{margin-top:8px;font-family:var(--disp);font-weight:650;font-variation-sett
     </div>
   </section>
 
-  <section class="card c-price" data-id="price" data-title="The price" data-next="The price" aria-roledescription="slide" aria-label="5 of 7" aria-hidden="true">
+  <section class="card c-price" data-id="price" data-title="The price" data-next="The price" aria-roledescription="slide" aria-label="6 of 8" aria-hidden="true">
     <div class="media" aria-hidden="true"><video src="media/racks.mp4" poster="media/racks.jpg" muted playsinline loop preload="none"></video></div>
     <div class="vis"></div>
     <div class="sheet">
@@ -329,11 +382,16 @@ h1,h2{margin-top:8px;font-family:var(--disp);font-weight:650;font-variation-sett
         </div>
         <p class="tot" aria-live="polite"><b id="tot">$250</b><small id="est">about 4 to 6 videos</small></p>
       </div>
+      <div class="presets" id="presets" role="group" aria-label="Common bookings">
+        <button class="key soft" type="button" data-h="2" data-rec aria-pressed="true"><b>$250</b><span>One shoot</span><small>2 hours</small></button>
+        <button class="key soft" type="button" data-h="4" aria-pressed="false"><b>$500</b><span>Content day</span><small>4 hours</small></button>
+        <button class="key soft" type="button" data-h="6" aria-pressed="false"><b>$750</b><span>Big day</span><small>6 hours</small></button>
+      </div>
       <p class="terms"><b>Each extra hour $125. Editing included.</b> $50 holds the date, the rest is due 15 days after your files. Free travel inside Loop 410, $0.50 a mile past it.</p>
     </div>
   </section>
 
-  <section class="card c-work" data-id="work" data-title="More work" data-next="More work" aria-roledescription="slide" aria-label="6 of 7" aria-hidden="true">
+  <section class="card c-work" data-id="work" data-title="More work" data-next="More work" aria-roledescription="slide" aria-label="7 of 8" aria-hidden="true">
     <div class="scroll">
       <p class="k">More of my work</p>
       <h2>Tap one. It plays.</h2>
@@ -343,12 +401,12 @@ h1,h2{margin-top:8px;font-family:var(--disp);font-weight:650;font-variation-sett
           <span class="pl" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l12.5-7.5z"/></svg></span>
           <span class="cap"><b>A commercial</b><small>3 spots · School of Comics</small></span>
         </button>
-        <button class="tile tall stack" type="button" data-reel="thrift" aria-label="Play the new promos for Thrift @ The Warehouse">
+        <button class="tile tall stack" type="button" data-reel="thrift" aria-label="Play the event promos for Thrift @ The Warehouse, markets and sale days">
           <img src="media/t01.jpg" alt="" width="216" height="384" loading="lazy" decoding="async">
           <img src="media/t03.jpg" alt="" width="216" height="384" loading="lazy" decoding="async">
           <img src="media/t02.jpg" alt="" width="216" height="384" loading="lazy" decoding="async">
           <span class="pl" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l12.5-7.5z"/></svg></span>
-          <span class="cap"><b>New promos</b><small>Thrift @ The Warehouse</small></span>
+          <span class="cap"><b>Event promos</b><small>Markets + sale days</small></span>
         </button>
         <button class="tile tall" type="button" data-reel="launch" aria-label="Play the grand opening cuts for Pixel Pulpit">
           <img src="media/launch-collage.jpg" alt="" width="360" height="640" loading="lazy" decoding="async">
@@ -377,7 +435,7 @@ h1,h2{margin-top:8px;font-family:var(--disp);font-weight:650;font-variation-sett
     </div>
   </section>
 
-  <section class="card c-book" data-id="book" data-title="Set a day" data-next="Set a day" aria-roledescription="slide" aria-label="7 of 7" aria-hidden="true">
+  <section class="card c-book" data-id="book" data-title="Set a day" data-next="Set a day" aria-roledescription="slide" aria-label="8 of 8" aria-hidden="true">
     <div class="vis">
       <div class="wall only-them">
         <p>Recent work</p>
@@ -439,10 +497,44 @@ h1,h2{margin-top:8px;font-family:var(--disp);font-weight:650;font-variation-sett
   var live=d.getElementById('live');
   var ME=/[?&]me(=|&|$)/.test(location.search)||matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
   if(ME) d.documentElement.classList.add('me');
-  // ?for=opening: the proof card shows a grand opening instead of the School of Comics 60 (the DM leads are openings)
+  // ?for= picks the pitch: events, opening, trades, or any (the plain one). On his phone the last pick sticks.
+  // events and opening swap the proof card to the grand opening (an event, start to finish); any and trades keep the School of Comics 60 (11/11)
   var FOR=(location.search.match(/[?&]for=([a-z]+)/)||[])[1]||'';
+  if(ME){ try{ if(FOR) localStorage.setItem('biz-for',FOR); else FOR=localStorage.getItem('biz-for')||'' }catch(e){} }
   var PROOF={opening:{src:'media/launch-collage.mp4',poster:'media/launch-collage.jpg',label:'The 1-minute highlight of a grand opening for Pixel Pulpit, 57 seconds',
     who:'· Pixel Pulpit',h:'One grand opening. 2 videos.',l:'A 1-minute highlight and a 2-minute recap, delivered the next day.',first:'launch'}};
+  // each pitch: the hook, the three stops, the plan line, the proof button, the three common bookings [hours, name, recommended]
+  var MODES={
+    any:{h:'Videos for your business.', l:'I write it, film it, direct it and edit it. <b>You post it.</b>',
+      steps:[['First','We plan it by DM'],['Then','I shoot, 2 hours'],['The next day','Your files']],
+      planh:'One shoot, start to finish.', planl:'2 hours at your place, about 4 to 6 videos, edited and ready to post.',
+      see:['comics','See a commercial I made'], plans:'',
+      presets:[[2,'One shoot',1],[4,'Content day',0],[6,'Big day',0]], subj:'Videos for my business', mail:'Date: '},
+    events:{h:'Got an event coming up?', l:'I shoot the promo before it, film the day, and hand you the recap the next day. <b>You post it.</b>',
+      steps:[['A week or two before','The promo shoot'],['The day of','I film it'],['The next day','The recap']],
+      planh:'Your event, start to finish.', planl:'For most events I would book 4 hours: 2 for the promo, 2 at the event. <b>$500, about 8 to 12 videos.</b>',
+      see:['thrift','See event promos I made'], plans:'Event this week? DM me today.',
+      presets:[[4,'Promo + the event',1],[2,'Promo only',0],[6,'2 promos + the event',0]], subj:'Videos for my event', mail:'The event and its date: ', proof:'opening'},
+    opening:{h:'Opening soon?', l:'I shoot the countdown promo, film opening day, and hand you the recap the next day. <b>You post it.</b>',
+      steps:[['A week before','The countdown promo'],['Opening day','I film it'],['The next day','The recap']],
+      planh:'Your opening, start to finish.', planl:'For an opening I would book 4 hours: 2 for the promo, 2 on the day. <b>$500, about 8 to 12 videos.</b>',
+      see:['launch','See a grand opening I shot'], plans:'Opening this week? DM me today.',
+      presets:[[4,'Promo + opening day',1],[2,'Opening day only',0],[6,'2 promos + the day',0]], subj:'Videos for my opening', mail:'The opening date: ', proof:'opening'},
+    trades:{h:'Show people the work.', l:'Your crew on the job, the before and after, and an ad for your page. <b>You post it.</b>',
+      steps:[['On the job','Your crew at work'],['When it is done','The before and after'],['The ad','A 30-second spot, plus clips']],
+      planh:'One visit. An ad and a stack of clips.', planl:'2 or 3 hours on one job site, shot from the ground around your crew. <b>You are on camera only if you want to be.</b>',
+      see:['comics','See a commercial I made'], plans:'',
+      presets:[[4,'Job site + the ad',1],[2,'One job site',0],[6,'2 job sites + the ad',0]], subj:'Videos for my business', mail:'The job site and a good day: '}
+  };
+  var MODE=MODES[FOR] ? FOR : 'any', M=MODES[MODE];
+  d.getElementById('hh').textContent=M.h;
+  d.getElementById('hl').innerHTML=M.l;
+  [].forEach.call(d.querySelectorAll('#steps li'), function(li,k){ li.querySelector('small').textContent=M.steps[k][0]; li.querySelector('b').textContent=M.steps[k][1] });
+  d.getElementById('planh').textContent=M.planh;
+  d.getElementById('planl').innerHTML=M.planl;
+  var see=d.getElementById('see'); see.setAttribute('data-reel', M.see[0]); see.querySelector('span').textContent=M.see[1];
+  var plans=d.getElementById('plans'); plans.textContent=M.plans; plans.hidden=!M.plans;
+  [].forEach.call(d.querySelectorAll('.modes a'), function(a){ if((a.getAttribute('href').match(/for=([a-z]+)/)||[])[1]===MODE) a.setAttribute('aria-current','page') });
   var at=-1, nudgeT=0, warmT=0;
 
   function vids(c){return [].slice.call(c.querySelectorAll('video'))}
@@ -553,20 +645,29 @@ h1,h2{margin-top:8px;font-family:var(--disp);font-weight:650;font-variation-sett
   var hrs=d.getElementById('hrs'), hrsu=d.getElementById('hrsu'), tot=d.getElementById('tot'), est=d.getElementById('est');
   var minus=d.getElementById('minus'), plus=d.getElementById('plus'), mail=d.getElementById('mail');
   function money(n){ return '$'+n.toLocaleString('en-US') }
+  // the common bookings: one tap sets the hours; the recommended one comes first
+  var presets=[].slice.call(d.querySelectorAll('#presets .key'));
   function upd(){
     hrs.textContent=h; hrsu.textContent='hours';
     var lo=Math.min(h*2,10), hi=Math.min(h*3,12);
     tot.textContent=money(h*RATE); est.textContent='about '+lo+' to '+hi+' videos';
     minus.disabled = h<=MIN; plus.disabled = h>=MAX;
-    mail.href='mailto:offtheprintcollective@gmail.com?subject='+encodeURIComponent('Videos for my business')+
-      '&body='+encodeURIComponent('Business: \nHours: '+h+' ('+money(h*RATE)+')\nDate: \nBest way to reach you: \n');
+    presets.forEach(function(b){ b.setAttribute('aria-pressed', +b.getAttribute('data-h')===h ? 'true' : 'false') });
+    mail.href='mailto:offtheprintcollective@gmail.com?subject='+encodeURIComponent(M.subj)+
+      '&body='+encodeURIComponent('Business: \n'+M.mail+'\nHours: '+h+' ('+money(h*RATE)+')\nBest way to reach you: \n');
   }
+  presets.forEach(function(b,k){
+    var p=M.presets[k]; b.setAttribute('data-h', p[0]);
+    if(p[2]) b.setAttribute('data-rec',''); else b.removeAttribute('data-rec');
+    b.querySelector('b').textContent=money(p[0]*RATE); b.querySelector('span').textContent=p[1]; b.querySelector('small').textContent=p[0]+' hours';
+    b.addEventListener('click', function(){ h=+b.getAttribute('data-h'); upd() });
+  });
   minus.addEventListener('click', function(){ if(h>MIN){ h--; upd() } });
   plus.addEventListener('click', function(){ if(h<MAX){ h++; upd() } });
   upd();
 
   // on his phone: hand them the link
-  var share=d.getElementById('share'), shareLabel=share.querySelector('span'), URL_='https://0fftheprint.com/business/'+(FOR?'?for='+FOR:'');
+  var share=d.getElementById('share'), shareLabel=share.querySelector('span'), URL_='https://0fftheprint.com/business/'+(MODE!=='any'?'?for='+MODE:'');
   share.addEventListener('click', function(){
     if(navigator.share){ navigator.share({title:'Videos for your business', text:'Videos for your business, from Gianni Ortiz', url:URL_}).catch(function(){}); return }
     if(navigator.clipboard){ navigator.clipboard.writeText(URL_).then(function(){ shareLabel.textContent='Link copied'; setTimeout(function(){ shareLabel.textContent='Send them the link' }, 2200) }) }
@@ -640,7 +741,7 @@ h1,h2{margin-top:8px;font-family:var(--disp);font-weight:650;font-variation-sett
     if(player.hidden) vids(cards[at]).forEach(play);
   });
 
-  var pf=PROOF[FOR];
+  var pf=PROOF[M.proof];
   if(pf){
     var real=deck.querySelector('.c-real');
     promo.src=pf.src; promo.poster=pf.poster; promo.setAttribute('aria-label', pf.label);
