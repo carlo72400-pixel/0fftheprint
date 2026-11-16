@@ -117,8 +117,10 @@
   // folder ("wallpapers/"), `thumb` = a 16:9 card inside it, `up` = the day it went up, `go` = the call to action (optional).
   // 11/11: a drop can live one folder down ("reliquary/ep1/", the manhwa's episode pages), so link and thumb take an optional
   // second folder, same characters.
-  var dropsP = null, DROP = /^[a-z0-9][a-z0-9-]{0,60}\/(?:[a-z0-9][a-z0-9-]{0,60}\/)?$/,
-      DTHUMB = /^[a-z0-9][a-z0-9-]{0,60}\/(?:[a-z0-9][a-z0-9-]{0,60}\/)?[a-z0-9._-]{1,80}\.(?:jpe?g|webp|png)$/i;
+  // 11/16: and two folders down ("events/2026-11-13-bloodbath-4/posts/", a night's posts page), so up to three folders now,
+  // same characters. The BLOODBATH 4 posts drop (11/15) sat in drops.json and never showed because this stopped at two.
+  var dropsP = null, DROP = /^[a-z0-9][a-z0-9-]{0,60}\/(?:[a-z0-9][a-z0-9-]{0,60}\/){0,2}$/,
+      DTHUMB = /^[a-z0-9][a-z0-9-]{0,60}\/(?:[a-z0-9][a-z0-9-]{0,60}\/){0,2}[a-z0-9._-]{1,80}\.(?:jpe?g|webp|png)$/i;
   function drops() {
     if (!dropsP) dropsP = fetch('content/drops.json', { cache: 'no-cache' })
       .then(function (r) { return r.ok ? r.json() : null; })
