@@ -3,6 +3,14 @@
   "items": [
     {
       "up": "2026-11-15",
+      "title": "BLOODBATH: the lock screen",
+      "line": "Cinder up the party tree at BLOODBATH 4, watching the mat. A free lock screen and a home screen that match, both in 4K.",
+      "link": "wallpapers/",
+      "thumb": "wallpapers/bloodbath-card.jpg",
+      "go": "save her in 4K"
+    },
+    {
+      "up": "2026-11-15",
       "title": "BLOODBATH 4: the posts",
       "line": "The night's carousels and stories: Follow The Blood as one strip, The Bursts slide by slide, and both stories.",
       "link": "events/2026-11-13-bloodbath-4/posts/",
