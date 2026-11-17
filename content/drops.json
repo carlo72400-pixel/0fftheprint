@@ -2,6 +2,14 @@
   "_about": "Stand-alone drop pages for the homepage timeline (cathedral.js drops(), 11/10). One row each: up = the day it went up, link = the drop's own folder, thumb = a 16:9 card inside it, go = the call to action.",
   "items": [
     {
+      "up": "2026-11-17",
+      "title": "夜音 YORUNE: meet the three",
+      "line": "Our virtual singers get their own pages: KIBANE CHIYU, GONE REI and KIRANE AGEHA. Official facts, their items, and reaction stickers to save and send. Zero songs. On tour anyway.",
+      "link": "yorune/",
+      "thumb": "yorune/a/card.jpg",
+      "go": "meet them"
+    },
+    {
       "up": "2026-11-16",
       "title": "夜音 YORUNE: our own virtual singers",
       "line": "Three vampire virtual singers, each in her own world: KIBANE CHIYU, GONE REI and KIRANE AGEHA. Their worlds, their profiles, their nights, and all three live on one stage. Ten free lock screens, all in 4K.",
