@@ -95,6 +95,8 @@ html.ig .igb{display:block}
 .new.bb .tag{background:var(--red);color:#fff}
 .new.bb h2{font-family:"Saira Condensed",Impact,"Arial Narrow",sans-serif;font-weight:900;letter-spacing:.02em;text-shadow:2px 2px 0 #000,5px 5px 0 #7a0006}
 .new.bb .nl{color:#f0cfd3}
+/* a big drop (VAMPPSYCH VOICE, 10 picks): title on top, one girl per row from 720px, the group shot centered alone */
+@media (min-width:720px){.new.wide{grid-template-columns:minmax(0,1fr);align-items:start}.new.wide .nl{margin:0 0 16px;max-width:46em}.new.wide .grid{grid-template-columns:repeat(3,minmax(0,1fr))}.new.wide .grid li:last-child{grid-column:2}}
 /* the viewer (z 9100, 11/12: over the street strip's back key at 9000, which sat on the close button) */
 .view{position:fixed;inset:0;z-index:9100;display:flex;flex-direction:column;background:#0a0407;
   padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
@@ -132,7 +134,7 @@ html.ig .igb{display:block}
     <p class="sub">tap one, save her &lt;3</p>
     <p class="igb">In Instagram? Tap ⋯ (top right), then <b>Open in browser</b>. Saving works best there.</p>
   </header>
-  <section class="new bb" aria-labelledby="vpv-h">
+  <section class="new bb wide" aria-labelledby="vpv-h">
     <div>
       <span class="tag">NEW 11/16 · 4K</span>
       <h2 id="vpv-h">VAMPPSYCH VOICE</h2>
