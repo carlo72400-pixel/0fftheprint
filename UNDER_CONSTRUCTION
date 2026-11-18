@@ -1,0 +1,9 @@
+0fftheprint.com is UNDER CONSTRUCTION (his call, 11/17/2026).
+
+The street is being rebuilt from real found assets (no generated art). Until then the front page, index.html, is the
+construction page, and it is hand-written: street_rebuild.py and the street kit's build_street.py --site both stop when
+this file is here, so no new night, story, stamp run or scheduled job writes the old street back over it.
+
+Still open: /portfolio/, /business/, every night page, /video/, /word/, and the members' pages by their own addresses.
+
+To reopen: delete this file, then run  /usr/bin/python3 street_rebuild.py --force  and push index.html + street/.

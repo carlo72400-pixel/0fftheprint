@@ -74,6 +74,12 @@ def rebuild(why="", force=False):
     """Rebuild the street for THIS repo if anything it shows has changed. Returns True when it rebuilt. Never raises."""
     tag = "street:"
     try:
+        # 11/17/26 his call: the site is UNDER CONSTRUCTION while the street is rebuilt from found assets. index.html is the
+        # construction page and must stay it. Delete UNDER_CONSTRUCTION in the repo root, then run this with --force, to reopen.
+        if os.path.exists(os.path.join(ROOT, "UNDER_CONSTRUCTION")):
+            print(f"{tag} the front page is UNDER CONSTRUCTION (UNDER_CONSTRUCTION in the repo root): not rebuilt"
+                  + (f" ({why})" if why else "") + ". index.html stays the construction page.")
+            return False
         if os.environ.get("OTP_STREET_REBUILD") == "0":
             print(f"{tag} rebuild is switched off (OTP_STREET_REBUILD=0). The front page is as it was.")
             return False
