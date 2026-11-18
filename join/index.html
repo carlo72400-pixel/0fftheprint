@@ -16,16 +16,18 @@
 <meta name="theme-color" content="#0a0a0d">
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/auth.css?v=35811dc7">
-<style>
+<link rel="stylesheet" href="../assets/css/fe/auth.css?v=99f9b536">
+<style>/*fe*/
 a.btn{text-decoration:none}
 .btn{min-height:48px}
 </style>
+<link rel="stylesheet" data-fe href="../assets/css/evil.css?v=e2549128">
 <link rel="stylesheet" href="../assets/css/street-skin.css?v=1c1b3a38">
 <script src="../assets/js/street-skin.js?v=c80117df" defer></script>
 </head>
 <body>
 <!--sk--><div class="sk-top"><a class="sk-back" href="../#in-door" aria-label="Back to The Coven on the street"><span aria-hidden="true">&lsaquo;</span>Coven</a><b class="sk-place">THE COVEN</b><span class="sk-keys" id="sk-keys"></span></div><!--/sk-->
+<i class="fe-sky" aria-hidden="true"></i>
 <div class="leopard-bar"></div>
 <div class="wrap">
   <h1 id="ttl">Welcome back</h1>
@@ -34,7 +36,7 @@ a.btn{text-decoration:none}
        Crypt's form is the one sign-up, so this page says where it went. -->
   <p class="door-note" id="upnote" hidden>Signing up happens in the Coven now.</p>
 
-  <div class="setup" id="setup" style="display:none">
+  <div class="setup" id="setup" style="display:none" data-fes>
     <b>Backend not switched on yet</b>
     Logins need the Supabase project wired up first. See <code>SUPABASE_SETUP.md</code>
     in the repo, then fill in <code>supabase-config.js</code>. Until then the timeline
@@ -43,7 +45,7 @@ a.btn{text-decoration:none}
 
   <div class="card" id="panel">
     <form id="form" autocomplete="on">
-      <label for="email" style="margin-top:0">Email</label>
+      <label for="email" style="margin-top:0" data-fes>Email</label>
       <input id="email" type="email" required placeholder="you@email.com" autocomplete="email" autocapitalize="none" spellcheck="false">
 
       <label for="pw">Password</label>
@@ -59,7 +61,7 @@ a.btn{text-decoration:none}
   </div>
 
   <div class="card" id="newhere">
-    <div class="note" style="margin-top:0">New here? Join the Coven. Joining asks for your Instagram, one account each.</div>
+    <div class="note" style="margin-top:0" data-fes>New here? Join the Coven. Joining asks for your Instagram, one account each.</div>
     <a class="btn ghost" href="../wall/">Join the Coven</a>
   </div>
 </div>

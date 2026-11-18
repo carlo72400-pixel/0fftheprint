@@ -1,0 +1,47 @@
+@import url("https://fonts.googleapis.com/css2?family=Archivo+Black&family=Oswald:wght@500;600;700&display=swap");
+/* FRUTIGER EVIL, the inner pages (11/17, his "full pass ... nothing out of place"). street_evil.py links this last in every inner
+   page's <head>, after the page's own re-coloured styles. It draws no pictures: the street's pixel night, chrome titles like the
+   3D title, black glass for the strip, the keys and the fields. */
+:root{--fe-night:#0b0610;--fe-ink:#f3fbff;--fe-rim:rgba(190,240,255,.75);--fe-glow:rgba(0,220,255,.26)}
+html{background:#0b0610!important;color-scheme:dark}
+body{background:transparent!important}
+::selection{background:#e0254a;color:#fff}
+
+/* the night: the street's own pixel sky (aurora, moon flare) behind the top of every page, fading into the dark */
+.fe-sky{position:absolute;left:0;right:0;top:0;height:min(78vw,640px);z-index:-1;pointer-events:none;
+  background:linear-gradient(rgba(11,6,16,0) 28%,rgba(11,6,16,.72) 68%,#0b0610 100%),url("../../street/m/sky-night.webp") center top/cover no-repeat;
+  image-rendering:pixelated}
+
+/* page titles: the 3D title's chrome, one horizon per line (silver above, crimson glow below) */
+html:not([data-fe="brand"]) h1{font-family:"Archivo Black",system-ui,sans-serif!important;font-weight:400!important;font-style:normal!important;
+  text-transform:uppercase;letter-spacing:.01em!important;line-height:1.06!important;
+  background:linear-gradient(180deg,#ffffff 0%,#d6dce6 44%,#2a0712 49%,#7c0f28 53%,#d42048 78%,#ff7398 100%)!important;
+  background-size:100% 1.06em!important;background-repeat:repeat-y!important;background-origin:content-box!important;
+  -webkit-background-clip:text!important;background-clip:text!important;color:transparent!important;-webkit-text-fill-color:transparent!important;
+  -webkit-text-stroke:0!important;text-shadow:none!important;filter:drop-shadow(0 .05em 0 #000) drop-shadow(0 0 .28em rgba(224,37,74,.36))}
+html:not([data-fe="brand"]) h1 *{-webkit-text-fill-color:inherit}
+html:not([data-fe="brand"]) h2{font-family:"Oswald",system-ui,sans-serif!important;font-weight:600!important;font-style:normal!important;
+  text-transform:uppercase;letter-spacing:.08em!important}
+
+/* the strip at the top of every page: black glass, the back key a glass pill like the street's */
+.sk-top{background:linear-gradient(#1c1e27,#0c0c12)!important;border:0!important;
+  box-shadow:0 1px 0 rgba(190,240,255,.28),0 8px 20px rgba(0,0,0,.45)!important}
+.sk-place{font-family:"Oswald",system-ui,sans-serif!important;font-weight:600!important;letter-spacing:.14em!important;color:#f3fbff!important;
+  text-shadow:0 0 10px rgba(0,220,255,.35)!important}
+.sk-back,.sk-snd{background:linear-gradient(#41454f 0%,#262830 49%,#0c0c12 50%,#17171f 100%)!important;color:#f3fbff!important;border:0!important;
+  box-shadow:0 0 0 1.5px var(--fe-rim),0 0 12px var(--fe-glow),0 3px 8px rgba(0,0,0,.5)!important;text-shadow:none!important;
+  font-family:"Oswald",system-ui,sans-serif!important;letter-spacing:.06em}
+.sk-back *,.sk-snd *{color:#f3fbff!important}
+
+/* fields: dark glass with a cold rim */
+input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=file]):not([type=submit]):not([type=button]),textarea,select{
+  background:#101118!important;color:#f3fbff!important;border-color:rgba(190,240,255,.35)!important}
+input::placeholder,textarea::placeholder{color:#8d93a3!important}
+/* the strip's other keys (MY COLLECTION on the night pages) */
+.sk-keys>a,.sk-keys>button:not(.sk-snd){background:linear-gradient(#41454f 0%,#262830 49%,#0c0c12 50%,#17171f 100%)!important;color:#f3fbff!important;
+  border:0!important;border-radius:999px!important;box-shadow:0 0 0 1.5px var(--fe-rim),0 0 12px var(--fe-glow),0 3px 8px rgba(0,0,0,.5)!important;
+  font-family:"Oswald",system-ui,sans-serif!important;letter-spacing:.06em}
+.sk-keys>a *,.sk-keys>button:not(.sk-snd) *{color:#f3fbff!important}
+.sk-keys img{image-rendering:pixelated}
+/* the Coven's masthead title sits in a narrow column beside its keys: the chrome letters run wider than the old face */
+html:not([data-fe="brand"]) .mast-l h1.word{font-size:clamp(28px,9.2vw,52px)!important;letter-spacing:-.01em!important}

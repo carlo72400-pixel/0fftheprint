@@ -184,6 +184,12 @@ def main() -> int:
         street_skin.apply_all()
     except Exception as e:
         print(f"  street skin NOT applied ({e}); the pages are as they were")
+    # 11/17: FRUTIGER EVIL on every inner page (street_evil.py: re-coloured styles, the night sky, chrome titles), right after the strip
+    try:
+        import street_evil
+        street_evil.apply_all()
+    except Exception as e:
+        print(f"  street evil NOT applied ({e}); the pages are as they were")
     stamps, css = current()
 
     if not stamps:

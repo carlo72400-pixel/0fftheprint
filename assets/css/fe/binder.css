@@ -1,0 +1,178 @@
+/*fe*//* re-coloured copy of assets/css/binder.css src=04973e99 (street_evil.py) */
+/* 0FF THE PRINT — THE BINDER (10/4). The look of assets/js/binder.js.
+   The chip, the house bar on pages that are not the homepage, the progress under a
+   pack, the next packs under a night, and the sheet.
+
+   ⛔ SELF-CONTAINED AND SCOPED. This file is loaded by the homepage, /events/ and every
+      night page, and each of those owns its own .wrap .back .grid .foot and h1.
+      Everything in here is .bn-*, plus the two hooks binder.js puts on a pack tile (and, since Wave 2, the
+      .bn-* controls sealed.js puts in a night's .lb-who line, at the bottom).
+   ⛔ EVERY COLOR HAS A FALLBACK. The night pages define the same variables the homepage
+      does, but a page that does not must still get a readable bar. */
+
+/* ---------------- the chip ---------------- */
+.bn-chip{display:inline-flex;align-items:center;gap:6px;flex:none;min-height:44px;padding:3px 11px 3px 5px;cursor:pointer;
+  border:1px solid rgba(180,139,166,0.3);border-radius:3px;background:rgba(44,46,53,0.05);color:var(--ink-t,var(--ink,#f4eef2));
+  font-family:var(--f-display,'Saira Condensed',sans-serif);font-style:italic;font-weight:900;font-size:17px;line-height:1;letter-spacing:.02em;text-transform:uppercase;
+  transition:border-color .18s,background .18s,transform .18s}
+.bn-chip:hover{border-color:var(--pink-glow-l,var(--pink-glow,#ff1099));background:rgba(111,9,68,0.1)}
+.bn-chip:focus-visible{outline:2px solid var(--pink-glow-l,var(--pink-glow,#ff1099));outline-offset:3px}
+.bn-chip img{display:block;width:26px;height:26px;object-fit:contain;filter:drop-shadow(0 2px 4px rgba(0,0,0,.6))}
+.bn-chip .bn-n{white-space:nowrap}
+.bn-chip:not(.has) .bn-n{font-family:var(--f-mono,monospace);font-style:normal;font-weight:700;font-size:11px;letter-spacing:.16em}
+.bn-chip .bn-h{display:none;align-items:center;gap:3px;color:#fade9e}
+.bn-chip.hit .bn-h{display:inline-flex}
+/* the hit mark: a drawn spark, not a glyph */
+.bn-chip .bn-h::before,.bn-night.hit .bn-pic::after{content:'';display:block;width:10px;height:10px;background:#8e670e;flex:none;
+  clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%)}
+.bn-chip.bump{animation:bn-bump .5s cubic-bezier(.2,.9,.3,1.3)}
+@keyframes bn-bump{0%{transform:scale(1)}35%{transform:scale(1.14);border-color:var(--pink-glow-l,var(--pink-glow,#ff1099));box-shadow:0 0 18px rgba(255,121,198,.55)}100%{transform:scale(1)}}
+
+/* ---------------- the house bar (not on the homepage, which has its own nav) ---------------- */
+.bn-bar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:16px;padding:3px 18px;
+  background:rgba(13,12,17,.94);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--line-l,var(--line,#3a3f4c))}
+.bn-bar .bn-wm{display:inline-flex;align-items:center;min-height:44px;min-width:44px;gap:5px;flex:none;text-decoration:none;color:var(--ink-t,var(--ink,#f4eef2));
+  font-family:'Cinzel',var(--f-mono,serif);font-weight:800;font-size:13px;letter-spacing:.2em;white-space:nowrap}
+.bn-bar .bn-wm img{display:block;height:26px;width:auto;filter:drop-shadow(0 0 7px rgba(255,121,198,.5))}
+.bn-bar .bn-links{display:flex;gap:18px;flex:1;min-width:0;overflow-x:auto;scrollbar-width:none}
+.bn-bar .bn-links::-webkit-scrollbar{display:none}
+.bn-bar .bn-links a{font-family:var(--f-mono,monospace);font-size:11px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;white-space:nowrap;
+  color:var(--muted-t,var(--muted,#cbc8d0));padding:0;min-height:44px;display:inline-flex;align-items:center}
+.bn-bar .bn-links a:hover,.bn-bar .bn-links a[aria-current="page"]{color:var(--pink-glow-t,var(--pink-glow,#fa9ed3))}
+/* the old rainbow strip and the lone back link said the same thing the bar says now */
+html.bn-has-bar .leopard-bar{height:3px;background:linear-gradient(90deg,transparent,#1e1f25 12%,#2e3038 50%,#1e1f25 88%,transparent);opacity:.55}
+@media (max-width:560px){
+  .bn-bar{gap:12px;padding:7px 14px}
+  .bn-bar .bn-wm span{display:none}
+  .bn-bar .bn-links{gap:15px}
+  /* the mark is the way home here; with Home in the row, Coven ran off the edge at 360 to 390px */
+  .bn-bar .bn-links .bn-home{display:none}
+}
+
+/* ---------------- a pack tile: how far in you are ---------------- */
+.bn-tag{position:absolute;z-index:2;top:9%;left:-3%;padding:3px 9px 3px 8px;transform:rotate(-8deg);
+  background:var(--pink-glow,#6f0944);color:#efcadf;border:1px solid #3a3f4c;box-shadow:2px 2px 0 rgba(0,0,0,.55);
+  font:700 11px/1.2 Verdana,Geneva,Tahoma,sans-serif;letter-spacing:.04em;text-transform:uppercase}
+.bn-prog{display:block;margin:7px auto 0;max-width:150px;text-align:center}
+.bn-prog i{display:block;height:5px;border:1px solid rgba(180,139,166,0.3);background:rgba(44,46,53,0.06);position:relative;overflow:hidden}
+.bn-prog i::after{content:'';position:absolute;left:0;top:0;bottom:0;width:var(--p,0%);background:var(--pink-glow,#6f0944);box-shadow:0 0 8px rgba(255,121,198,.7)}
+.bn-prog b{display:block;margin-top:5px;font-family:var(--f-mono,monospace);font-weight:500;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--pink-t,var(--pink,#f7b9dd))}
+/* the tile's own "45 frames · sealed" line steps aside once the pack is open: the meter says it better */
+a.bn-open .cap .d,a.bn-open .cap > i{display:none !important}
+a.bn-hit .bn-prog i::after{background:linear-gradient(90deg,var(--pink-glow,#6f0944),#8e670e)}
+a.bn-done .bn-prog i::after{background:#8e670e;box-shadow:0 0 8px rgba(247,208,70,.7)}
+a.bn-done .bn-prog b{color:#fade9e}
+
+/* ---------------- under a night: the next packs ---------------- */
+.bn-next{margin-top:54px;padding-top:26px;border-top:1px solid var(--line-l,var(--line,#3a3f4c))}
+.bn-next-h{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+.bn-next-h h2{font-family:var(--f-display,'Saira Condensed',sans-serif);font-style:italic;font-weight:900;text-transform:uppercase;font-size:30px;line-height:1;color:var(--ink-t,var(--ink,#f4eef2))}
+.bn-next-h span{font-family:var(--f-mono,monospace);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-t,var(--muted,#cbc8d0))}
+.bn-rail{display:grid;grid-template-columns:repeat(4,minmax(0,190px));gap:22px;align-items:start}
+.bn-pk{display:block;text-decoration:none;color:inherit;text-align:center;min-width:0}
+.bn-pk .cap{display:block;padding:10px 2px 0}
+.bn-pk .cap b{display:block;font-family:var(--f-display,'Saira Condensed',sans-serif);font-style:italic;font-weight:900;text-transform:uppercase;font-size:16px;line-height:1.05;color:var(--ink-t,var(--ink,#f4eef2));overflow-wrap:anywhere}
+.bn-pk .cap i{display:block;font-style:normal;font-family:var(--f-mono,monospace);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--pink-deep-t,var(--pink-deep,#f6a2d1));margin-top:5px}
+.bn-pk:hover .cap b{color:var(--pink-glow-t,var(--pink-glow,#fa9ed3))}
+.bn-all{display:inline-block;margin-top:22px;font-family:var(--f-mono,monospace);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--pink-glow-t,var(--pink-glow,#fa9ed3));text-decoration:none}
+@media (max-width:640px){
+  .bn-next{margin-top:40px}
+  .bn-next-h h2{font-size:26px}
+  .bn-rail{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:minmax(140px,42vw);gap:14px;overflow-x:auto;scrollbar-width:none;padding:6px 2px 10px;margin:0 -18px;padding-left:18px;padding-right:18px}
+  .bn-rail::-webkit-scrollbar{display:none}
+}
+
+/* ---------------- the sheet ---------------- */
+html.bn-open-sheet,html.bn-open-sheet body{overflow:hidden}
+.bn-sheet{position:fixed;inset:0;z-index:300;display:grid;place-items:center;padding:18px;background:rgba(6,6,9,.82);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.bn-sheet[hidden]{display:none}
+.bn-card{position:relative;width:min(520px,100%);max-height:min(86vh,760px);display:flex;flex-direction:column;
+  background:#131217;border:1px solid rgba(255,16,153,0.5);box-shadow:0 30px 80px rgba(0,0,0,.7);animation:bn-rise .28s cubic-bezier(.2,.8,.2,1)}
+@keyframes bn-rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.bn-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex:none;padding:7px 8px 7px 12px;background:var(--pink-glow,#6f0944);color:#efcadf}
+.bn-head h2{font:700 12px/1.2 Verdana,Geneva,Tahoma,sans-serif;letter-spacing:.03em;margin:0}
+.bn-x{width:32px;height:32px;border:1px solid #3a3f4c;background:rgba(31,10,22,0.12);color:#efcadf;font-size:20px;line-height:1;cursor:pointer;border-radius:0}
+.bn-x:hover{background:#1f0a16;color:var(--pink-glow-t,var(--pink-glow,#fa9ed3))}
+.bn-x{position:relative}
+.bn-x::after{content:'';position:absolute;inset:-7px}      /* 11/14: the key looks as it did (32 px) and takes a 44 px press (its inside is 30 px, plus 7 each way) */
+.bn-body{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:14px 14px 18px}
+.bn-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.bn-stat{padding:10px 8px 9px;border:1px solid rgba(180,139,166,0.18);background:rgba(44,46,53,0.04);text-align:center;min-width:0}
+.bn-stat b{display:block;font-family:var(--f-display,'Saira Condensed',sans-serif);font-style:italic;font-weight:900;font-size:30px;line-height:1;color:var(--ink-t,var(--ink,#f4eef2))}
+.bn-stat b i{font-style:normal;font-family:var(--f-mono,monospace);font-weight:500;font-size:11px;letter-spacing:.04em;color:var(--muted-t,var(--muted,#cbc8d0))}
+.bn-stat span{display:block;margin-top:6px;font-family:var(--f-mono,monospace);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--pink-t,var(--pink,#f7b9dd))}
+.bn-go{display:block;margin-top:12px;padding:12px 14px;text-decoration:none;text-align:center;
+  background:linear-gradient(180deg,var(--pink,#75134c),var(--pink-deep,#6b1044));color:#f0cadf;border:1px solid #3a3f4c;box-shadow:3px 3px 0 rgba(244,238,242,.3)}
+.bn-go:hover{transform:translate(1px,1px);box-shadow:2px 2px 0 rgba(244,238,242,.3)}
+.bn-go b{display:block;font-family:var(--f-display,'Saira Condensed',sans-serif);font-style:italic;font-weight:900;text-transform:uppercase;font-size:20px;line-height:1.05}
+.bn-go span{display:block;margin-top:4px;font-family:var(--f-mono,monospace);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+.bn-body h3{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:20px 0 8px;padding-bottom:6px;border-bottom:1px dotted rgba(180,139,166,0.3);
+  font-family:var(--f-display,'Saira Condensed',sans-serif);font-style:italic;font-weight:900;text-transform:uppercase;font-size:21px;line-height:1;color:var(--ink-t,var(--ink,#f4eef2))}
+.bn-body h3 small{font-family:var(--f-mono,monospace);font-style:normal;font-weight:500;font-size:11px;letter-spacing:.16em;color:var(--muted-t,var(--muted,#cbc8d0))}
+.bn-night{display:grid;grid-template-columns:54px minmax(0,1fr) auto;gap:11px;align-items:center;padding:7px 4px;text-decoration:none;color:var(--ink-t,var(--ink,#f4eef2));border-bottom:1px dotted rgba(180,139,166,0.14)}
+.bn-night:hover{background:rgba(111,9,68,0.06)}
+.bn-pic{position:relative;display:block;width:54px;height:54px;border:1px solid rgba(180,139,166,0.25);background:#0a0a0d;overflow:visible}
+.bn-pic img{display:block;width:100%;height:100%;object-fit:cover;filter:brightness(.45) saturate(.6)}
+.bn-night.open .bn-pic img{filter:none}
+.bn-night.hit .bn-pic{border-color:#eba70a;box-shadow:0 0 10px rgba(247,208,70,.45)}
+.bn-night.hit .bn-pic::after{position:absolute;right:-6px;top:-6px;width:15px;height:15px;filter:drop-shadow(0 0 3px #000)}
+.bn-tx{min-width:0;display:block}
+.bn-tx b{display:block;font-family:var(--f-display,'Saira Condensed',sans-serif);font-style:italic;font-weight:900;text-transform:uppercase;font-size:17px;line-height:1.05;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bn-tx > span:not(.bn-meter){display:block;margin-top:3px;font-family:var(--f-mono,monospace);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-t,var(--muted,#cbc8d0));white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bn-meter{display:block;margin-top:6px;height:4px;background:rgba(44,46,53,0.1);position:relative;overflow:hidden}
+.bn-meter i{position:absolute;left:0;top:0;bottom:0;width:var(--p,0%);background:var(--pink-glow,#6f0944)}
+.bn-night.done .bn-meter i{background:#8e670e}
+.bn-night em{font-style:normal;font-family:var(--f-mono,monospace);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-t,var(--muted,#cbc8d0));white-space:nowrap}
+.bn-night.open em{color:var(--pink-t,var(--pink,#f7b9dd))}
+.bn-night.done em{color:#fade9e}
+.bn-link{display:inline-block;margin-top:12px;font:700 11.5px/1.4 Verdana,Geneva,Tahoma,sans-serif;color:var(--pink-glow-t,var(--pink-glow,#fa9ed3));text-decoration:underline;text-underline-offset:2px}
+.bn-fine{margin:18px 0 0;font:11px/1.5 Verdana,Geneva,Tahoma,sans-serif;color:var(--muted-t,var(--muted,#cbc8d0))}
+@media (max-width:560px){
+  /* a sheet off the bottom edge, under the thumb */
+  .bn-sheet{place-items:end center;padding:0}
+  .bn-card{width:100%;max-height:88vh;max-height:88dvh;border-left:0;border-right:0;border-bottom:0}      /* 11/14: vh is the screen with Safari's bars put away; with them showing on a small iPhone the sheet's head and its close key were pushed off the top. dvh is the screen that is showing; the vh line stays for browsers without it */
+  .bn-body{padding-bottom:calc(22px + env(safe-area-inset-bottom,0px))}
+}
+/* ---------------- a night's lightbox: the tag line's controls (sealed.js, Wave 2) ----------------
+   Not the binder's, but this file is on every night page and sealed.css belongs to no Wave 2 task, so they live here,
+   .bn-* like the rest. The desk's cross takes one tag off; a member's Not them? opens the chooser under the names. */
+.lb-who .bn-untag{display:inline-grid;place-items:center;min-width:28px;min-height:28px;margin-left:4px;padding:0 6px;vertical-align:middle;cursor:pointer;
+  border:1px solid rgba(255,16,153,0.55);border-radius:0;background:transparent;color:var(--pink-glow-t,var(--pink-glow,#fa9ed3));font:700 15px/1 var(--f-mono,monospace)}
+.lb-who .bn-untag:hover{background:var(--pink-glow,#6f0944);color:#e0e0e7}
+.lb-who .bn-untag:disabled{opacity:.5;cursor:default}
+.lb-who .bn-notthem{display:inline-block;min-height:32px;margin-left:6px;padding:6px 8px;vertical-align:middle;border:0;background:none;cursor:pointer;color:var(--pink-t,var(--pink,#f7b9dd));font:inherit;letter-spacing:.08em;text-decoration:underline;text-underline-offset:2px}
+.lb-who .bn-sent{margin-left:6px;color:var(--muted-t,var(--muted,#cbc8d0));font-size:11px;letter-spacing:.16em;text-transform:uppercase}
+.lb-who .bn-said{display:block;margin-top:6px;color:var(--pink-t,var(--pink,#f7b9dd))}
+.lb-who .bn-why{display:block;margin-top:8px;padding-top:8px;border-top:1px dotted rgba(180,139,166,0.3)}
+.lb-who .bn-why b{display:block;margin-bottom:6px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+.lb-who .bn-why-c{display:flex;flex-wrap:wrap;gap:6px}
+.lb-who .bn-why-b{min-height:34px;padding:0 10px;cursor:pointer;border:1px solid rgba(180,139,166,0.3);border-radius:0;background:#0d0c11;color:var(--ink-t,var(--ink,#f4eef2));
+  font:400 11px/1.2 var(--f-mono,monospace);letter-spacing:.12em;text-transform:uppercase}
+.lb-who .bn-why-b:hover{border-color:var(--pink-glow-l,var(--pink-glow,#ff1099))}
+.lb-who .bn-why-b.go{background:var(--pink-glow,#6f0944);color:#e0e0e7;border-color:var(--pink-glow-l,var(--pink-glow,#ff1099))}
+.lb-who .bn-why-b:disabled{opacity:.5;cursor:default}
+/* 16px: a smaller box makes a phone zoom the whole page in */
+.lb-who .bn-why input{display:block;width:100%;margin:8px 0 6px;padding:8px 10px;border:1px solid rgba(180,139,166,0.3);border-radius:0;background:#0d0c11;color:var(--ink-t,var(--ink,#f4eef2));
+  font:400 16px/1.3 var(--f-body,'Inter',system-ui,sans-serif);letter-spacing:0}
+.lb-who .bn-why input:focus{outline:none;border-color:var(--pink-glow-l,var(--pink-glow,#ff1099))}
+.lb-who .bn-why-m{margin:6px 0 0;color:#fa9e9e}
+
+@media (prefers-reduced-motion:reduce){ .bn-card,.bn-chip.bump{animation:none} .bn-go,.bn-chip{transition:none} }
+
+/* ---- 11/12: one bag. The chip sits in the street strip's corner (#sk-keys), and the sheet lists what the street's own bag holds. ---- */
+#sk-keys .bn-chip{min-height:44px;margin:0}
+/* 11/13: the bag is MY COLLECTION. An empty chip says MY COLLECTION beside its picture; in a phone's strip there is no
+   room for that beside the place's name, so there it says COLLECTION under the picture, in the same footprint as before. */
+.bn-chip .bn-my{font-style:normal}
+@media (max-width:480px){
+  #sk-keys .bn-chip:not(.has){flex-direction:column;justify-content:center;gap:2px;padding:3px 5px}
+  #sk-keys .bn-chip:not(.has) img{width:22px;height:22px}
+  #sk-keys .bn-chip:not(.has) .bn-n{font:700 9px/1 system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:.03em}
+  #sk-keys .bn-chip:not(.has) .bn-my{display:none}
+}
+.bn-street{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin:0 0 14px}
+.bn-sitem{display:flex;align-items:center;gap:9px;min-height:60px;padding:6px 8px;border-radius:10px;text-decoration:none;color:inherit;background:rgba(46,48,56,0.05);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+.bn-sitem img{flex:none;width:40px;height:54px;object-fit:contain}
+.bn-sitem .bn-tx{display:flex;flex-direction:column;gap:3px;min-width:0}
+.bn-sitem .bn-tx b{font-size:12.5px;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bn-sitem .bn-tx span{font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:.7}

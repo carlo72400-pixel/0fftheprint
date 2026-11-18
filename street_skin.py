@@ -53,7 +53,7 @@ RULES = [
     (r"^(?:dates|join|reset|my|compose)/index\.html$", "door"),
     (r"^(?:reliquary|font|wallpapers)/index\.html$", "bites"),
     (r"^yorune/(?:[^/]+/)?index\.html$", "bites"),          # 11/17: 夜音 YORUNE, our own virtual singers (the group + one page each)
-    (r"^(?:work|press)/index\.html$", "street"),
+    (r"^(?:work|press|credits)/index\.html$", "street"),
     (r"^404\.html$", "street"),
     (r"^(?:kit|ad)/index\.html$", "kit"),
     (r"^kit/vlog/index\.html$", "kit"),
@@ -62,7 +62,7 @@ INLINE = ("kit/index.html",)                          # an offline app: the key'
 GLOBS = ["events/index.html", "events/*/index.html", "word/index.html", "word/*/index.html",
          "video/index.html", "ink/index.html", "dates/index.html", "join/index.html", "reset/index.html", "my/index.html",
          "compose/index.html", "take/index.html", "reliquary/index.html", "font/index.html",
-         "wallpapers/index.html", "yorune/index.html", "yorune/*/index.html", "work/index.html", "press/index.html", "404.html", "kit/index.html", "ad/index.html",
+         "wallpapers/index.html", "yorune/index.html", "yorune/*/index.html", "work/index.html", "press/index.html", "credits/index.html", "404.html", "kit/index.html", "ad/index.html",
          "kit/vlog/index.html"]
 
 KEY_CSS = (".sk-back{position:fixed;left:max(12px,env(safe-area-inset-left,0px));top:max(6px,env(safe-area-inset-top,0px));z-index:9000;"

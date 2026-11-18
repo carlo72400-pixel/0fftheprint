@@ -16,38 +16,38 @@
 <meta name="twitter:image" content="https://0fftheprint.com/assets/work/w3-zen-025.jpg">
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#0a0a0d;--panel:#121218;--line:#23222b;--ink:#f4eef2;--muted:#9a93a3;
---pink:#f7b9dd;--pink-deep:#f48fc8;--pink-glow:#ff79c6;--dye-blue:#2f6bff;
+<style>/*fe*/
+:root{--bg:#0a0a0d;--bg-t:#e0e0e7;--bg-l:#3a3f4c;--panel:#121218;--panel-t:#dfe2e7;--panel-l:#3a3f4c;--line:#0f1012;--line-t:#e1e1e7;--line-l:#3a3f4c;--ink:#2c2e35;--ink-t:#f4eef2;--ink-l:#b48ba6;--muted:#1e2025;--muted-t:#cbc8d0;--muted-l:#786f82;
+--pink:#75134c;--pink-t:#f7b9dd;--pink-l:#e93fa2;--pink-deep:#6b1044;--pink-deep-t:#f6a2d1;--pink-deep-l:#ea2a96;--pink-glow:#6f0944;--pink-glow-t:#fa9ed3;--pink-glow-l:#ff1099;--dye-blue:#08275d;--dye-blue-t:#9ec0fa;--dye-blue-l:#0057ee;
 --f-display:'Saira Condensed',sans-serif;--f-body:'Inter',system-ui,sans-serif;--f-mono:'JetBrains Mono',monospace;}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+body{background:var(--bg);color:var(--ink-t,var(--ink));font-family:var(--f-body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
 .leopard-bar{height:14px;background:linear-gradient(90deg,var(--pink-deep),var(--pink) 25%,var(--dye-blue) 50%,var(--pink-deep) 75%,var(--pink))}
 .wrap{max-width:1400px;margin:0 auto;padding:26px 18px 70px}
-.back{font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);text-decoration:none;display:inline-block;margin-bottom:22px}
-.back:hover{color:var(--pink-glow)}
+.back{font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-t,var(--muted));text-decoration:none;display:inline-block;margin-bottom:22px}
+.back:hover{color:var(--pink-glow-t,var(--pink-glow))}
 h1{font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;
 font-size:clamp(34px,7vw,76px);line-height:.94;letter-spacing:-.01em;
-background:linear-gradient(180deg,#fff 10%,var(--pink) 45%,#8f8a97 60%,var(--pink-deep) 96%);
+background:linear-gradient(180deg,#2e3038 10%,var(--pink) 45%,#1d1e23 60%,var(--pink-deep) 96%);
 -webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 4px 24px rgba(255,121,198,.22))}
-.meta{font-family:var(--f-mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-top:10px}
-.meta b{color:var(--pink-glow);font-weight:500}
+.meta{font-family:var(--f-mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted-t,var(--muted));margin-top:10px}
+.meta b{color:var(--pink-glow-t,var(--pink-glow));font-weight:500}
 .filters{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
-.fpill{font-family:var(--f-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);
-background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:7px 14px;cursor:pointer}
-.fpill:hover{border-color:var(--pink-deep);color:var(--ink)}
-.fpill.on{background:rgba(255,121,198,.14);border-color:var(--pink-glow);color:var(--pink)}
+.fpill{font-family:var(--f-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted-t,var(--muted));
+background:var(--panel);border:1px solid var(--line-l,var(--line));border-radius:999px;padding:7px 14px;cursor:pointer}
+.fpill:hover{border-color:var(--pink-deep-l,var(--pink-deep));color:var(--ink-t,var(--ink))}
+.fpill.on{background:rgba(111,9,68,0.14);border-color:var(--pink-glow-l,var(--pink-glow));color:var(--pink-t,var(--pink))}
 .grid{columns:4 260px;column-gap:12px;margin-top:24px}
 .tile{break-inside:avoid;margin:0 0 12px;position:relative;display:block;width:100%;
-border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--panel);cursor:zoom-in}
+border:1px solid var(--line-l,var(--line));border-radius:8px;overflow:hidden;background:var(--panel);cursor:zoom-in}
 .tile img{width:100%;height:100%;object-fit:cover;display:block}
 .tile figcaption{position:absolute;left:0;right:0;bottom:0;padding:22px 10px 8px;font-family:var(--f-mono);
-font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--pink);
+font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--pink-t,var(--pink));
 background:linear-gradient(180deg,transparent,rgba(10,10,13,.88))}
 .tile.hid{display:none}
-.foot{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);
-font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
-.foot a{color:var(--pink-glow);text-decoration:none}
+.foot{margin-top:44px;padding-top:20px;border-top:1px solid var(--line-l,var(--line));
+font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-t,var(--muted))}
+.foot a{color:var(--pink-glow-t,var(--pink-glow));text-decoration:none}
 /* 11/4: footer and contact links keep their type size. On a phone the hit area is 44px. */
 @media(max-width:900px){
   .foot a,a[href^="mailto:"]{display:inline-block;max-width:100%;line-height:1.25;padding:16px 3px;margin:0 -3px;vertical-align:middle}
@@ -56,14 +56,14 @@ font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;text-transform:upp
 align-items:center;justify-content:center;flex-direction:column;padding:16px}
 .lb.open{display:flex}
 .lb img{max-width:96vw;max-height:82vh;border-radius:6px}
-.lb-cap{margin-top:12px;font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--pink)}
+.lb-cap{margin-top:12px;font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--pink-t,var(--pink))}
 /* a frame from a night we put up gets a way to the rest of that night */
-.lb-night{margin-top:8px;font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--pink-glow);
-text-decoration:none;border-bottom:1px solid rgba(255,121,198,.45);padding-bottom:2px}
-.lb-night:hover{color:var(--ink)}
+.lb-night{margin-top:8px;font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--pink-glow-t,var(--pink-glow));
+text-decoration:none;border-bottom:1px solid rgba(255,16,153,0.45);padding-bottom:2px}
+.lb-night:hover{color:var(--ink-t,var(--ink))}
 .lb-night[hidden]{display:none}
-.lb-x,.lb-n,.lb-p{position:absolute;background:rgba(18,18,24,.9);border:1px solid var(--line);
-color:var(--ink);width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer;line-height:1}
+.lb-x,.lb-n,.lb-p{position:absolute;background:rgba(18,18,24,.9);border:1px solid var(--line-l,var(--line));
+color:var(--ink-t,var(--ink));width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer;line-height:1}
 .lb-x{top:calc(16px + env(safe-area-inset-top,0px));right:16px}      /* 11/14: opened from the home screen icon the page is drawn under the status bar: the key keeps its height clear */
 .lb-p{left:12px;top:50%;transform:translateY(-50%)}
 .lb-n{right:12px;top:50%;transform:translateY(-50%)}
@@ -73,13 +73,15 @@ color:var(--ink);width:44px;height:44px;border-radius:50%;font-size:20px;cursor:
 /* 10/22 scrim: the tile label sits on the photo, so it gets a dark fade under it */
 .tile figcaption{background:linear-gradient(180deg,rgba(10,10,13,0),rgba(10,10,13,.88) 45%);text-shadow:0 1px 2px #000}
 </style>
-<link rel="stylesheet" href="../assets/css/binder.css?v=04973e99">
+<link rel="stylesheet" href="../assets/css/fe/binder.css?v=d8f12967">
 <script src="../assets/js/binder.js?v=301b2a56" defer></script>
+<link rel="stylesheet" data-fe href="../assets/css/evil.css?v=e2549128">
 <link rel="stylesheet" href="../assets/css/street-skin.css?v=1c1b3a38">
 <script src="../assets/js/street-skin.js?v=c80117df" defer></script>
 </head>
 <body>
 <!--sk--><div class="sk-top"><a class="sk-back" href="../" aria-label="Back to 0Ff The Print on the street"><span aria-hidden="true">&lsaquo;</span>Street</a><b class="sk-place">0FF THE PRINT</b><span class="sk-keys" id="sk-keys"></span></div><!--/sk-->
+<i class="fe-sky" aria-hidden="true"></i>
 <div class="leopard-bar"></div>
 <div class="wrap">
   <h1>The Work</h1>

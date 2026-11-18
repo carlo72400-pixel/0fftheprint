@@ -1,0 +1,587 @@
+/*fe*//* re-coloured copy of assets/css/cathedral.css src=3329ef2e (street_evil.py) */
+/* 0FF THE PRINT — THE CATHEDRAL (10/3).
+   The homepage skin: the lounge up top, the tab cards, the party packs, the
+   boxes down the side. Loaded AFTER the inline sheet so it wins on order.
+
+   ⛔ EVERYTHING IS SCOPED UNDER html.cath. One class on <html> is the switch:
+      take it off and the page is the one that shipped before this file.
+   ⛔ NOTHING HERE TOUCHES BEHAVIOUR. Ids, mounts and the tab router are the
+      inline page's. This file only decides what things look like.
+   ⛔ Section heads STAY ON SAIRA. See "THE LOGO SYSTEM" in index.html: the
+      display face was tuned once and swapping it is never one line. The only
+      type this adds is Cinzel (already the logo face) on the hero line. */
+
+html.cath{
+  --silver:#272930;--silver-t:#cfd2da;--silver-l:#858ca1; --silver-d:#1e1f25;--silver-d-t:#c8cad0;--silver-d-l:#6d7281; --box:#131217;--box-t:#e2e0e7;--box-l:#3a3f4c; --box-line:rgba(111,9,68,0.5);--box-line-t:rgba(250,158,211,0.5);--box-line-l:rgba(255,16,153,0.5);
+  --hero-h:min(78vh,42vw);
+}
+html.cath body::before{display:none;}                       /* the old gyaru deco strip */
+html.cath .leopard-bar{height:3px;background:linear-gradient(90deg,transparent,var(--silver-d) 12%,#2e3038 50%,var(--silver-d) 88%,transparent);opacity:.55;}
+
+/* ---------------- nav: the wordmark comes home ---------------- */
+html.cath nav.site a.wm{display:inline-flex;align-items:center;gap:5px;font-family:var(--f-logo);font-weight:800;
+  font-size:15px;letter-spacing:.26em;white-space:nowrap;color:var(--ink-t,var(--ink));}
+html.cath nav.site a.wm::after{display:none;}
+html.cath nav.site a.wm img{display:block;height:30px;width:auto;margin:-6px 0;filter:drop-shadow(0 0 7px rgba(255,121,198,.5));}
+html.cath nav.site .cta{border-radius:3px;position:relative;}
+@media (min-width:821px) and (max-width:1180px){ html.cath nav.site a.wm span{display:none;} }
+/* ⛔ ONE ROW, IN EVERY DOOR STATE. Signed in, the nav also carries CRYPT, a longer key ("Your desk") and the
+   binder chip: at 821-900 that pushed the whole page sideways (an iPad slid, Follow was cut off), and at
+   1121-1366 the sticky bar wrapped to two rows on every tab. Measured at 821-1600 for out, pending, casual,
+   card and desk. Tablets get tighter spacing; small laptops keep the tablet rules (no handle after Follow).
+   :not(.wm) because a bare `a` here ties a.wm above on specificity and comes later, so it re-tracked the wordmark. */
+@media (min-width:821px) and (max-width:1120px){
+  html.cath.tabs nav.site{gap:12px;padding-left:16px;padding-right:16px;}
+  html.cath.tabs nav.site a:not(.wm){letter-spacing:.1em;}
+}
+@media (min-width:1121px) and (max-width:1440px){
+  html.cath.tabs nav.site{flex-wrap:nowrap;gap:18px;padding-left:22px;padding-right:22px;}
+  html.cath.tabs nav.site a:not(.wm){white-space:nowrap;letter-spacing:.16em;}
+  html.cath.tabs nav.site .nav-long{display:none;}
+}
+@media (max-width:820px){
+  html.cath nav.site{gap:12px;padding:10px 16px;flex-wrap:nowrap;}
+  html.cath nav.site a.wm{font-size:12.5px;letter-spacing:.12em;order:-1;}
+  html.cath nav.site .cta{padding:8px 11px;}
+  html.cath nav.site a.wm img{height:26px;}
+}
+@media (max-width:359px){ html.cath nav.site a.wm span{display:none;} }
+
+/* ---------------- the hero: the lounge ---------------- */
+html.cath .pulse-banner.hero{
+  position:relative;z-index:1;max-width:none;margin:0;padding:0;text-align:center;overflow:hidden;
+  height:var(--hero-h);min-height:420px;
+  background:#0a0a0d url('../../cathedral/hero.webp') 50% 92%/cover no-repeat;
+  border-bottom:1px solid var(--line-l,var(--line));
+}
+html.cath .hero::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:1;background:
+  linear-gradient(to bottom,rgba(10,10,13,.6) 0,rgba(10,10,13,0) 20%,rgba(10,10,13,0) 78%,rgba(10,10,13,.55) 95%,var(--bg) 100%);}
+html.cath .hero::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:1;
+  background:repeating-linear-gradient(to bottom,rgba(46,48,56,0.028) 0 1px,transparent 1px 3px);mix-blend-mode:screen;}
+
+html.cath .hero-rose{position:absolute;z-index:1;left:50%;top:18.5%;width:30vw;height:30vw;max-width:520px;max-height:520px;
+  transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;mix-blend-mode:screen;
+  background:radial-gradient(circle,rgba(111,9,68,0.32),rgba(111,9,68,0.09) 45%,transparent 70%);
+  animation:cath-breathe 5.5s ease-in-out infinite;}
+@keyframes cath-breathe{0%,100%{opacity:.45;transform:translate(-50%,-50%) scale(.94)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.06)}}
+
+html.cath .hero-bats{position:absolute;inset:0;z-index:2;overflow:hidden;pointer-events:none;}
+html.cath .hero-bats i{position:absolute;left:-40px;width:26px;height:14px;background:#060506;
+  clip-path:polygon(50% 38%,58% 20%,64% 38%,78% 8%,100% 30%,90% 34%,84% 58%,72% 48%,62% 78%,50% 60%,38% 78%,28% 48%,16% 58%,10% 34%,0 30%,22% 8%,36% 38%,42% 20%);
+  animation:cath-fly linear infinite,cath-flap .28s ease-in-out infinite alternate;}
+html.cath .hero-bats i:nth-child(1){top:12%;animation-duration:21s,.26s;animation-delay:-3s,0s;}
+html.cath .hero-bats i:nth-child(2){top:22%;animation-duration:28s,.3s;animation-delay:-15s,0s;scale:.7;}
+html.cath .hero-bats i:nth-child(3){top:7%;animation-duration:33s,.24s;animation-delay:-23s,0s;scale:.55;}
+@keyframes cath-fly{0%{translate:0 0}25%{translate:27vw -4vh}50%{translate:54vw 3vh}75%{translate:80vw -5vh}100%{translate:calc(100vw + 80px) 0}}
+@keyframes cath-flap{from{transform:scaleY(1)}to{transform:scaleY(.35)}}
+
+/* the line the house says. Same two elements the loader has always filled. */
+html.cath .hero .hero-say{position:absolute;z-index:3;left:0;right:0;top:44%;padding:0 20px;}
+html.cath .hero .pulse-kick{font-size:10px;letter-spacing:.3em;color:#cbc6d2;text-shadow:0 0 12px #0a0a0d,0 0 4px #0a0a0d;}
+html.cath .hero .pulse-line{font-family:var(--f-logo);font-style:normal;font-weight:700;text-transform:uppercase;
+  font-size:clamp(17px,2.05vw,30px);line-height:1.25;letter-spacing:.16em;margin:8px 0 0;
+  background:none;-webkit-background-clip:border-box;background-clip:border-box;color:var(--ink-t,var(--ink));-webkit-text-fill-color:currentColor;
+  text-shadow:0 0 18px #0a0a0d,0 0 6px #0a0a0d,0 1px 0 rgba(0,0,0,.6);}
+html.cath .hero .pulse-line br{display:none;}
+html.cath .hero .pulse-line .blue{background:none;-webkit-background-clip:border-box;background-clip:border-box;color:var(--pink-t,var(--pink));-webkit-text-fill-color:currentColor;margin-left:.5em;}
+
+/* the window marks the last night */
+html.cath .hero-beacon{position:absolute;z-index:3;left:calc(50% + min(11vw,170px));top:11%;display:flex;align-items:flex-start;gap:12px;
+  text-align:left;text-decoration:none;color:var(--ink-t,var(--ink));}
+html.cath .hero-beacon[hidden]{display:none;}
+html.cath .hero-beacon i{display:block;width:48px;height:1px;background:var(--pink-glow);margin-top:8px;box-shadow:0 0 8px var(--pink-glow);flex:none;}
+html.cath .hero-beacon b{display:block;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--pink-glow-t,var(--pink-glow));font-weight:500;}
+html.cath .hero-beacon strong{display:block;font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;font-size:26px;line-height:1;margin-top:5px;
+  text-shadow:0 0 14px #0a0a0d;}
+html.cath .hero-beacon small{display:block;font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#cbc6d2;margin-top:6px;}
+html.cath .hero-beacon:hover strong{color:var(--pink-glow-t,var(--pink-glow));}
+html.cath .hero-beacon em{display:inline-block;margin-top:9px;font:700 11px/1.3 Verdana,Geneva,Tahoma,sans-serif;font-style:normal;color:var(--pink-glow-t,var(--pink-glow));text-decoration:underline;text-underline-offset:2px;text-shadow:0 0 10px #0a0a0d;}
+/* under 1240 the beacon runs into the right-hand cards; the NEW NIGHT strip over the timeline says the same thing */
+@media (max-width:1239px){ html.cath .hero-beacon{display:none;} }
+
+/* the hand: six tabs as arch cards, three down each side so the lounge stays in view */
+html.cath .hero-hand{position:absolute;z-index:4;left:clamp(14px,2.6vw,52px);right:clamp(14px,2.6vw,52px);top:5%;bottom:8%;
+  display:grid;grid-template-columns:auto 1fr auto;grid-template-rows:repeat(3,minmax(0,1fr));gap:30px 0;justify-items:center;pointer-events:none;}
+html.cath .hcard{pointer-events:auto;position:relative;display:block;height:100%;min-height:0;aspect-ratio:480/759;text-decoration:none;
+  transition:transform .35s cubic-bezier(.2,.8,.2,1);}
+html.cath .hcard:nth-child(-n+3){grid-column:1;}
+html.cath .hcard:nth-child(n+4){grid-column:3;}
+html.cath .hcard:nth-child(1),html.cath .hcard:nth-child(4){grid-row:1;}
+html.cath .hcard:nth-child(2),html.cath .hcard:nth-child(5){grid-row:2;}
+html.cath .hcard:nth-child(3),html.cath .hcard:nth-child(6){grid-row:3;}
+html.cath .hcard:nth-child(odd){transform:rotate(-2.5deg);}
+html.cath .hcard:nth-child(even){transform:rotate(2.5deg);}
+html.cath .hcard::before{content:'';position:absolute;inset:1.5% 2.5% .5%;
+  background:linear-gradient(170deg,rgba(44,46,53,0.11),rgba(44,46,53,0.02) 50%,rgba(111,9,68,0.07));
+  -webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);
+  clip-path:polygon(50% 0,70% 7%,86% 17%,96% 27%,100% 36%,100% 100%,0 100%,0 36%,4% 27%,14% 17%,30% 7%);}
+html.cath .hcard::after{content:'';position:absolute;inset:0;background:url('../../cathedral/frame-card.webp') 0 0/100% 100% no-repeat;pointer-events:none;
+  transition:filter .35s;filter:saturate(.5) brightness(.82) drop-shadow(0 8px 10px rgba(0,0,0,.55));}
+html.cath .hcard img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:44% 9% 8%;
+  filter:saturate(.55) brightness(.9) drop-shadow(0 10px 10px rgba(0,0,0,.55));transition:filter .35s,opacity .5s;animation:cath-bob 5s ease-in-out infinite;}
+html.cath .hcard:nth-child(2n) img{animation-delay:-1.6s;}
+html.cath .hcard:nth-child(3n) img{animation-delay:-3.1s;}
+html.cath .hcard model-viewer{position:absolute;inset:36% 5% 4% 5%;width:auto;height:auto;pointer-events:none;background:transparent;--poster-color:transparent;
+  opacity:0;transition:opacity .5s,filter .35s;filter:saturate(.6) brightness(.92);}
+html.cath .hcard.m3 model-viewer{opacity:1;}
+html.cath .hcard.m3 img{opacity:0;}
+html.cath .hcard u{position:absolute;left:-10px;right:-10px;bottom:-20px;text-align:center;text-decoration:none;font-family:var(--f-mono);font-size:10px;
+  letter-spacing:.26em;text-transform:uppercase;color:#cbc6d2;transition:color .3s;text-shadow:0 0 8px #0a0a0d;}
+html.cath .hcard:hover,html.cath .hcard[aria-current="page"]{transform:translateY(-5px) rotate(0) scale(1.07);z-index:2;}
+html.cath .hcard:hover::after,html.cath .hcard[aria-current="page"]::after{
+  filter:saturate(1.15) brightness(1.1) drop-shadow(0 0 10px rgba(255,121,198,.85)) drop-shadow(0 0 22px rgba(255,121,198,.45));}
+html.cath .hcard[aria-current="page"]::before{background:linear-gradient(170deg,rgba(111,9,68,0.16),rgba(111,9,68,0.04) 50%,rgba(111,9,68,0.18));}
+html.cath .hcard:hover img,html.cath .hcard[aria-current="page"] img{filter:saturate(1.1) brightness(1.08) drop-shadow(0 0 14px rgba(255,121,198,.55));}
+html.cath .hcard:hover model-viewer,html.cath .hcard[aria-current="page"] model-viewer{filter:saturate(1.15) brightness(1.1) drop-shadow(0 0 12px rgba(255,121,198,.5));}
+html.cath .hcard:hover u,html.cath .hcard[aria-current="page"] u{color:var(--pink-glow-t,var(--pink-glow));}
+html.cath .hcard:focus-visible{outline:2px solid var(--pink-glow-l,var(--pink-glow));outline-offset:6px;}
+@keyframes cath-bob{0%,100%{transform:translateY(-3%)}50%{transform:translateY(3%)}}
+
+/* The lounge is Home. Every other tab gets its own room of the building, short. */
+html.cath .tabroom{display:none;grid-column:1/-1;order:-2;position:relative;z-index:1;height:clamp(150px,19vw,250px);overflow:hidden;
+  border:1px solid rgba(180,139,166,0.2);background:#0a0a0d center/cover no-repeat;}
+html.cath .tabroom::before{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(10,10,13,.35) 0,rgba(10,10,13,0) 30%,rgba(10,10,13,.2) 62%,rgba(10,10,13,.78) 100%);}
+html.cath .tabroom::after{content:'';position:absolute;inset:0;pointer-events:none;border:13px solid transparent;border-image:url('../../cathedral/frame-panel.webp') 112 / 46px / 0 stretch;}
+html.cath .tabroom div{position:absolute;left:0;right:0;bottom:16%;text-align:center;z-index:1;}
+html.cath .tabroom b{display:block;font-family:var(--f-logo);font-weight:800;font-size:clamp(22px,3.2vw,42px);letter-spacing:.28em;text-transform:uppercase;color:var(--ink-t,var(--ink));
+  text-shadow:0 0 20px #0a0a0d,0 0 6px #0a0a0d;padding-left:.28em;}
+html.cath .tabroom span{display:block;margin-top:8px;font-family:var(--f-mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--pink-t,var(--pink));
+  text-shadow:0 0 10px #0a0a0d;}
+html.cath .tabroom[data-room="photos"]{background-image:url('../../cathedral/room-photos.webp');background-position:50% 64%;}
+html.cath .tabroom[data-room="stories"]{background-image:url('../../cathedral/room-stories.webp');background-position:50% 80%;}
+html.cath .tabroom[data-room="music"]{background-image:url('../../cathedral/room-music.webp');background-position:50% 82%;}
+html.cath .tabroom[data-room="people"]{background-image:url('../../cathedral/room-people.webp');background-position:50% 46%;}
+html.cath .tabroom[data-room="more"]{background-image:url('../../cathedral/room-more.webp');background-position:50% 50%;}
+html.cath.tabs:not([data-tab="home"]) .pulse-banner.hero{display:none;}
+html.cath.tabs[data-tab="photos"] .tabroom[data-room="photos"],
+html.cath.tabs[data-tab="stories"] .tabroom[data-room="stories"],
+html.cath.tabs[data-tab="music"] .tabroom[data-room="music"],
+html.cath.tabs[data-tab="people"] .tabroom[data-room="people"],
+html.cath.tabs[data-tab="more"] .tabroom[data-room="more"]{display:block;}
+
+@media (max-width:820px){
+  /* a phone has the tab bar under the thumb already, so the hand stays off the picture
+     and the timeline starts sooner */
+  html.cath .hero-hand{display:none;}
+  html.cath .hero-beacon{display:none;}
+  html.cath .pulse-banner.hero{height:56.25vw;min-height:0;margin-top:0;background-position:50% 50%;background-size:cover;}
+  html.cath .hero .hero-say{top:38%;}
+  html.cath .hero-rose{top:37%;width:38vw;height:38vw;}
+  html.cath.tabs .pulse-banner{margin-top:0;}
+  html.cath .tabroom{height:34vw;min-height:116px;}
+  html.cath .tabroom div{bottom:16%;}
+  html.cath .tabroom::after{border-width:10px;border-image-width:34px;}
+  html.cath.tabs .wrap{padding-top:14px;}
+  html.cath .tabroom span{font-size:8.5px;letter-spacing:.2em;margin-top:5px;}
+}
+@media (max-width:560px){
+  /* the tall plate: window, light and the whole lounge in one crop */
+  html.cath .pulse-banner.hero{height:90vw;background-image:url('../../cathedral/hero-m.webp');background-size:100% auto;background-position:50% 68.3%;}
+  html.cath .hero .hero-say{top:30.5%;}
+  html.cath .hero .pulse-kick{display:none;}
+  html.cath .hero .pulse-line{font-size:15px;letter-spacing:.12em;}
+  html.cath .hero .pulse-line .blue{display:block;margin-left:0;}
+  html.cath .hero-rose{top:15%;width:46vw;height:46vw;}
+}
+
+/* ---------------- the tab bar wears the same six icons ---------------- */
+@media (max-width:820px){
+  html.cath .tabbar a img{width:30px;height:30px;object-fit:contain;filter:saturate(.35) brightness(.8);transition:filter .2s,transform .2s;}
+  html.cath .tabbar a[aria-current="page"] img{filter:saturate(1.1) brightness(1.1) drop-shadow(0 0 6px rgba(255,121,198,.6));transform:translateY(-1px) scale(1.08);}
+  html.cath .tabbar a{gap:2px;padding-top:6px;}
+}
+
+/* ---------------- section heads: same Saira, plus the crest rule ---------------- */
+html.cath .section-head{position:relative;border-bottom:0;padding-bottom:22px;}
+/* the sub line could not shrink, so in a narrow main column (an iPad held upright, 821 to 860 wide) it pushed the page sideways */
+html.cath .section-head .sub{flex-shrink:1;min-width:0;}
+html.cath .section-head::after{content:'';position:absolute;left:0;right:0;bottom:0;height:20px;pointer-events:none;background:
+  url('../../cathedral/mark.webp') 50% 50%/auto 20px no-repeat,
+  linear-gradient(90deg,transparent,rgba(44,46,53,0.34) 10%,rgba(44,46,53,0.34) calc(50% - 26px),transparent calc(50% - 26px),transparent calc(50% + 26px),rgba(44,46,53,0.34) calc(50% + 26px),rgba(44,46,53,0.34) 90%,transparent) 0 50%/100% 1px no-repeat;}
+
+/* ---------------- the side column: profile boxes ---------------- */
+html.cath aside.sidebar .card{background:var(--box);border:1px solid var(--box-line-l,var(--box-line));border-radius:0;padding:0 13px 14px;}
+html.cath aside.sidebar .card h3{margin:0 -13px 12px;padding:6px 10px;background:var(--pink-glow);color:#efcadf;
+  font:700 11px/1.2 Verdana,Geneva,Tahoma,sans-serif;letter-spacing:.03em;text-transform:none;}
+html.cath aside.sidebar .card .strip{display:none;}
+html.cath .brand-card{background:var(--box);}
+html.cath .brand-card .bc-lock{flex-direction:row;text-align:left;gap:12px;align-items:center;padding:0;}
+html.cath .brand-card .bc-mk{width:66px;height:66px;object-fit:contain;padding:6px;border:1px solid rgba(180,139,166,0.25);background:rgba(44,46,53,0.04);filter:none;flex:none;}
+html.cath .brand-card .bc-txt{min-width:0;font:12.5px/1.55 Verdana,Geneva,Tahoma,sans-serif;color:#ddd7e2;}
+html.cath .brand-card .bc-txt b{color:var(--ink-t,var(--ink));}
+html.cath .brand-card .bc-on{display:block;color:var(--pink-glow-t,var(--pink-glow));font-weight:700;font-size:11px;animation:cath-blink 1.4s steps(2) infinite;}
+@keyframes cath-blink{50%{opacity:.4}}
+html.cath .brand-card dl{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;margin:11px 0 0;font:12px/1.5 Verdana,Geneva,Tahoma,sans-serif;color:#ddd7e2;}
+html.cath .brand-card dt{color:var(--muted-t,var(--muted));font-weight:700;}
+html.cath .brand-card dd{margin:0;min-width:0;overflow-wrap:anywhere;}
+html.cath .brand-card dd a{color:var(--pink-glow-t,var(--pink-glow));}
+html.cath .brand-card .bc-acts{display:grid;grid-template-columns:1fr 1fr;gap:5px 10px;margin-top:10px;padding-top:9px;border-top:1px dotted rgba(180,139,166,0.28);
+  font:11.5px/1.5 Verdana,Geneva,Tahoma,sans-serif;}
+html.cath .brand-card .bc-acts a{color:var(--pink-glow-t,var(--pink-glow));text-decoration:underline;text-underline-offset:2px;}
+
+/* the friend space: faces, four across */
+html.cath .friends .creator-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px 7px;}
+html.cath .friends .creator{display:block;padding:0;border:0;border-radius:0;background:none;text-align:center;}
+html.cath .friends .creator:hover{transform:none;background:none;}
+html.cath .friends .creator-pic{width:100%;height:auto;aspect-ratio:1;border-radius:0;border:1px solid rgba(180,139,166,0.3);box-shadow:none;font-size:22px;
+  background-size:cover;background-position:50% 20%;transition:transform .2s,border-color .2s;}
+html.cath .friends .creator-pic.has{color:transparent;text-shadow:none;}
+html.cath .friends .creator:hover .creator-pic{transform:scale(1.06) rotate(-2deg);border-color:var(--pink-glow-l,var(--pink-glow));}
+html.cath .friends .creator-meta{margin-top:4px;}
+html.cath .friends .creator-name{font:400 9.5px/1.3 Verdana,Geneva,Tahoma,sans-serif;letter-spacing:0;color:var(--pink-t,var(--pink));}
+html.cath .friends .creator-tag,html.cath .friends .creator-platform{display:none;}
+html.cath .friends .fr-count{font:11px/1.4 Verdana,Geneva,Tahoma,sans-serif;color:#ddd7e2;margin:0 0 10px;}
+html.cath .friends .fr-count b{color:var(--pink-glow-t,var(--pink-glow));}
+
+/* the tip box. It opens the visitor's own mail app: no form, no backend. */
+html.cath .tipbox textarea{width:100%;min-height:74px;resize:vertical;background:rgba(44,46,53,0.05);border:1px solid rgba(180,139,166,0.28);border-radius:0;color:var(--ink-t,var(--ink));
+  font:16px/1.4 Verdana,Geneva,Tahoma,sans-serif;padding:8px 9px;outline:none;}
+html.cath .tipbox textarea:focus{border-color:var(--pink-deep-l,var(--pink-deep));}
+html.cath .tipbox textarea::placeholder{color:var(--muted-t,var(--muted));font-size:13px;}
+html.cath .tipbox .tip-row{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;margin-top:9px;}
+html.cath .tipbox .tip-row small{font-family:var(--f-logo);font-weight:700;font-size:10.5px;letter-spacing:.1em;line-height:1.5;color:var(--muted-t,var(--muted));text-transform:uppercase;}
+html.cath .tipbox .tip-send{font:700 11px/1 Verdana,Geneva,Tahoma,sans-serif;background:var(--pink-glow);color:#efcadf;border:1px solid #3a3f4c;border-radius:0;
+  padding:8px 13px;cursor:pointer;box-shadow:2px 2px 0 rgba(244,238,242,.35);white-space:nowrap;}
+html.cath .tipbox .tip-send:hover{transform:translate(1px,1px);box-shadow:1px 1px 0 rgba(244,238,242,.35);}
+html.cath .tipbox .tip-alt{display:block;margin-top:9px;font:11px/1.4 Verdana,Geneva,Tahoma,sans-serif;color:var(--muted-t,var(--muted));}
+html.cath .tipbox .tip-alt a{color:var(--pink-glow-t,var(--pink-glow));}
+
+/* ---------------- Home: the tiles (the new-night strip became the dock, see THE FRONT DOOR below) ---------------- */
+html.cath .do{border-radius:3px;border-color:rgba(180,139,166,0.16);}
+html.cath .do.wall{border-color:var(--box-line-l,var(--box-line));}
+/* every icon is the house's own now (10/3): the seven doors in, the four reactions, the comment and the pin */
+html.cath .do{gap:2px 12px;padding:9px 16px 9px 11px;}
+html.cath .do .di{grid-row:span 2;width:44px;height:44px;display:block;filter:drop-shadow(0 3px 6px rgba(0,0,0,.55));transition:transform .2s;}
+html.cath .do:hover .di{transform:translateY(-2px) rotate(-6deg) scale(1.08);}
+html.cath .react-btn img.em{width:19px;height:19px;display:block;margin:-3px 0;}
+html.cath .react-btn.voted img.em{filter:drop-shadow(0 0 5px rgba(255,255,255,.55));}
+html.cath .post-t .pin img{width:14px;height:14px;vertical-align:-3px;margin-right:4px;}
+@media (max-width:820px){ html.cath .do .di{width:38px;height:38px;} html.cath .do{padding:8px 13px 8px 9px;} }
+@media (prefers-reduced-motion:reduce){ html.cath .do .di{transition:none;} html.cath .do:hover .di{transform:none;} }
+/* the timeline: the same posts, the gossip-page dress */
+html.cath #take .feed{border-top:1px dotted rgba(180,139,166,0.3);}
+html.cath .post-t{border-bottom:1px dotted rgba(180,139,166,0.26);}
+html.cath .post-t.pinned{background:rgba(111,9,68,0.06);border:1px dashed rgba(255,16,153,0.55);padding:14px 12px;margin:10px 0 4px;}
+html.cath .pin{color:var(--pink-glow-t,var(--pink-glow));border-color:rgba(255,16,153,0.5);}
+html.cath .cbox{border-radius:0;border-color:var(--box-line-l,var(--box-line));background:var(--box);}
+html.cath .post-img{border-radius:3px;}
+html.cath .feed-cta{border-radius:0;}
+
+/* ---------------- Photos: every night is a party pack ---------------- */
+html.cath .drops-rail{grid-auto-columns:minmax(178px,196px);gap:18px;padding:8px 4px 14px;align-items:start;}
+html.cath .drop.party{border:0;border-radius:0;background:none;overflow:visible;}
+html.cath .drop.party:hover{transform:none;box-shadow:none;}
+/* the pack tile itself (.pp, the printed photo, the plate) is assets/css/pack.css, shared with /events/ */
+html.cath .drop.party .cap{padding:9px 2px 0;text-align:center;}
+html.cath .drop.party .cap .v,html.cath .drop.party .cap .d{display:block;}
+html.cath .drop.party .cap .v{font-size:15px;}
+html.cath .drop.party .cap .d{margin-top:4px;font-size:9px;}
+@media (max-width:640px){ html.cath .drops-rail{grid-auto-columns:minmax(150px,44vw);gap:12px;} }
+
+/* ---------------- People: the house pack ----------------
+   FULL ART (10/3). Five packs, one per girl in the lounge, each her own illustration printed edge to
+   edge on the pouch (makepack.py --art). cathedral.js picks one per visit and hands it over as
+   --house-pack; with no script the pack is pack-house.webp. Same pouch, same words-over-picture
+   rule as the night packs (assets/css/pack.css). */
+html.cath .poke.booster-pack{aspect-ratio:520/878;background:none;padding:0;border-radius:0;max-width:230px;}
+html.cath .poke.booster-pack::before{display:none;}
+html.cath .booster-inner{border-radius:0;background:var(--house-pack,url('../../cathedral/pack-house.webp')) 50% 50%/contain no-repeat;box-shadow:none;
+  container-type:inline-size;filter:drop-shadow(0 14px 16px rgba(0,0,0,.6));transition:filter .3s,transform .3s;justify-content:flex-end;}
+html.cath .booster-inner::after{display:none;}
+html.cath .poke.booster-pack:hover .booster-inner{box-shadow:none;filter:drop-shadow(0 0 18px rgba(255,121,198,.75));transform:translateY(-6px) rotate(-2deg);}
+html.cath .poke.booster-pack{margin-bottom:30px;}
+html.cath .booster-inner{overflow:visible;}
+html.cath .booster-mark{display:block;position:absolute;left:5%;right:5%;bottom:13.4%;margin:0;padding:0;text-align:center;white-space:nowrap;
+  font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;font-size:24px;font-size:12.4cqw;line-height:.9;letter-spacing:.005em;
+  color:#ffffff;background:none;-webkit-text-fill-color:#ffffff;-webkit-text-stroke:3px #16060f;-webkit-text-stroke:1.5cqw #16060f;paint-order:stroke fill;
+  text-shadow:0 2px 0 #ff79c6,0 .9cqw 0 #ff79c6,0 0 3cqw rgba(0,0,0,.7);transform:rotate(-3deg);}
+html.cath .booster-mark .zero{color:#fbbce0;-webkit-text-fill-color:#fbbce0;background:none;}
+html.cath .booster-stamp{display:block;position:absolute;left:4%;right:4%;bottom:7.6%;margin:0;padding:0;border:0;background:none;text-align:center;
+  font-family:var(--f-mono);font-weight:500;font-size:8px;font-size:4.1cqw;line-height:1;letter-spacing:.2em;text-transform:uppercase;color:#f1ecf4;
+  text-shadow:0 1px 3px #000,0 0 6px rgba(0,0,0,.8);transform:none;}
+html.cath .booster-foot{position:absolute;left:-20px;right:-20px;bottom:-26px;padding:0;font-size:9.5px;letter-spacing:.18em;color:var(--muted-t,var(--muted));text-shadow:none;}
+html.cath .booster-stage .pack .booster-foot{color:#e9e3ee;bottom:-30px;}
+html.cath .booster-stage .pack .booster-inner{filter:drop-shadow(0 20px 30px rgba(0,0,0,.7));}
+/* back to top wears the house mark, not the old sigil */
+html.cath .scroll-top svg{display:none;}
+html.cath .scroll-top{background-image:url('../../cathedral/mark.webp');background-repeat:no-repeat;background-position:50% 50%;background-size:62% auto;}
+
+/* ---------------- footer ---------------- */
+html.cath footer.site .mark .fmk{width:auto;height:1.5em;vertical-align:-.36em;margin-right:.1em;filter:drop-shadow(0 0 6px rgba(255,121,198,.45));}
+
+@media (prefers-reduced-motion:reduce){
+  html.cath .hero-rose,html.cath .hero-bats i,html.cath .hcard img,html.cath .brand-card .bc-on{animation:none!important;}
+  html.cath .hcard,html.cath .booster-inner{transition:none!important;}
+}
+
+/* ================= THE FRONT DOOR (10/4) =================
+   What a stranger meets under the lounge: a pack to tear, a date, a tip line, and a timeline
+   that carries the house's own news. Same scope rule as everything above: html.cath only. */
+
+/* ---- the nav: the binder chip rides next to Log in. On a phone the bar stops scrolling sideways:
+        Follow steps down to the footer and the side column, where it already is. ---- */
+html.cath nav.site #nav-binder:empty{display:none;}
+@media (max-width:820px){
+  html.cath nav.site{gap:10px;}
+  html.cath nav.site .cta,html.cath nav.site .nav-more{display:none;}
+  html.cath nav.site .bn-chip{min-height:34px;}
+  /* signed in, the bar also carries The Wall: the wordmark keeps its mark and gives up its letters */
+  html.cath[data-door="in"] nav.site a.wm span,html.cath[data-door="wait"] nav.site a.wm span{display:none;}
+  /* tapping the tab you are on already takes you to the top, so the floating mark stops covering the reactions */
+  html.cath .scroll-top{display:none;}
+}
+
+/* ---- the dock: the newest night, as a pack on the front door ---- */
+html.cath .dock{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);gap:0 18px;align-items:center;
+  margin:26px 0 16px;padding:13px 16px 13px 14px;border:1px solid var(--box-line-l,var(--box-line));background:var(--box);text-decoration:none;color:var(--ink-t,var(--ink));
+  box-shadow:0 0 22px rgba(255,121,198,.12);transition:border-color .2s,box-shadow .2s;}
+html.cath .dock[hidden]{display:none;}
+html.cath .dock:hover{border-color:var(--pink-glow-l,var(--pink-glow));box-shadow:0 0 30px rgba(255,121,198,.28);}
+html.cath .dk-pack{display:block;width:104px;margin:-34px 0 -6px 4px;transform:rotate(-6deg);transition:transform .3s cubic-bezier(.2,.8,.2,1);}
+html.cath .dock:hover .dk-pack{transform:rotate(-2deg) translateY(-5px) scale(1.04);}
+html.cath .dk-tx{display:block;min-width:0;}
+html.cath .dk-tx i{display:inline-block;font:700 10px/1.3 Verdana,Geneva,Tahoma,sans-serif;font-style:normal;letter-spacing:.03em;text-transform:uppercase;
+  background:var(--pink-glow);color:#efcadf;padding:2px 8px;}
+html.cath .dk-tx b{display:block;margin-top:8px;font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;font-size:28px;line-height:.98;overflow-wrap:anywhere;}
+html.cath .dk-tx > span{display:block;margin-top:6px;font:12.5px/1.5 Verdana,Geneva,Tahoma,sans-serif;color:#ddd7e2;}
+html.cath .dk-tx em{display:inline-block;margin-top:11px;padding:9px 18px 8px;font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;font-size:18px;line-height:1;letter-spacing:.02em;
+  background:linear-gradient(180deg,var(--pink),var(--pink-deep));color:#f0cadf;border:1px solid #3a3f4c;box-shadow:3px 3px 0 rgba(244,238,242,.35);transition:transform .15s,box-shadow .15s;}
+html.cath .dock:hover .dk-tx em{transform:translate(1px,1px);box-shadow:2px 2px 0 rgba(244,238,242,.35);}
+html.cath .dock:focus-visible{outline:2px solid var(--pink-glow-l,var(--pink-glow));outline-offset:4px;}
+html.cath main.feed{border-top:0;}
+@media (max-width:820px){ html.cath .dock{margin-top:12px;} }
+@media (max-width:560px){
+  html.cath .dock{gap:0 14px;margin:10px 0 14px;padding:12px 12px 12px 10px;}
+  html.cath .dk-pack{width:88px;margin:-30px 0 -4px 2px;}
+  html.cath .dk-tx b{font-size:23px;}
+  html.cath .dk-tx > span{font-size:12px;}
+  html.cath .dk-tx em{font-size:16px;padding:8px 14px 7px;margin-top:9px;}
+}
+/* members have the faces row above the dock; the pack must not climb onto it */
+
+/* ---- the tip line: what a stranger gets where the lock used to be ---- */
+html.cath .tipline{display:none;margin:0 0 16px;border:1px solid var(--box-line-l,var(--box-line));background:var(--box);padding:0 13px 12px;}
+html.cath[data-door="out"] .tipline{display:block;}
+html.cath[data-door="out"] #composer{display:none;}
+html.cath[data-door="out"] aside.sidebar .tipbox{display:none;}      /* one tip box at a time */
+html.cath .tipline > b{display:block;margin:0 -13px 11px;padding:6px 10px;background:var(--pink-glow);color:#efcadf;font:700 11px/1.2 Verdana,Geneva,Tahoma,sans-serif;letter-spacing:.03em;}
+html.cath .tipline textarea{display:block;flex:1;min-width:0;height:42px;min-height:42px;max-height:160px;resize:none;background:rgba(44,46,53,0.05);border:1px solid rgba(180,139,166,0.28);border-radius:0;color:var(--ink-t,var(--ink));
+  font:16px/1.4 Verdana,Geneva,Tahoma,sans-serif;padding:9px 9px;outline:none;}
+html.cath .tipline textarea:focus{height:86px;}
+html.cath .tipline textarea:focus{border-color:var(--pink-deep-l,var(--pink-deep));}
+html.cath .tipline textarea::placeholder{color:var(--muted-t,var(--muted));font-size:13px;}
+html.cath .tipline .tl-row{display:flex;align-items:flex-start;gap:9px;}
+html.cath .tipline .tip-send{font:700 11px/1 Verdana,Geneva,Tahoma,sans-serif;background:var(--pink-glow);color:#efcadf;border:1px solid #3a3f4c;border-radius:0;
+  height:42px;padding:0 14px;cursor:pointer;box-shadow:2px 2px 0 rgba(244,238,242,.35);white-space:nowrap;flex:none;}
+html.cath .tipline .tip-send:hover{transform:translate(1px,1px);box-shadow:1px 1px 0 rgba(244,238,242,.35);}
+html.cath .tipline .tl-alt{display:block;margin-top:9px;font:11px/1.55 Verdana,Geneva,Tahoma,sans-serif;color:var(--muted-t,var(--muted));}
+html.cath .tipline .tl-alt a{color:var(--pink-glow-t,var(--pink-glow));}
+
+/* ---- the timeline: a count of nothing is not printed, and the pinned rules fold ---- */
+html.cath .react-btn.zero .ct{display:none;}
+html.cath .react-btn.zero{padding-left:9px;padding-right:9px;}
+html.cath .post-body.fold{max-height:4.7em;overflow:hidden;-webkit-mask-image:linear-gradient(#000 50%,transparent);mask-image:linear-gradient(#000 50%,transparent);}
+html.cath body.editing .post-body.fold{max-height:none;-webkit-mask-image:none;mask-image:none;}
+html.cath .fold-more{display:inline-block;margin:6px 0 2px;padding:4px 0;border:0;background:none;cursor:pointer;color:var(--pink-glow-t,var(--pink-glow));
+  font:700 11px/1.3 Verdana,Geneva,Tahoma,sans-serif;text-decoration:underline;text-underline-offset:2px;}
+
+/* ---- the house's own news between the posts. Same two columns a post uses: the mark where a face goes. ---- */
+html.cath .hx{display:grid;grid-template-columns:52px minmax(0,1fr);gap:12px;padding:16px 4px;border-bottom:1px dotted rgba(180,139,166,0.26);
+  text-decoration:none;color:var(--ink-t,var(--ink));background:linear-gradient(90deg,rgba(111,9,68,0.05),transparent 70%);}
+html.cath a.hx:hover{background:linear-gradient(90deg,rgba(111,9,68,0.11),transparent 80%);}
+html.cath .hx-av{display:grid;place-items:center;width:52px;height:52px;border-radius:50%;border:2px solid rgba(255,16,153,0.5);background:#0d0c11;}
+html.cath .hx-av img{display:block;width:70%;height:auto;}
+html.cath .hx-main{display:block;min-width:0;}
+html.cath .hx-who{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap;font-size:13px;line-height:1.3;}
+html.cath .hx-who b{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:17px;letter-spacing:.01em;text-transform:uppercase;color:var(--ink-t,var(--ink));}
+html.cath .hx-who .seat{font-family:var(--f-mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--pink-glow-t,var(--pink-glow));border:1px solid rgba(255,16,153,0.5);border-radius:3px;padding:1px 5px;}
+html.cath .hx-who .when{font-family:var(--f-mono);font-size:11px;color:var(--muted-t,var(--muted));}
+html.cath .hx-row{display:grid;grid-template-columns:62px minmax(0,1fr);gap:13px;align-items:center;margin-top:10px;}
+html.cath .hx-pk{display:block;transform:rotate(-4deg);filter:drop-shadow(0 6px 8px rgba(0,0,0,.6));transition:transform .25s;}
+html.cath .hx-pk img{display:block;width:100%;height:auto;}
+html.cath a.hx:hover .hx-pk{transform:rotate(-1deg) translateY(-3px);}
+html.cath .hx-tx{display:block;min-width:0;}
+html.cath .hx-tx b{display:block;font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;font-size:21px;line-height:1;overflow-wrap:anywhere;}
+html.cath .hx-tx > span{display:block;margin-top:5px;font-size:14px;line-height:1.4;color:#ddd7e2;}
+html.cath .hx-tx em{display:inline-block;margin-top:6px;font:700 11.5px/1.3 Verdana,Geneva,Tahoma,sans-serif;font-style:normal;color:var(--pink-glow-t,var(--pink-glow));text-decoration:underline;text-underline-offset:2px;}
+html.cath .hx-st{display:grid;grid-template-columns:54px minmax(0,1fr);gap:11px;align-items:center;margin-top:9px;text-decoration:none;color:var(--ink-t,var(--ink));}
+html.cath .hx-st img{display:block;width:54px;height:54px;object-fit:cover;border:1px solid rgba(180,139,166,0.25);}
+html.cath .hx-st b{display:block;font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;font-size:18px;line-height:1.02;overflow-wrap:anywhere;}
+html.cath .hx-st small{display:block;margin-top:3px;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--pink-deep-t,var(--pink-deep));}
+html.cath .hx-st:hover b{color:var(--pink-glow-t,var(--pink-glow));}
+@media (max-width:820px){
+  html.cath .hx{grid-template-columns:42px minmax(0,1fr);gap:10px;}
+  html.cath .hx-av{width:42px;height:42px;}
+  html.cath .hx-row{grid-template-columns:56px minmax(0,1fr);gap:12px;}
+  html.cath .hx-tx b{font-size:19px;}
+}
+/* THE TAPE on the timeline (10/21): a day's new cuts, their posters in a strip, a +N for the rest */
+html.cath .hx-tx > span.hx-strip{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:0;line-height:0;}
+html.cath .hx-strip img{display:block;width:56px;height:100px;object-fit:cover;border-radius:6px;border:1px solid rgba(180,139,166,0.25);background:#0d0c11;
+  filter:drop-shadow(0 5px 7px rgba(0,0,0,.55));transition:transform .25s;}
+html.cath .hx-strip img:nth-child(odd){transform:rotate(-2deg);}
+html.cath .hx-strip img:nth-child(even){transform:rotate(2deg);}
+html.cath a.hx.tape:hover .hx-strip img{transform:translateY(-3px);}
+html.cath .hx-strip .more{display:grid;place-items:center;width:42px;height:100px;border-radius:6px;border:1px dashed rgba(255,16,153,0.5);
+  font:700 12px/1 var(--f-mono);color:var(--pink-glow-t,var(--pink-glow));}
+@media (max-width:820px){ html.cath .hx-strip img{width:48px;height:86px;} html.cath .hx-strip .more{width:38px;height:86px;} }
+/* the wide row (10/21): the portfolio and the Crypt, a 16:9 picture beside the words */
+html.cath .hx-row.hx-wide{grid-template-columns:112px minmax(0,1fr);}
+html.cath .hx-wpic{display:block;transform:rotate(-2deg);filter:drop-shadow(0 6px 8px rgba(0,0,0,.6));transition:transform .25s;}
+html.cath .hx-wpic img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:6px;border:1px solid rgba(180,139,166,0.25);}
+html.cath a.hx:hover .hx-wpic{transform:rotate(0) translateY(-3px);}
+/* the Crypt card follows the Crypt's own nav link: members (door "in") only, his call 10/2 */
+html.cath .hx.crypt{display:none;}
+html.cath[data-door="in"] .hx.crypt{display:grid;}
+@media (max-width:820px){ html.cath .hx-row.hx-wide{grid-template-columns:96px minmax(0,1fr);gap:11px;} }
+@media (prefers-reduced-motion:reduce){ html.cath .dk-pack,html.cath .hx-pk,html.cath .dk-tx em,html.cath .dock,html.cath .hx-strip img,html.cath .hx-wpic{transition:none;} }
+
+/* ---- the tape rail (10/4): a cut's own name is the headline now, and names run one line or three.
+        Cards stay one height, the name holds to two lines, and "watch" sits on the floor of the card. ---- */
+html.cath #tape-rail{align-items:stretch;}
+html.cath #tape-rail .drop{display:flex;flex-direction:column;}
+/* the whole upright poster, not a 4:3 slice of it. ⛔ flex:none + min-height:0: a flex child grows to its
+   picture's own height otherwise and the ratio is ignored. A wide cut is letterboxed, never cropped. */
+html.cath #tape-rail .drop .shot{aspect-ratio:9/16;flex:none;min-height:0;}
+html.cath #tape-rail .drop .shot.wide img{object-fit:contain;}
+html.cath #tape-rail .drop .cap{display:flex;flex-direction:column;flex:1;}
+html.cath #tape-rail .drop .cap .v{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+html.cath #tape-rail .drop .cap .t:empty{display:none;}
+html.cath #tape-rail .drop .cap .d{margin-top:auto;padding-top:7px;}
+
+
+/* ---------------- the plain line (10/14): what the house line means, said plain ---------------- */
+html.cath .hero .hero-plain{margin:12px auto 0;max-width:520px;font:13px/1.5 Verdana,Geneva,Tahoma,sans-serif;color:#e8e3ec;text-shadow:0 0 12px #0a0a0d,0 0 4px #0a0a0d,0 1px 2px #0a0a0d;text-wrap:balance;}
+@media (max-width:560px){ html.cath .hero .hero-plain{margin-top:9px;font-size:12px;max-width:300px;} }
+/* THE BOOK KEY (11/4, his "Button only" on Bunni's site audit): the money lane on the first screen, at the top of the Home
+   column right under the picture (inside it, the key sat on the lounge's faces at 390 and 1024 wide). A framed square key
+   like the house strip's, 44 px tall for a thumb, never an arch; it opens More at Book the house (#book). */
+html.cath .feed-book{display:flex;width:100%;justify-content:center;align-items:center;gap:10px;min-height:44px;box-sizing:border-box;margin:0 0 14px;padding:0 16px;border:1px solid rgba(180,139,166,0.34);border-radius:3px;background:var(--box);color:var(--ink-t,var(--ink));text-decoration:none;font-family:var(--f-display);font-style:italic;font-weight:900;font-size:15px;line-height:1;text-transform:uppercase;}
+html.cath .feed-book small{font:400 11px/1 Verdana,Geneva,Tahoma,sans-serif;text-transform:none;color:#e8e3ec;}
+html.cath .feed-book:hover,html.cath .feed-book:focus-visible{border-color:var(--pink-glow-l,var(--pink-glow));color:var(--pink-glow-t,var(--pink-glow));}
+/* the hand's cards say what they open */
+html.cath .hcard u{bottom:-34px;line-height:1.3;}
+html.cath .hcard u small{display:block;font-size:8.5px;letter-spacing:.14em;text-transform:none;color:#cbc9cf;}
+html.cath .hcard:hover u small,html.cath .hcard[aria-current="page"] u small{color:#e8e3ec;}
+
+/* ---------------- THE NIGHT PICKER (10/14): the last three nights, as packs ---------------- */
+html.cath .pick{margin:22px 0 16px;}
+html.cath .pick[hidden]{display:none;}
+html.cath .pk-head{display:flex;align-items:baseline;gap:12px;margin:0 0 12px;}
+html.cath .pk-head b{font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;font-size:26px;line-height:1;}
+html.cath .pk-head span{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-t,var(--muted));}
+html.cath .pk-rail{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;}
+html.cath .pk{display:block;text-decoration:none;color:var(--ink-t,var(--ink));min-width:0;}
+html.cath .pk .pp{margin:0 6% 10px;}
+html.cath .pk b{display:block;font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;font-size:17px;line-height:1;overflow-wrap:anywhere;}
+html.cath .pk span{display:block;margin-top:4px;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-t,var(--muted));}
+html.cath .pk em{display:block;margin-top:6px;font:700 11px/1.3 Verdana,Geneva,Tahoma,sans-serif;font-style:normal;color:var(--pink-glow-t,var(--pink-glow));}
+html.cath .pk .pk-meter{display:block;height:3px;margin-top:7px;background:rgba(44,46,53,0.12);}
+html.cath .pk .pk-meter i{display:block;height:100%;width:0;background:var(--pink-glow);box-shadow:0 0 8px var(--pink-glow);}
+html.cath .pk.all{display:grid;place-items:center;text-align:center;border:1px dashed var(--box-line-l,var(--box-line));background:var(--box);padding:16px 12px;aspect-ratio:auto;}
+html.cath .pk.all b{font-size:22px;}
+html.cath .pk.all em{margin-top:10px;}
+html.cath .pk:hover b,html.cath .pk:focus-visible b{color:var(--pink-glow-t,var(--pink-glow));}
+html.cath .pk:focus-visible{outline:2px solid var(--pink-glow-l,var(--pink-glow));outline-offset:4px;}
+@media (max-width:820px){ html.cath .pick{margin-top:12px;} }
+@media (max-width:560px){
+  html.cath .pk-rail{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;}
+  html.cath .pk.all{grid-column:1 / -1;padding:12px;}
+  html.cath .pk.all b{font-size:18px;}
+  html.cath .pk b{font-size:14px;}
+  html.cath .pk span{font-size:8.5px;letter-spacing:.08em;}
+  html.cath .pk em{font-size:10.5px;}
+  html.cath .pk-head b{font-size:22px;}
+}
+
+/* KIT + PLAY in the phone tab bar (10/15): eight across, so the icons and labels shrink a step */
+@media (max-width:820px){ html.cath .tabbar a img{width:28px;height:28px} html.cath .tabbar a{padding-top:6px;gap:3px} html.cath .tabbar a span{font-size:9px;letter-spacing:.04em} }
+
+/* ---- THE HOUSE STRIP (10/15): what a member sees first, what a stranger sees first ---- */
+html.cath .house{margin:16px 0 18px;}
+html.cath .house[hidden]{display:none;}
+html.cath .hs-head{display:flex;align-items:baseline;gap:12px;margin:0 0 10px;flex-wrap:wrap;}
+html.cath .hs-head b{font-family:var(--f-display);font-style:italic;font-weight:900;text-transform:uppercase;font-size:26px;line-height:1;}
+html.cath .hs-head span{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-t,var(--muted));}
+html.cath .hs-head b span{font:inherit;letter-spacing:inherit;color:var(--pink-glow-t,var(--pink-glow));text-transform:none;}
+html.cath .hs-rail{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;}
+html.cath .hk{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 10px;align-items:center;padding:10px 12px 10px 10px;min-height:60px;border:1px solid rgba(180,139,166,0.16);border-radius:3px;background:var(--box);color:var(--ink-t,var(--ink));text-decoration:none;transition:border-color .18s,transform .18s;}
+html.cath .hk:hover{border-color:var(--pink-deep-l,var(--pink-deep));transform:translateY(-2px);}
+html.cath .hk img{grid-row:span 2;width:38px;height:38px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(255,121,198,.3));}
+html.cath .hk b{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:17px;line-height:1;text-transform:uppercase;letter-spacing:.01em;white-space:nowrap;}
+html.cath .hk span{font-family:var(--f-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-t,var(--muted));white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+html.cath .hk .n{position:absolute;top:-7px;right:-6px;min-width:22px;height:22px;padding:0 6px;border-radius:11px;background:var(--pink-glow);color:#e0e0e7;font:700 11px/22px var(--f-mono);text-align:center;font-style:normal;box-shadow:0 0 10px rgba(255,121,198,.6);}
+html.cath .hk .n.gold{background:#9e730d;box-shadow:0 0 10px rgba(255,212,121,.6);}
+html.cath .hk.live{border-color:rgba(255,16,153,0.55);box-shadow:0 0 18px rgba(255,121,198,.16);}
+html.cath .hs-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 12px;}
+html.cath .st{display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 12px;align-items:center;padding:12px 14px;border:1px solid rgba(180,139,166,0.16);border-radius:3px;background:var(--box);color:var(--ink-t,var(--ink));text-decoration:none;transition:border-color .18s;}
+html.cath .st:hover{border-color:var(--pink-deep-l,var(--pink-deep));}
+html.cath .st i{grid-row:span 2;width:34px;height:34px;border-radius:50%;border:2px solid var(--pink-glow-l,var(--pink-glow));color:var(--pink-glow-t,var(--pink-glow));display:grid;place-items:center;font:900 16px/1 var(--f-display);font-style:italic;}
+html.cath .st b{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:18px;line-height:1;text-transform:uppercase;}
+html.cath .st span{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-t,var(--muted));}
+html.cath .st:last-child{border-color:rgba(255,16,153,0.55);box-shadow:0 0 18px rgba(255,121,198,.16);}
+html.cath .hs-what{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 18px;align-items:center;padding:12px 14px;border:1px dashed rgba(180,139,166,0.2);border-radius:3px;background:var(--box);}
+html.cath .hs-what>b{grid-column:1/-1;font-family:var(--f-display);font-style:italic;font-weight:900;font-size:18px;line-height:1;text-transform:uppercase;color:var(--pink-glow-t,var(--pink-glow));}
+html.cath .hs-what ul{margin:0;padding:0 0 0 16px;font:12.5px/1.5 Verdana,Geneva,Tahoma,sans-serif;color:#dad4df;}
+html.cath .hs-keys{display:grid;gap:8px;min-width:170px;}
+html.cath .hs-key{display:block;text-align:center;padding:12px 16px;border:1px solid rgba(180,139,166,0.22);border-radius:3px;background:var(--box);color:var(--ink-t,var(--ink));text-decoration:none;font-family:var(--f-display);font-style:italic;font-weight:900;font-size:18px;line-height:1;text-transform:uppercase;}
+html.cath .hs-key.primary{background:var(--pink-glow);border-color:var(--pink-glow-l,var(--pink-glow));color:#e0e0e7;}
+/* 10/29: to 1140 wide, not 820. From 821 up the page is two columns and the feed beside the 320 px sidebar is only 393 to 712 px
+   (an iPad held upright: 406), a phone's width, so the strip keeps its phone shape there or the names wrap letter by letter. */
+@media (max-width:1140px){
+  html.cath .hs-rail{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
+  html.cath .hk{grid-template-columns:minmax(0,1fr);justify-items:start;padding:9px 10px;min-height:0;}
+  html.cath .hk img{grid-row:auto;width:30px;height:30px;margin-bottom:2px;}
+  html.cath .hk b{font-size:15px;}
+  html.cath .hk span{font-size:8.5px;letter-spacing:.06em;max-width:100%;white-space:normal;line-height:1.3;}
+  html.cath .hs-head b{font-size:22px;}
+  html.cath .hs-steps{grid-template-columns:1fr;gap:8px;}
+  html.cath .st{padding:10px 12px;}
+  html.cath .hs-what{grid-template-columns:1fr;}
+  html.cath .hs-keys{grid-template-columns:1fr 1fr;min-width:0;}
+}
+
+/* ---- TEAR-OUTS (10/15): a story on the timeline is a torn magazine page ---- */
+html.cath .tear{position:relative;display:grid;grid-template-columns:96px minmax(0,1fr);gap:4px 12px;align-items:start;margin:10px 0 0;padding:10px 12px 12px 10px;text-decoration:none;color:var(--ink-t,var(--ink));background:#2b2c34;color:#e1e0e7;transform:rotate(-1.4deg);
+  clip-path:polygon(0 2%,3% 0,7% 2%,12% 0,18% 2%,25% 1%,33% 2%,40% 0,48% 2%,55% 1%,63% 2%,70% 0,78% 2%,85% 1%,92% 2%,97% 0,100% 2%,100% 98%,96% 100%,90% 98%,84% 100%,76% 98%,69% 100%,61% 98%,53% 100%,45% 98%,37% 100%,29% 98%,21% 100%,14% 98%,7% 100%,2% 98%,0 100%);
+  box-shadow:0 10px 20px rgba(0,0,0,.5);transition:transform .15s;}
+html.cath .tear.r{transform:rotate(1.2deg);}
+html.cath .tear:hover{transform:rotate(0) translateY(-2px);}
+html.cath .tear-pic{display:block;width:96px;aspect-ratio:4/5;background:#111;box-shadow:0 4px 8px rgba(0,0,0,.35);transform:rotate(2deg);overflow:hidden;}
+html.cath .tear-pic img{width:100%;height:100%;object-fit:cover;display:block;}
+html.cath .tear-tx{display:grid;gap:4px;min-width:0;}
+html.cath .tear-k{display:inline-block;justify-self:start;font:700 9px/1 var(--f-mono);letter-spacing:.22em;text-transform:uppercase;color:#e1e0e7;background:var(--pink-glow);padding:4px 7px;transform:rotate(-2deg);font-style:normal;}
+html.cath .tear b{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:22px;line-height:.95;text-transform:uppercase;color:#e1e0e7;}
+html.cath .tear-dek{font:400 12.5px/1.45 Georgia,'Times New Roman',serif;color:#e3e1e7;}
+html.cath .tear-m{font:700 9px/1.3 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:#ccc9cf;}
+html.cath .tear-new{position:absolute;right:10px;top:8px;padding:4px 8px;border:2px solid #c0287f;color:#eeaad1;font:900 10px/1 var(--f-mono);letter-spacing:.2em;transform:rotate(8deg);font-style:normal;background:rgba(46,48,56,0.7);}
+
+
+/* 10/15 late: THE PLAY KEY on Home. A camera-body key (leatherette slab, machined edge, the shutter gem) for the game, since Play left the tab bar. */
+.playkey{display:grid;grid-template-columns:64px minmax(0,1fr) auto;align-items:center;gap:14px;margin:14px 0 16px;padding:12px 14px 12px 12px;border-radius:8px;text-decoration:none;color:#f1ecf5;
+  background:radial-gradient(rgba(46,48,56,0.035) 1px,transparent 1.2px) 0 0/4px 4px,linear-gradient(180deg,#121215,#0f1012 40%,#17151b);
+  box-shadow:0 1px 0 rgba(255,255,255,.14),0 4px 0 #0b0a0e,0 10px 20px rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.05);transition:transform .08s,box-shadow .08s}
+.playkey:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(255,255,255,.14),0 1px 0 #0b0a0e,0 4px 10px rgba(0,0,0,.6)}
+.pk-gem{width:64px;height:64px;border-radius:50%;background:radial-gradient(circle at 50% 30%,#141518,#0f0f12 70%);padding:8px;box-sizing:border-box;box-shadow:0 0 0 2px #0b0a0e,0 0 0 4px #4b4754,0 0 0 5px #0b0a0e,0 6px 12px rgba(0,0,0,.7),0 0 18px rgba(255,121,198,.35)}
+.pk-t{display:flex;flex-direction:column;gap:4px;min-width:0}
+.pk-t b{font:900 italic 26px/1 var(--f-display);text-transform:uppercase;letter-spacing:.01em;text-shadow:0 1px 0 rgba(255,255,255,.12),0 -1px 0 #000}
+.pk-t small{font:700 10px/1.3 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:#cac8d0}
+.pk-go{font:700 11px/1 var(--f-mono);letter-spacing:.18em;text-transform:uppercase;color:var(--gold-t,var(--gold,#fade9e));padding:9px 10px;border-radius:4px;background:#0b0a0e;box-shadow:inset 0 1px 3px rgba(0,0,0,.9),0 1px 0 rgba(255,255,255,.1);white-space:nowrap}
+@media (max-width:420px){.playkey{grid-template-columns:56px minmax(0,1fr) auto;gap:10px}.pk-gem{width:56px;height:56px}.pk-t b{font-size:22px}.pk-go{padding:8px 8px;font-size:10px}}
+
+/* 10/21: THE AD joins the play key ("find a way to impliment it nicely on to the home"). One deck, two keys, the game and
+   the tool, side by side on the same camera-body slab. Narrow, each key stacks: the gem with its pill across from it, the
+   name under, and only the short line (.pk-more drops). */
+.keydeck{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0 16px}
+.keydeck .playkey{margin:0}
+@media (max-width:760px), (min-width:821px) and (max-width:1140px){   /* 10/29: the two-column page's feed is phone-wide to 1140 (see the house strip above) */
+  .keydeck .playkey{grid-template-columns:auto minmax(0,1fr);align-items:center;gap:10px 8px;padding:11px 11px 13px}
+  .keydeck .pk-gem{grid-row:1;grid-column:1;width:52px;height:52px;padding:6px}
+  .keydeck .pk-go{grid-row:1;grid-column:2;justify-self:end}
+  .keydeck .pk-t{grid-row:2;grid-column:1/-1}
+  .keydeck .pk-t b{font-size:21px}
+  .keydeck .pk-t small{font-size:9.5px;letter-spacing:.12em}
+  .keydeck .pk-more{display:none}
+}
+.pk-gem.pk-ad{padding:3px}   /* the stopwatch is square with air around it, so it sits bigger in the gem to weigh what the shutter does */
+@media (max-width:360px){ .keydeck .pk-gem{width:46px;height:46px} .keydeck .pk-go{letter-spacing:.12em;padding:8px 7px} }   /* 320 wide: START cleared the gem by -2px */

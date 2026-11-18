@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-place="bites">
+<html data-fe="brand" lang="en" data-place="bites">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -36,63 +36,63 @@
      set) in a NEW box above the Cinder one, same .new.bb look. Keys bbcinder / bbrin / bbnyx / bblena (the crew grid already
      owns rin, nyx, lena, cinder). night/bb*.jpg ARE the 4K (2160 x 4680, his phone's 9:19.5, Photoshop Preserve Details 2.0).
      Files made by 02_BRAND/art-style/coffin-cuddles/bloodbath_wallpapers/_build/make_web_night.py (also bbcrew-card.jpg). -->
-<style>
+<style>/*fe*/
 @font-face{font-family:"VP Deadeye";src:url(fonts/vpdeadeye.woff2) format("woff2");font-display:swap}
 @font-face{font-family:"Potta One";src:url(fonts/pottaone.woff2) format("woff2");font-display:swap}
-:root{--bg:#0e0609;--ink:#f6f1ea;--mute:#c9bac0;--red:#e3121a;--deep:#7a0006;--gold:#d8c032;--chip:#1d0e14;--line:#3b2731}
+:root{--bg:#0e0609;--bg-t:#ecd3dc;--bg-l:#3a3f4c;--ink:#2b2d35;--ink-t:#f6eeea;--ink-l:#c59079;--mute:#24262c;--mute-t:#d2c6cb;--mute-l:#987c87;--red:#4b0a0c;--red-t:#eec3c5;--red-l:#c51017;--deep:#310406;--deep-t:#edc0c2;--deep-l:#3a3f4c;--gold:#72581b;--gold-t:#efdaa9;--gold-l:#ba8d23;--chip:#1d0e14;--chip-t:#ebd5de;--chip-l:#3a3f4c;--line:#1c1318;--line-t:#e8dde2;--line-l:#3a3f4c}
 *{box-sizing:border-box}
 html{background:var(--bg);-webkit-text-size-adjust:100%}
 html.locked{overflow:hidden}
-body{margin:0;min-height:100vh;color:var(--ink);background:var(--bg) radial-gradient(130% 55% at 50% -5%,#55061a 0%,rgba(14,6,9,0) 70%) no-repeat;
+body{margin:0;min-height:100vh;color:var(--ink-t,var(--ink));background:var(--bg) radial-gradient(130% 55% at 50% -5%,#28050e 0%,rgba(14,6,9,0) 70%) no-repeat;
   font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
 a{color:inherit}
 .wrap{max-width:1060px;margin:0 auto;padding:0 16px}
 .top{padding:calc(10px + env(safe-area-inset-top)) 0 0}
-.home{display:inline-flex;align-items:center;min-height:44px;font-weight:800;font-size:13px;letter-spacing:.16em;color:var(--mute);text-decoration:none}
+.home{display:inline-flex;align-items:center;min-height:44px;font-weight:800;font-size:13px;letter-spacing:.16em;color:var(--mute-t,var(--mute));text-decoration:none}
 h1{font-family:"VP Deadeye",Impact,"Arial Black",sans-serif;font-weight:400;text-transform:uppercase;font-size:clamp(54px,15.5vw,122px);line-height:.9;
   margin:4px 0 12px;color:#faf8f3;text-shadow:3px 3px 0 #000,7px 7px 0 var(--deep);letter-spacing:.01em}
 .lead{font-family:"Potta One",system-ui,sans-serif;font-size:clamp(18px,4.8vw,23px);line-height:1.25;margin:0 0 4px}
-.sub{font-family:"Potta One",system-ui,sans-serif;color:var(--gold);font-size:17px;margin:0}
-.igb{display:none;margin:14px 0 0;padding:11px 14px;border-radius:14px;background:var(--gold);color:#1a0b10;font-weight:700;font-size:15px;line-height:1.35}
+.sub{font-family:"Potta One",system-ui,sans-serif;color:var(--gold-t,var(--gold));font-size:17px;margin:0}
+.igb{display:none;margin:14px 0 0;padding:11px 14px;border-radius:14px;background:var(--gold);color:#ecd2db;font-weight:700;font-size:15px;line-height:1.35}
 html.ig .igb{display:block}
 .bar{position:sticky;top:calc(max(6px,env(safe-area-inset-top,0px)) + 50px);z-index:5;margin:14px -16px 0;padding:10px 16px;transition:background-color .15s}      /* 11/14: it sticks under the back key's row. At the very top of the screen NIGHT sat under the back key (and, from the home screen icon, under the status bar) */
 .bar.stuck{background:linear-gradient(var(--bg) 72%,rgba(14,6,9,0))}
 .pin{height:1px;margin-bottom:-1px}
-.mode{display:inline-flex;gap:4px;padding:4px;border-radius:999px;background:var(--chip);border:2px solid var(--line)}
+.mode{display:inline-flex;gap:4px;padding:4px;border-radius:999px;background:var(--chip);border:2px solid var(--line-l,var(--line))}
 .mode button{font-family:"Potta One",system-ui,sans-serif;font-size:17px;letter-spacing:.06em;min-height:48px;min-width:108px;padding:0 18px;border:0;border-radius:999px;
-  background:transparent;color:var(--mute);cursor:pointer}
-.mode button[aria-pressed="true"]{background:var(--red);color:#fff}
-.mode button:focus-visible,.x:focus-visible,.nav:focus-visible,.save:focus-visible,.pick:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+  background:transparent;color:var(--mute-t,var(--mute));cursor:pointer}
+.mode button[aria-pressed="true"]{background:var(--red);color:#ffffff}
+.mode button:focus-visible,.x:focus-visible,.nav:focus-visible,.save:focus-visible,.pick:focus-visible{outline:3px solid var(--gold-l,var(--gold));outline-offset:3px}
 .grid{list-style:none;margin:6px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 14px}
 @media (min-width:720px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (min-width:1000px){.grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
 .pick{display:block;text-decoration:none;color:inherit;-webkit-tap-highlight-color:transparent;border-radius:24px}
-.ph{display:block;padding:5px;border-radius:24px;background:#0b0b0d;border:1.5px solid #3e3b44;box-shadow:0 12px 26px rgba(0,0,0,.55);transition:transform .18s}
-.ph img{display:block;width:100%;height:auto;aspect-ratio:400/867;border-radius:19px;background:#2a1018}
+.ph{display:block;padding:5px;border-radius:24px;background:#0b0b0d;border:1.5px solid #3a3f4c;box-shadow:0 12px 26px rgba(0,0,0,.55);transition:transform .18s}
+.ph img{display:block;width:100%;height:auto;aspect-ratio:400/867;border-radius:19px;background:#1a0b10}
 .pick:active .ph{transform:scale(.97)}
 @media (hover:hover){.pick:hover .ph{transform:translateY(-3px) rotate(-1deg)}}
 .lab{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:2px 8px;margin:9px 4px 0}
 .nm{font-family:"Potta One",system-ui,sans-serif;font-size:18px;line-height:1.15}
-.ty{font-size:13px;font-weight:800;letter-spacing:.08em;color:var(--gold)}
-.foot{margin:34px 0 0;padding:20px 0 calc(28px + env(safe-area-inset-bottom));border-top:1px solid var(--line);color:var(--mute);font-size:15px}
+.ty{font-size:13px;font-weight:800;letter-spacing:.08em;color:var(--gold-t,var(--gold))}
+.foot{margin:34px 0 0;padding:20px 0 calc(28px + env(safe-area-inset-bottom));border-top:1px solid var(--line-l,var(--line));color:var(--mute-t,var(--mute));font-size:15px}
 .foot p{margin:0 0 12px;max-width:640px}
-.foot b{color:var(--ink)}
-.foot .go{display:flex;align-items:center;min-height:52px;border-top:1px solid var(--line);color:var(--ink);font-weight:700;text-decoration:none}
-.foot .go:last-child{border-bottom:1px solid var(--line)}
-.foot .go:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.foot b{color:var(--ink-t,var(--ink))}
+.foot .go{display:flex;align-items:center;min-height:52px;border-top:1px solid var(--line-l,var(--line));color:var(--ink-t,var(--ink));font-weight:700;text-decoration:none}
+.foot .go:last-child{border-bottom:1px solid var(--line-l,var(--line))}
+.foot .go:focus-visible{outline:3px solid var(--gold-l,var(--gold));outline-offset:2px}
 /* NEW 11/12: Rin as Teto, her pirate night (one version, see data-one) */
-.new{margin:22px 0 4px;padding:16px 14px 18px;border-radius:26px;background:linear-gradient(160deg,#2a1840 0%,#170d26 55%,#10070f 100%);border:2px solid #42305e}
-.new .tag{display:inline-block;padding:4px 11px;border-radius:999px;background:var(--gold);color:#1a0b10;font-weight:800;font-size:12px;letter-spacing:.14em}
+.new{margin:22px 0 4px;padding:16px 14px 18px;border-radius:26px;background:linear-gradient(160deg,#180d1f 0%,#130a1a 55%,#10070f 100%);border:2px solid #57386e}
+.new .tag{display:inline-block;padding:4px 11px;border-radius:999px;background:var(--gold);color:#ecd2db;font-weight:800;font-size:12px;letter-spacing:.14em}
 .new h2{font-family:"VP Deadeye",Impact,"Arial Black",sans-serif;font-weight:400;text-transform:uppercase;font-size:clamp(40px,11vw,66px);line-height:.92;
   margin:10px 0 8px;color:#faf8f3;text-shadow:2px 2px 0 #000,5px 5px 0 #4b2a7a;letter-spacing:.01em}
-.new .nl{font-family:"Potta One",system-ui,sans-serif;font-size:16px;line-height:1.3;color:#d9cde6;margin:0 0 14px;max-width:30em}
+.new .nl{font-family:"Potta One",system-ui,sans-serif;font-size:16px;line-height:1.3;color:#dbcde6;margin:0 0 14px;max-width:30em}
 .new .grid{margin:0}
 @media (min-width:720px){.new{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:0 26px;align-items:center;padding:22px 24px}
   .new .grid{grid-template-columns:repeat(2,minmax(0,1fr))}.new .nl{margin:0}}
 /* NEW 11/15: BLOODBATH x Cinder, 4K (Saira Condensed title: no VP Deadeye on photo content) */
 @font-face{font-family:"Saira Condensed";src:url(../assets/fonts/saira-condensed-900.woff2) format("woff2");font-weight:900;font-display:swap}
-.new.bb{background:linear-gradient(160deg,#4a0710 0%,#22060c 55%,#10070f 100%);border-color:#7a0f1d}
-.new.bb .tag{background:var(--red);color:#fff}
+.new.bb{background:linear-gradient(160deg,#26050a 0%,#22060c 55%,#10070f 100%);border-color:#921223}
+.new.bb .tag{background:var(--red);color:#ffffff}
 .new.bb h2{font-family:"Saira Condensed",Impact,"Arial Narrow",sans-serif;font-weight:900;letter-spacing:.02em;text-shadow:2px 2px 0 #000,5px 5px 0 #7a0006}
 .new.bb .nl{color:#f0cfd3}
 /* a big drop (YORUNE, 10 picks): title on top, one girl per row from 720px, the group shot centered alone */
@@ -102,31 +102,33 @@ html.ig .igb{display:block}
   padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
 .view[hidden]{display:none}
 .vtop{display:flex;align-items:center;gap:10px;padding:8px 12px;min-height:64px}
-.x{flex:none;width:48px;height:48px;border:0;border-radius:50%;background:#28161d;color:#fff;font-size:30px;line-height:1;cursor:pointer}
+.x{flex:none;width:48px;height:48px;border:0;border-radius:50%;background:#180e12;color:#ffffff;font-size:30px;line-height:1;cursor:pointer}
 .vname{flex:1;min-width:0;line-height:1.15}
 .vname b{display:block;font-family:"Potta One",system-ui,sans-serif;font-weight:400;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .vname b.long{font-size:14px}
-.vname span{display:block;margin-top:2px;font-size:12px;font-weight:800;letter-spacing:.08em;color:var(--gold)}
+.vname span{display:block;margin-top:2px;font-size:12px;font-weight:800;letter-spacing:.08em;color:var(--gold-t,var(--gold))}
 .vtop .mode button{min-width:64px;min-height:44px;font-size:14px;padding:0 10px}
 .stage{flex:1;min-height:0;position:relative;display:flex;align-items:center;justify-content:center;padding:4px 58px}
 .frame{position:relative;height:100%;max-width:100%;aspect-ratio:1290/2796}
 .frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;border-radius:22px;-webkit-touch-callout:default}
 .vfull{opacity:0;transition:opacity .2s}
 .vfull.on{opacity:1}
-.nav{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:96px;border:0;border-radius:16px;background:#28161d;color:#fff;font-size:34px;line-height:1;cursor:pointer}
+.nav{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:96px;border:0;border-radius:16px;background:#180e12;color:#ffffff;font-size:34px;line-height:1;cursor:pointer}
 .prev{left:6px}.next{right:6px}
 .vbot{padding:10px 16px 14px;text-align:center}
-.save{display:block;max-width:440px;margin:0 auto;padding:17px 20px;border-radius:18px;background:var(--red);color:#fff;text-decoration:none;
+.save{display:block;max-width:440px;margin:0 auto;padding:17px 20px;border-radius:18px;background:var(--red);color:#ffffff;text-decoration:none;
   font-family:"Potta One",system-ui,sans-serif;font-size:20px;letter-spacing:.05em;box-shadow:0 6px 0 var(--deep)}
 .save:active{transform:translateY(3px);box-shadow:0 3px 0 var(--deep)}
 .hint{margin:11px auto 0;max-width:440px;font-size:14px;line-height:1.4;color:#d4c6cc}
 @media (prefers-reduced-motion:reduce){.ph,.vfull{transition:none}.pick:hover .ph{transform:none}}
 </style>
+<link rel="stylesheet" data-fe href="../assets/css/evil.css?v=e2549128">
 <link rel="stylesheet" href="../assets/css/street-skin.css?v=1c1b3a38">
 <script src="../assets/js/street-skin.js?v=c80117df" defer></script>
 </head>
 <body>
 <!--sk--><div class="sk-top"><a class="sk-back" href="../#in-bites" aria-label="Back to Love Bites on the street"><span aria-hidden="true">&lsaquo;</span>Love Bites</a><b class="sk-place">LOVE BITES</b><span class="sk-keys" id="sk-keys"></span></div><!--/sk-->
+<i class="fe-sky" aria-hidden="true"></i>
 <div class="wrap">
   <header class="top">
     <h1>Pick your<br>lock screen</h1>

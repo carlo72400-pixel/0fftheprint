@@ -12,24 +12,24 @@
 <meta name="theme-color" content="#0a0a0d">
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-  :root{--ink:#f2eef5;--muted:#8d8798;--line:rgba(255,255,255,.1);--pink:#ff79c6;--bg:#0a0a0d}
+<style>/*fe*/
+  :root{--ink:#2c2e35;--ink-t:#f2eef5;--ink-l:#a387b8;--muted:#1d1e23;--muted-t:#cbc8d0;--muted-l:#716b7c;--line:rgba(46,48,56,0.1);--line-t:rgba(255,255,255,0.1);--line-l:rgba(166,166,166,0.1);--pink:#6f0944;--pink-t:#fa9ed3;--pink-l:#ff1099;--bg:#0a0a0d;--bg-t:#e0e0e7;--bg-l:#3a3f4c}
   *{margin:0;padding:0;box-sizing:border-box}
-  body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif}
-  .leopard-bar{height:7px;background:linear-gradient(90deg,#ff79c6,#caa9ff,#2f6bff,#ff79c6);background-size:300% 100%}
+  body{background:var(--bg);color:var(--ink-t,var(--ink));font-family:Inter,system-ui,sans-serif}
+  .leopard-bar{height:7px;background:linear-gradient(90deg,#6f0944,#4a0a7c,#08275d,#6f0944);background-size:300% 100%}
   .wrap{max-width:1180px;margin:0 auto;padding:28px 18px 90px}
   a.back{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;
-    text-transform:uppercase;color:var(--muted);text-decoration:none}
-  a.back:hover{color:var(--pink)}
+    text-transform:uppercase;color:var(--muted-t,var(--muted));text-decoration:none}
+  a.back:hover{color:var(--pink-t,var(--pink))}
   h1{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
     text-transform:uppercase;font-size:clamp(38px,9vw,72px);line-height:.95;margin:26px 0 8px}
   .sub{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.2em;
-    text-transform:uppercase;color:var(--muted)}
+    text-transform:uppercase;color:var(--muted-t,var(--muted))}
   .tabs{display:flex;gap:8px;margin:24px 0 22px;flex-wrap:wrap}
-  .tab{background:transparent;color:var(--muted);border:1px solid var(--line);border-radius:999px;min-height:44px;display:inline-flex;align-items:center;
+  .tab{background:transparent;color:var(--muted-t,var(--muted));border:1px solid var(--line-l,var(--line));border-radius:999px;min-height:44px;display:inline-flex;align-items:center;
     padding:9px 16px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;
     text-transform:uppercase;cursor:pointer}
-  .tab.on{color:#12070f;background:var(--pink);border-color:var(--pink);font-weight:600}
+  .tab.on{color:#edd1da;background:var(--pink);border-color:var(--pink-l,var(--pink));font-weight:600}
   /* A RAIL, same grammar as the homepage. 28 of the 35 pieces here are 9:16, so
      vertical is what this page actually is and the tile is 9:16 native.
      ⚠️ A horizontal scroller has to LOOK scrollable: styled scrollbar, and column
@@ -44,7 +44,7 @@
   .card{background:transparent;border:0;padding:0;text-align:left;cursor:pointer;color:inherit;
     display:block;width:100%;font:inherit;scroll-snap-align:start}
   .shot{position:relative;display:block;border-radius:12px;overflow:hidden;
-    border:1px solid var(--line);background:#141119}
+    border:1px solid var(--line-l,var(--line));background:#141119}
   /* the poster's own aspect drives the tile. A lazy img with no w/h collapses
      to 2px and takes the whole column with it. */
   /* ⛔ THE TILE IS A FIXED 9:16, so a rail cannot go ragged. The 28 vertical
@@ -67,20 +67,20 @@
   .shot.wide::after{content:'';position:absolute;left:0;right:0;top:50%;
     height:calc(100% * 81 / 256);transform:translateY(-50%);
     box-shadow:0 0 0 1px rgba(255,255,255,.09);pointer-events:none;z-index:2}
-  .card:hover .shot{border-color:var(--pink)}
+  .card:hover .shot{border-color:var(--pink-l,var(--pink))}
   .ply{position:absolute;inset:0;display:grid;place-items:center;font-size:30px;
-    color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.65);opacity:.92}
+    color:#ffffff;text-shadow:0 2px 14px rgba(0,0,0,.65);opacity:.92}
   .dur{position:absolute;right:7px;bottom:7px;background:rgba(8,6,10,.82);
-    font-family:'JetBrains Mono',monospace;font-size:11px;padding:3px 7px;border-radius:5px;color:#fff}
+    font-family:'JetBrains Mono',monospace;font-size:11px;padding:3px 7px;border-radius:5px;color:#ffffff}
   .kd{position:absolute;left:7px;top:7px;font-family:'JetBrains Mono',monospace;font-size:11px;
-    letter-spacing:.16em;padding:3px 7px;border-radius:5px;background:rgba(8,6,10,.82);color:var(--pink)}
+    letter-spacing:.16em;padding:3px 7px;border-radius:5px;background:rgba(8,6,10,.82);color:var(--pink-t,var(--pink))}
   .ti{display:block;margin-top:9px;font-family:'Saira Condensed',sans-serif;font-style:italic;
     font-weight:900;text-transform:uppercase;font-size:16px;line-height:1.04}
   .fr{display:block;margin-top:3px;font-family:'JetBrains Mono',monospace;font-size:11px;
-    letter-spacing:.12em;text-transform:uppercase;color:var(--muted);line-height:1.45}
-  .empty{color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:12px;padding:30px 0}
+    letter-spacing:.12em;text-transform:uppercase;color:var(--muted-t,var(--muted));line-height:1.45}
+  .empty{color:var(--muted-t,var(--muted));font-family:'JetBrains Mono',monospace;font-size:12px;padding:30px 0}
   .railnote{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;
-    text-transform:uppercase;color:var(--muted);margin-top:12px}
+    text-transform:uppercase;color:var(--muted-t,var(--muted));margin-top:12px}
   /* ---- lightbox = THE STRIP (10/22, his ask: "scroll left and right to scroll through ... instead
      of having to go in and out of each video"). Every piece in the rail is a slide in ONE horizontal
      scroller: a finger or trackpad swipe lands on the next piece, the arrows and arrow keys step it.
@@ -105,23 +105,23 @@
   .lb-bar{display:flex;gap:4px 14px;align-items:baseline;flex-wrap:wrap;padding:10px 4px 0}
   .lb-t{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
     text-transform:uppercase;font-size:20px}
-  .lb-l{font-size:13px;color:var(--muted);flex:1 1 240px;line-height:1.5}
+  .lb-l{font-size:13px;color:var(--muted-t,var(--muted));flex:1 1 240px;line-height:1.5}
   /* 11/11: a cut can carry a `credit` line (the CC BY music credit on the School of Comics spots) */
-  .lb-cr{flex:1 1 100%;font-size:11px;color:var(--muted);line-height:1.5;opacity:.85}
+  .lb-cr{flex:1 1 100%;font-size:11px;color:var(--muted-t,var(--muted));line-height:1.5;opacity:.85}
   .lb-bar a{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;
-    text-transform:uppercase;color:var(--pink);text-decoration:none;display:inline-flex;
+    text-transform:uppercase;color:var(--pink-t,var(--pink));text-decoration:none;display:inline-flex;
     align-items:center;min-height:44px;padding:0 2px}
   /* where you are in the run that went up together: 3 / 10 · THE RUN'S NAME */
   .lb-top{position:absolute;top:env(safe-area-inset-top,0px);left:0;right:64px;min-height:56px;
     display:flex;align-items:center;gap:12px;padding:0 18px;pointer-events:none;white-space:nowrap;
     overflow:hidden;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;
-    text-transform:uppercase;color:var(--muted)}
-  .lb-c{color:var(--pink);flex:none}
+    text-transform:uppercase;color:var(--muted-t,var(--muted))}
+  .lb-c{color:var(--pink-t,var(--pink));flex:none}
   .lb-g{overflow:hidden;text-overflow:ellipsis}
   /* ⛔ the arrows and the close carry their own type: the old shared `.lb button` rule out-ranked
      .nav and .lb-x, so all three drew as 11 px pink text 12 px wide and nobody found them */
   .lb .lb-x,.lb .nav{position:absolute;display:grid;place-items:center;min-width:48px;min-height:48px;
-    padding:0;border:0;background:transparent;color:#fff;cursor:pointer;line-height:1;
+    padding:0;border:0;background:transparent;color:#ffffff;cursor:pointer;line-height:1;
     font-family:Inter,system-ui,sans-serif;text-shadow:0 2px 12px rgba(0,0,0,.85)}
   .lb .lb-x{top:calc(4px + env(safe-area-inset-top,0px));right:6px;font-size:30px}
   .lb .nav{top:50%;transform:translateY(-50%);font-size:46px;opacity:.8}
@@ -138,41 +138,43 @@
   .lb-end.on{display:flex}
   .lb-end-in{width:100%;max-width:720px;display:grid;gap:16px;margin:auto}
   .lb-end-h{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;
-    text-transform:uppercase;color:var(--pink)}
+    text-transform:uppercase;color:var(--pink-t,var(--pink))}
   .lb-end-g{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
   /* phones: the buttons come before the tiles so Keep watching never needs a scroll */
   @media (max-width:560px){.lb-end-g{grid-template-columns:repeat(2,minmax(0,1fr))}
     .lb .lb-end-g img{aspect-ratio:4/5;object-position:50% 25%}.lb-end-h{order:-2}.lb-end-a{order:-1}}
   .lb .lb-end-g button{display:grid;gap:6px;min-width:0;padding:0;border:0;background:transparent;
-    color:#fff;cursor:pointer;text-align:left;font:inherit}
+    color:#ffffff;cursor:pointer;text-align:left;font:inherit}
   .lb-end-g img{width:100%;aspect-ratio:9/16;object-fit:cover;border-radius:8px;background:#111;display:block}
   .lb-end-g b{font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;
     text-transform:uppercase;font-size:15px;line-height:1.1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .lb-end-g small{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;
-    text-transform:uppercase;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    text-transform:uppercase;color:var(--muted-t,var(--muted));overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .lb .lb-end-g button:focus-visible,.lb .lb-end-a button:focus-visible,.lb-end-a a:focus-visible{
-    outline:2px solid var(--pink);outline-offset:3px}
+    outline:2px solid var(--pink-l,var(--pink));outline-offset:3px}
   .lb-end-a{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
   .lb .lb-end-a button,.lb-end-a a{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;
-    text-transform:uppercase;min-height:44px;padding:0 16px;border-radius:999px;border:1px solid var(--pink);
-    background:transparent;color:#fff;cursor:pointer;display:inline-flex;align-items:center;text-decoration:none}
-  .lb .lb-end-a button.p{background:var(--pink);color:#060508;font-weight:700}
-  .foot{margin-top:46px;padding-top:20px;border-top:1px solid var(--line);
+    text-transform:uppercase;min-height:44px;padding:0 16px;border-radius:999px;border:1px solid var(--pink-l,var(--pink));
+    background:transparent;color:#ffffff;cursor:pointer;display:inline-flex;align-items:center;text-decoration:none}
+  .lb .lb-end-a button.p{background:var(--pink);color:#e3dbe9;font-weight:700}
+  .foot{margin-top:46px;padding-top:20px;border-top:1px solid var(--line-l,var(--line));
     font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;
-    text-transform:uppercase;color:var(--muted);line-height:2}
-  .foot a{color:var(--pink);text-decoration:none}
+    text-transform:uppercase;color:var(--muted-t,var(--muted));line-height:2}
+  .foot a{color:var(--pink-t,var(--pink));text-decoration:none}
   /* 11/4: footer and contact links keep their type size. On a phone the hit area is 44px. */
   @media(max-width:900px){
     .foot a,a[href^="mailto:"]{display:inline-block;max-width:100%;line-height:1.25;padding:16px 3px;margin:0 -3px;vertical-align:middle}
   }
 </style>
-<link rel="stylesheet" href="../assets/css/binder.css?v=04973e99">
+<link rel="stylesheet" href="../assets/css/fe/binder.css?v=d8f12967">
 <script src="../assets/js/binder.js?v=301b2a56" defer></script>
+<link rel="stylesheet" data-fe href="../assets/css/evil.css?v=e2549128">
 <link rel="stylesheet" href="../assets/css/street-skin.css?v=1c1b3a38">
 <script src="../assets/js/street-skin.js?v=c80117df" defer></script>
 </head>
 <body>
 <!--sk--><div class="sk-top"><a class="sk-back" href="../#in-box" aria-label="Back to Box Office on the street"><span aria-hidden="true">&lsaquo;</span>Box Office</a><b class="sk-place">BOX OFFICE</b><span class="sk-keys" id="sk-keys"></span></div><!--/sk-->
+<i class="fe-sky" aria-hidden="true"></i>
 <div class="leopard-bar"></div>
 <div class="wrap">
   <h1>Now Showing</h1>

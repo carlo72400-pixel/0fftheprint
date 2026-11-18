@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-place="bites">
+<html data-fe="brand" lang="en" data-place="bites">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -23,125 +23,127 @@
 <link rel="preload" href="fonts/pottaone.woff2" as="font" type="font/woff2" crossorigin>
 <!-- Built 2026-11-10 from Drive 03_PROJECTS/reliquary/carousels (make_site_page.py + captions.json). The three RELIQUARY lore carousels
      (v4 lanes: THE PLAN, THE SHRINE, THE MANUAL), one caption per slide. Self-contained: no shared CSS/JS, no stamp needed. -->
-<style>
+<style>/*fe*/
 @font-face{font-family:"VP Deadeye";src:url(fonts/vpdeadeye.woff2) format("woff2");font-display:swap}
 @font-face{font-family:"Potta One";src:url(fonts/pottaone.woff2) format("woff2");font-display:swap}
-:root{--bg:#120709;--ink:#f7f2ea;--mute:#cbbcc0;--red:#e3121a;--gold:#ffd23f;--line:#3a2329}
+:root{--bg:#120709;--bg-t:#edd1d6;--bg-l:#3a3f4c;--ink:#2c2e35;--ink-t:#f7f3ea;--ink-l:#cab074;--mute:#25262d;--mute-t:#d2c6c9;--mute-l:#9a7c84;--red:#4b0a0c;--red-t:#eec3c5;--red-l:#c51017;--gold:#90680c;--gold-t:#fade9e;--gold-l:#f5ac00;--line:#1c1215;--line-t:#e9dade;--line-l:#3a3f4c}
 *{box-sizing:border-box}
 html{background:var(--bg);-webkit-text-size-adjust:100%;scroll-behavior:smooth}
-body{margin:0;color:var(--ink);background:var(--bg);font:17px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  background-image:linear-gradient(rgba(214,162,46,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(214,162,46,.05) 1px,transparent 1px);background-size:44px 44px}
+body{margin:0;color:var(--ink-t,var(--ink));background:var(--bg);font:17px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  background-image:linear-gradient(rgba(112,87,28,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(112,87,28,0.05) 1px,transparent 1px);background-size:44px 44px}
 a{color:inherit}
 .wrap{max-width:1060px;margin:0 auto;padding:0 16px}
 .top{padding:calc(10px + env(safe-area-inset-top)) 0 0}
-.home{display:inline-flex;align-items:center;min-height:44px;font-weight:800;font-size:13px;letter-spacing:.16em;color:var(--mute);text-decoration:none}
-.home:hover{color:var(--ink)}
+.home{display:inline-flex;align-items:center;min-height:44px;font-weight:800;font-size:13px;letter-spacing:.16em;color:var(--mute-t,var(--mute));text-decoration:none}
+.home:hover{color:var(--ink-t,var(--ink))}
 .hero{text-align:center;padding:18px 0 8px}
-.hero h1{margin:0;font:400 clamp(58px,15vw,132px)/.95 "VP Deadeye",Impact,sans-serif;color:var(--gold);letter-spacing:.01em;
+.hero h1{margin:0;font:400 clamp(58px,15vw,132px)/.95 "VP Deadeye",Impact,sans-serif;color:var(--gold-t,var(--gold));letter-spacing:.01em;
   text-shadow:1px 1px 0 #96081a,2px 2px 0 #96081a,3px 3px 0 #96081a,4px 4px 0 #96081a,5px 5px 0 #5a0610,6px 6px 0 #5a0610,7px 7px 0 #5a0610,0 12px 26px rgba(0,0,0,.6)}
-.hero .sub{margin:14px auto 0;max-width:640px;font:400 clamp(19px,4.6vw,24px)/1.35 "Potta One",sans-serif;color:var(--ink)}
-.hero .punch{margin:10px 0 0;font:400 clamp(28px,7vw,44px)/1 "VP Deadeye",Impact,sans-serif;color:var(--red)}
-.how{margin:12px auto 0;max-width:560px;color:var(--mute);font-size:16px}
+.hero .sub{margin:14px auto 0;max-width:640px;font:400 clamp(19px,4.6vw,24px)/1.35 "Potta One",sans-serif;color:var(--ink-t,var(--ink))}
+.hero .punch{margin:10px 0 0;font:400 clamp(28px,7vw,44px)/1 "VP Deadeye",Impact,sans-serif;color:var(--red-t,var(--red))}
+.how{margin:12px auto 0;max-width:560px;color:var(--mute-t,var(--mute));font-size:16px}
 .tabs{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:22px 0 6px}
-.tab{display:inline-flex;align-items:center;min-height:48px;padding:0 18px;background:var(--lane);color:var(--laneink);text-decoration:none;
-  font:400 22px/1 "VP Deadeye",Impact,sans-serif;letter-spacing:.02em;border:3px solid #000;box-shadow:4px 4px 0 #000}
+.tab{display:inline-flex;align-items:center;min-height:48px;padding:0 18px;background:var(--lane);color:var(--laneink-t,var(--laneink));text-decoration:none;
+  font:400 22px/1 "VP Deadeye",Impact,sans-serif;letter-spacing:.02em;border:3px solid #3a3f4c;box-shadow:4px 4px 0 #000}
 .tab:active{transform:translate(2px,2px);box-shadow:2px 2px 0 #000}
 .deck{max-width:572px;margin:0 auto;padding:40px 16px 8px;scroll-margin-top:8px}
 .deckhead{margin-bottom:12px}
-.kicker{margin:0;color:var(--mute);font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
-.chip{display:inline-block;padding:3px 9px;margin-right:6px;background:var(--lane);color:var(--laneink);border:2px solid #000;font-weight:800;letter-spacing:.1em}
-.deck h2{margin:6px 0 2px;font:400 clamp(44px,12vw,64px)/1 "VP Deadeye",Impact,sans-serif;color:var(--ink);text-shadow:3px 3px 0 var(--lane),5px 5px 0 #000}
-.post{margin:4px 0 0;font-size:18px;color:var(--ink)}
-.frame{position:relative;border:3px solid #000;background:#000;box-shadow:6px 6px 0 var(--lane),12px 12px 0 #000}
+.kicker{margin:0;color:var(--mute-t,var(--mute));font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.chip{display:inline-block;padding:3px 9px;margin-right:6px;background:var(--lane);color:var(--laneink-t,var(--laneink));border:2px solid #3a3f4c;font-weight:800;letter-spacing:.1em}
+.deck h2{margin:6px 0 2px;font:400 clamp(44px,12vw,64px)/1 "VP Deadeye",Impact,sans-serif;color:var(--ink-t,var(--ink));text-shadow:3px 3px 0 var(--lane),5px 5px 0 #000}
+.post{margin:4px 0 0;font-size:18px;color:var(--ink-t,var(--ink))}
+.frame{position:relative;border:3px solid #3a3f4c;background:#000;box-shadow:6px 6px 0 var(--lane),12px 12px 0 #000}
 .track{display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;outline:none}
 .track::-webkit-scrollbar{display:none}
 .track:focus-visible{box-shadow:inset 0 0 0 4px var(--gold)}
 .slide{flex:0 0 100%;margin:0;scroll-snap-align:center;scroll-snap-stop:always;background:#0b0507}
 .slide img{display:block;width:100%;height:auto;aspect-ratio:3/4;background:#1c0d10}
-.slide figcaption{padding:12px 14px 14px;font-size:18px;line-height:1.4;color:var(--ink);background:#0b0507;min-height:76px}
-.slide figcaption b{display:inline-block;min-width:34px;margin-right:6px;padding:1px 6px;background:var(--lane);color:var(--laneink);border:2px solid #000;font:400 15px/1.3 "Potta One",sans-serif;text-align:center}
-.nav{position:absolute;top:calc((100% - 76px) / 2);transform:translateY(-50%);width:48px;height:64px;border:3px solid #000;background:rgba(247,242,234,.92);color:#000;
+.slide figcaption{padding:12px 14px 14px;font-size:18px;line-height:1.4;color:var(--ink-t,var(--ink));background:#0b0507;min-height:76px}
+.slide figcaption b{display:inline-block;min-width:34px;margin-right:6px;padding:1px 6px;background:var(--lane);color:var(--laneink-t,var(--laneink));border:2px solid #3a3f4c;font:400 15px/1.3 "Potta One",sans-serif;text-align:center}
+.nav{position:absolute;top:calc((100% - 76px) / 2);transform:translateY(-50%);width:48px;height:64px;border:3px solid #3a3f4c;background:rgba(44,46,53,0.92);color:#e6e6e6;
   font:700 40px/1 system-ui,sans-serif;cursor:pointer;box-shadow:3px 3px 0 #000;display:flex;align-items:center;justify-content:center;padding:0 0 4px}
 .nav.prev{left:8px}.nav.next{right:8px}
 .nav[disabled]{opacity:0;pointer-events:none}
 .bar{display:flex;justify-content:space-between;align-items:center;margin:12px 0 10px}
-.count,.share{min-height:40px;display:inline-flex;align-items:center;padding:0 12px;background:#000;color:#fff;border:2px solid var(--lane);font:700 15px/1 system-ui,sans-serif;letter-spacing:.04em}
+.count,.share{min-height:40px;display:inline-flex;align-items:center;padding:0 12px;background:#000;color:#ffffff;border:2px solid var(--lane-l,var(--lane));font:700 15px/1 system-ui,sans-serif;letter-spacing:.04em}
 .share{cursor:pointer}
 .dots{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin:20px 0 0}
-.dots button{width:12px;height:12px;padding:0;border-radius:50%;border:2px solid var(--mute);background:transparent;cursor:pointer}
-.dots button[aria-current="true"]{background:var(--gold);border-color:var(--gold)}
+.dots button{width:12px;height:12px;padding:0;border-radius:50%;border:2px solid var(--mute-l,var(--mute));background:transparent;cursor:pointer}
+.dots button[aria-current="true"]{background:var(--gold);border-color:var(--gold-l,var(--gold))}
 @media (hover:none){.nav{display:none}}
 @media (min-width:760px){.nav.prev{left:-76px}.nav.next{right:-76px}}
 .more{max-width:640px;margin:56px auto 0;padding:0 16px;text-align:center}
-.more h3{margin:0 0 12px;font:400 30px/1 "VP Deadeye",Impact,sans-serif;color:var(--gold)}
+.more h3{margin:0 0 12px;font:400 30px/1 "VP Deadeye",Impact,sans-serif;color:var(--gold-t,var(--gold))}
 .more .links{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.more a{display:inline-flex;align-items:center;min-height:48px;padding:0 16px;border:2px solid var(--line);background:#1c0d10;text-decoration:none;font-weight:800}
-.more a:hover{border-color:var(--gold)}
-footer{padding:40px 16px calc(36px + env(safe-area-inset-bottom));text-align:center;color:var(--mute);font-size:14px}
-footer b{color:var(--ink)}
-.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translateX(-50%);padding:12px 16px;background:#000;color:#fff;border:2px solid var(--gold);font-weight:800;opacity:0;transition:opacity .2s;pointer-events:none}
+.more a{display:inline-flex;align-items:center;min-height:48px;padding:0 16px;border:2px solid var(--line-l,var(--line));background:#1c0d10;text-decoration:none;font-weight:800}
+.more a:hover{border-color:var(--gold-l,var(--gold))}
+footer{padding:40px 16px calc(36px + env(safe-area-inset-bottom));text-align:center;color:var(--mute-t,var(--mute));font-size:14px}
+footer b{color:var(--ink-t,var(--ink))}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translateX(-50%);padding:12px 16px;background:#000;color:#ffffff;border:2px solid var(--gold-l,var(--gold));font-weight:800;opacity:0;transition:opacity .2s;pointer-events:none}
 .toast.on{opacity:1}
 .jump{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:22px 0 4px}
-.jump a{display:inline-flex;align-items:center;min-height:48px;padding:0 14px;background:var(--lane);color:var(--laneink);text-decoration:none;
-  font:400 16px/1 "Potta One",sans-serif;border:3px solid #000;box-shadow:4px 4px 0 #000}
+.jump a{display:inline-flex;align-items:center;min-height:48px;padding:0 14px;background:var(--lane);color:var(--laneink-t,var(--laneink));text-decoration:none;
+  font:400 16px/1 "Potta One",sans-serif;border:3px solid #3a3f4c;box-shadow:4px 4px 0 #000}
 .jump a:active{transform:translate(2px,2px);box-shadow:2px 2px 0 #000}
-.band{margin:0;text-align:center;font:400 clamp(28px,7vw,40px)/1.05 "Potta One",sans-serif;color:var(--gold);text-transform:uppercase;letter-spacing:.03em;
+.band{margin:0;text-align:center;font:400 clamp(28px,7vw,40px)/1.05 "Potta One",sans-serif;color:var(--gold-t,var(--gold));text-transform:uppercase;letter-spacing:.03em;
   text-shadow:3px 3px 0 #96081a,5px 5px 0 #000;text-wrap:balance}
 .shelf{padding-top:40px;scroll-margin-top:8px}
-.shelf-intro{margin:10px auto 0;max-width:560px;text-align:center;color:var(--mute);font-size:16px}
+.shelf-intro{margin:10px auto 0;max-width:560px;text-align:center;color:var(--mute-t,var(--mute));font-size:16px}
 .group{margin:30px auto 0;max-width:980px}
-.group h3{margin:0 0 16px;display:flex;align-items:center;gap:12px;font:800 13px/1.2 system-ui,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+.group h3{margin:0 0 16px;display:flex;align-items:center;gap:12px;font:800 13px/1.2 system-ui,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--mute-t,var(--mute))}
 .group h3::after{content:"";flex:1;height:2px;background:var(--line)}
 .cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 16px}
 @media (min-width:700px){.cards{grid-template-columns:repeat(4,minmax(0,1fr));gap:28px 22px}}
-.card{position:relative;display:flex;flex-direction:column;gap:4px;min-width:0;color:var(--ink);text-decoration:none}
-.card .cov{display:block;width:100%;height:auto;aspect-ratio:3/4;margin-bottom:10px;border:3px solid #000;background:#1c0d10;
+.card{position:relative;display:flex;flex-direction:column;gap:4px;min-width:0;color:var(--ink-t,var(--ink));text-decoration:none}
+.card .cov{display:block;width:100%;height:auto;aspect-ratio:3/4;margin-bottom:10px;border:3px solid #3a3f4c;background:#1c0d10;
   box-shadow:5px 5px 0 var(--acc),9px 9px 0 #000;transition:transform .12s,box-shadow .12s}
 .card:hover .cov,.card:focus-visible .cov{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--acc),11px 11px 0 #000}
-.card:focus-visible{outline:3px solid var(--gold);outline-offset:6px}
-.card .k{font:800 12px/1.3 system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
-.card .t{font:400 clamp(17px,4.4vw,21px)/1.15 "Potta One",sans-serif;color:var(--ink)}
-.card .m{font-size:13px;color:var(--mute)}
-.card .start{display:inline-block;margin:0 4px 4px 0;padding:3px 6px;background:var(--gold);color:#000;font:800 11px/1.1 system-ui,sans-serif;
-  letter-spacing:.12em;border:2px solid #000;box-shadow:2px 2px 0 #000}
-.vault-note{margin:12px auto 0;max-width:560px;text-align:center;color:var(--gold);font-size:14px;font-weight:700}
-.card .offsite{display:inline-block;margin:0 5px 2px 0;padding:2px 5px;background:var(--red);color:#fff;font:800 10px/1.2 system-ui,sans-serif;
-  letter-spacing:.12em;border:2px solid #000}
+.card:focus-visible{outline:3px solid var(--gold-l,var(--gold));outline-offset:6px}
+.card .k{font:800 12px/1.3 system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--mute-t,var(--mute))}
+.card .t{font:400 clamp(17px,4.4vw,21px)/1.15 "Potta One",sans-serif;color:var(--ink-t,var(--ink))}
+.card .m{font-size:13px;color:var(--mute-t,var(--mute))}
+.card .start{display:inline-block;margin:0 4px 4px 0;padding:3px 6px;background:var(--gold);color:#e6e6e6;font:800 11px/1.1 system-ui,sans-serif;
+  letter-spacing:.12em;border:2px solid #3a3f4c;box-shadow:2px 2px 0 #000}
+.vault-note{margin:12px auto 0;max-width:560px;text-align:center;color:var(--gold-t,var(--gold));font-size:14px;font-weight:700}
+.card .offsite{display:inline-block;margin:0 5px 2px 0;padding:2px 5px;background:var(--red);color:#ffffff;font:800 10px/1.2 system-ui,sans-serif;
+  letter-spacing:.12em;border:2px solid #3a3f4c}
 .lorehead{text-align:center;padding-top:56px;scroll-margin-top:8px}
-.private{max-width:760px;margin:0 auto;padding:14px 16px 16px;border-bottom:3px solid #000;background:#0b0507;box-shadow:0 4px 0 var(--red)}
-.private p{margin:0 0 8px;font-size:15px;color:var(--ink)}
-.private .pv-k{font:800 12px/1.2 system-ui,sans-serif;letter-spacing:.16em;color:var(--red)}
+.private{max-width:760px;margin:0 auto;padding:14px 16px 16px;border-bottom:3px solid #3a3f4c;background:#0b0507;box-shadow:0 4px 0 var(--red)}
+.private p{margin:0 0 8px;font-size:15px;color:var(--ink-t,var(--ink))}
+.private .pv-k{font:800 12px/1.2 system-ui,sans-serif;letter-spacing:.16em;color:var(--red-t,var(--red))}
 .sched{margin:6px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;font-size:15px}
 .sched li{display:grid;grid-template-columns:86px minmax(0,1fr);gap:10px;align-items:baseline}
-.sched b{color:var(--gold);font:800 14px/1.2 system-ui,sans-serif;letter-spacing:.06em}
-.sched i{font:800 11px/1 system-ui,sans-serif;font-style:normal;letter-spacing:.12em;text-transform:uppercase;color:#000;background:var(--gold);padding:3px 6px;margin-left:6px}
+.sched b{color:var(--gold-t,var(--gold));font:800 14px/1.2 system-ui,sans-serif;letter-spacing:.06em}
+.sched i{font:800 11px/1 system-ui,sans-serif;font-style:normal;letter-spacing:.12em;text-transform:uppercase;color:#e6e6e6;background:var(--gold);padding:3px 6px;margin-left:6px}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
+<link rel="stylesheet" data-fe href="../assets/css/evil.css?v=e2549128">
 <link rel="stylesheet" href="../assets/css/street-skin.css?v=1c1b3a38">
 <script src="../assets/js/street-skin.js?v=c80117df" defer></script>
 </head>
 <body>
 <!--sk--><div class="sk-top"><a class="sk-back" href="../#in-bites" aria-label="Back to Love Bites on the street"><span aria-hidden="true">&lsaquo;</span>Love Bites</a><b class="sk-place">LOVE BITES</b><span class="sk-keys" id="sk-keys"></span></div><!--/sk-->
+<i class="fe-sky" aria-hidden="true"></i>
 <div class="wrap top"></div>
 <header class="wrap hero">
   <h1>RELIQUARY</h1>
   <p class="sub">The church owns every miracle in Santa Ossa. Twelve misfits rob it for a living.</p>
   <p class="punch">We own a crowbar.</p>
-  <nav class="jump" aria-label="On this page"><a href="#manhwa" style="--lane:#ffd23f;--laneink:#000">Read the manhwa</a><a href="#lore" style="--lane:#f7f2ea;--laneink:#000">Swipe the lore</a></nav>
+  <nav class="jump" aria-label="On this page"><a href="#manhwa" style="--lane:#90680c;--lane-t:#fade9e;--lane-l:#f5ac00;--laneink:#000;--laneink-t:#e6e6e6;--laneink-l:#3a3f4c" data-fes>Read the manhwa</a><a href="#lore" style="--lane:#2c2e35;--lane-t:#f7f3ea;--lane-l:#cab074;--laneink:#000;--laneink-t:#e6e6e6;--laneink-l:#3a3f4c" data-fes>Swipe the lore</a></nav>
 </header>
 <section class="wrap shelf" id="manhwa">
   <h2 class="band">Read the manhwa</h2>
   <p class="shelf-intro">New chapters on Fridays.</p>
-  <div class="group" data-shelf="origins"><h3>Origins</h3><div class="cards"><a class="card" href="putty/" style="--acc:#ce121a"><img class="cov" src="putty/cover-720.webp" width="720" height="960" loading="lazy" decoding="async" alt="The cover of RELIQUARY Origins #10, PUT OUT: Putty, a clown knight in mismatched armor, leans on her greatsword under a streetlight in a strip-mall parking lot, her steel shield painted with a melted red smiley, a red OVERDUE stamp in the corner."><span class="k">Origins #10 · Putty</span><span class="t">Put Out</span><span class="m">10 pages</span></a></div></div>
-  <div class="group" data-shelf="specials"><h3>Specials · they don&#x27;t count</h3><div class="cards"><a class="card" href="bloodbath/" style="--acc:#f0030b"><img class="cov" src="bloodbath/cover-720.webp" width="720" height="960" loading="lazy" decoding="async" alt="The front of the BLOODBATH 4 fight card: BLOODBATH in white on a red masthead, and below it HYDRA&#x27;s three purple heads roaring over the ring while Putty holds up the gold champ belt between Kuro and Bala, fake blood flying, the crowd&#x27;s heads in silhouette. HYDRA&#x27;s middle head bursts up out of the frame. SPECIAL, BLOODBATH 4."><span class="k">Special #1 · BLOODBATH 4</span><span class="t">The Fight Card</span><span class="m">10 pages</span></a><a class="card" href="afterparty/" style="--acc:#f0030b"><img class="cov" src="afterparty/cover-720.webp" width="720" height="960" loading="lazy" decoding="async" alt="The front of the tape&#x27;s sleeve: BLOODBATH in white on black, a red strip reading THE AFTER PARTY, and WHO TOOK THE BELT? in marker; below it, Nyx DJs with her ring light behind her head like a halo and the Myths play on a little stage, while Bala holds the gold champ belt over her head with Lena, Kuro and Putty posing around her. SPECIAL, BLOODBATH 4."><span class="k">Special #2 · BLOODBATH 4</span><span class="t">The After Party</span><span class="m">10 pages</span></a></div></div>
+  <div class="group" data-shelf="origins"><h3>Origins</h3><div class="cards"><a class="card" href="putty/" style="--acc:#450a0c;--acc-t:#eec4c5;--acc-l:#bb1018" data-fes><img class="cov" src="putty/cover-720.webp" width="720" height="960" loading="lazy" decoding="async" alt="The cover of RELIQUARY Origins #10, PUT OUT: Putty, a clown knight in mismatched armor, leans on her greatsword under a streetlight in a strip-mall parking lot, her steel shield painted with a melted red smiley, a red OVERDUE stamp in the corner."><span class="k">Origins #10 · Putty</span><span class="t">Put Out</span><span class="m">10 pages</span></a></div></div>
+  <div class="group" data-shelf="specials"><h3>Specials · they don&#x27;t count</h3><div class="cards"><a class="card" href="bloodbath/" style="--acc:#4e0609;--acc-t:#edc0c2;--acc-l:#d1030a" data-fes><img class="cov" src="bloodbath/cover-720.webp" width="720" height="960" loading="lazy" decoding="async" alt="The front of the BLOODBATH 4 fight card: BLOODBATH in white on a red masthead, and below it HYDRA&#x27;s three purple heads roaring over the ring while Putty holds up the gold champ belt between Kuro and Bala, fake blood flying, the crowd&#x27;s heads in silhouette. HYDRA&#x27;s middle head bursts up out of the frame. SPECIAL, BLOODBATH 4."><span class="k">Special #1 · BLOODBATH 4</span><span class="t">The Fight Card</span><span class="m">10 pages</span></a><a class="card" href="afterparty/" style="--acc:#4e0609;--acc-t:#edc0c2;--acc-l:#d1030a" data-fes><img class="cov" src="afterparty/cover-720.webp" width="720" height="960" loading="lazy" decoding="async" alt="The front of the tape&#x27;s sleeve: BLOODBATH in white on black, a red strip reading THE AFTER PARTY, and WHO TOOK THE BELT? in marker; below it, Nyx DJs with her ring light behind her head like a halo and the Myths play on a little stage, while Bala holds the gold champ belt over her head with Lena, Kuro and Putty posing around her. SPECIAL, BLOODBATH 4."><span class="k">Special #2 · BLOODBATH 4</span><span class="t">The After Party</span><span class="m">10 pages</span></a></div></div>
 </section>
 <section class="wrap lorehead" id="lore">
   <h2 class="band">Swipe the lore</h2>
   <p class="how">Three carousels, 41 slides. Swipe through each one. A heist comedy by @vamppsych.</p>
-  <nav class="tabs" aria-label="The carousels"><a class="tab" href="#12-chairs" style="--lane:#16346a;--laneink:#d2e4ff">12 CHAIRS</a><a class="tab" href="#patron-saints" style="--lane:#96162a;--laneink:#ffd23f">PATRON SAINTS</a><a class="tab" href="#how-to-play" style="--lane:#ffd23f;--laneink:#111012">HOW TO PLAY</a></nav>
+  <nav class="tabs" aria-label="The carousels"><a class="tab" href="#12-chairs" style="--lane:#0b172b;--lane-t:#c8d6ef;--lane-l:#1b4284;--laneink:#2a2c34;--laneink-t:#d4e3fd;--laneink-l:#3881ff" data-fes>12 CHAIRS</a><a class="tab" href="#patron-saints" style="--lane:#370b12;--lane-t:#eec6cc;--lane-l:#9c172c;--laneink:#90680c;--laneink-t:#fade9e;--laneink-l:#f5ac00" data-fes>PATRON SAINTS</a><a class="tab" href="#how-to-play" style="--lane:#90680c;--lane-t:#fade9e;--lane-l:#f5ac00;--laneink:#111012;--laneink-t:#e5e3e6;--laneink-l:#3a3f4c" data-fes>HOW TO PLAY</a></nav>
 </section>
 <main>
-<section class="deck" id="12-chairs" style="--lane:#16346a;--laneink:#d2e4ff">
+<section class="deck" id="12-chairs" style="--lane:#0b172b;--lane-t:#c8d6ef;--lane-l:#1b4284;--laneink:#2a2c34;--laneink-t:#d4e3fd;--laneink-l:#3881ff" data-fes>
   <header class="deckhead">
     <p class="kicker"><span class="chip">the plan</span> 16 slides</p>
     <h2>12 CHAIRS</h2>
@@ -172,7 +174,7 @@ footer b{color:var(--ink)}
   </div>
   <div class="dots" hidden></div>
 </section>
-<section class="deck" id="patron-saints" style="--lane:#96162a;--laneink:#ffd23f">
+<section class="deck" id="patron-saints" style="--lane:#370b12;--lane-t:#eec6cc;--lane-l:#9c172c;--laneink:#90680c;--laneink-t:#fade9e;--laneink-l:#f5ac00" data-fes>
   <header class="deckhead">
     <p class="kicker"><span class="chip">the shrine</span> 12 slides</p>
     <h2>PATRON SAINTS</h2>
@@ -199,7 +201,7 @@ footer b{color:var(--ink)}
   </div>
   <div class="dots" hidden></div>
 </section>
-<section class="deck" id="how-to-play" style="--lane:#ffd23f;--laneink:#111012">
+<section class="deck" id="how-to-play" style="--lane:#90680c;--lane-t:#fade9e;--lane-l:#f5ac00;--laneink:#111012;--laneink-t:#e5e3e6;--laneink-l:#3a3f4c" data-fes>
   <header class="deckhead">
     <p class="kicker"><span class="chip">the manual</span> 13 slides</p>
     <h2>HOW TO PLAY</h2>

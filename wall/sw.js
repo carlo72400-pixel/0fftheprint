@@ -12,7 +12,7 @@
    - Scripts, styles and fonts: served from the phone, refreshed in the background.
    - Flyers: kept after the first view (and the next few nights are warmed while the phone is idle), capped.
    - Supabase (logins, the key): never cached, always live. */
-const BUILD = '20261117170602';
+const BUILD = '20261118000100';
 const SHELL = 'wall-shell-' + BUILD;
 const IMGS = 'wall-img-v1';
 const PRECACHE = ["./", "manifest.webmanifest", "icon-192.png", "apple-touch-icon.png", "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js", "../supabase-config.js?v=f1348482", "../assets/js/desk.js?v=e5ad04a5"];

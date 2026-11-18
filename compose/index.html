@@ -8,64 +8,66 @@
 <meta name="theme-color" content="#0a0a0d">
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/auth.css?v=35811dc7">
-<style>
-  .sub a{color:var(--pink-glow);text-decoration:none;font-weight:600}
-  .drop{margin-top:14px;border:1px dashed var(--line);border-radius:12px;padding:18px;text-align:center;
-    font-family:var(--f-mono);font-size:11.5px;letter-spacing:.14em;color:var(--muted);cursor:pointer;text-transform:uppercase}
-  .drop:hover,.drop.over{border-color:var(--pink-deep);color:var(--pink-glow)}
+<link rel="stylesheet" href="../assets/css/fe/auth.css?v=99f9b536">
+<style>/*fe*/
+  .sub a{color:var(--pink-glow-t,var(--pink-glow));text-decoration:none;font-weight:600}
+  .drop{margin-top:14px;border:1px dashed var(--line-l,var(--line));border-radius:12px;padding:18px;text-align:center;
+    font-family:var(--f-mono);font-size:11.5px;letter-spacing:.14em;color:var(--muted-t,var(--muted));cursor:pointer;text-transform:uppercase}
+  .drop:hover,.drop.over{border-color:var(--pink-deep-l,var(--pink-deep));color:var(--pink-glow-t,var(--pink-glow))}
 
   /* ---- your posts ---- */
   .mine{margin-top:22px}
   .mine h2{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:24px;
     text-transform:uppercase;margin-bottom:4px}
-  .mrow{display:grid;grid-template-columns:auto 1fr;gap:12px;padding:15px 0;border-bottom:1px solid var(--line)}
+  .mrow{display:grid;grid-template-columns:auto 1fr;gap:12px;padding:15px 0;border-bottom:1px solid var(--line-l,var(--line))}
   .mrow:last-child{border-bottom:0}
   .mthumb{width:54px;height:54px;border-radius:9px;background:#0d0c11 center/cover no-repeat;
-    border:1px solid var(--line);flex:0 0 auto;object-fit:cover}
+    border:1px solid var(--line-l,var(--line));flex:0 0 auto;object-fit:cover}
   .mrow.no-img{grid-template-columns:1fr}
   .mtext{font-size:14px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}
-  .mmeta{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;color:var(--muted);margin-top:6px;
+  .mmeta{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;color:var(--muted-t,var(--muted));margin-top:6px;
     display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   .tag{font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;
-    border:1px solid var(--line);border-radius:3px;padding:2px 6px}
-  .tag.edited{color:var(--muted)}
-  .tag.pulled{color:var(--bad);border-color:rgba(255,93,126,.45)}
+    border:1px solid var(--line-l,var(--line));border-radius:3px;padding:2px 6px}
+  .tag.edited{color:var(--muted-t,var(--muted))}
+  .tag.pulled{color:var(--bad-t,var(--bad));border-color:rgba(255,4,55,0.45)}
   /* where it went: the Take is everyone, the Roll is members only */
-  .tag.take{color:var(--ink)}
-  .tag.roll{color:var(--pink-glow);border-color:var(--pink-deep)}
+  .tag.take{color:var(--ink-t,var(--ink))}
+  .tag.roll{color:var(--pink-glow-t,var(--pink-glow));border-color:var(--pink-deep-l,var(--pink-deep))}
   /* 44px minimum tap target. These are people on phones, not on a mouse. */
   .macts{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
   .macts .btn{width:auto;margin:0;min-height:44px;font-size:14px;padding:9px 18px}
   .macts .btn:disabled{opacity:.35}
   /* the first tap on anything that comes down arms it, the second does it */
-  .btn.sure{border-color:var(--bad);color:var(--bad)}
-  .locked{font-family:var(--f-mono);font-size:11px;color:var(--muted);margin-top:8px}
-  .fine{font-family:var(--f-mono);font-size:10.5px;color:var(--muted);line-height:1.6;margin-top:8px}
+  .btn.sure{border-color:var(--bad-l,var(--bad));color:var(--bad-t,var(--bad))}
+  .locked{font-family:var(--f-mono);font-size:11px;color:var(--muted-t,var(--muted));margin-top:8px}
+  .fine{font-family:var(--f-mono);font-size:10.5px;color:var(--muted-t,var(--muted));line-height:1.6;margin-top:8px}
   .mrow textarea{min-height:110px;margin-top:2px}
 
   /* ---- your videos ---- */
-  .vrow{border-top:1px solid var(--line);padding:12px 0}
+  .vrow{border-top:1px solid var(--line-l,var(--line));padding:12px 0}
   .vtop{display:flex;justify-content:space-between;align-items:center;gap:8px}
   .vt{font-size:13px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .vlab{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.14em;color:var(--muted);white-space:nowrap}
-  .vlab.on{color:var(--pink-glow)}
-  .vlab.pulled{color:var(--bad)}
+  .vlab{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.14em;color:var(--muted-t,var(--muted));white-space:nowrap}
+  .vlab.on{color:var(--pink-glow-t,var(--pink-glow))}
+  .vlab.pulled{color:var(--bad-t,var(--bad))}
   .vfix input{margin-top:10px}
-  .vmsg{font-family:var(--f-mono);font-size:11px;color:var(--pink-glow);margin-top:8px;min-height:0}
+  .vmsg{font-family:var(--f-mono);font-size:11px;color:var(--pink-glow-t,var(--pink-glow));margin-top:8px;min-height:0}
   .vmsg:empty{display:none}
-  #vd-msg a,.vmsg a{color:var(--pink-glow)}
+  #vd-msg a,.vmsg a{color:var(--pink-glow-t,var(--pink-glow))}
   #vd-msg a{display:inline-block;padding:14px 0;margin:-14px 0}
   /* the send button is full width, so its answer goes on the line under it */
   .sendrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:10px}
   .sendrow .empty{flex-basis:100%;margin:0;padding:2px 0 0}
   .sendrow .empty:empty{display:none}
 </style>
+<link rel="stylesheet" data-fe href="../assets/css/evil.css?v=e2549128">
 <link rel="stylesheet" href="../assets/css/street-skin.css?v=1c1b3a38">
 <script src="../assets/js/street-skin.js?v=c80117df" defer></script>
 </head>
 <body>
 <!--sk--><div class="sk-top"><a class="sk-back" href="../#in-door" aria-label="Back to The Coven on the street"><span aria-hidden="true">&lsaquo;</span>Coven</a><b class="sk-place">THE COVEN</b><span class="sk-keys" id="sk-keys"></span></div><!--/sk-->
+<i class="fe-sky" aria-hidden="true"></i>
 <div class="leopard-bar"></div>
 <div class="wrap">
   <h1>Your posts</h1>
